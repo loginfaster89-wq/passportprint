@@ -425,6 +425,26 @@ canvas{display:block;}
 }
 .btn-primary:hover::after { transform:translateX(100%); }
 
+/* ── Skip-as-next-step highlight (used when AI BG is locked, e.g. free plan) ── */
+.btn.skip-highlight{
+  background:var(--accent)!important;
+  color:#000!important;
+  border:1px solid var(--accent)!important;
+  font-weight:600!important;
+  box-shadow:0 0 0 0 rgba(240,165,0,0.55);
+  animation:skipPulse 1.8s ease-out infinite;
+}
+.btn.skip-highlight:hover:not(:disabled){
+  background:#ffc03a!important;
+  color:#000!important;
+  transform:translateY(-1px);
+}
+@keyframes skipPulse{
+  0%   { box-shadow:0 0 0 0 rgba(240,165,0,0.55); }
+  70%  { box-shadow:0 0 0 10px rgba(240,165,0,0); }
+  100% { box-shadow:0 0 0 0 rgba(240,165,0,0); }
+}
+
 /* ── Progress bar shimmer ── */
 .progress-bar {
   background: linear-gradient(90deg,var(--accent) 0%,#ffc03a 50%,var(--accent) 100%);
@@ -2972,7 +2992,7 @@ window.addEventListener('resize',()=>{
 });
 
 // ═══════════════════════════════════════════════
-// LOGO RESET (click on logo → reset to Step 1 / refresh)
+// LOGO RESET (click on logo → refresh page like other websites)
 // ═══════════════════════════════════════════════
 async function resetApp(){
   // If user has unsaved work, ask via our custom in-site modal (never browser confirm)
@@ -2986,30 +3006,11 @@ async function resetApp(){
     });
     if(!ok) return;
   }
-  // Soft-reset: clear state and go to step 1 without full page reload (preserves login/plan)
-  try{
-    origImg=null; processedCanvas=null; croppedCanvas=null;
-    const fi=document.getElementById('fileInput'); if(fi) fi.value='';
-    // Reset defaults
-    photoW=35; photoH=45;
-    sheetCols=4; sheetRows=2; sheetTotal=8;
-    bgColor='#FFFFFF';
-    // Reset UI: clear any progress, reset preset/swatches to first active
-    document.querySelectorAll('#totalBtns .count-btn').forEach(b=>{
-      b.classList.toggle('active', b.dataset.v==='8');
-    });
-    document.querySelectorAll('#colBtns .count-btn').forEach(b=>{
-      b.classList.toggle('active', b.dataset.v==='4');
-    });
-    closeAllModals();
-    goStep(1);
-    // Scroll top so it feels like a fresh page
-    window.scrollTo(0, 0);
-  }catch(e){
-    // Swallow — no forced reload, which would trigger the browser's
-    // "Reload site? Changes you made may not be saved" dialog.
-    console.warn('resetApp failed', e);
-  }
+  // Full page reload so it behaves like the browser's refresh button.
+  // There is no beforeunload handler in this app, so no native "Reload site?"
+  // dialog will appear. Login/plan persist via localStorage.
+  try{ closeAllModals(); }catch(e){}
+  window.location.reload();
 }
 window.resetApp=resetApp;
 
@@ -3352,6 +3353,13 @@ function refreshPlanUI(){
       aiBtn.classList.remove('pro-locked');
       aiBtn.innerHTML = '🤖 ' + ('Remove Background');
     }
+  }
+
+  // Skip → Keep Original: promote to primary CTA when AI BG is locked,
+  // so free users can clearly see how to move to the next step.
+  const skipBtn = document.getElementById('skipBgBtn');
+  if(skipBtn){
+    skipBtn.classList.toggle('skip-highlight', !pl.aiBgAllowed);
   }
 
   // Show/hide HD export button
