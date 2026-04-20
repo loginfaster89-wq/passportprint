@@ -910,6 +910,159 @@ canvas{display:block;}
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--surface);border:1px solid var(--accent);color:var(--text);padding:12px 20px;border-radius:8px;font-size:13px;z-index:10001;box-shadow:0 8px 24px rgba(0,0,0,.5);animation:toastIn .3s;max-width:90%;}
 @keyframes toastIn{from{transform:translate(-50%,20px);opacity:0;}to{transform:translate(-50%,0);opacity:1;}}
 
+/* ═══════════════════════════════════════════════════════════
+   EXTREME RESPONSIVE PASS — zero overlap / overflow on every device
+   ═══════════════════════════════════════════════════════════ */
+
+/* --- Global safety rails --- */
+*,*::before,*::after{box-sizing:border-box;}
+html,body{max-width:100vw;overflow-x:hidden;}
+img,svg,canvas,video{max-width:100%;height:auto;}
+/* Prevent long unbroken tokens (emails / URLs / plan IDs) from expanding
+   their parent beyond the viewport and creating horizontal scroll. */
+.modal,.modal-body,.form-input,.form-group,.user-chip,.pay-row,.plan-banner,.app-footer,.sb-section,.info-box{min-width:0;}
+.modal,.modal-body,.form-group,.pay-row,.plan-banner,.toast,.user-chip,main.legal-main p,main.legal-main li{overflow-wrap:anywhere;word-break:break-word;}
+/* Flex children with shrinkable text need min-width:0 so they can actually shrink. */
+header>*,.steps>*,.sidebar>*,.modal-header>*,.modal-footer>*{min-width:0;}
+/* Inputs must never overflow their row. */
+input,select,textarea,button{max-width:100%;}
+
+/* --- Header: prevent Plans/Login buttons from overlapping the logo on narrow widths --- */
+header{flex-wrap:nowrap;}
+.logo{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex-shrink:1;}
+.hdr-btn,.lang-toggle{flex-shrink:0;}
+
+/* --- Modals: make modal content scroll cleanly on small screens, never clip --- */
+.modal-overlay{padding:12px;}
+.modal{max-width:min(820px,calc(100vw - 24px));max-height:min(90dvh,calc(100dvh - 24px));}
+.modal-footer{flex-wrap:wrap;}
+.modal-footer .btn{flex:1 1 auto;min-width:120px;}
+
+/* --- App footer: never wrap off-screen, collapse gracefully --- */
+.app-footer{max-width:100vw;}
+
+/* --- Tablet / small laptop (≤1024px): tighten header + steps spacing --- */
+@media(max-width:1024px){
+  header{padding:0 14px;gap:10px;}
+  .hdr-btn{padding:6px 9px;}
+}
+
+/* --- Small tablet (≤768px): rework stacked layout so nothing clips --- */
+@media(max-width:768px){
+  body{overflow:hidden;}
+  .main{
+    display:grid;
+    grid-template-columns:1fr;
+    grid-template-rows:minmax(180px,1fr) auto;
+    min-height:0;
+  }
+  .canvas-area{
+    min-height:0; /* override the 300px rule so the canvas shrinks to fit */
+  }
+  .sidebar{
+    max-height:50dvh;
+    border-top:2px solid var(--border);
+    border-left:none;
+  }
+  /* Modal content tighter */
+  .modal-body{padding:16px;}
+  .modal-header{padding:14px 16px;}
+  .modal-footer{padding:12px 16px;}
+}
+
+/* --- Mobile (≤640px): compact header / steps / sidebar / footer --- */
+@media(max-width:640px){
+  header{height:48px;padding:0 10px;gap:6px;}
+  .logo{font-size:14px;}
+  .steps{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  .main{grid-template-rows:minmax(160px,1fr) auto;}
+  .sidebar{max-height:46dvh;}
+  .sb-section{padding:10px 12px;}
+  /* Upload inner card: let it breathe, never exceed the canvas area */
+  .upload-inner-card{padding:clamp(18px,4.5vw,28px) clamp(16px,5vw,26px);width:min(94%,420px);}
+  .upload-icon-wrap{width:52px;height:52px;margin-bottom:10px;}
+  .upload-icon-wrap svg{width:24px;height:24px;}
+  /* Modal layout */
+  .modal{border-radius:12px;}
+  .modal.small{max-width:100%;}
+  .modal-title{font-size:17px;}
+  .modal-body{padding:14px;}
+  .modal-footer{padding:10px 14px;}
+  .modal-footer .btn{min-width:100%;}
+  /* Plans grid already single-column at ≤720px, make the cards tighter */
+  .plan-card{padding:18px 14px;}
+  .plan-price{font-size:28px;}
+  /* Payment methods wrap cleanly */
+  .pay-method{min-width:100px;}
+  /* Comparison slider labels — keep inside the frame on tiny screens */
+  .comp-label{font-size:9px;padding:2px 6px;}
+  /* App footer becomes a tidy single-line scroll on super narrow if needed */
+  .app-footer{overflow-x:auto;flex-wrap:wrap;justify-content:center;}
+  .app-footer a{padding:2px 4px;}
+}
+
+/* --- Small mobile (≤420px) --- */
+@media(max-width:420px){
+  header{padding:0 8px;gap:5px;}
+  .hdr-btn{padding:5px 7px;font-size:10px;}
+  .logo{font-size:13px;letter-spacing:-.5px;}
+  .steps .step{padding:7px 10px;}
+  .main{grid-template-rows:minmax(140px,1fr) auto;}
+  .sidebar{max-height:44dvh;}
+  .sb-section{padding:9px 10px;}
+  .upload-inner-card{width:min(96%,360px);padding:16px 14px;}
+  .upload-feats{gap:3px;}
+  .upload-feat-pill{font-size:8.5px;padding:2px 6px;}
+  .modal-overlay{padding:6px;}
+  .modal-title{font-size:16px;}
+  .plan-card{padding:16px 12px;}
+  .plan-features li{font-size:11px;}
+  .app-footer{font-size:9.5px;padding:4px 6px;gap:0;}
+  .app-footer .sep{margin:0 1px;}
+  .app-footer a{padding:2px 3px;}
+}
+
+/* --- Landscape mobile / very short viewports (≤520px height): compact mode --- */
+@media(max-height:520px) and (max-width:900px){
+  header{height:38px;}
+  .logo{font-size:13px;}
+  .steps .step{padding:5px 9px;font-size:11px;}
+  .main{grid-template-rows:minmax(120px,1fr) auto;}
+  .sidebar{max-height:58dvh;}
+  .app-footer{padding:3px 6px;font-size:9.5px;}
+}
+
+/* --- Tiny mobile (≤340px) — the narrowest phones still supported --- */
+@media(max-width:340px){
+  header{gap:4px;padding:0 6px;}
+  .hdr-btn{padding:4px 6px;font-size:10px;}
+  .hdr-btn span.hdr-lbl{display:none;}
+  .logo{font-size:12px;}
+  .step-label{display:none;}
+  .step{padding:6px 8px;}
+  .upload-title{font-size:15px!important;}
+  .preset-grid{grid-template-columns:1fr;}
+  .app-footer .copy{display:none;}
+}
+
+/* --- Ultra-wide (≥1800px): keep content readable, not stretched --- */
+@media(min-width:1800px){
+  :root{--sidebar-w:420px;}
+  .canvas-area{padding:24px;}
+  .upload-inner-card{max-width:620px;}
+}
+
+/* --- Legal pages — responsive tune-up --- */
+@media(max-width:520px){
+  .legal-header{padding:10px 14px;}
+  .legal-header .logo{font-size:17px;}
+  .legal-header nav{font-size:12px;gap:8px;}
+  main.legal-main{padding:20px 14px 40px;}
+  main.legal-main h1{font-size:22px;}
+  main.legal-main h2{font-size:17px;margin:22px 0 8px;}
+  .contact-grid{padding:14px 16px;}
+}
+
 </style>
 </head>
 <body>
