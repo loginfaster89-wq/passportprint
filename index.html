@@ -1484,14 +1484,33 @@ const LANG = {
     plan_btn_upgrade:'Upgrade now',
     plan_price_forever:'forever',
 
+    /* Auth buttons / labels */
+    auth_login:'Login', auth_signup:'Sign Up',
+    auth_name:'Name', auth_email:'Gmail address', auth_email_ph:'yourname@gmail.com',
+    auth_pwd:'Password (min 6)',
+    auth_login_btn:'Login', auth_signup_btn:'Send OTP',
+    auth_gmail_note:'Only official Gmail (@gmail.com) addresses are allowed. We\'ll email you a 6-digit code to verify.',
+    auth_sending_otp:'Sending code…', auth_signing_in:'Signing in…',
+    auth_verifying:'Verifying…', auth_verify_create:'Verify & Create Account',
+    auth_otp_intro_pre:'We sent a 6-digit verification code to',
+    auth_otp_intro_post:'Check your inbox (and Spam folder) to complete signup.',
+    auth_otp_label:'Verification code',
+    auth_otp_resend:'Resend Code', auth_otp_back:'← Back',
+    otp_expires_in:'Code expires in {time}',
+    otp_expired:'Code expired — tap Resend to get a new one.',
+
     /* Auth errors + toasts */
     err_fields_required:'Please fill in all fields.',
     err_invalid_email:'Invalid email.',
+    err_gmail_only:'Only @gmail.com addresses are accepted. Please use a valid Gmail account.',
+    err_otp_digits:'Enter the 6-digit code we emailed you.',
+    err_signup_again:'Please sign up again.',
     err_pwd_short:'Password must be at least 6 characters.',
     err_fields_both:'Enter both email and password.',
-    err_no_account:'No account found. Please sign up first.',
-    err_wrong_pwd:'Wrong password.',
+    err_no_account:'No account found with this Gmail. Please sign up first.',
+    err_wrong_pwd:'Wrong password. Please try again.',
     err_prefix:'Error: ',
+    toast_otp_resent:'New verification code sent.',
     toast_welcome_new:'Welcome {name}! Account created.',
     toast_welcome_back:'Welcome back, {name}!',
     toast_logout:'Logged out',
@@ -3423,8 +3442,31 @@ function setAuthTab(tab){
   document.querySelectorAll('.auth-tab').forEach(t=>t.classList.toggle('active', t.dataset.tab===tab));
   document.getElementById('loginForm').style.display=tab==='login'?'block':'none';
   document.getElementById('signupForm').style.display=tab==='signup'?'block':'none';
+  const otpForm = document.getElementById('otpForm');
+  if(otpForm) otpForm.style.display = tab==='otp' ? 'block' : 'none';
+  // Hide the login/signup tab switcher while on OTP step.
+  const tabs = document.querySelector('#authModal .auth-tabs');
+  if(tabs) tabs.style.display = tab==='otp' ? 'none' : '';
   document.getElementById('authError').textContent='';
 }
+// Only accept official @gmail.com addresses (trademark Gmail).
+function isGmailAddress(s){
+  if(typeof s !== 'string') return false;
+  return /^[a-z0-9][a-z0-9._+\-]{0,62}[a-z0-9]@gmail\.com$/.test(s.trim().toLowerCase());
+}
+
+// Pending signup state between "send OTP" and "verify OTP" steps.
+let _pendingSignup = null;  // { email, name, pwd }
+let _otpTimerId = null;
+
+function setAuthBusy(formId, busy, busyText, idleText){
+  const btn = document.querySelector('#'+formId+' button[type=submit]');
+  if(!btn) return;
+  btn.disabled = !!busy;
+  if(busy && busyText) btn.textContent = busyText;
+  if(!busy && idleText) btn.textContent = idleText;
+}
+
 async function doSignup(e){
   if(e) e.preventDefault();
   const name=document.getElementById('suName').value.trim();
@@ -3432,19 +3474,20 @@ async function doSignup(e){
   const pwd=document.getElementById('suPwd').value;
   const err=document.getElementById('authError'); err.textContent='';
   if(!name||!email||!pwd){err.textContent=t('err_fields_required');return;}
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){err.textContent=t('err_invalid_email');return;}
+  if(!isGmailAddress(email)){err.textContent=t('err_gmail_only');return;}
   if(pwd.length<6){err.textContent=t('err_pwd_short');return;}
 
   if(USE_BACKEND){
+    setAuthBusy('signupForm', true, t('auth_sending_otp'));
     try{
-      const {token, user} = await api('/api/signup', {method:'POST', body:{name, email, password:pwd}});
-      localStorage.setItem(AUTH_TOKEN_KEY, token);
-      saveUsers(Object.assign(getUsers(), {[user.email]: user}));
-      setSession({email:user.email, loggedAt:Date.now()});
-      refreshAuthUI(); closeModal('authModal');
-      showToast(t('toast_welcome_new', {name:user.name}));
-      refreshServerDownloadStatus();
-    }catch(ex){ err.textContent = t('err_prefix') + ex.message; }
+      const res = await api('/api/send-signup-otp', {method:'POST', body:{name, email, password:pwd}});
+      _pendingSignup = { email: (res && res.email) || email, name, pwd };
+      showOtpStep(_pendingSignup.email, (res && res.expiresInSec) || 600);
+    }catch(ex){
+      err.textContent = (ex && ex.message) ? ex.message : t('err_prefix');
+    }finally{
+      setAuthBusy('signupForm', false, null, t('auth_signup_btn'));
+    }
     return;
   }
 
@@ -3459,14 +3502,84 @@ async function doSignup(e){
   closeModal('authModal');
   showToast(t('toast_welcome_new', {name}));
 }
+
+async function doVerifySignupOtp(e){
+  if(e) e.preventDefault();
+  const err=document.getElementById('authError'); err.textContent='';
+  const code = (document.getElementById('otpCode').value||'').trim();
+  if(!/^\d{6}$/.test(code)){ err.textContent = t('err_otp_digits'); return; }
+  if(!_pendingSignup){ err.textContent = t('err_signup_again'); setAuthTab('signup'); return; }
+  setAuthBusy('otpForm', true, t('auth_verifying'));
+  try{
+    const {token, user} = await api('/api/verify-signup-otp', {
+      method:'POST', body:{ email:_pendingSignup.email, otp:code }
+    });
+    localStorage.setItem(AUTH_TOKEN_KEY, token);
+    saveUsers(Object.assign(getUsers(), {[user.email]: user}));
+    setSession({email:user.email, loggedAt:Date.now()});
+    refreshAuthUI(); closeModal('authModal');
+    showToast(t('toast_welcome_new', {name:user.name}));
+    refreshServerDownloadStatus();
+    _pendingSignup = null;
+    clearInterval(_otpTimerId);
+  }catch(ex){
+    err.textContent = (ex && ex.message) ? ex.message : t('err_prefix');
+  }finally{
+    setAuthBusy('otpForm', false, null, t('auth_verify_create'));
+  }
+}
+
+async function resendSignupOtp(){
+  const err=document.getElementById('authError'); err.textContent='';
+  if(!_pendingSignup){ setAuthTab('signup'); return; }
+  const { name, email, pwd } = _pendingSignup;
+  try{
+    const res = await api('/api/send-signup-otp', {method:'POST', body:{name, email, password:pwd}});
+    startOtpCountdown((res && res.expiresInSec) || 600);
+    showToast(t('toast_otp_resent'));
+  }catch(ex){
+    err.textContent = (ex && ex.message) ? ex.message : t('err_prefix');
+  }
+}
+
+function showOtpStep(email, seconds){
+  setAuthTab('otp');
+  const emailDisplay = document.getElementById('otpEmailDisplay');
+  if(emailDisplay) emailDisplay.textContent = email;
+  const codeInput = document.getElementById('otpCode');
+  if(codeInput){ codeInput.value=''; setTimeout(()=>codeInput.focus(), 80); }
+  startOtpCountdown(seconds);
+}
+
+function startOtpCountdown(seconds){
+  clearInterval(_otpTimerId);
+  let remaining = Math.max(0, seconds|0);
+  const el = document.getElementById('otpCountdown');
+  function tick(){
+    if(!el) return;
+    if(remaining <= 0){
+      el.textContent = t('otp_expired');
+      clearInterval(_otpTimerId);
+      return;
+    }
+    const m = Math.floor(remaining/60), s = remaining%60;
+    el.textContent = t('otp_expires_in', {time: `${m}:${String(s).padStart(2,'0')}`});
+    remaining--;
+  }
+  tick();
+  _otpTimerId = setInterval(tick, 1000);
+}
+
 async function doLogin(e){
   if(e) e.preventDefault();
   const email=document.getElementById('liEmail').value.trim().toLowerCase();
   const pwd=document.getElementById('liPwd').value;
   const err=document.getElementById('authError'); err.textContent='';
   if(!email||!pwd){err.textContent=t('err_fields_both');return;}
+  if(!isGmailAddress(email)){err.textContent=t('err_gmail_only');return;}
 
   if(USE_BACKEND){
+    setAuthBusy('loginForm', true, t('auth_signing_in'));
     try{
       const {token, user} = await api('/api/login', {method:'POST', body:{email, password:pwd}});
       localStorage.setItem(AUTH_TOKEN_KEY, token);
@@ -3475,7 +3588,11 @@ async function doLogin(e){
       refreshAuthUI(); closeModal('authModal');
       showToast(t('toast_welcome_back', {name:user.name}));
       refreshServerDownloadStatus();
-    }catch(ex){ err.textContent = t('err_prefix') + ex.message; }
+    }catch(ex){
+      err.textContent = (ex && ex.message) ? ex.message : t('err_prefix');
+    }finally{
+      setAuthBusy('loginForm', false, null, t('auth_login_btn'));
+    }
     return;
   }
 
@@ -3764,14 +3881,42 @@ restoreSession();
           <input type="text" class="form-input" id="suName" autocomplete="name" required>
         </div>
         <div class="form-group">
-          <label class="form-label" data-i18n="auth_email">Email</label>
-          <input type="email" class="form-input" id="suEmail" autocomplete="email" required>
+          <label class="form-label" data-i18n="auth_email">Gmail address</label>
+          <input type="email" class="form-input" id="suEmail" autocomplete="email"
+                 pattern="[a-zA-Z0-9._%+\-]+@gmail\.com"
+                 placeholder="yourname@gmail.com"
+                 title="Only @gmail.com addresses are accepted"
+                 data-i18n-placeholder="auth_email_ph" required>
         </div>
         <div class="form-group">
           <label class="form-label" data-i18n="auth_pwd">Password (min 6)</label>
           <input type="password" class="form-input" id="suPwd" autocomplete="new-password" minlength="6" required>
         </div>
-        <button type="submit" class="btn btn-primary" style="margin-top:6px;" data-i18n="auth_signup_btn">Create Account</button>
+        <div style="font-size:11px;color:var(--muted);margin:-4px 0 8px;" data-i18n="auth_gmail_note">
+          Only official Gmail (@gmail.com) addresses are allowed. We'll email you a 6-digit code to verify.
+        </div>
+        <button type="submit" class="btn btn-primary" style="margin-top:6px;" data-i18n="auth_signup_btn">Send OTP</button>
+      </form>
+      <form id="otpForm" onsubmit="doVerifySignupOtp(event)" style="display:none;">
+        <div style="background:var(--surface,#161625);border:1px solid var(--border,#262637);border-radius:10px;padding:12px 14px;margin-bottom:12px;font-size:12px;line-height:1.6;color:var(--muted);">
+          <span data-i18n="auth_otp_intro_pre">We sent a 6-digit verification code to</span>
+          <strong id="otpEmailDisplay" style="color:var(--text);display:block;margin:4px 0;word-break:break-all;">—</strong>
+          <span data-i18n="auth_otp_intro_post">Check your inbox (and Spam folder) to complete signup.</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label" data-i18n="auth_otp_label">Verification code</label>
+          <input type="text" inputmode="numeric" pattern="\d{6}" maxlength="6"
+                 class="form-input" id="otpCode" autocomplete="one-time-code"
+                 placeholder="123456"
+                 style="letter-spacing:8px;font-family:'DM Mono',ui-monospace,Menlo,monospace;text-align:center;font-size:18px;font-weight:600;"
+                 required>
+        </div>
+        <div id="otpCountdown" style="font-size:11px;color:var(--muted);margin:-6px 0 8px;"></div>
+        <button type="submit" class="btn btn-primary" style="margin-top:6px;" data-i18n="auth_verify_create">Verify &amp; Create Account</button>
+        <div style="margin-top:8px;display:flex;gap:8px;">
+          <button type="button" class="btn btn-ghost" style="flex:1;margin:0;" onclick="resendSignupOtp()" data-i18n="auth_otp_resend">Resend Code</button>
+          <button type="button" class="btn btn-ghost" style="flex:1;margin:0;" onclick="setAuthTab('signup')" data-i18n="auth_otp_back">← Back</button>
+        </div>
       </form>
       <div class="form-error" id="authError"></div>
       <div class="form-success" id="authSuccess" style="display:none;"></div>
