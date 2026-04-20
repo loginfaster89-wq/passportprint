@@ -881,6 +881,19 @@ canvas{display:block;}
 .pay-method.active{border-color:var(--accent);background:var(--accent-dim);color:var(--accent);}
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--surface);border:1px solid var(--accent);color:var(--text);padding:12px 20px;border-radius:8px;font-size:13px;z-index:10001;box-shadow:0 8px 24px rgba(0,0,0,.5);animation:toastIn .3s;max-width:90%;}
 @keyframes toastIn{from{transform:translate(-50%,20px);opacity:0;}to{transform:translate(-50%,0);opacity:1;}}
+
+/* ── Google Translate widget (whole-page translation) ── */
+.gt-wrap{display:flex;align-items:center;min-height:28px;flex-shrink:0;}
+.gt-wrap .goog-te-gadget{font-family:'DM Mono',monospace !important;font-size:0 !important;color:transparent !important;line-height:1 !important;}
+.gt-wrap .goog-te-gadget > span{display:none !important;}
+.gt-wrap .goog-te-gadget .goog-te-combo{margin:0 !important;padding:4px 10px !important;border:1px solid var(--border) !important;background:var(--surface2) !important;color:var(--text) !important;border-radius:16px !important;font-family:'DM Mono',monospace !important;font-size:12px !important;font-weight:600 !important;letter-spacing:.5px !important;cursor:pointer !important;outline:none !important;}
+.gt-wrap .goog-te-combo option{background:var(--surface2);color:var(--text);}
+/* Hide the Google Translate top banner + tooltip bubble */
+.goog-te-banner-frame.skiptranslate,
+.goog-logo-link,
+#goog-gt-tt,
+.goog-te-balloon-frame{display:none !important;}
+body{top:0 !important;}
 </style>
 </head>
 <body>
@@ -896,10 +909,7 @@ canvas{display:block;}
   </div>
   <!-- Language + Help + Auth -->
   <div style="margin-left:auto;display:flex;align-items:center;gap:8px;flex-shrink:0;">
-    <div class="lang-toggle">
-      <button class="lang-btn active" onclick="setLang('hi')">HI</button>
-      <button class="lang-btn" onclick="setLang('en')">EN</button>
-    </div>
+    <div id="google_translate_element" class="gt-wrap" title="Translate this page"></div>
     <button class="help-btn" onclick="openTutorial()" title="API Key Tutorial" style="display:none;">?</button>
     <button class="hdr-btn hdr-btn-plans" onclick="openPlans()" title="Subscription Plans">💎 <span class="hdr-lbl" data-i18n="hdr_plans">Plans</span></button>
     <button class="hdr-btn hdr-btn-login" id="hdrAuthBtn" onclick="openAuth()" title="Login / Signup">👤 <span class="hdr-lbl" id="hdrAuthLabel" data-i18n="hdr_login">Login</span></button>
@@ -909,9 +919,9 @@ canvas{display:block;}
 <!-- STEPS BAR -->
 <div class="steps">
   <div class="step active" id="tab1"><div class="step-num">1</div><span class="step-label" data-i18n="step1">Photo Upload</span></div>
-  <div class="step" id="tab2"><div class="step-num">2</div><span class="step-label" data-i18n="step2">Background Hatao</span></div>
+  <div class="step" id="tab2"><div class="step-num">2</div><span class="step-label" data-i18n="step2">Remove Background</span></div>
   <div class="step" id="tab3"><div class="step-num">3</div><span class="step-label" data-i18n="step3">Crop & Adjust</span></div>
-  <div class="step" id="tab4"><div class="step-num">4</div><span class="step-label" data-i18n="step4">A4 Sheet Banao</span></div>
+  <div class="step" id="tab4"><div class="step-num">4</div><span class="step-label" data-i18n="step4">Generate A4 Sheet</span></div>
 </div>
 
 <!-- MAIN -->
@@ -950,7 +960,7 @@ canvas{display:block;}
               <circle cx="24" cy="24" r="3" fill="#f0a500" opacity="0.5"/>
             </svg>
           </div>
-          <div class="upload-title" data-i18n="upload_title" style="font-size:clamp(16px, 2.6vw, 22px);margin-bottom:8px;">यहाँ Photo डालें</div>
+          <div class="upload-title" data-i18n="upload_title" style="font-size:clamp(16px, 2.6vw, 22px);margin-bottom:8px;">Drop your photo here</div>
           <div class="upload-sub" style="color:var(--muted);font-size:clamp(11px, 1.5vw, 13px);line-height:1.8;">
             <span data-i18n="upload_sub1">WhatsApp · Camera · Any image</span><br>
             <span style="font-size:clamp(9px, 1.3vw, 11px);color:var(--muted2);">JPG · PNG · WEBP · BMP</span>
@@ -966,7 +976,7 @@ canvas{display:block;}
           <!-- CTA hint -->
           <div style="margin-top:18px;font-size:12px;color:var(--muted2);">
             <span style="background:var(--accent);color:#000;border-radius:4px;padding:2px 8px;font-weight:700;font-size:11px;">CLICK</span>
-            &nbsp;<span data-i18n="or_drop">ya photo yahan drop karo</span>
+            &nbsp;<span data-i18n="or_drop">or drop your photo here</span>
           </div>
         </div>
 
@@ -1033,11 +1043,11 @@ canvas{display:block;}
       <div class="sb-section">
         <div class="sb-title" data-i18n="sb1_tips_title">Photo Tips</div>
         <div class="tips">
-          <span data-i18n="tip1">📌 Achhi roshni mein photo lein</span>
-          <span data-i18n="tip2">📌 Plain background ho toh better</span>
-          <span data-i18n="tip3">📌 Chehra seedha aur clear ho</span>
-          <span data-i18n="tip4">📌 WhatsApp photos bilkul theek hain</span>
-          <span data-i18n="tip5">📌 Glasses hat dein agar ho sakein</span>
+          <span data-i18n="tip1">📌 Take photo in good lighting</span>
+          <span data-i18n="tip2">📌 Plain background is better</span>
+          <span data-i18n="tip3">📌 Face should be straight and clear</span>
+          <span data-i18n="tip4">📌 WhatsApp photos work perfectly</span>
+          <span data-i18n="tip5">📌 Remove glasses if possible</span>
         </div>
       </div>
     </div>
@@ -1066,7 +1076,7 @@ canvas{display:block;}
 
       <!-- BG COLOR -->
       <div class="sb-section">
-        <div class="sb-title" data-i18n="sb2_bg_color">Naya Background Color</div>
+        <div class="sb-title" data-i18n="sb2_bg_color">New Background Color</div>
         <div class="swatches" id="bgSwatches">
           <div class="swatch active" style="background:#FFFFFF;border:1px solid #ddd;" data-color="#FFFFFF" onclick="selectBgColor(this)" title="White"></div>
           <div class="swatch" style="background:#ACD1E9;" data-color="#ACD1E9" onclick="selectBgColor(this)" title="Passport Blue"></div>
@@ -1087,8 +1097,8 @@ canvas{display:block;}
         <button class="btn btn-secondary" onclick="resetCrop()" data-i18n="btn_reset_crop">↺ Reset Crop Box</button>
         <button class="btn btn-ghost mt6" onclick="autoCenterCrop()" data-i18n="btn_autocenter">⊙ Auto-Center</button>
         <div class="info-box mt10">
-          <strong data-i18n="crop_amber_label">Amber box</strong> <span data-i18n="crop_drag_info">drag karein reposition ke liye.</span><br>
-          <strong data-i18n="crop_corners_label">Corners</strong> <span data-i18n="crop_resize_info">resize karte hain — aspect ratio auto-lock.</span>
+          <strong data-i18n="crop_amber_label">Amber box</strong> <span data-i18n="crop_drag_info">drag to reposition.</span><br>
+          <strong data-i18n="crop_corners_label">Corners</strong> <span data-i18n="crop_resize_info">resize — aspect ratio auto-locked.</span>
         </div>
       </div>
       <div class="sb-section">
@@ -1125,7 +1135,7 @@ canvas{display:block;}
     <div id="sb4" class="hidden">
       <div class="sb-section">
         <div class="sb-title" data-i18n="sb4_layout_title">Layout</div>
-        <div style="font-size:10px;color:var(--muted);margin-bottom:6px;" data-i18n="sb4_how_many">Kitni photos chahiye?</div>
+        <div style="font-size:10px;color:var(--muted);margin-bottom:6px;" data-i18n="sb4_how_many">How many photos?</div>
         <div class="count-row" style="flex-wrap:wrap;gap:5px;" id="totalBtns">
           <div class="count-btn" data-v="1" onclick="setTotal(this)">1</div>
           <div class="count-btn" data-v="2" onclick="setTotal(this)">2</div>
@@ -1139,7 +1149,7 @@ canvas{display:block;}
           <div class="count-btn" data-v="16" onclick="setTotal(this)">16</div>
         </div>
         <button class="btn btn-secondary" style="margin-top:8px;padding:8px 10px;font-size:12px;" onclick="fillA4()" data-i18n="btn_fill_a4">📄 Fill A4 Sheet (Max Photos)</button>
-        <div style="font-size:10px;color:var(--muted);margin:10px 0 6px;" data-i18n="sb4_per_row">Ek line mein kitni? (cols)</div>
+        <div style="font-size:10px;color:var(--muted);margin:10px 0 6px;" data-i18n="sb4_per_row">Photos per row (cols)</div>
         <div class="count-row" id="colBtns">
           <div class="count-btn" data-v="2" onclick="setCols(this)">2</div>
           <div class="count-btn" data-v="3" onclick="setCols(this)">3</div>
@@ -1176,14 +1186,11 @@ canvas{display:block;}
 <!-- ══════════ TUTORIAL PAGE ══════════ -->
 <div id="tutorialPage" class="hidden">
   <div class="tut-header">
-    <button class="tut-back" onclick="closeTutorial()">← <span data-i18n="tut_back">Wapas Jao</span></button>
+    <button class="tut-back" onclick="closeTutorial()">← <span data-i18n="tut_back">Go Back</span></button>
     <div class="tut-title">API Key <em>Tutorial</em></div>
     <div style="margin-left:auto;display:flex;align-items:center;gap:10px;">
-      <div style="font-size:10px;color:var(--muted);display:none;" class="tut-sub-text" data-i18n="tut_sub">Remove.bg se free API key kaise lein</div>
-      <div class="lang-toggle">
-        <button class="lang-btn" id="tut-lang-hi" onclick="setLang('hi')">HI</button>
-        <button class="lang-btn" id="tut-lang-en" onclick="setLang('en')">EN</button>
-      </div>
+      <div style="font-size:10px;color:var(--muted);display:none;" class="tut-sub-text" data-i18n="tut_sub">How to get a free API key from Remove.bg</div>
+      
     </div>
   </div>
   <div class="tut-body">
@@ -1207,8 +1214,8 @@ canvas{display:block;}
         <div class="tut-step-badge">1</div>
       </div>
       <div class="tut-card-right">
-        <div class="tut-card-title" data-i18n="tut1_title">Remove.bg par free account banao</div>
-        <div class="tut-card-desc" data-i18n="tut1_desc">remove.bg ek AI tool hai jo photos se background automatically hatata hai. Iska free plan mein 50 photos har month milti hain — bilkul free.</div>
+        <div class="tut-card-title" data-i18n="tut1_title">Create a free account on Remove.bg</div>
+        <div class="tut-card-desc" data-i18n="tut1_desc">remove.bg is an AI tool that automatically removes backgrounds from photos. The free plan gives 50 photos every month — completely free.</div>
         <div class="mock-screen">
           <div class="mock-bar">
             <div class="mock-dots"><div class="mock-dot" style="background:#ff5f57"></div><div class="mock-dot" style="background:#ffbd2e"></div><div class="mock-dot" style="background:#28c840"></div></div>
@@ -1223,7 +1230,7 @@ canvas{display:block;}
             </div>
           </div>
         </div>
-        <div class="tut-tip"><strong>🔗 Link:</strong> <span style="color:var(--accent)">remove.bg</span> — Google par search karo ya seedha URL daalo. Sign up mein sirf email chahiye, free hai.</div>
+        <div class="tut-tip"><strong>🔗 Link:</strong> <span style="color:var(--accent)">remove.bg</span> — search it on Google or type the URL directly. Sign up needs only an email — it's free.</div>
       </div>
     </div>
 
@@ -1233,8 +1240,8 @@ canvas{display:block;}
         <div class="tut-step-badge">2</div>
       </div>
       <div class="tut-card-right">
-        <div class="tut-card-title" data-i18n="tut2_title">Dashboard pe "API" tab pe click karo</div>
-        <div class="tut-card-desc" data-i18n="tut2_desc">Login hone ke baad upar navbar mein "API" likha hoga — us par click karo.</div>
+        <div class="tut-card-title" data-i18n="tut2_title">Click the "API" tab on the dashboard</div>
+        <div class="tut-card-desc" data-i18n="tut2_desc">After logging in, you'll see "API" in the top navbar — click on it.</div>
         <div class="mock-screen">
           <div class="mock-bar">
             <div class="mock-dots"><div class="mock-dot" style="background:#ff5f57"></div><div class="mock-dot" style="background:#ffbd2e"></div><div class="mock-dot" style="background:#28c840"></div></div>
@@ -1243,7 +1250,7 @@ canvas{display:block;}
           <div class="mock-nav">
             <div class="mock-nav-item">Uploads</div>
             <div class="mock-nav-item">Bulk Editing</div>
-            <div class="mock-nav-item hi mock-highlight">API ← Click karo</div>
+            <div class="mock-nav-item hi mock-highlight">API ← Click here</div>
             <div class="mock-nav-item">Plugins</div>
             <div class="mock-nav-item">Pricing</div>
           </div>
@@ -1260,8 +1267,8 @@ canvas{display:block;}
         <div class="tut-step-badge">3</div>
       </div>
       <div class="tut-card-right">
-        <div class="tut-card-title" data-i18n="tut3_title">"+ New API Key" button dabao</div>
-        <div class="tut-card-desc" data-i18n="tut3_desc">API page par right side mein "+ New API Key" ka button hoga. Us par click karo — ek popup khulega.</div>
+        <div class="tut-card-title" data-i18n="tut3_title">Click the "+ New API Key" button</div>
+        <div class="tut-card-desc" data-i18n="tut3_desc">On the API page, you'll see a "+ New API Key" button on the right side. Click it — a popup will open.</div>
         <div class="mock-screen">
           <div class="mock-bar">
             <div class="mock-dots"><div class="mock-dot" style="background:#ff5f57"></div><div class="mock-dot" style="background:#ffbd2e"></div><div class="mock-dot" style="background:#28c840"></div></div>
@@ -1270,7 +1277,7 @@ canvas{display:block;}
           <div class="mock-body">
             <div style="display:flex;justify-content:space-between;align-items:center;">
               <div style="font-size:12px;color:#a0a0c0;font-weight:700;">API Keys</div>
-              <div class="mock-btn mock-highlight" style="font-size:10px;">+ New API Key ← Yahan</div>
+              <div class="mock-btn mock-highlight" style="font-size:10px;">+ New API Key ← Here</div>
             </div>
             <div style="margin-top:12px;background:#0f0f23;border-radius:6px;padding:10px;font-size:10px;color:#4040a0;">
               No API keys yet. Create one above.
@@ -1286,8 +1293,8 @@ canvas{display:block;}
         <div class="tut-step-badge">4</div>
       </div>
       <div class="tut-card-right">
-        <div class="tut-card-title" data-i18n="tut4_title">Key copy karo</div>
-        <div class="tut-card-desc" data-i18n="tut4_desc">Popup mein ek long key dikhegi jaise: "abc123XYZ..." — us key ko poora select karke copy karo (Ctrl+C). Ye key sirf ek baar dikhti hai!</div>
+        <div class="tut-card-title" data-i18n="tut4_title">Copy your API key</div>
+        <div class="tut-card-desc" data-i18n="tut4_desc">A long key will appear like: "abc123XYZ..." — select it all and copy (Ctrl+C). This key is shown only once!</div>
         <div class="mock-screen">
           <div class="mock-bar">
             <div class="mock-dots"><div class="mock-dot" style="background:#ff5f57"></div><div class="mock-dot" style="background:#ffbd2e"></div><div class="mock-dot" style="background:#28c840"></div></div>
@@ -1301,11 +1308,11 @@ canvas{display:block;}
                 <div class="mock-key-text">DeTzhisA7969mQu<wbr>ABN7XpXbY</div>
                 <div class="mock-copy-btn">📋 Copy</div>
               </div>
-              <div style="font-size:9px;color:#f87171;margin-top:8px;">⚠ Ye key kisi ko share mat karo!</div>
+              <div style="font-size:9px;color:#f87171;margin-top:8px;">⚠ Do not share this key with anyone!</div>
             </div>
           </div>
         </div>
-        <div class="tut-tip"><strong>⚠ Zaroori:</strong> Key copy ho gayi? Kahi note kar lo — notepad mein save karo. Baad mein bhi dekhni pad sakti hai.</div>
+        <div class="tut-tip"><strong>⚠ Important:</strong> Copied the key? Save it somewhere — paste it into Notepad. You may need to look it up later.</div>
       </div>
     </div>
 
@@ -1315,8 +1322,8 @@ canvas{display:block;}
         <div class="tut-step-badge">5</div>
       </div>
       <div class="tut-card-right">
-        <div class="tut-card-title" data-i18n="tut5_title">Tool mein API key paste karo</div>
-        <div class="tut-card-desc" data-i18n="tut5_desc">Wapas PassportPrint Studio mein aao. Step 2 (Background Hatao) pe aoge toh upar API Key field dikhega — wahan Ctrl+V se paste karo. Key save ho jayegi automatically.</div>
+        <div class="tut-card-title" data-i18n="tut5_title">Paste the API key in the tool</div>
+        <div class="tut-card-desc" data-i18n="tut5_desc">Come back to PassportPrint Studio. On Step 2 (Remove Background) you'll see an API Key field at the top — paste it there (Ctrl+V). It saves automatically.</div>
         <div class="mock-screen" style="background:#161616;border-color:#2c2c2c;">
           <div class="mock-bar" style="background:#0d0d0d;border-color:#2c2c2c;">
             <div class="mock-dots"><div class="mock-dot" style="background:#ff5f57"></div><div class="mock-dot" style="background:#ffbd2e"></div><div class="mock-dot" style="background:#28c840"></div></div>
@@ -1325,21 +1332,21 @@ canvas{display:block;}
           <div class="mock-body">
             <div style="font-size:9px;color:#777;text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px;">🔑 Remove.bg API Key</div>
             <div class="mock-input-row">
-              <div class="mock-input mock-highlight" style="background:#1e1e1e;border-color:#f0a500;color:#4ade80;">DeTzhisA7969mQu... ← Paste karo</div>
+              <div class="mock-input mock-highlight" style="background:#1e1e1e;border-color:#f0a500;color:#4ade80;">DeTzhisA7969mQu... ← Paste here</div>
               <div style="background:#272727;border:1px solid #2c2c2c;border-radius:5px;padding:5px 8px;font-size:12px;cursor:pointer;">👁</div>
             </div>
-            <div style="font-size:9px;color:#4ade80;margin-top:6px;">✓ API Key set hai — AI removal ready!</div>
+            <div style="font-size:9px;color:#4ade80;margin-top:6px;">✓ API Key set — AI removal ready!</div>
           </div>
         </div>
-        <div class="tut-tip"><strong>✓ Ho gaya!</strong> Ab "🤖 AI Remove BG" button dabao — complex backgrounds bhi chutki mein hatenge. Har month 50 photos free milti hain, phir reset hoti hai.</div>
+        <div class="tut-tip"><strong>✓ Done!</strong> Now click the "🤖 AI Remove BG" button — even complex backgrounds will be removed in a snap. 50 photos are free every month, then it resets.</div>
       </div>
     </div>
 
     <!-- CTA -->
     <div class="tut-cta">
-      <div class="tut-cta-title">Sab ho gaya! Ab <em>kaam shuru karo</em> 🎉</div>
-      <div style="font-size:11px;color:var(--muted);margin-bottom:16px;" data-i18n="tut_cta_sub">Tool mein wapas jao, photo upload karo, aur AI magic dekho</div>
-      <button class="btn btn-primary" style="width:auto;padding:10px 28px;" onclick="closeTutorial()">← Tool pe Wapas Jao</button>
+      <div class="tut-cta-title">All set! Now <em>get started</em> 🎉</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:16px;" data-i18n="tut_cta_sub">Go back to the tool, upload a photo, and watch the AI magic</div>
+      <button class="btn btn-primary" style="width:auto;padding:10px 28px;" onclick="closeTutorial()">← Go Back to Tool</button>
     </div>
 
   </div>
@@ -1404,105 +1411,6 @@ window.hideFeatLines=hideFeatLines;
 // LANGUAGE SYSTEM
 // ═══════════════════════════════════════════════
 const LANG = {
-  hi: {
-    badge_free:'✓ 100% मुफ़्त', badge_offline:'✓ Offline', badge_ai:'✓ AI Background',
-    step1:'फ़ोटो अपलोड', step2:'Background हटाओ', step3:'Crop करो', step4:'A4 Sheet बनाओ',
-    upload_title:'यहाँ Photo डालें', upload_sub1:'WhatsApp downloads, camera photos, any image',
-    crop_hint:'🟡 box खींचो reposition के लिए · Corners से resize करो',
-    sb1_standard:'Photo Standard', sb1_selected:'चुना गया:', sb1_output:'Output size:',
-    sb1_tips_title:'Photo Tips',
-    tip1:'📌 अच्छी रोशनी में photo लें', tip2:'📌 Plain background हो तो better',
-    tip3:'📌 चेहरा सीधा और clear हो', tip4:'📌 WhatsApp photos बिलकुल ठीक हैं',
-    tip5:'📌 Glasses हटा दें अगर हो सके',
-    api_placeholder:'अपनी API key यहाँ डालो...',
-    api_status_empty:'Key डालो → AI background removal सब backgrounds पे काम करेगा',
-    api_privacy:'Key सिर्फ आपके computer पर save होती है।',
-    api_tut_btn:'API Key कैसे मिलेगी?', api_tut_sub:'Step-by-step tutorial देखें →',
-    sb2_remove_title:'Background हटाओ',
-    btn_cancel:'✕ Cancel', btn_ai_remove:'🤖 Background हटाओ',
-    btn_proceed:'✓ Crop करने जाओ →',
-    btn_skip:'Skip → Original रखना है',
-    sb2_bg_color:'नया Background Color', white_standard:'⭐ White = India passport standard',
-    sb3_crop_title:'Crop Controls', btn_reset_crop:'↺ Crop Box Reset करो',
-    btn_autocenter:'⊙ Auto-Center',
-    crop_amber_label:'Amber box', crop_drag_info:'खींचो reposition के लिए।',
-    crop_corners_label:'Corners', crop_resize_info:'resize करते हैं — aspect ratio auto-lock।',
-    sb3_adj_title:'Photo Adjustments',
-    adj_brightness:'Brightness', adj_contrast:'Contrast', adj_saturation:'Saturation', adj_warmth:'Warmth',
-    btn_reset_adj:'Adjustments Reset करो',
-    btn_confirm_crop:'✓ Confirm → Sheet बनाओ', btn_back:'← वापस',
-    sb4_layout_title:'Layout', sb4_how_many:'कितनी photos चाहिए?',
-    sb4_per_row:'एक line में कितनी? (cols)',
-    btn_regen:'↻ Sheet दोबारा बनाओ',
-    sb4_output_title:'Output Info',
-    out_sheet:'Sheet size:', out_res:'Resolution:', out_fmt:'Format:',
-    out_photos:'Photos:', out_cut:'Cutting guides:', out_included:'Included ✓',
-    btn_download:'⬇ Download PNG (300 DPI)', btn_print:'🖨 Print करो',
-    btn_new_photo:'← नई Photo', btn_back_crop:'← Crop पर वापस जाओ',
-    tut_back:'वापस जाओ', tut_sub:'Remove.bg से free API key कैसे लें',
-    tut1_title:'Remove.bg पर free account बनाओ',
-    tut1_desc:'remove.bg एक AI tool है जो photos से background automatically हटाता है। Free plan में 50 photos हर month मिलती हैं — बिलकुल free।',
-    tut2_title:'Dashboard पे "API" tab पे click करो',
-    tut2_desc:'Login होने के बाद ऊपर navbar में "API" लिखा होगा — उस पर click करो।',
-    tut3_title:'"+ New API Key" button दबाओ',
-    tut3_desc:'API page पर right side में "+ New API Key" का button होगा। उस पर click करो — एक popup खुलेगा।',
-    tut4_title:'Key copy करो',
-    tut4_desc:'Popup में एक long key दिखेगी जैसे: "abc123XYZ..." — उसे पूरा copy करो (Ctrl+C). यह key सिर्फ एक बार दिखती है!',
-    tut5_title:'Tool में API key paste करो',
-    tut5_desc:'वापस PassportPrint Studio में आओ। Step 2 पे API Key field में Ctrl+V से paste करो। Key automatically save हो जाएगी।',
-    tut_cta_sub:'Tool में वापस जाओ, photo upload करो, और AI magic देखो',
-    tut_cta_btn:'← Tool पे वापस जाओ',
-
-    /* Header / auth / account / plans (proper Hindi) */
-    hdr_plans:'Plans', hdr_login:'Login',
-    auth_info_title:'ℹ सूचना:',
-    auth_info_body:'आपका account सुरक्षित है। Passwords encrypt करके रखे जाते हैं और सारा data HTTPS के ज़रिए भेजा जाता है।',
-    plans_note:'सभी payments Razorpay के ज़रिए secure किए जाते हैं (UPI, Card, Net Banking सब accept होते हैं)। Payment successful होते ही आपका plan तुरंत activate हो जाएगा। Cancel anytime.',
-    acc_name:'नाम', acc_email:'Email', acc_plan:'मौजूदा Plan', acc_expiry:'Expiry',
-    acc_upgrade:'💎 Upgrade / Plan बदलें',
-    acc_logout:'Logout',
-    acc_delete:'🗑 Account हमेशा के लिए Delete करें',
-    plan_tag_free:'Try karo — 2 sheets daily, watermark ke saath।',
-    plan_tag_weekly:'7 दिन full access, bina watermark।',
-    plan_tag_monthly:'Best value. 30 दिन, सब unlocked।',
-    plan_btn_current:'✓ आपका Plan',
-    plan_btn_switch_free:'Free पर जाएँ',
-    plan_btn_upgrade:'अभी Upgrade करें',
-    plan_price_forever:'forever',
-
-    /* Auth errors + toasts (proper Hindi) */
-    err_fields_required:'सभी fields भरें।',
-    err_invalid_email:'Email सही नहीं है।',
-    err_pwd_short:'Password कम से कम 6 characters का होना चाहिए।',
-    err_fields_both:'Email और password दोनों ज़रूरी हैं।',
-    err_no_account:'Account नहीं मिला। पहले Signup करें।',
-    err_wrong_pwd:'Password गलत है।',
-    err_prefix:'Error: ',
-    toast_welcome_new:'Welcome {name}! Account बन गया।',
-    toast_welcome_back:'Welcome back, {name}!',
-    toast_logout:'Logout हो गए',
-    toast_free_active:'Free plan activate हो गया',
-    toast_signup_first:'पहले Signup करें',
-    toast_payment_cancel:'Payment cancel हो गया',
-    toast_need_login:'पहले Login करें',
-    toast_crop_first:'पहले photo crop करें',
-    toast_plan_activated:'✓ {plan} plan activate हो गया!',
-    toast_verification_fail:'Verification fail: ',
-    toast_order_fail:'Order fail: ',
-    toast_account_deleted:'आपका account delete हो गया',
-
-    /* App reset + delete confirm modal */
-    confirm_reset_title:'App reset करें?',
-    confirm_reset_body:'आपकी current photo clear हो जाएगी। Login safe रहेगा।',
-    confirm_yes:'हाँ',
-    confirm_no:'रद्द करें',
-    confirm_delete_title:'Account हमेशा के लिए delete करें?',
-    confirm_delete_body:'यह undo नहीं हो सकता। आपका सारा data permanently delete हो जाएगा।',
-    confirm_delete_yes:'हाँ, delete करें',
-
-    /* UPI fallback */
-    upi_done_q:'क्या payment complete हो गई है?',
-  },
   en: {
     badge_free:'✓ 100% Free', badge_offline:'✓ Offline After First Load', badge_ai:'✓ AI BG Removal',
     step1:'Upload Photo', step2:'Remove Background', step3:'Crop & Adjust', step4:'Generate A4 Sheet',
@@ -1603,8 +1511,9 @@ const LANG = {
     upi_done_q:'Has your payment completed?',
   }
 };
+LANG.hi = LANG.en;;
 
-let currentLang='hi';
+let currentLang='en';
 
 function setLang(lang){
   currentLang=lang;
@@ -1630,14 +1539,14 @@ function setLang(lang){
 
 function loadLang(){
   try{
-    const saved=localStorage.getItem('pps_lang')||'hi';
+    const saved=localStorage.getItem('pps_lang')||'en';
     setLang(saved);
-  }catch(e){ setLang('hi'); }
+  }catch(e){ setLang('en'); }
 }
 
 // i18n helper — returns string for current language, with optional {placeholder} substitution
 function t(key, vars){
-  const dict = LANG[currentLang] || LANG.hi;
+  const dict = LANG[currentLang] || LANG.en;
   let s = (dict[key] != null) ? dict[key] : (LANG.en[key] || key);
   if(vars){
     for(const k in vars){ s = s.replace(new RegExp('\\{'+k+'\\}','g'), vars[k]); }
@@ -1754,7 +1663,7 @@ async function loadImage(file){
     });
   } catch (err) {
     console.error('[loadImage]', err);
-    alert('Image load nahi ho payi. Koi dusri photo try karein.');
+    alert('Image could not be loaded. Please try a different photo.');
   }
 }
 
@@ -1785,9 +1694,7 @@ function goStep(n){
 function selectPreset(el){
   // Plan gate: block pro country presets for free users
   if(el.classList.contains('pro-locked')){
-    showUpgradePrompt(currentLang==='hi'
-      ? 'Ye country preset paid plan mein unlock hota hai.'
-      : 'This country preset unlocks with a paid plan.');
+    showUpgradePrompt('This country preset unlocks with a paid plan.');
     return;
   }
   document.querySelectorAll('.preset-btn').forEach(b=>b.classList.remove('active'));
@@ -1983,13 +1890,11 @@ function cleanMaskLargestComponent(maskData, w, h) {
 
 // Main entry point — called by "Remove Background" button
 async function startBgRemoval() {
-  if (!origImg) { showToast(currentLang==='hi'?'पहले photo upload करें।':'Please upload a photo first.'); return; }
+  if (!origImg) { showToast('Please upload a photo first.'); return; }
 
   // Plan gate: AI BG is a paid feature
   if(!planLimits().aiBgAllowed){
-    showUpgradePrompt(currentLang==='hi'
-      ? 'AI Background Removal paid plan mein unlock hota hai. "Skip → Keep Original" use karein ya upgrade karein.'
-      : 'AI Background Removal is a paid feature. Use "Skip → Keep Original" or upgrade.');
+    showUpgradePrompt('AI Background Removal is a paid feature. Use "Skip → Keep Original" or upgrade.');
     return;
   }
 
@@ -2316,7 +2221,7 @@ function startOfflineBgRemoval(){
   hideComparisonSlider();
   const statusEl=document.getElementById('statusText');
   const barEl=document.getElementById('progressBar');
-  statusEl.textContent='Photo process ho rahi hai...';
+  statusEl.textContent='Processing photo...';
   barEl.style.width='20%';
   setTimeout(()=>{
     if(bgCancelled) return;
@@ -2330,7 +2235,7 @@ function startOfflineBgRemoval(){
       tmp.getContext('2d').drawImage(src,0,0,pw,ph);
       if(bgCancelled) return;
       barEl.style.width='55%';
-      statusEl.textContent='Background detect ho raha hai...';
+      statusEl.textContent='Detecting background...';
       const threshold=parseInt(document.getElementById('bgThreshold').value)||45;
       removeBgFloodFill(tmp,threshold);
       if(bgCancelled) return;
@@ -2678,9 +2583,7 @@ function setTotal(el){
   const v = +el.dataset.v;
   const pl = planLimits();
   if(v > pl.maxPhotosPerSheet){
-    showUpgradePrompt(currentLang==='hi'
-      ? `Free plan mein ${pl.maxPhotosPerSheet} photos per sheet tak allowed hai. Zyada chahiye toh upgrade karo.`
-      : `Free plan allows up to ${pl.maxPhotosPerSheet} photos per sheet. Upgrade for more.`);
+    showUpgradePrompt(`Free plan allows up to ${pl.maxPhotosPerSheet} photos per sheet. Upgrade for more.`);
     return;
   }
   document.querySelectorAll('#totalBtns .count-btn').forEach(b=>b.classList.remove('active'));
@@ -2920,9 +2823,7 @@ async function downloadSheet(){
 
 async function downloadSheetHD(){
   if(!planLimits().hdExport){
-    showUpgradePrompt(currentLang==='hi'
-      ? 'HD 600 DPI export paid plan mein unlock hota hai.'
-      : 'HD 600 DPI export unlocks with a paid plan.');
+    showUpgradePrompt('HD 600 DPI export unlocks with a paid plan.');
     return;
   }
   if(!croppedCanvas){ showToast(t('toast_crop_first')); return; }
@@ -3038,7 +2939,7 @@ initUploadParticles();
 
 // Add or_drop to LANG
 if(typeof LANG !== 'undefined'){
-  if(LANG.hi) LANG.hi.or_drop = 'ya photo yahan drop karo';
+  if(LANG.hi) LANG.hi.or_drop = 'or drop your photo here';
   if(LANG.en) LANG.en.or_drop = 'or drop your photo here';
 }
 
@@ -3134,9 +3035,7 @@ function fillA4(){
     sheetTotal = _pl.maxPhotosPerSheet;
     // Recompute rows to fit new total inside same column count
     sheetRows = Math.ceil(sheetTotal/sheetCols);
-    showToast(currentLang==='hi'
-      ? `Free plan: A4 par sirf ${_pl.maxPhotosPerSheet} photos tak allowed hain. Upgrade karein unlimited ke liye.`
-      : `Free plan: limited to ${_pl.maxPhotosPerSheet} photos per sheet. Upgrade for unlimited.`);
+    showToast(`Free plan: limited to ${_pl.maxPhotosPerSheet} photos per sheet. Upgrade for unlimited.`);
   }
   // Sync UI buttons (mark closest; add if missing)
   const totals=[1,2,3,4,5,6,8,10,12,16];
@@ -3156,9 +3055,7 @@ function fillA4(){
     b.classList.toggle('active', +b.dataset.v===sheetCols);
   });
   buildSheet();
-  showToast(currentLang==='hi'
-    ? `A4 भर गया — ${sheetTotal} photos (${sheetCols}×${sheetRows})`
-    : `A4 filled — ${sheetTotal} photos (${sheetCols}×${sheetRows})`);
+  showToast(`A4 filled — ${sheetTotal} photos (${sheetCols}×${sheetRows})`);
 }
 window.fillA4=fillA4;
 
@@ -3260,9 +3157,7 @@ function remainingFreeSheets(){
 function dailyLimitMessage(){
   const pl=planLimits();
   const limit=pl.dailySheets||2;
-  return currentLang==='hi'
-    ? `Aaj ka free limit (${limit} sheet${limit===1?'':'s'}) khatam ho gaya. Upgrade karo unlimited ke liye.`
-    : `Daily free limit (${limit} sheet${limit===1?'':'s'}) reached. Upgrade for unlimited sheets.`;
+  return `Daily free limit (${limit} sheet${limit===1?'':'s'}) reached. Upgrade for unlimited sheets.`;
 }
 // Returns true if a logged-in backend session should be used as the
 // source of truth for the daily counter.
@@ -3325,7 +3220,7 @@ async function refreshServerDownloadStatus(){
 window.refreshServerDownloadStatus = refreshServerDownloadStatus;
 
 function showUpgradePrompt(msg){
-  showToast(msg || (currentLang==='hi' ? 'Ye feature paid plan mein hai. Upgrade karo.' : 'This feature requires a paid plan. Please upgrade.'));
+  showToast(msg || ('This feature requires a paid plan. Please upgrade.'));
   // Open plans modal after a short delay so the toast is visible first
   setTimeout(()=>{ try{ closeAllModals(); openPlans(); }catch(e){} }, 450);
 }
@@ -3385,7 +3280,7 @@ function refreshPlanUI(){
     const v = +b.dataset.v;
     const locked = v > pl.maxPhotosPerSheet;
     b.classList.toggle('pro-locked', locked);
-    b.title = locked ? (currentLang==='hi' ? 'Paid plan mein unlock hota hai' : 'Unlocks in paid plan') : '';
+    b.title = locked ? ('Unlocks in paid plan') : '';
   });
 
   // If current sheetTotal exceeds cap, snap it back to cap
@@ -3420,10 +3315,10 @@ function refreshPlanUI(){
   if(aiBtn){
     if(free){
       aiBtn.classList.add('pro-locked');
-      aiBtn.innerHTML = '🔒 ' + (currentLang==='hi' ? 'AI BG (Pro)' : 'AI Remove BG (Pro)');
+      aiBtn.innerHTML = '🔒 ' + ('AI Remove BG (Pro)');
     }else{
       aiBtn.classList.remove('pro-locked');
-      aiBtn.innerHTML = '🤖 ' + (currentLang==='hi' ? 'Background hatao' : 'Remove Background');
+      aiBtn.innerHTML = '🤖 ' + ('Remove Background');
     }
   }
 
@@ -3449,14 +3344,10 @@ function refreshPlanBanner(){
   el.style.display = 'block';
   if(left > 0){
     el.className = 'plan-banner ok';
-    el.innerHTML = (currentLang==='hi'
-      ? `Free plan · Aaj bache hain <strong>${left}/${pl.dailySheets}</strong> sheet${left===1?'':'s'}. <a href="#" onclick="openPlans();return false;">Unlimited chahiye?</a>`
-      : `Free plan · <strong>${left}/${pl.dailySheets}</strong> sheet${left===1?'':'s'} left today. <a href="#" onclick="openPlans();return false;">Go unlimited →</a>`);
+    el.innerHTML = (`Free plan · <strong>${left}/${pl.dailySheets}</strong> sheet${left===1?'':'s'} left today. <a href="#" onclick="openPlans();return false;">Go unlimited →</a>`);
   }else{
     el.className = 'plan-banner hit';
-    el.innerHTML = (currentLang==='hi'
-      ? `Aaj ka free limit (${pl.dailySheets} sheets) khatam. <a href="#" onclick="openPlans();return false;">Upgrade karein</a>`
-      : `Daily free limit (${pl.dailySheets} sheets) reached. <a href="#" onclick="openPlans();return false;">Upgrade</a>`);
+    el.innerHTML = (`Daily free limit (${pl.dailySheets} sheets) reached. <a href="#" onclick="openPlans();return false;">Upgrade</a>`);
   }
 }
 window.refreshPlanUI = refreshPlanUI;
@@ -3512,7 +3403,7 @@ async function doSignup(e){
 
   // ── LocalStorage mode (no backend) ──
   const users=getUsers();
-  if(users[email]){err.textContent = currentLang==='hi' ? 'यह Email पहले से registered है। Login करें।' : 'Email already registered. Please login.';return;}
+  if(users[email]){err.textContent = 'Email already registered. Please login.';return;}
   const passhash=await hashPwd(pwd);
   users[email]={email,name,passhash,plan:'free',planExpiresAt:0,createdAt:Date.now()};
   saveUsers(users);
@@ -3746,7 +3637,7 @@ async function completePayment(){
     return;
   }
   // ── Fallback: gateway not available ──
-  showToast(t('toast_order_fail') + (currentLang==='hi' ? 'Payment gateway अभी उपलब्ध नहीं है।' : 'Payment gateway is not available right now.'));
+  showToast(t('toast_order_fail') + ('Payment gateway is not available right now.'));
 }
 function activatePlan(planId, paymentId){
   const user=currentUser(); if(!user) return;
@@ -3822,7 +3713,7 @@ restoreSession();
       </form>
       <form id="signupForm" onsubmit="doSignup(event)" style="display:none;">
         <div class="form-group">
-          <label class="form-label" data-i18n="auth_name">Naam / Name</label>
+          <label class="form-label" data-i18n="auth_name">Name</label>
           <input type="text" class="form-input" id="suName" autocomplete="name" required>
         </div>
         <div class="form-group">
@@ -3839,7 +3730,7 @@ restoreSession();
       <div class="form-success" id="authSuccess" style="display:none;"></div>
       <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border);font-size:11px;color:var(--muted);line-height:1.6;">
         <strong style="color:var(--text);" data-i18n="auth_info_title">ℹ Info:</strong>
-        <span data-i18n="auth_info_body">आपका account सुरक्षित है। Passwords encrypt करके रखे जाते हैं और सारा data HTTPS के ज़रिए भेजा जाता है।</span>
+        <span data-i18n="auth_info_body">Your account is kept secure. Passwords are stored hashed and all data is sent over HTTPS.</span>
       </div>
     </div>
   </div>
@@ -3898,7 +3789,7 @@ restoreSession();
       </div>
       <div style="margin-top:18px;padding:14px;background:var(--accent-dim);border:1px solid rgba(240,165,0,.15);border-radius:8px;font-size:11px;color:var(--muted);line-height:1.7;">
         <strong style="color:var(--accent);">💡 Note:</strong>
-        <span data-i18n="plans_note">सभी payments Razorpay के ज़रिए secure किए जाते हैं (UPI, Card, Net Banking सब accept होते हैं)। Payment successful होते ही आपका plan तुरंत activate हो जाएगा। Cancel anytime.</span>
+        <span data-i18n="plans_note">All payments are processed securely through Razorpay (UPI, Cards and Net Banking all supported). Your plan activates instantly once payment succeeds. Cancel anytime.</span>
       </div>
     </div>
   </div>
@@ -3925,11 +3816,27 @@ restoreSession();
       </div>
       <button class="btn btn-primary" onclick="completePayment()" data-i18n="pay_btn">🔒 Pay Securely</button>
       <div style="margin-top:10px;text-align:center;font-size:10px;color:var(--muted2);">
-        🔒 <span data-i18n="pay_secure">256-bit secure encryption · Aapka data safe hai</span>
+        🔒 <span data-i18n="pay_secure">256-bit secure encryption · Your data is safe</span>
       </div>
     </div>
   </div>
 </div>
+
+
+<!-- Google Translate: translates the entire site to any language (Hindi, etc.) -->
+<div id="google_translate_loader" style="position:absolute;left:-9999px;top:-9999px;"></div>
+<script type="text/javascript">
+function googleTranslateElementInit(){
+  // Keep the page source in English, offer common target languages.
+  new google.translate.TranslateElement({
+    pageLanguage: 'en',
+    includedLanguages: 'en,hi,bn,ta,te,mr,gu,pa,ur,kn,ml,or,as,ne,si,ar,zh-CN,es,fr,de,ru,ja,ko,pt,it',
+    layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+    autoDisplay: false
+  }, 'google_translate_element');
+}
+</script>
+<script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" async></script>
 
 </body>
 </html>
