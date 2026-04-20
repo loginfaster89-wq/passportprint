@@ -2899,9 +2899,9 @@ function renderSheetAtDPI(targetDPI){
   return sheet;
 }
 
-function downloadSheet(){
+async function downloadSheet(){
   if(!_sheetFullRes) return;
-  if(!consumeFreeSheetOrBlock()) return;
+  if(!(await consumeFreeSheetOrBlock())) return;
   const cvs = _sheetFullRes;
   let outCvs = cvs;
   if(isFreeUser() && planLimits().watermark){
@@ -2918,7 +2918,7 @@ function downloadSheet(){
   link.click();
 }
 
-function downloadSheetHD(){
+async function downloadSheetHD(){
   if(!planLimits().hdExport){
     showUpgradePrompt(currentLang==='hi'
       ? 'HD 600 DPI export paid plan mein unlock hota hai.'
@@ -2926,7 +2926,7 @@ function downloadSheetHD(){
     return;
   }
   if(!croppedCanvas){ showToast(t('toast_crop_first')); return; }
-  if(!consumeFreeSheetOrBlock()) return;
+  if(!(await consumeFreeSheetOrBlock())) return;
   const hd = renderSheetAtDPI(600);
   if(!hd) return;
   const link=document.createElement('a');
@@ -2935,9 +2935,9 @@ function downloadSheetHD(){
   link.click();
 }
 
-function printSheet(){
+async function printSheet(){
   if(!_sheetFullRes) return;
-  if(!consumeFreeSheetOrBlock()) return;
+  if(!(await consumeFreeSheetOrBlock())) return;
   const cvs = _sheetFullRes;
   let outCvs = cvs;
   if(isFreeUser() && planLimits().watermark){
@@ -3242,6 +3242,9 @@ function getTodaySheets(){
   const n=+localStorage.getItem(_todayKey());
   return Number.isFinite(n)?n:0;
 }
+function setTodaySheets(n){
+  try{ localStorage.setItem(_todayKey(), String(Math.max(0, n|0))); }catch(e){}
+}
 function incTodaySheets(){
   const k=_todayKey();
   const n=getTodaySheets()+1;
@@ -3254,20 +3257,72 @@ function remainingFreeSheets(){
   if(!pl.dailySheets) return Infinity;
   return Math.max(0, pl.dailySheets - getTodaySheets());
 }
-function consumeFreeSheetOrBlock(){
-  // Returns true if allowed, false if limit hit (and shows upgrade prompt).
+function dailyLimitMessage(){
+  const pl=planLimits();
+  const limit=pl.dailySheets||2;
+  return currentLang==='hi'
+    ? `Aaj ka free limit (${limit} sheet${limit===1?'':'s'}) khatam ho gaya. Upgrade karo unlimited ke liye.`
+    : `Daily free limit (${limit} sheet${limit===1?'':'s'}) reached. Upgrade for unlimited sheets.`;
+}
+// Returns true if a logged-in backend session should be used as the
+// source of truth for the daily counter.
+function useServerCounter(){
+  try{
+    return !!(USE_BACKEND && localStorage.getItem(AUTH_TOKEN_KEY));
+  }catch(e){ return false; }
+}
+// Local-only version of the gate. Used as a fallback when the backend
+// is unreachable or the user is anonymous.
+function consumeFreeSheetOrBlockLocal(){
   if(!isFreeUser()) return true;
   if(remainingFreeSheets() <= 0){
-    showUpgradePrompt(
-      currentLang==='hi'
-        ? 'Aaj ka free limit (2 sheets) khatam ho gaya. Upgrade karo unlimited ke liye.'
-        : 'Daily free limit (2 sheets) reached. Upgrade for unlimited sheets.'
-    );
+    showUpgradePrompt(dailyLimitMessage());
     return false;
   }
   incTodaySheets();
   return true;
 }
+// Server-first version: hits /api/track-download when logged in so the
+// daily count cannot be reset by clearing the browser. Falls back to the
+// local counter when the backend is unreachable so offline use still works.
+async function consumeFreeSheetOrBlock(){
+  if(!useServerCounter()) return consumeFreeSheetOrBlockLocal();
+  try{
+    const data = await api('/api/track-download', {method:'POST'});
+    if(data && typeof data.used === 'number'){
+      // Keep the local banner in sync with server truth.
+      setTodaySheets(data.used);
+      refreshPlanBanner();
+    }
+    return true;
+  }catch(e){
+    if(e && e.status === 429){
+      const d = e.data || {};
+      if(typeof d.used === 'number') setTodaySheets(d.used);
+      refreshPlanBanner();
+      showUpgradePrompt(dailyLimitMessage());
+      return false;
+    }
+    if(e && e.status === 401){
+      // Auth expired — behave like an anonymous user and fall back locally.
+      return consumeFreeSheetOrBlockLocal();
+    }
+    // Network / server error → don't punish the user, fall back to local.
+    console.warn('track-download failed, falling back to local counter:', e);
+    return consumeFreeSheetOrBlockLocal();
+  }
+}
+async function refreshServerDownloadStatus(){
+  if(!useServerCounter()) return;
+  try{
+    const data = await api('/api/download-status');
+    if(data && typeof data.used === 'number'){
+      setTodaySheets(data.used);
+      refreshPlanBanner();
+    }
+  }catch(e){ /* best-effort sync; ignore */ }
+}
+window.refreshServerDownloadStatus = refreshServerDownloadStatus;
 
 function showUpgradePrompt(msg){
   showToast(msg || (currentLang==='hi' ? 'Ye feature paid plan mein hai. Upgrade karo.' : 'This feature requires a paid plan. Please upgrade.'));
@@ -3450,6 +3505,7 @@ async function doSignup(e){
       setSession({email:user.email, loggedAt:Date.now()});
       refreshAuthUI(); closeModal('authModal');
       showToast(t('toast_welcome_new', {name:user.name}));
+      refreshServerDownloadStatus();
     }catch(ex){ err.textContent = t('err_prefix') + ex.message; }
     return;
   }
@@ -3480,6 +3536,7 @@ async function doLogin(e){
       setSession({email:user.email, loggedAt:Date.now()});
       refreshAuthUI(); closeModal('authModal');
       showToast(t('toast_welcome_back', {name:user.name}));
+      refreshServerDownloadStatus();
     }catch(ex){ err.textContent = t('err_prefix') + ex.message; }
     return;
   }
@@ -3540,6 +3597,7 @@ async function restoreSession(){
     saveUsers(Object.assign(getUsers(), {[user.email]: user}));
     setSession({email:user.email, loggedAt:Date.now()});
     refreshAuthUI();
+    refreshServerDownloadStatus();
   }catch(e){
     // Token expired or invalid — clear it
     if(e.status===401){ localStorage.removeItem(AUTH_TOKEN_KEY); setSession(null); refreshAuthUI(); }
