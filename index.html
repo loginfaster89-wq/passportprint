@@ -2338,6 +2338,19 @@ function compositeWithBg(src,color){
 }
 
 function selectBgColor(el){
+  // Plan gate: background colour is a paid feature. Free/logged-out users
+  // get a login/upgrade prompt on every swatch click (including the default
+  // White one) so nothing recolours until they upgrade.
+  if(isFreeUser()){
+    const user = (typeof currentUser === 'function') ? currentUser() : null;
+    if(!user){
+      showToast('Please login to change the background colour.');
+      setTimeout(()=>{ try{ closeAllModals(); openAuth('login'); }catch(e){} }, 400);
+    }else{
+      showUpgradePrompt('Background colour selection unlocks with a paid plan.');
+    }
+    return;
+  }
   document.querySelectorAll('#bgSwatches .swatch').forEach(s=>s.classList.remove('active'));
   el.classList.add('active');
   bgColor=el.dataset.color;
@@ -2345,6 +2358,17 @@ function selectBgColor(el){
 }
 
 function applyCustomColor(val){
+  // Same gate as selectBgColor — custom colour picker is paid-only too.
+  if(isFreeUser()){
+    const user = (typeof currentUser === 'function') ? currentUser() : null;
+    if(!user){
+      showToast('Please login to pick a custom background colour.');
+      setTimeout(()=>{ try{ closeAllModals(); openAuth('login'); }catch(e){} }, 400);
+    }else{
+      showUpgradePrompt('Custom background colour unlocks with a paid plan.');
+    }
+    return;
+  }
   bgColor=val;
   document.querySelectorAll('#bgSwatches .swatch').forEach(s=>s.classList.remove('active'));
   rebuildProcessed();
@@ -3278,6 +3302,27 @@ function refreshPlanUI(){
     });
     if(typeof croppedCanvas !== 'undefined' && croppedCanvas) buildSheet();
   }
+
+  // Background-colour swatches: lock every swatch (including default white) for free users
+  document.querySelectorAll('#bgSwatches .swatch').forEach(s=>{
+    if(free){
+      s.classList.add('pro-locked');
+      s.title = 'Unlocks in paid plan';
+      if(!s.querySelector('.pro-lock-badge')){
+        const badge = document.createElement('span');
+        badge.className = 'pro-lock-badge';
+        badge.textContent = '🔒';
+        s.appendChild(badge);
+      }
+    }else{
+      s.classList.remove('pro-locked');
+      const badge = s.querySelector('.pro-lock-badge');
+      if(badge) badge.remove();
+    }
+  });
+  // Also lock the custom-colour picker input so free users can't bypass via native picker
+  const customInput = document.getElementById('customColor');
+  if(customInput){ customInput.disabled = free; }
 
   // Preset buttons: lock "pro" country presets for free users
   document.querySelectorAll('.preset-btn').forEach(b=>{
