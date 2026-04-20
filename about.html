@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>About — PassportPrint Studio</title>
+<meta name="description" content="About PassportPrint Studio — a fast, private, browser-based passport photo tool.">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/legal.css">
+</head>
+<body>
+
+<header class="legal-header">
+  <a href="index.html" class="logo">Passport<em>Print</em> Studio</a>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="about.html" class="active">About</a>
+    <a href="privacy.html">Privacy</a>
+    <a href="terms.html">Terms</a>
+    <a href="refund.html">Refund</a>
+    <a href="shipping.html">Delivery</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+</header>
+
+<main class="legal-main">
+  <h1>About PassportPrint Studio</h1>
+  <p class="meta">A fast, private, browser-based passport photo tool.</p>
+
+  <p>PassportPrint Studio turns an ordinary selfie into a print-ready passport photo — right inside your browser. Upload a photo, let our AI remove the background, crop to your country’s exact passport dimensions, and download a 300-DPI A4 sheet with cutting guides. Take it to any local print shop and you’re done.</p>
+
+  <h2>Why we built it</h2>
+  <p>Most passport-photo services either charge too much, require installing a desktop app, or upload your photo to a remote server. We wanted something different:</p>
+  <ul>
+    <li><strong>Completely private.</strong> Your photo never leaves your browser. All AI and cropping happens on-device.</li>
+    <li><strong>Print-shop ready.</strong> 300 DPI A4 output with thin cutting lines, so any local printer can cut it cleanly.</li>
+    <li><strong>Accurate.</strong> Built-in presets for common passport sizes — India, US Visa, UAE, Schengen, Australia and more.</li>
+    <li><strong>Affordable.</strong> Free forever (with a watermark and a 2-sheet-per-day limit). Full access is ₹59 for a week or ₹149 for a month.</li>
+  </ul>
+
+  <h2>How it works</h2>
+  <ol>
+    <li><strong>Upload</strong> a clear selfie or studio photo.</li>
+    <li><strong>Remove</strong> the background with AI (the <code>briaai/RMBG-1.4</code> model, running in your browser via transformers.js).</li>
+    <li><strong>Crop &amp; adjust</strong> to the preset of your choice.</li>
+    <li><strong>Generate</strong> a 300-DPI A4 sheet and download.</li>
+  </ol>
+
+  <h2>Tech stack</h2>
+  <ul>
+    <li><strong>Frontend</strong> — a single HTML page with vanilla JS and Canvas2D.</li>
+    <li><strong>AI</strong> — <a href="https://huggingface.co/briaai/RMBG-1.4" target="_blank" rel="noopener">BRIA RMBG-1.4</a> via transformers.js, loaded lazily on first use.</li>
+    <li><strong>Backend</strong> — Node.js / Express / SQLite, hosted on <a href="https://render.com" target="_blank" rel="noopener">Render</a>.</li>
+    <li><strong>Payments</strong> — <a href="https://razorpay.com" target="_blank" rel="noopener">Razorpay</a> with server-side signature verification.</li>
+    <li><strong>Hosting</strong> — GitHub Pages (frontend) and Render (backend).</li>
+  </ul>
+
+  <h2>Contact</h2>
+  <p>Questions, bug reports, feedback or partnerships — email <strong>loginfaster89@gmail.com</strong> or visit the <a href="contact.html">Contact page</a>.</p>
+</main>
+
+<footer class="legal-footer">
+  <div class="links">
+    <a href="index.html">Home</a>·
+    <a href="about.html">About</a>·
+    <a href="privacy.html">Privacy</a>·
+    <a href="terms.html">Terms</a>·
+    <a href="refund.html">Refund</a>·
+    <a href="shipping.html">Delivery</a>·
+    <a href="contact.html">Contact</a>
+  </div>
+  <div>© 2026 PassportPrint Studio. All rights reserved.</div>
+</footer>
+
+</body>
+</html>

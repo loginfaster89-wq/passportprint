@@ -41,6 +41,14 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:0
 .badge-green{border-color:rgba(74,222,128,.3);color:var(--success);background:rgba(74,222,128,.06);}
 .badge-amber{border-color:rgba(240,165,0,.3);color:var(--accent);background:var(--accent-dim);}
 
+/* ── APP FOOTER (legal links) ── */
+.app-footer{background:var(--surface);border-top:1px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;gap:6px;padding:6px 12px;font-size:11px;color:var(--muted);flex-wrap:wrap;}
+.app-footer a{color:var(--muted);text-decoration:none;padding:2px 6px;border-radius:4px;transition:.15s;}
+.app-footer a:hover{color:var(--accent);background:var(--accent-glow);}
+.app-footer .sep{color:var(--muted2);user-select:none;}
+.app-footer .copy{color:var(--muted2);margin-right:4px;}
+@media (max-width:640px){.app-footer{font-size:10px;padding:5px 8px;gap:2px;} .app-footer .copy{display:none;}}
+
 /* ── STEPS BAR ── */
 .steps{background:var(--surface);border-bottom:1px solid var(--border);display:flex;flex-shrink:0;overflow-x:auto;}
 .steps::-webkit-scrollbar{display:none;}
@@ -1189,6 +1197,17 @@ canvas{display:block;}
 
   </div>
 </div>
+
+<!-- APP FOOTER -->
+<footer class="app-footer">
+  <span class="copy">© 2026 PassportPrint Studio</span>
+  <a href="about.html">About</a><span class="sep">·</span>
+  <a href="privacy.html">Privacy</a><span class="sep">·</span>
+  <a href="terms.html">Terms</a><span class="sep">·</span>
+  <a href="refund.html">Refund</a><span class="sep">·</span>
+  <a href="shipping.html">Delivery</a><span class="sep">·</span>
+  <a href="contact.html">Contact</a>
+</footer>
 
 <!-- ══════════ TUTORIAL PAGE ══════════ -->
 <div id="tutorialPage" class="hidden">
