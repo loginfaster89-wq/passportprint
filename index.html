@@ -1492,6 +1492,19 @@ const LANG = {
     err_no_account:'No account found. Please sign up first.',
     err_wrong_pwd:'Wrong password.',
     err_prefix:'Error: ',
+    err_disposable_email:'Disposable / temporary email addresses are not allowed. Please use a real email.',
+    err_otp_required:'Enter the 6-digit code we emailed you.',
+    err_otp_format:'Code must be exactly 6 digits.',
+    otp_step_title:'Check your inbox',
+    otp_step_desc:'We just emailed a 6-digit verification code to {email}. Enter it below to finish creating your account.',
+    otp_label:'Verification code',
+    otp_submit:'Verify & Create Account',
+    otp_back:'← Back',
+    otp_resend_idle:'Resend code',
+    otp_resend_wait:'Resend in {s}s',
+    otp_sent_toast:'Code sent to {email}',
+    otp_resent_toast:'New code sent',
+    otp_spam_hint:'Didn\'t get it? Check your spam folder.',
     toast_welcome_new:'Welcome {name}! Account created.',
     toast_welcome_back:'Welcome back, {name}!',
     toast_logout:'Logged out',
@@ -3423,9 +3436,92 @@ function setAuthTab(tab){
   document.querySelectorAll('.auth-tab').forEach(t=>t.classList.toggle('active', t.dataset.tab===tab));
   document.getElementById('loginForm').style.display=tab==='login'?'block':'none';
   document.getElementById('signupForm').style.display=tab==='signup'?'block':'none';
+  // Always reset OTP step when switching tabs.
+  const otpForm=document.getElementById('otpForm'); if(otpForm) otpForm.style.display='none';
   document.getElementById('authError').textContent='';
 }
-async function doSignup(e){
+
+// ── Client-side disposable / throwaway email block (fast UI feedback;
+// the backend enforces a fuller list authoritatively). ──
+const DISPOSABLE_EMAIL_DOMAINS = new Set([
+  '10minutemail.com','10minutemail.net','dispostable.com','fakeinbox.com',
+  'getnada.com','guerrillamail.com','guerrillamail.net','guerrillamail.org',
+  'guerrillamail.biz','guerrillamailblock.com','sharklasers.com','grr.la',
+  'pokemail.net','mailinator.com','mailinator.net','mailnesia.com','maildrop.cc',
+  'mintemail.com','tempmail.com','temp-mail.org','temp-mail.io','tempmailaddress.com',
+  'tempr.email','throwawaymail.com','trashmail.com','trashmail.de','yopmail.com',
+  'yopmail.fr','yopmail.net','spam4.me','spambox.us','inboxbear.com','inboxkitten.com',
+  'mohmal.com','emailondeck.com','tempmailo.com','tmpmail.org','burnermail.io',
+  'emailfake.com','mytemp.email','mailcatch.com','mohmal.in','tempmailer.com',
+  'tempmail.dev','discard.email','discardmail.com','gufum.com','tafmail.com',
+  'mailpoof.com','tempail.com','tempmail.plus','gongjua.com',
+]);
+function isDisposableEmail(email){
+  const at=(email||'').lastIndexOf('@');
+  if(at<0) return false;
+  const dom=email.slice(at+1).toLowerCase();
+  if(DISPOSABLE_EMAIL_DOMAINS.has(dom)) return true;
+  const parts=dom.split('.');
+  for(let i=1;i<parts.length;i++){
+    if(DISPOSABLE_EMAIL_DOMAINS.has(parts.slice(i).join('.'))) return true;
+  }
+  return false;
+}
+
+// ── Pending signup state (kept across the email→OTP step transition) ──
+let _pendingSignup = null;
+let _otpResendTimer = null;
+
+function _setSignupStep(step){
+  const form1=document.getElementById('signupForm');
+  const form2=document.getElementById('otpForm');
+  if(step==='otp'){
+    if(form1) form1.style.display='none';
+    if(form2) form2.style.display='block';
+    setTimeout(()=>{ const el=document.getElementById('suOtp'); if(el){ el.value=''; el.focus(); } }, 50);
+  }else{
+    if(form1) form1.style.display='block';
+    if(form2) form2.style.display='none';
+  }
+  document.getElementById('authError').textContent='';
+}
+
+function _startOtpResendCooldown(ms){
+  if(_otpResendTimer){ clearInterval(_otpResendTimer); _otpResendTimer=null; }
+  const btn=document.getElementById('suOtpResend'); if(!btn) return;
+  const endAt = Date.now() + Math.max(0, ms|0);
+  const tick = () => {
+    const left = Math.max(0, Math.ceil((endAt - Date.now())/1000));
+    if(left <= 0){
+      btn.disabled = false;
+      btn.textContent = t('otp_resend_idle');
+      clearInterval(_otpResendTimer); _otpResendTimer = null;
+    }else{
+      btn.disabled = true;
+      btn.textContent = t('otp_resend_wait', {s:String(left)});
+    }
+  };
+  tick();
+  _otpResendTimer = setInterval(tick, 500);
+}
+
+function _setSignupBtnBusy(id, busy, idleLabelKey){
+  const btn=document.getElementById(id); if(!btn) return;
+  if(busy){
+    btn.dataset.idleLabel = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = '…';
+  }else{
+    btn.disabled = false;
+    btn.textContent = btn.dataset.idleLabel || t(idleLabelKey);
+  }
+}
+
+function backToSignupStep1(){
+  _setSignupStep('details');
+}
+
+async function requestSignupOtp(e){
   if(e) e.preventDefault();
   const name=document.getElementById('suName').value.trim();
   const email=document.getElementById('suEmail').value.trim().toLowerCase();
@@ -3434,21 +3530,80 @@ async function doSignup(e){
   if(!name||!email||!pwd){err.textContent=t('err_fields_required');return;}
   if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){err.textContent=t('err_invalid_email');return;}
   if(pwd.length<6){err.textContent=t('err_pwd_short');return;}
+  if(isDisposableEmail(email)){err.textContent=t('err_disposable_email');return;}
 
-  if(USE_BACKEND){
-    try{
-      const {token, user} = await api('/api/signup', {method:'POST', body:{name, email, password:pwd}});
-      localStorage.setItem(AUTH_TOKEN_KEY, token);
-      saveUsers(Object.assign(getUsers(), {[user.email]: user}));
-      setSession({email:user.email, loggedAt:Date.now()});
-      refreshAuthUI(); closeModal('authModal');
-      showToast(t('toast_welcome_new', {name:user.name}));
-      refreshServerDownloadStatus();
-    }catch(ex){ err.textContent = t('err_prefix') + ex.message; }
-    return;
+  if(!USE_BACKEND){
+    // Offline / demo mode: fall back to instant signup, no OTP required.
+    return _offlineCreateAccount({name, email, pwd});
   }
 
-  // ── LocalStorage mode (no backend) ──
+  _setSignupBtnBusy('suSendOtpBtn', true);
+  try{
+    const res = await api('/api/request-otp', {method:'POST', body:{email, name, purpose:'signup'}});
+    _pendingSignup = { name, email, pwd };
+    const desc=document.getElementById('otpStepDesc');
+    if(desc) desc.innerHTML = t('otp_step_desc', {email:`<strong style="color:var(--text);">${email.replace(/[<>]/g,'')}</strong>`});
+    _setSignupStep('otp');
+    _startOtpResendCooldown(res && res.resendAfter ? res.resendAfter : 60000);
+    showToast(t('otp_sent_toast', {email}));
+  }catch(ex){
+    err.textContent = t('err_prefix') + (ex && ex.message || 'Could not send code');
+  }finally{
+    _setSignupBtnBusy('suSendOtpBtn', false, 'auth_signup_btn');
+  }
+}
+
+async function resendSignupOtp(){
+  if(!_pendingSignup) return;
+  const err=document.getElementById('authError'); err.textContent='';
+  const btn=document.getElementById('suOtpResend');
+  if(btn && btn.disabled) return;
+  try{
+    const res = await api('/api/request-otp', {method:'POST', body:{email:_pendingSignup.email, name:_pendingSignup.name, purpose:'signup'}});
+    _startOtpResendCooldown(res && res.resendAfter ? res.resendAfter : 60000);
+    showToast(t('otp_resent_toast'));
+  }catch(ex){
+    err.textContent = t('err_prefix') + (ex && ex.message || 'Could not resend code');
+    if(ex && ex.status === 429 && ex.data && ex.data.resendAfter){
+      _startOtpResendCooldown(ex.data.resendAfter);
+    }
+  }
+}
+
+async function completeSignup(e){
+  if(e) e.preventDefault();
+  const err=document.getElementById('authError'); err.textContent='';
+  if(!_pendingSignup){ backToSignupStep1(); return; }
+  const otp=(document.getElementById('suOtp').value || '').trim();
+  if(!otp){ err.textContent=t('err_otp_required'); return; }
+  if(!/^\d{6}$/.test(otp)){ err.textContent=t('err_otp_format'); return; }
+
+  _setSignupBtnBusy('suVerifyBtn', true);
+  try{
+    const {token, user} = await api('/api/signup', {method:'POST', body:{
+      name: _pendingSignup.name,
+      email: _pendingSignup.email,
+      password: _pendingSignup.pwd,
+      otp,
+    }});
+    localStorage.setItem(AUTH_TOKEN_KEY, token);
+    saveUsers(Object.assign(getUsers(), {[user.email]: user}));
+    setSession({email:user.email, loggedAt:Date.now()});
+    _pendingSignup = null;
+    if(_otpResendTimer){ clearInterval(_otpResendTimer); _otpResendTimer = null; }
+    refreshAuthUI(); closeModal('authModal');
+    _setSignupStep('details');
+    showToast(t('toast_welcome_new', {name:user.name}));
+    refreshServerDownloadStatus();
+  }catch(ex){
+    err.textContent = t('err_prefix') + (ex && ex.message || 'Verification failed');
+  }finally{
+    _setSignupBtnBusy('suVerifyBtn', false, 'otp_submit');
+  }
+}
+
+async function _offlineCreateAccount({name, email, pwd}){
+  const err=document.getElementById('authError');
   const users=getUsers();
   if(users[email]){err.textContent = 'Email already registered. Please login.';return;}
   const passhash=await hashPwd(pwd);
@@ -3459,6 +3614,10 @@ async function doSignup(e){
   closeModal('authModal');
   showToast(t('toast_welcome_new', {name}));
 }
+
+// Legacy alias kept so any cached pages that still reference doSignup keep
+// working while the new 2-step flow rolls out.
+const doSignup = requestSignupOtp;
 async function doLogin(e){
   if(e) e.preventDefault();
   const email=document.getElementById('liEmail').value.trim().toLowerCase();
@@ -3554,6 +3713,8 @@ function openAccount(){
 }
 window.openAuth=openAuth; window.setAuthTab=setAuthTab;
 window.doSignup=doSignup; window.doLogin=doLogin;
+window.requestSignupOtp=requestSignupOtp; window.completeSignup=completeSignup;
+window.resendSignupOtp=resendSignupOtp; window.backToSignupStep1=backToSignupStep1;
 window.logout=logout; window.openAccount=openAccount;
 window.deleteAccount=deleteAccount;
 
@@ -3758,7 +3919,7 @@ restoreSession();
         </div>
         <button type="submit" class="btn btn-primary" style="margin-top:6px;" data-i18n="auth_login_btn">Login</button>
       </form>
-      <form id="signupForm" onsubmit="doSignup(event)" style="display:none;">
+      <form id="signupForm" onsubmit="requestSignupOtp(event)" style="display:none;">
         <div class="form-group">
           <label class="form-label" data-i18n="auth_name">Name</label>
           <input type="text" class="form-input" id="suName" autocomplete="name" required>
@@ -3771,7 +3932,26 @@ restoreSession();
           <label class="form-label" data-i18n="auth_pwd">Password (min 6)</label>
           <input type="password" class="form-input" id="suPwd" autocomplete="new-password" minlength="6" required>
         </div>
-        <button type="submit" class="btn btn-primary" style="margin-top:6px;" data-i18n="auth_signup_btn">Create Account</button>
+        <button type="submit" id="suSendOtpBtn" class="btn btn-primary" style="margin-top:6px;" data-i18n="auth_signup_btn">Create Account</button>
+      </form>
+      <form id="otpForm" onsubmit="completeSignup(event)" style="display:none;">
+        <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:15px;color:var(--text);margin-bottom:6px;" data-i18n="otp_step_title">Check your inbox</div>
+        <div id="otpStepDesc" style="color:var(--muted);font-size:12.5px;line-height:1.6;margin-bottom:14px;"></div>
+        <div class="form-group">
+          <label class="form-label" data-i18n="otp_label">Verification code</label>
+          <input type="text" class="form-input" id="suOtp"
+                 autocomplete="one-time-code" inputmode="numeric" pattern="\d{6}"
+                 maxlength="6" required
+                 style="letter-spacing:10px;text-align:center;font-family:'DM Mono',monospace;font-size:22px;font-weight:600;">
+        </div>
+        <button type="submit" id="suVerifyBtn" class="btn btn-primary" style="margin-top:6px;" data-i18n="otp_submit">Verify &amp; Create Account</button>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;font-size:12px;">
+          <button type="button" id="suOtpBack" onclick="backToSignupStep1()" style="background:none;border:none;color:var(--muted);cursor:pointer;padding:4px 0;font-family:inherit;" data-i18n="otp_back">← Back</button>
+          <button type="button" id="suOtpResend" onclick="resendSignupOtp()" disabled
+                  style="background:none;border:none;color:var(--accent);cursor:pointer;padding:4px 0;font-family:inherit;font-weight:600;"
+                  data-i18n="otp_resend_idle">Resend code</button>
+        </div>
+        <div style="margin-top:8px;color:var(--muted);font-size:11px;" data-i18n="otp_spam_hint">Didn't get it? Check your spam folder.</div>
       </form>
       <div class="form-error" id="authError"></div>
       <div class="form-success" id="authSuccess" style="display:none;"></div>
