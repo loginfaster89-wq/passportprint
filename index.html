@@ -860,6 +860,18 @@ canvas{display:block;}
 .plan-btn-primary:hover{background:#ffc03a;transform:translateY(-1px);}
 .plan-btn-current{background:rgba(74,222,128,.15);color:var(--success);border:1px solid rgba(74,222,128,.3);cursor:default;}
 
+/* ── PRO LOCK / PLAN BANNER ── */
+.pro-locked{position:relative;opacity:.6;filter:grayscale(.35);}
+.preset-btn.pro-locked,.count-btn.pro-locked{border-style:dashed!important;}
+.preset-btn.pro-locked:hover{border-color:var(--accent)!important;color:var(--accent)!important;}
+.pro-lock-badge{position:absolute;top:2px;right:4px;font-size:10px;opacity:.85;}
+.btn.pro-locked{background:var(--surface3)!important;color:var(--accent)!important;border:1px dashed rgba(240,165,0,.4)!important;}
+.plan-banner{font-size:11px;line-height:1.5;padding:8px 10px;border-radius:6px;margin-bottom:10px;border:1px solid var(--border);}
+.plan-banner.ok{background:var(--accent-glow);border-color:rgba(240,165,0,.25);color:var(--text);}
+.plan-banner.hit{background:rgba(248,113,113,.08);border-color:rgba(248,113,113,.3);color:var(--danger);}
+.plan-banner a{color:var(--accent);text-decoration:none;border-bottom:1px dashed currentColor;}
+.plan-banner a:hover{color:#ffc03a;}
+
 /* Payment modal */
 .pay-summary{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:16px;}
 .pay-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;font-size:13px;}
@@ -1007,11 +1019,11 @@ canvas{display:block;}
         <div class="sb-title" data-i18n="sb1_standard">Photo Standard</div>
         <div class="preset-grid">
           <div class="preset-btn active" data-w="35" data-h="45" onclick="selectPreset(this)">🇮🇳 India<br><span class="preset-size">35×45 mm</span></div>
-          <div class="preset-btn" data-w="51" data-h="51" onclick="selectPreset(this)">🇺🇸 US Visa<br><span class="preset-size">51×51 mm</span></div>
+          <div class="preset-btn" data-w="51" data-h="51" data-pro="1" onclick="selectPreset(this)">🇺🇸 US Visa<br><span class="preset-size">51×51 mm</span></div>
           <div class="preset-btn" data-w="35" data-h="45" onclick="selectPreset(this)">🇬🇧 UK<br><span class="preset-size">35×45 mm</span></div>
           <div class="preset-btn" data-w="35" data-h="45" onclick="selectPreset(this)">🌍 Schengen<br><span class="preset-size">35×45 mm</span></div>
-          <div class="preset-btn" data-w="25" data-h="35" onclick="selectPreset(this)">🇦🇪 UAE<br><span class="preset-size">25×35 mm</span></div>
-          <div class="preset-btn" data-w="40" data-h="60" onclick="selectPreset(this)">🇦🇺 Australia<br><span class="preset-size">40×60 mm</span></div>
+          <div class="preset-btn" data-w="25" data-h="35" data-pro="1" onclick="selectPreset(this)">🇦🇪 UAE<br><span class="preset-size">25×35 mm</span></div>
+          <div class="preset-btn" data-w="40" data-h="60" data-pro="1" onclick="selectPreset(this)">🇦🇺 Australia<br><span class="preset-size">40×60 mm</span></div>
         </div>
         <div class="info-box">
           <strong data-i18n="sb1_selected">Selected:</strong> <span id="presetLabel">35×45 mm (India Passport)</span><br>
@@ -1149,7 +1161,9 @@ canvas{display:block;}
         </div>
       </div>
       <div class="sb-section">
+        <div id="planBanner" class="plan-banner" style="display:none;"></div>
         <button class="btn btn-primary" onclick="downloadSheet()" data-i18n="btn_download">⬇ Download PNG (300 DPI)</button>
+        <button class="btn btn-secondary mt6" id="hdDownloadBtn" onclick="downloadSheetHD()" style="display:none;">⬇ Download HD (600 DPI) ✨</button>
         <button class="btn btn-secondary mt6" onclick="printSheet()" data-i18n="btn_print">🖨 Print Directly</button>
         <button class="btn btn-ghost mt6" onclick="goStep(3)" data-i18n="btn_back_crop">← Back to Crop & Adjust</button>
         <button class="btn btn-ghost mt6" onclick="goStep(1)" data-i18n="btn_new_photo">← New Photo</button>
@@ -1448,8 +1462,8 @@ const LANG = {
     acc_upgrade:'💎 Upgrade / Plan बदलें',
     acc_logout:'Logout',
     acc_delete:'🗑 Account हमेशा के लिए Delete करें',
-    plan_tag_free:'Basic use के लिए, हमेशा free।',
-    plan_tag_weekly:'Short-term use. 7 दिन full access।',
+    plan_tag_free:'Try karo — 2 sheets daily, watermark ke saath।',
+    plan_tag_weekly:'7 दिन full access, bina watermark।',
     plan_tag_monthly:'Best value. 30 दिन, सब unlocked।',
     plan_btn_current:'✓ आपका Plan',
     plan_btn_switch_free:'Free पर जाएँ',
@@ -1547,8 +1561,8 @@ const LANG = {
     acc_upgrade:'💎 Upgrade / Change Plan',
     acc_logout:'Logout',
     acc_delete:'🗑 Delete Account Permanently',
-    plan_tag_free:'Basic use, free forever.',
-    plan_tag_weekly:'Short-term use. 7 days full access.',
+    plan_tag_free:'Try it out — 2 sheets/day, watermarked.',
+    plan_tag_weekly:'7 days full access, no watermark.',
     plan_tag_monthly:'Best value. 30 days, everything unlocked.',
     plan_btn_current:'✓ Your Plan',
     plan_btn_switch_free:'Switch to Free',
@@ -1761,12 +1775,21 @@ function goStep(n){
   activeCanvas.classList.add('step-fade');
   // Hide feature lines when leaving step 2
   if(n!==2) hideFeatLines();
+  // Re-apply plan gating every step so dynamically-added buttons get locked correctly
+  if(typeof refreshPlanUI === 'function') refreshPlanUI();
 }
 
 // ═══════════════════════════════════════════════
 // PRESET
 // ═══════════════════════════════════════════════
 function selectPreset(el){
+  // Plan gate: block pro country presets for free users
+  if(el.classList.contains('pro-locked')){
+    showUpgradePrompt(currentLang==='hi'
+      ? 'Ye country preset paid plan mein unlock hota hai.'
+      : 'This country preset unlocks with a paid plan.');
+    return;
+  }
   document.querySelectorAll('.preset-btn').forEach(b=>b.classList.remove('active'));
   el.classList.add('active');
   photoW=+el.dataset.w; photoH=+el.dataset.h;
@@ -1961,6 +1984,14 @@ function cleanMaskLargestComponent(maskData, w, h) {
 // Main entry point — called by "Remove Background" button
 async function startBgRemoval() {
   if (!origImg) { showToast(currentLang==='hi'?'पहले photo upload करें।':'Please upload a photo first.'); return; }
+
+  // Plan gate: AI BG is a paid feature
+  if(!planLimits().aiBgAllowed){
+    showUpgradePrompt(currentLang==='hi'
+      ? 'AI Background Removal paid plan mein unlock hota hai. "Skip → Keep Original" use karein ya upgrade karein.'
+      : 'AI Background Removal is a paid feature. Use "Skip → Keep Original" or upgrade.');
+    return;
+  }
 
   bgCancelled = false;
   setBgBtnsDisabled(true);
@@ -2644,9 +2675,17 @@ function confirmCrop(){
 // SHEET GENERATION
 // ═══════════════════════════════════════════════
 function setTotal(el){
+  const v = +el.dataset.v;
+  const pl = planLimits();
+  if(v > pl.maxPhotosPerSheet){
+    showUpgradePrompt(currentLang==='hi'
+      ? `Free plan mein ${pl.maxPhotosPerSheet} photos per sheet tak allowed hai. Zyada chahiye toh upgrade karo.`
+      : `Free plan allows up to ${pl.maxPhotosPerSheet} photos per sheet. Upgrade for more.`);
+    return;
+  }
   document.querySelectorAll('#totalBtns .count-btn').forEach(b=>b.classList.remove('active'));
   el.classList.add('active');
-  sheetTotal=+el.dataset.v;
+  sheetTotal=v;
   buildSheet();
 }
 function setCols(el){
@@ -2736,6 +2775,11 @@ function buildSheet(){
     marginPx, a4H-Math.round(4/MM2IN*DPI)
   );
 
+  // Preview watermark for free users so they can see exactly what the download looks like
+  if(isFreeUser() && planLimits().watermark){
+    paintWatermark(ctx, a4W, a4H);
+  }
+
   _sheetFullRes=sheet;
 
   // Preview — DPR-aware so the A4 thumbnail stays crisp on mobile / Retina
@@ -2760,23 +2804,157 @@ function buildSheet(){
      Photo size: ${actualPwMm}×${actualPhMm}mm · Auto-fit ✓`;
 }
 
+// ── Watermark painter (free users only) ──
+function paintWatermark(ctx, W, H){
+  ctx.save();
+  ctx.globalAlpha = 0.18;
+  ctx.fillStyle = '#000';
+  ctx.font = `bold ${Math.round(H*0.035)}px monospace`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.translate(W/2, H/2);
+  ctx.rotate(-Math.PI/6);
+  const line = 'PassportPrint • FREE PREVIEW • Upgrade for HD';
+  const step = Math.round(H*0.16);
+  for(let y = -H; y <= H; y += step){
+    ctx.fillText(line, 0, y);
+  }
+  ctx.restore();
+}
+
+// Render a sheet canvas at an arbitrary DPI — used by both preview (300) and HD export (600).
+function renderSheetAtDPI(targetDPI){
+  if(!croppedCanvas) return null;
+  const a4W=Math.round(210/MM2IN*targetDPI);
+  const a4H=Math.round(297/MM2IN*targetDPI);
+  const marginPx=Math.round(3/MM2IN*targetDPI);
+  const gapPx=Math.round(2.5/MM2IN*targetDPI);
+  const usableW=a4W-2*marginPx;
+
+  // For HD we re-render the crop at the target DPI for true high-res output.
+  let sourceCrop = croppedCanvas;
+  if(targetDPI !== DPI && processedCanvas && typeof cropX === 'number'){
+    const outW=Math.round(photoW/MM2IN*targetDPI);
+    const outH=Math.round(photoH/MM2IN*targetDPI);
+    const hd=document.createElement('canvas');
+    hd.width=outW; hd.height=outH;
+    const hctx=hd.getContext('2d');
+    hctx.imageSmoothingEnabled=true; hctx.imageSmoothingQuality='high';
+    hctx.fillStyle=bgColor&&bgColor!=='transparent'?bgColor:'#FFFFFF';
+    hctx.fillRect(0,0,outW,outH);
+    hctx.filter=getFilter();
+    hctx.drawImage(processedCanvas,
+      cropX/dispScale, cropY/dispScale, cropW/dispScale, cropH/dispScale,
+      0, 0, outW, outH);
+    hctx.filter='none';
+    sourceCrop=hd;
+  }
+
+  const naturalPW=sourceCrop.width, naturalPH=sourceCrop.height;
+  const scaledPW=Math.floor((usableW-(sheetCols-1)*gapPx)/sheetCols);
+  const pW=Math.min(scaledPW, naturalPW);
+  const pH=Math.round(pW*(naturalPH/naturalPW));
+  const rows=Math.ceil(sheetTotal/sheetCols);
+
+  const sheet=document.createElement('canvas');
+  sheet.width=a4W; sheet.height=a4H;
+  const ctx=sheet.getContext('2d');
+  ctx.imageSmoothingEnabled=true; ctx.imageSmoothingQuality='high';
+  ctx.fillStyle='#FFFFFF';
+  ctx.fillRect(0,0,a4W,a4H);
+
+  const gridW=sheetCols*pW+(sheetCols-1)*gapPx;
+  const sx=Math.round((a4W-gridW)/2);
+  const sy=marginPx;
+
+  let count=0;
+  outer: for(let r=0;r<rows;r++){
+    for(let c=0;c<sheetCols;c++){
+      if(count>=sheetTotal) break outer;
+      const x=sx+c*(pW+gapPx);
+      const y=sy+r*(pH+gapPx);
+      ctx.drawImage(sourceCrop,0,0,naturalPW,naturalPH,x,y,pW,pH);
+      count++;
+    }
+  }
+  ctx.strokeStyle='rgba(0,0,0,0.75)';
+  ctx.lineWidth=Math.max(1, Math.round(0.25/MM2IN*targetDPI));
+  ctx.setLineDash([]);
+  count=0;
+  outer2: for(let r=0;r<rows;r++){
+    for(let c=0;c<sheetCols;c++){
+      if(count>=sheetTotal) break outer2;
+      const x=sx+c*(pW+gapPx);
+      const y=sy+r*(pH+gapPx);
+      ctx.strokeRect(x,y,pW,pH);
+      count++;
+    }
+  }
+  ctx.fillStyle='rgba(0,0,0,0.15)';
+  ctx.font=`${Math.round(6/MM2IN*targetDPI)}px monospace`;
+  ctx.fillText(
+    `PassportPrint Studio · ${sheetTotal} photos · ${photoW}×${photoH}mm · ${targetDPI} DPI · A4`,
+    marginPx, a4H-Math.round(4/MM2IN*targetDPI)
+  );
+  return sheet;
+}
+
 function downloadSheet(){
   if(!_sheetFullRes) return;
+  if(!consumeFreeSheetOrBlock()) return;
+  const cvs = _sheetFullRes;
+  let outCvs = cvs;
+  if(isFreeUser() && planLimits().watermark){
+    // Clone + stamp watermark so the preview stays clean
+    outCvs = document.createElement('canvas');
+    outCvs.width = cvs.width; outCvs.height = cvs.height;
+    const c = outCvs.getContext('2d');
+    c.drawImage(cvs, 0, 0);
+    paintWatermark(c, outCvs.width, outCvs.height);
+  }
   const link=document.createElement('a');
   link.download=`passport_photos_A4_${sheetCols}x${sheetRows}_300dpi.png`;
-  link.href=_sheetFullRes.toDataURL('image/png');
+  link.href=outCvs.toDataURL('image/png');
+  link.click();
+}
+
+function downloadSheetHD(){
+  if(!planLimits().hdExport){
+    showUpgradePrompt(currentLang==='hi'
+      ? 'HD 600 DPI export paid plan mein unlock hota hai.'
+      : 'HD 600 DPI export unlocks with a paid plan.');
+    return;
+  }
+  if(!croppedCanvas){ showToast(t('toast_crop_first')); return; }
+  if(!consumeFreeSheetOrBlock()) return;
+  const hd = renderSheetAtDPI(600);
+  if(!hd) return;
+  const link=document.createElement('a');
+  link.download=`passport_photos_A4_${sheetCols}x${sheetRows}_600dpi_HD.png`;
+  link.href=hd.toDataURL('image/png');
   link.click();
 }
 
 function printSheet(){
   if(!_sheetFullRes) return;
-  const dataUrl=_sheetFullRes.toDataURL('image/png');
+  if(!consumeFreeSheetOrBlock()) return;
+  const cvs = _sheetFullRes;
+  let outCvs = cvs;
+  if(isFreeUser() && planLimits().watermark){
+    outCvs = document.createElement('canvas');
+    outCvs.width = cvs.width; outCvs.height = cvs.height;
+    const c = outCvs.getContext('2d');
+    c.drawImage(cvs, 0, 0);
+    paintWatermark(c, outCvs.width, outCvs.height);
+  }
+  const dataUrl=outCvs.toDataURL('image/png');
   const w=window.open('','_blank');
   w.document.write(`<!DOCTYPE html><html><head><title>Print Passport Photos</title>
   <style>@page{size:A4 portrait;margin:0;}body{margin:0;padding:0;}img{width:210mm;height:297mm;display:block;}</style>
   </head><body onload="window.print();"><img src="${dataUrl}"></body></html>`);
   w.document.close();
 }
+window.downloadSheetHD = downloadSheetHD;
 
 // ═══════════════════════════════════════════════
 // UTILITIES
@@ -2950,6 +3128,16 @@ function fillA4(){
     if(total>best.total) best={total,cols,rows};
   }
   sheetCols=best.cols; sheetRows=best.rows; sheetTotal=best.total;
+  // Plan gate: cap sheetTotal for free users
+  const _pl = planLimits();
+  if(sheetTotal > _pl.maxPhotosPerSheet){
+    sheetTotal = _pl.maxPhotosPerSheet;
+    // Recompute rows to fit new total inside same column count
+    sheetRows = Math.ceil(sheetTotal/sheetCols);
+    showToast(currentLang==='hi'
+      ? `Free plan: A4 par sirf ${_pl.maxPhotosPerSheet} photos tak allowed hain. Upgrade karein unlimited ke liye.`
+      : `Free plan: limited to ${_pl.maxPhotosPerSheet} photos per sheet. Upgrade for unlimited.`);
+  }
   // Sync UI buttons (mark closest; add if missing)
   const totals=[1,2,3,4,5,6,8,10,12,16];
   document.querySelectorAll('#totalBtns .count-btn').forEach(b=>b.classList.remove('active'));
@@ -3004,10 +3192,89 @@ async function api(path, opts={}){
   return data;
 }
 const PLANS = {
-  free:   { id:'free',    name:'Free',    price:0,   period:'',          photos:5,   watermark:true,  features:['5 photos per sheet','Standard cutting guides','AI BG (with your key)','300 DPI download'], dimFeatures:['Watermark on print','No Pro presets','No HD export'] },
-  weekly: { id:'weekly',  name:'Weekly',  price:49,  period:'/week',     photos:999, watermark:false, features:['Unlimited photos','No watermark','All country presets','Priority BG removal','HD 600 DPI export'], dimFeatures:[] },
-  monthly:{ id:'monthly', name:'Monthly', price:149, period:'/month',    photos:999, watermark:false, features:['Everything in Weekly','Save ₹47 vs weekly','Bulk batch processing','Custom background colors','Email support'], dimFeatures:[] }
+  free: {
+    id:'free', name:'Free', price:0, period:'',
+    maxPhotosPerSheet: 5,
+    dailySheets: 2,       // A4 sheets (download + print combined) allowed per 24h
+    watermark: true,
+    aiBgAllowed: false,
+    hdExport: false,
+    allPresets: false,
+    features: ['5 photos per sheet', 'Standard cutting guides', '2 sheets per day'],
+    dimFeatures: []
+  },
+  weekly: {
+    id:'weekly', name:'Weekly', price:59, period:'/week',
+    maxPhotosPerSheet: 999,
+    dailySheets: 0,       // 0 = unlimited
+    watermark: false,
+    aiBgAllowed: true,
+    hdExport: true,
+    allPresets: true,
+    features: ['Unlimited photos', 'No watermark', 'All country presets', 'Priority AI BG removal', 'HD 600 DPI export'],
+    dimFeatures: []
+  },
+  monthly: {
+    id:'monthly', name:'Monthly', price:149, period:'/month',
+    maxPhotosPerSheet: 999,
+    dailySheets: 0,
+    watermark: false,
+    aiBgAllowed: true,
+    hdExport: true,
+    allPresets: true,
+    features: ['Everything in Weekly', 'Bulk batch processing', 'Custom background colors', 'Priority email support', 'Best value — saves ₹27/month vs weekly'],
+    dimFeatures: []
+  }
 };
+
+// ── Plan enforcement helpers ──
+function planLimits(){ return PLANS[effectivePlan(currentUser())] || PLANS.free; }
+function isFreeUser(){ return effectivePlan(currentUser()) === 'free'; }
+
+// Pro preset flags — presets beyond the "basic" free set
+const PRO_PRESET_COUNTRIES = new Set(['🇺🇸 US Visa','🇦🇪 UAE','🇦🇺 Australia']);
+
+function _todayKey(){
+  const d=new Date();
+  return `pps_daily_sheets_${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+function getTodaySheets(){
+  const n=+localStorage.getItem(_todayKey());
+  return Number.isFinite(n)?n:0;
+}
+function incTodaySheets(){
+  const k=_todayKey();
+  const n=getTodaySheets()+1;
+  try{ localStorage.setItem(k, String(n)); }catch(e){}
+  refreshPlanBanner();
+  return n;
+}
+function remainingFreeSheets(){
+  const pl=planLimits();
+  if(!pl.dailySheets) return Infinity;
+  return Math.max(0, pl.dailySheets - getTodaySheets());
+}
+function consumeFreeSheetOrBlock(){
+  // Returns true if allowed, false if limit hit (and shows upgrade prompt).
+  if(!isFreeUser()) return true;
+  if(remainingFreeSheets() <= 0){
+    showUpgradePrompt(
+      currentLang==='hi'
+        ? 'Aaj ka free limit (2 sheets) khatam ho gaya. Upgrade karo unlimited ke liye.'
+        : 'Daily free limit (2 sheets) reached. Upgrade for unlimited sheets.'
+    );
+    return false;
+  }
+  incTodaySheets();
+  return true;
+}
+
+function showUpgradePrompt(msg){
+  showToast(msg || (currentLang==='hi' ? 'Ye feature paid plan mein hai. Upgrade karo.' : 'This feature requires a paid plan. Please upgrade.'));
+  // Open plans modal after a short delay so the toast is visible first
+  setTimeout(()=>{ try{ closeAllModals(); openPlans(); }catch(e){} }, 450);
+}
+window.showUpgradePrompt = showUpgradePrompt;
 
 function getUsers(){ try{return JSON.parse(localStorage.getItem(AUTH_STORE_KEY)||'{}');}catch(e){return {};} }
 function saveUsers(u){ localStorage.setItem(AUTH_STORE_KEY, JSON.stringify(u)); }
@@ -3050,7 +3317,95 @@ function refreshAuthUI(){
     btn.innerHTML = '\uD83D\uDC64 <span class="hdr-lbl" data-i18n="hdr_login">'+t('hdr_login')+'</span>';
     btn.onclick = openAuth;
   }
+  refreshPlanUI();
 }
+
+// ── Apply plan-based UI gating (buttons, presets, badges) ──
+function refreshPlanUI(){
+  const pl = planLimits();
+  const free = isFreeUser();
+
+  // Photo-count buttons: disable any value above maxPhotosPerSheet for free users
+  document.querySelectorAll('#totalBtns .count-btn').forEach(b=>{
+    const v = +b.dataset.v;
+    const locked = v > pl.maxPhotosPerSheet;
+    b.classList.toggle('pro-locked', locked);
+    b.title = locked ? (currentLang==='hi' ? 'Paid plan mein unlock hota hai' : 'Unlocks in paid plan') : '';
+  });
+
+  // If current sheetTotal exceeds cap, snap it back to cap
+  if(sheetTotal > pl.maxPhotosPerSheet){
+    sheetTotal = pl.maxPhotosPerSheet;
+    document.querySelectorAll('#totalBtns .count-btn').forEach(b=>{
+      b.classList.toggle('active', +b.dataset.v === sheetTotal);
+    });
+    if(typeof croppedCanvas !== 'undefined' && croppedCanvas) buildSheet();
+  }
+
+  // Preset buttons: lock "pro" country presets for free users
+  document.querySelectorAll('.preset-btn').forEach(b=>{
+    const isPro = b.dataset.pro === '1';
+    if(free && isPro){
+      b.classList.add('pro-locked');
+      if(!b.querySelector('.pro-lock-badge')){
+        const badge = document.createElement('span');
+        badge.className = 'pro-lock-badge';
+        badge.textContent = '🔒';
+        b.appendChild(badge);
+      }
+    }else{
+      b.classList.remove('pro-locked');
+      const badge = b.querySelector('.pro-lock-badge');
+      if(badge) badge.remove();
+    }
+  });
+
+  // AI BG button: visually lock for free users
+  const aiBtn = document.getElementById('removeBgBtn');
+  if(aiBtn){
+    if(free){
+      aiBtn.classList.add('pro-locked');
+      aiBtn.innerHTML = '🔒 ' + (currentLang==='hi' ? 'AI BG (Pro)' : 'AI Remove BG (Pro)');
+    }else{
+      aiBtn.classList.remove('pro-locked');
+      aiBtn.innerHTML = '🤖 ' + (currentLang==='hi' ? 'Background hatao' : 'Remove Background');
+    }
+  }
+
+  // Show/hide HD export button
+  const hdBtn = document.getElementById('hdDownloadBtn');
+  if(hdBtn) hdBtn.style.display = pl.hdExport ? 'flex' : 'none';
+
+  refreshPlanBanner();
+}
+
+// Daily-usage banner for free users, visible on step 4
+function refreshPlanBanner(){
+  const el = document.getElementById('planBanner');
+  if(!el) return;
+  const pl = planLimits();
+  if(!isFreeUser() || !pl.dailySheets){
+    el.style.display = 'none';
+    el.textContent = '';
+    return;
+  }
+  const used = getTodaySheets();
+  const left = Math.max(0, pl.dailySheets - used);
+  el.style.display = 'block';
+  if(left > 0){
+    el.className = 'plan-banner ok';
+    el.innerHTML = (currentLang==='hi'
+      ? `Free plan · Aaj bache hain <strong>${left}/${pl.dailySheets}</strong> sheet${left===1?'':'s'}. <a href="#" onclick="openPlans();return false;">Unlimited chahiye?</a>`
+      : `Free plan · <strong>${left}/${pl.dailySheets}</strong> sheet${left===1?'':'s'} left today. <a href="#" onclick="openPlans();return false;">Go unlimited →</a>`);
+  }else{
+    el.className = 'plan-banner hit';
+    el.innerHTML = (currentLang==='hi'
+      ? `Aaj ka free limit (${pl.dailySheets} sheets) khatam. <a href="#" onclick="openPlans();return false;">Upgrade karein</a>`
+      : `Daily free limit (${pl.dailySheets} sheets) reached. <a href="#" onclick="openPlans();return false;">Upgrade</a>`);
+  }
+}
+window.refreshPlanUI = refreshPlanUI;
+window.refreshPlanBanner = refreshPlanBanner;
 function escapeHtml(s){return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 
 // ── Modal helpers ──
