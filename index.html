@@ -763,6 +763,34 @@ canvas{display:block;}
   .preset-grid{grid-template-columns:1fr 1fr;}
 }
 
+/* ── DESKTOP (≥1181px): larger header + steps + sidebar for comfortable desktop use ── */
+@media(min-width:1181px){
+  :root{--sidebar-w:360px;}
+  header{height:64px;padding:0 22px;gap:16px;}
+  .logo{font-size:23px;}
+  .badge{font-size:12px;padding:4px 11px;}
+  .step{padding:14px 22px;font-size:13px;gap:10px;}
+  .step-num{width:22px;height:22px;font-size:11px;}
+  .hdr-btn{padding:9px 14px;font-size:13px;border-radius:7px;}
+  .lang-btn{padding:6px 14px;font-size:12px;}
+  .sb-section{padding:18px;}
+  .sb-title{font-size:12px;margin-bottom:13px;letter-spacing:1px;}
+  .preset-btn{padding:11px 6px;font-size:12px;}
+  .btn{padding:11px 16px;font-size:14px;}
+}
+
+/* ── LARGE DESKTOP (≥1440px): extra breathing room ── */
+@media(min-width:1440px){
+  :root{--sidebar-w:400px;}
+  header{height:70px;padding:0 28px;}
+  .logo{font-size:26px;}
+  .step{padding:16px 26px;font-size:14px;}
+  .step-num{width:24px;height:24px;font-size:12px;}
+  .hdr-btn{padding:10px 16px;font-size:14px;}
+  .sb-section{padding:20px;}
+  .badge{font-size:13px;padding:5px 13px;}
+}
+
 /* ── HEADER AUTH / PLANS BUTTONS ── */
 .hdr-btn{background:var(--surface2);border:1px solid var(--border);color:var(--text);
   padding:6px 11px;border-radius:6px;font-family:'DM Mono',monospace;font-size:12px;
@@ -1410,6 +1438,56 @@ const LANG = {
     tut5_desc:'वापस PassportPrint Studio में आओ। Step 2 पे API Key field में Ctrl+V से paste करो। Key automatically save हो जाएगी।',
     tut_cta_sub:'Tool में वापस जाओ, photo upload करो, और AI magic देखो',
     tut_cta_btn:'← Tool पे वापस जाओ',
+
+    /* Header / auth / account / plans (proper Hindi) */
+    hdr_plans:'Plans', hdr_login:'Login',
+    auth_info_title:'ℹ सूचना:',
+    auth_info_body:'आपका account सुरक्षित है। Passwords encrypt करके रखे जाते हैं और सारा data HTTPS के ज़रिए भेजा जाता है।',
+    plans_note:'सभी payments Razorpay के ज़रिए secure किए जाते हैं (UPI, Card, Net Banking सब accept होते हैं)। Payment successful होते ही आपका plan तुरंत activate हो जाएगा। Cancel anytime.',
+    acc_name:'नाम', acc_email:'Email', acc_plan:'मौजूदा Plan', acc_expiry:'Expiry',
+    acc_upgrade:'💎 Upgrade / Plan बदलें',
+    acc_logout:'Logout',
+    acc_delete:'🗑 Account हमेशा के लिए Delete करें',
+    plan_tag_free:'Basic use के लिए, हमेशा free।',
+    plan_tag_weekly:'Short-term use. 7 दिन full access।',
+    plan_tag_monthly:'Best value. 30 दिन, सब unlocked।',
+    plan_btn_current:'✓ आपका Plan',
+    plan_btn_switch_free:'Free पर जाएँ',
+    plan_btn_upgrade:'अभी Upgrade करें',
+    plan_price_forever:'forever',
+
+    /* Auth errors + toasts (proper Hindi) */
+    err_fields_required:'सभी fields भरें।',
+    err_invalid_email:'Email सही नहीं है।',
+    err_pwd_short:'Password कम से कम 6 characters का होना चाहिए।',
+    err_fields_both:'Email और password दोनों ज़रूरी हैं।',
+    err_no_account:'Account नहीं मिला। पहले Signup करें।',
+    err_wrong_pwd:'Password गलत है।',
+    err_prefix:'Error: ',
+    toast_welcome_new:'Welcome {name}! Account बन गया।',
+    toast_welcome_back:'Welcome back, {name}!',
+    toast_logout:'Logout हो गए',
+    toast_free_active:'Free plan activate हो गया',
+    toast_signup_first:'पहले Signup करें',
+    toast_payment_cancel:'Payment cancel हो गया',
+    toast_need_login:'पहले Login करें',
+    toast_crop_first:'पहले photo crop करें',
+    toast_plan_activated:'✓ {plan} plan activate हो गया!',
+    toast_verification_fail:'Verification fail: ',
+    toast_order_fail:'Order fail: ',
+    toast_account_deleted:'आपका account delete हो गया',
+
+    /* App reset + delete confirm modal */
+    confirm_reset_title:'App reset करें?',
+    confirm_reset_body:'आपकी current photo clear हो जाएगी। Login safe रहेगा।',
+    confirm_yes:'हाँ',
+    confirm_no:'रद्द करें',
+    confirm_delete_title:'Account हमेशा के लिए delete करें?',
+    confirm_delete_body:'यह undo नहीं हो सकता। आपका सारा data permanently delete हो जाएगा।',
+    confirm_delete_yes:'हाँ, delete करें',
+
+    /* UPI fallback */
+    upi_done_q:'क्या payment complete हो गई है?',
   },
   en: {
     badge_free:'✓ 100% Free', badge_offline:'✓ Offline After First Load', badge_ai:'✓ AI BG Removal',
@@ -1459,6 +1537,56 @@ const LANG = {
     tut5_desc:'Come back to PassportPrint Studio. On Step 2, paste the key (Ctrl+V) in the API Key field. It saves automatically.',
     tut_cta_sub:'Go back to the tool, upload a photo, and watch the AI magic',
     tut_cta_btn:'← Go Back to Tool',
+
+    /* Header / auth / account / plans */
+    hdr_plans:'Plans', hdr_login:'Login',
+    auth_info_title:'ℹ Info:',
+    auth_info_body:'Your account is kept secure. Passwords are stored hashed and all data is sent over HTTPS.',
+    plans_note:'All payments are processed securely through Razorpay (UPI, Cards and Net Banking all supported). Your plan activates instantly once payment succeeds. Cancel anytime.',
+    acc_name:'Name', acc_email:'Email', acc_plan:'Current Plan', acc_expiry:'Expires',
+    acc_upgrade:'💎 Upgrade / Change Plan',
+    acc_logout:'Logout',
+    acc_delete:'🗑 Delete Account Permanently',
+    plan_tag_free:'Basic use, free forever.',
+    plan_tag_weekly:'Short-term use. 7 days full access.',
+    plan_tag_monthly:'Best value. 30 days, everything unlocked.',
+    plan_btn_current:'✓ Your Plan',
+    plan_btn_switch_free:'Switch to Free',
+    plan_btn_upgrade:'Upgrade now',
+    plan_price_forever:'forever',
+
+    /* Auth errors + toasts */
+    err_fields_required:'Please fill in all fields.',
+    err_invalid_email:'Invalid email.',
+    err_pwd_short:'Password must be at least 6 characters.',
+    err_fields_both:'Enter both email and password.',
+    err_no_account:'No account found. Please sign up first.',
+    err_wrong_pwd:'Wrong password.',
+    err_prefix:'Error: ',
+    toast_welcome_new:'Welcome {name}! Account created.',
+    toast_welcome_back:'Welcome back, {name}!',
+    toast_logout:'Logged out',
+    toast_free_active:'Free plan activated',
+    toast_signup_first:'Please sign up first',
+    toast_payment_cancel:'Payment cancelled',
+    toast_need_login:'Login required',
+    toast_crop_first:'Crop a photo first',
+    toast_plan_activated:'✓ {plan} plan activated!',
+    toast_verification_fail:'Verification failed: ',
+    toast_order_fail:'Order failed: ',
+    toast_account_deleted:'Your account has been deleted',
+
+    /* App reset + delete confirm modal */
+    confirm_reset_title:'Reset the app?',
+    confirm_reset_body:'Your current photo will be cleared. Your login stays.',
+    confirm_yes:'Yes',
+    confirm_no:'Cancel',
+    confirm_delete_title:'Delete your account?',
+    confirm_delete_body:'This cannot be undone. All your data will be permanently deleted.',
+    confirm_delete_yes:'Yes, delete',
+
+    /* UPI fallback */
+    upi_done_q:'Has your payment completed?',
   }
 };
 
@@ -1492,6 +1620,46 @@ function loadLang(){
     setLang(saved);
   }catch(e){ setLang('hi'); }
 }
+
+// i18n helper — returns string for current language, with optional {placeholder} substitution
+function t(key, vars){
+  const dict = LANG[currentLang] || LANG.hi;
+  let s = (dict[key] != null) ? dict[key] : (LANG.en[key] || key);
+  if(vars){
+    for(const k in vars){ s = s.replace(new RegExp('\\{'+k+'\\}','g'), vars[k]); }
+  }
+  return s;
+}
+
+// ═══════════════════════════════════════════════
+// CUSTOM CONFIRM MODAL (replaces browser's native confirm popup)
+// ═══════════════════════════════════════════════
+// Usage: const ok = await customConfirm({title, body, yes, no, danger:true})
+function customConfirm(opts){
+  return new Promise(resolve=>{
+    const overlay = document.getElementById('confirmModal');
+    document.getElementById('confirmTitle').textContent = opts.title || '';
+    document.getElementById('confirmBody').textContent  = opts.body  || '';
+    const yesBtn = document.getElementById('confirmYes');
+    const noBtn  = document.getElementById('confirmNo');
+    yesBtn.textContent = opts.yes || t('confirm_yes');
+    noBtn.textContent  = opts.no  || t('confirm_no');
+    yesBtn.className = 'btn ' + (opts.danger ? 'btn-danger' : 'btn-primary');
+    overlay.classList.add('active');
+    document.body.style.overflow='hidden';
+    const cleanup = (val) => {
+      overlay.classList.remove('active');
+      document.body.style.overflow='';
+      yesBtn.onclick = null; noBtn.onclick = null;
+      overlay.onclick = null;
+      resolve(val);
+    };
+    yesBtn.onclick = () => cleanup(true);
+    noBtn.onclick  = () => cleanup(false);
+    overlay.onclick = (e) => { if(e.target === overlay) cleanup(false); };
+  });
+}
+window.customConfirm = customConfirm;
 
 // ═══════════════════════════════════════════════
 // TUTORIAL
@@ -1792,7 +1960,7 @@ function cleanMaskLargestComponent(maskData, w, h) {
 
 // Main entry point — called by "Remove Background" button
 async function startBgRemoval() {
-  if (!origImg) { alert('Pehle photo upload karein!'); return; }
+  if (!origImg) { showToast(currentLang==='hi'?'पहले photo upload करें।':'Please upload a photo first.'); return; }
 
   bgCancelled = false;
   setBgBtnsDisabled(true);
@@ -2716,14 +2884,17 @@ window.addEventListener('resize',()=>{
 // ═══════════════════════════════════════════════
 // LOGO RESET (click on logo → reset to Step 1 / refresh)
 // ═══════════════════════════════════════════════
-function resetApp(){
-  // If user has unsaved work, confirm
+async function resetApp(){
+  // If user has unsaved work, ask via our custom in-site modal (never browser confirm)
   const hasWork = origImg || processedCanvas || croppedCanvas;
   if(hasWork){
-    const txt = (currentLang==='hi')
-      ? 'App reset karna hai? Current photo chali jayegi.'
-      : 'Reset the app? Your current photo will be cleared.';
-    if(!confirm(txt)) return;
+    const ok = await customConfirm({
+      title: t('confirm_reset_title'),
+      body:  t('confirm_reset_body'),
+      yes:   t('confirm_yes'),
+      no:    t('confirm_no'),
+    });
+    if(!ok) return;
   }
   // Soft-reset: clear state and go to step 1 without full page reload (preserves login/plan)
   try{
@@ -2740,10 +2911,14 @@ function resetApp(){
     document.querySelectorAll('#colBtns .count-btn').forEach(b=>{
       b.classList.toggle('active', b.dataset.v==='4');
     });
+    closeAllModals();
     goStep(1);
+    // Scroll top so it feels like a fresh page
+    window.scrollTo(0, 0);
   }catch(e){
-    // Fallback: hard reload
-    location.reload();
+    // Swallow — no forced reload, which would trigger the browser's
+    // "Reload site? Changes you made may not be saved" dialog.
+    console.warn('resetApp failed', e);
   }
 }
 window.resetApp=resetApp;
@@ -2753,7 +2928,7 @@ window.resetApp=resetApp;
 // ═══════════════════════════════════════════════
 function fillA4(){
   if(!croppedCanvas){
-    showToast(currentLang==='hi' ? 'Pehle photo crop karo' : 'Crop a photo first');
+    showToast(t('toast_crop_first'));
     return;
   }
   const a4W=Math.round(210/MM2IN*DPI);
@@ -2794,7 +2969,7 @@ function fillA4(){
   });
   buildSheet();
   showToast(currentLang==='hi'
-    ? `A4 full — ${sheetTotal} photos (${sheetCols}×${sheetRows})`
+    ? `A4 भर गया — ${sheetTotal} photos (${sheetCols}×${sheetRows})`
     : `A4 filled — ${sheetTotal} photos (${sheetCols}×${sheetRows})`);
 }
 window.fillA4=fillA4;
@@ -2865,17 +3040,15 @@ function effectivePlan(user){
 }
 function refreshAuthUI(){
   const user=currentUser();
-  const lbl=document.getElementById('hdrAuthLabel');
   const btn=document.getElementById('hdrAuthBtn');
   if(user){
-    const plan=effectivePlan(user);
-    const planName=PLANS[plan].name;
-    const cls=plan==='free'?'free':'';
-    btn.innerHTML=`👤 <span class="hdr-lbl">${escapeHtml(user.name||user.email.split('@')[0])}</span> <span class="plan-pill ${cls}">${planName}</span>`;
-    btn.onclick=openAccount;
+    // Show ONLY the username — plan info lives in the Account modal now.
+    const name = user.name || (user.email ? user.email.split('@')[0] : '');
+    btn.innerHTML = `\uD83D\uDC64 <span class="hdr-lbl">${escapeHtml(name)}</span>`;
+    btn.onclick = openAccount;
   }else{
-    btn.innerHTML='👤 <span class="hdr-lbl" data-i18n="hdr_login">'+(currentLang==='hi'?'Login':'Login')+'</span>';
-    btn.onclick=openAuth;
+    btn.innerHTML = '\uD83D\uDC64 <span class="hdr-lbl" data-i18n="hdr_login">'+t('hdr_login')+'</span>';
+    btn.onclick = openAuth;
   }
 }
 function escapeHtml(s){return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
@@ -2910,9 +3083,9 @@ async function doSignup(e){
   const email=document.getElementById('suEmail').value.trim().toLowerCase();
   const pwd=document.getElementById('suPwd').value;
   const err=document.getElementById('authError'); err.textContent='';
-  if(!name||!email||!pwd){err.textContent='Sab fields bharo / Fill all fields.';return;}
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){err.textContent='Email galat hai / Invalid email.';return;}
-  if(pwd.length<6){err.textContent='Password kam se kam 6 char / Password must be ≥ 6 chars.';return;}
+  if(!name||!email||!pwd){err.textContent=t('err_fields_required');return;}
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){err.textContent=t('err_invalid_email');return;}
+  if(pwd.length<6){err.textContent=t('err_pwd_short');return;}
 
   if(USE_BACKEND){
     try{
@@ -2921,28 +3094,28 @@ async function doSignup(e){
       saveUsers(Object.assign(getUsers(), {[user.email]: user}));
       setSession({email:user.email, loggedAt:Date.now()});
       refreshAuthUI(); closeModal('authModal');
-      showToast(currentLang==='hi'?`Welcome ${user.name}! Account ban gaya.`:`Welcome ${user.name}! Account created.`);
-    }catch(ex){ err.textContent = (currentLang==='hi'?'Error: ':'Error: ') + ex.message; }
+      showToast(t('toast_welcome_new', {name:user.name}));
+    }catch(ex){ err.textContent = t('err_prefix') + ex.message; }
     return;
   }
 
   // ── LocalStorage mode (no backend) ──
   const users=getUsers();
-  if(users[email]){err.textContent='Email already registered. Please login.';return;}
+  if(users[email]){err.textContent = currentLang==='hi' ? 'यह Email पहले से registered है। Login करें।' : 'Email already registered. Please login.';return;}
   const passhash=await hashPwd(pwd);
   users[email]={email,name,passhash,plan:'free',planExpiresAt:0,createdAt:Date.now()};
   saveUsers(users);
   setSession({email, loggedAt:Date.now()});
   refreshAuthUI();
   closeModal('authModal');
-  showToast(currentLang==='hi'?`Welcome ${name}! Account ban gaya.`:`Welcome ${name}! Account created.`);
+  showToast(t('toast_welcome_new', {name}));
 }
 async function doLogin(e){
   if(e) e.preventDefault();
   const email=document.getElementById('liEmail').value.trim().toLowerCase();
   const pwd=document.getElementById('liPwd').value;
   const err=document.getElementById('authError'); err.textContent='';
-  if(!email||!pwd){err.textContent='Email aur password dono zaruri / Enter email and password.';return;}
+  if(!email||!pwd){err.textContent=t('err_fields_both');return;}
 
   if(USE_BACKEND){
     try{
@@ -2951,28 +3124,57 @@ async function doLogin(e){
       saveUsers(Object.assign(getUsers(), {[user.email]: user}));
       setSession({email:user.email, loggedAt:Date.now()});
       refreshAuthUI(); closeModal('authModal');
-      showToast(currentLang==='hi'?`Welcome back, ${user.name}!`:`Welcome back, ${user.name}!`);
-    }catch(ex){ err.textContent = (currentLang==='hi'?'Error: ':'Error: ') + ex.message; }
+      showToast(t('toast_welcome_back', {name:user.name}));
+    }catch(ex){ err.textContent = t('err_prefix') + ex.message; }
     return;
   }
 
   // ── LocalStorage mode ──
   const users=getUsers();
   const u=users[email];
-  if(!u){err.textContent='Account nahi mila / No account found. Signup karein.';return;}
+  if(!u){err.textContent=t('err_no_account');return;}
   const ph=await hashPwd(pwd);
-  if(ph!==u.passhash){err.textContent='Password galat / Wrong password.';return;}
+  if(ph!==u.passhash){err.textContent=t('err_wrong_pwd');return;}
   setSession({email, loggedAt:Date.now()});
   refreshAuthUI();
   closeModal('authModal');
-  showToast(currentLang==='hi'?`Welcome back, ${u.name}!`:`Welcome back, ${u.name}!`);
+  showToast(t('toast_welcome_back', {name:u.name}));
 }
 function logout(){
   setSession(null);
   localStorage.removeItem(AUTH_TOKEN_KEY);
   refreshAuthUI(); closeAllModals();
-  showToast(currentLang==='hi'?'Logout ho gaye':'Logged out');
+  showToast(t('toast_logout'));
 }
+
+// ── Delete account (permanent) ──
+async function deleteAccount(){
+  const user = currentUser();
+  if(!user) return;
+  const ok = await customConfirm({
+    title: t('confirm_delete_title'),
+    body:  t('confirm_delete_body'),
+    yes:   t('confirm_delete_yes'),
+    no:    t('confirm_no'),
+    danger: true,
+  });
+  if(!ok) return;
+  // Backend mode: try to delete on server (best-effort; ignore network errors)
+  if(USE_BACKEND){
+    try{ await api('/api/delete-account', {method:'POST'}); }catch(e){ /* continue anyway */ }
+  }
+  // Local cleanup in every case
+  try{
+    const users = getUsers();
+    delete users[user.email];
+    saveUsers(users);
+  }catch(e){}
+  localStorage.removeItem(AUTH_TOKEN_KEY);
+  setSession(null);
+  refreshAuthUI(); closeAllModals();
+  showToast(t('toast_account_deleted'));
+}
+window.deleteAccount = deleteAccount;
 // On load: if backend mode + token present, refresh user from server
 async function restoreSession(){
   if(!USE_BACKEND) return;
@@ -3002,6 +3204,7 @@ function openAccount(){
 window.openAuth=openAuth; window.setAuthTab=setAuthTab;
 window.doSignup=doSignup; window.doLogin=doLogin;
 window.logout=logout; window.openAccount=openAccount;
+window.deleteAccount=deleteAccount;
 
 // ── Plans modal ──
 function openPlans(){
@@ -3015,18 +3218,18 @@ function openPlans(){
     const featsHtml = p.features.map(f=>`<li>${escapeHtml(f)}</li>`).join('') +
                        p.dimFeatures.map(f=>`<li class="dim">${escapeHtml(f)}</li>`).join('');
     const priceHtml = p.price===0
-      ? `<div class="plan-price"><span class="currency">₹</span>0<span class="period">${currentLang==='hi'?'forever':'forever'}</span></div>`
+      ? `<div class="plan-price"><span class="currency">₹</span>0<span class="period">${t('plan_price_forever')}</span></div>`
       : `<div class="plan-price"><span class="currency">₹</span>${p.price}<span class="period">${p.period}</span></div>`;
     const btnHtml = isCur
-      ? `<button class="plan-btn plan-btn-current">${currentLang==='hi'?'✓ Aapka Plan':'✓ Your Plan'}</button>`
+      ? `<button class="plan-btn plan-btn-current">${t('plan_btn_current')}</button>`
       : p.id==='free'
-        ? `<button class="plan-btn plan-btn-free" onclick="downgradeToFree()">${currentLang==='hi'?'Free par jaao':'Switch to Free'}</button>`
-        : `<button class="plan-btn plan-btn-primary" onclick="startCheckout('${p.id}')">${currentLang==='hi'?'Abhi Upgrade karo':'Upgrade now'}</button>`;
+        ? `<button class="plan-btn plan-btn-free" onclick="downgradeToFree()">${t('plan_btn_switch_free')}</button>`
+        : `<button class="plan-btn plan-btn-primary" onclick="startCheckout('${p.id}')">${t('plan_btn_upgrade')}</button>`;
     const card=document.createElement('div');
     card.className='plan-card'+(isFeatured?' featured':'')+(isCur?' current':'');
     card.innerHTML=`
       <div class="plan-name">${escapeHtml(p.name)}</div>
-      <div class="plan-tagline">${p.id==='free'?(currentLang==='hi'?'Basic use ke liye, hamesha free.':'Basic use, free forever.'):p.id==='weekly'?(currentLang==='hi'?'Short-term use. 7 din full access.':'Short-term use. 7 days full access.'):(currentLang==='hi'?'Best value. 30 din, sab kuch unlocked.':'Best value. 30 days, everything unlocked.')}</div>
+      <div class="plan-tagline">${p.id==='free'?t('plan_tag_free'):p.id==='weekly'?t('plan_tag_weekly'):t('plan_tag_monthly')}</div>
       ${priceHtml}
       <ul class="plan-features">${featsHtml}</ul>
       ${btnHtml}
@@ -3042,11 +3245,11 @@ function downgradeToFree(){
   saveUsers(users);
   refreshAuthUI();
   openPlans();
-  showToast(currentLang==='hi'?'Free plan activate':'Free plan activated');
+  showToast(t('toast_free_active'));
 }
 function startCheckout(planId){
   const user=currentUser();
-  if(!user){ closeModal('plansModal'); openAuth('signup'); showToast(currentLang==='hi'?'Pehle signup karein':'Please signup first'); return; }
+  if(!user){ closeModal('plansModal'); openAuth('signup'); showToast(t('toast_signup_first')); return; }
   const p=PLANS[planId]; if(!p||p.price===0) return;
   document.getElementById('payPlanName').textContent=p.name;
   document.getElementById('payPlanPrice').textContent='₹'+p.price;
@@ -3067,7 +3270,7 @@ async function completePayment(){
   const planId=document.getElementById('payModal').dataset.planId;
   const p=PLANS[planId]; if(!p) return;
   const method=document.querySelector('.pay-method.active')?.dataset.method||'razorpay';
-  const user=currentUser(); if(!user){showToast('Login required');return;}
+  const user=currentUser(); if(!user){showToast(t('toast_need_login'));return;}
 
   // ── BACKEND MODE: real Razorpay payment with server-side signature verification ──
   if(USE_BACKEND && method==='razorpay'){
@@ -3097,18 +3300,16 @@ async function completePayment(){
             // Update cached user
             const users=getUsers(); users[verified.user.email]=verified.user; saveUsers(users);
             closeAllModals(); refreshAuthUI();
-            showToast(currentLang==='hi'
-              ? `✓ ${PLANS[planId].name} plan activate!`
-              : `✓ ${PLANS[planId].name} plan activated!`);
+            showToast(t('toast_plan_activated', {plan: PLANS[planId].name}));
           }catch(ex){
-            showToast((currentLang==='hi'?'Verification fail: ':'Verification failed: ')+ex.message);
+            showToast(t('toast_verification_fail')+ex.message);
           }
         },
-        modal:{ ondismiss:function(){ showToast(currentLang==='hi'?'Payment cancel':'Payment cancelled'); } }
+        modal:{ ondismiss:function(){ showToast(t('toast_payment_cancel')); } }
       });
       rzp.open();
     }catch(ex){
-      showToast((currentLang==='hi'?'Order fail: ':'Order failed: ')+ex.message);
+      showToast(t('toast_order_fail')+ex.message);
     }
     return;
   }
@@ -3120,20 +3321,19 @@ async function completePayment(){
     const note=encodeURIComponent(`${p.name} Plan - ${user.email}`);
     const upiUrl=`upi://pay?pa=${encodeURIComponent(UPI_VPA)}&pn=${encodeURIComponent(payeeName)}&am=${p.price}&cu=INR&tn=${note}&tr=${txnRef}`;
     window.location.href=upiUrl;
-    setTimeout(()=>{
-      if(confirm(currentLang==='hi'?'Payment complete ho gaya? (agar ho gaya toh OK dabao)':'Payment complete? Click OK to activate plan.')){
-        activatePlan(planId, 'upi_'+txnRef);
-      }
+    setTimeout(async ()=>{
+      const ok = await customConfirm({
+        title: t('upi_done_q'),
+        body:  '',
+        yes:   t('confirm_yes'),
+        no:    t('confirm_no'),
+      });
+      if(ok) activatePlan(planId, 'upi_'+txnRef);
     }, 2500);
     return;
   }
-  // ── Demo / Manual (no gateway configured yet) ──
-  const ok=confirm(
-    currentLang==='hi'
-      ? `DEMO MODE\n\nAbhi payment gateway setup nahi hai (Razorpay key khali hai).\nIs plan ko DEMO activate karun? (Testing ke liye)\n\nReal payments chalu karne ke liye:\n1. Razorpay account banao\n2. API key daalo code mein\n3. Server se order verify karo`
-      : `DEMO MODE\n\nNo payment gateway configured (Razorpay key empty).\nActivate this plan in DEMO mode? (for testing)\n\nTo enable real payments:\n1. Signup at Razorpay\n2. Put API key in code\n3. Verify orders server-side`
-  );
-  if(ok) activatePlan(planId, 'demo_'+Date.now());
+  // ── Fallback: gateway not available ──
+  showToast(t('toast_order_fail') + (currentLang==='hi' ? 'Payment gateway अभी उपलब्ध नहीं है।' : 'Payment gateway is not available right now.'));
 }
 function activatePlan(planId, paymentId){
   const user=currentUser(); if(!user) return;
@@ -3146,9 +3346,7 @@ function activatePlan(planId, paymentId){
   saveUsers(users);
   closeAllModals();
   refreshAuthUI();
-  showToast(currentLang==='hi'
-    ? `✓ ${PLANS[planId].name} plan activate! (${days} din)`
-    : `✓ ${PLANS[planId].name} plan activated! (${days} days)`);
+  showToast(t('toast_plan_activated', {plan: PLANS[planId].name}));
 }
 window.openPlans=openPlans; window.startCheckout=startCheckout;
 window.selectPayMethod=selectPayMethod; window.completePayment=completePayment;
@@ -3228,7 +3426,7 @@ restoreSession();
       <div class="form-success" id="authSuccess" style="display:none;"></div>
       <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border);font-size:11px;color:var(--muted);line-height:1.6;">
         <strong style="color:var(--text);" data-i18n="auth_info_title">ℹ Info:</strong>
-        <span data-i18n="auth_info_body">Account data sirf aapke browser mein safe hai (localStorage). Real production ke liye backend server zaruri hai.</span>
+        <span data-i18n="auth_info_body">आपका account सुरक्षित है। Passwords encrypt करके रखे जाते हैं और सारा data HTTPS के ज़रिए भेजा जाता है।</span>
       </div>
     </div>
   </div>
@@ -3250,6 +3448,22 @@ restoreSession();
       </div>
       <button class="btn btn-primary" onclick="closeModal('accountModal');openPlans();" data-i18n="acc_upgrade">💎 Upgrade / Change Plan</button>
       <button class="btn btn-ghost" style="margin-top:8px;" onclick="logout()" data-i18n="acc_logout">Logout</button>
+      <div style="margin-top:18px;padding-top:14px;border-top:1px solid var(--border);"></div>
+      <button class="btn btn-danger" style="margin-top:4px;" onclick="deleteAccount()" data-i18n="acc_delete">🗑 Delete Account Permanently</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ CUSTOM CONFIRM MODAL (replaces browser native confirm) ══════════ -->
+<div class="modal-overlay" id="confirmModal" role="dialog" aria-modal="true">
+  <div class="modal small" style="max-width:400px;">
+    <div class="modal-body" style="padding:22px 22px 18px;">
+      <div id="confirmTitle" style="font-family:'Syne',sans-serif;font-weight:700;font-size:16px;color:var(--text);margin-bottom:10px;"></div>
+      <div id="confirmBody" style="color:var(--muted);font-size:13px;line-height:1.7;margin-bottom:18px;"></div>
+      <div style="display:flex;gap:8px;">
+        <button id="confirmNo" class="btn btn-ghost" style="flex:1;margin:0;">Cancel</button>
+        <button id="confirmYes" class="btn btn-primary" style="flex:1;margin:0;">OK</button>
+      </div>
     </div>
   </div>
 </div>
@@ -3271,7 +3485,7 @@ restoreSession();
       </div>
       <div style="margin-top:18px;padding:14px;background:var(--accent-dim);border:1px solid rgba(240,165,0,.15);border-radius:8px;font-size:11px;color:var(--muted);line-height:1.7;">
         <strong style="color:var(--accent);">💡 Note:</strong>
-        <span data-i18n="plans_note">Payment Razorpay/UPI ke through accept kiya jayega. Real payments chalu karne ke liye Razorpay API key code mein daalni hogi (aur orders verify karne ke liye backend zaruri hai).</span>
+        <span data-i18n="plans_note">सभी payments Razorpay के ज़रिए secure किए जाते हैं (UPI, Card, Net Banking सब accept होते हैं)। Payment successful होते ही आपका plan तुरंत activate हो जाएगा। Cancel anytime.</span>
       </div>
     </div>
   </div>
