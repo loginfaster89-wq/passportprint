@@ -882,18 +882,6 @@ canvas{display:block;}
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--surface);border:1px solid var(--accent);color:var(--text);padding:12px 20px;border-radius:8px;font-size:13px;z-index:10001;box-shadow:0 8px 24px rgba(0,0,0,.5);animation:toastIn .3s;max-width:90%;}
 @keyframes toastIn{from{transform:translate(-50%,20px);opacity:0;}to{transform:translate(-50%,0);opacity:1;}}
 
-/* ── Google Translate widget (whole-page translation) ── */
-.gt-wrap{display:flex;align-items:center;min-height:28px;flex-shrink:0;}
-.gt-wrap .goog-te-gadget{font-family:'DM Mono',monospace !important;font-size:0 !important;color:transparent !important;line-height:1 !important;}
-.gt-wrap .goog-te-gadget > span{display:none !important;}
-.gt-wrap .goog-te-gadget .goog-te-combo{margin:0 !important;padding:4px 10px !important;border:1px solid var(--border) !important;background:var(--surface2) !important;color:var(--text) !important;border-radius:16px !important;font-family:'DM Mono',monospace !important;font-size:12px !important;font-weight:600 !important;letter-spacing:.5px !important;cursor:pointer !important;outline:none !important;}
-.gt-wrap .goog-te-combo option{background:var(--surface2);color:var(--text);}
-/* Hide the Google Translate top banner + tooltip bubble */
-.goog-te-banner-frame.skiptranslate,
-.goog-logo-link,
-#goog-gt-tt,
-.goog-te-balloon-frame{display:none !important;}
-body{top:0 !important;}
 </style>
 </head>
 <body>
@@ -909,7 +897,6 @@ body{top:0 !important;}
   </div>
   <!-- Language + Help + Auth -->
   <div style="margin-left:auto;display:flex;align-items:center;gap:8px;flex-shrink:0;">
-    <div id="google_translate_element" class="gt-wrap" title="Translate this page"></div>
     <button class="help-btn" onclick="openTutorial()" title="API Key Tutorial" style="display:none;">?</button>
     <button class="hdr-btn hdr-btn-plans" onclick="openPlans()" title="Subscription Plans">💎 <span class="hdr-lbl" data-i18n="hdr_plans">Plans</span></button>
     <button class="hdr-btn hdr-btn-login" id="hdrAuthBtn" onclick="openAuth()" title="Login / Signup">👤 <span class="hdr-lbl" id="hdrAuthLabel" data-i18n="hdr_login">Login</span></button>
@@ -3822,21 +3809,6 @@ restoreSession();
   </div>
 </div>
 
-
-<!-- Google Translate: translates the entire site to any language (Hindi, etc.) -->
-<div id="google_translate_loader" style="position:absolute;left:-9999px;top:-9999px;"></div>
-<script type="text/javascript">
-function googleTranslateElementInit(){
-  // Keep the page source in English, offer common target languages.
-  new google.translate.TranslateElement({
-    pageLanguage: 'en',
-    includedLanguages: 'en,hi,bn,ta,te,mr,gu,pa,ur,kn,ml,or,as,ne,si,ar,zh-CN,es,fr,de,ru,ja,ko,pt,it',
-    layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
-    autoDisplay: false
-  }, 'google_translate_element');
-}
-</script>
-<script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" async></script>
 
 </body>
 </html>
