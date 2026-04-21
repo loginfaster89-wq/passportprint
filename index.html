@@ -292,6 +292,26 @@ input[type=range]::-webkit-slider-thumb{appearance:none;width:14px;height:14px;b
   .refine-size{min-width:140px;font-size:10px;}
 }
 
+/* Floating close button shown on the mobile Refine overlay so the user
+   can always back out — the bottom toolbar rows sometimes clip below the
+   viewport on tall photos, so we guarantee a dedicated exit control. */
+.refine-close-btn{
+  display:none;
+  position:absolute;top:8px;right:8px;z-index:10002;
+  width:40px;height:40px;border-radius:50%;
+  background:rgba(0,0,0,.8);
+  border:1px solid var(--border);
+  color:#fff;font-size:20px;line-height:1;
+  cursor:pointer;
+  align-items:center;justify-content:center;
+  box-shadow:0 2px 10px rgba(0,0,0,.5);
+  -webkit-tap-highlight-color:transparent;
+}
+.refine-close-btn:hover,.refine-close-btn:active{
+  background:rgba(248,113,113,.25);
+  border-color:#f87171;color:#f87171;
+}
+
 /* On phones / small tablets the refine editor takes over the full viewport.
    The tiny step-2 canvas area on mobile was leaving almost no room for the
    image, so the user couldn't see what they were editing. Making it a
@@ -302,26 +322,34 @@ input[type=range]::-webkit-slider-thumb{appearance:none;width:14px;height:14px;b
     position:fixed;inset:0;z-index:9999;
     width:100vw;height:100dvh;height:100vh;
     background:rgba(8,8,8,.97);
-    padding:10px 8px;gap:8px;
+    padding:10px 8px;gap:6px;
     justify-content:space-between;
+    overflow:hidden;
   }
+  /* Show the floating ✕ escape hatch on mobile. */
+  #refineWrap:not(.hidden) .refine-close-btn{display:flex;}
   #refineWrap .refine-hint{
-    order:-1;flex:0 0 auto;width:100%;max-width:100%;
+    order:-1;flex:0 0 auto;width:calc(100% - 52px);max-width:calc(100% - 52px);
+    margin-right:44px; /* leave room for the ✕ button */
     font-size:10.5px;padding:5px 10px;
   }
   #refineWrap #refineCanvasWrap{
-    flex:1 1 auto;min-height:0;
+    flex:1 1 0;min-height:0;
     max-width:100%;max-height:100%;
     display:flex;align-items:center;justify-content:center;
   }
   #refineWrap .refine-toolbar{
     flex:0 0 auto;width:100%;max-width:100%;
-    padding:8px;gap:6px;
+    padding:6px 8px;gap:6px;
   }
-  /* Stack toolbar groups vertically on mobile so nothing clips off-screen. */
-  #refineWrap .refine-modes,
-  #refineWrap .refine-actions{
+  /* Keep mode + actions side-by-side so all four action buttons
+     (Undo / Reset / Cancel / Done) always stay on-screen. Size slider
+     gets its own row. */
+  #refineWrap .refine-modes{
     flex:1 1 100%;width:100%;justify-content:center;flex-wrap:wrap;
+  }
+  #refineWrap .refine-actions{
+    flex:1 1 100%;width:100%;justify-content:center;flex-wrap:nowrap;gap:5px;
   }
   #refineWrap .refine-size{
     flex:1 1 100%;min-width:0;width:100%;
@@ -329,19 +357,21 @@ input[type=range]::-webkit-slider-thumb{appearance:none;width:14px;height:14px;b
   #refineWrap .refine-size input[type=range]{flex:1;min-width:0;}
   #refineWrap .refine-mode-btn,
   #refineWrap .refine-act-btn{
-    padding:9px 10px;font-size:11px;flex:1 1 auto;min-width:0;
-    justify-content:center;
+    padding:9px 6px;font-size:11px;flex:1 1 0;min-width:0;
+    justify-content:center;white-space:nowrap;
   }
-  #refineWrap .refine-act-btn.primary{flex:1 1 48%;}
+  #refineWrap .refine-act-btn.primary{flex:1 1 0;}
   /* Escape the global canvas safety rule so our JS-sized canvas isn't
      force-shrunk by the max-width/height:auto rule on all <canvas>. */
   #refineWrap #refineDisplayCanvas{max-width:none;height:auto;}
 }
 @media (max-width:420px){
-  #refineWrap:not(.hidden){padding:8px 6px;gap:6px;}
+  #refineWrap:not(.hidden){padding:6px;gap:5px;}
+  #refineWrap .refine-toolbar{padding:5px 6px;gap:5px;}
   #refineWrap .refine-mode-btn,
-  #refineWrap .refine-act-btn{padding:8px 8px;font-size:10.5px;}
+  #refineWrap .refine-act-btn{padding:7px 4px;font-size:10.5px;}
   #refineWrap .refine-hint{font-size:10px;padding:4px 8px;}
+  #refineWrap .refine-size{font-size:10px;gap:5px;}
 }
 
 .hidden{display:none!important;}
@@ -1358,6 +1388,10 @@ header{flex-wrap:nowrap;}
       </div>
       <!-- Manual Refine Editor (shown when user clicks "Refine Edges") -->
       <div id="refineWrap" class="hidden">
+        <!-- Floating close button — visible only on mobile so user can
+             always back out even if the bottom toolbar rows clip on very
+             tall photos. -->
+        <button type="button" class="refine-close-btn" onclick="exitRefineMode(false)" aria-label="Close refine editor" title="Close">✕</button>
         <div class="refine-hint" id="refineHint" data-i18n="refine_hint">Paint over leftover background to <b>erase</b>, or <b>restore</b> parts that got cut off.</div>
         <div id="refineCanvasWrap">
           <canvas id="refineDisplayCanvas"></canvas>
