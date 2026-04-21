@@ -153,24 +153,27 @@ input[type=range]::-webkit-slider-thumb{appearance:none;width:14px;height:14px;b
   touch-action:none;
   -ms-touch-action:none;
 }
-.comp-canvas-orig,.comp-canvas-result{
+/* Both canvases are stacked at the exact same (0,0) inside the container.
+   The bottom canvas (BG-removed result) fills the container; the top canvas
+   (original photo) is clipped with clip-path so only the left portion up to
+   the slider shows. Using clip-path on the element itself — instead of
+   wrapping it in a <div> whose width we animate — keeps the image pinned to
+   the same pixel coordinates regardless of slider position, so the photo
+   doesn't visually shift while dragging. */
+#compResultCanvas,
+#compOrigCanvas{
   display:block;
   max-width:100%;
   max-height:100%;
 }
-.comp-canvas-orig{
+#compOrigCanvas{
   position:absolute;
   top:0;left:0;
   pointer-events:none;
+  /* Updated inline by setSlider(); start fully visible. */
+  clip-path:inset(0 0 0 0);
+  -webkit-clip-path:inset(0 0 0 0);
 }
-/* clip the original to left of slider */
-.comp-clip{
-  position:absolute;
-  top:0;left:0;height:100%;
-  overflow:hidden;
-  pointer-events:none;
-}
-.comp-clip canvas{display:block;}
 
 /* Divider line */
 .comp-divider{
@@ -1342,10 +1345,8 @@ header{flex-wrap:nowrap;}
         <div class="comp-container" id="compContainer">
           <!-- Result (bottom layer — bg removed) -->
           <canvas id="compResultCanvas"></canvas>
-          <!-- Original clipped to left side -->
-          <div class="comp-clip" id="compClip">
-            <canvas id="compOrigCanvas"></canvas>
-          </div>
+          <!-- Original photo, stacked on top and clipped via clip-path -->
+          <canvas id="compOrigCanvas"></canvas>
           <!-- Divider -->
           <div class="comp-divider" id="compDivider">
             <div class="comp-handle">◀▶</div>
@@ -2575,7 +2576,6 @@ function showComparisonSlider(origSrc, resultCanvas){
   const origCvs   = document.getElementById('compOrigCanvas');
   const resCvs    = document.getElementById('compResultCanvas');
   const divider   = document.getElementById('compDivider');
-  const clip      = document.getElementById('compClip');
 
   // Hide plain bgCanvas
   document.getElementById('bgCanvas').style.display = 'none';
@@ -2600,7 +2600,6 @@ function showComparisonSlider(origSrc, resultCanvas){
   // Size container
   container.style.width  = dw + 'px';
   container.style.height = dh + 'px';
-  clip.style.height = dh + 'px';
 
   // Start divider at center
   let sliderPct = 50;
@@ -2615,8 +2614,14 @@ function showComparisonSlider(origSrc, resultCanvas){
   function setSlider(pct, w){
     const x = Math.round((pct/100) * w);
     divider.style.left = x + 'px';
-    clip.style.width   = x + 'px';
-    origCvs.style.width = dw + 'px'; // keep original canvas full width, clip handles masking
+    // Clip the original canvas from the right so only the left portion up
+    // to the slider is visible. The canvas itself stays pinned to (0,0) —
+    // this avoids the image appearing to shift horizontally when the user
+    // drags the slider on mobile.
+    const rightInsetPct = Math.max(0, Math.min(100, 100 - pct));
+    const clip = 'inset(0 ' + rightInsetPct + '% 0 0)';
+    origCvs.style.clipPath = clip;
+    origCvs.style.webkitClipPath = clip;
   }
 
   function onMove(clientX){
