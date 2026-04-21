@@ -15,8 +15,39 @@
 
 <header class="legal-header">
   <a href="index.html" class="logo">Studio <em>Print</em></a>
-  <nav>
+  <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="primaryNav">☰</button>
+  <nav id="primaryNav">
     <a href="index.html">Home</a>
+    <div class="has-dropdown">
+      <button class="nav-dd-btn" aria-haspopup="true" aria-expanded="false">Features <span class="caret" aria-hidden="true">▾</span></button>
+      <div class="dropdown-panel" role="menu">
+        <a href="passport-photo.html" role="menuitem">
+          <span class="dd-icon" aria-hidden="true">📷</span>
+          <span class="dd-meta"><strong>Passport Photo</strong><small>AI crop · 300 DPI A4 sheet</small></span>
+          <span class="dd-tag live">Live</span>
+        </a>
+        <span class="dd-item soon" role="menuitem" aria-disabled="true">
+          <span class="dd-icon" aria-hidden="true">🪪</span>
+          <span class="dd-meta"><strong>Document Sheet</strong><small>Aadhaar, PAN · cut &amp; arrange</small></span>
+          <span class="dd-tag soon">Soon</span>
+        </span>
+        <span class="dd-item soon" role="menuitem" aria-disabled="true">
+          <span class="dd-icon" aria-hidden="true">📜</span>
+          <span class="dd-meta"><strong>Certificate Editor</strong><small>Marriage, birth, misc.</small></span>
+          <span class="dd-tag soon">Soon</span>
+        </span>
+        <span class="dd-item soon" role="menuitem" aria-disabled="true">
+          <span class="dd-icon" aria-hidden="true">🖼️</span>
+          <span class="dd-meta"><strong>ID &amp; Visa Sheets</strong><small>Mix sizes on A4</small></span>
+          <span class="dd-tag soon">Soon</span>
+        </span>
+        <span class="dd-item soon" role="menuitem" aria-disabled="true">
+          <span class="dd-icon" aria-hidden="true">✂️</span>
+          <span class="dd-meta"><strong>Background Studio</strong><small>Remove &amp; replace</small></span>
+          <span class="dd-tag soon">Soon</span>
+        </span>
+      </div>
+    </div>
     <a href="about.html">About</a>
     <a href="privacy.html" class="active">Privacy</a>
     <a href="terms.html">Terms</a>
@@ -135,5 +166,6 @@
   <div>© 2026 Studio Print. All rights reserved.</div>
 </footer>
 
+<script src="assets/nav.js" defer></script>
 </body>
 </html>
