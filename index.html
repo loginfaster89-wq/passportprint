@@ -263,6 +263,17 @@ canvas{display:block;}
 .upload-zone:hover { transform: none; box-shadow: none; }
 .upload-zone::before, .upload-zone::after { display:none; }
 
+/* Wrapper around the inner card. Needed so the tablet/mobile corner brackets
+   can sit OUTSIDE the card (negative offsets) without being clipped by the
+   card's own overflow:hidden — which is required for the rotating gradient
+   border pseudo-elements. The wrapper auto-sizes to the card's width, so
+   brackets always hug the card's actual corners across breakpoints. */
+.upload-card-wrap {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+}
+
 /* Inner card — centered, floating (fluid). Only this is clickable. */
 .upload-inner-card {
   position: relative;
@@ -278,6 +289,9 @@ canvas{display:block;}
   transition: transform .25s, box-shadow .25s, border-color .25s;
   cursor: pointer;
 }
+/* When wrapped, the card fills the wrapper so brackets line up with the
+   actual visible card corners (the wrapper sizes itself to the card). */
+.upload-card-wrap > .upload-inner-card { width: 100%; max-width: 100%; }
 .upload-zone:hover .upload-inner-card,
 .upload-zone.drag-over .upload-inner-card {
   transform: translateY(-4px);
@@ -338,10 +352,12 @@ canvas{display:block;}
 }
 .upload-zone:hover .corner-bracket-inner,
 .upload-zone.drag-over .corner-bracket-inner { opacity: 0.9; }
-.cbi-tl { top:10px; left:10px; border-top:2px solid var(--accent); border-left:2px solid var(--accent); border-radius:4px 0 0 0; }
-.cbi-tr { top:10px; right:10px; border-top:2px solid var(--accent); border-right:2px solid var(--accent); border-radius:0 4px 0 0; }
-.cbi-bl { bottom:10px; left:10px; border-bottom:2px solid var(--accent); border-left:2px solid var(--accent); border-radius:0 0 0 4px; }
-.cbi-br { bottom:10px; right:10px; border-bottom:2px solid var(--accent); border-right:2px solid var(--accent); border-radius:0 0 4px 0; }
+/* Positioned on the wrapper with negative offsets so they sit OUTSIDE the
+   card on all four corners (like the desktop canvas frame), not inside it. */
+.cbi-tl { top:-10px; left:-10px; border-top:2px solid var(--accent); border-left:2px solid var(--accent); border-radius:4px 0 0 0; }
+.cbi-tr { top:-10px; right:-10px; border-top:2px solid var(--accent); border-right:2px solid var(--accent); border-radius:0 4px 0 0; }
+.cbi-bl { bottom:-10px; left:-10px; border-bottom:2px solid var(--accent); border-left:2px solid var(--accent); border-radius:0 0 0 4px; }
+.cbi-br { bottom:-10px; right:-10px; border-bottom:2px solid var(--accent); border-right:2px solid var(--accent); border-radius:0 0 4px 0; }
 
 /* Drag-over full overlay pulse */
 .upload-zone.drag-over::before {
@@ -724,6 +740,10 @@ canvas{display:block;}
      corners. */
   .corner-bracket{display:none;}
   .corner-bracket-inner{display:block;}
+
+  /* Leave breathing room between the card + its outside brackets and the
+     canvas edges so nothing visually touches top/bottom/left/right. */
+  .upload-zone{padding:20px 16px;}
 }
 
 /* ── SMALL TABLET (≤768px) ── */
@@ -1140,13 +1160,17 @@ header{flex-wrap:nowrap;}
         <div class="float-chip" style="bottom:14%;right:5%;animation-delay:2.1s;">🌍 6+ Country Sizes</div>
         <div class="float-chip" style="top:55%;left:3%;animation-delay:.35s;">⚡ Instant Download</div>
 
-        <!-- Inner floating card (only clickable area) -->
-        <div class="upload-inner-card">
-          <!-- Inner corner brackets (shown on tablet/mobile to hug the card) -->
+        <!-- Inner floating card (only clickable area).
+             Wrapped so tablet/mobile corner brackets can sit OUTSIDE the card
+             (at its 4 corners) instead of inside. On desktop (>900px) the
+             brackets are hidden and the outer .corner-bracket frame shows. -->
+        <div class="upload-card-wrap">
+          <!-- Corner brackets hugging the card from OUTSIDE (tablet/mobile) -->
           <div class="corner-bracket-inner cbi-tl"></div>
           <div class="corner-bracket-inner cbi-tr"></div>
           <div class="corner-bracket-inner cbi-bl"></div>
           <div class="corner-bracket-inner cbi-br"></div>
+        <div class="upload-inner-card">
           <input type="file" id="fileInput" accept="image/*">
           <!-- Animated camera icon -->
           <div class="upload-icon-wrap">
@@ -1174,6 +1198,7 @@ header{flex-wrap:nowrap;}
             <span style="background:var(--accent);color:#000;border-radius:4px;padding:2px 8px;font-weight:700;font-size:11px;">CLICK</span>
             &nbsp;<span data-i18n="or_drop">or drop your photo here</span>
           </div>
+        </div>
         </div>
 
       </div>
