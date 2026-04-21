@@ -3980,40 +3980,8 @@ async function completePayment(){
     }
     return;
   }
-  // ── UPI fallback (direct link to your VPA) ──
-  if(method==='upi'){
-    const UPI_VPA=(window.PPS_UPI_VPA||'yourname@upi'); // TODO: replace with your UPI ID
-    const payeeName='PassportPrint Studio';
-    const txnRef='PPS'+Date.now();
-    const note=encodeURIComponent(`${p.name} Plan - ${user.email}`);
-    const upiUrl=`upi://pay?pa=${encodeURIComponent(UPI_VPA)}&pn=${encodeURIComponent(payeeName)}&am=${p.price}&cu=INR&tn=${note}&tr=${txnRef}`;
-    window.location.href=upiUrl;
-    setTimeout(async ()=>{
-      const ok = await customConfirm({
-        title: t('upi_done_q'),
-        body:  '',
-        yes:   t('confirm_yes'),
-        no:    t('confirm_no'),
-      });
-      if(ok) activatePlan(planId, 'upi_'+txnRef);
-    }, 2500);
-    return;
-  }
   // ── Fallback: gateway not available ──
   showToast(t('toast_order_fail') + ('Payment gateway is not available right now.'));
-}
-function activatePlan(planId, paymentId){
-  const user=currentUser(); if(!user) return;
-  const users=getUsers();
-  const days = planId==='weekly'?7:planId==='monthly'?30:0;
-  users[user.email].plan=planId;
-  users[user.email].planExpiresAt=Date.now()+days*24*3600*1000;
-  users[user.email].lastPaymentId=paymentId;
-  users[user.email].lastPaymentAt=Date.now();
-  saveUsers(users);
-  closeAllModals();
-  refreshAuthUI();
-  showToast(t('toast_plan_activated', {plan: PLANS[planId].name}));
 }
 window.openPlans=openPlans; window.startCheckout=startCheckout;
 window.selectPayMethod=selectPayMethod; window.completePayment=completePayment;
@@ -4202,8 +4170,7 @@ restoreSession();
       </div>
       <div class="form-label" data-i18n="pay_method">Payment Method</div>
       <div class="pay-methods">
-        <div class="pay-method active" data-method="razorpay" onclick="selectPayMethod(this)">💳 Card / Netbanking<br><span style="font-size:10px;color:var(--muted);">Razorpay</span></div>
-        <div class="pay-method" data-method="upi" onclick="selectPayMethod(this)">📱 UPI<br><span style="font-size:10px;color:var(--muted);">GPay / PhonePe / Paytm</span></div>
+        <div class="pay-method active" data-method="razorpay" onclick="selectPayMethod(this)">💳 Card / UPI / Netbanking<br><span style="font-size:10px;color:var(--muted);">Razorpay · GPay / PhonePe / Paytm</span></div>
       </div>
       <button class="btn btn-primary" onclick="completePayment()" data-i18n="pay_btn">🔒 Pay Securely</button>
       <div style="margin-top:10px;text-align:center;font-size:10px;color:var(--muted2);">
