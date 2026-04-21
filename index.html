@@ -1648,7 +1648,7 @@ const LANG = {
     acc_upgrade:'💎 Upgrade / Change Plan',
     acc_logout:'Logout',
     acc_delete:'🗑 Delete Account Permanently',
-    plan_tag_free:'Try it out — 2 sheets/day, watermarked.',
+    plan_tag_free:'Try it out — 2 sheets/day, no watermark, AI BG included.',
     plan_tag_weekly:'7 days full access, no watermark.',
     plan_tag_monthly:'Best value. 30 days, everything unlocked.',
     plan_btn_current:'✓ Your Plan',
@@ -3303,11 +3303,11 @@ const PLANS = {
     id:'free', name:'Free', price:0, period:'',
     maxPhotosPerSheet: 5,
     dailySheets: 2,       // A4 sheets (download + print combined) allowed per 24h
-    watermark: true,
-    aiBgAllowed: false,
+    watermark: false,
+    aiBgAllowed: true,
     hdExport: false,
     allPresets: false,
-    features: ['5 photos per sheet', 'Standard cutting guides', '2 sheets per day'],
+    features: ['5 photos per sheet', 'AI background removal', 'No watermark', '2 sheets per day'],
     dimFeatures: []
   },
   weekly: {
