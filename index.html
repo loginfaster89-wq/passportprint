@@ -1875,10 +1875,16 @@ function setLang(lang){
   document.querySelectorAll('.lang-btn').forEach(b=>{
     b.classList.toggle('active', b.textContent.toLowerCase()===lang);
   });
-  // Update all data-i18n text content
+  // Update all data-i18n text content. Values may contain simple inline
+  // markup (<b>, <em>, <br>) authored in the LANG dictionary — e.g. the
+  // Refine Edges hint. We use innerHTML only when the value contains a
+  // '<' so plain strings still go through textContent (safer + faster).
   document.querySelectorAll('[data-i18n]').forEach(el=>{
     const key=el.getAttribute('data-i18n');
-    if(LANG[lang]&&LANG[lang][key]) el.textContent=LANG[lang][key];
+    const val = LANG[lang] && LANG[lang][key];
+    if(val == null) return;
+    if(/[<&]/.test(val)) el.innerHTML = val;
+    else el.textContent = val;
   });
   // Update input placeholders
   document.querySelectorAll('[data-i18n-placeholder]').forEach(el=>{
