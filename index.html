@@ -147,6 +147,11 @@ input[type=range]::-webkit-slider-thumb{appearance:none;width:14px;height:14px;b
   border-radius:8px;
   overflow:hidden;
   box-shadow:0 0 40px rgba(0,0,0,.7);
+  /* Stop the browser from panning/scrolling the page while the user drags
+     the comparison slider on touch devices — the drag gesture must stay on
+     the slider, not move the underlying photo. */
+  touch-action:none;
+  -ms-touch-action:none;
 }
 .comp-canvas-orig,.comp-canvas-result{
   display:block;
@@ -2563,9 +2568,21 @@ function showComparisonSlider(origSrc, resultCanvas){
   window.addEventListener('mousemove', e => { if(dragging) onMove(e.clientX); });
   window.addEventListener('mouseup',   ()  => { dragging = false; });
 
-  container.addEventListener('touchstart', e => { dragging = true; onMove(e.touches[0].clientX); },{passive:true});
-  window.addEventListener('touchmove',  e => { if(dragging) onMove(e.touches[0].clientX); },{passive:true});
-  window.addEventListener('touchend',   ()  => { dragging = false; });
+  // Non-passive touch listeners so we can call preventDefault() inside
+  // touchmove — otherwise the mobile browser pans/scrolls the page along
+  // with the drag, which looked like the image itself was being dragged.
+  container.addEventListener('touchstart', e => {
+    dragging = true;
+    onMove(e.touches[0].clientX);
+    e.preventDefault();
+  }, {passive:false});
+  window.addEventListener('touchmove',  e => {
+    if(!dragging) return;
+    onMove(e.touches[0].clientX);
+    e.preventDefault();
+  }, {passive:false});
+  window.addEventListener('touchend',    ()  => { dragging = false; });
+  window.addEventListener('touchcancel', ()  => { dragging = false; });
 }
 
 function hideComparisonSlider(){
