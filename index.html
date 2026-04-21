@@ -4064,8 +4064,8 @@ const USE_BACKEND = !!BACKEND_URL;
 // Can be overridden at runtime by setting window.GOOGLE_OAUTH_CLIENT_ID
 // before this script runs (useful for local dev / preview deploys).
 const GOOGLE_CLIENT_ID = (typeof window !== 'undefined' && window.GOOGLE_OAUTH_CLIENT_ID)
-  || 'YOUR_GOOGLE_OAUTH_CLIENT_ID.apps.googleusercontent.com';
-const GOOGLE_ENABLED = !!GOOGLE_CLIENT_ID && !/^YOUR_/.test(GOOGLE_CLIENT_ID);
+  || '216240284102-d63glsohcp2lr85kk1el364f7gecnv9q.apps.googleusercontent.com';
+const GOOGLE_ENABLED = !!GOOGLE_CLIENT_ID && /\.apps\.googleusercontent\.com$/.test(GOOGLE_CLIENT_ID) && !/^(YOUR_|__REPLACE_)/.test(GOOGLE_CLIENT_ID);
 const AUTH_STORE_KEY='pps_users_v1';
 const AUTH_SESSION_KEY='pps_session_v1';
 const AUTH_TOKEN_KEY='pps_token_v1';
