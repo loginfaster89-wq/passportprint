@@ -2671,6 +2671,8 @@ const _refine = {
   drawing: false,
   lastX: 0, lastY: 0,   // last pointer position in work-canvas coords
   pointerId: null,
+  origParent: null,     // node the overlay was portaled out of (for cleanup)
+  onResize: null,       // viewport-resize handler registered while active
 };
 
 function enterRefineMode(){
@@ -2687,6 +2689,18 @@ function enterRefineMode(){
   compW.classList.add('hidden');
   document.getElementById('bgCanvas').style.display = 'none';
 
+  // The step-fade animation on #step2-canvas leaves a transform:translateY(0)
+  // on the element, which creates a new containing block and breaks the
+  // position:fixed mobile overlay (it ends up sized relative to the tiny
+  // step-2 pane instead of the viewport). On mobile, portal the overlay
+  // onto <body> so its fixed positioning works regardless of ancestors.
+  // Desktop keeps the in-flow placement inside the step-2 pane.
+  const shouldPortal = window.matchMedia('(max-width:768px)').matches;
+  if(shouldPortal && refW.parentNode !== document.body){
+    _refine.origParent = refW.parentNode;
+    document.body.appendChild(refW);
+  }
+
   // Build mutable work canvas from current transparentCanvas
   const tw = transparentCanvas.width, th = transparentCanvas.height;
   const work = document.createElement('canvas');
@@ -2701,19 +2715,27 @@ function enterRefineMode(){
   src.getContext('2d').drawImage(origImg, 0, 0, tw, th);
   _refine.srcCanvas = src;
 
-  // Display canvas — fit into the step2 area with a little padding.
-  // On phones / small tablets the refine editor is rendered as a fullscreen
-  // overlay (see CSS #refineWrap:not(.hidden) at ≤768px), so we must size
-  // against the actual viewport — not the tiny stacked step-2 canvas area,
-  // which was leaving the image almost invisible on mobile.
+  // Show overlay first so we can measure the real available space for the
+  // canvas wrapper (hint + toolbar heights vary by viewport / font).
+  refW.classList.remove('hidden');
+
   const disp = document.getElementById('refineDisplayCanvas');
   const canvasWrap = document.getElementById('refineCanvasWrap');
   const isMobileRefine = window.matchMedia('(max-width:768px)').matches;
+
+  // Temporarily clear any previous inline size so the wrapper can flex
+  // to its natural available space before we measure.
+  canvasWrap.style.width  = '';
+  canvasWrap.style.height = '';
+
   let availW, availH;
   if (isMobileRefine) {
-    // Mobile overlay: full viewport minus padding + hint + stacked toolbar
-    availW = Math.max(window.innerWidth  - 24,  260);
-    availH = Math.max(window.innerHeight - 210, 260);
+    // Measure the real space left by hint + toolbar inside the fullscreen
+    // overlay. Fallback to a conservative viewport math if flex layout
+    // hasn't settled yet.
+    const rect = canvasWrap.getBoundingClientRect();
+    availW = Math.max(rect.width  || (window.innerWidth  - 24), 240);
+    availH = Math.max(rect.height || (window.innerHeight - 260), 240);
   } else {
     // Desktop: keep original behaviour — fit inside the step-2 canvas area
     availW = Math.max(wrap.clientWidth  - 32,  260);
@@ -2745,10 +2767,14 @@ function enterRefineMode(){
   updateRefineUndoBtn();
   redrawRefineDisplay();
 
-  refW.classList.remove('hidden');
-
   // Bind pointer events (idempotent: we remove first to allow re-entry)
   bindRefinePointerEvents();
+
+  // Re-measure + resize if the viewport changes (rotate / keyboard open)
+  // while the editor is active.
+  _refine.onResize = () => { if(_refine.active) resizeRefineForViewport(); };
+  window.addEventListener('resize', _refine.onResize);
+  window.addEventListener('orientationchange', _refine.onResize);
 }
 window.enterRefineMode = enterRefineMode;
 
@@ -2758,6 +2784,21 @@ function exitRefineMode(apply){
   unbindRefinePointerEvents();
   const refW = document.getElementById('refineWrap');
 
+  // Tear down viewport listeners we registered on enter
+  if(_refine.onResize){
+    window.removeEventListener('resize', _refine.onResize);
+    window.removeEventListener('orientationchange', _refine.onResize);
+    _refine.onResize = null;
+  }
+
+  // Restore overlay to its original DOM parent (we portal it to <body>
+  // on enter to escape ancestor containing blocks).
+  refW.classList.add('hidden');
+  if(_refine.origParent && refW.parentNode !== _refine.origParent){
+    _refine.origParent.appendChild(refW);
+  }
+  _refine.origParent = null;
+
   if(apply && _refine.workCanvas){
     // Commit edits: replace transparentCanvas, rebuild processedCanvas, refresh slider
     const tw = _refine.workCanvas.width, th = _refine.workCanvas.height;
@@ -2766,12 +2807,10 @@ function exitRefineMode(apply){
     newTrans.getContext('2d').drawImage(_refine.workCanvas, 0, 0);
     transparentCanvas = newTrans;
     processedCanvas = compositeWithBg(transparentCanvas, bgColor);
-    refW.classList.add('hidden');
     // Re-show comparison slider with updated result
     showComparisonSlider(origImg, processedCanvas);
     showToast('Edges refined — tap "Proceed to Crop" when ready.');
   } else {
-    refW.classList.add('hidden');
     // Restore comparison slider as it was
     if(processedCanvas){
       showComparisonSlider(origImg, processedCanvas);
@@ -2785,6 +2824,48 @@ function exitRefineMode(apply){
   _refine.srcCanvas  = null;
   _refine.undoStack  = [];
   _refine.dispCtx    = null;
+}
+
+// Recompute display canvas size when the viewport changes mid-edit
+// (device rotation, on-screen keyboard, mobile URL bar hide/show).
+function resizeRefineForViewport(){
+  if(!_refine.active || !_refine.workCanvas) return;
+  const disp = document.getElementById('refineDisplayCanvas');
+  const canvasWrap = document.getElementById('refineCanvasWrap');
+  const wrap = document.getElementById('step2-canvas');
+  if(!disp || !canvasWrap) return;
+
+  const tw = _refine.workCanvas.width, th = _refine.workCanvas.height;
+  const isMobileRefine = window.matchMedia('(max-width:768px)').matches;
+  canvasWrap.style.width  = '';
+  canvasWrap.style.height = '';
+
+  let availW, availH;
+  if(isMobileRefine){
+    const rect = canvasWrap.getBoundingClientRect();
+    availW = Math.max(rect.width  || (window.innerWidth  - 24), 240);
+    availH = Math.max(rect.height || (window.innerHeight - 260), 240);
+  } else {
+    availW = Math.max(wrap.clientWidth  - 32,  260);
+    availH = Math.max(wrap.clientHeight - 180, 260);
+  }
+  const scale = Math.min(availW / tw, availH / th);
+  const dw = Math.max(1, Math.round(tw * scale));
+  const dh = Math.max(1, Math.round(th * scale));
+  _refine.dw = dw; _refine.dh = dh;
+  _refine.scale = tw / dw;
+
+  canvasWrap.style.width  = dw + 'px';
+  canvasWrap.style.height = dh + 'px';
+  const dpr = Math.max(1, Math.min(window.devicePixelRatio || 1, 3));
+  disp.width  = Math.round(dw * dpr);
+  disp.height = Math.round(dh * dpr);
+  disp.style.width  = dw + 'px';
+  disp.style.height = dh + 'px';
+  const ctx = disp.getContext('2d');
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  _refine.dispCtx = ctx;
+  redrawRefineDisplay();
 }
 window.exitRefineMode = exitRefineMode;
 
