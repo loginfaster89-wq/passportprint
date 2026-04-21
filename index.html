@@ -1445,6 +1445,10 @@ header{flex-wrap:nowrap;}
         </button>
 
         <button class="btn btn-ghost mt6" id="skipBgBtn" onclick="skipBgRemoval()" data-i18n="btn_skip">Skip → Keep Original</button>
+        <div class="info-box blue mt10" id="refineTip" style="display:none;">
+          <strong data-i18n="refine_tip_label">Leftover background patches?</strong>
+          <span data-i18n="refine_tip_body">Tap <b>Refine Edges</b> below and paint over them to erase, or restore any parts the AI cut off.</span>
+        </div>
         <button class="btn btn-secondary mt6" id="refineBgBtn" style="display:none;" onclick="enterRefineMode()" data-i18n="btn_refine_bg" title="Clean up leftover background or restore cut-off parts">✏️ Refine Edges</button>
         <button class="btn btn-primary mt6" id="proceedCropBtn" style="display:none;" onclick="proceedToCrop()" data-i18n="btn_proceed">✓ Proceed to Crop →</button>
         <button class="btn btn-ghost mt6" onclick="goStep(1)" data-i18n="btn_new_photo">← New Photo</button>
@@ -1818,6 +1822,8 @@ const LANG = {
     btn_skip:'Skip → Keep Original',
     btn_refine_bg:'✏️ Refine Edges',
     refine_hint:'Paint over leftover background to <b>erase</b>, or <b>restore</b> parts that got cut off.',
+    refine_tip_label:'Leftover background patches?',
+    refine_tip_body:' Tap <b>Refine Edges</b> below and paint over them to erase, or restore any parts the AI cut off.',
     refine_erase:'🩹 Erase', refine_restore:'↩ Restore',
     refine_size:'Size', refine_undo:'↶ Undo', refine_reset:'Reset',
     refine_cancel:'Cancel', refine_done:'✓ Done',
@@ -2342,6 +2348,8 @@ async function startBgRemoval() {
   document.getElementById('bgCanvas').style.display = 'block';
   document.getElementById('proceedCropBtn').style.display = 'none';
   document.getElementById('refineBgBtn').style.display = 'none';
+  const _refineTipEl0 = document.getElementById('refineTip');
+  if (_refineTipEl0) _refineTipEl0.style.display = 'none';
 
   const statusEl  = document.getElementById('statusText');
   const barEl     = document.getElementById('progressBar');
@@ -2426,6 +2434,8 @@ async function startBgRemoval() {
       showComparisonSlider(origImg, processedCanvas);
       document.getElementById('proceedCropBtn').style.display = 'flex';
       document.getElementById('refineBgBtn').style.display = 'flex';
+      const _refineTipEl = document.getElementById('refineTip');
+      if (_refineTipEl) _refineTipEl.style.display = 'block';
 
       setTimeout(() => {
         if (!bgCancelled) {
@@ -3043,6 +3053,8 @@ function startOfflineBgRemoval(){
       showComparisonSlider(origImg, processedCanvas);
       document.getElementById('proceedCropBtn').style.display='flex';
       document.getElementById('refineBgBtn').style.display='flex';
+      const _refineTipEl2 = document.getElementById('refineTip');
+      if (_refineTipEl2) _refineTipEl2.style.display = 'block';
       setTimeout(()=>{ if(!bgCancelled){
         document.getElementById('bgProgressWrap').classList.add('hidden');
         barEl.style.width='0%';
