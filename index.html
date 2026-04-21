@@ -212,6 +212,78 @@ input[type=range]::-webkit-slider-thumb{appearance:none;width:14px;height:14px;b
 .comp-label-left{left:12px;}
 .comp-label-right{right:12px;}
 
+/* ── REFINE EDGES (manual brush) ── */
+#refineWrap{
+  position:relative;width:100%;height:100%;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:10px;padding:10px;
+}
+#refineCanvasWrap{
+  position:relative;display:inline-block;
+  border-radius:8px;overflow:hidden;
+  background-image:linear-gradient(45deg,#2a2a2a 25%,transparent 25%),linear-gradient(-45deg,#2a2a2a 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#2a2a2a 75%),linear-gradient(-45deg,transparent 75%,#2a2a2a 75%);
+  background-size:14px 14px;background-position:0 0,0 7px,7px -7px,-7px 0;
+  background-color:#1a1a1a;
+  box-shadow:0 0 40px rgba(0,0,0,.7);
+  touch-action:none;
+  max-width:100%;max-height:100%;
+}
+#refineDisplayCanvas{display:block;cursor:none;max-width:100%;height:auto;}
+#refineBrushCursor{
+  position:absolute;pointer-events:none;
+  border:1.5px solid var(--accent);
+  background:rgba(240,165,0,.18);
+  border-radius:50%;
+  transform:translate(-50%,-50%);
+  box-shadow:0 0 0 1px rgba(0,0,0,.5) inset,0 0 8px rgba(240,165,0,.4);
+  display:none;z-index:5;
+  mix-blend-mode:normal;
+}
+#refineBrushCursor.erase{border-color:#f87171;background:rgba(248,113,113,.2);box-shadow:0 0 0 1px rgba(0,0,0,.5) inset,0 0 8px rgba(248,113,113,.4);}
+#refineBrushCursor.restore{border-color:#4ade80;background:rgba(74,222,128,.2);box-shadow:0 0 0 1px rgba(0,0,0,.5) inset,0 0 8px rgba(74,222,128,.4);}
+.refine-toolbar{
+  display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center;
+  background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:10px 12px;width:100%;max-width:720px;
+  box-shadow:0 4px 16px rgba(0,0,0,.35);
+}
+.refine-modes{display:flex;gap:6px;}
+.refine-mode-btn{
+  padding:8px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:7px;
+  font-family:'DM Mono',monospace;font-size:12px;color:var(--muted);cursor:pointer;transition:.15s;
+  display:inline-flex;align-items:center;gap:6px;
+}
+.refine-mode-btn:hover{color:var(--text);}
+.refine-mode-btn.active.erase{border-color:#f87171;color:#f87171;background:rgba(248,113,113,.12);}
+.refine-mode-btn.active.restore{border-color:#4ade80;color:#4ade80;background:rgba(74,222,128,.12);}
+.refine-size{
+  display:flex;align-items:center;gap:8px;min-width:170px;flex:1 1 170px;
+  font-size:11px;color:var(--muted);font-family:'DM Mono',monospace;
+}
+.refine-size input[type=range]{flex:1;}
+.refine-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;}
+.refine-act-btn{
+  padding:8px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:7px;
+  font-family:'DM Mono',monospace;font-size:12px;color:var(--text);cursor:pointer;transition:.15s;
+  display:inline-flex;align-items:center;gap:6px;white-space:nowrap;
+}
+.refine-act-btn:hover:not(:disabled){border-color:var(--accent);color:var(--accent);}
+.refine-act-btn.primary{background:var(--accent);color:#000;border-color:var(--accent);}
+.refine-act-btn.primary:hover:not(:disabled){background:#ffc03a;}
+.refine-act-btn.danger{color:var(--danger);border-color:rgba(248,113,113,.3);background:rgba(248,113,113,.1);}
+.refine-act-btn.danger:hover:not(:disabled){background:rgba(248,113,113,.2);}
+.refine-act-btn:disabled{opacity:.4;cursor:not-allowed;}
+.refine-hint{
+  font-size:11px;color:var(--muted);text-align:center;
+  background:rgba(0,0,0,.55);padding:5px 12px;border-radius:20px;
+  backdrop-filter:blur(6px);max-width:100%;
+}
+@media (max-width:720px){
+  .refine-toolbar{padding:8px;gap:6px;}
+  .refine-mode-btn,.refine-act-btn{padding:8px 10px;font-size:11px;}
+  .refine-size{min-width:140px;font-size:10px;}
+}
+
 .hidden{display:none!important;}
 .mt6{margin-top:6px;}
 .mt10{margin-top:10px;}
@@ -950,7 +1022,7 @@ canvas{display:block;}
 .pay-methods{display:flex;gap:10px;margin:14px 0;flex-wrap:wrap;}
 .pay-method{flex:1;min-width:120px;padding:11px;border:1.5px solid var(--border);border-radius:8px;background:var(--surface2);cursor:pointer;text-align:center;transition:.15s;font-size:12px;}
 .pay-method.active{border-color:var(--accent);background:var(--accent-dim);color:var(--accent);}
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--surface);border:1px solid var(--accent);color:var(--text);padding:12px 20px;border-radius:8px;font-size:13px;z-index:10001;box-shadow:0 8px 24px rgba(0,0,0,.5);animation:toastIn .3s;max-width:90%;}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--surface);border:1px solid var(--accent);color:var(--text);padding:14px 22px;border-radius:10px;font-size:14px;line-height:1.45;z-index:10001;box-shadow:0 8px 24px rgba(0,0,0,.5);animation:toastIn .3s;width:max-content;max-width:min(560px,calc(100vw - 24px));min-width:min(260px,calc(100vw - 24px));text-align:center;white-space:normal;}
 @keyframes toastIn{from{transform:translate(-50%,20px);opacity:0;}to{transform:translate(-50%,0);opacity:1;}}
 
 /* ═══════════════════════════════════════════════════════════
@@ -1226,6 +1298,31 @@ header{flex-wrap:nowrap;}
           <div class="comp-label comp-label-right">BG Removed ✨</div>
         </div>
       </div>
+      <!-- Manual Refine Editor (shown when user clicks "Refine Edges") -->
+      <div id="refineWrap" class="hidden">
+        <div class="refine-hint" id="refineHint" data-i18n="refine_hint">Paint over leftover background to <b>erase</b>, or <b>restore</b> parts that got cut off.</div>
+        <div id="refineCanvasWrap">
+          <canvas id="refineDisplayCanvas"></canvas>
+          <div id="refineBrushCursor"></div>
+        </div>
+        <div class="refine-toolbar" role="toolbar" aria-label="Refine edges tools">
+          <div class="refine-modes">
+            <button type="button" class="refine-mode-btn erase active" id="refineModeErase" onclick="setRefineMode('erase')" aria-pressed="true" data-i18n="refine_erase">🩹 Erase</button>
+            <button type="button" class="refine-mode-btn restore" id="refineModeRestore" onclick="setRefineMode('restore')" aria-pressed="false" data-i18n="refine_restore">↩ Restore</button>
+          </div>
+          <label class="refine-size">
+            <span data-i18n="refine_size">Size</span>
+            <input type="range" id="refineBrushSize" min="6" max="120" value="32" oninput="setRefineBrushSize(this.value)" aria-label="Brush size">
+            <span id="refineBrushSizeVal" style="min-width:28px;text-align:right;color:var(--accent);">32</span>
+          </label>
+          <div class="refine-actions">
+            <button type="button" class="refine-act-btn" id="refineUndoBtn" onclick="undoRefine()" disabled data-i18n="refine_undo">↶ Undo</button>
+            <button type="button" class="refine-act-btn danger" id="refineResetBtn" onclick="resetRefine()" data-i18n="refine_reset">Reset</button>
+            <button type="button" class="refine-act-btn" onclick="exitRefineMode(false)" data-i18n="refine_cancel">Cancel</button>
+            <button type="button" class="refine-act-btn primary" onclick="exitRefineMode(true)" data-i18n="refine_done">✓ Done</button>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Step 3: Crop -->
@@ -1291,6 +1388,7 @@ header{flex-wrap:nowrap;}
         </button>
 
         <button class="btn btn-ghost mt6" id="skipBgBtn" onclick="skipBgRemoval()" data-i18n="btn_skip">Skip → Keep Original</button>
+        <button class="btn btn-secondary mt6" id="refineBgBtn" style="display:none;" onclick="enterRefineMode()" data-i18n="btn_refine_bg" title="Clean up leftover background or restore cut-off parts">✏️ Refine Edges</button>
         <button class="btn btn-primary mt6" id="proceedCropBtn" style="display:none;" onclick="proceedToCrop()" data-i18n="btn_proceed">✓ Proceed to Crop →</button>
         <button class="btn btn-ghost mt6" onclick="goStep(1)" data-i18n="btn_new_photo">← New Photo</button>
       </div>
@@ -1661,6 +1759,11 @@ const LANG = {
     btn_cancel:'✕ Cancel', btn_ai_remove:'🤖 Remove Background',
     btn_proceed:'✓ Proceed to Crop →',
     btn_skip:'Skip → Keep Original',
+    btn_refine_bg:'✏️ Refine Edges',
+    refine_hint:'Paint over leftover background to <b>erase</b>, or <b>restore</b> parts that got cut off.',
+    refine_erase:'🩹 Erase', refine_restore:'↩ Restore',
+    refine_size:'Size', refine_undo:'↶ Undo', refine_reset:'Reset',
+    refine_cancel:'Cancel', refine_done:'✓ Done',
     sb2_bg_color:'New Background Color', white_standard:'⭐ White = India passport standard',
     sb3_crop_title:'Crop Controls', btn_reset_crop:'↺ Reset Crop Box',
     btn_autocenter:'⊙ Auto-Center',
@@ -2172,8 +2275,10 @@ async function startBgRemoval() {
 
   // Hide comparison, show plain canvas while processing
   document.getElementById('comparisonWrap').classList.add('hidden');
+  document.getElementById('refineWrap')?.classList.add('hidden');
   document.getElementById('bgCanvas').style.display = 'block';
   document.getElementById('proceedCropBtn').style.display = 'none';
+  document.getElementById('refineBgBtn').style.display = 'none';
 
   const statusEl  = document.getElementById('statusText');
   const barEl     = document.getElementById('progressBar');
@@ -2257,6 +2362,7 @@ async function startBgRemoval() {
       // Show before/after comparison slider
       showComparisonSlider(origImg, processedCanvas);
       document.getElementById('proceedCropBtn').style.display = 'flex';
+      document.getElementById('refineBgBtn').style.display = 'flex';
 
       setTimeout(() => {
         if (!bgCancelled) {
@@ -2461,6 +2567,340 @@ function hideComparisonSlider(){
   document.getElementById('bgCanvas').style.display = 'block';
 }
 
+// ═══════════════════════════════════════════════
+// REFINE EDGES — manual erase / restore brush editor
+// Used after AI BG removal to clean up leftover background
+// patches or to bring back accidentally-removed foreground parts.
+// ═══════════════════════════════════════════════
+const _refine = {
+  active: false,
+  mode: 'erase',        // 'erase' | 'restore'
+  brushSize: 32,        // display-space (CSS) pixels
+  workCanvas: null,     // mutable alpha canvas at transparentCanvas resolution
+  srcCanvas: null,      // origImg drawn at workCanvas resolution (for restore)
+  dispCtx: null,        // 2d context of #refineDisplayCanvas
+  dw: 0, dh: 0,         // display size in CSS px
+  scale: 1,             // workCanvas px per display CSS px
+  undoStack: [],        // HTMLCanvasElements (snapshots of workCanvas)
+  MAX_UNDO: 20,
+  drawing: false,
+  lastX: 0, lastY: 0,   // last pointer position in work-canvas coords
+  pointerId: null,
+};
+
+function enterRefineMode(){
+  if(!transparentCanvas || !origImg){
+    showToast('Run "Remove Background" first.');
+    return;
+  }
+  const wrap = document.getElementById('step2-canvas');
+  const compW = document.getElementById('comparisonWrap');
+  const refW  = document.getElementById('refineWrap');
+  if(!wrap || !refW) return;
+
+  // Hide comparison slider and plain bg canvas while editing
+  compW.classList.add('hidden');
+  document.getElementById('bgCanvas').style.display = 'none';
+
+  // Build mutable work canvas from current transparentCanvas
+  const tw = transparentCanvas.width, th = transparentCanvas.height;
+  const work = document.createElement('canvas');
+  work.width = tw; work.height = th;
+  work.getContext('2d').drawImage(transparentCanvas, 0, 0);
+  _refine.workCanvas = work;
+
+  // Build source canvas from origImg scaled to work canvas resolution
+  // (used by "Restore" to bring back pixels the AI removed)
+  const src = document.createElement('canvas');
+  src.width = tw; src.height = th;
+  src.getContext('2d').drawImage(origImg, 0, 0, tw, th);
+  _refine.srcCanvas = src;
+
+  // Display canvas — fit into the step2 area with a little padding
+  const disp = document.getElementById('refineDisplayCanvas');
+  const canvasWrap = document.getElementById('refineCanvasWrap');
+  // reserve ~150px for toolbar + hint on compact viewports
+  const availW = Math.max(wrap.clientWidth  - 32, 260);
+  const availH = Math.max(wrap.clientHeight - 180, 260);
+  const scale = Math.min(availW / tw, availH / th);
+  const dw = Math.max(1, Math.round(tw * scale));
+  const dh = Math.max(1, Math.round(th * scale));
+  _refine.dw = dw; _refine.dh = dh;
+  _refine.scale = tw / dw; // work px per display px
+
+  canvasWrap.style.width  = dw + 'px';
+  canvasWrap.style.height = dh + 'px';
+  const dpr = Math.max(1, Math.min(window.devicePixelRatio || 1, 3));
+  disp.width  = Math.round(dw * dpr);
+  disp.height = Math.round(dh * dpr);
+  disp.style.width  = dw + 'px';
+  disp.style.height = dh + 'px';
+  const ctx = disp.getContext('2d');
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  _refine.dispCtx = ctx;
+
+  // Reset state
+  _refine.undoStack = [];
+  _refine.drawing = false;
+  _refine.active  = true;
+  setRefineMode(_refine.mode);
+  setRefineBrushSize(_refine.brushSize);
+  updateRefineUndoBtn();
+  redrawRefineDisplay();
+
+  refW.classList.remove('hidden');
+
+  // Bind pointer events (idempotent: we remove first to allow re-entry)
+  bindRefinePointerEvents();
+}
+window.enterRefineMode = enterRefineMode;
+
+function exitRefineMode(apply){
+  if(!_refine.active) return;
+  _refine.active = false;
+  unbindRefinePointerEvents();
+  const refW = document.getElementById('refineWrap');
+
+  if(apply && _refine.workCanvas){
+    // Commit edits: replace transparentCanvas, rebuild processedCanvas, refresh slider
+    const tw = _refine.workCanvas.width, th = _refine.workCanvas.height;
+    const newTrans = document.createElement('canvas');
+    newTrans.width = tw; newTrans.height = th;
+    newTrans.getContext('2d').drawImage(_refine.workCanvas, 0, 0);
+    transparentCanvas = newTrans;
+    processedCanvas = compositeWithBg(transparentCanvas, bgColor);
+    refW.classList.add('hidden');
+    // Re-show comparison slider with updated result
+    showComparisonSlider(origImg, processedCanvas);
+    showToast('Edges refined — tap "Proceed to Crop" when ready.');
+  } else {
+    refW.classList.add('hidden');
+    // Restore comparison slider as it was
+    if(processedCanvas){
+      showComparisonSlider(origImg, processedCanvas);
+    } else {
+      document.getElementById('bgCanvas').style.display = 'block';
+    }
+  }
+
+  // Free memory
+  _refine.workCanvas = null;
+  _refine.srcCanvas  = null;
+  _refine.undoStack  = [];
+  _refine.dispCtx    = null;
+}
+window.exitRefineMode = exitRefineMode;
+
+function setRefineMode(mode){
+  if(mode !== 'erase' && mode !== 'restore') return;
+  _refine.mode = mode;
+  const eraseBtn   = document.getElementById('refineModeErase');
+  const restoreBtn = document.getElementById('refineModeRestore');
+  const cursor     = document.getElementById('refineBrushCursor');
+  if(eraseBtn){
+    eraseBtn.classList.toggle('active', mode==='erase');
+    eraseBtn.setAttribute('aria-pressed', mode==='erase' ? 'true' : 'false');
+  }
+  if(restoreBtn){
+    restoreBtn.classList.toggle('active', mode==='restore');
+    restoreBtn.setAttribute('aria-pressed', mode==='restore' ? 'true' : 'false');
+  }
+  if(cursor){
+    cursor.classList.remove('erase','restore');
+    cursor.classList.add(mode);
+  }
+}
+window.setRefineMode = setRefineMode;
+
+function setRefineBrushSize(v){
+  const n = Math.max(4, Math.min(200, +v || 32));
+  _refine.brushSize = n;
+  const valEl = document.getElementById('refineBrushSizeVal');
+  if(valEl) valEl.textContent = n;
+  const cursor = document.getElementById('refineBrushCursor');
+  if(cursor){
+    cursor.style.width  = n + 'px';
+    cursor.style.height = n + 'px';
+  }
+}
+window.setRefineBrushSize = setRefineBrushSize;
+
+function updateRefineUndoBtn(){
+  const btn = document.getElementById('refineUndoBtn');
+  if(btn) btn.disabled = _refine.undoStack.length === 0;
+}
+
+function pushRefineUndo(){
+  if(!_refine.workCanvas) return;
+  const snap = document.createElement('canvas');
+  snap.width  = _refine.workCanvas.width;
+  snap.height = _refine.workCanvas.height;
+  snap.getContext('2d').drawImage(_refine.workCanvas, 0, 0);
+  _refine.undoStack.push(snap);
+  if(_refine.undoStack.length > _refine.MAX_UNDO){
+    _refine.undoStack.shift();
+  }
+  updateRefineUndoBtn();
+}
+
+function undoRefine(){
+  if(!_refine.undoStack.length || !_refine.workCanvas) return;
+  const snap = _refine.undoStack.pop();
+  const ctx = _refine.workCanvas.getContext('2d');
+  ctx.save();
+  ctx.globalCompositeOperation = 'copy';
+  ctx.drawImage(snap, 0, 0);
+  ctx.restore();
+  updateRefineUndoBtn();
+  redrawRefineDisplay();
+}
+window.undoRefine = undoRefine;
+
+function resetRefine(){
+  if(!transparentCanvas || !_refine.workCanvas) return;
+  pushRefineUndo();
+  const ctx = _refine.workCanvas.getContext('2d');
+  ctx.save();
+  ctx.globalCompositeOperation = 'copy';
+  ctx.drawImage(transparentCanvas, 0, 0);
+  ctx.restore();
+  redrawRefineDisplay();
+}
+window.resetRefine = resetRefine;
+
+function redrawRefineDisplay(){
+  const ctx = _refine.dispCtx;
+  if(!ctx || !_refine.workCanvas) return;
+  ctx.clearRect(0, 0, _refine.dw, _refine.dh);
+  // Draw work canvas scaled into display. CSS wrapper already shows a
+  // checker pattern behind, so transparent areas read as "removed".
+  ctx.drawImage(_refine.workCanvas, 0, 0, _refine.dw, _refine.dh);
+}
+
+function refineCanvasCoords(clientX, clientY){
+  const disp = document.getElementById('refineDisplayCanvas');
+  if(!disp) return null;
+  const r = disp.getBoundingClientRect();
+  const x = (clientX - r.left) * (_refine.workCanvas.width  / r.width);
+  const y = (clientY - r.top ) * (_refine.workCanvas.height / r.height);
+  return { x, y };
+}
+
+function paintBrushAt(x, y, radiusWork){
+  const ctx = _refine.workCanvas.getContext('2d');
+  ctx.save();
+  if(_refine.mode === 'erase'){
+    ctx.globalCompositeOperation = 'destination-out';
+    ctx.beginPath();
+    ctx.arc(x, y, radiusWork, 0, Math.PI * 2);
+    ctx.fill();
+  } else {
+    // Restore: redraw original pixels in the brush circle with full alpha
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.beginPath();
+    ctx.arc(x, y, radiusWork, 0, Math.PI * 2);
+    ctx.closePath();
+    ctx.clip();
+    // Clear first so we overwrite any lingering transparency properly
+    ctx.clearRect(x - radiusWork, y - radiusWork, radiusWork * 2, radiusWork * 2);
+    ctx.drawImage(_refine.srcCanvas, 0, 0);
+  }
+  ctx.restore();
+}
+
+function strokeBrush(x, y){
+  const radiusWork = (_refine.brushSize * _refine.scale) / 2;
+  // Interpolate between last point and current for smooth lines
+  const dx = x - _refine.lastX, dy = y - _refine.lastY;
+  const dist = Math.hypot(dx, dy);
+  const step = Math.max(1, radiusWork * 0.4);
+  const n = Math.max(1, Math.ceil(dist / step));
+  for(let i = 1; i <= n; i++){
+    const t = i / n;
+    paintBrushAt(_refine.lastX + dx * t, _refine.lastY + dy * t, radiusWork);
+  }
+  _refine.lastX = x; _refine.lastY = y;
+  redrawRefineDisplay();
+}
+
+function moveBrushCursor(clientX, clientY){
+  const cursor = document.getElementById('refineBrushCursor');
+  const wrapEl = document.getElementById('refineCanvasWrap');
+  if(!cursor || !wrapEl) return;
+  const r = wrapEl.getBoundingClientRect();
+  const inside = clientX >= r.left && clientX <= r.right && clientY >= r.top && clientY <= r.bottom;
+  if(!inside){ cursor.style.display = 'none'; return; }
+  cursor.style.display = 'block';
+  cursor.style.left = (clientX - r.left) + 'px';
+  cursor.style.top  = (clientY - r.top ) + 'px';
+}
+
+function onRefinePointerDown(e){
+  if(!_refine.active) return;
+  const disp = document.getElementById('refineDisplayCanvas');
+  if(e.target !== disp) return;
+  e.preventDefault();
+  try { disp.setPointerCapture(e.pointerId); } catch(_){}
+  pushRefineUndo();
+  _refine.drawing = true;
+  _refine.pointerId = e.pointerId;
+  const p = refineCanvasCoords(e.clientX, e.clientY);
+  if(!p) return;
+  _refine.lastX = p.x; _refine.lastY = p.y;
+  const radiusWork = (_refine.brushSize * _refine.scale) / 2;
+  paintBrushAt(p.x, p.y, radiusWork);
+  redrawRefineDisplay();
+  moveBrushCursor(e.clientX, e.clientY);
+}
+
+function onRefinePointerMove(e){
+  if(!_refine.active) return;
+  moveBrushCursor(e.clientX, e.clientY);
+  if(!_refine.drawing || e.pointerId !== _refine.pointerId) return;
+  const p = refineCanvasCoords(e.clientX, e.clientY);
+  if(!p) return;
+  strokeBrush(p.x, p.y);
+}
+
+function onRefinePointerUp(e){
+  if(!_refine.active) return;
+  if(_refine.drawing && e.pointerId === _refine.pointerId){
+    _refine.drawing = false;
+    _refine.pointerId = null;
+    try {
+      const disp = document.getElementById('refineDisplayCanvas');
+      disp.releasePointerCapture(e.pointerId);
+    } catch(_){}
+  }
+}
+
+function onRefinePointerLeave(){
+  const cursor = document.getElementById('refineBrushCursor');
+  if(cursor) cursor.style.display = 'none';
+}
+
+function bindRefinePointerEvents(){
+  const disp = document.getElementById('refineDisplayCanvas');
+  const wrapEl = document.getElementById('refineCanvasWrap');
+  if(!disp || !wrapEl) return;
+  unbindRefinePointerEvents(); // safety
+  disp.addEventListener('pointerdown',  onRefinePointerDown);
+  window.addEventListener('pointermove', onRefinePointerMove);
+  window.addEventListener('pointerup',   onRefinePointerUp);
+  window.addEventListener('pointercancel', onRefinePointerUp);
+  wrapEl.addEventListener('pointerleave', onRefinePointerLeave);
+}
+
+function unbindRefinePointerEvents(){
+  const disp = document.getElementById('refineDisplayCanvas');
+  const wrapEl = document.getElementById('refineCanvasWrap');
+  if(disp) disp.removeEventListener('pointerdown', onRefinePointerDown);
+  window.removeEventListener('pointermove', onRefinePointerMove);
+  window.removeEventListener('pointerup',   onRefinePointerUp);
+  window.removeEventListener('pointercancel', onRefinePointerUp);
+  if(wrapEl) wrapEl.removeEventListener('pointerleave', onRefinePointerLeave);
+}
+
 
 
 function setBgBtnsDisabled(v){
@@ -2515,6 +2955,7 @@ function startOfflineBgRemoval(){
       // Show comparison slider for offline too
       showComparisonSlider(origImg, processedCanvas);
       document.getElementById('proceedCropBtn').style.display='flex';
+      document.getElementById('refineBgBtn').style.display='flex';
       setTimeout(()=>{ if(!bgCancelled){
         document.getElementById('bgProgressWrap').classList.add('hidden');
         barEl.style.width='0%';
