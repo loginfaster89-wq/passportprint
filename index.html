@@ -289,6 +289,58 @@ input[type=range]::-webkit-slider-thumb{appearance:none;width:14px;height:14px;b
   .refine-size{min-width:140px;font-size:10px;}
 }
 
+/* On phones / small tablets the refine editor takes over the full viewport.
+   The tiny step-2 canvas area on mobile was leaving almost no room for the
+   image, so the user couldn't see what they were editing. Making it a
+   full-screen overlay gives the canvas the whole screen and anchors the
+   toolbar at the bottom. */
+@media (max-width:768px){
+  #refineWrap:not(.hidden){
+    position:fixed;inset:0;z-index:9999;
+    width:100vw;height:100dvh;height:100vh;
+    background:rgba(8,8,8,.97);
+    padding:10px 8px;gap:8px;
+    justify-content:space-between;
+  }
+  #refineWrap .refine-hint{
+    order:-1;flex:0 0 auto;width:100%;max-width:100%;
+    font-size:10.5px;padding:5px 10px;
+  }
+  #refineWrap #refineCanvasWrap{
+    flex:1 1 auto;min-height:0;
+    max-width:100%;max-height:100%;
+    display:flex;align-items:center;justify-content:center;
+  }
+  #refineWrap .refine-toolbar{
+    flex:0 0 auto;width:100%;max-width:100%;
+    padding:8px;gap:6px;
+  }
+  /* Stack toolbar groups vertically on mobile so nothing clips off-screen. */
+  #refineWrap .refine-modes,
+  #refineWrap .refine-actions{
+    flex:1 1 100%;width:100%;justify-content:center;flex-wrap:wrap;
+  }
+  #refineWrap .refine-size{
+    flex:1 1 100%;min-width:0;width:100%;
+  }
+  #refineWrap .refine-size input[type=range]{flex:1;min-width:0;}
+  #refineWrap .refine-mode-btn,
+  #refineWrap .refine-act-btn{
+    padding:9px 10px;font-size:11px;flex:1 1 auto;min-width:0;
+    justify-content:center;
+  }
+  #refineWrap .refine-act-btn.primary{flex:1 1 48%;}
+  /* Escape the global canvas safety rule so our JS-sized canvas isn't
+     force-shrunk by the max-width/height:auto rule on all <canvas>. */
+  #refineWrap #refineDisplayCanvas{max-width:none;height:auto;}
+}
+@media (max-width:420px){
+  #refineWrap:not(.hidden){padding:8px 6px;gap:6px;}
+  #refineWrap .refine-mode-btn,
+  #refineWrap .refine-act-btn{padding:8px 8px;font-size:10.5px;}
+  #refineWrap .refine-hint{font-size:10px;padding:4px 8px;}
+}
+
 .hidden{display:none!important;}
 .mt6{margin-top:6px;}
 .mt10{margin-top:10px;}
@@ -2639,12 +2691,24 @@ function enterRefineMode(){
   src.getContext('2d').drawImage(origImg, 0, 0, tw, th);
   _refine.srcCanvas = src;
 
-  // Display canvas — fit into the step2 area with a little padding
+  // Display canvas — fit into the step2 area with a little padding.
+  // On phones / small tablets the refine editor is rendered as a fullscreen
+  // overlay (see CSS #refineWrap:not(.hidden) at ≤768px), so we must size
+  // against the actual viewport — not the tiny stacked step-2 canvas area,
+  // which was leaving the image almost invisible on mobile.
   const disp = document.getElementById('refineDisplayCanvas');
   const canvasWrap = document.getElementById('refineCanvasWrap');
-  // reserve ~150px for toolbar + hint on compact viewports
-  const availW = Math.max(wrap.clientWidth  - 32, 260);
-  const availH = Math.max(wrap.clientHeight - 180, 260);
+  const isMobileRefine = window.matchMedia('(max-width:768px)').matches;
+  let availW, availH;
+  if (isMobileRefine) {
+    // Mobile overlay: full viewport minus padding + hint + stacked toolbar
+    availW = Math.max(window.innerWidth  - 24,  260);
+    availH = Math.max(window.innerHeight - 210, 260);
+  } else {
+    // Desktop: keep original behaviour — fit inside the step-2 canvas area
+    availW = Math.max(wrap.clientWidth  - 32,  260);
+    availH = Math.max(wrap.clientHeight - 180, 260);
+  }
   const scale = Math.min(availW / tw, availH / th);
   const dw = Math.max(1, Math.round(tw * scale));
   const dh = Math.max(1, Math.round(th * scale));
