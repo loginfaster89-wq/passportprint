@@ -2103,6 +2103,14 @@ async function startBgRemoval() {
     return;
   }
 
+  // Daily-limit gate: free users who've already used all their sheets today
+  // can't download a new sheet anyway, so steer them to the upgrade modal
+  // instead of running the BG removal for nothing.
+  if(isFreeUser() && remainingFreeSheets() <= 0){
+    showUpgradePrompt(dailyLimitMessage());
+    return;
+  }
+
   bgCancelled = false;
   setBgBtnsDisabled(true);
   hideFeatLines(); // hide feature overlay when processing starts
@@ -3356,7 +3364,13 @@ function incTodaySheets(){
   const k=_todayKey();
   const n=getTodaySheets()+1;
   try{ localStorage.setItem(k, String(n)); }catch(e){}
-  refreshPlanBanner();
+  // Full plan UI refresh so buttons (e.g. AI BG) re-evaluate their locked
+  // state as soon as the quota is consumed, not just the banner text.
+  if(typeof refreshPlanUI === 'function'){
+    refreshPlanUI();
+  }else{
+    refreshPlanBanner();
+  }
   return n;
 }
 function remainingFreeSheets(){
@@ -3541,20 +3555,30 @@ function refreshPlanUI(){
     }
   });
 
-  // AI BG button: visually lock for free users
+  // AI BG button state:
+  //  - Locked if the plan does not allow AI BG at all (e.g. paid-only plans).
+  //  - Locked if a free user has exhausted their daily sheet quota
+  //    (no point generating a BG when they can't download the sheet).
+  //  - Otherwise active — free users get the same treatment as paid users.
   const aiBtn = document.getElementById('removeBgBtn');
   if(aiBtn){
-    if(free){
+    const atDailyLimit = free && pl.dailySheets > 0 && remainingFreeSheets() <= 0;
+    const locked = !pl.aiBgAllowed || atDailyLimit;
+    if(locked){
       aiBtn.classList.add('pro-locked');
-      aiBtn.innerHTML = '🔒 ' + ('AI Remove BG (Pro)');
+      aiBtn.innerHTML = atDailyLimit
+        ? '🔒 Daily limit reached — Upgrade'
+        : '🔒 AI Remove BG (Pro)';
     }else{
       aiBtn.classList.remove('pro-locked');
-      aiBtn.innerHTML = '🤖 ' + ('Remove Background');
+      aiBtn.innerHTML = '🤖 Remove Background';
     }
   }
 
-  // Skip → Keep Original: promote to primary CTA when AI BG is locked,
-  // so free users can clearly see how to move to the next step.
+  // Skip → Keep Original: only promote as primary CTA when AI BG isn't
+  // available on this plan at all. When the lock is purely due to the daily
+  // quota being exhausted, skipping won't help either (they still can't
+  // generate a new sheet), so we don't highlight it.
   const skipBtn = document.getElementById('skipBgBtn');
   if(skipBtn){
     skipBtn.classList.toggle('skip-highlight', !pl.aiBgAllowed);
