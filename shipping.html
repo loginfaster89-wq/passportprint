@@ -15,8 +15,18 @@
 
 <header class="legal-header">
   <a href="index.html" class="logo">Studio <em>Print</em></a>
-  <nav>
+  <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="primaryNav">☰</button>
+  <nav id="primaryNav">
     <a href="index.html">Home</a>
+    <div class="has-dropdown">
+      <button class="nav-dd-btn" aria-haspopup="true" aria-expanded="false">Features <span class="caret" aria-hidden="true">▾</span></button>
+      <div class="dropdown-panel" role="menu">
+        <a href="passport-photo.html" role="menuitem">
+          <span class="dd-icon" aria-hidden="true">📷</span>
+          <span class="dd-meta"><strong>Passport Photo</strong><small>AI cropping · 300 DPI A4 sheet</small></span>
+        </a>
+      </div>
+    </div>
     <a href="about.html">About</a>
     <a href="privacy.html">Privacy</a>
     <a href="terms.html">Terms</a>
@@ -75,5 +85,6 @@
   <div>© 2026 Studio Print. All rights reserved.</div>
 </footer>
 
+<script src="assets/nav.js" defer></script>
 </body>
 </html>
