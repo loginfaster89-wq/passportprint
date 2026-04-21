@@ -326,22 +326,30 @@ canvas{display:block;}
 .cb-bl { bottom:18px; left:18px; border-bottom:2px solid var(--accent); border-left:2px solid var(--accent); border-radius:0 0 0 4px; }
 .cb-br { bottom:18px; right:18px; border-bottom:2px solid var(--accent); border-right:2px solid var(--accent); border-radius:0 0 4px 0; }
 
-/* Inner brackets — hug the upload card itself (shown only on tablet/mobile ≤900px) */
+/* Card-hugging brackets — sit just OUTSIDE the upload card, at its four
+   corners. Shown only on tablet/mobile (≤900px); on desktop the outer
+   canvas brackets (.corner-bracket) are used instead. */
+.upload-card-wrap {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+  line-height: 0; /* avoid extra inline-box whitespace below card */
+}
 .corner-bracket-inner {
   position: absolute;
-  width: 22px; height: 22px;
+  width: 26px; height: 26px;
   pointer-events: none;
   z-index: 5;
-  opacity: 0.55;
+  opacity: 0.6;
   transition: opacity .35s;
   display: none;
 }
 .upload-zone:hover .corner-bracket-inner,
-.upload-zone.drag-over .corner-bracket-inner { opacity: 0.9; }
-.cbi-tl { top:10px; left:10px; border-top:2px solid var(--accent); border-left:2px solid var(--accent); border-radius:4px 0 0 0; }
-.cbi-tr { top:10px; right:10px; border-top:2px solid var(--accent); border-right:2px solid var(--accent); border-radius:0 4px 0 0; }
-.cbi-bl { bottom:10px; left:10px; border-bottom:2px solid var(--accent); border-left:2px solid var(--accent); border-radius:0 0 0 4px; }
-.cbi-br { bottom:10px; right:10px; border-bottom:2px solid var(--accent); border-right:2px solid var(--accent); border-radius:0 0 4px 0; }
+.upload-zone.drag-over .corner-bracket-inner { opacity: 0.95; }
+.cbi-tl { top:-6px;    left:-6px;    border-top:2px solid var(--accent); border-left:2px solid var(--accent);  border-radius:4px 0 0 0; }
+.cbi-tr { top:-6px;    right:-6px;   border-top:2px solid var(--accent); border-right:2px solid var(--accent); border-radius:0 4px 0 0; }
+.cbi-bl { bottom:-6px; left:-6px;    border-bottom:2px solid var(--accent); border-left:2px solid var(--accent);  border-radius:0 0 0 4px; }
+.cbi-br { bottom:-6px; right:-6px;   border-bottom:2px solid var(--accent); border-right:2px solid var(--accent); border-radius:0 0 4px 0; }
 
 /* Drag-over full overlay pulse */
 .upload-zone.drag-over::before {
@@ -1140,13 +1148,16 @@ header{flex-wrap:nowrap;}
         <div class="float-chip" style="bottom:14%;right:5%;animation-delay:2.1s;">🌍 6+ Country Sizes</div>
         <div class="float-chip" style="top:55%;left:3%;animation-delay:.35s;">⚡ Instant Download</div>
 
-        <!-- Inner floating card (only clickable area) -->
-        <div class="upload-inner-card">
-          <!-- Inner corner brackets (shown on tablet/mobile to hug the card) -->
+        <!-- Inner floating card (only clickable area).
+             Wrapped so corner brackets can be positioned against the card's
+             own box on mobile/tablet instead of against the outer canvas. -->
+        <div class="upload-card-wrap">
+          <!-- Card-hugging corner brackets (shown on tablet/mobile) -->
           <div class="corner-bracket-inner cbi-tl"></div>
           <div class="corner-bracket-inner cbi-tr"></div>
           <div class="corner-bracket-inner cbi-bl"></div>
           <div class="corner-bracket-inner cbi-br"></div>
+        <div class="upload-inner-card">
           <input type="file" id="fileInput" accept="image/*">
           <!-- Animated camera icon -->
           <div class="upload-icon-wrap">
@@ -1175,6 +1186,7 @@ header{flex-wrap:nowrap;}
             &nbsp;<span data-i18n="or_drop">or drop your photo here</span>
           </div>
         </div>
+        </div><!-- /.upload-card-wrap -->
 
       </div>
     </div>
