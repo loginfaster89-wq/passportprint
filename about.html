@@ -15,16 +15,46 @@
 
 <header class="legal-header">
   <a href="index.html" class="logo">Studio <em>Print</em></a>
-  <nav>
-    <a href="index.html">Home</a>
+
+  <nav class="desktop-nav" aria-label="Main">
+    <div class="has-menu">
+      <button type="button" class="menu-trigger" aria-label="Features menu">Features</button>
+      <div class="submenu" role="menu">
+        <a href="passport-photo.html" role="menuitem">
+          <span class="sm-ico" aria-hidden="true">📷</span>
+          <span class="sm-meta">
+            <span class="sm-title">Passport Photo</span>
+            <span class="sm-sub">Selfie → print-ready A4 sheet</span>
+          </span>
+        </a>
+      </div>
+    </div>
     <a href="about.html" class="active">About</a>
-    <a href="privacy.html">Privacy</a>
-    <a href="terms.html">Terms</a>
-    <a href="refund.html">Refund</a>
-    <a href="shipping.html">Delivery</a>
     <a href="contact.html">Contact</a>
+    <a href="passport-photo.html" class="nav-cta">Try for Free</a>
   </nav>
+
+  <button type="button" class="hamburger" aria-label="Open menu" aria-expanded="false"><span></span></button>
 </header>
+
+<div class="nav-backdrop" aria-hidden="true"></div>
+<aside class="mobile-drawer" aria-label="Mobile menu">
+  <button type="button" class="drawer-close" aria-label="Close menu">✕</button>
+  <div class="dgroup-title">Features</div>
+  <a href="passport-photo.html">
+    <span class="sm-ico" aria-hidden="true">📷</span>
+    <span>Passport Photo</span>
+  </a>
+  <div class="dgroup-title">Company</div>
+  <a href="about.html">About</a>
+  <a href="contact.html">Contact</a>
+  <div class="dgroup-title">Legal</div>
+  <a href="privacy.html">Privacy</a>
+  <a href="terms.html">Terms</a>
+  <a href="refund.html">Refund</a>
+  <a href="shipping.html">Delivery</a>
+  <a href="passport-photo.html" class="drawer-cta">Try Passport Photo →</a>
+</aside>
 
 <main class="legal-main">
   <h1>About Studio Print</h1>
@@ -56,6 +86,7 @@
 <footer class="legal-footer">
   <div class="links">
     <a href="index.html">Home</a>·
+    <a href="passport-photo.html">Passport Photo</a>·
     <a href="about.html">About</a>·
     <a href="privacy.html">Privacy</a>·
     <a href="terms.html">Terms</a>·
@@ -65,6 +96,8 @@
   </div>
   <div>© 2026 Studio Print. All rights reserved.</div>
 </footer>
+
+<script src="assets/nav.js" defer></script>
 
 </body>
 </html>

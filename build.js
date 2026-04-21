@@ -14,6 +14,7 @@ const OUT = path.join(ROOT, 'dist');
 
 const HTML_FILES = [
   'index.html',
+  'passport-photo.html',
   'about.html',
   'contact.html',
   'privacy.html',
@@ -131,7 +132,7 @@ async function buildHtmlFile(relPath) {
   }
   let html = await fs.promises.readFile(src, 'utf8');
 
-  const shouldObfuscate = relPath === 'index.html';
+  const shouldObfuscate = relPath === 'passport-photo.html';
   if (shouldObfuscate) {
     html = obfuscateInlineScripts(html);
   }
