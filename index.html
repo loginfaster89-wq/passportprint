@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
 <meta name="theme-color" content="#0d0d0d">
-<title>Studio Print — Print-Ready Photo Tools, Right in Your Browser</title>
-<meta name="description" content="Studio Print is a fast, private, browser-based studio for print-ready photos. Start with our free Passport Photo tool — AI background removal, country presets and 300 DPI A4 sheets, all on-device.">
-<meta property="og:title" content="Studio Print — Print-Ready Photo Tools">
-<meta property="og:description" content="Free, private, browser-based passport photo tool. AI background removal and 300 DPI A4 output — no uploads.">
+<title>Studio Print — Print-Ready Photo & Document Tools for eMitra Shops</title>
+<meta name="description" content="Studio Print is a fast, private, browser-based studio for emitra shops and local printers. Passport photos, Aadhaar/PAN card sheets, certificate edits and more — all print-ready, all on-device.">
+<meta property="og:title" content="Studio Print — Print-Ready Photo & Document Tools">
+<meta property="og:description" content="Skip Photoshop. Passport photos, Aadhaar/PAN sheets, certificate edits and A4 print layouts — all in your browser, nothing uploaded.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://studioprint.netlify.app/">
 <link rel="canonical" href="https://studioprint.netlify.app/">
@@ -120,6 +120,25 @@ body.home main.home-main{
 .hero-preview-grid{
   display:grid;grid-template-columns:1.2fr 1fr;gap:14px;padding:14px;
 }
+.hero-preview-tiles{
+  display:grid;gap:12px;padding:14px;
+  grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+}
+.hpv-mini{
+  display:flex;flex-direction:column;gap:6px;
+  padding:16px 14px;border-radius:12px;
+  background:var(--bg);border:1px dashed var(--border);
+  transition:.2s;
+}
+.hpv-mini:hover{border-color:rgba(240,165,0,0.45);border-style:solid;}
+.hpv-mini-ic{
+  width:34px;height:34px;border-radius:9px;
+  background:var(--accent-dim);color:var(--accent);
+  display:inline-flex;align-items:center;justify-content:center;font-size:17px;
+  border:1px solid rgba(240,165,0,0.28);
+}
+.hpv-mini-t{font-family:'Syne',sans-serif;font-weight:700;font-size:14px;color:#fff;}
+.hpv-mini-s{font-size:11.5px;color:var(--muted2);line-height:1.4;}
 .hpv-tile{
   background:var(--bg);border:1px dashed var(--border);border-radius:12px;
   min-height:180px;display:flex;align-items:center;justify-content:center;
@@ -326,8 +345,29 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
       <div class="dropdown-panel" role="menu">
         <a href="passport-photo.html" role="menuitem">
           <span class="dd-icon" aria-hidden="true">📷</span>
-          <span class="dd-meta"><strong>Passport Photo</strong><small>AI cropping · 300 DPI A4 sheet</small></span>
+          <span class="dd-meta"><strong>Passport Photo</strong><small>AI crop · 300 DPI A4 sheet</small></span>
+          <span class="dd-tag live">Live</span>
         </a>
+        <span class="dd-item soon" role="menuitem" aria-disabled="true">
+          <span class="dd-icon" aria-hidden="true">🪪</span>
+          <span class="dd-meta"><strong>Document Sheet</strong><small>Aadhaar, PAN · cut &amp; arrange</small></span>
+          <span class="dd-tag soon">Soon</span>
+        </span>
+        <span class="dd-item soon" role="menuitem" aria-disabled="true">
+          <span class="dd-icon" aria-hidden="true">📜</span>
+          <span class="dd-meta"><strong>Certificate Editor</strong><small>Marriage, birth, misc.</small></span>
+          <span class="dd-tag soon">Soon</span>
+        </span>
+        <span class="dd-item soon" role="menuitem" aria-disabled="true">
+          <span class="dd-icon" aria-hidden="true">🖼️</span>
+          <span class="dd-meta"><strong>ID &amp; Visa Sheets</strong><small>Mix sizes on A4</small></span>
+          <span class="dd-tag soon">Soon</span>
+        </span>
+        <span class="dd-item soon" role="menuitem" aria-disabled="true">
+          <span class="dd-icon" aria-hidden="true">✂️</span>
+          <span class="dd-meta"><strong>Background Studio</strong><small>Remove &amp; replace</small></span>
+          <span class="dd-tag soon">Soon</span>
+        </span>
       </div>
     </div>
     <a href="about.html">About</a>
@@ -344,39 +384,46 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
   <!-- HERO -->
   <section class="hero">
     <div class="hero-inner">
-      <span class="hero-eyebrow"><span class="dot"></span>Browser-based · Private by default</span>
-      <h1>Print-ready photos. Right inside <em>your browser.</em></h1>
-      <p class="lead">Studio Print is a tiny, privacy-first studio for the prints you actually need — passport photos today, more tools tomorrow. AI runs on your device. Nothing is uploaded.</p>
+      <span class="hero-eyebrow"><span class="dot"></span>Built for eMitra shops &amp; local printers</span>
+      <h1>Print-ready documents. <em>Skip Photoshop.</em></h1>
+      <p class="lead">Studio Print is a browser-based studio for the prints an eMitra shop actually runs — passport photos, Aadhaar &amp; PAN card sheets, certificate edits, A4 layouts. Fast, private, on-device. No more fiddling with Photoshop for a ₹10 print.</p>
       <div class="hero-actions">
-        <a class="btn btn-primary" href="passport-photo.html">Try Passport Photo <span class="arrow" aria-hidden="true">→</span></a>
-        <a class="btn btn-ghost" href="#features">Explore features</a>
+        <a class="btn btn-primary" href="#features">Explore tools <span class="arrow" aria-hidden="true">→</span></a>
+        <a class="btn btn-ghost" href="passport-photo.html">Try Passport Photo</a>
       </div>
       <div class="hero-trust" aria-label="Trust indicators">
-        <span class="pill"><span class="tick">✓</span> 100% Free to start</span>
-        <span class="pill"><span class="tick">✓</span> On-device AI</span>
-        <span class="pill"><span class="tick">✓</span> 300 DPI output</span>
-        <span class="pill"><span class="tick">✓</span> Works offline after first load</span>
+        <span class="pill"><span class="tick">✓</span> Free tier, no signup wall</span>
+        <span class="pill"><span class="tick">✓</span> On-device · nothing uploaded</span>
+        <span class="pill"><span class="tick">✓</span> 300 DPI A4 output</span>
+        <span class="pill"><span class="tick">✓</span> Works on any device</span>
       </div>
     </div>
 
     <div class="hero-preview" aria-hidden="true">
       <div class="hero-preview-bar">
         <span class="pdot"></span><span class="pdot"></span><span class="pdot amber"></span>
-        <span class="ptitle">studio print · workspace preview</span>
+        <span class="ptitle">studio print · tools preview</span>
       </div>
-      <div class="hero-preview-grid">
-        <div class="hpv-tile canvas">
-          <div class="silhouette"></div>
-          <div class="crop-frame"></div>
+      <div class="hero-preview-tiles">
+        <div class="hpv-mini">
+          <span class="hpv-mini-ic" aria-hidden="true">📷</span>
+          <span class="hpv-mini-t">Passport Photo</span>
+          <span class="hpv-mini-s">35×45 mm · A4 sheet</span>
         </div>
-        <div class="hpv-side">
-          <div class="hpv-row"><span>Preset</span><strong>India · 35×45 mm</strong></div>
-          <div class="hpv-row"><span>Background</span><span style="display:flex;align-items:center;gap:6px;"><span class="swatch" style="background:#fff;"></span><strong>White</strong></span></div>
-          <div class="hpv-row"><span>Sheet</span><strong>A4 · 300 DPI</strong></div>
-          <div class="hpv-bar">
-            <span class="lab">Head size</span>
-            <div class="track"><div class="fill"></div></div>
-          </div>
+        <div class="hpv-mini">
+          <span class="hpv-mini-ic" aria-hidden="true">🪪</span>
+          <span class="hpv-mini-t">Aadhaar / PAN</span>
+          <span class="hpv-mini-s">Crop &amp; arrange on A4</span>
+        </div>
+        <div class="hpv-mini">
+          <span class="hpv-mini-ic" aria-hidden="true">📜</span>
+          <span class="hpv-mini-t">Certificate Edit</span>
+          <span class="hpv-mini-s">Marriage, birth, misc.</span>
+        </div>
+        <div class="hpv-mini">
+          <span class="hpv-mini-ic" aria-hidden="true">✂️</span>
+          <span class="hpv-mini-t">Background Studio</span>
+          <span class="hpv-mini-s">Remove &amp; replace</span>
         </div>
       </div>
     </div>
@@ -387,29 +434,43 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
     <div class="wrap">
       <div class="section-head">
         <span class="section-tag">Features</span>
-        <h2>One studio. Built for the prints you actually use.</h2>
-        <p>Each Studio Print tool runs entirely in your browser — no signup wall, no uploads. Pick a tool to get started.</p>
+        <h2>One studio. Every print job an eMitra shop runs.</h2>
+        <p>Pick a tool. Each one runs entirely in your browser — no signup wall, no uploads, no Photoshop. More tools are landing every month.</p>
       </div>
 
       <div class="features-grid">
         <a href="passport-photo.html" class="feature-card live">
           <div class="ficon" aria-hidden="true">📷</div>
           <h3>Passport Photo <span class="tag live">Live</span></h3>
-          <p>Turn a selfie into a print-ready passport photo. AI background removal, country presets (India, US, UAE, Schengen, AU…), and a 300 DPI A4 sheet with cutting guides — all on your device.</p>
+          <p>Selfie → print-ready passport photo. AI background removal, country presets, and a 300 DPI A4 sheet with cutting guides.</p>
           <span class="fcta">Open tool <span class="arrow" aria-hidden="true">→</span></span>
         </a>
 
         <div class="feature-card soon" aria-label="Coming soon">
           <div class="ficon" aria-hidden="true">🪪</div>
+          <h3>Document Sheet <span class="tag soon">Soon</span></h3>
+          <p>Upload an Aadhaar card, PAN card or any ID PDF — crop front &amp; back, arrange multiple copies on a single A4 sheet with cut lines.</p>
+          <span class="fcta" style="color:var(--muted);">In the works</span>
+        </div>
+
+        <div class="feature-card soon" aria-label="Coming soon">
+          <div class="ficon" aria-hidden="true">📜</div>
+          <h3>Certificate Editor <span class="tag soon">Soon</span></h3>
+          <p>Edit marriage, birth and miscellaneous certificate scans — clean up, fix text, arrange on A4 and print without rebuilding the layout in Photoshop.</p>
+          <span class="fcta" style="color:var(--muted);">In the works</span>
+        </div>
+
+        <div class="feature-card soon" aria-label="Coming soon">
+          <div class="ficon" aria-hidden="true">🖼️</div>
           <h3>ID &amp; Visa Sheets <span class="tag soon">Soon</span></h3>
-          <p>Resize and arrange ID, PAN, and visa-sized photos onto a print-ready A4 sheet with crop marks. Mix sizes on the same sheet to save paper.</p>
+          <p>Mix ID, PAN and visa-sized photos on the same print-ready A4 sheet. Pick sizes, arrange, add crop marks, export.</p>
           <span class="fcta" style="color:var(--muted);">In the works</span>
         </div>
 
         <div class="feature-card soon" aria-label="Coming soon">
           <div class="ficon" aria-hidden="true">✂️</div>
           <h3>Background Studio <span class="tag soon">Soon</span></h3>
-          <p>Standalone background remover and replacer for product photos, profile pictures, and social posts — same on-device AI engine, no watermarks.</p>
+          <p>Standalone background remover and replacer for product photos, profile pictures and social posts — same on-device AI, no watermarks.</p>
           <span class="fcta" style="color:var(--muted);">In the works</span>
         </div>
       </div>
@@ -421,30 +482,30 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
     <div class="wrap">
       <div class="section-head">
         <span class="section-tag">Why Studio Print</span>
-        <h2>Fast, private, and made for real print shops.</h2>
-        <p>The web is full of passport-photo sites that upload your face to a server and charge you ₹200 for a JPG. Studio Print is the opposite of that.</p>
+        <h2>Made for the counter, not the studio.</h2>
+        <p>Most sites upload your customer's photo to a server and charge ₹200 for a JPG. Studio Print is the opposite — tools that run in your browser, priced for a real shop.</p>
       </div>
 
       <div class="why-grid">
         <div class="why-card">
+          <div class="wicon" aria-hidden="true">⏱️</div>
+          <h4>Minutes, not hours</h4>
+          <p>No more fighting Photoshop for an Aadhaar cut-out. Upload, crop, arrange on A4, print — all in a few taps.</p>
+        </div>
+        <div class="why-card">
           <div class="wicon" aria-hidden="true">🔒</div>
           <h4>100% on your device</h4>
-          <p>Your photo never leaves the browser. AI background removal, cropping, and sheet rendering all happen locally.</p>
+          <p>Customer photos and documents never leave the browser. AI, cropping, and sheet rendering all run locally.</p>
         </div>
         <div class="why-card">
           <div class="wicon" aria-hidden="true">🖨️</div>
           <h4>Print-shop ready</h4>
-          <p>Exports a 300 DPI A4 sheet with thin cutting lines so any local printer can cut it cleanly the first time.</p>
-        </div>
-        <div class="why-card">
-          <div class="wicon" aria-hidden="true">🌐</div>
-          <h4>Country presets</h4>
-          <p>Built-in dimensions for India, US Visa, UAE, Schengen, Australia, and more — head size and margins handled for you.</p>
+          <p>Every tool exports a 300 DPI A4 sheet with clean cutting lines so any local printer can cut it in one pass.</p>
         </div>
         <div class="why-card">
           <div class="wicon" aria-hidden="true">⚡</div>
           <h4>Free, then fair</h4>
-          <p>Free with a 2-sheet daily limit. Unlimited HD export and all presets are <strong>₹59/week</strong> or <strong>₹149/month</strong>.</p>
+          <p>Start free, no signup wall. Unlock unlimited HD exports and all presets at <strong>₹59/week</strong> or <strong>₹149/month</strong>.</p>
         </div>
       </div>
     </div>
@@ -455,29 +516,29 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
     <div class="wrap">
       <div class="section-head">
         <span class="section-tag">How it works</span>
-        <h2>From selfie to printable sheet in four steps.</h2>
+        <h2>From a photo or scan to a printable A4 — in four steps.</h2>
       </div>
 
       <div class="steps-grid">
         <div class="step-card">
           <div class="sicon" aria-hidden="true">📤</div>
-          <h4>Upload a photo</h4>
-          <p>Drop in a clear selfie or studio shot. JPG, PNG, or HEIC.</p>
+          <h4>Upload</h4>
+          <p>Drop in a selfie, ID scan, certificate PDF or phone photo. JPG, PNG, PDF or HEIC.</p>
         </div>
         <div class="step-card">
           <div class="sicon" aria-hidden="true">🤖</div>
-          <h4>Remove background</h4>
-          <p>The <code>RMBG-1.4</code> model runs in your browser via transformers.js — no upload, no waiting on a server.</p>
+          <h4>Auto-process</h4>
+          <p>On-device AI handles background removal, alignment and cropping — no server round-trips.</p>
         </div>
         <div class="step-card">
           <div class="sicon" aria-hidden="true">🔍</div>
-          <h4>Crop &amp; adjust</h4>
-          <p>Pick a country preset and fine-tune head size, position, and background colour.</p>
+          <h4>Adjust &amp; arrange</h4>
+          <p>Tweak size, position or background. Arrange multiple copies on the same A4 sheet to save paper.</p>
         </div>
         <div class="step-card">
           <div class="sicon" aria-hidden="true">🖨️</div>
-          <h4>Generate &amp; print</h4>
-          <p>Download a 300 DPI A4 sheet with cut lines. Take it to any print shop — done.</p>
+          <h4>Export &amp; print</h4>
+          <p>Download a 300 DPI A4 sheet with cut lines. Feed it to any local printer — done.</p>
         </div>
       </div>
     </div>
@@ -485,10 +546,10 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
 
   <!-- CTA BAND -->
   <section class="cta-band">
-    <h2>Ready to print your first sheet?</h2>
-    <p>Open the Passport Photo tool — your first 2 sheets per day are free, no signup needed.</p>
+    <h2>Run your next print job in the browser.</h2>
+    <p>Passport Photo is live today. Document Sheet, Certificate Editor and more are rolling out soon — no subscriptions required to try.</p>
     <div class="hero-actions" style="justify-content:center;">
-      <a class="btn btn-primary" href="passport-photo.html">Open Passport Photo <span class="arrow" aria-hidden="true">→</span></a>
+      <a class="btn btn-primary" href="passport-photo.html">Try Passport Photo <span class="arrow" aria-hidden="true">→</span></a>
       <a class="btn btn-ghost" href="about.html">Read the story</a>
     </div>
   </section>
