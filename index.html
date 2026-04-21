@@ -281,6 +281,12 @@ input[type=range]::-webkit-slider-thumb{appearance:none;width:14px;height:14px;b
 .refine-act-btn.danger{color:var(--danger);border-color:rgba(248,113,113,.3);background:rgba(248,113,113,.1);}
 .refine-act-btn.danger:hover:not(:disabled){background:rgba(248,113,113,.2);}
 .refine-act-btn:disabled{opacity:.4;cursor:not-allowed;}
+.refine-back-btn{
+  /* Hidden on desktop — the Cancel button in the toolbar already covers this.
+     Shown only on the mobile fullscreen overlay (see @media rule below) where
+     the toolbar can scroll off-screen on small devices. */
+  display:none;
+}
 .refine-hint{
   font-size:11px;color:var(--muted);text-align:center;
   background:rgba(0,0,0,.55);padding:5px 12px;border-radius:20px;
@@ -336,6 +342,24 @@ input[type=range]::-webkit-slider-thumb{appearance:none;width:14px;height:14px;b
   /* Escape the global canvas safety rule so our JS-sized canvas isn't
      force-shrunk by the max-width/height:auto rule on all <canvas>. */
   #refineWrap #refineDisplayCanvas{max-width:none;height:auto;}
+  /* Floating back button — anchors to top-left of the fullscreen overlay so
+     the user always has a clear exit even if the toolbar is scrolled/clipped. */
+  #refineWrap .refine-back-btn{
+    display:inline-flex;align-items:center;gap:6px;
+    position:absolute;top:10px;left:10px;z-index:10;
+    padding:8px 12px;
+    background:rgba(0,0,0,.65);color:var(--text);
+    border:1px solid var(--border);border-radius:20px;
+    font-family:'DM Mono',monospace;font-size:12px;line-height:1;
+    cursor:pointer;backdrop-filter:blur(6px);
+    -webkit-tap-highlight-color:transparent;
+  }
+  #refineWrap .refine-back-btn:active{background:rgba(0,0,0,.8);}
+  #refineWrap .refine-back-btn span[aria-hidden]{font-size:16px;line-height:1;}
+}
+@media (max-width:420px){
+  #refineWrap .refine-back-btn{padding:7px 10px;font-size:11px;}
+  #refineWrap .refine-back-btn .refine-back-label{display:none;}
 }
 @media (max-width:420px){
   #refineWrap:not(.hidden){padding:8px 6px;gap:6px;}
@@ -1358,6 +1382,10 @@ header{flex-wrap:nowrap;}
       </div>
       <!-- Manual Refine Editor (shown when user clicks "Refine Edges") -->
       <div id="refineWrap" class="hidden">
+        <button type="button" id="refineBackBtn" class="refine-back-btn" onclick="exitRefineMode(false)" aria-label="Back" title="Back">
+          <span aria-hidden="true">←</span>
+          <span class="refine-back-label" data-i18n="refine_back">Back</span>
+        </button>
         <div class="refine-hint" id="refineHint" data-i18n="refine_hint">Paint over leftover background to <b>erase</b>, or <b>restore</b> parts that got cut off.</div>
         <div id="refineCanvasWrap">
           <canvas id="refineDisplayCanvas"></canvas>
@@ -1827,7 +1855,7 @@ const LANG = {
     refine_tip_body:' Tap <b>Refine Edges</b> below and paint over them to erase, or restore any parts the AI cut off.',
     refine_erase:'🩹 Erase', refine_restore:'↩ Restore',
     refine_size:'Size', refine_undo:'↶ Undo', refine_reset:'Reset',
-    refine_cancel:'Cancel', refine_done:'✓ Done',
+    refine_cancel:'Cancel', refine_done:'✓ Done', refine_back:'Back',
     sb2_bg_color:'New Background Color', white_standard:'⭐ White = India passport standard',
     sb3_crop_title:'Crop Controls', btn_reset_crop:'↺ Reset Crop Box',
     btn_autocenter:'⊙ Auto-Center',
