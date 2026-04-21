@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PassportPrint Studio — Free Passport Photo Tool</title>
+<title>Studio Print — Free Passport Photo Tool</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
 <!-- AI library loads lazily on first use via dynamic import -->
 <style>
@@ -1069,7 +1069,7 @@ header{flex-wrap:nowrap;}
 
 <!-- HEADER -->
 <header>
-  <div class="logo" onclick="resetApp()" style="cursor:pointer;user-select:none;" title="Home">Passport<em>Print</em> Studio</div>
+  <div class="logo" onclick="resetApp()" style="cursor:pointer;user-select:none;" title="Home">Studio <em>Print</em></div>
   <div class="badges">
     <span class="badge badge-green" data-i18n="badge_free">✓ 100% Free</span>
     <span class="badge badge-green" data-i18n="badge_offline">✓ Offline After First Load</span>
@@ -1353,7 +1353,7 @@ header{flex-wrap:nowrap;}
 
 <!-- APP FOOTER -->
 <footer class="app-footer">
-  <span class="copy">© 2026 PassportPrint Studio</span>
+  <span class="copy">© 2026 Studio Print</span>
   <a href="about.html">About</a><span class="sep">·</span>
   <a href="privacy.html">Privacy</a><span class="sep">·</span>
   <a href="terms.html">Terms</a><span class="sep">·</span>
@@ -1502,11 +1502,11 @@ header{flex-wrap:nowrap;}
       </div>
       <div class="tut-card-right">
         <div class="tut-card-title" data-i18n="tut5_title">Paste the API key in the tool</div>
-        <div class="tut-card-desc" data-i18n="tut5_desc">Come back to PassportPrint Studio. On Step 2 (Remove Background) you'll see an API Key field at the top — paste it there (Ctrl+V). It saves automatically.</div>
+        <div class="tut-card-desc" data-i18n="tut5_desc">Come back to Studio Print. On Step 2 (Remove Background) you'll see an API Key field at the top — paste it there (Ctrl+V). It saves automatically.</div>
         <div class="mock-screen" style="background:#161616;border-color:#2c2c2c;">
           <div class="mock-bar" style="background:#0d0d0d;border-color:#2c2c2c;">
             <div class="mock-dots"><div class="mock-dot" style="background:#ff5f57"></div><div class="mock-dot" style="background:#ffbd2e"></div><div class="mock-dot" style="background:#28c840"></div></div>
-            <div class="mock-url" style="background:#1e1e1e;color:#555;">PassportPrint Studio</div>
+            <div class="mock-url" style="background:#1e1e1e;color:#555;">Studio Print</div>
           </div>
           <div class="mock-body">
             <div style="font-size:9px;color:#777;text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px;">🔑 Remove.bg API Key</div>
@@ -1635,7 +1635,7 @@ const LANG = {
     tut4_title:'Copy your API key',
     tut4_desc:'A long key will appear like: "abc123XYZ..." — select it all and copy (Ctrl+C). This key is shown only once!',
     tut5_title:'Paste the API key in the tool',
-    tut5_desc:'Come back to PassportPrint Studio. On Step 2, paste the key (Ctrl+V) in the API Key field. It saves automatically.',
+    tut5_desc:'Come back to Studio Print. On Step 2, paste the key (Ctrl+V) in the API Key field. It saves automatically.',
     tut_cta_sub:'Go back to the tool, upload a photo, and watch the AI magic',
     tut_cta_btn:'← Go Back to Tool',
 
@@ -2903,7 +2903,7 @@ function buildSheet(){
   ctx.fillStyle='rgba(0,0,0,0.15)';
   ctx.font=`${Math.round(6/MM2IN*DPI)}px monospace`;
   ctx.fillText(
-    `PassportPrint Studio · ${sheetTotal} photos · ${photoW}×${photoH}mm · 300 DPI · A4`,
+    `Studio Print · ${sheetTotal} photos · ${photoW}×${photoH}mm · 300 DPI · A4`,
     marginPx, a4H-Math.round(4/MM2IN*DPI)
   );
 
@@ -2946,7 +2946,7 @@ function paintWatermark(ctx, W, H){
   ctx.textBaseline = 'middle';
   ctx.translate(W/2, H/2);
   ctx.rotate(-Math.PI/6);
-  const line = 'PassportPrint • FREE PREVIEW • Upgrade for HD';
+  const line = 'Studio Print • FREE PREVIEW • Upgrade for HD';
   const step = Math.round(H*0.16);
   for(let y = -H; y <= H; y += step){
     ctx.fillText(line, 0, y);
@@ -3025,7 +3025,7 @@ function renderSheetAtDPI(targetDPI){
   ctx.fillStyle='rgba(0,0,0,0.15)';
   ctx.font=`${Math.round(6/MM2IN*targetDPI)}px monospace`;
   ctx.fillText(
-    `PassportPrint Studio · ${sheetTotal} photos · ${photoW}×${photoH}mm · ${targetDPI} DPI · A4`,
+    `Studio Print · ${sheetTotal} photos · ${photoW}×${photoH}mm · ${targetDPI} DPI · A4`,
     marginPx, a4H-Math.round(4/MM2IN*targetDPI)
   );
   return sheet;
@@ -3948,7 +3948,7 @@ async function completePayment(){
         key: order.keyId,
         amount: order.amount,
         currency: order.currency,
-        name:'PassportPrint Studio',
+        name:'Studio Print',
         description:`${p.name} Plan`,
         order_id: order.orderId,
         prefill:{name:user.name, email:user.email},
