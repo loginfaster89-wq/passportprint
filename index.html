@@ -305,7 +305,7 @@ canvas{display:block;}
   z-index:1;
 }
 @keyframes rotateBorder { to { --bangle: 360deg; } }
-.upload-inner-card > *:not(input[type=file]) { position:relative; z-index:2; }
+.upload-inner-card > *:not(input[type=file]):not(.corner-bracket-inner) { position:relative; z-index:2; }
 .upload-zone.drag-over .upload-inner-card::before {
   animation: rotateBorder .8s linear infinite;
 }
