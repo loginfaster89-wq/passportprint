@@ -4,7 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Studio Print — Free Passport Photo Tool</title>
+<link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+<link rel="alternate icon" type="image/png" href="assets/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<!-- Google Identity Services — loaded eagerly so One Tap / Sign-In with Google is available as soon as the user clicks the login button. -->
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 <!-- AI library loads lazily on first use via dynamic import -->
 <style>
 :root {
@@ -1961,7 +1966,7 @@ const LANG = {
     plan_price_forever:'forever',
 
     /* Auth buttons / labels */
-    auth_login:'Login', auth_signup:'Sign Up',
+    auth_login:'Login', auth_signup:'Sign Up', auth_or:'or continue with email',
     auth_name:'Name', auth_email:'Gmail address', auth_email_ph:'yourname@gmail.com',
     auth_pwd:'Password (min 6)',
     auth_login_btn:'Login', auth_signup_btn:'Send OTP',
@@ -4053,6 +4058,14 @@ window.fillA4=fillA4;
 //   Leave as '' to run in localStorage-only mode (demo / testing).
 const BACKEND_URL = 'https://passportprint-studio.onrender.com';
 const USE_BACKEND = !!BACKEND_URL;
+// Google Sign-In (One Tap + button). Configure this to the OAuth Web Client ID
+// from Google Cloud Console → APIs & Services → Credentials. Authorized
+// JavaScript origins must include this site's origin (e.g. the Netlify URL).
+// Can be overridden at runtime by setting window.GOOGLE_OAUTH_CLIENT_ID
+// before this script runs (useful for local dev / preview deploys).
+const GOOGLE_CLIENT_ID = (typeof window !== 'undefined' && window.GOOGLE_OAUTH_CLIENT_ID)
+  || 'YOUR_GOOGLE_OAUTH_CLIENT_ID.apps.googleusercontent.com';
+const GOOGLE_ENABLED = !!GOOGLE_CLIENT_ID && !/^YOUR_/.test(GOOGLE_CLIENT_ID);
 const AUTH_STORE_KEY='pps_users_v1';
 const AUTH_SESSION_KEY='pps_session_v1';
 const AUTH_TOKEN_KEY='pps_token_v1';
@@ -4415,6 +4428,19 @@ function openAuth(tab){
   setAuthTab(tab);
   document.getElementById('authError').textContent='';
   document.getElementById('authSuccess').style.display='none';
+  // Render the "Continue with Google" button and show the Google account
+  // chooser (One Tap). If the GIS script hasn't loaded yet, retry briefly.
+  if(GOOGLE_ENABLED && USE_BACKEND){
+    const tryInit = (tries) => {
+      if(initGoogleSignIn()){
+        renderGoogleButton();
+        promptGoogleOneTap();
+      } else if(tries > 0){
+        setTimeout(() => tryInit(tries-1), 200);
+      }
+    };
+    tryInit(15); // ~3s max
+  }
 }
 function setAuthTab(tab){
   document.querySelectorAll('.auth-tab').forEach(t=>t.classList.toggle('active', t.dataset.tab===tab));
@@ -4444,6 +4470,91 @@ function setAuthBusy(formId, busy, busyText, idleText){
   if(busy && busyText) btn.textContent = busyText;
   if(!busy && idleText) btn.textContent = idleText;
 }
+
+// ── Google Sign-In (One Tap + button) ────────────────────────────────────
+// Uses Google Identity Services (the script is loaded in <head>). Clicking
+// "Login" opens the modal and triggers One Tap, which shows the browser's
+// native account chooser with every Gmail the user is already signed in to.
+// Selecting an account auto-fills the user's name + email on the backend
+// and logs them straight in — no password, no OTP. Users without backend
+// mode fall back to the localStorage email/password flow below.
+let _googleInitDone = false;
+let _googleBtnRendered = false;
+function initGoogleSignIn(){
+  if(_googleInitDone) return true;
+  if(!GOOGLE_ENABLED) return false;
+  if(!USE_BACKEND) return false;
+  if(typeof google === 'undefined' || !google.accounts || !google.accounts.id) return false;
+  try {
+    google.accounts.id.initialize({
+      client_id: GOOGLE_CLIENT_ID,
+      callback: handleGoogleCredential,
+      auto_select: false,
+      cancel_on_tap_outside: false,
+      ux_mode: 'popup',
+      context: 'signin',
+      itp_support: true,
+    });
+    _googleInitDone = true;
+    return true;
+  } catch(e) {
+    console.warn('Google Sign-In init failed:', e);
+    return false;
+  }
+}
+function renderGoogleButton(){
+  if(!initGoogleSignIn()) return;
+  const host = document.getElementById('googleSignInBtn');
+  if(!host) return;
+  if(_googleBtnRendered) return;
+  try {
+    google.accounts.id.renderButton(host, {
+      type: 'standard',
+      theme: 'filled_black',
+      size: 'large',
+      text: 'continue_with',
+      shape: 'rectangular',
+      logo_alignment: 'left',
+      width: 300,
+    });
+    _googleBtnRendered = true;
+  } catch(e) {
+    console.warn('Google button render failed:', e);
+  }
+}
+function promptGoogleOneTap(){
+  if(!initGoogleSignIn()) return;
+  try { google.accounts.id.prompt(); } catch(e) { /* no-op */ }
+}
+async function handleGoogleCredential(resp){
+  const err = document.getElementById('authError');
+  if(err) err.textContent = '';
+  if(!resp || !resp.credential){
+    if(err) err.textContent = t('err_prefix') + 'No credential returned from Google.';
+    return;
+  }
+  if(!USE_BACKEND){
+    if(err) err.textContent = t('err_prefix') + 'Backend not configured.';
+    return;
+  }
+  try {
+    const { token, user } = await api('/api/google-login', {
+      method: 'POST',
+      body: { credential: resp.credential },
+    });
+    localStorage.setItem(AUTH_TOKEN_KEY, token);
+    saveUsers(Object.assign(getUsers(), {[user.email]: user}));
+    setSession({email:user.email, loggedAt:Date.now()});
+    refreshAuthUI();
+    closeModal('authModal');
+    showToast(t('toast_welcome_back', {name:user.name}) || ('Welcome, ' + user.name));
+    refreshServerDownloadStatus();
+  } catch(ex) {
+    if(err) err.textContent = (ex && ex.message) ? ex.message : (t('err_prefix') + 'Google sign-in failed.');
+  }
+}
+window.handleGoogleCredential = handleGoogleCredential;
+window.promptGoogleOneTap = promptGoogleOneTap;
 
 async function doSignup(e){
   if(e) e.preventDefault();
@@ -4756,6 +4867,7 @@ async function completePayment(){
         currency: order.currency,
         name:'Studio Print',
         description:`${p.name} Plan`,
+        image: new URL('assets/logo.png', window.location.origin + window.location.pathname).href,
         order_id: order.orderId,
         prefill:{name:user.name, email:user.email},
         theme:{color:'#f0a500'},
@@ -4823,6 +4935,27 @@ document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeAllModals();
 refreshAuthUI();
 // If backend mode, refresh user from server (in case plan changed or token expired)
 restoreSession();
+
+// Hide the Google Sign-In block entirely if it isn't configured — we don't
+// want to render an empty box in the auth modal. When enabled, show a
+// lightweight One Tap prompt on page load for logged-out users so the
+// account chooser appears without even opening the modal.
+(function setupGoogleSignInUi(){
+  if(!GOOGLE_ENABLED || !USE_BACKEND){
+    const wrap = document.getElementById('googleSignInWrap');
+    if(wrap) wrap.style.display = 'none';
+    return;
+  }
+  const tryPrompt = (tries) => {
+    if(localStorage.getItem(AUTH_TOKEN_KEY)) return; // already signed in
+    if(initGoogleSignIn()){
+      promptGoogleOneTap();
+    } else if(tries > 0){
+      setTimeout(() => tryPrompt(tries-1), 250);
+    }
+  };
+  tryPrompt(20); // ~5s max
+})();
 </script>
 
 <!-- ══════════ AUTH MODAL ══════════ -->
@@ -4833,6 +4966,15 @@ restoreSession();
       <button class="modal-close" onclick="closeModal('authModal')">✕</button>
     </div>
     <div class="modal-body">
+      <!-- Google Sign-In: one-click account chooser that auto-fills name + email. -->
+      <div id="googleSignInWrap" style="display:flex;flex-direction:column;align-items:center;gap:8px;margin-bottom:12px;">
+        <div id="googleSignInBtn" style="min-height:44px;"></div>
+        <div class="google-divider" style="display:flex;align-items:center;gap:8px;width:100%;color:var(--muted);font-size:11px;margin:4px 0;">
+          <span style="flex:1;height:1px;background:var(--border);"></span>
+          <span data-i18n="auth_or">or continue with email</span>
+          <span style="flex:1;height:1px;background:var(--border);"></span>
+        </div>
+      </div>
       <div class="auth-tabs">
         <button class="auth-tab active" data-tab="login" onclick="setAuthTab('login')" data-i18n="auth_login">Login</button>
         <button class="auth-tab" data-tab="signup" onclick="setAuthTab('signup')" data-i18n="auth_signup">Sign Up</button>
