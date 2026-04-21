@@ -3798,11 +3798,37 @@ async function deleteAccount(){
     danger: true,
   });
   if(!ok) return;
-  // Backend mode: try to delete on server (best-effort; ignore network errors)
+
+  // Backend mode: the server MUST confirm the delete before we clear the
+  // local session. Silently swallowing errors here previously caused a bug
+  // where the user thought their account was gone but the server still had
+  // it — so re-signup failed with "This Gmail is already registered".
   if(USE_BACKEND){
-    try{ await api('/api/delete-account', {method:'POST'}); }catch(e){ /* continue anyway */ }
+    try{
+      await api('/api/delete-account', {method:'POST'});
+    }catch(e){
+      const msg = (e && e.message) || '';
+      const status = e && e.status;
+      // 401 "User not found" / "Invalid or expired token" means the server
+      // has no record of this user (e.g. token expired, or the backend DB
+      // was reset). Nothing to delete server-side — safe to clear locally.
+      const alreadyGone =
+        status === 401 ||
+        status === 404 ||
+        /user not found/i.test(msg) ||
+        /invalid or expired token/i.test(msg);
+      if(!alreadyGone){
+        // Real failure — keep the session so the user can retry. Do NOT
+        // log them out, otherwise the server-side account becomes a ghost
+        // they can never log back into or re-register with.
+        showToast('Could not delete account: ' + (msg || 'server error') + '. Please try again.');
+        return;
+      }
+    }
   }
-  // Local cleanup in every case
+
+  // Backend delete succeeded (or there was nothing to delete). Clean up local
+  // state and log the user out.
   try{
     const users = getUsers();
     delete users[user.email];
