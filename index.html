@@ -2415,8 +2415,10 @@ async function startBgRemoval() {
 
   // Daily-limit gate: free users who've already used all their sheets today
   // can't download a new sheet anyway, so steer them to the upgrade modal
-  // instead of running the BG removal for nothing.
-  if(isFreeUser() && remainingFreeSheets() <= 0){
+  // instead of running the BG removal for nothing. Only applies to logged-in
+  // free users — anonymous users are blocked earlier by the plan gate above
+  // (aiBgAllowed === false for the free plan).
+  if(isLoggedInForDownload() && isFreeUser() && remainingFreeSheets() <= 0){
     showUpgradePrompt(dailyLimitMessage());
     return;
   }
@@ -4149,29 +4151,27 @@ function dailyLimitMessage(){
   const limit=pl.dailySheets||2;
   return `Daily free limit (${limit} sheet${limit===1?'':'s'}) reached. Upgrade for unlimited sheets.`;
 }
-// Returns true if a logged-in backend session should be used as the
-// source of truth for the daily counter.
-function useServerCounter(){
+// Returns true if there's a live backend session (i.e. the user is
+// signed in). Download/print is gated on this so every sheet is counted
+// against a real account and can't be reset by clearing browser data.
+function isLoggedInForDownload(){
   try{
     return !!(USE_BACKEND && localStorage.getItem(AUTH_TOKEN_KEY));
   }catch(e){ return false; }
 }
-// Local-only version of the gate. Used as a fallback when the backend
-// is unreachable or the user is anonymous.
-function consumeFreeSheetOrBlockLocal(){
-  if(!isFreeUser()) return true;
-  if(remainingFreeSheets() <= 0){
-    showUpgradePrompt(dailyLimitMessage());
-    return false;
-  }
-  incTodaySheets();
-  return true;
+// Prompt anonymous users to sign up / log in, then abort the action.
+function promptLoginForDownload(){
+  showToast('Please sign up or log in to download sheets.');
+  setTimeout(()=>{ try{ closeAllModals(); openAuth('login'); }catch(e){} }, 400);
+  return false;
 }
-// Server-first version: hits /api/track-download when logged in so the
-// daily count cannot be reset by clearing the browser. Falls back to the
-// local counter when the backend is unreachable so offline use still works.
+// Source of truth is the server: every download/print hits /api/track-download
+// while authenticated so the free-tier daily quota is tied to the account,
+// not to browser storage. Anonymous users are redirected to sign up.
 async function consumeFreeSheetOrBlock(){
-  if(!useServerCounter()) return consumeFreeSheetOrBlockLocal();
+  if(!isLoggedInForDownload()){
+    return promptLoginForDownload();
+  }
   try{
     const data = await api('/api/track-download', {method:'POST'});
     if(data && typeof data.used === 'number'){
@@ -4189,16 +4189,24 @@ async function consumeFreeSheetOrBlock(){
       return false;
     }
     if(e && e.status === 401){
-      // Auth expired — behave like an anonymous user and fall back locally.
-      return consumeFreeSheetOrBlockLocal();
+      // Auth expired — clear the stale token and force re-login instead
+      // of silently falling back to a bypassable local counter.
+      try{
+        localStorage.removeItem(AUTH_TOKEN_KEY);
+        setSession(null);
+        if(typeof refreshAuthUI === 'function') refreshAuthUI();
+      }catch(_){}
+      return promptLoginForDownload();
     }
-    // Network / server error → don't punish the user, fall back to local.
-    console.warn('track-download failed, falling back to local counter:', e);
-    return consumeFreeSheetOrBlockLocal();
+    // Transient network / 5xx error for an authenticated user: allow the
+    // download through so a momentary outage doesn't block paying users.
+    // The server enforces the quota on the next successful call.
+    console.warn('track-download request failed:', e);
+    return true;
   }
 }
 async function refreshServerDownloadStatus(){
-  if(!useServerCounter()) return;
+  if(!isLoggedInForDownload()) return;
   try{
     const data = await api('/api/download-status');
     if(data && typeof data.used === 'number'){
@@ -4328,7 +4336,7 @@ function refreshPlanUI(){
   //  - Otherwise active — free users get the same treatment as paid users.
   const aiBtn = document.getElementById('removeBgBtn');
   if(aiBtn){
-    const atDailyLimit = free && pl.dailySheets > 0 && remainingFreeSheets() <= 0;
+    const atDailyLimit = free && pl.dailySheets > 0 && isLoggedInForDownload() && remainingFreeSheets() <= 0;
     const locked = !pl.aiBgAllowed || atDailyLimit;
     if(locked){
       aiBtn.classList.add('pro-locked');
@@ -4365,6 +4373,14 @@ function refreshPlanBanner(){
   if(!isFreeUser() || !pl.dailySheets){
     el.style.display = 'none';
     el.textContent = '';
+    return;
+  }
+  // Anonymous users must sign in before downloading/printing so their
+  // quota is tied to an account instead of clearable browser storage.
+  if(!isLoggedInForDownload()){
+    el.style.display = 'block';
+    el.className = 'plan-banner ok';
+    el.innerHTML = (`Free plan · <strong>${pl.dailySheets}</strong> sheet${pl.dailySheets===1?'':'s'}/day. <a href="#" onclick="openAuth('signup');return false;">Sign up to download →</a>`);
     return;
   }
   const used = getTodaySheets();
