@@ -310,7 +310,7 @@ canvas{display:block;}
   animation: rotateBorder .8s linear infinite;
 }
 
-/* Corner accent brackets */
+/* Corner accent brackets — outer canvas frame (desktop ≥901px) */
 .corner-bracket {
   position: absolute;
   width: 32px; height: 32px;
@@ -325,6 +325,23 @@ canvas{display:block;}
 .cb-tr { top:18px; right:18px; border-top:2px solid var(--accent); border-right:2px solid var(--accent); border-radius:0 4px 0 0; }
 .cb-bl { bottom:18px; left:18px; border-bottom:2px solid var(--accent); border-left:2px solid var(--accent); border-radius:0 0 0 4px; }
 .cb-br { bottom:18px; right:18px; border-bottom:2px solid var(--accent); border-right:2px solid var(--accent); border-radius:0 0 4px 0; }
+
+/* Inner brackets — hug the upload card itself (shown only on tablet/mobile ≤900px) */
+.corner-bracket-inner {
+  position: absolute;
+  width: 22px; height: 22px;
+  pointer-events: none;
+  z-index: 5;
+  opacity: 0.55;
+  transition: opacity .35s;
+  display: none;
+}
+.upload-zone:hover .corner-bracket-inner,
+.upload-zone.drag-over .corner-bracket-inner { opacity: 0.9; }
+.cbi-tl { top:10px; left:10px; border-top:2px solid var(--accent); border-left:2px solid var(--accent); border-radius:4px 0 0 0; }
+.cbi-tr { top:10px; right:10px; border-top:2px solid var(--accent); border-right:2px solid var(--accent); border-radius:0 4px 0 0; }
+.cbi-bl { bottom:10px; left:10px; border-bottom:2px solid var(--accent); border-left:2px solid var(--accent); border-radius:0 0 0 4px; }
+.cbi-br { bottom:10px; right:10px; border-bottom:2px solid var(--accent); border-right:2px solid var(--accent); border-radius:0 0 4px 0; }
 
 /* Drag-over full overlay pulse */
 .upload-zone.drag-over::before {
@@ -701,6 +718,12 @@ canvas{display:block;}
   .badges{display:none;}
   .sb-section{padding:12px;}
   .preset-btn{font-size:11px;padding:9px 5px;}
+
+  /* Swap the decorative corner frame from the outer canvas to the upload card
+     itself so the brackets always hug the "Drop your photo" box, not the page
+     corners. */
+  .corner-bracket{display:none;}
+  .corner-bracket-inner{display:block;}
 }
 
 /* ── SMALL TABLET (≤768px) ── */
@@ -1119,6 +1142,11 @@ header{flex-wrap:nowrap;}
 
         <!-- Inner floating card (only clickable area) -->
         <div class="upload-inner-card">
+          <!-- Inner corner brackets (shown on tablet/mobile to hug the card) -->
+          <div class="corner-bracket-inner cbi-tl"></div>
+          <div class="corner-bracket-inner cbi-tr"></div>
+          <div class="corner-bracket-inner cbi-bl"></div>
+          <div class="corner-bracket-inner cbi-br"></div>
           <input type="file" id="fileInput" accept="image/*">
           <!-- Animated camera icon -->
           <div class="upload-icon-wrap">
