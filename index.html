@@ -4,14 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
 <meta name="theme-color" content="#0d0d0d">
-<title>Studio Print — Print-Ready Photo & Document Tools for eMitra Shops</title>
-<meta name="description" content="Studio Print — browser-based print studio for Indian eMitra shops and home users. Passport photos, Aadhaar &amp; PAN sheets, certificate edits — 300 DPI print-ready, on-device, free to try.">
+<title>Studio Print — Browser-Based Passport Photo & Print Studio</title>
+<meta name="description" content="Studio Print — a browser-based print studio for small shops, studios, students and home users. Passport photos, Aadhaar &amp; PAN sheets, certificate edits — 300 DPI print-ready, on-device, free to try.">
 <meta property="og:title" content="Studio Print — Print-Ready Photo & Document Tools">
 <meta property="og:description" content="Skip Photoshop. Passport photos, Aadhaar/PAN sheets, certificate edits and A4 print layouts — all in your browser, nothing uploaded.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://studioprint.pages.dev/">
 <meta property="og:image" content="https://studioprint.pages.dev/assets/apple-touch-icon.png">
-<meta property="og:image:alt" content="Studio Print — Print-Ready Photo & Document Tools for eMitra Shops">
+<meta property="og:image:alt" content="Studio Print — Print-Ready Photo & Document Tools">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Studio Print — Print-Ready Photo & Document Tools">
 <meta name="twitter:description" content="Passport photos, Aadhaar/PAN sheets, certificate edits and A4 print layouts — all in your browser, nothing uploaded.">
@@ -28,6 +28,7 @@
 <link rel="dns-prefetch" href="https://passportprint-studio.onrender.com">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/legal.css">
+<link rel="stylesheet" href="assets/auth.css">
 <style>
 /* ───── Homepage-specific styles ───── */
 :root{
@@ -526,7 +527,7 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
     </div>
     <a href="#pricing">Pricing</a>
     <a href="#faq">FAQ</a>
-    <a href="passport-photo.html#login">Login</a>
+    <button type="button" class="nav-login" id="hdrAuthBtn" aria-label="Login / Signup">👤 <span>Login</span></button>
   </nav>
 </header>
 
@@ -535,9 +536,9 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
   <!-- HERO -->
   <section class="hero">
     <div class="hero-inner">
-      <span class="hero-eyebrow"><span class="dot"></span>Built in India · eMitra shops &amp; home users</span>
-      <h1>Every print job your shop runs. <em>In the browser.</em></h1>
-      <p class="lead">Passport photos, Aadhaar &amp; PAN sheets, certificate edits and A4 layouts — all print-ready, all on-device. Made for eMitra counters, home users and students who just need a clean ₹10 print without opening Photoshop.</p>
+      <span class="hero-eyebrow"><span class="dot"></span>Built in India · Print shops, studios &amp; home users</span>
+      <h1>Every print job your counter runs. <em>In the browser.</em></h1>
+      <p class="lead">Passport photos, Aadhaar &amp; PAN sheets, certificate edits and A4 layouts — all print-ready, all on-device. Made for print shops, studios, students and anyone who just needs a clean ₹10 print without opening Photoshop.</p>
       <div class="hero-actions">
         <a class="btn btn-primary" href="passport-photo.html">Open Passport Photo <span class="arrow" aria-hidden="true">→</span></a>
         <a class="btn btn-ghost" href="#features">See all tools</a>
@@ -585,7 +586,7 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
     <div class="wrap">
       <div class="section-head">
         <span class="section-tag">Features</span>
-        <h2>One studio. Every print job an eMitra shop runs.</h2>
+        <h2>One studio. Every print job your counter runs.</h2>
         <p>Pick a tool. Each one runs entirely in your browser — no signup wall, no uploads, no Photoshop. More tools are landing every month.</p>
       </div>
 
@@ -640,8 +641,8 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
       <div class="audience-grid">
         <div class="audience-card">
           <div class="aicon" aria-hidden="true">🪪</div>
-          <h3>eMitra shops &amp; photo studios</h3>
-          <span class="hindi">ईमित्र दुकानों और फ़ोटो स्टूडियो के लिए</span>
+          <h3>Print shops &amp; photo studios</h3>
+          <span class="hindi">छोटी दुकानों और फ़ोटो स्टूडियो के लिए</span>
           <ul>
             <li>Skip Photoshop — passport, Aadhaar, PAN, visa sheets in minutes</li>
             <li>Unlimited HD exports and all country presets at <strong>₹149/month</strong></li>
@@ -776,7 +777,7 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
             <li>Everything in Weekly</li>
             <li>Bulk batch processing</li>
             <li>Priority email support</li>
-            <li>Best for eMitra shops &amp; photo studios</li>
+            <li>Best for print shops, studios &amp; busy counters</li>
           </ul>
           <a class="pcta" href="passport-photo.html#login">Get monthly pass</a>
         </div>
@@ -792,7 +793,7 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
       <div class="section-head">
         <span class="section-tag">FAQ</span>
         <h2>Questions, answered.</h2>
-        <p>Most common questions we get from eMitra operators and home users. More in our <a href="contact.html" style="color:var(--accent);">contact page</a>.</p>
+        <p>Most common questions we get from shop operators, studios and home users. More in our <a href="contact.html" style="color:var(--accent);">contact page</a>.</p>
       </div>
 
       <div class="faq-list">
@@ -848,10 +849,10 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
         </details>
 
         <details class="faq-item">
-          <summary>I am an eMitra operator — can I use this at my counter?</summary>
+          <summary>I run a small print shop or studio — can I use this at my counter?</summary>
           <div class="faq-body">
             <p>Yes, that is exactly who Studio Print was built for. The Monthly ₹149 plan is designed for counters that process many sheets a day. No install, no Photoshop licence — just open the browser on your shop PC or tablet.</p>
-            <span class="hindi">हाँ, ईमित्र दुकान के लिए ₹149/महीना का प्लान सबसे सही है।</span>
+            <span class="hindi">हाँ, दुकान काउंटर के लिए ₹149/महीना का प्लान सबसे सही है।</span>
           </div>
         </details>
       </div>
@@ -885,6 +886,7 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
 </footer>
 
 <script src="assets/nav.js" defer></script>
+<script src="assets/auth.js" defer></script>
 <script>
 // Warm up the Render-hosted backend so the first real call on /passport-photo
 // doesn't pay the full free-tier cold-start latency (up to ~30–50s after
