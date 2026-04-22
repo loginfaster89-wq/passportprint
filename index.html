@@ -9,11 +9,23 @@
 <meta property="og:title" content="Studio Print — Print-Ready Photo & Document Tools">
 <meta property="og:description" content="Skip Photoshop. Passport photos, Aadhaar/PAN sheets, certificate edits and A4 print layouts — all in your browser, nothing uploaded.">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://studioprint.netlify.app/">
-<link rel="canonical" href="https://studioprint.netlify.app/">
+<meta property="og:url" content="https://studioprint.pages.dev/">
+<meta property="og:image" content="https://studioprint.pages.dev/assets/apple-touch-icon.png">
+<meta property="og:image:alt" content="Studio Print — Print-Ready Photo & Document Tools for eMitra Shops">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Studio Print — Print-Ready Photo & Document Tools">
+<meta name="twitter:description" content="Passport photos, Aadhaar/PAN sheets, certificate edits and A4 print layouts — all in your browser, nothing uploaded.">
+<meta name="twitter:image" content="https://studioprint.pages.dev/assets/apple-touch-icon.png">
+<link rel="canonical" href="https://studioprint.pages.dev/">
 <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
 <link rel="alternate icon" type="image/png" href="assets/favicon-32.png">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<!-- Faster first paint: preconnect to font CDN + warm-up backend so the first API call
+     on /passport-photo doesn't pay the full Render cold-start latency. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://passportprint-studio.onrender.com">
+<link rel="dns-prefetch" href="https://passportprint-studio.onrender.com">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/legal.css">
 <style>
@@ -566,5 +578,25 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
 </footer>
 
 <script src="assets/nav.js" defer></script>
+<script>
+// Warm up the Render-hosted backend so the first real call on /passport-photo
+// doesn't pay the full free-tier cold-start latency (up to ~30–50s after
+// idle). Fire-and-forget on the homepage — errors are ignored.
+(function () {
+  try {
+    var url = 'https://passportprint-studio.onrender.com/health';
+    var run = function () {
+      try {
+        fetch(url, { method: 'GET', mode: 'cors', cache: 'no-store', credentials: 'omit', keepalive: true }).catch(function(){});
+      } catch (_) {}
+    };
+    if ('requestIdleCallback' in window) {
+      window.requestIdleCallback(run, { timeout: 2000 });
+    } else {
+      setTimeout(run, 800);
+    }
+  } catch (_) {}
+})();
+</script>
 </body>
 </html>

@@ -1,0 +1,7 @@
+# Studio Print — https://studioprint.pages.dev/
+User-agent: *
+Allow: /
+Disallow: /_headers
+Disallow: /_redirects
+
+Sitemap: https://studioprint.pages.dev/sitemap.xml

@@ -31,7 +31,8 @@ const ASSET_DIRS = ['assets'];
 // Deploy-host config files that must land at the root of dist/ verbatim.
 // `_headers` / `_redirects` are the Netlify-style conventions that Cloudflare
 // Pages also honours, so the same files work for either host.
-const ROOT_FILES = ['_headers', '_redirects'];
+// `robots.txt` / `sitemap.xml` are copied so search engines can index the site.
+const ROOT_FILES = ['_headers', '_redirects', 'robots.txt', 'sitemap.xml'];
 
 // Obfuscator options — conservative settings that preserve globals referenced
 // by inline onclick="foo()" handlers. Renaming globals would break the app.
