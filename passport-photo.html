@@ -1398,6 +1398,21 @@ header{flex-wrap:nowrap;}
 .dropdown-panel .dd-tag.live{color:#4ade80;border-color:rgba(74,222,128,0.35);background:rgba(74,222,128,0.08);}
 .dropdown-panel .dd-tag.soon{color:var(--muted);border-color:var(--border);background:var(--bg);}
 
+/* Unify passport-photo header with index.html / legal pages:
+   override the compact 52px-fixed `header{...}` rules (and their
+   responsive variants) so padding, height and logo match the
+   homepage's `.legal-header`. `header.legal-header` (0,1,1)
+   beats bare `header` (0,0,1) at every breakpoint, so a single
+   non-@media block is sufficient for all viewports ≥761px.
+   Mobile (<760px) keeps the hamburger rules defined below.     */
+header.legal-header{
+  padding:14px 22px;
+  height:auto;
+  gap:14px;
+  flex-wrap:wrap;
+}
+.legal-header .logo{font-size:20px;}
+
 /* Mobile / narrow widths: collapse nav into hamburger */
 @media (max-width:760px){
   header.legal-header{flex-wrap:wrap;height:auto;min-height:52px;padding:8px 12px;}
