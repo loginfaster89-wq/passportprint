@@ -34,7 +34,7 @@ once via the Cloudflare dashboard.
 
 6. Click **Save and Deploy**. The first build takes ~1–2 minutes.
 
-7. Your site will be live at `https://passportprint.pages.dev` (or a similar
+7. Your site will be live at `https://studioprint.pages.dev` (or a similar
    `<project>.pages.dev` URL shown in the dashboard). Every push to `main`
    triggers an auto-deploy; pull requests get preview deploys on unique URLs.
 
@@ -56,7 +56,7 @@ add it to the Render service's `CORS_ORIGINS` environment variable so the
 `passport-photo.html` page can call the API:
 
 ```
-CORS_ORIGINS=https://passportprint.pages.dev,https://studioprint.netlify.app
+CORS_ORIGINS=https://studioprint.pages.dev,https://studioprint.netlify.app
 ```
 
 (Replace the first value with whatever Cloudflare assigns you, plus any custom
@@ -70,7 +70,7 @@ If Google Sign-In is configured, add the new origin to the OAuth client:
 2. Open the OAuth 2.0 Client ID used by the site
    (`216240284102-d63glsohcp2lr85kk1el364f7gecnv9q...`).
 3. Under **Authorized JavaScript origins**, add your Cloudflare URL
-   (e.g. `https://passportprint.pages.dev`) and any custom domain.
+   (e.g. `https://studioprint.pages.dev`) and any custom domain.
 4. Save. Changes take effect within a few minutes.
 
 ## After the Cloudflare URL is assigned
