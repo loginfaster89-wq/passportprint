@@ -4,13 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>About — Studio Print</title>
-<meta name="description" content="About Studio Print — a browser-based multi-tool studio for eMitra shops and Indian home users. Passport photos, Aadhaar/PAN sheets, certificate edits and more.">
+<meta name="description" content="About Studio Print — a browser-based multi-tool studio for print shops, students and Indian home users. Passport photos, Aadhaar/PAN sheets, certificate edits and more.">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
 <link rel="alternate icon" type="image/png" href="assets/favicon-32.png">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <meta property="og:title" content="About — Studio Print">
-<meta property="og:description" content="About Studio Print — a browser-based multi-tool studio for eMitra shops and Indian home users.">
+<meta property="og:description" content="About Studio Print — a browser-based multi-tool studio for print shops, students and Indian home users.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://studioprint.pages.dev/about.html">
 <meta property="og:image" content="https://studioprint.pages.dev/assets/apple-touch-icon.png">
@@ -19,6 +19,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="assets/legal.css">
+<link rel="stylesheet" href="assets/auth.css">
 </head>
 <body>
 
@@ -57,20 +58,20 @@
         </span>
       </div>
     </div>
-    <a href="passport-photo.html#login">Login</a>
+    <button type="button" class="nav-login" id="hdrAuthBtn" title="Login / Signup"><span class="hdr-lbl">Login</span></button>
   </nav>
 </header>
 
 <main class="legal-main">
   <h1>About Studio Print</h1>
-  <p class="meta">A fast, private, browser-based print studio — built for Indian eMitra shops and home users.</p>
+  <p class="meta">A fast, private, browser-based print studio — built for Indian print shops, students and home users.</p>
 
-  <p>Studio Print is a browser-based multi-tool studio for the prints a small eMitra shop actually runs — passport photos, Aadhaar and PAN card sheets, certificate edits, A4 layouts and more. Upload a photo or document, let our on-device AI clean it up, and download a 300-DPI A4 sheet with cutting guides. Take it to any ₹10 print counter and you’re done.</p>
+  <p>Studio Print is a browser-based multi-tool studio for the prints a small shop or home user actually runs — passport photos, Aadhaar and PAN card sheets, certificate edits, A4 layouts and more. Upload a photo or document, let our on-device AI clean it up, and download a 300-DPI A4 sheet with cutting guides. Take it to any ₹10 print counter and you’re done.</p>
 
   <p>The first tool we shipped is <strong>Passport Photo</strong> — turn a selfie into a government-compliant passport photo with country presets for India, US, UK, UAE, Schengen and more. Document Sheet, Certificate Editor, ID &amp; Visa Sheets and Background Studio are rolling out next.</p>
 
   <h2>Why we built it</h2>
-  <p>The idea came from watching an eMitra operator spend fifteen minutes in Photoshop for a single ₹10 passport print. Most passport-photo websites either charge too much, require installing a desktop app, or upload your photo to a remote server. We wanted something different:</p>
+  <p>The idea came from watching a shop operator spend fifteen minutes in Photoshop for a single ₹10 passport print. Most passport-photo websites either charge too much, require installing a desktop app, or upload your photo to a remote server. We wanted something different:</p>
   <ul>
     <li><strong>Completely private.</strong> Your photo never leaves your browser. All AI and cropping happens on-device.</li>
     <li><strong>Print-shop ready.</strong> 300 DPI A4 output with thin cutting lines, so any local printer can cut it cleanly.</li>
@@ -104,5 +105,6 @@
 </footer>
 
 <script src="assets/nav.js" defer></script>
+<script src="assets/auth.js" defer></script>
 </body>
 </html>
