@@ -19,6 +19,16 @@
   var AUTH_STORE_KEY = 'pps_users_v1';
   var AUTH_SESSION_KEY = 'pps_session_v1';
 
+  // Google Sign-In (One Tap + button). Mirrors the wiring in
+  // passport-photo.html so the same OAuth Web Client ID and backend
+  // endpoint (/api/google-login) work for the shared modal too.
+  // Override at runtime with window.GOOGLE_OAUTH_CLIENT_ID if needed.
+  var GOOGLE_CLIENT_ID = (typeof window !== 'undefined' && window.GOOGLE_OAUTH_CLIENT_ID)
+    || '216240284102-d63glsohcp2lr85kk1el364f7gecnv9q.apps.googleusercontent.com';
+  var GOOGLE_ENABLED = !!GOOGLE_CLIENT_ID
+    && /\.apps\.googleusercontent\.com$/.test(GOOGLE_CLIENT_ID)
+    && !/^(YOUR_|__REPLACE_)/.test(GOOGLE_CLIENT_ID);
+
   // ── localStorage helpers ──
   function getUsers() {
     try { return JSON.parse(localStorage.getItem(AUTH_STORE_KEY) || '{}'); }
@@ -90,6 +100,10 @@
       '      <button type="button" class="sp-auth-close" aria-label="Close">✕</button>',
       '    </div>',
       '    <div class="sp-auth-body">',
+      '      <div class="sp-google-wrap" id="spGoogleWrap">',
+      '        <div class="sp-google-btn" id="spGoogleBtn"></div>',
+      '        <div class="sp-auth-divider"><span>or</span></div>',
+      '      </div>',
       '      <div class="sp-auth-tabs" role="tablist">',
       '        <button type="button" class="sp-auth-tab active" data-tab="login" role="tab">Login</button>',
       '        <button type="button" class="sp-auth-tab" data-tab="signup" role="tab">Sign Up</button>',
@@ -147,6 +161,13 @@
     document.getElementById('spOtpForm').addEventListener('submit', doVerifyOtp);
     document.getElementById('spOtpResend').addEventListener('click', resendOtp);
     document.getElementById('spOtpBack').addEventListener('click', function () { setAuthTab('signup'); });
+
+    // Hide Google section entirely if not configured so the modal
+    // collapses gracefully (no empty space, no broken widget).
+    if (!GOOGLE_ENABLED) {
+      var gw = document.getElementById('spGoogleWrap');
+      if (gw) gw.style.display = 'none';
+    }
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && overlay.classList.contains('active')) closeAuth();
     });
@@ -162,6 +183,10 @@
     document.getElementById('spSignupForm').style.display = tab === 'signup' ? 'block' : 'none';
     document.getElementById('spOtpForm').style.display = tab === 'otp' ? 'block' : 'none';
     overlay.querySelector('.sp-auth-tabs').style.display = tab === 'otp' ? 'none' : '';
+    // Google Sign-In is a shortcut for login + signup; hide it on the
+    // OTP step (user has already started the email flow at that point).
+    var gw = document.getElementById('spGoogleWrap');
+    if (gw && GOOGLE_ENABLED) gw.style.display = tab === 'otp' ? 'none' : '';
     setError('');
   }
 
@@ -177,6 +202,11 @@
     setError('');
     var overlay = document.getElementById(MODAL_ID);
     overlay.classList.add('active');
+    // Render the Google button lazily after the modal is visible (GIS
+    // measures the host element, so it must be in the DOM + laid out).
+    if (GOOGLE_ENABLED && tab !== 'otp') {
+      setTimeout(renderGoogleButton, 0);
+    }
     setTimeout(function () {
       var focusId = tab === 'signup' ? 'spSuName' : tab === 'otp' ? 'spOtpCode' : 'spLiEmail';
       var el = document.getElementById(focusId); if (el) el.focus();
@@ -305,6 +335,83 @@
       startOtpCountdown((res && res.expiresInSec) || 600);
     } catch (ex) {
       setError((ex && ex.message) || 'Could not resend OTP.');
+    }
+  }
+
+  // ── Google Sign-In (One Tap + button) ──
+  // Uses Google Identity Services (the <script src="https://accounts.google.com/gsi/client">
+  // must be loaded in the page <head>). Mirrors the flow used in
+  // passport-photo.html so the backend endpoint /api/google-login handles
+  // both paths identically.
+  var _googleInitDone = false;
+  var _googleBtnRendered = false;
+  function initGoogleSignIn() {
+    if (_googleInitDone) return true;
+    if (!GOOGLE_ENABLED) return false;
+    if (typeof google === 'undefined' || !google.accounts || !google.accounts.id) return false;
+    try {
+      google.accounts.id.initialize({
+        client_id: GOOGLE_CLIENT_ID,
+        callback: handleGoogleCredential,
+        auto_select: false,
+        cancel_on_tap_outside: false,
+        ux_mode: 'popup',
+        context: 'signin',
+        itp_support: true,
+      });
+      _googleInitDone = true;
+      return true;
+    } catch (e) {
+      console.warn('Google Sign-In init failed:', e);
+      return false;
+    }
+  }
+  function renderGoogleButton() {
+    // GIS may not be ready yet (async script) — retry a few times.
+    if (!GOOGLE_ENABLED) return;
+    if (_googleBtnRendered) return;
+    if (!initGoogleSignIn()) {
+      if (!renderGoogleButton._tries) renderGoogleButton._tries = 0;
+      if (renderGoogleButton._tries++ < 20) {
+        setTimeout(renderGoogleButton, 150);
+      }
+      return;
+    }
+    var host = document.getElementById('spGoogleBtn');
+    if (!host) return;
+    try {
+      google.accounts.id.renderButton(host, {
+        type: 'standard',
+        theme: 'filled_black',
+        size: 'large',
+        text: 'continue_with',
+        shape: 'rectangular',
+        logo_alignment: 'left',
+        width: 320,
+      });
+      _googleBtnRendered = true;
+    } catch (e) {
+      console.warn('Google button render failed:', e);
+    }
+  }
+  async function handleGoogleCredential(resp) {
+    setError('');
+    if (!resp || !resp.credential) {
+      setError('No credential returned from Google.');
+      return;
+    }
+    try {
+      var res = await api('/api/google-login', {
+        method: 'POST',
+        body: { credential: resp.credential },
+      });
+      var users = getUsers(); users[res.user.email] = res.user; saveUsers(users);
+      localStorage.setItem(AUTH_TOKEN_KEY, res.token);
+      setSession({ email: res.user.email, loggedAt: Date.now() });
+      refreshAuthUI();
+      closeAuth();
+    } catch (ex) {
+      setError((ex && ex.message) || 'Google sign-in failed.');
     }
   }
 

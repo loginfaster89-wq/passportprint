@@ -95,6 +95,31 @@
 
 .sp-auth-body { padding: 20px; }
 
+/* ── Google Sign-In ── */
+.sp-google-wrap {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.sp-google-btn {
+  min-height: 44px;
+  width: 100%;
+  display: flex; justify-content: center;
+}
+/* Google's rendered iframe sits inside .sp-google-btn; GIS handles its own
+   styling, we just make sure the container is sized right and centered. */
+.sp-auth-divider {
+  display: flex; align-items: center; gap: 8px;
+  width: 100%;
+  color: var(--muted);
+  font-size: 11px;
+  text-transform: uppercase; letter-spacing: 1px;
+}
+.sp-auth-divider::before,
+.sp-auth-divider::after {
+  content: ""; flex: 1; height: 1px; background: var(--border);
+}
+
 /* ── Tabs ── */
 .sp-auth-tabs {
   display: flex; gap: 4px;
