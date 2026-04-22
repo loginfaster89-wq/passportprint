@@ -415,6 +415,48 @@
     }
   }
 
+  // ── Plan helpers (mirror passport-photo.html) ──
+  // Keep plan metadata in sync with passport-photo.html's PLANS object so
+  // the Account modal shows the same plan names everywhere.
+  var PLAN_META = {
+    free:    { name: 'Free' },
+    weekly:  { name: 'Weekly' },
+    monthly: { name: 'Monthly' }
+  };
+  function isActivePlan(user) {
+    if (!user || !user.plan || user.plan === 'free') return false;
+    return user.planExpiresAt && Date.now() < user.planExpiresAt;
+  }
+  function effectivePlan(user) {
+    if (!user) return 'free';
+    if (user.plan === 'free') return 'free';
+    if (!isActivePlan(user)) return 'free';
+    return user.plan;
+  }
+
+  // Refresh cached user from backend so plan / planExpiresAt stay fresh on
+  // legal pages (homepage, about, etc.). Noop if no token.
+  async function refreshUserFromServer() {
+    if (!localStorage.getItem(AUTH_TOKEN_KEY)) return null;
+    try {
+      var res = await api('/api/me');
+      if (res && res.user) {
+        var users = getUsers();
+        users[res.user.email] = res.user;
+        saveUsers(users);
+        setSession({ email: res.user.email, loggedAt: Date.now() });
+      }
+      return res && res.user;
+    } catch (e) {
+      if (e && e.status === 401) {
+        localStorage.removeItem(AUTH_TOKEN_KEY);
+        setSession(null);
+        refreshAuthUI();
+      }
+      return null;
+    }
+  }
+
   // ── Account modal (for logged-in header button) ──
   var ACCOUNT_MODAL_ID = 'spAccountModal';
   function ensureAccountModal() {
@@ -428,11 +470,25 @@
       '      <button type="button" class="sp-auth-close" aria-label="Close">✕</button>',
       '    </div>',
       '    <div class="sp-auth-body">',
-      '      <div class="sp-account-info">',
-      '        <div class="sp-account-row"><span>Name</span><strong id="spAccName">—</strong></div>',
-      '        <div class="sp-account-row"><span>Email</span><strong id="spAccEmail">—</strong></div>',
+      '      <div class="sp-account-pane" id="spAccPane">',
+      '        <div class="sp-account-info">',
+      '          <div class="sp-account-row"><span>Name</span><strong id="spAccName">—</strong></div>',
+      '          <div class="sp-account-row"><span>Email</span><strong id="spAccEmail">—</strong></div>',
+      '          <div class="sp-account-row"><span>Current Plan</span><strong id="spAccPlan" class="sp-plan-name">Free</strong></div>',
+      '          <div class="sp-account-row"><span>Expires</span><strong id="spAccExpiry">—</strong></div>',
+      '        </div>',
+      '        <button type="button" class="sp-btn sp-btn-primary" id="spAccUpgrade">💎 Upgrade / Change Plan</button>',
+      '        <button type="button" class="sp-btn sp-btn-ghost" id="spAccLogout">Logout</button>',
+      '        <div class="sp-account-sep"></div>',
+      '        <button type="button" class="sp-btn sp-btn-danger" id="spAccDelete">🗑 Delete Account Permanently</button>',
       '      </div>',
-      '      <button type="button" class="sp-btn sp-btn-ghost" id="spAccLogout">Logout</button>',
+      '      <div class="sp-account-pane sp-account-confirm" id="spAccConfirm" hidden>',
+      '        <div class="sp-confirm-title">Delete account?</div>',
+      '        <div class="sp-confirm-body">This permanently deletes your account, active plan and all server-side data. This cannot be undone.</div>',
+      '        <div class="sp-auth-error" id="spAccConfirmError"></div>',
+      '        <button type="button" class="sp-btn sp-btn-danger" id="spAccConfirmYes">Yes, delete my account</button>',
+      '        <button type="button" class="sp-btn sp-btn-ghost" id="spAccConfirmNo">Cancel</button>',
+      '      </div>',
       '    </div>',
       '  </div>',
       '</div>'
@@ -447,19 +503,98 @@
       closeAccount();
       logout();
     });
+    document.getElementById('spAccUpgrade').addEventListener('click', function () {
+      // Plans modal lives inside passport-photo.html. Navigate there with a
+      // hash so passport-photo auto-opens it on load.
+      var onPassport = /\/passport-photo(\.html)?(\/|$|[?#])/.test(location.pathname);
+      if (onPassport && typeof window.openPlans === 'function') {
+        closeAccount();
+        window.openPlans();
+      } else {
+        location.href = 'passport-photo.html#plans';
+      }
+    });
+    document.getElementById('spAccDelete').addEventListener('click', function () {
+      showAccountPane('confirm');
+    });
+    document.getElementById('spAccConfirmNo').addEventListener('click', function () {
+      showAccountPane('info');
+    });
+    document.getElementById('spAccConfirmYes').addEventListener('click', doDeleteAccount);
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && overlay.classList.contains('active')) closeAccount();
     });
+  }
+
+  function showAccountPane(which) {
+    var info = document.getElementById('spAccPane');
+    var confirm = document.getElementById('spAccConfirm');
+    if (!info || !confirm) return;
+    var err = document.getElementById('spAccConfirmError');
+    if (err) err.textContent = '';
+    if (which === 'confirm') { info.hidden = true; confirm.hidden = false; }
+    else { info.hidden = false; confirm.hidden = true; }
+  }
+
+  async function doDeleteAccount() {
+    var yes = document.getElementById('spAccConfirmYes');
+    var err = document.getElementById('spAccConfirmError');
+    var user = currentUser();
+    if (!user) { closeAccount(); return; }
+    if (yes) { yes.disabled = true; yes.textContent = 'Deleting…'; }
+    if (err) err.textContent = '';
+    try {
+      await api('/api/delete-account', { method: 'POST' });
+    } catch (e) {
+      var status = e && e.status;
+      var msg = (e && e.message) || '';
+      var alreadyGone = status === 401 || status === 404 ||
+        /user not found/i.test(msg) || /invalid or expired token/i.test(msg);
+      if (!alreadyGone) {
+        if (err) err.textContent = 'Could not delete account: ' + (msg || 'server error') + '. Please try again.';
+        if (yes) { yes.disabled = false; yes.textContent = 'Yes, delete my account'; }
+        return;
+      }
+    }
+    try {
+      var users = getUsers();
+      delete users[user.email];
+      saveUsers(users);
+    } catch (e) {}
+    localStorage.removeItem(AUTH_TOKEN_KEY);
+    setSession(null);
+    refreshAuthUI();
+    closeAccount();
+    if (yes) { yes.disabled = false; yes.textContent = 'Yes, delete my account'; }
+  }
+
+  function populateAccountModal(user) {
+    var name = user.name || (user.email ? user.email.split('@')[0] : 'Account');
+    document.getElementById('spAccName').textContent = name;
+    document.getElementById('spAccEmail').textContent = user.email || '—';
+    var plan = effectivePlan(user);
+    var meta = PLAN_META[plan] || PLAN_META.free;
+    document.getElementById('spAccPlan').textContent = meta.name;
+    var expiry = isActivePlan(user)
+      ? new Date(user.planExpiresAt).toLocaleDateString()
+      : '—';
+    document.getElementById('spAccExpiry').textContent = expiry;
   }
 
   function openAccount() {
     var user = currentUser();
     if (!user) { openAuth('login'); return; }
     ensureAccountModal();
-    var name = user.name || (user.email ? user.email.split('@')[0] : 'Account');
-    document.getElementById('spAccName').textContent = name;
-    document.getElementById('spAccEmail').textContent = user.email || '—';
+    showAccountPane('info');
+    populateAccountModal(user);
     document.getElementById(ACCOUNT_MODAL_ID).classList.add('active');
+    // Refresh from server so plan / expiry stay current after Razorpay
+    // payments or server-side plan changes.
+    refreshUserFromServer().then(function (fresh) {
+      if (fresh && document.getElementById(ACCOUNT_MODAL_ID).classList.contains('active')) {
+        populateAccountModal(fresh);
+      }
+    });
   }
 
   function closeAccount() {
@@ -506,6 +641,9 @@
     ensureModal();
     ensureAccountModal();
     refreshAuthUI();
+    // If a session token is present, refresh cached user from backend so the
+    // Account modal (plan / expiry) is up to date on next open.
+    refreshUserFromServer().then(function () { refreshAuthUI(); });
   }
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);

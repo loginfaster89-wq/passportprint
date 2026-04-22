@@ -5309,12 +5309,17 @@ restoreSession();
 <!-- Shared nav behavior (hamburger + Features dropdown) -->
 <script src="assets/nav.js" defer></script>
 <script>
-  // Auto-open the login modal when the page is reached via `#login`
-  // (the "Login" link in the header of other pages points here).
+  // Auto-open login / plans modals when the page is reached via a hash from
+  // another page's header or Account modal.
+  //   #login  -> homepage Login link (falls through to auth modal here)
+  //   #plans  -> shared Account modal "Upgrade / Change Plan" button
   (function(){
     function maybeOpen(){
-      if (window.location.hash === '#login' && typeof window.openAuth === 'function') {
+      var h = window.location.hash;
+      if (h === '#login' && typeof window.openAuth === 'function') {
         try { window.openAuth('login'); } catch (e) {}
+      } else if (h === '#plans' && typeof window.openPlans === 'function') {
+        try { window.openPlans(); } catch (e) {}
       }
     }
     if (document.readyState === 'loading') {
