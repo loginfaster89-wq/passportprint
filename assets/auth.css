@@ -209,6 +209,34 @@
   line-height: 1.5;
 }
 
+/* ── Account modal info rows ── */
+.sp-account-info {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 4px 14px;
+  margin-bottom: 14px;
+}
+.sp-account-row {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 12px;
+}
+.sp-account-row:last-child { border-bottom: none; }
+.sp-account-row span {
+  color: var(--muted);
+  text-transform: uppercase; letter-spacing: .5px;
+  font-size: 11px;
+}
+.sp-account-row strong {
+  color: var(--text);
+  font-weight: 600;
+  text-align: right;
+  word-break: break-all;
+}
+
 @media (max-width: 420px) {
   .sp-auth-modal { max-width: 100%; }
   .sp-auth-body { padding: 16px; }

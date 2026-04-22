@@ -415,6 +415,58 @@
     }
   }
 
+  // ── Account modal (for logged-in header button) ──
+  var ACCOUNT_MODAL_ID = 'spAccountModal';
+  function ensureAccountModal() {
+    if (document.getElementById(ACCOUNT_MODAL_ID)) return;
+    var wrap = document.createElement('div');
+    wrap.innerHTML = [
+      '<div class="sp-auth-overlay" id="' + ACCOUNT_MODAL_ID + '" role="dialog" aria-modal="true" aria-labelledby="spAccountTitle">',
+      '  <div class="sp-auth-modal">',
+      '    <div class="sp-auth-header">',
+      '      <div class="sp-auth-title" id="spAccountTitle">My <em>Account</em></div>',
+      '      <button type="button" class="sp-auth-close" aria-label="Close">✕</button>',
+      '    </div>',
+      '    <div class="sp-auth-body">',
+      '      <div class="sp-account-info">',
+      '        <div class="sp-account-row"><span>Name</span><strong id="spAccName">—</strong></div>',
+      '        <div class="sp-account-row"><span>Email</span><strong id="spAccEmail">—</strong></div>',
+      '      </div>',
+      '      <button type="button" class="sp-btn sp-btn-ghost" id="spAccLogout">Logout</button>',
+      '    </div>',
+      '  </div>',
+      '</div>'
+    ].join('');
+    document.body.appendChild(wrap.firstElementChild);
+    var overlay = document.getElementById(ACCOUNT_MODAL_ID);
+    overlay.addEventListener('click', function (e) {
+      if (e.target === overlay) closeAccount();
+    });
+    overlay.querySelector('.sp-auth-close').addEventListener('click', closeAccount);
+    document.getElementById('spAccLogout').addEventListener('click', function () {
+      closeAccount();
+      logout();
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && overlay.classList.contains('active')) closeAccount();
+    });
+  }
+
+  function openAccount() {
+    var user = currentUser();
+    if (!user) { openAuth('login'); return; }
+    ensureAccountModal();
+    var name = user.name || (user.email ? user.email.split('@')[0] : 'Account');
+    document.getElementById('spAccName').textContent = name;
+    document.getElementById('spAccEmail').textContent = user.email || '—';
+    document.getElementById(ACCOUNT_MODAL_ID).classList.add('active');
+  }
+
+  function closeAccount() {
+    var el = document.getElementById(ACCOUNT_MODAL_ID);
+    if (el) el.classList.remove('active');
+  }
+
   // ── Header button state ──
   function refreshAuthUI() {
     var btn = document.getElementById('hdrAuthBtn');
@@ -423,10 +475,8 @@
     if (user) {
       var name = user.name || (user.email ? user.email.split('@')[0] : 'Account');
       btn.innerHTML = '<span class="hdr-lbl">' + escapeHtml(name) + '</span>';
-      btn.onclick = function () {
-        if (confirm('Log out of Studio Print?')) logout();
-      };
-      btn.title = 'Logged in as ' + user.email + ' — click to log out';
+      btn.onclick = openAccount;
+      btn.title = 'Logged in as ' + user.email;
     } else {
       btn.innerHTML = '<span class="hdr-lbl">Login</span>';
       btn.onclick = function () { openAuth('login'); };
@@ -446,12 +496,15 @@
   window.openAuth = openAuth;
   window.closeAuth = closeAuth;
   window.setAuthTab = setAuthTab;
+  window.openAccount = openAccount;
+  window.closeAccount = closeAccount;
   window.logout = logout;
   window.currentUser = currentUser;
   window.refreshAuthUI = refreshAuthUI;
 
   function init() {
     ensureModal();
+    ensureAccountModal();
     refreshAuthUI();
   }
   if (document.readyState === 'loading') {
