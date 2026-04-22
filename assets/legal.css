@@ -205,3 +205,15 @@ footer.legal-footer .links a:hover{color:var(--accent);}
   .legal-header nav{margin:10px -14px -10px;padding:8px 14px 10px;font-size:13px;}
   .nav-toggle{padding:5px 8px;font-size:16px;}
 }
+
+/* Login nav item — works for both <a> (legal pages) and <button> (passport-photo.html) */
+.legal-header nav .nav-login{
+  color:#0d0d0d;background:var(--accent);border:1px solid var(--accent);
+  padding:6px 14px;border-radius:999px;font:inherit;font-weight:600;
+  cursor:pointer;text-decoration:none;line-height:1;white-space:nowrap;
+  transition:transform .15s ease,background .15s ease,border-color .15s ease;
+}
+.legal-header nav .nav-login:hover{background:#ffb627;border-color:#ffb627;color:#0d0d0d;text-decoration:none;transform:translateY(-1px);}
+@media (max-width:760px){
+  .legal-header nav .nav-login{align-self:flex-start;padding:8px 16px;font-size:14px;}
+}

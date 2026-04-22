@@ -5130,5 +5130,19 @@ restoreSession();
 </div>
 
 
+<script src="assets/nav.js" defer></script>
+<script>
+// Deep-link support: legal pages send users here with ?auth=login to open the auth modal.
+(function(){
+  try {
+    var u = new URL(location.href);
+    if (u.searchParams.get('auth') === 'login') {
+      var open = function(){ try { if (typeof openAuth === 'function') openAuth(); } catch(e){} };
+      if (document.readyState === 'complete') setTimeout(open, 0);
+      else window.addEventListener('load', function(){ setTimeout(open, 0); });
+    }
+  } catch(e) {}
+})();
+</script>
 </body>
 </html>
