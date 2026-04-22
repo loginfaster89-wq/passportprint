@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Login or Sign Up — Studio Print</title>
+<meta name="description" content="Log in or create your Studio Print account. Browser-based print studio — passport photos, document sheets and more.">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+<link rel="alternate icon" type="image/png" href="assets/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<meta property="og:title" content="Login or Sign Up — Studio Print">
+<meta property="og:description" content="Log in or create your Studio Print account to unlock unlimited print-ready sheets.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://studioprint.pages.dev/login.html">
+<meta property="og:image" content="https://studioprint.pages.dev/assets/apple-touch-icon.png">
+<meta name="twitter:card" content="summary">
+<meta name="robots" content="noindex,follow">
+<link rel="canonical" href="https://studioprint.pages.dev/login.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://passportprint-studio.onrender.com">
+<link rel="preconnect" href="https://accounts.google.com">
+<link rel="stylesheet" href="assets/legal.css">
+<style>
+  main.legal-main.auth-main{max-width:460px;padding-top:48px;}
+  .auth-card{
+    background:var(--surface);border:1px solid var(--border);border-radius:14px;
+    padding:28px 26px;box-shadow:0 10px 40px -18px rgba(0,0,0,0.6);
+  }
+  .auth-card h1{font-size:24px;margin-bottom:4px;}
+  .auth-card .meta{margin-bottom:22px;}
+  #googleSignInWrap{display:flex;flex-direction:column;align-items:center;gap:10px;margin-bottom:14px;}
+  #googleSignInBtn{min-height:44px;width:100%;display:flex;justify-content:center;}
+  .google-divider{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:11px;margin:6px 0 14px;letter-spacing:0.08em;text-transform:uppercase;}
+  .google-divider span.line{flex:1;height:1px;background:var(--border);}
+  .auth-tabs{display:flex;gap:6px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:4px;margin-bottom:16px;}
+  .auth-tab{flex:1;background:transparent;border:0;color:var(--muted);font-family:inherit;font-size:13px;padding:9px 10px;border-radius:7px;cursor:pointer;transition:background .15s,color .15s;}
+  .auth-tab.active{background:var(--accent);color:#0d0d0d;font-weight:500;}
+  .form-group{margin-bottom:12px;}
+  .form-label{display:block;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
+  .form-input{
+    width:100%;background:var(--surface2);border:1px solid var(--border);
+    color:var(--text);font-family:inherit;font-size:14px;
+    padding:10px 12px;border-radius:8px;transition:border-color .15s,background .15s;
+  }
+  .form-input:focus{outline:none;border-color:var(--accent);background:#191919;}
+  .otp-input{letter-spacing:8px;font-family:'DM Mono',ui-monospace,Menlo,monospace;text-align:center;font-size:18px;}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 18px;border:1px solid transparent;border-radius:9px;font-family:inherit;font-size:14px;cursor:pointer;transition:transform .15s,background .15s,color .15s,border-color .15s;width:100%;margin-top:4px;}
+  .btn-primary{background:var(--accent);color:#0d0d0d;font-weight:500;}
+  .btn-primary:hover{background:#ffbe2c;}
+  .btn-primary:disabled{opacity:0.65;cursor:not-allowed;}
+  .btn-ghost{background:transparent;color:var(--muted);border-color:var(--border);}
+  .btn-ghost:hover{color:var(--accent);border-color:var(--accent);}
+  .auth-note{font-size:11px;color:var(--muted);margin:-4px 0 10px;line-height:1.6;}
+  .auth-error{color:#ff6b6b;font-size:13px;min-height:18px;margin:8px 0 0;}
+  .auth-success{color:#6bdca6;font-size:13px;background:rgba(107,220,166,0.08);border:1px solid rgba(107,220,166,0.24);border-radius:8px;padding:10px 12px;margin-top:10px;display:none;}
+  .otp-box{
+    background:var(--surface2);border:1px solid var(--border);border-radius:10px;
+    padding:12px 14px;margin-bottom:12px;font-size:12px;line-height:1.6;color:var(--muted);
+  }
+  .otp-box strong{display:block;color:var(--text);margin:4px 0;word-break:break-all;}
+  .resend-row{display:flex;justify-content:space-between;align-items:center;margin-top:8px;font-size:12px;color:var(--muted);}
+  .resend-row button{background:transparent;border:0;color:var(--accent);cursor:pointer;font-family:inherit;font-size:12px;padding:0;}
+  .resend-row button:disabled{color:var(--muted2);cursor:not-allowed;}
+  .back-link{display:inline-block;margin-top:18px;font-size:12px;color:var(--muted);}
+  .back-link:hover{color:var(--accent);text-decoration:none;}
+  .plan-banner{
+    background:var(--accent-dim);border:1px solid rgba(240,165,0,0.28);
+    border-radius:8px;padding:10px 12px;margin-bottom:14px;font-size:12px;color:var(--accent);line-height:1.55;
+  }
+</style>
+</head>
+<body>
+
+<header class="legal-header">
+  <a href="index.html" class="logo">Studio <em>Print</em></a>
+  <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="primaryNav">☰</button>
+  <nav id="primaryNav">
+    <a href="index.html">Home</a>
+    <div class="has-dropdown">
+      <button class="nav-dd-btn" aria-haspopup="true" aria-expanded="false">Features <span class="caret" aria-hidden="true">▾</span></button>
+      <div class="dropdown-panel" role="menu">
+        <a href="passport-photo.html" role="menuitem">
+          <span class="dd-icon" aria-hidden="true">📷</span>
+          <span class="dd-meta"><strong>Passport Photo</strong><small>AI crop · 300 DPI A4 sheet</small></span>
+          <span class="dd-tag live">Live</span>
+        </a>
+        <span class="dd-item soon" role="menuitem" aria-disabled="true">
+          <span class="dd-icon" aria-hidden="true">🪪</span>
+          <span class="dd-meta"><strong>Document Sheet</strong><small>Aadhaar, PAN · cut &amp; arrange</small></span>
+          <span class="dd-tag soon">Soon</span>
+        </span>
+        <span class="dd-item soon" role="menuitem" aria-disabled="true">
+          <span class="dd-icon" aria-hidden="true">📜</span>
+          <span class="dd-meta"><strong>Certificate Editor</strong><small>Marriage, birth, misc.</small></span>
+          <span class="dd-tag soon">Soon</span>
+        </span>
+        <span class="dd-item soon" role="menuitem" aria-disabled="true">
+          <span class="dd-icon" aria-hidden="true">🖼️</span>
+          <span class="dd-meta"><strong>ID &amp; Visa Sheets</strong><small>Mix sizes on A4</small></span>
+          <span class="dd-tag soon">Soon</span>
+        </span>
+        <span class="dd-item soon" role="menuitem" aria-disabled="true">
+          <span class="dd-icon" aria-hidden="true">✂️</span>
+          <span class="dd-meta"><strong>Background Studio</strong><small>Remove &amp; replace</small></span>
+          <span class="dd-tag soon">Soon</span>
+        </span>
+      </div>
+    </div>
+    <a href="index.html#pricing">Pricing</a>
+    <a href="index.html#faq">FAQ</a>
+    <a href="login.html" class="active">Login</a>
+  </nav>
+</header>
+
+<main class="legal-main auth-main">
+  <div class="auth-card">
+    <h1 id="authTitle">Welcome back</h1>
+    <p class="meta" id="authSubtitle">Log in with your Gmail address to continue.</p>
+
+    <div id="planBanner" class="plan-banner" style="display:none;"></div>
+
+    <div id="googleSignInWrap">
+      <div id="googleSignInBtn"></div>
+    </div>
+    <div class="google-divider"><span class="line"></span><span>or continue with email</span><span class="line"></span></div>
+
+    <div class="auth-tabs" role="tablist">
+      <button class="auth-tab active" data-tab="login" type="button">Login</button>
+      <button class="auth-tab" data-tab="signup" type="button">Sign Up</button>
+    </div>
+
+    <form id="loginForm" autocomplete="on">
+      <div class="form-group">
+        <label class="form-label" for="liEmail">Email</label>
+        <input type="email" class="form-input" id="liEmail" autocomplete="email" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="liPwd">Password</label>
+        <input type="password" class="form-input" id="liPwd" autocomplete="current-password" required>
+      </div>
+      <button type="submit" class="btn btn-primary" id="loginBtn">Log in</button>
+    </form>
+
+    <form id="signupForm" style="display:none;" autocomplete="on">
+      <div class="form-group">
+        <label class="form-label" for="suName">Name</label>
+        <input type="text" class="form-input" id="suName" autocomplete="name" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="suEmail">Gmail address</label>
+        <input type="email" class="form-input" id="suEmail" autocomplete="email"
+               pattern="[a-zA-Z0-9._%+\-]+@gmail\.com"
+               placeholder="yourname@gmail.com"
+               title="Only @gmail.com addresses are accepted" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="suPwd">Password (min 6)</label>
+        <input type="password" class="form-input" id="suPwd" autocomplete="new-password" minlength="6" required>
+      </div>
+      <p class="auth-note">Only official Gmail (@gmail.com) addresses are allowed. We'll email you a 6-digit code to verify.</p>
+      <button type="submit" class="btn btn-primary" id="signupBtn">Send OTP</button>
+    </form>
+
+    <form id="otpForm" style="display:none;" autocomplete="off">
+      <div class="otp-box">
+        We sent a 6-digit verification code to
+        <strong id="otpEmailDisplay">—</strong>
+        Check your inbox (and Spam folder) to complete signup.
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="otpCode">Verification code</label>
+        <input type="text" inputmode="numeric" pattern="\d{6}" maxlength="6"
+               class="form-input otp-input" id="otpCode" autocomplete="one-time-code"
+               placeholder="123456" required>
+      </div>
+      <button type="submit" class="btn btn-primary" id="otpBtn">Verify &amp; create account</button>
+      <div class="resend-row">
+        <button type="button" id="otpResend">Resend code</button>
+        <button type="button" id="otpBack">Back</button>
+      </div>
+    </form>
+
+    <p id="authError" class="auth-error" role="alert" aria-live="polite"></p>
+    <div id="authSuccess" class="auth-success" role="status" aria-live="polite"></div>
+
+    <a class="back-link" href="index.html">← Back to homepage</a>
+  </div>
+</main>
+
+<footer class="legal-footer">
+  <div class="links">
+    <a href="index.html">Home</a>·
+    <a href="about.html">About</a>·
+    <a href="privacy.html">Privacy</a>·
+    <a href="terms.html">Terms</a>·
+    <a href="refund.html">Refund</a>·
+    <a href="shipping.html">Delivery</a>·
+    <a href="contact.html">Contact</a>
+  </div>
+  <div>© 2026 Studio Print. All rights reserved.</div>
+</footer>
+
+<script src="assets/nav.js" defer></script>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script>
+(function(){
+  const BACKEND_URL = 'https://passportprint-studio.onrender.com';
+  const GOOGLE_CLIENT_ID = '216240284102-d63glsohcp2lr85kk1el364f7gecnv9q.apps.googleusercontent.com';
+  const AUTH_TOKEN_KEY = 'pps_token_v1';
+  const AUTH_SESSION_KEY = 'pps_session_v1';
+  const AUTH_STORE_KEY = 'pps_users_v1';
+
+  const $ = (id) => document.getElementById(id);
+  const params = new URLSearchParams(location.search);
+  const nextUrl = sanitizeNext(params.get('next')) || 'index.html';
+  const plan = params.get('plan');
+
+  function sanitizeNext(n){
+    if(!n) return null;
+    try{
+      // Only allow same-origin relative paths
+      if(/^https?:\/\//i.test(n)) return null;
+      if(n.startsWith('//')) return null;
+      return n;
+    }catch(e){ return null; }
+  }
+
+  function isGmail(email){ return /^[a-zA-Z0-9._%+\-]+@gmail\.com$/.test(email); }
+
+  async function api(path, opts){
+    opts = opts || {};
+    const headers = Object.assign({'Content-Type':'application/json'}, opts.headers||{});
+    const token = localStorage.getItem(AUTH_TOKEN_KEY);
+    if(token) headers['Authorization'] = 'Bearer '+token;
+    const res = await fetch(BACKEND_URL + path, {
+      method: opts.method || 'GET',
+      headers,
+      body: opts.body ? JSON.stringify(opts.body) : undefined,
+    });
+    let data = null; try{ data = await res.json(); }catch(e){}
+    if(!res.ok){
+      const err = new Error((data && data.error) || ('HTTP ' + res.status));
+      err.status = res.status; err.data = data; throw err;
+    }
+    return data;
+  }
+
+  function setError(msg){ $('authError').textContent = msg || ''; }
+  function clearError(){ setError(''); }
+
+  function setBusy(btn, busy, busyLabel, restoreLabel){
+    if(!btn) return;
+    btn.disabled = !!busy;
+    if(busy){
+      btn.dataset.prev = btn.textContent;
+      if(busyLabel) btn.textContent = busyLabel;
+    } else {
+      btn.textContent = restoreLabel || btn.dataset.prev || btn.textContent;
+    }
+  }
+
+  function redirectAfterAuth(user){
+    // If a plan is requested, always take the user into the feature where
+    // they can complete the subscription flow.
+    let dest = nextUrl;
+    if(plan){
+      dest = 'passport-photo.html#plan=' + encodeURIComponent(plan);
+    }
+    $('authSuccess').style.display = 'block';
+    $('authSuccess').textContent = 'Signed in as ' + (user && user.email ? user.email : 'your account') + '. Redirecting…';
+    setTimeout(() => { location.href = dest; }, 600);
+  }
+
+  function saveUserLocally(user){
+    try{
+      const users = JSON.parse(localStorage.getItem(AUTH_STORE_KEY) || '{}');
+      users[user.email] = user;
+      localStorage.setItem(AUTH_STORE_KEY, JSON.stringify(users));
+      localStorage.setItem(AUTH_SESSION_KEY, JSON.stringify({email: user.email, loggedAt: Date.now()}));
+    }catch(e){}
+  }
+
+  // ── Tabs ───────────────────────────────────────────────
+  const loginForm = $('loginForm');
+  const signupForm = $('signupForm');
+  const otpForm = $('otpForm');
+  const title = $('authTitle');
+  const subtitle = $('authSubtitle');
+
+  function setTab(tab){
+    clearError();
+    document.querySelectorAll('.auth-tab').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+    if(tab === 'login'){
+      loginForm.style.display = 'block';
+      signupForm.style.display = 'none';
+      otpForm.style.display = 'none';
+      title.textContent = 'Welcome back';
+      subtitle.textContent = 'Log in with your Gmail address to continue.';
+    } else {
+      loginForm.style.display = 'none';
+      signupForm.style.display = 'block';
+      otpForm.style.display = 'none';
+      title.textContent = 'Create your account';
+      subtitle.textContent = 'Sign up with your Gmail to unlock your Studio Print account.';
+    }
+  }
+  document.querySelectorAll('.auth-tab').forEach(b => b.addEventListener('click', () => setTab(b.dataset.tab)));
+
+  function showOtp(email){
+    clearError();
+    loginForm.style.display = 'none';
+    signupForm.style.display = 'none';
+    otpForm.style.display = 'block';
+    $('otpEmailDisplay').textContent = email;
+    title.textContent = 'Verify your email';
+    subtitle.textContent = 'Enter the 6-digit code we sent to finish creating your account.';
+    $('otpCode').value = '';
+    $('otpCode').focus();
+  }
+
+  // ── Plan banner ───────────────────────────────────────
+  if(plan){
+    const labels = { weekly: 'Weekly (₹59 / 7 days)', monthly: 'Monthly (₹149 / 30 days)' };
+    const label = labels[plan] || plan;
+    const b = $('planBanner');
+    b.textContent = 'Continue to activate ' + label + '. You can complete payment after login.';
+    b.style.display = 'block';
+  }
+
+  // ── Login ──────────────────────────────────────────────
+  let _pendingSignup = null;
+
+  loginForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    clearError();
+    const email = $('liEmail').value.trim().toLowerCase();
+    const pwd = $('liPwd').value;
+    if(!email || !pwd){ setError('Please fill in both fields.'); return; }
+    if(!isGmail(email)){ setError('Only @gmail.com addresses are supported.'); return; }
+    const btn = $('loginBtn');
+    setBusy(btn, true, 'Signing in…');
+    try{
+      const { token, user } = await api('/api/login', { method: 'POST', body: { email, password: pwd } });
+      localStorage.setItem(AUTH_TOKEN_KEY, token);
+      saveUserLocally(user);
+      redirectAfterAuth(user);
+    }catch(ex){
+      setError((ex && ex.message) || 'Login failed. Please try again.');
+    }finally{
+      setBusy(btn, false, null, 'Log in');
+    }
+  });
+
+  // ── Signup (send OTP) ─────────────────────────────────
+  signupForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    clearError();
+    const name = $('suName').value.trim();
+    const email = $('suEmail').value.trim().toLowerCase();
+    const pwd = $('suPwd').value;
+    if(!name || !email || !pwd){ setError('All fields are required.'); return; }
+    if(!isGmail(email)){ setError('Only @gmail.com addresses are supported.'); return; }
+    if(pwd.length < 6){ setError('Password must be at least 6 characters.'); return; }
+    const btn = $('signupBtn');
+    setBusy(btn, true, 'Sending OTP…');
+    try{
+      const res = await api('/api/send-signup-otp', { method: 'POST', body: { name, email, password: pwd } });
+      _pendingSignup = { email: (res && res.email) || email, name, pwd };
+      showOtp(_pendingSignup.email);
+    }catch(ex){
+      setError((ex && ex.message) || 'Could not send the verification code. Try again.');
+    }finally{
+      setBusy(btn, false, null, 'Send OTP');
+    }
+  });
+
+  // ── OTP verify ────────────────────────────────────────
+  otpForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    clearError();
+    if(!_pendingSignup){ setError('Session expired. Please start sign up again.'); setTab('signup'); return; }
+    const code = $('otpCode').value.trim();
+    if(!/^\d{6}$/.test(code)){ setError('Enter the 6-digit code from your email.'); return; }
+    const btn = $('otpBtn');
+    setBusy(btn, true, 'Verifying…');
+    try{
+      const { token, user } = await api('/api/verify-signup-otp', { method: 'POST', body: { email: _pendingSignup.email, code } });
+      localStorage.setItem(AUTH_TOKEN_KEY, token);
+      saveUserLocally(user);
+      redirectAfterAuth(user);
+    }catch(ex){
+      setError((ex && ex.message) || 'Invalid or expired code.');
+    }finally{
+      setBusy(btn, false, null, 'Verify & create account');
+    }
+  });
+
+  $('otpResend').addEventListener('click', async () => {
+    if(!_pendingSignup) return;
+    const btn = $('otpResend');
+    btn.disabled = true; const prev = btn.textContent; btn.textContent = 'Sending…';
+    clearError();
+    try{
+      await api('/api/send-signup-otp', { method: 'POST', body: { name: _pendingSignup.name, email: _pendingSignup.email, password: _pendingSignup.pwd } });
+      btn.textContent = 'Code sent';
+      setTimeout(() => { btn.textContent = prev; btn.disabled = false; }, 6000);
+    }catch(ex){
+      setError((ex && ex.message) || 'Could not resend the code.');
+      btn.textContent = prev; btn.disabled = false;
+    }
+  });
+
+  $('otpBack').addEventListener('click', () => { _pendingSignup = null; setTab('signup'); });
+
+  // ── Google Sign-In ────────────────────────────────────
+  let gisInited = false;
+
+  window.handleGoogleCredential = async function(response){
+    clearError();
+    const credential = response && response.credential;
+    if(!credential){ setError('Google sign-in did not return a credential.'); return; }
+    try{
+      const { token, user } = await api('/api/google-login', { method: 'POST', body: { credential } });
+      localStorage.setItem(AUTH_TOKEN_KEY, token);
+      saveUserLocally(user);
+      redirectAfterAuth(user);
+    }catch(ex){
+      setError((ex && ex.message) || 'Google sign-in failed.');
+    }
+  };
+
+  function initGoogle(tries){
+    if(gisInited) return true;
+    if(!(window.google && google.accounts && google.accounts.id)){
+      if(tries > 0) setTimeout(() => initGoogle(tries - 1), 200);
+      return false;
+    }
+    try{
+      google.accounts.id.initialize({
+        client_id: GOOGLE_CLIENT_ID,
+        callback: window.handleGoogleCredential,
+        auto_select: false,
+        cancel_on_tap_outside: true,
+        ux_mode: 'popup',
+        context: 'signin',
+      });
+      google.accounts.id.renderButton($('googleSignInBtn'), {
+        theme: 'filled_black',
+        size: 'large',
+        shape: 'pill',
+        text: 'continue_with',
+        width: 320,
+      });
+      gisInited = true;
+      // One-tap prompt (non-blocking; ignored if user dismissed earlier)
+      try{ google.accounts.id.prompt(); }catch(e){}
+      return true;
+    }catch(e){
+      // If rendering fails (e.g. preview origin not whitelisted), hide the button wrap.
+      $('googleSignInWrap').style.display = 'none';
+      document.querySelector('.google-divider').style.display = 'none';
+      return true;
+    }
+  }
+  initGoogle(20);
+
+  // If already logged in, skip straight to destination.
+  try{
+    const existingToken = localStorage.getItem(AUTH_TOKEN_KEY);
+    const existingSession = JSON.parse(localStorage.getItem(AUTH_SESSION_KEY) || 'null');
+    if(existingToken && existingSession && existingSession.email){
+      redirectAfterAuth({ email: existingSession.email });
+    }
+  }catch(e){}
+})();
+</script>
+</body>
+</html>

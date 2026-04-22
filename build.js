@@ -21,6 +21,7 @@ const HTML_FILES = [
   'terms.html',
   'refund.html',
   'shipping.html',
+  'login.html',
 ];
 
 // Static asset folders to copy verbatim (CSS/fonts/images). We still minify CSS
