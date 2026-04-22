@@ -33,14 +33,15 @@
 }
 .legal-header .nav-login .hdr-lbl { font-size: inherit; }
 
-/* Mobile: login becomes full-width inside the hamburger panel */
+/* Mobile: login button sits outside the hamburger panel, between the
+   logo and the ☰ toggle. Tapping it opens the modal directly — without
+   having to expand the nav first. Header HTML puts the button after
+   <nav> so flex + margin-left:auto keeps it pinned to the right. */
 @media (max-width: 900px) {
   .legal-header .nav-login {
-    width: 100%;
-    margin: 8px 0 2px;
-    padding: 12px 14px;
-    justify-content: center;
-    font-size: 14px;
+    margin-left: auto;
+    padding: 8px 14px;
+    font-size: 13px;
   }
 }
 
