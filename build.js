@@ -28,6 +28,11 @@ const HTML_FILES = [
 // are copied as-is because they are already small.
 const ASSET_DIRS = ['assets'];
 
+// Deploy-host config files that must land at the root of dist/ verbatim.
+// `_headers` / `_redirects` are the Netlify-style conventions that Cloudflare
+// Pages also honours, so the same files work for either host.
+const ROOT_FILES = ['_headers', '_redirects'];
+
 // Obfuscator options — conservative settings that preserve globals referenced
 // by inline onclick="foo()" handlers. Renaming globals would break the app.
 const OBFUSCATOR_OPTIONS = {
@@ -154,6 +159,15 @@ async function main() {
   console.log('→ Copying static assets ...');
   for (const dir of ASSET_DIRS) {
     await copyDir(path.join(SRC, dir), path.join(OUT, dir));
+  }
+
+  console.log('→ Copying deploy config files ...');
+  for (const file of ROOT_FILES) {
+    const src = path.join(SRC, file);
+    if (fs.existsSync(src)) {
+      await fs.promises.copyFile(src, path.join(OUT, file));
+      console.log(`  ${file}`);
+    }
   }
 
   console.log('→ Building HTML ...');
