@@ -1469,9 +1469,8 @@ header{flex-wrap:nowrap;}
         </span>
       </div>
     </div>
-    <button class="nav-login" id="hdrAuthBtn" onclick="openAuth()" title="Login / Signup">
-      <span aria-hidden="true">👤</span>
-      <span id="hdrAuthLabel" data-i18n="hdr_login">Login</span>
+    <button type="button" class="nav-login" id="hdrAuthBtn" onclick="openAuth()" title="Login / Signup">
+      <span id="hdrAuthLabel" class="hdr-lbl" data-i18n="hdr_login">Login</span>
     </button>
     <button class="help-btn" onclick="openTutorial()" title="API Key Tutorial" style="display:none;">?</button>
   </nav>
@@ -4412,10 +4411,10 @@ function refreshAuthUI(){
   if(user){
     // Show ONLY the username — plan info lives in the Account modal now.
     const name = user.name || (user.email ? user.email.split('@')[0] : '');
-    btn.innerHTML = `\uD83D\uDC64 <span class="hdr-lbl">${escapeHtml(name)}</span>`;
+    btn.innerHTML = `<span class="hdr-lbl">${escapeHtml(name)}</span>`;
     btn.onclick = openAccount;
   }else{
-    btn.innerHTML = '\uD83D\uDC64 <span class="hdr-lbl" data-i18n="hdr_login">'+t('hdr_login')+'</span>';
+    btn.innerHTML = '<span class="hdr-lbl" data-i18n="hdr_login">'+t('hdr_login')+'</span>';
     btn.onclick = openAuth;
   }
   refreshPlanUI();

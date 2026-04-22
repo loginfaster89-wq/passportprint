@@ -1,6 +1,6 @@
 # Studio Print — Frontend
 
-Static frontend for [Studio Print](https://passportprint-studio.onrender.com) — a browser-based passport photo, Aadhaar/PAN sheet and certificate tool for eMitra shops and local print studios.
+Static frontend for [Studio Print](https://passportprint-studio.onrender.com) — a browser-based passport photo, Aadhaar/PAN sheet and certificate tool for print shops, students and home users.
 
 The backend (auth, payments, email OTP) lives in a separate repo:
 **[loginfaster89-wq/PassportPrint-Studio](https://github.com/loginfaster89-wq/PassportPrint-Studio)** (deployed on Render).
