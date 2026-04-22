@@ -287,17 +287,11 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
 .steps-grid{
   display:grid;gap:14px;
   grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  counter-reset:steps;
 }
 .step-card{
   position:relative;padding:24px 22px 22px;border-radius:12px;
   background:var(--surface2);border:1px solid var(--border);
   display:flex;flex-direction:column;gap:8px;
-}
-.step-card::before{
-  counter-increment:steps;content:counter(steps,decimal-leading-zero);
-  position:absolute;top:14px;right:16px;
-  font-family:'DM Mono',monospace;font-size:11px;color:var(--muted2);letter-spacing:0.1em;
 }
 .step-card h4{
   font-family:'Syne',sans-serif;font-weight:700;font-size:16px;color:#fff;letter-spacing:-0.2px;
@@ -488,13 +482,71 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
   .faq-item summary{padding:14px 16px;font-size:14px;}
   .faq-item .faq-body{padding:0 16px 14px;}
 }
+
+/* ── MOBILE CARD SLIDERS ── */
+/* On narrow screens, every homepage card grid becomes a horizontal
+   scroll-snap slider. A <div class="slider-dots"></div> is injected
+   after each grid by a tiny script (see end of file). */
+.slider-dots{display:none;}
+@media (max-width:760px){
+  .features-grid,
+  .audience-grid,
+  .why-grid,
+  .steps-grid,
+  .pricing-grid{
+    display:flex;
+    flex-wrap:nowrap;
+    gap:12px;
+    overflow-x:auto;
+    overflow-y:hidden;
+    scroll-snap-type:x mandatory;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+    margin:0 -18px;
+    padding:4px 18px 8px;
+    scroll-padding-left:18px;
+  }
+  .features-grid::-webkit-scrollbar,
+  .audience-grid::-webkit-scrollbar,
+  .why-grid::-webkit-scrollbar,
+  .steps-grid::-webkit-scrollbar,
+  .pricing-grid::-webkit-scrollbar{display:none;}
+  .feature-card,
+  .audience-card,
+  .why-card,
+  .step-card,
+  .pricing-card{
+    flex:0 0 86%;
+    scroll-snap-align:start;
+    min-height:0;
+  }
+  .feature-card.primary{flex:0 0 86%;min-height:0;grid-column:auto;}
+  .slider-dots{
+    display:flex;
+    justify-content:center;
+    gap:7px;
+    margin:14px 0 0;
+    padding:0;
+  }
+  .slider-dots button{
+    width:7px;height:7px;border-radius:50%;
+    background:var(--border);
+    border:0;padding:0;
+    cursor:pointer;
+    transition:background .2s,transform .2s,width .2s;
+  }
+  .slider-dots button.active{
+    background:var(--accent);
+    width:18px;
+    border-radius:4px;
+  }
+}
 </style>
 </head>
 <body class="home">
 
 <header class="legal-header">
   <a href="index.html" class="logo">Studio <em>Print</em></a>
-  <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="primaryNav">☰</button>
   <nav id="primaryNav">
     <a href="index.html" class="active">Home</a>
     <div class="has-dropdown">
@@ -529,8 +581,9 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
     </div>
     <a href="#pricing">Pricing</a>
     <a href="#faq">FAQ</a>
-    <button type="button" class="nav-login" id="hdrAuthBtn" title="Login / Signup"><span class="hdr-lbl">Login</span></button>
   </nav>
+  <button type="button" class="nav-login" id="hdrAuthBtn" title="Login / Signup"><span class="hdr-lbl">Login</span></button>
+  <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="primaryNav">☰</button>
 </header>
 
 <main class="home-main">
@@ -889,6 +942,72 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
 
 <script src="assets/nav.js" defer></script>
 <script src="assets/auth.js" defer></script>
+<script>
+// Mobile card sliders: wrap each homepage grid with dot indicators and
+// sync the active dot to the scroll position. Pure vanilla; no deps.
+(function () {
+  var SELECTORS = ['.features-grid', '.audience-grid', '.why-grid', '.steps-grid', '.pricing-grid'];
+  var MQ = window.matchMedia('(max-width: 760px)');
+
+  function buildDots(grid) {
+    var dots = grid.nextElementSibling;
+    if (!dots || !dots.classList.contains('slider-dots')) {
+      dots = document.createElement('div');
+      dots.className = 'slider-dots';
+      dots.setAttribute('role', 'tablist');
+      grid.parentNode.insertBefore(dots, grid.nextSibling);
+    }
+    dots.innerHTML = '';
+    var cards = grid.children;
+    for (var i = 0; i < cards.length; i++) {
+      (function (idx) {
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.setAttribute('aria-label', 'Go to slide ' + (idx + 1));
+        b.addEventListener('click', function () {
+          var card = grid.children[idx];
+          if (card) grid.scrollTo({ left: card.offsetLeft - grid.offsetLeft, behavior: 'smooth' });
+        });
+        dots.appendChild(b);
+      })(i);
+    }
+    return dots;
+  }
+
+  function sync(grid, dots) {
+    var cards = grid.children, x = grid.scrollLeft, best = Infinity, active = 0;
+    for (var i = 0; i < cards.length; i++) {
+      var d = Math.abs(cards[i].offsetLeft - grid.offsetLeft - x);
+      if (d < best) { best = d; active = i; }
+    }
+    var bs = dots.children;
+    for (var j = 0; j < bs.length; j++) bs[j].classList.toggle('active', j === active);
+  }
+
+  function setup() {
+    SELECTORS.forEach(function (sel) {
+      var grid = document.querySelector(sel);
+      if (!grid) return;
+      var next = grid.nextElementSibling;
+      if (MQ.matches) {
+        var dots = buildDots(grid);
+        var onScroll = function () { sync(grid, dots); };
+        grid.addEventListener('scroll', onScroll, { passive: true });
+        grid._spDotsScroll = onScroll;
+        sync(grid, dots);
+      } else if (next && next.classList.contains('slider-dots')) {
+        if (grid._spDotsScroll) grid.removeEventListener('scroll', grid._spDotsScroll);
+        next.remove();
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', setup);
+  else setup();
+  var rt;
+  window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(setup, 180); });
+})();
+</script>
 <script>
 // Warm up the Render-hosted backend so the first real call on /passport-photo
 // doesn't pay the full free-tier cold-start latency (up to ~30–50s after
