@@ -237,3 +237,24 @@ footer.legal-footer .links a:hover{color:var(--accent);}
   .legal-header nav{font-size:14px;}
   .nav-toggle{padding:7px 10px;font-size:18px;}
 }
+
+/* ─────────────────────────────────────────────────────────
+   Keyboard focus rings (site-wide)
+   Visible only for keyboard users; suppressed for mouse clicks.
+   ─────────────────────────────────────────────────────── */
+:focus{outline:none;}
+:focus-visible{
+  outline:2px solid var(--accent);
+  outline-offset:2px;
+  border-radius:4px;
+}
+a:focus-visible,
+button:focus-visible,
+summary:focus-visible,
+[role="button"]:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible{
+  outline:2px solid var(--accent);
+  outline-offset:2px;
+}
