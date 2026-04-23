@@ -147,33 +147,30 @@ See `issues.md` at the repo root for the full findings table. One-line
 summary per bucket (next sessions should treat these as the default
 backlog unless the user redirects):
 
-**Blocking / near-blocking (fix first):**
-- `passport-photo.html` loads Razorpay with an undefined build URL
-  (`checkout-static-next.razorpay.com/build/undefined` → 403). Audit
-  reproduced on desktop 1440 and iPhone 390, NOT on iPad 820 (different
-  SDK code path). Issue ID `F1`.
-- Google One-Tap auto-prompt covers the Login button on iPad / iPhone
-  when landing on `passport-photo.html`. Kill auto-prompt on touch
-  viewports — call `google.accounts.id.disableAutoSelect()` or drop
-  the auto-prompt, keep only the explicit "Continue with Google"
-  button in the shared auth modal. Issue ID `F2`.
+**Resolved this week (do NOT re-fix):**
+- `F1` Razorpay undefined URL → PR #70 (declarative `<script async>` +
+  preconnects). The remaining /build/undefined 403 is a Razorpay-SDK
+  bug, payment flow actually works.
+- `F2` Google One-Tap auto-prompt → PR #71 (prompt only fires on
+  explicit Login click inside the auth modal).
+- `F3` features-grid 820 uneven heights → PR #73 (explicit 2-col at
+  761-899 with primary `grid-column:1/-1`, 3-col desktop moved to
+  `min-width:900px`).
+- `F4` hero H1 phrase wrap → PR #74 (explicit `<br>` between the
+  two sentences + `text-wrap:balance` on `.hero h1`).
 
-**Layout (medium):**
-- `F3` — features-grid at exactly 820px renders 2-col with 5 cards
-  and uneven heights; primary `.feature-card.primary` has `min-height:230px`
-  while sibling SOON cards are shorter.
-- `F4` — hero H1 wraps badly at 820 and 390. Phrase boundary splits
-  "Every print job. / One browser tab." on desktop but "Every print
-  job. One / browser tab." on 820px and "Every print / job. One /
-  browser tab." on 390. Needs `text-wrap:balance` on `.hero h1`
-  or an explicit break.
-
-**Nits / polish queue (F5-F12, P1-P30 in issues.md):**
-- Pricing "Shop counter" title wraps at 820. Most-Popular badge
-  alignment at 1440. Emoji icons render inconsistently on Android
-  (suggest SVG icon pack — no new fonts needed). Cards flat on hover.
-  FAQ `<details>` has no transition. No mobile sticky CTA. Contact
-  email exposed as scrapable plain text on about + contact.
+**Nits / polish queue (F5-F12 remaining, P1-P30 in issues.md):**
+- `F5` pricing "Shop counter" title wraps at 820. `F6` audience grid
+  sparse (2 cards) on desktop. `F7` GSI iframe permissions-policy
+  console warnings (harmless). `F8` plain-text email on about /
+  contact — scrapable. `F9` Most-Popular badge overlap at 1440.
+  `F10` tools-preview window-chrome dots unclear. `F11` desktop
+  1440 empty space below upload card on passport-photo. `F12`
+  emoji icons inconsistent across platforms — switch to SVG pack.
+- 2026 polish: P3/P6/P7/P14/P17/P22 are the highest-impact quick
+  wins (hover lift, FAQ slide, button active, sticky mobile CTA,
+  focus rings, proper OG image). P9/P10/P15/P19/P27/P28 are
+  larger scope items.
 
 **How to audit again (reproducible)**
 
