@@ -10,6 +10,11 @@
 /*.html
   Cache-Control: no-cache
 
+# Service worker must always revalidate — otherwise a stale SW keeps serving
+# stale precache entries long after the next deploy.
+/sw.js
+  Cache-Control: no-cache, no-store, must-revalidate
+
 # Security headers (apply to every response)
 /*
   X-Frame-Options: DENY

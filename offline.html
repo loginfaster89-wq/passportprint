@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#0d0d0d">
+<title>Offline — Studio Print</title>
+<meta name="description" content="You're offline. Studio Print will reload as soon as the connection comes back.">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+<link rel="alternate icon" type="image/png" href="assets/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="manifest" href="assets/manifest.webmanifest">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/legal.css">
+<style>
+.offline{display:flex;flex-direction:column;align-items:center;text-align:center;padding:clamp(40px,8vw,96px) 20px;max-width:640px;margin:0 auto;}
+.offline-tag{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);background:var(--accent-dim);border:1px solid rgba(240,165,0,.28);padding:6px 14px;border-radius:999px;margin-bottom:22px;}
+.offline-icon{width:64px;height:64px;margin:0 0 20px;color:var(--accent);}
+.offline h1{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(26px,4vw,38px);line-height:1.1;color:#fff;margin:0 0 14px;text-wrap:balance;}
+.offline p{font-family:'DM Mono',monospace;font-size:15px;line-height:1.65;color:var(--muted);margin:0 0 28px;max-width:48ch;}
+.offline-ctas{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;}
+.offline-ctas .btn{font-family:'DM Mono',monospace;font-size:14px;padding:12px 22px;border-radius:10px;text-decoration:none;display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border);color:var(--text);background:var(--surface);cursor:pointer;transition:transform .15s ease,background .15s ease,border-color .15s ease;}
+.offline-ctas .btn:hover{background:var(--surface2);border-color:var(--accent);}
+.offline-ctas .btn.primary{background:var(--accent);color:#0D0D0D;border-color:var(--accent);font-weight:600;}
+.offline-ctas .btn.primary:hover{filter:brightness(1.05);}
+.offline-ctas .btn:active{transform:scale(.97);}
+.offline-hint{margin-top:32px;font-family:'DM Mono',monospace;font-size:12px;color:var(--muted2);}
+@media (prefers-reduced-motion: reduce){
+  .offline-ctas .btn{transition:none;}
+}
+</style>
+</head>
+<body>
+
+<header class="legal-header">
+  <a href="index.html" class="logo">Studio <em>Print</em></a>
+</header>
+
+<main class="legal-main">
+  <section class="offline">
+    <svg class="offline-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M1 1l22 22"/>
+      <path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"/>
+      <path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"/>
+      <path d="M10.71 5.05A16 16 0 0 1 22.58 9"/>
+      <path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"/>
+      <path d="M8.53 16.11a6 6 0 0 1 6.95 0"/>
+      <line x1="12" y1="20" x2="12.01" y2="20"/>
+    </svg>
+    <span class="offline-tag">No Connection</span>
+    <h1>You're offline right now.</h1>
+    <p>Studio Print pages you have already visited still work from cache. New pages and the passport photo tool need the internet the first time.</p>
+    <div class="offline-ctas">
+      <button type="button" class="btn primary" onclick="location.reload()">Try again</button>
+      <a class="btn" href="/">Go home</a>
+    </div>
+    <div class="offline-hint">This page will reload automatically when you're back online.</div>
+  </section>
+</main>
+
+<script>
+(function(){
+  if ('onLine' in navigator && navigator.onLine === false) {
+    window.addEventListener('online', function(){ location.reload(); }, { once: true });
+  }
+})();
+</script>
+
+</body>
+</html>
