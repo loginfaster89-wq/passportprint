@@ -476,63 +476,70 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
   .faq-item .faq-body{padding:0 16px 14px;}
 }
 
-/* ── MOBILE CARD SLIDERS ── */
-/* On narrow screens, every homepage card grid becomes a horizontal
-   scroll-snap slider. A <div class="slider-dots"></div> is injected
-   after each grid by a tiny script (see end of file). */
+/* ── CARD SLIDERS ── */
+/* Any homepage card grid becomes a horizontal scroll-snap slider when JS
+   adds the `is-slider` class: either because the viewport is narrow
+   (≤760px) or because the grid's last row is an orphan (fewer cards than
+   the first row). A <div class="slider-dots"></div> is injected after
+   each grid by a tiny script (see end of file). */
 .slider-dots{display:none;}
-@media (max-width:760px){
-  .features-grid,
-  .audience-grid,
-  .why-grid,
-  .steps-grid,
-  .pricing-grid{
-    display:flex;
-    flex-wrap:nowrap;
-    gap:12px;
-    overflow-x:auto;
-    overflow-y:hidden;
-    scroll-snap-type:x mandatory;
-    -webkit-overflow-scrolling:touch;
-    scrollbar-width:none;
-    margin:0 -18px;
-    padding:4px 18px 8px;
-    scroll-padding-left:18px;
-  }
-  .features-grid::-webkit-scrollbar,
-  .audience-grid::-webkit-scrollbar,
-  .why-grid::-webkit-scrollbar,
-  .steps-grid::-webkit-scrollbar,
-  .pricing-grid::-webkit-scrollbar{display:none;}
-  .feature-card,
-  .audience-card,
-  .why-card,
-  .step-card,
-  .pricing-card{
-    flex:0 0 86%;
-    scroll-snap-align:start;
-    min-height:0;
-  }
-  .feature-card.primary{flex:0 0 86%;min-height:0;grid-column:auto;}
-  .slider-dots{
-    display:flex;
-    justify-content:center;
-    gap:7px;
-    margin:14px 0 0;
-    padding:0;
-  }
-  .slider-dots button{
-    width:7px;height:7px;border-radius:50%;
-    background:var(--border);
-    border:0;padding:0;
-    cursor:pointer;
-    transition:background .2s,transform .2s,width .2s;
-  }
-  .slider-dots button.active{
-    background:var(--accent);
-    width:18px;
-    border-radius:4px;
-  }
+.features-grid.is-slider,
+.audience-grid.is-slider,
+.why-grid.is-slider,
+.steps-grid.is-slider,
+.pricing-grid.is-slider{
+  display:flex;
+  flex-wrap:nowrap;
+  gap:12px;
+  overflow-x:auto;
+  overflow-y:hidden;
+  scroll-snap-type:x mandatory;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+  margin:0 -18px;
+  padding:4px 18px 8px;
+  scroll-padding-left:18px;
+}
+.features-grid.is-slider::-webkit-scrollbar,
+.audience-grid.is-slider::-webkit-scrollbar,
+.why-grid.is-slider::-webkit-scrollbar,
+.steps-grid.is-slider::-webkit-scrollbar,
+.pricing-grid.is-slider::-webkit-scrollbar{display:none;}
+.features-grid.is-slider > .feature-card,
+.audience-grid.is-slider > .audience-card,
+.why-grid.is-slider > .why-card,
+.steps-grid.is-slider > .step-card,
+.pricing-grid.is-slider > .pricing-card{
+  flex:0 0 86%;
+  scroll-snap-align:start;
+  min-height:0;
+}
+.features-grid.is-slider > .feature-card.primary{flex:0 0 86%;min-height:0;grid-column:auto;}
+@media (min-width:761px){
+  .features-grid.is-slider > .feature-card,
+  .audience-grid.is-slider > .audience-card,
+  .why-grid.is-slider > .why-card,
+  .steps-grid.is-slider > .step-card,
+  .pricing-grid.is-slider > .pricing-card{flex:0 0 48%;}
+}
+.is-slider + .slider-dots{
+  display:flex;
+  justify-content:center;
+  gap:7px;
+  margin:14px 0 0;
+  padding:0;
+}
+.slider-dots button{
+  width:7px;height:7px;border-radius:50%;
+  background:var(--border);
+  border:0;padding:0;
+  cursor:pointer;
+  transition:background .2s,transform .2s,width .2s;
+}
+.slider-dots button.active{
+  background:var(--accent);
+  width:18px;
+  border-radius:4px;
 }
 </style>
 </head>
@@ -930,8 +937,11 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
 <script src="assets/nav.js" defer></script>
 <script src="assets/auth.js" defer></script>
 <script>
-// Mobile card sliders: wrap each homepage grid with dot indicators and
-// sync the active dot to the scroll position. Pure vanilla; no deps.
+// Homepage card sliders: any grid becomes a horizontal scroll-snap slider
+// either on narrow viewports (≤760px) or whenever its last row is an
+// orphan (fewer cards than the first row). Dots indicator is injected
+// after each slider-mode grid and synced to the scroll position. Pure
+// vanilla; no deps.
 (function () {
   var SELECTORS = ['.features-grid', '.audience-grid', '.why-grid', '.steps-grid', '.pricing-grid'];
   var MQ = window.matchMedia('(max-width: 760px)');
@@ -971,19 +981,63 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
     for (var j = 0; j < bs.length; j++) bs[j].classList.toggle('active', j === active);
   }
 
+  // Detect an incomplete last row in grid layout. Uses the per-row right
+  // edge (rightmost card's right coordinate) rather than child count so
+  // spanning cards (e.g. .feature-card.primary on desktop) are treated
+  // as filling the row. Returns true when the last row's right edge is
+  // noticeably narrower than the first row's.
+  function hasOrphanRow(grid) {
+    var cards = grid.children;
+    if (cards.length < 2) return false;
+    var rows = [];
+    for (var i = 0; i < cards.length; i++) {
+      var c = cards[i];
+      var top = c.offsetTop;
+      var right = c.offsetLeft + c.offsetWidth;
+      var row = rows[rows.length - 1];
+      if (!row || Math.abs(row.top - top) > 4) {
+        rows.push({ top: top, right: right });
+      } else if (right > row.right) {
+        row.right = right;
+      }
+    }
+    if (rows.length < 2) return false;
+    return (rows[0].right - rows[rows.length - 1].right) > 10;
+  }
+
+  function attachScroll(grid, dots) {
+    if (grid._spDotsScroll) return;
+    var onScroll = function () { sync(grid, dots); };
+    grid.addEventListener('scroll', onScroll, { passive: true });
+    grid._spDotsScroll = onScroll;
+  }
+
+  function detachScroll(grid) {
+    if (grid._spDotsScroll) {
+      grid.removeEventListener('scroll', grid._spDotsScroll);
+      grid._spDotsScroll = null;
+    }
+  }
+
   function setup() {
     SELECTORS.forEach(function (sel) {
       var grid = document.querySelector(sel);
       if (!grid) return;
+      // Measure orphan state in grid mode, so remove class first and let
+      // the browser re-layout before sampling card positions.
+      var wasSlider = grid.classList.contains('is-slider');
+      if (wasSlider) grid.classList.remove('is-slider');
+      // Force synchronous reflow.
+      void grid.offsetHeight;
+      var shouldSlide = MQ.matches || hasOrphanRow(grid);
       var next = grid.nextElementSibling;
-      if (MQ.matches) {
+      if (shouldSlide) {
+        grid.classList.add('is-slider');
         var dots = buildDots(grid);
-        var onScroll = function () { sync(grid, dots); };
-        grid.addEventListener('scroll', onScroll, { passive: true });
-        grid._spDotsScroll = onScroll;
+        attachScroll(grid, dots);
         sync(grid, dots);
       } else if (next && next.classList.contains('slider-dots')) {
-        if (grid._spDotsScroll) grid.removeEventListener('scroll', grid._spDotsScroll);
+        detachScroll(grid);
         next.remove();
       }
     });
