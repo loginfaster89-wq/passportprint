@@ -113,6 +113,24 @@ modal directly without expanding the nav:
 5. **Shared auth/nav changes** live in `assets/auth.js`, `assets/auth.css`,
    `assets/nav.js`, `assets/legal.css`. Do not fork the shared module into a
    per-page copy.
+6. **Shared auth toast.** On login / signup-verify / Google Sign-In /
+   logout / account-delete, `assets/auth.js` fires `notify(msg)`. On
+   `passport-photo.html` it delegates to the inline `window.showToast`
+   (so the page's existing `.toast` element is reused); everywhere else
+   it injects a `.sp-toast` element styled in `assets/auth.css`. Keep the
+   two visually in sync — both use `var(--surface)` bg +
+   `var(--accent)` border + `z-index: 10001`.
+
+## Passport-photo defaults (post PR #58)
+
+Reference only — do not modify `passport-photo.html` without user approval.
+
+- **Default sheet layout:** 5 photos, 5 cols × 1 row (`sheetCols=5`,
+  `sheetRows=1`, `sheetTotal=5`). Was previously 8 photos in 4 × 2.
+- **Mobile step bar** (`.steps` with the 1 → 4 progress pills) is hidden
+  on phones `≤640px` via the existing media block.
+- **Mobile upload card** uses a 360px max-width with reduced padding /
+  pill sizes so it sits centered in the canvas area on narrow screens.
 
 ## Working with the GitHub App / PAT
 

@@ -277,3 +277,37 @@
   .sp-auth-header { padding: 14px 16px; }
   .sp-auth-title { font-size: 18px; }
 }
+
+/* ── Toast ──
+   Mirrors the passport-photo.html inline `.toast` so login/logout/account
+   notifications look identical on the homepage + all legal pages. */
+.sp-toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translate(-50%, 20px);
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  color: var(--text);
+  padding: 14px 22px;
+  border-radius: 10px;
+  font-family: 'DM Mono', ui-monospace, Menlo, monospace;
+  font-size: 14px;
+  line-height: 1.45;
+  z-index: 10001;
+  box-shadow: 0 8px 24px rgba(0,0,0,.5);
+  width: max-content;
+  max-width: min(560px, calc(100vw - 24px));
+  min-width: min(260px, calc(100vw - 24px));
+  text-align: center;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  opacity: 0;
+  pointer-events: none;
+  transition: transform .22s ease-out, opacity .22s ease-out;
+}
+.sp-toast.sp-toast-show {
+  transform: translate(-50%, 0);
+  opacity: 1;
+}
