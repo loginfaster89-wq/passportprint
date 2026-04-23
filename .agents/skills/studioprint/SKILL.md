@@ -127,7 +127,55 @@ to dedupe it from here.
 - Before reporting done: `npm run build` locally.
 - Keep backend / CI / CD internals brief unless asked.
 
-## 9. Related repos
+## 9. Known issues from the 2026-04-23 full-site audit
+
+See `issues.md` at the repo root for the full findings table. One-line
+summary per bucket (next sessions should treat these as the default
+backlog unless the user redirects):
+
+**Blocking / near-blocking (fix first):**
+- `passport-photo.html` loads Razorpay with an undefined build URL
+  (`checkout-static-next.razorpay.com/build/undefined` → 403). Audit
+  reproduced on desktop 1440 and iPhone 390, NOT on iPad 820 (different
+  SDK code path). Issue ID `F1`.
+- Google One-Tap auto-prompt covers the Login button on iPad / iPhone
+  when landing on `passport-photo.html`. Kill auto-prompt on touch
+  viewports — call `google.accounts.id.disableAutoSelect()` or drop
+  the auto-prompt, keep only the explicit "Continue with Google"
+  button in the shared auth modal. Issue ID `F2`.
+
+**Layout (medium):**
+- `F3` — features-grid at exactly 820px renders 2-col with 5 cards
+  and uneven heights; primary `.feature-card.primary` has `min-height:230px`
+  while sibling SOON cards are shorter.
+- `F4` — hero H1 wraps badly at 820 and 390. Phrase boundary splits
+  "Every print job. / One browser tab." on desktop but "Every print
+  job. One / browser tab." on 820px and "Every print / job. One /
+  browser tab." on 390. Needs `text-wrap:balance` on `.hero h1`
+  or an explicit break.
+
+**Nits / polish queue (F5-F12, P1-P30 in issues.md):**
+- Pricing "Shop counter" title wraps at 820. Most-Popular badge
+  alignment at 1440. Emoji icons render inconsistently on Android
+  (suggest SVG icon pack — no new fonts needed). Cards flat on hover.
+  FAQ `<details>` has no transition. No mobile sticky CTA. Contact
+  email exposed as scrapable plain text on about + contact.
+
+**How to audit again (reproducible)**
+
+```bash
+# 3 viewports × 8 pages via Playwright, ~30 s.
+mkdir -p /home/ubuntu/audit-evidence
+# See the script committed to issues.md's reference section; run:
+python3 -c "import playwright" || pip install playwright && playwright install chromium
+# Then adapt the PAGES/VIEWPORTS list in your script and iterate.
+```
+
+When auditing: check `audit.json` for `hasHScroll`, `brokenImages`,
+`consoleErrors`, `netErrors`. Per-page `logs/<page>__<viewport>.json`
+has full console + network.
+
+## 10. Related repos
 
 - Frontend (this repo): `loginfaster89-wq/passportprint`
 - Backend: `loginfaster89-wq/PassportPrint-Studio` — Node/Express on
