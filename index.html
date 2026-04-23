@@ -178,14 +178,14 @@ body.home main.home-main{
   top:14%;left:-4%;transform:rotate(-11deg);
 }
 .hero-sheet.right{
-  top:38%;right:-3%;transform:rotate(9deg);
+  top:38%;right:max(-3%,-24px);transform:rotate(9deg);
   width:clamp(160px,17vw,220px);
 }
 @media (max-width:1100px){
   .hero-sheet.left{display:none;}
-  .hero-sheet.right{top:58%;right:-10%;opacity:.55;}
+  .hero-sheet.right{top:58%;right:max(-10%,-40px);opacity:.55;}
 }
-@media (max-width:760px){
+@media (max-width:820px){
   .hero-sheets{display:none;}
 }
 .hero-trust .pill{
@@ -709,6 +709,9 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
   .feature-card h3{font-size:17px;}
   .step-card h4{font-size:15px;}
 }
+@media (max-width:420px){
+  .hero h1{font-size:clamp(28px,8.6vw,64px);max-width:none;}
+}
 @media (max-width:340px){
   .hero h1{font-size:30px;}
   .hero p.lead{font-size:13px;}
@@ -791,6 +794,12 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
   border:0;padding:0;
   cursor:pointer;
   transition:background .2s,transform .2s,width .2s;
+  position:relative;
+}
+.slider-dots button::after{
+  content:"";
+  position:absolute;
+  inset:-8.5px;
 }
 .slider-dots button.active{
   background:var(--accent);

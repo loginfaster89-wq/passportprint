@@ -266,6 +266,7 @@ footer.legal-footer:has(.footer-main){
 .footer-col ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:6px;}
 .footer-col a{
   color:var(--muted);font-size:13px;line-height:1.5;
+  padding-block:6px;
   transition:color .15s;
 }
 .footer-col a:hover{color:var(--accent);text-decoration:none;}
