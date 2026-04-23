@@ -143,49 +143,52 @@ to dedupe it from here.
 
 ## 9. Known issues from the 2026-04-23 full-site audit
 
-See `issues.md` at the repo root for the full findings table. One-line
-summary per bucket (next sessions should treat these as the default
-backlog unless the user redirects):
+See `issues.md` at the repo root for the full findings table. This skill
+just lists what's closed and what's still open so the next session
+doesn't re-fix already-merged work.
 
-**Resolved this week (do NOT re-fix):**
-- `F1` Razorpay undefined URL → PR #70 (declarative `<script async>` +
-  preconnects). The remaining /build/undefined 403 is a Razorpay-SDK
-  bug, payment flow actually works.
-- `F2` Google One-Tap auto-prompt → PR #71 (prompt only fires on
-  explicit Login click inside the auth modal).
-- `F3` features-grid 820 uneven heights → PR #73 (explicit 2-col at
-  761-899 with primary `grid-column:1/-1`, 3-col desktop moved to
-  `min-width:900px`).
-- `F4` hero H1 phrase wrap → PR #74 (explicit `<br>` between the
-  two sentences + `text-wrap:balance` on `.hero h1`).
-- `F5` pricing-card heights at 820 → PR #78 (narrow-tablet
-  `@media (min-width:761px) and (max-width:899px)` shrinks `h3` to
-  19px, `.amt` to 32px, `.per` to 11px; "Shop counter" +
-  "for 30 days" both fit on one line; ≥900 untouched).
-- `F8` plain-text email on about / contact → PR #77
-  (`<a class="email-obf" data-u="…" data-d="…">` + tiny per-page
-  IIFE assembles the mailto on DOMContentLoaded; regex scrapers
-  no longer see the address, browser users see the full clickable
-  `mailto:` as before. No new shared module).
-- `P3 + P7 + P17` interaction polish → PR #76 (CSS-only, one PR).
-  `.why/.step/.audience/.pricing-card` hover lift + shadow,
-  `.btn:active{transform:scale(.97)}`, `.pricing-card .pcta:active`
-  same. Site-wide `:focus-visible { outline:2px solid var(--accent);
-  outline-offset:2px }` added to `assets/legal.css` with
-  `:focus{outline:none}` fallback so mouse clicks don't show rings.
-  Respects `prefers-reduced-motion: reduce`.
+**All quick-win queue items are now merged (do NOT re-fix):**
+- `F1` Razorpay decl. script → PR #70. `F2` One-Tap auto-prompt → PR #71.
+- `F3` features 820 heights → PR #73. `F4` hero H1 wrap → PR #74.
+- `F5` pricing 820 heights → PR #78. `F8` email obfuscation → PR #77.
+- `F9` ribbon centering → PR #80. `F10` preview chrome → PR #81.
+- `F12/P4` SVG icon pack → PR #85.
+- `P3+P7+P17` card/button/focus polish → PR #76.
+- `P6` FAQ smooth open + `−` toggle → PR #82.
+- `P13` Most-Popular ribbon pulse → PR #89.
+- `P14` mobile sticky CTA pill → PR #83.
+- `P18` FAQ deep-link IDs + auto-open → PR #88.
+- `P22` 1200×630 OG image → PR #84.
+- `P23` sitemap.xml lastmod + anchors → PR #90.
+- `P25` backend preconnect on all legal pages → PR #87.
+- `P27` branded 404 page → PR #86.
+- `P5` scroll-reveal IntersectionObserver → PR #91.
 
-**Nits / polish queue (remaining):**
-- `F6` audience grid sparse (2 cards) on desktop. `F7` GSI iframe
-  permissions-policy console warnings (harmless). `F9` Most-Popular
-  badge overlap at 1440. `F10` tools-preview window-chrome dots
-  unclear. `F11` desktop 1440 empty space below upload card on
-  passport-photo. `F12` emoji icons inconsistent across platforms —
-  switch to SVG pack.
-- 2026 polish: P6 (FAQ smooth slide + `−` toggle), P14 (mobile sticky
-  CTA pill), P22 (proper 1200×630 OG image) are the next highest-
-  impact quick wins. P4/F12 SVG-icon pack + P9/P10/P15/P19/P27/P28
-  are larger scope items.
+**Open backlog (default priority order for next session):**
+
+*Functional nits:* `F6` audience grid sparse, `F7` GSI iframe warnings
+(harmless, not our code), `F11` passport-photo 1440 empty space (locked
+file — needs user approval).
+
+*2026 polish roadmap (by impact):*
+1. `P28` PWA manifest + offline-capable SW — highest value.
+2. `P15` multi-column footer (Product/Resources/Company/Legal + social).
+3. `P9` About page rework (mission hero + 2024→2026 timeline).
+4. `P10` Contact form (name/email/message/category + mailto fallback).
+5. `P19` Inline product-demo video in tools-preview card.
+6. `P2` Hero product visual (A4 mockup with 5 passport photos).
+7. `P8` Social proof (testimonials / "trusted by" / concrete numbers).
+8. `P11` Pricing monthly/yearly toggle (copy-only phase 1).
+9. `P12` Pricing comparison matrix.
+10. `P1` Hero animated gradient pulse (CSS-only).
+11. `P30` Homepage density break — live-demo section between HERO/FEATURES.
+12. `P24` Self-host Syne + DM Mono (woff2 subset).
+13. `P16` Language switcher UI affordance.
+14. `P26` Cookie banner (self-hosted, essentials-only).
+
+*Locked-file items (`passport-photo.html` — needs explicit user ok):*
+`F11`, `P20` AI-model download progress bar, `P21` inline error banner,
+`P29` step-bar progress fill.
 
 **How to audit again (reproducible)**
 
