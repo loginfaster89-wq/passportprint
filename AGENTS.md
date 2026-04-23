@@ -4,6 +4,11 @@ This file is read automatically by coding agents (Devin, Cursor, etc.) when
 they open this repo. Keep it short; deep implementation notes go in
 `CLOUDFLARE_DEPLOY.md` or in source comments where they belong.
 
+For Devin specifically, there is also a condensed recipe at
+[`.agents/skills/studioprint/SKILL.md`](.agents/skills/studioprint/SKILL.md)
+covering the build/preview/PAT-PR commands, hard rules, and current copy tone
+so a new session can start work quickly without re-reading everything.
+
 ## What this repo is
 
 Plain static HTML/CSS/JS frontend for [Studio Print](https://studioprint.pages.dev/) —
