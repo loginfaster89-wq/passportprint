@@ -130,9 +130,19 @@ body.home main.home-main{
   display:flex;align-items:center;gap:8px;padding:6px 8px 10px;
   border-bottom:1px solid var(--border);
 }
-.hero-preview-bar .pdot{width:10px;height:10px;border-radius:50%;background:var(--surface3);}
-.hero-preview-bar .pdot.amber{background:var(--accent);}
-.hero-preview-bar .ptitle{margin-left:8px;color:var(--muted);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;}
+.hero-preview-bar .plive{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--accent);
+  box-shadow:0 0 0 4px rgba(240,165,0,0.18);
+  flex:none;
+}
+.hero-preview-bar .ptitle{color:var(--muted);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;}
+.hero-preview-bar .ptag-live{
+  margin-left:auto;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.14em;
+  text-transform:uppercase;color:var(--accent);
+  padding:2px 8px;border-radius:999px;border:1px solid rgba(240,165,0,0.35);
+  background:var(--accent-dim);
+}
 .hero-preview-grid{
   display:grid;grid-template-columns:1.2fr 1fr;gap:14px;padding:14px;
 }
@@ -661,8 +671,9 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
 
     <div class="hero-preview" aria-hidden="true">
       <div class="hero-preview-bar">
-        <span class="pdot"></span><span class="pdot"></span><span class="pdot amber"></span>
+        <span class="plive" aria-hidden="true"></span>
         <span class="ptitle">studio print · tools preview</span>
+        <span class="ptag-live">Live in browser</span>
       </div>
       <div class="hero-preview-tiles">
         <div class="hpv-mini">
