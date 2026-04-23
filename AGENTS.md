@@ -200,11 +200,22 @@ Quick headlines for the next session (post-2026-04-23 worklog):
   3-col desktop layout moved to `min-width:900px`.
 - `F4` hero H1 phrase wrap → merged in PR #74. `<br>` between the
   two sentences + `text-wrap:balance` on `.hero h1`.
-- Open backlog: F5-F12 + P1-P30 in `issues.md`. Highest-impact
-  quick wins: P3 (card hover lift) + P7 (button active) + P17
-  (focus-visible rings) as one CSS-only PR; P6 (FAQ smooth open);
-  P14 (mobile sticky CTA); F8 (email obfuscation on about/contact);
-  P22 (proper 1200×630 OG image); F12/P4 (emoji → SVG icon pack).
+- `F5` pricing-card heights at 820 → PR #78. Narrow-tablet media
+  query (761-899) shrinks `.pricing-card h3` to 19px, `.amt` to 32px,
+  `.per` to 11px so "Shop counter" + "for 30 days" both fit one-line.
+- `F8` plain-text email on about / contact → PR #77. `<a class="email-obf"
+  data-u data-d>` + tiny per-page IIFE assembles the `mailto:` on
+  DOMContentLoaded; regex scrapers no longer see the address.
+- `P3 + P7 + P17` interaction polish → PR #76 (CSS-only). Card
+  `:hover { translateY(-4px) + amber-tinted shadow }` on `.why/.step/
+  .audience/.pricing-card`, `.btn:active{scale(.97)}`, site-wide
+  `:focus-visible { outline:2px solid var(--accent) }` in `legal.css`.
+  Respects `prefers-reduced-motion: reduce`.
+- Open backlog: F6, F7, F9-F12 + P1-P2, P4-P5, P6, P8-P16, P18-P30
+  in `issues.md`. Highest-impact remaining quick wins: P6 (FAQ smooth
+  open); P14 (mobile sticky CTA); P22 (proper 1200×630 OG image);
+  F9 (Most-Popular ribbon 1440 alignment); F10 (tools-preview window
+  chrome); F12/P4 (emoji → SVG icon pack).
 
 ## Working style for human collaborators
 

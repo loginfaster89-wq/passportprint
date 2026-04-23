@@ -158,19 +158,34 @@ backlog unless the user redirects):
   `min-width:900px`).
 - `F4` hero H1 phrase wrap → PR #74 (explicit `<br>` between the
   two sentences + `text-wrap:balance` on `.hero h1`).
+- `F5` pricing-card heights at 820 → PR #78 (narrow-tablet
+  `@media (min-width:761px) and (max-width:899px)` shrinks `h3` to
+  19px, `.amt` to 32px, `.per` to 11px; "Shop counter" +
+  "for 30 days" both fit on one line; ≥900 untouched).
+- `F8` plain-text email on about / contact → PR #77
+  (`<a class="email-obf" data-u="…" data-d="…">` + tiny per-page
+  IIFE assembles the mailto on DOMContentLoaded; regex scrapers
+  no longer see the address, browser users see the full clickable
+  `mailto:` as before. No new shared module).
+- `P3 + P7 + P17` interaction polish → PR #76 (CSS-only, one PR).
+  `.why/.step/.audience/.pricing-card` hover lift + shadow,
+  `.btn:active{transform:scale(.97)}`, `.pricing-card .pcta:active`
+  same. Site-wide `:focus-visible { outline:2px solid var(--accent);
+  outline-offset:2px }` added to `assets/legal.css` with
+  `:focus{outline:none}` fallback so mouse clicks don't show rings.
+  Respects `prefers-reduced-motion: reduce`.
 
-**Nits / polish queue (F5-F12 remaining, P1-P30 in issues.md):**
-- `F5` pricing "Shop counter" title wraps at 820. `F6` audience grid
-  sparse (2 cards) on desktop. `F7` GSI iframe permissions-policy
-  console warnings (harmless). `F8` plain-text email on about /
-  contact — scrapable. `F9` Most-Popular badge overlap at 1440.
-  `F10` tools-preview window-chrome dots unclear. `F11` desktop
-  1440 empty space below upload card on passport-photo. `F12`
-  emoji icons inconsistent across platforms — switch to SVG pack.
-- 2026 polish: P3/P6/P7/P14/P17/P22 are the highest-impact quick
-  wins (hover lift, FAQ slide, button active, sticky mobile CTA,
-  focus rings, proper OG image). P9/P10/P15/P19/P27/P28 are
-  larger scope items.
+**Nits / polish queue (remaining):**
+- `F6` audience grid sparse (2 cards) on desktop. `F7` GSI iframe
+  permissions-policy console warnings (harmless). `F9` Most-Popular
+  badge overlap at 1440. `F10` tools-preview window-chrome dots
+  unclear. `F11` desktop 1440 empty space below upload card on
+  passport-photo. `F12` emoji icons inconsistent across platforms —
+  switch to SVG pack.
+- 2026 polish: P6 (FAQ smooth slide + `−` toggle), P14 (mobile sticky
+  CTA pill), P22 (proper 1200×630 OG image) are the next highest-
+  impact quick wins. P4/F12 SVG-icon pack + P9/P10/P15/P19/P27/P28
+  are larger scope items.
 
 **How to audit again (reproducible)**
 
