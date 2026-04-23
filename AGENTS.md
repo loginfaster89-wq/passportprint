@@ -182,6 +182,32 @@ curl -sS -X POST \
 PAT must have `Contents: Read and write` and `Pull requests: Read and write`
 on this repo. Add `Actions: Read and write` only if editing workflow files.
 
+## Known-issue backlog (2026-04-23 audit)
+
+A full audit of the production site (3 viewports × 8 pages) is recorded
+at `issues.md` at the repo root. That file is the source of truth for
+**what's broken / dated** right now; treat its "Suggested PR sequence"
+as the default backlog unless the user redirects.
+
+Quick headlines for the next session:
+- **Razorpay SDK** on `passport-photo.html` fetches
+  `https://checkout-static-next.razorpay.com/build/undefined` → 403.
+  A JS variable is undefined when the SDK composes its build path.
+  Reproduced on desktop 1440 + iPhone 390, NOT on iPad 820.
+- **Google One-Tap** auto-prompts on `passport-photo.html` mobile
+  viewports and covers the Login button / upload card. Disable
+  auto-prompt site-wide; keep only the explicit "Continue with
+  Google" button inside the auth modal.
+- **Hero H1** wraps badly at 820 and 390. `text-wrap:balance` on
+  `.hero h1` or an explicit responsive `<br>` fixes the phrase-
+  boundary issue without touching copy.
+- **`.features-grid` at 820px** renders a 2-col grid with 5 cards and
+  uneven heights (`.feature-card.primary` has `min-height:230px`;
+  sibling SOON cards are shorter).
+- Polish backlog (emoji → SVG icons; card hover lift; FAQ slide-open
+  transition; mobile sticky CTA; email obfuscation on about/contact;
+  proper 1200×630 OG image) is fully listed in `issues.md` §B.
+
 ## Working style for human collaborators
 
 The project owner is non-technical, prefers **simple Hinglish** explanations,
