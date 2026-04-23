@@ -594,6 +594,29 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
     transform:none;
   }
 }
+
+/* Mobile sticky CTA pill — appears on phones once the user has scrolled
+   past the hero, improving conversion on long scroll sessions. Hidden
+   on desktop/tablet because the in-hero CTA is already visible. */
+.sp-mobile-cta{
+  position:fixed;right:16px;bottom:16px;z-index:60;
+  display:none;align-items:center;gap:6px;
+  padding:12px 18px;border-radius:999px;
+  background:var(--accent);color:#0d0d0d;
+  font-family:'DM Mono',monospace;font-size:13px;font-weight:700;
+  letter-spacing:0.04em;text-decoration:none;
+  box-shadow:0 12px 28px -10px rgba(240,165,0,0.55),0 4px 10px rgba(0,0,0,0.35);
+  opacity:0;transform:translateY(12px) scale(.96);pointer-events:none;
+  transition:opacity .2s ease, transform .2s ease;
+}
+.sp-mobile-cta .arrow{font-family:inherit;}
+.sp-mobile-cta:active{transform:translateY(10px) scale(.94);}
+.sp-mobile-cta.is-visible{opacity:1;transform:translateY(0) scale(1);pointer-events:auto;}
+@media (max-width:640px){.sp-mobile-cta{display:inline-flex;}}
+@media (prefers-reduced-motion: reduce){
+  .sp-mobile-cta{transition:opacity .15s linear;transform:none;}
+  .sp-mobile-cta.is-visible{transform:none;}
+}
 </style>
 </head>
 <body class="home">
@@ -974,6 +997,10 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
 
 </main>
 
+<a class="sp-mobile-cta" href="passport-photo.html" aria-label="Open Passport Photo tool">
+  Open Passport Photo <span class="arrow" aria-hidden="true">→</span>
+</a>
+
 <footer class="legal-footer">
   <div class="links">
     <a href="index.html">Home</a>·
@@ -990,6 +1017,26 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
 <script src="assets/nav.js" defer></script>
 <script src="assets/auth.js" defer></script>
 <script src="assets/sliders.js" defer></script>
+<script>
+// Mobile sticky CTA pill — reveal once the user has scrolled past the hero
+// so a persistent "Open Passport Photo" affordance follows them down the
+// page. Desktop / tablet keeps it hidden (CSS guard on @media ≤640px).
+(function () {
+  try {
+    var cta = document.querySelector('.sp-mobile-cta');
+    var hero = document.querySelector('.hero');
+    if (!cta || !hero || !('IntersectionObserver' in window)) return;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        // Show once the hero's bottom has scrolled above the viewport top.
+        if (!e.isIntersecting) cta.classList.add('is-visible');
+        else cta.classList.remove('is-visible');
+      });
+    }, { rootMargin: '0px 0px -100% 0px', threshold: 0 });
+    io.observe(hero);
+  } catch (_) {}
+})();
+</script>
 <script>
 // Warm up the Render-hosted backend so the first real call on /passport-photo
 // doesn't pay the full free-tier cold-start latency (up to ~30–50s after
