@@ -82,11 +82,48 @@ modal directly without expanding the nav:
 ```html
 <header class="legal-header">
   <a href="index.html" class="logo">Studio <em>Print</em></a>
-  <nav id="primaryNav">…links…</nav>
+  <nav id="primaryNav">
+    <a href="index.html">Home</a>
+    <div class="has-dropdown">…Features ▾…</div>
+    <a href="index.html#pricing">Pricing</a>
+    <a href="index.html#faq">FAQ</a>
+  </nav>
   <button type="button" class="nav-login" id="hdrAuthBtn">…Login…</button>
   <button class="nav-toggle" aria-controls="primaryNav">☰</button>
 </header>
 ```
+
+Every shared page (index + 6 legal pages) ships the **same 4 nav links**
+plus the Features dropdown. If you add a new legal page, copy this nav
+block verbatim so the header stays in sync.
+
+On mobile (`<=900px`) the nav opens as an **overlay**
+(`position:absolute; top:100%; left:0; right:0; z-index:45` with backdrop
+blur + shadow) so it floats over the content instead of pushing it down.
+Keep this behaviour when editing `assets/legal.css`.
+
+### Footer markup (shared pages)
+
+Every shared page uses the **same 7-link legal footer** — no product /
+feature links here:
+
+```html
+<footer class="legal-footer">
+  <div class="links">
+    <a href="index.html">Home</a>·
+    <a href="about.html">About</a>·
+    <a href="privacy.html">Privacy</a>·
+    <a href="terms.html">Terms</a>·
+    <a href="refund.html">Refund</a>·
+    <a href="shipping.html">Delivery</a>·
+    <a href="contact.html">Contact</a>
+  </div>
+  <div>© 2026 Studio Print. All rights reserved.</div>
+</footer>
+```
+
+Product features (Passport Photo and future tools) belong in the header
+**Features ▾** dropdown, never in the footer.
 
 `passport-photo.html` keeps its own pre-PR-#54 inline copy of the header
 (still `#hdrAuthBtn` inside `<nav>`) because we do not touch that file.
@@ -113,6 +150,11 @@ modal directly without expanding the nav:
 5. **Shared auth/nav changes** live in `assets/auth.js`, `assets/auth.css`,
    `assets/nav.js`, `assets/legal.css`. Do not fork the shared module into a
    per-page copy.
+6. **Footer is legal-only** across every shared page. Do not add product /
+   feature links (Passport Photo, future tools) to the footer — they belong
+   in the header **Features ▾** dropdown. The footer must stay as the 7
+   links shown above: Home · About · Privacy · Terms · Refund · Delivery ·
+   Contact.
 
 ## Working with the GitHub App / PAT
 
