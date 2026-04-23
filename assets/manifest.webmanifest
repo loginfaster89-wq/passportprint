@@ -1,0 +1,49 @@
+{
+  "name": "Studio Print",
+  "short_name": "Studio Print",
+  "description": "On-device AI print studio — passport photos, Aadhaar/PAN sheets and 300 DPI A4 layouts, right in your browser.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0D0D0D",
+  "theme_color": "#0D0D0D",
+  "lang": "en-IN",
+  "dir": "ltr",
+  "categories": ["productivity", "photo", "utilities", "business"],
+  "icons": [
+    {
+      "src": "/assets/logo.svg",
+      "type": "image/svg+xml",
+      "sizes": "any",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/icon-maskable-512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Open Passport Photo",
+      "short_name": "Passport Photo",
+      "description": "Jump straight into the passport photo tool",
+      "url": "/passport-photo.html",
+      "icons": [{ "src": "/assets/icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    }
+  ]
+}
