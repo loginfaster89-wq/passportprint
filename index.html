@@ -438,6 +438,36 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
 .feature-card .fcta .arrow{transition:transform .2s;}
 .feature-card.live:hover .fcta .arrow{transform:translateX(3px);}
 
+/* ── STATS / SOCIAL PROOF (P8) ──
+   No fabricated testimonials / trusted-by logos — each stat maps to a
+   verifiable product claim already documented in the meta description,
+   FAQ, pricing, and hero trust pills. Uses existing tokens only. */
+.stats-grid{
+  list-style:none;margin:0;padding:0;
+  display:grid;gap:14px;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+}
+.stat-card{
+  padding:24px 22px;border-radius:14px;
+  background:var(--surface);border:1px solid var(--border);
+  display:flex;flex-direction:column;gap:10px;
+  transition:transform .2s ease, border-color .2s ease;
+}
+.stat-card:hover{transform:translateY(-3px);border-color:var(--accent-dim);}
+.stat-num{
+  font-family:'Syne',sans-serif;font-weight:800;
+  font-size:clamp(30px,4.2vw,42px);line-height:1;
+  color:var(--accent);letter-spacing:-0.5px;
+}
+.stat-unit{
+  font-family:'DM Mono',monospace;font-weight:500;
+  font-size:14px;color:var(--muted);margin-left:4px;letter-spacing:0;
+}
+.stat-label{
+  font-family:'DM Mono',monospace;font-size:13px;line-height:1.55;
+  color:var(--muted);
+}
+
 /* ── WHY GRID ── */
 .why-grid{
   display:grid;gap:14px;
@@ -1055,6 +1085,36 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
           </ul>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- STATS / SOCIAL PROOF (P8) -->
+  <section class="section stats-section reveal" id="stats">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="section-tag">By the numbers</span>
+        <h2>The product, stated plainly.</h2>
+        <p>No testimonial theatre, no mystery metrics. Just the load-bearing facts that shape every print job you run through this tab.</p>
+      </div>
+
+      <ul class="stats-grid">
+        <li class="stat-card">
+          <span class="stat-num">0</span>
+          <span class="stat-label">Photos ever uploaded to our servers. Background removal runs on your device.</span>
+        </li>
+        <li class="stat-card">
+          <span class="stat-num">2 <span class="stat-unit">sheets</span></span>
+          <span class="stat-label">Free every day — no credit card, no signup wall before your first print.</span>
+        </li>
+        <li class="stat-card">
+          <span class="stat-num">₹149<span class="stat-unit">/30 days</span></span>
+          <span class="stat-label">Unlimited A4 passport sheets on the monthly pass. Weekly pass is ₹59.</span>
+        </li>
+        <li class="stat-card">
+          <span class="stat-num">300 <span class="stat-unit">DPI</span></span>
+          <span class="stat-label">Print-ready A4 output with cut lines — works at any ₹10 local print shop.</span>
+        </li>
+      </ul>
     </div>
   </section>
 
