@@ -1245,14 +1245,21 @@ header{flex-wrap:nowrap;}
 @media(max-width:640px){
   header{height:48px;padding:0 10px;gap:6px;}
   .logo{font-size:14px;}
-  .steps{overflow-x:auto;-webkit-overflow-scrolling:touch;}
-  .main{grid-template-rows:minmax(160px,1fr) auto;}
+  /* Hide the step progress bar on phones — too cramped, visually noisy.
+     Users are guided through steps by the sidebar + canvas content itself. */
+  .steps{display:none;}
+  .main{grid-template-rows:minmax(180px,1fr) auto;}
   .sidebar{max-height:46dvh;}
   .sb-section{padding:10px 12px;}
-  /* Upload inner card: let it breathe, never exceed the canvas area */
-  .upload-inner-card{padding:clamp(18px,4.5vw,28px) clamp(16px,5vw,26px);width:min(94%,420px);}
-  .upload-icon-wrap{width:52px;height:52px;margin-bottom:10px;}
-  .upload-icon-wrap svg{width:24px;height:24px;}
+  /* Upload inner card: tighter padding, smaller fixed max so it sits nicely
+     centered in the canvas area without crowding the edges. */
+  .upload-inner-card{padding:18px 16px 16px;width:min(92%,360px);border-radius:16px;}
+  .upload-icon-wrap{width:48px;height:48px;margin-bottom:8px;}
+  .upload-icon-wrap svg{width:22px;height:22px;}
+  .upload-title{font-size:16px!important;margin-bottom:4px!important;}
+  .upload-sub{font-size:11px!important;line-height:1.5!important;}
+  .upload-feats{margin-top:10px;gap:4px;}
+  .upload-feat-pill{font-size:9px;padding:2px 6px;}
   /* Modal layout */
   .modal{border-radius:12px;}
   .modal.small{max-width:100%;}
@@ -1800,9 +1807,9 @@ header.legal-header{
           <div class="count-btn" data-v="2" onclick="setTotal(this)">2</div>
           <div class="count-btn" data-v="3" onclick="setTotal(this)">3</div>
           <div class="count-btn" data-v="4" onclick="setTotal(this)">4</div>
-          <div class="count-btn" data-v="5" onclick="setTotal(this)">5</div>
+          <div class="count-btn active" data-v="5" onclick="setTotal(this)">5</div>
           <div class="count-btn" data-v="6" onclick="setTotal(this)">6</div>
-          <div class="count-btn active" data-v="8" onclick="setTotal(this)">8</div>
+          <div class="count-btn" data-v="8" onclick="setTotal(this)">8</div>
           <div class="count-btn" data-v="10" onclick="setTotal(this)">10</div>
           <div class="count-btn" data-v="12" onclick="setTotal(this)">12</div>
           <div class="count-btn" data-v="16" onclick="setTotal(this)">16</div>
@@ -1812,11 +1819,11 @@ header.legal-header{
         <div class="count-row" id="colBtns">
           <div class="count-btn" data-v="2" onclick="setCols(this)">2</div>
           <div class="count-btn" data-v="3" onclick="setCols(this)">3</div>
-          <div class="count-btn active" data-v="4" onclick="setCols(this)">4</div>
-          <div class="count-btn" data-v="5" onclick="setCols(this)">5</div>
+          <div class="count-btn" data-v="4" onclick="setCols(this)">4</div>
+          <div class="count-btn active" data-v="5" onclick="setCols(this)">5</div>
         </div>
         <div class="info-box mt6" id="layoutInfo" style="font-size:10px;">
-          <strong>8 photos</strong> — 4 cols × 2 rows · Auto-fit ✓
+          <strong>5 photos</strong> — 5 cols × 1 rows · Auto-fit ✓
         </div>
       </div>
       <div class="sb-section">
@@ -2035,7 +2042,7 @@ let processedCanvas = null;  // With BG color applied
 let croppedCanvas = null;    // Final cropped + adjusted photo
 let bgColor = '#FFFFFF';
 let photoW = 35, photoH = 45; // mm
-let sheetCols = 4, sheetRows = 2, sheetTotal = 8;
+let sheetCols = 5, sheetRows = 1, sheetTotal = 5;
 const DPI = 300, MM2IN = 25.4;
 
 // Crop state
