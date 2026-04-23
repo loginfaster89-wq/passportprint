@@ -170,6 +170,8 @@ doesn't re-fix already-merged work.
 - `P10` contact form (name/email/category/message + SLA badge + mailto fallback) → PR #98.
 - `P19` inline tools-preview demo strip (upload → bg-removed → A4 sheet, 9 s loop) → PR #99.
 - `P2` hero A4-sheet mockups (two floating CSS sheets, pure CSS no raster) → PR #100.
+- `P1` hero animated accent-glow pulse (7 s CSS-only loop, reduced-motion safe) → PR #102.
+- `P8` `By the numbers` honest facts strip (4 stat cards, no testimonials) → PR #103.
 
 **Open backlog (default priority order for next session):**
 
@@ -178,14 +180,12 @@ doesn't re-fix already-merged work.
 file — needs user approval).
 
 *2026 polish roadmap (by impact):*
-1. `P8` Social proof (testimonials / "trusted by" / concrete numbers) — highest value.
-2. `P11` Pricing monthly/yearly toggle (copy-only phase 1).
-3. `P12` Pricing comparison matrix.
-4. `P1` Hero animated gradient pulse (CSS-only).
-5. `P30` Homepage density break — live-demo section between HERO/FEATURES.
-6. `P24` Self-host Syne + DM Mono (woff2 subset).
-7. `P16` Language switcher UI affordance.
-8. `P26` Cookie banner (self-hosted, essentials-only).
+1. `P11` Pricing monthly/yearly toggle (copy-only phase 1) — highest value.
+2. `P12` Pricing comparison matrix.
+3. `P30` Homepage density break — live-demo section between HERO/FEATURES.
+4. `P24` Self-host Syne + DM Mono (woff2 subset).
+5. `P16` Language switcher UI affordance.
+6. `P26` Cookie banner (self-hosted, essentials-only).
 
 *Locked-file items (`passport-photo.html` — needs explicit user ok):*
 `F11`, `P20` AI-model download progress bar, `P21` inline error banner,
