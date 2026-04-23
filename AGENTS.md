@@ -188,28 +188,27 @@ on this repo. Add `Actions: Read and write` only if editing workflow files.
 items from the original audit are now merged. Summary headlines for the
 next session:
 
-**Resolved (PRs #70-#91):** F1 Razorpay script, F2 One-Tap, F3 features
+**Resolved (PRs #70-#96):** F1 Razorpay script, F2 One-Tap, F3 features
 grid 820, F4 hero wrap, F5 pricing 820, F8 email obfuscation, F9 ribbon
 centering, F10 preview chrome, F12/P4 SVG icons, P3+P7+P17 card/button/
 focus polish, P5 scroll-reveal, P6 FAQ smooth open, P13 ribbon pulse,
 P14 mobile sticky CTA, P18 FAQ deep-link IDs, P22 OG image, P23 sitemap
-lastmod+anchors, P25 backend preconnect on legal pages, P27 branded 404.
+lastmod+anchors, P25 backend preconnect on legal pages, P27 branded 404,
+P28 PWA manifest + offline SW (PRs #93/#94), P15 multi-column footer
+(PR #95), P9 About page rework (PR #96).
 
 **Open backlog priority order for the next session:**
-1. P28 PWA manifest + offline-capable service worker (highest value).
-2. P15 multi-column footer.
-3. P9 About page rework.
-4. P10 Contact form.
-5. P19 Inline product-demo video in tools-preview.
-6. P2 Hero A4 product visual.
-7. P8 Social proof (testimonials / trusted-by / numbers).
-8. P11 Pricing monthly/yearly toggle (copy-only phase 1).
-9. P12 Pricing comparison matrix.
-10. P1 Hero animated gradient pulse.
-11. P30 Homepage density break — live-demo section.
-12. P24 Self-host Syne + DM Mono (woff2).
-13. P16 Language switcher UI.
-14. P26 Cookie banner.
+1. P10 Contact form (name/email/message/category + mailto fallback).
+2. P19 Inline product-demo video in tools-preview.
+3. P2 Hero A4 product visual.
+4. P8 Social proof (testimonials / trusted-by / numbers).
+5. P11 Pricing monthly/yearly toggle (copy-only phase 1).
+6. P12 Pricing comparison matrix.
+7. P1 Hero animated gradient pulse.
+8. P30 Homepage density break — live-demo section.
+9. P24 Self-host Syne + DM Mono (woff2).
+10. P16 Language switcher UI.
+11. P26 Cookie banner.
 
 **Lower-priority functional nits:** F6 audience grid sparse, F7 GSI
 iframe warnings (harmless, not our code).
