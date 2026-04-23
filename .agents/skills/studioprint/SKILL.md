@@ -121,11 +121,25 @@ to dedupe it from here.
 
 ## 8. Communication style (quota-conscious)
 
-- **Hinglish** (simple, non-technical). Project owner is non-technical.
+- **Hinglish, zero jargon.** The project owner has explicitly said
+  "muje coding ke baare main kuch nhi pta hai" — assume the reader does
+  not know code, stack traces, network tooling, or CI/CD. Translate
+  every technical finding into plain consequences: kya toota, kya kaam
+  kar raha hai, kya decision chahiye.
+- **Never paste** stack traces, CDP initiator dumps, Playwright logs,
+  minified JS snippets, HTTP status codes, or internal symbol names in
+  user messages. Keep that evidence in the PR body / commit message
+  only.
+- **Lead with the decision, not the investigation.** First line should
+  tell the user what's fixed / what's broken / what choice they need to
+  make. Details only if asked.
 - **Short plan → get approval → implement.** One PR per logical task.
 - **Concise updates only** — don't message after every tool call.
 - Before reporting done: `npm run build` locally.
 - Keep backend / CI / CD internals brief unless asked.
+- **Quota-conscious:** the owner watches daily quota. If they flag it
+  mid-task, drop to the most terse mode possible — fewer tool calls,
+  no speculative exploration, no re-explaining already-agreed plans.
 
 ## 9. Known issues from the 2026-04-23 full-site audit
 
