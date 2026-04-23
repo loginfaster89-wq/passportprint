@@ -984,56 +984,56 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
       </div>
 
       <div class="faq-list">
-        <details class="faq-item">
+        <details class="faq-item" id="faq-free-tier">
           <summary>Is Studio Print really free?</summary>
           <div class="faq-body">
             <p>Yes — the free tier gives you 2 A4 sheets per day with Indian passport presets, no signup wall, and 300 DPI print-ready output. Upgrade to Weekly (₹59) or Monthly (₹149) only if you need unlimited sheets or all country presets.</p>
           </div>
         </details>
 
-        <details class="faq-item">
+        <details class="faq-item" id="faq-privacy">
           <summary>Does my photo get uploaded to a server?</summary>
           <div class="faq-body">
             <p>No. Studio Print runs entirely inside your browser. AI background removal, cropping, and A4 sheet rendering all happen on your device. Customer photos and documents never leave the browser.</p>
           </div>
         </details>
 
-        <details class="faq-item">
+        <details class="faq-item" id="faq-countries">
           <summary>Which passport photo sizes and countries are supported?</summary>
           <div class="faq-body">
             <p>India (3.5×4.5 cm and 5×5 cm), US Visa (2×2 inch), UK, Schengen, UAE, Australia, Canada and more. All country presets are unlocked on the paid plan; the free tier includes the Indian passport preset.</p>
           </div>
         </details>
 
-        <details class="faq-item">
+        <details class="faq-item" id="faq-no-software">
           <summary>Do I need Photoshop or any other software?</summary>
           <div class="faq-body">
             <p>No. Everything runs in a normal web browser on a laptop, phone or tablet. You don't need Photoshop, Illustrator, or any desktop app — just upload a photo and download the print-ready sheet.</p>
           </div>
         </details>
 
-        <details class="faq-item">
+        <details class="faq-item" id="faq-aadhaar-pan">
           <summary>Can it print Aadhaar or PAN card sheets?</summary>
           <div class="faq-body">
             <p>The dedicated Aadhaar / PAN &quot;Document Sheet&quot; tool is <strong>in the works</strong> and will land soon. For now, you can already use Passport Photo for ID-sized photo sheets. Follow the homepage for updates.</p>
           </div>
         </details>
 
-        <details class="faq-item">
+        <details class="faq-item" id="faq-mobile">
           <summary>Does Studio Print work on mobile?</summary>
           <div class="faq-body">
             <p>Yes. The tool is designed mobile-first and works on any modern browser — Chrome, Edge, Safari, Firefox — on Android, iPhone, iPad, or a desktop. 4G connection and 2 GB RAM are enough.</p>
           </div>
         </details>
 
-        <details class="faq-item">
+        <details class="faq-item" id="faq-refund">
           <summary>How do refunds work?</summary>
           <div class="faq-body">
             <p>Both Weekly and Monthly plans are one-time purchases (no auto-renewal). Duplicate charges and failed activations are refunded in full within 5-7 working days. Full details in the <a href="refund.html" style="color:var(--accent);">Refund &amp; Cancellation Policy</a>.</p>
           </div>
         </details>
 
-        <details class="faq-item">
+        <details class="faq-item" id="faq-print-shop">
           <summary>I run a print shop or kiosk — can I use this at my counter?</summary>
           <div class="faq-body">
             <p>Yes, that is exactly what Studio Print was built for. The Monthly ₹149 plan is designed for counters that process many sheets a day. No install, no Photoshop licence — just open the browser on your shop PC or tablet.</p>
@@ -1112,6 +1112,33 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
     } else {
       setTimeout(run, 800);
     }
+  } catch (_) {}
+})();
+</script>
+<script>
+// Open the targeted FAQ <details> when the URL hash points at one (e.g.
+// /#faq-refund). Native hash scroll lands on the closed summary; this
+// flips open: true and re-scrolls after layout settles so the answer
+// is visible without a second click.
+(function () {
+  try {
+    var open = function () {
+      var h = (location.hash || '').slice(1);
+      if (!h || h.indexOf('faq-') !== 0) return;
+      var el = document.getElementById(h);
+      if (el && el.tagName === 'DETAILS') {
+        el.open = true;
+        requestAnimationFrame(function () {
+          el.scrollIntoView({ block: 'start', behavior: 'smooth' });
+        });
+      }
+    };
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', open, { once: true });
+    } else {
+      open();
+    }
+    window.addEventListener('hashchange', open);
   } catch (_) {}
 })();
 </script>
