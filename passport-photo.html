@@ -5158,24 +5158,15 @@ refreshAuthUI();
 restoreSession();
 
 // Hide the Google Sign-In block entirely if it isn't configured — we don't
-// want to render an empty box in the auth modal. When enabled, show a
-// lightweight One Tap prompt on page load for logged-out users so the
-// account chooser appears without even opening the modal.
+// want to render an empty box in the auth modal. The One Tap auto-prompt
+// on page load was removed (issues.md F2): it covered the Login button
+// and the upload card on iPad + iPhone. One Tap still appears inside the
+// auth modal when the user explicitly clicks Login (see openAuth()).
 (function setupGoogleSignInUi(){
   if(!GOOGLE_ENABLED || !USE_BACKEND){
     const wrap = document.getElementById('googleSignInWrap');
     if(wrap) wrap.style.display = 'none';
-    return;
   }
-  const tryPrompt = (tries) => {
-    if(localStorage.getItem(AUTH_TOKEN_KEY)) return; // already signed in
-    if(initGoogleSignIn()){
-      promptGoogleOneTap();
-    } else if(tries > 0){
-      setTimeout(() => tryPrompt(tries-1), 250);
-    }
-  };
-  tryPrompt(20); // ~5s max
 })();
 </script>
 
