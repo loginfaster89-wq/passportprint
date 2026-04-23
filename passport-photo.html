@@ -57,13 +57,19 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:0
 .badge-green{border-color:rgba(74,222,128,.3);color:var(--success);background:rgba(74,222,128,.06);}
 .badge-amber{border-color:rgba(240,165,0,.3);color:var(--accent);background:var(--accent-dim);}
 
-/* ── APP FOOTER (legal links) ── */
-.app-footer{background:var(--surface);border-top:1px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;gap:6px;padding:6px 12px;font-size:11px;color:var(--muted);flex-wrap:wrap;}
-.app-footer a{color:var(--muted);text-decoration:none;padding:2px 6px;border-radius:4px;transition:.15s;}
-.app-footer a:hover{color:var(--accent);background:var(--accent-glow);}
-.app-footer .sep{color:var(--muted2);user-select:none;}
-.app-footer .copy{color:var(--muted2);margin-right:4px;}
-@media (max-width:640px){.app-footer{font-size:10px;padding:5px 8px;gap:2px;} .app-footer .copy{display:none;}}
+/* ── LEGAL FOOTER (shared with rest of site — matches assets/legal.css) ── */
+footer.legal-footer{
+  margin-top:auto;border-top:1px solid var(--border);
+  background:var(--surface);padding:22px;text-align:center;
+  color:var(--muted2);font-size:12px;line-height:2;flex-shrink:0;
+}
+footer.legal-footer .links{margin-bottom:6px;}
+footer.legal-footer .links a{color:var(--muted);margin:0 8px;text-decoration:none;}
+footer.legal-footer .links a:hover{color:var(--accent);}
+@media (max-width:420px){
+  footer.legal-footer{padding:16px 12px;font-size:11px;}
+  footer.legal-footer .links a{margin:0 4px;}
+}
 
 /* ── STEPS BAR ── */
 .steps{background:var(--surface);border-bottom:1px solid var(--border);display:flex;flex-shrink:0;overflow-x:auto;}
@@ -1432,27 +1438,32 @@ header.legal-header{
 }
 .legal-header .logo{font-size:20px;}
 
-/* Mobile / narrow widths: collapse nav into hamburger. Breakpoint matches legal.css (900px). */
+/* Mobile / narrow widths: collapse nav into hamburger. Open nav overlays the
+   page (absolute below the sticky header) so it never pushes page content
+   downwards — matches assets/legal.css behavior used on every other page. */
 @media (max-width:900px){
-  header.legal-header{flex-wrap:wrap;height:auto;min-height:52px;padding:8px 12px;}
-  .legal-header .nav-toggle{display:inline-flex;}
+  header.legal-header{min-height:52px;padding:8px 12px;}
+  .legal-header .nav-toggle{display:inline-flex;margin-left:0;}
+  .legal-header .nav-login{margin-left:auto;padding:8px 14px;font-size:13px;}
   .legal-header nav{
     display:none;flex-direction:column;align-items:stretch;gap:4px;
-    width:100%;order:3;margin:8px -12px -8px;padding:8px 12px;
-    background:var(--surface);border-top:1px solid var(--border);
-    font-size:15px;max-height:calc(100dvh - 60px);overflow-y:auto;
+    position:absolute;top:100%;left:0;right:0;z-index:2000;
+    padding:12px clamp(16px,3vw,32px) 14px;
+    background:rgba(22,22,22,0.96);
+    -webkit-backdrop-filter:saturate(140%) blur(10px);
+    backdrop-filter:saturate(140%) blur(10px);
+    border-top:1px solid var(--border);
+    box-shadow:0 16px 34px rgba(0,0,0,0.5);
+    font-size:15px;
+    max-height:calc(100dvh - 60px);overflow-y:auto;
   }
   .legal-header nav.open{display:flex;}
   .legal-header nav > a,
-  .legal-header nav .has-dropdown > .nav-dd-btn,
-  .legal-header nav .nav-login{
+  .legal-header nav .has-dropdown > .nav-dd-btn{
     padding:12px 14px;border-radius:8px;width:100%;justify-content:flex-start;
   }
   .legal-header nav > a.active::after{display:none;}
   .legal-header nav > a.active{background:var(--accent-dim);color:var(--accent);}
-  .legal-header nav .nav-login{
-    margin:8px 0 2px;padding:12px 14px;justify-content:center;font-size:14px;
-  }
   .has-dropdown{display:flex;flex-direction:column;align-items:stretch;width:100%;}
   .has-dropdown .nav-dd-btn{justify-content:space-between;font-size:15px;color:var(--muted);}
   .dropdown-panel{
@@ -1463,7 +1474,7 @@ header.legal-header{
 }
 @media (max-width:420px){
   header.legal-header{padding:8px 10px;}
-  .legal-header nav{margin:8px -10px -8px;padding:8px 10px;font-size:13px;}
+  .legal-header nav{padding:10px 14px 12px;font-size:14px;}
   .nav-toggle{padding:4px 8px;font-size:16px;}
 }
 
@@ -1474,7 +1485,6 @@ header.legal-header{
 <!-- HEADER -->
 <header class="legal-header">
   <a class="logo" href="index.html" style="text-decoration:none;color:inherit;user-select:none;" title="Back to Home">Studio <em>Print</em></a>
-  <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="primaryNav">☰</button>
   <nav id="primaryNav">
     <a href="index.html">Home</a>
     <div class="has-dropdown">
@@ -1507,11 +1517,14 @@ header.legal-header{
         </span>
       </div>
     </div>
-    <button type="button" class="nav-login" id="hdrAuthBtn" onclick="openAuth()" title="Login / Signup">
-      <span id="hdrAuthLabel" class="hdr-lbl" data-i18n="hdr_login">Login</span>
-    </button>
-    <button class="help-btn" onclick="openTutorial()" title="API Key Tutorial" style="display:none;">?</button>
+    <a href="index.html#pricing">Pricing</a>
+    <a href="index.html#faq">FAQ</a>
   </nav>
+  <button type="button" class="nav-login" id="hdrAuthBtn" onclick="openAuth()" title="Login / Signup">
+    <span id="hdrAuthLabel" class="hdr-lbl" data-i18n="hdr_login">Login</span>
+  </button>
+  <button class="help-btn" onclick="openTutorial()" title="API Key Tutorial" style="display:none;">?</button>
+  <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="primaryNav">☰</button>
 </header>
 
 <!-- STEPS BAR -->
@@ -1829,16 +1842,18 @@ header.legal-header{
   </div>
 </div>
 
-<!-- APP FOOTER -->
-<footer class="app-footer">
-  <span class="copy">© 2026 Studio Print</span>
-  <a href="index.html">Home</a><span class="sep">·</span>
-  <a href="about.html">About</a><span class="sep">·</span>
-  <a href="privacy.html">Privacy</a><span class="sep">·</span>
-  <a href="terms.html">Terms</a><span class="sep">·</span>
-  <a href="refund.html">Refund</a><span class="sep">·</span>
-  <a href="shipping.html">Delivery</a><span class="sep">·</span>
-  <a href="contact.html">Contact</a>
+<!-- LEGAL FOOTER (shared with rest of site) -->
+<footer class="legal-footer">
+  <div class="links">
+    <a href="index.html">Home</a>·
+    <a href="about.html">About</a>·
+    <a href="privacy.html">Privacy</a>·
+    <a href="terms.html">Terms</a>·
+    <a href="refund.html">Refund</a>·
+    <a href="shipping.html">Delivery</a>·
+    <a href="contact.html">Contact</a>
+  </div>
+  <div>© 2026 Studio Print. All rights reserved.</div>
 </footer>
 
 <!-- ══════════ TUTORIAL PAGE ══════════ -->
