@@ -104,3 +104,42 @@ actively watches quota usage.
 4. Run `npm run build` locally before reporting done.
 5. Prefer a single consolidated status message over many small ones — the
    user watches quota closely.
+
+## End-of-session: refresh this skill + give user a new-chat prompt
+
+At the **end of every session**, before reporting done, check whether
+anything *notable* changed that a future Devin session would want to know:
+
+- A new **hard rule** (what to touch / not touch).
+- A **new shared module**, workflow, or CLI the next session should use.
+- A **change in copy tone / branding** (new hero tagline, pricing copy,
+  taglines quoted in the "Copy / design tone" section above).
+- A new **PR / deploy / testing workflow** (e.g. a new preview host, a new
+  CI stage, a new way to verify a change).
+- A **new secret / PAT scope / credential** the next session will need.
+
+If *any* of those changed, open a **small separate follow-up PR** that:
+
+1. Updates the relevant section(s) of this `SKILL.md` (keep diff minimal —
+   edit existing sections, do not duplicate).
+2. If tone/branding changed, update the quoted examples in the
+   "Copy / design tone" section to match the site today.
+3. Is clearly titled `chore: refresh Devin skill after <short reason>` and
+   body notes which prior PR(s) this reflects.
+
+Then, in the final `message_user` of the session, **also include a
+refreshed copy-paste "new-chat prompt"** that the project owner can paste
+into their next Devin chat. The prompt should:
+
+- Point to this repo and the `GITHUB_PAT_PASSPORTPRINT` secret.
+- Tell the next Devin to read `.agents/skills/studioprint/SKILL.md` **and**
+  `AGENTS.md` before starting.
+- List the 2-3 most recent relevant PRs as context.
+- Leave a placeholder line like `Mera aaj ka kaam: <YAHAN APNA NAYA TASK LIKHO>`
+  for the owner to fill in.
+- End with a reminder of default rules (passport-photo copy-only, no
+  workflow edits, fonts/palette untouched, one PR per logical task, run
+  `npm run build`, quota-conscious Hinglish replies).
+
+If nothing notable changed in a given session, **skip both** the skill-refresh
+PR and the new-chat prompt — don't create churn. Just report done normally.
