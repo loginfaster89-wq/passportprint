@@ -663,6 +663,15 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
   .sp-mobile-cta{transition:opacity .15s linear;transform:none;}
   .sp-mobile-cta.is-visible{transform:none;}
 }
+
+/* Scroll-reveal — sections fade + slide up on first enter. Driven by
+   assets/reveal.js via an IntersectionObserver. Reduced-motion falls
+   back to an instant show in the script itself. */
+.reveal{opacity:0;transform:translateY(14px);transition:opacity .45s ease, transform .45s ease;will-change:opacity,transform;}
+.reveal.in-view{opacity:1;transform:translateY(0);}
+@media (prefers-reduced-motion: reduce){
+  .reveal{opacity:1;transform:none;transition:none;}
+}
 </style>
 </head>
 <body class="home">
@@ -783,7 +792,7 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
   </section>
 
   <!-- FEATURES -->
-  <section class="section" id="features">
+  <section class="section reveal" id="features">
     <div class="wrap">
       <div class="section-head">
         <span class="section-tag">Features</span>
@@ -831,7 +840,7 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
   </section>
 
   <!-- AUDIENCE / WHO IT'S FOR -->
-  <section class="section" id="audience">
+  <section class="section reveal" id="audience">
     <div class="wrap">
       <div class="section-head">
         <span class="section-tag">Who it's for</span>
@@ -866,7 +875,7 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
   </section>
 
   <!-- WHY -->
-  <section class="section" id="why">
+  <section class="section reveal" id="why">
     <div class="wrap">
       <div class="section-head">
         <span class="section-tag">Why Studio Print</span>
@@ -900,7 +909,7 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
   </section>
 
   <!-- HOW IT WORKS -->
-  <section class="section" id="how">
+  <section class="section reveal" id="how">
     <div class="wrap">
       <div class="section-head">
         <span class="section-tag">How it works</span>
@@ -933,7 +942,7 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
   </section>
 
   <!-- PRICING -->
-  <section class="section" id="pricing">
+  <section class="section reveal" id="pricing">
     <div class="wrap">
       <div class="section-head">
         <span class="section-tag">Pricing</span>
@@ -987,7 +996,7 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
   </section>
 
   <!-- FAQ -->
-  <section class="section" id="faq">
+  <section class="section reveal" id="faq">
     <div class="wrap">
       <div class="section-head">
         <span class="section-tag">FAQ</span>
@@ -1056,7 +1065,7 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
   </section>
 
   <!-- CTA BAND -->
-  <section class="cta-band">
+  <section class="cta-band reveal">
     <h2>Your next print job — right in this tab.</h2>
     <p>Passport Photo is live today. Document Sheet, Certificate Editor and more are rolling out through 2026 — no subscription required to try.</p>
     <div class="hero-actions" style="justify-content:center;">
@@ -1087,6 +1096,7 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
 <script src="assets/nav.js" defer></script>
 <script src="assets/auth.js" defer></script>
 <script src="assets/sliders.js" defer></script>
+<script src="assets/reveal.js" defer></script>
 <script>
 // Mobile sticky CTA pill — reveal once the user has scrolled past the hero
 // so a persistent "Open Passport Photo" affordance follows them down the
