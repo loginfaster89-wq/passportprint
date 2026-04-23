@@ -67,6 +67,25 @@ body.home main.home-main{
   background-size:48px 48px;
 }
 .hero::before{inset:0;mask-image:radial-gradient(ellipse 80% 60% at 50% 30%, #000 30%, transparent 75%);-webkit-mask-image:radial-gradient(ellipse 80% 60% at 50% 30%, #000 30%, transparent 75%);}
+/* P1: subtle animated amber gradient pulse behind hero content.
+   Repurposes the existing (unpositioned) .hero::after pseudo so no
+   new DOM nodes are added. 7 s ease loop, capped at ~18 % alpha, sits
+   below .hero-inner (z:2). Disabled under prefers-reduced-motion. */
+.hero::after{
+  inset:-6% 0 auto 0;height:62%;
+  background-image:none;
+  background:radial-gradient(ellipse 55% 55% at 50% 22%, rgba(240,165,0,0.18), transparent 70%);
+  animation:hero-pulse 7s ease-in-out infinite;
+  will-change:opacity,transform;
+  z-index:1;
+}
+@keyframes hero-pulse{
+  0%,100%{opacity:.55;transform:scale(1);}
+  50%{opacity:1;transform:scale(1.06);}
+}
+@media (prefers-reduced-motion:reduce){
+  .hero::after{animation:none;opacity:.7;transform:none;}
+}
 .hero-inner{position:relative;z-index:2;max-width:880px;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:22px;}
 .hero-eyebrow{
   display:inline-flex;align-items:center;gap:8px;
