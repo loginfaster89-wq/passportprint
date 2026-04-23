@@ -1,6 +1,6 @@
 // Shared footer behaviour for Studio Print legal / info pages.
 //
-// Two jobs, both intentionally defensive so a single malformed element
+// Three jobs, all intentionally defensive so a single malformed element
 // never takes the whole script down:
 //
 // 1. `.email-obf` anchors — reveal on demand. Markup ships with
@@ -12,6 +12,11 @@
 //    so we build a `mailto:` to the obfuscated owner address with the
 //    subscriber's typed email in the body. Same data-u / data-d scheme
 //    as the link obfuscator so the email stays out of the HTML source.
+//
+// 3. `form.contact-form` — contact page message form (P10). Builds a
+//    prefilled `mailto:` from name / email / category / message fields.
+//    Same data-u / data-d scheme. Falls back to focusing the first
+//    invalid field if validation fails.
 //
 // Kept as a plain, non-obfuscated file (like `assets/sliders.js` and
 // `assets/reveal.js`) so the build pipeline can't silently mangle the
@@ -56,6 +61,44 @@
     });
   }
 
+  function wireContactForm(form) {
+    var u = form.dataset.u;
+    var d = form.dataset.d;
+    if (!u || !d) return;
+    form.addEventListener('submit', function (ev) {
+      ev.preventDefault();
+      var name = (form.querySelector('#cfName') || {}).value || '';
+      var email = (form.querySelector('#cfEmail') || {}).value || '';
+      var category = (form.querySelector('#cfCategory') || {}).value || 'Support';
+      var message = (form.querySelector('#cfMessage') || {}).value || '';
+      name = name.trim();
+      email = email.trim();
+      message = message.trim();
+
+      var firstInvalid = null;
+      if (!name) firstInvalid = firstInvalid || form.querySelector('#cfName');
+      if (!email || email.indexOf('@') === -1) firstInvalid = firstInvalid || form.querySelector('#cfEmail');
+      if (!message) firstInvalid = firstInvalid || form.querySelector('#cfMessage');
+      if (firstInvalid) { firstInvalid.focus(); return; }
+
+      var addr = u + '@' + d;
+      var subject = '[' + category + '] Studio Print — ' + name;
+      var body = [
+        'Name: ' + name,
+        'Email: ' + email,
+        'Category: ' + category,
+        '',
+        message,
+        '',
+        '— Sent from studioprint.pages.dev/contact.html'
+      ].join('\n');
+      var href = 'mailto:' + addr +
+        '?subject=' + encodeURIComponent(subject) +
+        '&body=' + encodeURIComponent(body);
+      window.location.href = href;
+    });
+  }
+
   function init() {
     try {
       var links = document.querySelectorAll('.email-obf');
@@ -64,6 +107,10 @@
     try {
       var forms = document.querySelectorAll('form.footer-news');
       for (var j = 0; j < forms.length; j++) wireNewsletter(forms[j]);
+    } catch (e) { /* ignore — non-critical */ }
+    try {
+      var cforms = document.querySelectorAll('form.contact-form');
+      for (var k = 0; k < cforms.length; k++) wireContactForm(cforms[k]);
     } catch (e) { /* ignore — non-critical */ }
   }
 
