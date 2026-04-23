@@ -436,8 +436,12 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
 .faq-item .faq-body p{margin:0 0 8px;}
 .faq-item .faq-body p:last-child{margin-bottom:0;}
 
-/* ── FEATURES: highlight live card on desktop ── */
-@media (min-width:820px){
+/* ── FEATURES: highlight live card on tablet + desktop ── */
+@media (min-width:761px) and (max-width:899px){
+  .features-grid{grid-template-columns:repeat(2,1fr);}
+  .feature-card.primary{grid-column:1 / -1;}
+}
+@media (min-width:900px){
   .features-grid{grid-template-columns:repeat(3,1fr);}
   .feature-card.primary{grid-column:span 2;min-height:230px;}
 }
