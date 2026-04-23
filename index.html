@@ -644,6 +644,26 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
   font-family:'DM Mono',monospace;
 }
 
+/* ── PRICING BILLING TOGGLE (P11 phase 1 — copy only) ── */
+.pricing-billing{display:flex;justify-content:center;margin:0 auto 22px;}
+.pricing-toggle{
+  display:inline-flex;padding:4px;gap:4px;
+  border:1px solid var(--border);border-radius:999px;
+  background:var(--surface);
+}
+.pricing-toggle button{
+  appearance:none;border:0;background:transparent;
+  font-family:'DM Mono',monospace;font-size:11.5px;letter-spacing:0.14em;text-transform:uppercase;
+  color:var(--muted2);padding:8px 18px;border-radius:999px;cursor:pointer;
+  transition:color .2s ease, background-color .2s ease;
+}
+.pricing-toggle button.is-active{background:var(--accent);color:#0d0d0d;}
+.pricing-toggle button:focus-visible{outline:2px solid var(--accent);outline-offset:3px;}
+.pricing-grid[data-billing="yearly"] .pricing-card.featured::before{content:"Save ~16%";}
+@media (prefers-reduced-motion: reduce){
+  .pricing-toggle button{transition:none;}
+}
+
 /* ── FAQ ── */
 .faq-list{
   display:flex;flex-direction:column;gap:10px;
@@ -1194,7 +1214,14 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
         <p>Start for free with no signup wall. Upgrade only when you're running a counter or printing dozens of sheets a week. One-time purchase — no auto-renewal.</p>
       </div>
 
-      <div class="pricing-grid">
+      <div class="pricing-billing">
+        <div class="pricing-toggle" role="tablist" aria-label="Billing cycle">
+          <button type="button" role="tab" id="bill-monthly" data-mode="monthly" class="is-active" aria-selected="true" aria-controls="pricingGrid">Monthly</button>
+          <button type="button" role="tab" id="bill-yearly" data-mode="yearly" aria-selected="false" tabindex="-1" aria-controls="pricingGrid">Yearly</button>
+        </div>
+      </div>
+
+      <div class="pricing-grid" id="pricingGrid" data-billing="monthly">
         <div class="pricing-card">
           <span class="ptag">Free</span>
           <h3>Try it out</h3>
@@ -1218,13 +1245,13 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
             <li>All country presets (India, US, UK, UAE, Schengen…)</li>
             <li>No auto-renewal — one-time purchase</li>
           </ul>
-          <a class="pcta" href="passport-photo.html#plans" data-plan-cta="weekly">Get weekly pass</a>
+          <a class="pcta" href="passport-photo.html#plans" data-plan-cta="weekly" data-yearly-text="Switch to monthly →">Get weekly pass</a>
         </div>
 
         <div class="pricing-card featured">
           <span class="ptag">Monthly</span>
           <h3>Shop counter</h3>
-          <div class="price"><span class="amt">₹149</span><span class="per">for 30 days</span></div>
+          <div class="price"><span class="amt" data-yearly-text="₹1,499">₹149</span><span class="per" data-yearly-text="preview — per year">for 30 days</span></div>
           <ul>
             <li>Everything in Weekly</li>
             <li>Bulk batch processing</li>
@@ -1497,6 +1524,41 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
           });
           mo.observe(overlay, { attributes: true, attributeFilter: ['class'] });
         }, 0);
+      });
+    });
+  } catch (_) {}
+})();
+</script>
+<script>
+// Pricing monthly/yearly toggle (P11 phase 1 — copy only; no yearly backend
+// yet). Flips visible amt / per / weekly-CTA text on the pricing cards and
+// the featured ribbon ("Save ~16%" via CSS) when the billing period switches.
+// Keyboard accessible (role="tablist", arrow keys), reduced-motion safe.
+(function () {
+  try {
+    var grid = document.getElementById('pricingGrid');
+    var tabs = document.querySelectorAll('.pricing-toggle button[data-mode]');
+    if (!grid || !tabs.length) return;
+    function setMode(mode) {
+      grid.setAttribute('data-billing', mode);
+      tabs.forEach(function (t) {
+        var on = t.dataset.mode === mode;
+        t.classList.toggle('is-active', on);
+        t.setAttribute('aria-selected', on ? 'true' : 'false');
+        t.tabIndex = on ? 0 : -1;
+      });
+      grid.querySelectorAll('[data-yearly-text]').forEach(function (el) {
+        if (el.dataset.monthlyText == null) el.dataset.monthlyText = el.textContent;
+        el.textContent = mode === 'yearly' ? el.dataset.yearlyText : el.dataset.monthlyText;
+      });
+    }
+    tabs.forEach(function (t) {
+      t.addEventListener('click', function () { setMode(t.dataset.mode); });
+      t.addEventListener('keydown', function (e) {
+        if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+        e.preventDefault();
+        var sib = e.key === 'ArrowRight' ? t.nextElementSibling : t.previousElementSibling;
+        if (sib && sib.dataset.mode) { setMode(sib.dataset.mode); sib.focus(); }
       });
     });
   } catch (_) {}
