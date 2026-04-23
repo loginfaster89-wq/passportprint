@@ -16,6 +16,12 @@
   [headers.values]
     Cache-Control = "no-cache"
 
+# Service worker must always revalidate so deploys take effect on next load.
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"
+
 # Security headers
 [[headers]]
   for = "/*"

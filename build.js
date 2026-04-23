@@ -22,6 +22,7 @@ const HTML_FILES = [
   'refund.html',
   'shipping.html',
   '404.html',
+  'offline.html',
 ];
 
 // Static asset folders to copy verbatim (CSS/fonts/images). We still minify CSS
@@ -33,7 +34,7 @@ const ASSET_DIRS = ['assets'];
 // `_headers` / `_redirects` are the Netlify-style conventions that Cloudflare
 // Pages also honours, so the same files work for either host.
 // `robots.txt` / `sitemap.xml` are copied so search engines can index the site.
-const ROOT_FILES = ['_headers', '_redirects', 'robots.txt', 'sitemap.xml'];
+const ROOT_FILES = ['_headers', '_redirects', 'robots.txt', 'sitemap.xml', 'sw.js'];
 
 // Obfuscator options — conservative settings that preserve globals referenced
 // by inline onclick="foo()" handlers. Renaming globals would break the app.
