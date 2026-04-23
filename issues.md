@@ -69,14 +69,14 @@ for a follow-up PR.
 
 | # | Area | Finding / suggestion |
 |---|------|---------------------|
-| P1 | Hero | Static background (radial glow + grid pattern). Add a subtle **animated gradient pulse** on the accent glow (6-8 s ease loop) and a low-amplitude parallax on the grid pattern tied to scroll. Preserves the palette, adds life. |
+| ~~P1~~ | Hero | **resolved PR #102.** `accent-glow-pulse` keyframes on `.hero::before` — 7 s ease loop, opacity 0.55→1 and scale 1→1.06. CSS-only (~19 lines), reuses the existing unused `.hero::after` pattern. Fonts/tokens untouched; respects `prefers-reduced-motion`. |
 | ~~P2~~ | Hero | **resolved PR #100.** Two decorative A4 passport-photo sheets (left -11°, right +9°) in hero with dashed cut marks + five 5×1 silhouette placeholders (matches post-PR-#58 sheet default). Pure CSS, no raster/SVG asset. Respects `prefers-reduced-motion` + hides on narrow screens. |
 | ~~P3~~ | Cards (features/why/steps/audience/pricing) | **resolved PR #76.** `.why/.step/.audience/.pricing-card` pe `transition` + `:hover{translateY(-4px); amber-tinted shadow}`. Uses existing tokens. |
 | P4 | Icons | Replace emoji with a consistent SVG icon pack (see F12). Lucide icons are MIT-licensed, small, and render consistently. |
 | ~~P5~~ | Motion | **resolved PR #91.** New `assets/reveal.js` + `.reveal/.in-view` CSS on homepage: 6 sections + CTA band fade + slide up (14 px → 0, 450 ms) once on first enter. One-shot observer, respects `prefers-reduced-motion`. |
 | ~~P6~~ | FAQ | **resolved PR #82.** `details[open] summary::after{content:"−"}` + soft `faq-fade` keyframe on `.faq-body` for smooth open. |
 | ~~P7~~ | Hero CTAs | **resolved PR #76** (tactile half). `.btn:active{transform:scale(.97);}` aur `.pricing-card .pcta:active` bhi. Optional spinner on primary CTA during nav still open — separate item if we want that. |
-| P8 | Social proof | Homepage has no testimonials, no "used by N shops", no logo strip, no press mentions. A multinational feel needs at least one of: a testimonials section, a "trusted by" row, or concrete numbers ("5,000 passport photos printed this month"). |
+| ~~P8~~ | Social proof | **resolved PR #103.** Honest `By the numbers` strip on the homepage between TOOLS-PREVIEW and WHY — 4 stat cards using only product facts already documented elsewhere (0 photos uploaded, 2 free sheets/day, ₹149/30 days, 300 DPI A4). No fabricated testimonials or logos. Pure CSS using existing tokens, `.reveal` fade-in like other sections. |
 | ~~P9~~ | About page | **resolved PR #96.** Mission-hero (`Make every ₹10 print job feel like a browser tab.`) + founder-style pull-quote + 2024→2026 timeline (Idea / Prototype / Launch / Now) + 'What ships next' card (4 upcoming tools). Inline styles only, existing tokens. |
 | ~~P10~~ | Contact page | **resolved PR #98.** Inline `Send us a message` form on `contact.html` (name / email / 7-option category / message), `Replies within 1–2 working days` SLA badge, submit builds a prefilled `mailto:` with structured body. Obfuscated email block kept as fallback. |
 | P11 | Pricing | No **monthly/yearly toggle**. Even though you only have weekly+monthly today, a toggle that shows "₹149/month → ₹1,499/year (save 16%)" preview would frame Monthly as the default and prime upsell. (Requires backend change later; phase 1 can be copy-only.) |
@@ -110,16 +110,14 @@ All of the quick-win queue from the 2026-04-23 audit is now merged. The**open ba
 - `F11` passport-photo 1440 empty space below upload card — **locked file**, needs explicit user approval.
 
 **2026 polish roadmap (ordered by impact):**
-1. **P8** — Social proof (testimonials / "trusted by" logo row / concrete numbers).
-2. **P11** — Pricing monthly/yearly toggle (copy-only phase 1).
-3. **P12** — Pricing comparison matrix (Free vs Weekly vs Monthly feature table).
-4. **P1** — Hero animated gradient pulse on accent glow (CSS-only).
-5. **P30** — Homepage density break — one real "live demo" section between HERO and FEATURES.
-6. **P24** — Self-host Syne + DM Mono fonts (woff2 subset) — removes Google Fonts third-party.
-7. **P16** — Language switcher (`हि` ↔ `EN`) UI affordance.
-8. **P26** — Cookie banner (self-hosted, essential-only).
+1. **P11** — Pricing monthly/yearly toggle (copy-only phase 1).
+2. **P12** — Pricing comparison matrix (Free vs Weekly vs Monthly feature table).
+3. **P30** — Homepage density break — one real "live demo" section between HERO and FEATURES.
+4. **P24** — Self-host Syne + DM Mono fonts (woff2 subset) — removes Google Fonts third-party.
+5. **P16** — Language switcher (`हि` ↔ `EN`) UI affordance.
+6. **P26** — Cookie banner (self-hosted, essential-only).
 
-**Recently resolved (since last audit refresh):** P10 contact form (PR #98), P19 inline tools-preview demo strip (PR #99), P2 hero A4-sheet mockup (PR #100).
+**Recently resolved (since last audit refresh):** P10 contact form (PR #98), P19 inline tools-preview demo strip (PR #99), P2 hero A4-sheet mockup (PR #100), P1 hero animated gradient pulse (PR #102), P8 honest numbers strip (PR #103).
 
 **Locked-file items (needs user approval to touch `passport-photo.html`):**
 - `F1` Razorpay `/build/undefined` 403 residual (payment flow works, SDK's own bug).

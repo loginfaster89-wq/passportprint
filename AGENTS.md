@@ -188,7 +188,7 @@ on this repo. Add `Actions: Read and write` only if editing workflow files.
 items from the original audit are now merged. Summary headlines for the
 next session:
 
-**Resolved (PRs #70-#100):** F1 Razorpay script, F2 One-Tap, F3 features
+**Resolved (PRs #70-#103):** F1 Razorpay script, F2 One-Tap, F3 features
 grid 820, F4 hero wrap, F5 pricing 820, F8 email obfuscation, F9 ribbon
 centering, F10 preview chrome, F12/P4 SVG icons, P3+P7+P17 card/button/
 focus polish, P5 scroll-reveal, P6 FAQ smooth open, P13 ribbon pulse,
@@ -197,17 +197,16 @@ lastmod+anchors, P25 backend preconnect on legal pages, P27 branded 404,
 P28 PWA manifest + offline SW (PRs #93/#94), P15 multi-column footer
 (PR #95), P9 About page rework (PR #96), P10 contact form (PR #98),
 P19 inline tools-preview demo strip (PR #99), P2 hero A4-sheet mockup
-(PR #100).
+(PR #100), P1 hero animated accent-glow pulse (PR #102), P8 honest
+`By the numbers` strip (PR #103).
 
 **Open backlog priority order for the next session:**
-1. P8 Social proof (testimonials / trusted-by / numbers).
-2. P11 Pricing monthly/yearly toggle (copy-only phase 1).
-3. P12 Pricing comparison matrix.
-4. P1 Hero animated gradient pulse.
-5. P30 Homepage density break — live-demo section.
-6. P24 Self-host Syne + DM Mono (woff2).
-7. P16 Language switcher UI.
-8. P26 Cookie banner.
+1. P11 Pricing monthly/yearly toggle (copy-only phase 1).
+2. P12 Pricing comparison matrix.
+3. P30 Homepage density break — live-demo section.
+4. P24 Self-host Syne + DM Mono (woff2).
+5. P16 Language switcher UI.
+6. P26 Cookie banner.
 
 **Lower-priority functional nits:** F6 audience grid sparse, F7 GSI
 iframe warnings (harmless, not our code).
