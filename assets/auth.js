@@ -87,6 +87,37 @@
     });
   }
 
+  // ── Toast notifications ──
+  // passport-photo.html has its own inline showToast. When we're on that
+  // page we reuse it so there is no double toast; everywhere else the
+  // shared module renders its own .sp-toast element.
+  var _spToastTimer = null;
+  function notify(msg) {
+    if (!msg) return;
+    if (typeof window.showToast === 'function') {
+      try { window.showToast(msg); return; } catch (e) {}
+    }
+    var el = document.getElementById('spToast');
+    if (!el) {
+      el = document.createElement('div');
+      el.id = 'spToast';
+      el.className = 'sp-toast';
+      el.setAttribute('role', 'status');
+      el.setAttribute('aria-live', 'polite');
+      document.body.appendChild(el);
+    }
+    el.textContent = msg;
+    el.classList.add('sp-toast-show');
+    clearTimeout(_spToastTimer);
+    _spToastTimer = setTimeout(function () {
+      el.classList.remove('sp-toast-show');
+    }, 3200);
+  }
+  function welcomeName(user) {
+    if (!user) return '';
+    return user.name || (user.email ? user.email.split('@')[0] : '');
+  }
+
   // ── Modal markup (injected once) ──
   var MODAL_ID = 'spAuthModal';
   function ensureModal() {
@@ -236,6 +267,7 @@
       setSession({ email: res.user.email, loggedAt: Date.now() });
       refreshAuthUI();
       closeAuth();
+      notify('Welcome back, ' + welcomeName(res.user) + '!');
     } catch (ex) {
       setError((ex && ex.message) || 'Login failed.');
     } finally {
@@ -315,6 +347,7 @@
       setSession({ email: res.user.email, loggedAt: Date.now() });
       refreshAuthUI();
       closeAuth();
+      notify('Welcome ' + welcomeName(res.user) + '! Account created.');
       _pending = null;
       clearOtpTimer();
     } catch (ex) {
@@ -410,6 +443,7 @@
       setSession({ email: res.user.email, loggedAt: Date.now() });
       refreshAuthUI();
       closeAuth();
+      notify('Welcome, ' + welcomeName(res.user) + '!');
     } catch (ex) {
       setError((ex && ex.message) || 'Google sign-in failed.');
     }
@@ -566,6 +600,7 @@
     refreshAuthUI();
     closeAccount();
     if (yes) { yes.disabled = false; yes.textContent = 'Yes, delete my account'; }
+    notify('Your account has been deleted');
   }
 
   function populateAccountModal(user) {
@@ -625,6 +660,7 @@
     } catch (e) {}
     setSession(null);
     refreshAuthUI();
+    notify('Logged out');
   }
 
   // ── Public API ──
