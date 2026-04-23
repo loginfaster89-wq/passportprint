@@ -104,6 +104,7 @@ body.home main.home-main{
   border-color:var(--border);
 }
 .btn-ghost:hover{border-color:var(--accent);color:var(--accent);text-decoration:none;}
+.btn:active{transform:scale(.97);}
 .btn .arrow{transition:transform .2s;}
 .btn:hover .arrow{transform:translateX(3px);}
 
@@ -272,6 +273,12 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
   padding:22px 20px;border-radius:12px;
   background:var(--surface);border:1px solid var(--border);
   display:flex;flex-direction:column;gap:10px;
+  transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+}
+.why-card:hover{
+  transform:translateY(-4px);
+  border-color:rgba(240,165,0,0.30);
+  box-shadow:0 10px 30px rgba(240,165,0,0.08);
 }
 .why-card .wicon{
   width:38px;height:38px;border-radius:10px;
@@ -292,6 +299,12 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
   position:relative;padding:24px 22px 22px;border-radius:12px;
   background:var(--surface2);border:1px solid var(--border);
   display:flex;flex-direction:column;gap:8px;
+  transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+}
+.step-card:hover{
+  transform:translateY(-4px);
+  border-color:rgba(240,165,0,0.30);
+  box-shadow:0 10px 30px rgba(240,165,0,0.08);
 }
 .step-card h4{
   font-family:'Syne',sans-serif;font-weight:700;font-size:16px;color:#fff;letter-spacing:-0.2px;
@@ -324,9 +337,13 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
   background:linear-gradient(180deg,var(--surface),var(--surface2));
   border:1px solid var(--border);
   display:flex;flex-direction:column;gap:14px;
-  transition:.2s;
+  transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease;
 }
-.audience-card:hover{border-color:rgba(240,165,0,0.45);}
+.audience-card:hover{
+  transform:translateY(-4px);
+  border-color:rgba(240,165,0,0.45);
+  box-shadow:0 10px 30px rgba(240,165,0,0.10);
+}
 .audience-card .aicon{
   width:46px;height:46px;border-radius:11px;
   background:var(--accent-dim);color:var(--accent);
@@ -356,9 +373,13 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
   background:linear-gradient(180deg,var(--surface),var(--surface2));
   border:1px solid var(--border);
   display:flex;flex-direction:column;gap:14px;
-  transition:.2s;
+  transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease;
 }
-.pricing-card:hover{border-color:rgba(240,165,0,0.45);}
+.pricing-card:hover{
+  transform:translateY(-4px);
+  border-color:rgba(240,165,0,0.45);
+  box-shadow:0 10px 30px rgba(240,165,0,0.10);
+}
 .pricing-card.featured{
   border-color:var(--accent);
   box-shadow:0 24px 50px -28px rgba(240,165,0,0.55);
@@ -400,6 +421,7 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
   transition:.15s;
 }
 .pricing-card .pcta:hover{border-color:var(--accent);color:var(--accent);text-decoration:none;}
+.pricing-card .pcta:active{transform:scale(.97);}
 .pricing-card.featured .pcta{background:var(--accent);color:#0d0d0d;border-color:var(--accent);}
 .pricing-card.featured .pcta:hover{background:#ffb627;color:#0d0d0d;}
 .pricing-note{
@@ -544,6 +566,23 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
   background:var(--accent);
   width:18px;
   border-radius:4px;
+}
+
+/* Respect reduced-motion preference — disable card lifts, button press,
+   and decorative transitions for users who opt out. */
+@media (prefers-reduced-motion: reduce){
+  .btn,.btn .arrow,
+  .feature-card,.why-card,.step-card,.audience-card,.pricing-card,
+  .pricing-card .pcta,.hpv-mini,.faq-item summary::after{
+    transition:none;
+  }
+  .btn:hover,.btn:active,.btn-primary:hover,
+  .feature-card.live:hover,.why-card:hover,.step-card:hover,
+  .audience-card:hover,.pricing-card:hover,
+  .pricing-card .pcta:active,.hpv-mini:hover,
+  .btn:hover .arrow,.feature-card.live:hover .fcta .arrow{
+    transform:none;
+  }
 }
 </style>
 </head>
