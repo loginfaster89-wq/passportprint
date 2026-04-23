@@ -189,24 +189,22 @@ at `issues.md` at the repo root. That file is the source of truth for
 **what's broken / dated** right now; treat its "Suggested PR sequence"
 as the default backlog unless the user redirects.
 
-Quick headlines for the next session:
-- **Razorpay SDK** on `passport-photo.html` fetches
-  `https://checkout-static-next.razorpay.com/build/undefined` → 403.
-  A JS variable is undefined when the SDK composes its build path.
-  Reproduced on desktop 1440 + iPhone 390, NOT on iPad 820.
-- **Google One-Tap** auto-prompts on `passport-photo.html` mobile
-  viewports and covers the Login button / upload card. Disable
-  auto-prompt site-wide; keep only the explicit "Continue with
-  Google" button inside the auth modal.
-- **Hero H1** wraps badly at 820 and 390. `text-wrap:balance` on
-  `.hero h1` or an explicit responsive `<br>` fixes the phrase-
-  boundary issue without touching copy.
-- **`.features-grid` at 820px** renders a 2-col grid with 5 cards and
-  uneven heights (`.feature-card.primary` has `min-height:230px`;
-  sibling SOON cards are shorter).
-- Polish backlog (emoji → SVG icons; card hover lift; FAQ slide-open
-  transition; mobile sticky CTA; email obfuscation on about/contact;
-  proper 1200×630 OG image) is fully listed in `issues.md` §B.
+Quick headlines for the next session (post-2026-04-23 worklog):
+- `F1` Razorpay undefined URL → merged in PR #70. Residual
+  `/build/undefined` 403 is a Razorpay-SDK bug, not client-side;
+  payments work. Treat as closed.
+- `F2` Google One-Tap auto-prompt → merged in PR #71. Prompt now
+  only fires when the user clicks Login and the modal opens.
+- `F3` features-grid 820 uneven heights → merged in PR #73.
+  Explicit 2-col in 761-899 with `.feature-card.primary{grid-column:1/-1;}`;
+  3-col desktop layout moved to `min-width:900px`.
+- `F4` hero H1 phrase wrap → merged in PR #74. `<br>` between the
+  two sentences + `text-wrap:balance` on `.hero h1`.
+- Open backlog: F5-F12 + P1-P30 in `issues.md`. Highest-impact
+  quick wins: P3 (card hover lift) + P7 (button active) + P17
+  (focus-visible rings) as one CSS-only PR; P6 (FAQ smooth open);
+  P14 (mobile sticky CTA); F8 (email obfuscation on about/contact);
+  P22 (proper 1200×630 OG image); F12/P4 (emoji → SVG icon pack).
 
 ## Working style for human collaborators
 
