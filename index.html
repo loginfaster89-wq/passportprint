@@ -116,6 +116,59 @@ body.home main.home-main{
   display:flex;flex-wrap:wrap;justify-content:center;gap:8px 14px;
   margin-top:18px;font-size:12px;color:var(--muted);
 }
+
+/* P2 — floating A4 mockup in the hero. Two sheets, absolutely positioned
+   on either side, rotated symmetrically. Decorative only — hidden on
+   narrow viewports where the hero text needs the full width. */
+.hero-sheets{
+  position:absolute;inset:0;pointer-events:none;z-index:1;
+  overflow:hidden;
+}
+.hero-sheet{
+  position:absolute;
+  background:linear-gradient(180deg,#f5efdd,#e8dfc4);
+  border-radius:6px;padding:clamp(8px,1vw,14px);
+  box-shadow:0 30px 60px -20px rgba(0,0,0,0.55),
+             0 0 0 1px rgba(240,165,0,0.18),
+             0 0 40px -10px rgba(240,165,0,0.22);
+  display:grid;grid-template-columns:repeat(5,1fr);
+  gap:clamp(4px,0.7vw,8px);
+  aspect-ratio:1 / 1.414;
+  width:clamp(180px,19vw,260px);
+}
+.hero-sheet::before,.hero-sheet::after{
+  content:"";position:absolute;
+  background:repeating-linear-gradient(90deg,rgba(13,13,13,.35) 0 4px,transparent 4px 9px);
+  height:1px;left:10%;right:10%;
+}
+.hero-sheet::before{top:4px;}
+.hero-sheet::after{bottom:4px;}
+.hero-sheet .ph{
+  background:
+    radial-gradient(circle at 50% 32%, #d9c3a0 0 32%, transparent 34%),
+    linear-gradient(180deg,#b4a07e,#7c6b52);
+  border-radius:2px;border:1px dashed rgba(13,13,13,.25);
+  position:relative;
+}
+.hero-sheet .ph::after{
+  content:"";position:absolute;left:50%;bottom:0;transform:translateX(-50%);
+  width:72%;height:48%;border-radius:40% 40% 0 0;
+  background:linear-gradient(180deg,rgba(13,13,13,.18),rgba(13,13,13,.55));
+}
+.hero-sheet.left{
+  top:14%;left:-4%;transform:rotate(-11deg);
+}
+.hero-sheet.right{
+  top:38%;right:-3%;transform:rotate(9deg);
+  width:clamp(160px,17vw,220px);
+}
+@media (max-width:1100px){
+  .hero-sheet.left{display:none;}
+  .hero-sheet.right{top:58%;right:-10%;opacity:.55;}
+}
+@media (max-width:760px){
+  .hero-sheets{display:none;}
+}
 .hero-trust .pill{
   display:inline-flex;align-items:center;gap:6px;
   padding:5px 12px;border-radius:999px;
@@ -819,6 +872,14 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
 
   <!-- HERO -->
   <section class="hero">
+    <div class="hero-sheets" aria-hidden="true">
+      <div class="hero-sheet left">
+        <span class="ph"></span><span class="ph"></span><span class="ph"></span><span class="ph"></span><span class="ph"></span>
+      </div>
+      <div class="hero-sheet right">
+        <span class="ph"></span><span class="ph"></span><span class="ph"></span><span class="ph"></span><span class="ph"></span>
+      </div>
+    </div>
     <div class="hero-inner">
       <span class="hero-eyebrow"><span class="dot"></span>On-device AI · Built in India · New in 2026</span>
       <h1>Every print job.<br><em>One browser tab.</em></h1>
