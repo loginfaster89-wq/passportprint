@@ -51,10 +51,10 @@ but workable), **nit** (polish).
 | F2 | `passport-photo.html` | iphone 390, ipad 820 | **medium** | Google One-Tap ("Sign in with Google" bubble) auto-prompts on page load and covers the Login button + part of the sidebar on iPad and most of the upload card on iPhone. This is Google Identity Services (`accounts.google.com/gsi/client`) with `auto_select` or default prompt behaviour enabled. Desktop did not auto-prompt in this audit (likely cookie heuristic). Fix: pass `cancel_on_tap_outside:true`, restrict prompt to the explicit "Continue with Google" button only, or call `google.accounts.id.disableAutoSelect()` on first load. |
 | ~~F3~~ | home `/` | ipad 820 | **resolved PR #73** | `.features-grid` does not become a slider at exactly 820px. It renders as a **2-column CSS grid with 5 cards**, so the "LIVE" `.feature-card.primary` (Passport Photo) sits next to a SOON card with an **uneven height** — primary has `min-height:230px` while SOON cards have "In the works" label. Visually looks like a dead / empty card. `sliders.js` `hasOrphanRow()` may be returning false because the CSS primary-span only activates at `min-width:820px`. Either tighten the breakpoint or let primary span in the 2-col layout too. |
 | ~~F4~~ | home `/` | ipad 820, iphone 390 | **resolved PR #74** | Hero headline wrap: at 820px the phrase `Every print job.` ends line 1 with `One` attached (orange) → "Every print job. One / browser tab." — the accent phrase `One browser tab.` gets split. At 390px it breaks as "Every print / job. One / browser tab.", dividing the white phrase too. Desktop is correct ("Every print job." / "One browser tab."). Suggested fix: `text-wrap:balance` on `.hero h1`, or an explicit `<br class="hero-break">` between the two sentences hidden on desktop. |
-| F5 | home `/` | ipad 820 | nit | Pricing card "Shop counter" title wraps to two lines while "Try it out" and "Quick job" fit on one, creating a visual height imbalance between the three cards. "for 30 days" also wraps to two lines. Tight font-size clamp or `white-space:nowrap` with a smaller title at `820px` would even them out. |
+| ~~F5~~ | home `/` | ipad 820 | **resolved PR #78** | Pricing card "Shop counter" title wraps to two lines while "Try it out" and "Quick job" fit on one, creating a visual height imbalance between the three cards. "for 30 days" also wraps to two lines. Tight font-size clamp or `white-space:nowrap` with a smaller title at `820px` would even them out. |
 | F6 | home `/` | all | nit | The `.audience-grid` has only **2 cards** ("Print shops & photo studios" / "Home users, students & parents"). On desktop this produces a wide empty column to the right (grid defined as `repeat(auto-fit, minmax(…,1fr))` → 2 full-width cards). Section feels sparse for the amount of vertical space it occupies. Either add a 3rd audience card (e.g. "Teachers / certificate printers") or shrink the gap and centre the 2 cards with `max-width`. |
 | F7 | `passport-photo.html` | all | nit | Console noise: four `Unrecognized feature: 'publickey-credentials-create' / 'web-share' / 'local-network-access' / 'loopback-network'.` warnings on every load. These come from the `<iframe>` Google GSI injects; Chrome doesn't recognise some Permissions-Policy tokens the GSI iframe requests. Not our code, but clutters the console. Harmless — keep an eye on it if the GSI SDK is ever updated. |
-| F8 | `about.html`, `contact.html` | all | medium | Email `loginfaster890@gmail.com` is exposed as plain text (clickable `mailto:` + visible text) on both pages. This is scrapable by spam bots within days. Either obfuscate via JS (`data-user` + `data-domain`), use an image, or route through a contact form. |
+| ~~F8~~ | `about.html`, `contact.html` | all | **resolved PR #77** | Email `loginfaster89@gmail.com` was exposed as plain text (clickable `mailto:` + visible text) on both pages. Scrapable by spam bots within days. Fixed via `<a class="email-obf" data-u="…" data-d="…">` + tiny per-page IIFE that assembles the mailto on DOMContentLoaded. A contact form (P10) is still the full fix. |
 | F9 | home `/` | desktop 1440 | nit | "MOST POPULAR" ribbon on the Monthly pricing card sits **on the border** (negative top position). On desktop the badge partially overhangs the card's rounded corner. Looks intentional but at 1440px the overlap renders as slightly misaligned. Inspect the `::before` offset at the desktop breakpoint. |
 | F10 | home `/` | desktop 1440 | nit | `Tools preview` card header has three circles that mimic macOS window-chrome red/yellow/green, but all three are styled with amber (two gray, one orange). Reads as a broken/loading browser chrome to some users. Pick a clearer visual metaphor or drop the window chrome entirely. |
 | F11 | `passport-photo.html` | desktop 1440 | nit | At 1440×900, almost the entire lower half of the viewport (below the upload card, above the footer) is empty black space. Consider raising the footer or adding a "While you wait, try…" section to pull the fold up. |
@@ -71,11 +71,11 @@ for a follow-up PR.
 |---|------|---------------------|
 | P1 | Hero | Static background (radial glow + grid pattern). Add a subtle **animated gradient pulse** on the accent glow (6-8 s ease loop) and a low-amplitude parallax on the grid pattern tied to scroll. Preserves the palette, adds life. |
 | P2 | Hero | No **product visual**. Add a real mockup of the passport-photo tool output (an A4 sheet with cutting lines and 5 passport photos arranged on it) floating in the hero, subtly rotated. Converts "what is this?" to "oh, I see" in 1 s. |
-| P3 | Cards (features/why/steps/audience/pricing) | All flat at rest and flat on hover. Add `transition:transform .25s, box-shadow .25s` with `:hover{transform:translateY(-4px); box-shadow:0 10px 30px rgba(240,165,0,.08);}`. Already within existing tokens. |
+| ~~P3~~ | Cards (features/why/steps/audience/pricing) | **resolved PR #76.** `.why/.step/.audience/.pricing-card` pe `transition` + `:hover{translateY(-4px); amber-tinted shadow}`. Uses existing tokens. |
 | P4 | Icons | Replace emoji with a consistent SVG icon pack (see F12). Lucide icons are MIT-licensed, small, and render consistently. |
 | P5 | Motion | No scroll-reveal anywhere. Add a single lightweight `IntersectionObserver` that toggles `.in-view { opacity:1; transform:translateY(0);}` on sections as they enter the viewport. Keep durations short (250 ms) — no AOS-style bounces. |
 | P6 | FAQ | Native `<details>` accordion jumps open/close with no transition and the `+` sign stays as `+`. Polish: use `details[open] summary::after { content:"−"; }` + CSS `grid-template-rows` transition trick (or tiny JS) for smooth slide-open. |
-| P7 | Hero CTAs | `.btn` has no loading / pressed state. On click to `passport-photo.html`, there's no visual feedback during the ~400 ms navigation. Add `:active{transform:scale(.97);}` and an optional spinner on the primary CTA while the next page is loading. |
+| ~~P7~~ | Hero CTAs | **resolved PR #76** (tactile half). `.btn:active{transform:scale(.97);}` aur `.pricing-card .pcta:active` bhi. Optional spinner on primary CTA during nav still open — separate item if we want that. |
 | P8 | Social proof | Homepage has no testimonials, no "used by N shops", no logo strip, no press mentions. A multinational feel needs at least one of: a testimonials section, a "trusted by" row, or concrete numbers ("5,000 passport photos printed this month"). |
 | P9 | About page | Wall of text. Needs: a mission-hero with a large founder quote, a timeline of 2024→2026 roadmap, a "What ships next" card. Re-use existing tokens, no new fonts. |
 | P10 | Contact page | Static email + "email us" copy. Multinational polish: an inline contact form (name, email, message, category) POSTed to an existing serverless endpoint or to `mailto:` as a fallback. Also: response-time SLA visible in a badge. |
@@ -85,7 +85,7 @@ for a follow-up PR.
 | P14 | Navigation | No **sticky CTA on mobile** when scrolling past the hero. A floating "Open Passport Photo →" pill anchored to `bottom:16px; right:16px` on `≤640px` after scroll > 1× viewport height improves conversion a lot. |
 | P15 | Footer | Single-row footer (`Home · About · Privacy · Terms · Refund · Delivery · Contact`). Multinational: multi-column — **Product** / **Resources** / **Company** / **Legal** + a newsletter signup field + social icons + locale switcher. |
 | P16 | Internationalisation | No language switcher. Hindi copy was removed (SKILL §5), but adding `हि` ↔ `EN` toggle for Indian multinational feel would be a 1-day add. Current copy is English-only — acceptable, but a locale selector UI affordance signals "we thought about it". |
-| P17 | Accessibility | Custom focus rings absent — Tab-navigation relies on default browser outline (blue on dark). Add `:focus-visible` rings using `--accent` with `outline:2px solid; outline-offset:3px; border-radius:inherit;` on all interactive elements. |
+| ~~P17~~ | Accessibility | **resolved PR #76.** Site-wide `:focus-visible{outline:2px solid var(--accent); outline-offset:2px}` added to `assets/legal.css`, with `:focus{outline:none}` fallback so mouse clicks don't show rings. Keyboard users now get a clean amber ring on nav links, Features dropdown, Login button, `<details>`, form elements. |
 | P18 | Accessibility | `<details>` FAQ items don't have unique `id`s — deep-linking to a specific question (e.g. `/#faq-is-it-free`) is impossible. Add stable slugs on each `<details>`. |
 | P19 | Product-demo | No **inline product demo / video** on the homepage. A 10-15 s muted autoplay `<video>` loop inside the tools-preview card (real tool, sped up) proves the product without requiring a click. |
 | P20 | Loading / perceived perf | No skeleton shimmer anywhere. `passport-photo.html` loads transformers.js (~large). On first visit there's no indication that a heavier model is being downloaded. Add a top-of-page thin progress bar for AI-model download. |
@@ -108,11 +108,14 @@ Ordered by impact / ease, one logical task per PR, minimum diff each:
 2. ~~**F2**~~ — merged PR #71.
 3. ~~**F4**~~ — merged PR #74.
 4. ~~**F3**~~ — merged PR #73.
-5. **F12 / P4** — Emoji → SVG icon pack (cross-platform consistency).
-6. **P3 + P7 + P17** — Card hover lift + button active state + focus-visible rings (small CSS-only polish, one PR).
-7. **P6** — FAQ open/close smooth transition + `+`/`−` toggle.
-8. **P14** — Mobile sticky CTA pill.
-9. **F8** — Obfuscate email on about / contact.
+5. ~~**P3 + P7 + P17**~~ — PR #76 (card hover lift + button active state + focus-visible rings, one CSS-only pass).
+6. ~~**F8**~~ — PR #77 (email obfuscation on about / contact).
+7. ~~**F5**~~ — PR #78 (pricing-card heights balanced at 820).
+8. **P6** — FAQ open/close smooth transition + `+`/`−` toggle.
+9. **P14** — Mobile sticky CTA pill.
 10. **P22** — Generate proper 1200×630 OG image and swap meta tags.
+11. **F9** — Most-Popular ribbon alignment at 1440.
+12. **F10** — Tools-preview window-chrome dots clarity.
+13. **F12 / P4** — Emoji → SVG icon pack (cross-platform consistency, larger diff).
 
 Everything else from section B is a multi-PR roadmap — pick per session.
