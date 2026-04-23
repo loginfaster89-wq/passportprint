@@ -184,38 +184,39 @@ on this repo. Add `Actions: Read and write` only if editing workflow files.
 
 ## Known-issue backlog (2026-04-23 audit)
 
-A full audit of the production site (3 viewports × 8 pages) is recorded
-at `issues.md` at the repo root. That file is the source of truth for
-**what's broken / dated** right now; treat its "Suggested PR sequence"
-as the default backlog unless the user redirects.
+`issues.md` at the repo root is the source of truth. All quick-win queue
+items from the original audit are now merged. Summary headlines for the
+next session:
 
-Quick headlines for the next session (post-2026-04-23 worklog):
-- `F1` Razorpay undefined URL → merged in PR #70. Residual
-  `/build/undefined` 403 is a Razorpay-SDK bug, not client-side;
-  payments work. Treat as closed.
-- `F2` Google One-Tap auto-prompt → merged in PR #71. Prompt now
-  only fires when the user clicks Login and the modal opens.
-- `F3` features-grid 820 uneven heights → merged in PR #73.
-  Explicit 2-col in 761-899 with `.feature-card.primary{grid-column:1/-1;}`;
-  3-col desktop layout moved to `min-width:900px`.
-- `F4` hero H1 phrase wrap → merged in PR #74. `<br>` between the
-  two sentences + `text-wrap:balance` on `.hero h1`.
-- `F5` pricing-card heights at 820 → PR #78. Narrow-tablet media
-  query (761-899) shrinks `.pricing-card h3` to 19px, `.amt` to 32px,
-  `.per` to 11px so "Shop counter" + "for 30 days" both fit one-line.
-- `F8` plain-text email on about / contact → PR #77. `<a class="email-obf"
-  data-u data-d>` + tiny per-page IIFE assembles the `mailto:` on
-  DOMContentLoaded; regex scrapers no longer see the address.
-- `P3 + P7 + P17` interaction polish → PR #76 (CSS-only). Card
-  `:hover { translateY(-4px) + amber-tinted shadow }` on `.why/.step/
-  .audience/.pricing-card`, `.btn:active{scale(.97)}`, site-wide
-  `:focus-visible { outline:2px solid var(--accent) }` in `legal.css`.
-  Respects `prefers-reduced-motion: reduce`.
-- Open backlog: F6, F7, F9-F12 + P1-P2, P4-P5, P6, P8-P16, P18-P30
-  in `issues.md`. Highest-impact remaining quick wins: P6 (FAQ smooth
-  open); P14 (mobile sticky CTA); P22 (proper 1200×630 OG image);
-  F9 (Most-Popular ribbon 1440 alignment); F10 (tools-preview window
-  chrome); F12/P4 (emoji → SVG icon pack).
+**Resolved (PRs #70-#91):** F1 Razorpay script, F2 One-Tap, F3 features
+grid 820, F4 hero wrap, F5 pricing 820, F8 email obfuscation, F9 ribbon
+centering, F10 preview chrome, F12/P4 SVG icons, P3+P7+P17 card/button/
+focus polish, P5 scroll-reveal, P6 FAQ smooth open, P13 ribbon pulse,
+P14 mobile sticky CTA, P18 FAQ deep-link IDs, P22 OG image, P23 sitemap
+lastmod+anchors, P25 backend preconnect on legal pages, P27 branded 404.
+
+**Open backlog priority order for the next session:**
+1. P28 PWA manifest + offline-capable service worker (highest value).
+2. P15 multi-column footer.
+3. P9 About page rework.
+4. P10 Contact form.
+5. P19 Inline product-demo video in tools-preview.
+6. P2 Hero A4 product visual.
+7. P8 Social proof (testimonials / trusted-by / numbers).
+8. P11 Pricing monthly/yearly toggle (copy-only phase 1).
+9. P12 Pricing comparison matrix.
+10. P1 Hero animated gradient pulse.
+11. P30 Homepage density break — live-demo section.
+12. P24 Self-host Syne + DM Mono (woff2).
+13. P16 Language switcher UI.
+14. P26 Cookie banner.
+
+**Lower-priority functional nits:** F6 audience grid sparse, F7 GSI
+iframe warnings (harmless, not our code).
+
+**Locked-file items** (need explicit user approval to touch
+`passport-photo.html`): F11 1440 empty space, P20 AI-model download
+progress bar, P21 inline error banner, P29 step-bar progress fill.
 
 ## Working style for human collaborators
 
