@@ -1198,6 +1198,17 @@ header>*,.steps>*,.sidebar>*,.modal-header>*,.modal-footer>*{min-width:0;}
 /* Inputs must never overflow their row. */
 input,select,textarea,button{max-width:100%;}
 
+/* iPadOS / iOS Safari: disable the 300 ms double-tap-to-zoom wait on
+   interactive elements so a tap fires its click listener immediately
+   instead of occasionally being dropped while Safari is still deciding
+   whether the tap is the first half of a double-tap. Fixes the
+   "buttons sometimes respond, sometimes don't" feel on iPad; iPhone
+   was less affected because Safari there usually resolves the delay
+   faster at smaller viewports. */
+button,a,label,.step,.hdr-btn,.lang-btn,.preset-btn,.btn,.modal-close,
+.upload-zone,.upload-inner-card,.count-btn,.nav-login,.nav-toggle,
+.modal-overlay,[onclick]{touch-action:manipulation;}
+
 /* --- Header: prevent Plans/Login buttons from overlapping the logo on narrow widths --- */
 header{flex-wrap:nowrap;}
 .logo{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex-shrink:1;}
