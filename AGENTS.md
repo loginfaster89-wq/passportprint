@@ -4,6 +4,10 @@ This file is read automatically by coding agents (Devin, Cursor, etc.) when
 they open this repo. Keep it short; deep implementation notes go in
 `CLOUDFLARE_DEPLOY.md` or in source comments where they belong.
 
+Devin-specific condensed recipe (build commands, PR curl snippet, quick
+hard-rules checklist) lives at `.agents/skills/studioprint/SKILL.md` —
+read both files at the start of every session.
+
 ## What this repo is
 
 Plain static HTML/CSS/JS frontend for [Studio Print](https://studioprint.pages.dev/) —
@@ -91,6 +95,13 @@ modal directly without expanding the nav:
 `passport-photo.html` keeps its own pre-PR-#54 inline copy of the header
 (still `#hdrAuthBtn` inside `<nav>`) because we do not touch that file.
 
+Post-PR #66: inside the `@media (max-width:900px)` block in
+`assets/legal.css`, `.nav-toggle` is explicitly `margin-left:0` so that
+only `.nav-login` owns the auto-margin and the Login + ☰ pair pin right
+together. Before the fix both had `margin-left:auto`, flex split the
+free space between them, and the Login button parked mid-header on
+iPad portrait / narrow tablets.
+
 ## Hard rules
 
 1. **Do not modify `passport-photo.html`** unless the user explicitly asks.
@@ -120,6 +131,22 @@ modal directly without expanding the nav:
    it injects a `.sp-toast` element styled in `assets/auth.css`. Keep the
    two visually in sync — both use `var(--surface)` bg +
    `var(--accent)` border + `z-index: 10001`.
+
+## Homepage grids → slider activation (post PR #64 / #65)
+
+`assets/sliders.js` (plain JS, deliberately **not** obfuscated — PR #65
+extracted it so the obfuscator can't silently break the IIFE) adds
+`.is-slider` to `.why-grid`, `.features-grid`, `.audience-grid` and
+`.steps-grid` when either:
+
+- `matchMedia('(max-width: 760px)')` matches (phones), **or**
+- `hasOrphanRow(grid)` is true (e.g. 3 cards row 1 + 1 orphan on iPad
+  Air 820px).
+
+If you edit that script, smoke-test at 820 / 1280 / 375px — 820 must
+render one horizontal row + 4 dots, 1280 must stay a plain 4-up grid
+with no dots, 375 must show the phone slider. No `charAt`/`undefined`
+console errors at any viewport.
 
 ## Passport-photo defaults (post PR #58)
 
