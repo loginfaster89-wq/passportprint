@@ -196,17 +196,22 @@ footer.legal-footer .links a:hover{color:var(--accent);}
 .dropdown-panel .dd-tag.live{color:#4ade80;border-color:rgba(74,222,128,0.35);background:rgba(74,222,128,0.08);}
 .dropdown-panel .dd-tag.soon{color:var(--muted);border-color:var(--border);background:var(--bg);}
 
-/* Mobile / narrow widths: collapse nav into hamburger */
+/* Mobile / narrow widths: collapse nav into hamburger.
+   Open nav overlays the page (absolute below the sticky header) so it
+   never pushes the page content downwards. */
 @media (max-width:900px){
   .nav-toggle{display:inline-flex;}
-  .legal-header{flex-wrap:wrap;}
   .legal-header nav{
     display:none;flex-direction:column;align-items:stretch;gap:4px;
-    width:100%;order:3;
-    margin:12px calc(clamp(16px,3vw,32px) * -1) -14px;
-    padding:10px clamp(16px,3vw,32px) 14px;
-    background:var(--surface);border-top:1px solid var(--border);
+    position:absolute;top:100%;left:0;right:0;z-index:45;
+    padding:12px clamp(16px,3vw,32px) 14px;
+    background:rgba(22,22,22,0.96);
+    -webkit-backdrop-filter:saturate(140%) blur(10px);
+    backdrop-filter:saturate(140%) blur(10px);
+    border-top:1px solid var(--border);
+    box-shadow:0 16px 34px rgba(0,0,0,0.5);
     font-size:15px;
+    max-height:calc(100dvh - 100%);overflow-y:auto;
   }
   .legal-header nav.open{display:flex;}
   .legal-header nav > a,.legal-header nav .has-dropdown > .nav-dd-btn{
