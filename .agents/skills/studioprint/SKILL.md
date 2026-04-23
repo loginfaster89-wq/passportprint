@@ -187,9 +187,32 @@ file — needs user approval).
 5. `P16` Language switcher UI affordance.
 6. `P26` Cookie banner (self-hosted, essentials-only).
 
+*Responsive + flow audit 2026-04-24 (details in `issues.md` §D):*
+- `R1` Hero H1 wraps awkwardly on phones (375/390 px) — tighten the
+  `.hero h1` clamp floor or drop `max-width:18ch` at ≤ 420 px.
+- `R2` `.hero-sheet.right` overflows the viewport right edge on
+  iPad-portrait + all desktop sizes; clip the `right` offset or add
+  `overflow:hidden` to `.hero`.
+- `R3` Same sheet still visible at iPad-portrait 768 — raise the
+  `.hero-sheets{display:none}` breakpoint from 760 to 820, or shrink
+  and inset the sheet further.
+- `R5` Slider pagination dots are 7×7 px — expand tap area to ~24 px
+  without changing the visual dot size.
+- `R6` Footer column links have ~17 px tap rows on phones — add
+  `padding-block:6px` on `.footer-col a` in `assets/legal.css`.
+- `R4` passport-photo upload-card frame-corners clip at iPhone SE
+  (locked file, low priority).
+- `R7` No dedicated 768 px hero breakpoint (optional polish).
+- `U1` Home paid-plan CTA → login → lands on `passport-photo.html#plans`
+  and forces the user to re-pick the plan to reach Razorpay. Fix needs
+  a `#buy-<planId>` hash handler in `passport-photo.html` (locked file
+  — needs user ok) + 1-line change in `index.html:1487` to pass the
+  plan id in the post-login redirect target.
+
 *Locked-file items (`passport-photo.html` — needs explicit user ok):*
 `F11`, `P20` AI-model download progress bar, `P21` inline error banner,
-`P29` step-bar progress fill.
+`P29` step-bar progress fill, `R4` frame-corners clip at 375 px,
+`U1` pricing buy-flow skip-a-step.
 
 **How to audit again (reproducible)**
 
@@ -213,3 +236,72 @@ has full console + network.
   `/api/google-login`, `/api/delete-account`. URL hardcoded as
   `https://passportprint-studio.onrender.com` in `passport-photo.html`
   and `assets/auth.js`.
+
+## 11. Ready-to-paste prompt for a new Devin chat
+
+Copy the block below into a fresh Devin session when you want to hand
+off the responsive + pricing-flow follow-up work. It self-contains
+repo / PAT / rules / concrete scope and references `issues.md` §D for
+details, so a new session can start working without re-auditing.
+
+```
+Studio Print frontend par kaam karo.
+Repo: loginfaster89-wq/passportprint (private)
+PAT: GITHUB_PAT_PASSPORTPRINT (repo-scoped fine-grained secret —
+Contents + Pull requests: Read and write on this repo).
+
+Clone ke baad pehle ye teen files padho:
+1. .agents/skills/studioprint/SKILL.md — Devin-specific recipe
+   (build/preview, hard rules, PAT curl snippet, Hinglish style,
+   §9 closed/open backlog including R1-R7 + U1).
+2. AGENTS.md — full source of truth.
+3. issues.md — 2026-04-23 full-site audit + 2026-04-24 §D responsive
+   follow-up with R1–R7 (responsive gaps) and U1 (pricing buy-flow).
+
+## Aaj ka kaam — 2 independent PRs
+
+### PR 1 — Responsive polish (no locked-file edits, ship first)
+- Fix R1: `.hero h1` ko phones par clean wrap karo. Clamp floor
+  tight karo (e.g. `clamp(28px, 8.6vw, 64px)` at `≤ 420px`) ya
+  `max-width:18ch` drop karo phones par, taaki `Every print job.`
+  ek line me fit ho.
+- Fix R2: `.hero-sheet.right` viewport ke right edge se bahar ja
+  raha hai. Ya to `right` offset clamp karo (e.g. `right:max(-3%,
+  -24px)`) ya `.hero { overflow:hidden }` lagao. Gray stripe gone.
+- Fix R3: `.hero-sheets { display:none }` breakpoint 760 se 820 px
+  tak uthao — iPad-portrait (768) par sheet nahi dikhni chahiye.
+- Fix R5: slider pagination dots (`.slider-dots button`) ka
+  clickable area ~24px karo (visual dot 7 px rehne do — padding
+  + `::before` / transparent hit pad).
+- Fix R6: `.footer-col a` me `padding-block:6px` add karo
+  (`assets/legal.css`) — footer links phones par easy tap.
+- Files: sirf `index.html` + `assets/legal.css`. No JS. No
+  `passport-photo.html`. No `.github/workflows/*.yml`. Tokens /
+  fonts / palette unchanged.
+- `npm run build` run karke verify karo, screenshots 375 / 768 /
+  820 / 1440 attach karo PR description me.
+
+### PR 2 — Pricing buy-flow (U1, REQUIRES USER APPROVAL)
+Skip unless the user explicitly says "locked file me jaao" — fix
+needs `passport-photo.html` edits.
+
+- `index.html:1487` par `target` ko plan id ke saath build karo:
+  `target = 'passport-photo.html#buy-' + a.getAttribute('data-plan-cta')`.
+- `passport-photo.html` me us hash handler ke paas (jahan abhi
+  `#plans` detect karta hai + `openPlans()` call hota hai) ek
+  `#buy-weekly` / `#buy-monthly` branch add karo jo seedha
+  existing `purchasePlan(<planId>)` call kare (plan-picker modal
+  skip, direct Razorpay modal khole).
+- Expected flow: homepage `Get weekly pass` → signup modal →
+  login OTP → passport-photo.html#buy-weekly → Razorpay checkout
+  direct. No `#plans` intermediate step.
+
+## Default rules (same every session)
+- `passport-photo.html` me sirf copy / meta edits (ya jo user ne
+  explicitly approve kiya ho), otherwise no JS/ID/DOM change.
+- `.github/workflows/*.yml` mat chhedo.
+- Fonts / palette / CSS tokens unchanged.
+- One PR per logical task, minimum diff.
+- `npm run build` run karke verify karo.
+- Hinglish updates, quota-conscious, zero jargon.
+```
