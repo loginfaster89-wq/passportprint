@@ -480,6 +480,15 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
   .faq-item .faq-body{padding:0 16px 14px;}
 }
 
+/* Balance pricing-card heights on narrow tablets: "Shop counter" + the
+   "for 30 days" subtitle were wrapping at ~820px while "Try it out" /
+   "Quick job" sat on one line, making the 3 cards visibly uneven. */
+@media (min-width:761px) and (max-width:899px){
+  .pricing-card h3{font-size:19px;letter-spacing:-0.2px;}
+  .pricing-card .price .amt{font-size:32px;}
+  .pricing-card .price .per{font-size:11px;}
+}
+
 /* ── CARD SLIDERS ── */
 /* Any homepage card grid becomes a horizontal scroll-snap slider when JS
    adds the `is-slider` class: either because the viewport is narrow
