@@ -411,6 +411,7 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
 .pricing-card.featured{
   border-color:var(--accent);
   box-shadow:0 24px 50px -28px rgba(240,165,0,0.55);
+  animation:featured-glow 3.2s ease-in-out infinite;
 }
 .pricing-card.featured::before{
   content:"Most popular";
@@ -419,6 +420,15 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
   color:#0d0d0d;background:var(--accent);
   padding:4px 12px;border-radius:999px;
   box-shadow:0 4px 12px -4px rgba(240,165,0,0.45);
+  animation:ribbon-pulse 3.2s ease-in-out infinite;
+}
+@keyframes ribbon-pulse{
+  0%,100%{box-shadow:0 4px 12px -4px rgba(240,165,0,0.45);}
+  50%{box-shadow:0 4px 18px -2px rgba(240,165,0,0.75);}
+}
+@keyframes featured-glow{
+  0%,100%{box-shadow:0 24px 50px -28px rgba(240,165,0,0.55);}
+  50%{box-shadow:0 28px 60px -26px rgba(240,165,0,0.75);}
 }
 .pricing-card .ptag{
   font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.16em;
@@ -627,6 +637,8 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
     transform:none;
   }
   .faq-item[open] .faq-body{animation:none;}
+  .pricing-card.featured,
+  .pricing-card.featured::before{animation:none;}
 }
 
 /* Mobile sticky CTA pill — appears on phones once the user has scrolled
