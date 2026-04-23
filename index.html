@@ -160,9 +160,24 @@ body.home main.home-main{
 .hpv-mini-ic{
   width:34px;height:34px;border-radius:9px;
   background:var(--accent-dim);color:var(--accent);
-  display:inline-flex;align-items:center;justify-content:center;font-size:17px;
+  display:inline-flex;align-items:center;justify-content:center;
   border:1px solid rgba(240,165,0,0.28);
 }
+
+/* Shared icon class for the inline SVG sprite below. Lucide-style stroke
+   icons (24x24 viewBox, 2px stroke, round caps) that inherit colour from
+   their container. Sized per-context; default is 18px. */
+.ix{
+  width:18px;height:18px;flex-shrink:0;vertical-align:middle;
+  fill:none;stroke:currentColor;stroke-width:2;
+  stroke-linecap:round;stroke-linejoin:round;
+}
+.dropdown-panel .dd-icon .ix{width:16px;height:16px;}
+.feature-card .ficon .ix{width:22px;height:22px;}
+.why-card .wicon .ix{width:19px;height:19px;}
+.step-card .sicon .ix{width:22px;height:22px;}
+.audience-card .aicon .ix{width:22px;height:22px;}
+.hpv-mini-ic .ix{width:18px;height:18px;}
 .hpv-mini-t{font-family:'Syne',sans-serif;font-weight:700;font-size:14px;color:#fff;}
 .hpv-mini-s{font-size:11.5px;color:var(--muted2);line-height:1.4;}
 .hpv-tile{
@@ -637,6 +652,29 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
 </head>
 <body class="home">
 
+<!-- Icon sprite (Lucide-style, 24x24, stroke-based). Referenced via
+     <svg class="ix"><use href="#i-…"/></svg> so every icon inherits the
+     container's colour and renders identically across platforms —
+     replacing emoji glyphs that were rendering inconsistently on
+     Android/old Windows/Linux. No new fonts, no new dependencies. -->
+<svg width="0" height="0" style="position:absolute;overflow:hidden" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="i-camera" viewBox="0 0 24 24"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3Z"/><circle cx="12" cy="13" r="3"/></symbol>
+    <symbol id="i-idcard" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><circle cx="8" cy="11" r="2"/><path d="M5 17a3 3 0 0 1 6 0"/><path d="M14 9h5"/><path d="M14 13h4"/></symbol>
+    <symbol id="i-scroll" viewBox="0 0 24 24"><path d="M8 21h12a2 2 0 0 0 2-2v-2H10v2a2 2 0 1 1-4 0V5a2 2 0 1 0-4 0v3h4"/><path d="M19 17V5a2 2 0 0 0-2-2H4"/><path d="M12 8h5"/><path d="M12 12h5"/></symbol>
+    <symbol id="i-image" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></symbol>
+    <symbol id="i-scissors" viewBox="0 0 24 24"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="20" y1="4" x2="8.12" y2="15.88"/><line x1="14.47" y1="14.48" x2="20" y2="20"/><line x1="8.12" y1="8.12" x2="12" y2="12"/></symbol>
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></symbol>
+    <symbol id="i-timer" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2"/><line x1="9" y1="2" x2="15" y2="2"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
+    <symbol id="i-printer" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></symbol>
+    <symbol id="i-zap" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></symbol>
+    <symbol id="i-upload" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></symbol>
+    <symbol id="i-bot" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="6" r="2"/><path d="M12 8v3"/><circle cx="8.5" cy="16" r="0.6" fill="currentColor"/><circle cx="15.5" cy="16" r="0.6" fill="currentColor"/><path d="M3 17h-1"/><path d="M22 17h-1"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></symbol>
+  </defs>
+</svg>
+
 <header class="legal-header">
   <a href="index.html" class="logo">Studio <em>Print</em></a>
   <nav id="primaryNav">
@@ -645,27 +683,27 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
       <button class="nav-dd-btn" aria-haspopup="true" aria-expanded="false">Features <span class="caret" aria-hidden="true">▾</span></button>
       <div class="dropdown-panel" role="menu">
         <a href="passport-photo.html" role="menuitem">
-          <span class="dd-icon" aria-hidden="true">📷</span>
+          <span class="dd-icon" aria-hidden="true"><svg class="ix" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-camera"/></svg></span>
           <span class="dd-meta"><strong>Passport Photo</strong><small>AI crop · 300 DPI A4 sheet</small></span>
           <span class="dd-tag live">Live</span>
         </a>
         <span class="dd-item soon" role="menuitem" aria-disabled="true">
-          <span class="dd-icon" aria-hidden="true">🪪</span>
+          <span class="dd-icon" aria-hidden="true"><svg class="ix" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-idcard"/></svg></span>
           <span class="dd-meta"><strong>Document Sheet</strong><small>Aadhaar, PAN · cut &amp; arrange</small></span>
           <span class="dd-tag soon">Soon</span>
         </span>
         <span class="dd-item soon" role="menuitem" aria-disabled="true">
-          <span class="dd-icon" aria-hidden="true">📜</span>
+          <span class="dd-icon" aria-hidden="true"><svg class="ix" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-scroll"/></svg></span>
           <span class="dd-meta"><strong>Certificate Editor</strong><small>Marriage, birth, misc.</small></span>
           <span class="dd-tag soon">Soon</span>
         </span>
         <span class="dd-item soon" role="menuitem" aria-disabled="true">
-          <span class="dd-icon" aria-hidden="true">🖼️</span>
+          <span class="dd-icon" aria-hidden="true"><svg class="ix" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-image"/></svg></span>
           <span class="dd-meta"><strong>ID &amp; Visa Sheets</strong><small>Mix sizes on A4</small></span>
           <span class="dd-tag soon">Soon</span>
         </span>
         <span class="dd-item soon" role="menuitem" aria-disabled="true">
-          <span class="dd-icon" aria-hidden="true">✂️</span>
+          <span class="dd-icon" aria-hidden="true"><svg class="ix" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-scissors"/></svg></span>
           <span class="dd-meta"><strong>Background Studio</strong><small>Remove &amp; replace</small></span>
           <span class="dd-tag soon">Soon</span>
         </span>
@@ -706,22 +744,22 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
       </div>
       <div class="hero-preview-tiles">
         <div class="hpv-mini">
-          <span class="hpv-mini-ic" aria-hidden="true">📷</span>
+          <span class="hpv-mini-ic" aria-hidden="true"><svg class="ix" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-camera"/></svg></span>
           <span class="hpv-mini-t">Passport Photo</span>
           <span class="hpv-mini-s">35×45 mm · A4 sheet</span>
         </div>
         <div class="hpv-mini">
-          <span class="hpv-mini-ic" aria-hidden="true">🪪</span>
+          <span class="hpv-mini-ic" aria-hidden="true"><svg class="ix" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-idcard"/></svg></span>
           <span class="hpv-mini-t">Aadhaar / PAN</span>
           <span class="hpv-mini-s">Crop &amp; arrange on A4</span>
         </div>
         <div class="hpv-mini">
-          <span class="hpv-mini-ic" aria-hidden="true">📜</span>
+          <span class="hpv-mini-ic" aria-hidden="true"><svg class="ix" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-scroll"/></svg></span>
           <span class="hpv-mini-t">Certificate Edit</span>
           <span class="hpv-mini-s">Marriage, birth, misc.</span>
         </div>
         <div class="hpv-mini">
-          <span class="hpv-mini-ic" aria-hidden="true">✂️</span>
+          <span class="hpv-mini-ic" aria-hidden="true"><svg class="ix" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-scissors"/></svg></span>
           <span class="hpv-mini-t">Background Studio</span>
           <span class="hpv-mini-s">Remove &amp; replace</span>
         </div>
@@ -740,35 +778,35 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
 
       <div class="features-grid">
         <a href="passport-photo.html" class="feature-card live primary">
-          <div class="ficon" aria-hidden="true">📷</div>
+          <div class="ficon" aria-hidden="true"><svg class="ix" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-camera"/></svg></div>
           <h3>Passport Photo <span class="tag live">Live</span></h3>
           <p>Selfie → print-ready passport photo. AI background removal, Indian passport &amp; visa country presets (India, US, UK, UAE, Schengen, Australia and more), and a 300 DPI A4 sheet with cutting guides.</p>
           <span class="fcta">Open tool <span class="arrow" aria-hidden="true">→</span></span>
         </a>
 
         <div class="feature-card soon" aria-label="Coming soon">
-          <div class="ficon" aria-hidden="true">🪪</div>
+          <div class="ficon" aria-hidden="true"><svg class="ix" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-idcard"/></svg></div>
           <h3>Document Sheet <span class="tag soon">Soon</span></h3>
           <p>Upload an Aadhaar card, PAN card or any ID PDF — crop front &amp; back, arrange multiple copies on a single A4 sheet with cut lines.</p>
           <span class="fcta" style="color:var(--muted);">In the works</span>
         </div>
 
         <div class="feature-card soon" aria-label="Coming soon">
-          <div class="ficon" aria-hidden="true">📜</div>
+          <div class="ficon" aria-hidden="true"><svg class="ix" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-scroll"/></svg></div>
           <h3>Certificate Editor <span class="tag soon">Soon</span></h3>
           <p>Edit marriage, birth and miscellaneous certificate scans — clean up, fix text, arrange on A4 and print without rebuilding the layout in Photoshop.</p>
           <span class="fcta" style="color:var(--muted);">In the works</span>
         </div>
 
         <div class="feature-card soon" aria-label="Coming soon">
-          <div class="ficon" aria-hidden="true">🖼️</div>
+          <div class="ficon" aria-hidden="true"><svg class="ix" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-image"/></svg></div>
           <h3>ID &amp; Visa Sheets <span class="tag soon">Soon</span></h3>
           <p>Mix ID, PAN and visa-sized photos on the same print-ready A4 sheet. Pick sizes, arrange, add crop marks, export.</p>
           <span class="fcta" style="color:var(--muted);">In the works</span>
         </div>
 
         <div class="feature-card soon" aria-label="Coming soon">
-          <div class="ficon" aria-hidden="true">✂️</div>
+          <div class="ficon" aria-hidden="true"><svg class="ix" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-scissors"/></svg></div>
           <h3>Background Studio <span class="tag soon">Soon</span></h3>
           <p>Standalone background remover and replacer for product photos, profile pictures and social posts — same on-device AI, no watermarks.</p>
           <span class="fcta" style="color:var(--muted);">In the works</span>
@@ -788,7 +826,7 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
 
       <div class="audience-grid">
         <div class="audience-card">
-          <div class="aicon" aria-hidden="true">🪪</div>
+          <div class="aicon" aria-hidden="true"><svg class="ix" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-idcard"/></svg></div>
           <h3>Print shops &amp; photo studios</h3>
           <ul>
             <li>Skip Photoshop — passport, Aadhaar, PAN, visa sheets in minutes</li>
@@ -799,7 +837,7 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
         </div>
 
         <div class="audience-card">
-          <div class="aicon" aria-hidden="true">🏠</div>
+          <div class="aicon" aria-hidden="true"><svg class="ix" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-home"/></svg></div>
           <h3>Home users, students &amp; parents</h3>
           <ul>
             <li>Make a passport photo from a selfie — no studio trip</li>
@@ -823,22 +861,22 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
 
       <div class="why-grid">
         <div class="why-card">
-          <div class="wicon" aria-hidden="true">⏱️</div>
+          <div class="wicon" aria-hidden="true"><svg class="ix" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-timer"/></svg></div>
           <h4>Minutes, not hours</h4>
           <p>No more fighting Photoshop for an Aadhaar cut-out. Upload, crop, arrange on A4, print — all in a few taps.</p>
         </div>
         <div class="why-card">
-          <div class="wicon" aria-hidden="true">🔒</div>
+          <div class="wicon" aria-hidden="true"><svg class="ix" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-lock"/></svg></div>
           <h4>100% on your device</h4>
           <p>Customer photos and documents never leave the browser. AI, cropping, and sheet rendering all run locally.</p>
         </div>
         <div class="why-card">
-          <div class="wicon" aria-hidden="true">🖨️</div>
+          <div class="wicon" aria-hidden="true"><svg class="ix" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-printer"/></svg></div>
           <h4>Print-shop ready</h4>
           <p>Every tool exports a 300 DPI A4 sheet with clean cutting lines so any local printer can cut it in one pass.</p>
         </div>
         <div class="why-card">
-          <div class="wicon" aria-hidden="true">⚡</div>
+          <div class="wicon" aria-hidden="true"><svg class="ix" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-zap"/></svg></div>
           <h4>Free, then fair</h4>
           <p>Start free, no signup wall. Unlock unlimited HD exports and all presets at <strong>₹59/week</strong> or <strong>₹149/month</strong>.</p>
         </div>
@@ -856,22 +894,22 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
 
       <div class="steps-grid">
         <div class="step-card">
-          <div class="sicon" aria-hidden="true">📤</div>
+          <div class="sicon" aria-hidden="true"><svg class="ix" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-upload"/></svg></div>
           <h4>Upload</h4>
           <p>Drop in a selfie, ID scan, certificate PDF or phone photo. JPG, PNG, PDF or HEIC.</p>
         </div>
         <div class="step-card">
-          <div class="sicon" aria-hidden="true">🤖</div>
+          <div class="sicon" aria-hidden="true"><svg class="ix" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-bot"/></svg></div>
           <h4>Auto-process</h4>
           <p>On-device AI handles background removal, alignment and cropping — no server round-trips.</p>
         </div>
         <div class="step-card">
-          <div class="sicon" aria-hidden="true">🔍</div>
+          <div class="sicon" aria-hidden="true"><svg class="ix" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-search"/></svg></div>
           <h4>Adjust &amp; arrange</h4>
           <p>Tweak size, position or background. Arrange multiple copies on the same A4 sheet to save paper.</p>
         </div>
         <div class="step-card">
-          <div class="sicon" aria-hidden="true">🖨️</div>
+          <div class="sicon" aria-hidden="true"><svg class="ix" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-printer"/></svg></div>
           <h4>Export &amp; print</h4>
           <p>Download a 300 DPI A4 sheet with cut lines. Feed it to any local printer — done.</p>
         </div>
