@@ -92,7 +92,7 @@
   </ol>
 
   <h2>Contact</h2>
-  <p>Questions, bug reports, feedback or partnerships — email <strong>loginfaster89@gmail.com</strong> or visit the <a href="contact.html">Contact page</a>.</p>
+  <p>Questions, bug reports, feedback or partnerships — <a class="email-obf" data-u="loginfaster89" data-d="gmail.com" href="#" rel="nofollow">email us</a> or visit the <a href="contact.html">Contact page</a>.</p>
 </main>
 
 <footer class="legal-footer">
@@ -110,5 +110,15 @@
 
 <script src="assets/nav.js" defer></script>
 <script src="assets/auth.js" defer></script>
+<script>
+(function(){
+  document.querySelectorAll('.email-obf').forEach(function(el){
+    var u=el.dataset.u,d=el.dataset.d;if(!u||!d)return;
+    var addr=u+'@'+d,subject=el.dataset.subject;
+    el.href='mailto:'+addr+(subject?'?subject='+encodeURIComponent(subject):'');
+    el.textContent=addr;
+  });
+})();
+</script>
 </body>
 </html>
