@@ -200,7 +200,7 @@ footer.legal-footer .links a:hover{color:var(--accent);}
    Open nav overlays the page (absolute below the sticky header) so it
    never pushes the page content downwards. */
 @media (max-width:900px){
-  .nav-toggle{display:inline-flex;}
+  .nav-toggle{display:inline-flex;margin-left:0;}
   .legal-header nav{
     display:none;flex-direction:column;align-items:stretch;gap:4px;
     position:absolute;top:100%;left:0;right:0;z-index:45;
