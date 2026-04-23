@@ -386,10 +386,11 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
 }
 .pricing-card.featured::before{
   content:"Most popular";
-  position:absolute;top:-11px;left:50%;transform:translateX(-50%);
+  position:absolute;top:0;left:50%;transform:translate(-50%,-50%);
   font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;
   color:#0d0d0d;background:var(--accent);
   padding:4px 12px;border-radius:999px;
+  box-shadow:0 4px 12px -4px rgba(240,165,0,0.45);
 }
 .pricing-card .ptag{
   font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.16em;
