@@ -228,6 +228,79 @@ body.home main.home-main{
 .hpv-bar .track{height:6px;border-radius:999px;background:var(--surface3);overflow:hidden;}
 .hpv-bar .fill{height:100%;width:72%;background:linear-gradient(90deg,var(--accent),#ffd17a);border-radius:999px;}
 
+/* P19 — animated tool-demo strip inside `.hero-preview`.
+   Pure CSS/SVG, no video asset. Three-phase loop (≈9s) that walks
+   through: upload → background removed → A4 sheet. Pauses under
+   `prefers-reduced-motion`. */
+.hero-preview-demo{
+  display:grid;grid-template-columns:1.2fr 1fr;gap:14px;padding:14px;
+  border-bottom:1px solid var(--border);
+}
+.hero-preview-demo .hpv-tile.canvas{min-height:176px;}
+.hero-preview-demo .hpv-tile.canvas .silhouette{animation:hpv-sil 9s ease-in-out infinite;}
+.hero-preview-demo .hpv-tile.canvas .crop-frame{opacity:0;animation:hpv-crop 9s ease-in-out infinite;}
+.hero-preview-demo .hpv-tile.canvas .sheet{
+  position:absolute;inset:12%;
+  display:grid;grid-template-columns:repeat(5,1fr);gap:4px;
+  background:#f3ebd4;border-radius:3px;padding:6px;
+  opacity:0;transform:scale(.85);
+  animation:hpv-sheet 9s ease-in-out infinite;
+  box-shadow:0 6px 20px -6px rgba(0,0,0,.5);
+}
+.hero-preview-demo .hpv-tile.canvas .sheet span{
+  display:block;background:var(--surface3);border-radius:1px;
+  border:1px dashed rgba(13,13,13,.25);
+}
+.hero-preview-demo .hpv-bar .fill{
+  width:0;animation:hpv-fill 9s ease-in-out infinite;
+}
+.hero-preview-demo .hpv-row .state{
+  font-family:'DM Mono',monospace;font-size:10.5px;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--muted2);
+}
+.hero-preview-demo .hpv-row .state::before{
+  content:"";display:inline-block;width:6px;height:6px;border-radius:50%;
+  background:var(--muted2);margin-right:6px;vertical-align:middle;
+  animation:hpv-dot 9s ease-in-out infinite;
+}
+
+@keyframes hpv-fill{
+  0%{width:0;}
+  30%{width:100%;}
+  60%{width:100%;}
+  62%{width:0;}
+  100%{width:0;}
+}
+@keyframes hpv-crop{
+  0%,28%{opacity:0;}
+  36%,60%{opacity:1;}
+  64%,100%{opacity:0;}
+}
+@keyframes hpv-sheet{
+  0%,60%{opacity:0;transform:scale(.85);}
+  68%,94%{opacity:1;transform:scale(1);}
+  100%{opacity:0;transform:scale(.9);}
+}
+@keyframes hpv-sil{
+  0%,60%{opacity:1;}
+  70%,100%{opacity:0;}
+}
+@keyframes hpv-dot{
+  0%,30%{background:var(--muted2);}
+  32%,60%{background:var(--success);box-shadow:0 0 0 3px rgba(74,222,128,.15);}
+  62%,100%{background:var(--accent);box-shadow:0 0 0 3px rgba(240,165,0,.15);}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .hero-preview-demo .hpv-tile.canvas .silhouette,
+  .hero-preview-demo .hpv-tile.canvas .crop-frame,
+  .hero-preview-demo .hpv-tile.canvas .sheet,
+  .hero-preview-demo .hpv-bar .fill,
+  .hero-preview-demo .hpv-row .state::before{animation:none;}
+  .hero-preview-demo .hpv-tile.canvas .crop-frame{opacity:1;}
+  .hero-preview-demo .hpv-bar .fill{width:72%;}
+}
+
 /* ── SECTION SHELL ── */
 section.section{
   padding:clamp(56px,8vw,96px) clamp(20px,4vw,40px);
@@ -516,8 +589,9 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
 /* Compact device-aware tweaks */
 @media (max-width:760px){
   .hero{padding-top:48px;}
-  .hero-preview-grid{grid-template-columns:1fr;}
+  .hero-preview-grid,.hero-preview-demo{grid-template-columns:1fr;}
   .hpv-tile{min-height:150px;}
+  .hero-preview-demo .hpv-tile.canvas{min-height:200px;}
   .feature-card{padding:20px;min-height:0;}
   .step-card{padding:22px 18px 18px;}
 }
@@ -527,7 +601,7 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
   .hero-trust .pill{padding:4px 10px;}
   .btn{padding:11px 18px;font-size:13.5px;}
   .hero-preview{margin-top:30px;border-radius:12px;padding:10px;}
-  .hero-preview-grid{padding:10px;gap:10px;}
+  .hero-preview-grid,.hero-preview-demo{padding:10px;gap:10px;}
   .hpv-row{font-size:10.5px;padding:9px 10px;}
   section.section{padding:48px 18px;}
   .feature-card h3{font-size:17px;}
@@ -767,6 +841,35 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
         <span class="ptitle">studio print · tools preview</span>
         <span class="ptag-live">Live in browser</span>
       </div>
+
+      <div class="hero-preview-demo" role="img" aria-label="Demo: photo uploaded, background removed, arranged on an A4 sheet.">
+        <div class="hpv-tile canvas">
+          <div class="silhouette"></div>
+          <div class="crop-frame"></div>
+          <div class="sheet">
+            <span></span><span></span><span></span><span></span><span></span>
+          </div>
+        </div>
+        <div class="hpv-side">
+          <div class="hpv-bar">
+            <span class="lab">Background removal</span>
+            <div class="track"><div class="fill"></div></div>
+          </div>
+          <div class="hpv-row">
+            <strong>Sheet</strong>
+            <span>A4 · 5 up · 300 DPI</span>
+          </div>
+          <div class="hpv-row">
+            <strong>Country preset</strong>
+            <span>India · 35×45 mm</span>
+          </div>
+          <div class="hpv-row">
+            <span class="state">Running on-device</span>
+            <span class="swatch" aria-hidden="true"></span>
+          </div>
+        </div>
+      </div>
+
       <div class="hero-preview-tiles">
         <div class="hpv-mini">
           <span class="hpv-mini-ic" aria-hidden="true"><svg class="ix" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-camera"/></svg></span>
