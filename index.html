@@ -1218,7 +1218,7 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
             <li>All country presets (India, US, UK, UAE, Schengen…)</li>
             <li>No auto-renewal — one-time purchase</li>
           </ul>
-          <a class="pcta" href="passport-photo.html" onclick="if(window.openAuth){openAuth('signup');return false;}">Get weekly pass</a>
+          <a class="pcta" href="passport-photo.html#plans" data-plan-cta="weekly">Get weekly pass</a>
         </div>
 
         <div class="pricing-card featured">
@@ -1231,7 +1231,7 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
             <li>Priority email support</li>
             <li>Best for print shops &amp; photo studios</li>
           </ul>
-          <a class="pcta" href="passport-photo.html" onclick="if(window.openAuth){openAuth('signup');return false;}">Get monthly pass</a>
+          <a class="pcta" href="passport-photo.html#plans" data-plan-cta="monthly">Get monthly pass</a>
         </div>
       </div>
 
@@ -1462,6 +1462,43 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
       open();
     }
     window.addEventListener('hashchange', open);
+  } catch (_) {}
+})();
+</script>
+<script>
+// Paid-plan pricing CTAs: if the visitor is already signed in, navigate
+// straight to the buy modal on passport-photo.html (#plans). If not,
+// open the shared auth signup modal; once it closes after a successful
+// login, follow through to #plans automatically. Fixes the loop where
+// the CTA always opened the login modal, even after login.
+(function () {
+  try {
+    var ctas = document.querySelectorAll('.pricing-card .pcta[data-plan-cta]');
+    if (!ctas.length) return;
+    function loggedIn() {
+      try { return !!(typeof window.currentUser === 'function' && window.currentUser()); }
+      catch (_) { return false; }
+    }
+    Array.prototype.forEach.call(ctas, function (a) {
+      a.addEventListener('click', function (e) {
+        if (loggedIn()) return; // let <a href="#plans"> navigation proceed
+        if (typeof window.openAuth !== 'function') return; // safety: normal nav
+        e.preventDefault();
+        var target = a.getAttribute('href') || 'passport-photo.html#plans';
+        window.openAuth('signup');
+        setTimeout(function () {
+          var overlay = document.getElementById('spAuthModal');
+          if (!overlay) return;
+          var mo = new MutationObserver(function () {
+            if (!overlay.classList.contains('active')) {
+              mo.disconnect();
+              if (loggedIn()) { location.href = target; }
+            }
+          });
+          mo.observe(overlay, { attributes: true, attributeFilter: ['class'] });
+        }, 0);
+      });
+    });
   } catch (_) {}
 })();
 </script>
