@@ -15,12 +15,25 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://passportprint-studio.onrender.com">
 <link rel="dns-prefetch" href="https://passportprint-studio.onrender.com">
+<!-- Razorpay Checkout — preconnect to every CDN the SDK pulls from so the
+     build-hash manifest + chunk assets start warming the TCP/TLS handshake
+     as soon as the page parses. Resolves an intermittent `build/undefined`
+     403 that happened when the SDK was injected late via createElement. -->
+<link rel="preconnect" href="https://checkout.razorpay.com" crossorigin>
+<link rel="preconnect" href="https://checkout-static-next.razorpay.com" crossorigin>
+<link rel="preconnect" href="https://api.razorpay.com" crossorigin>
+<link rel="preconnect" href="https://cdn.razorpay.com" crossorigin>
 <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
 <link rel="alternate icon" type="image/png" href="assets/favicon-32.png">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
 <!-- Google Identity Services — loaded eagerly so One Tap / Sign-In with Google is available as soon as the user clicks the login button. -->
 <script src="https://accounts.google.com/gsi/client" async defer></script>
+<!-- Razorpay Checkout SDK — loaded declaratively (not via createElement) so
+     `document.currentScript` resolves correctly inside the SDK and its build-
+     hash manifest is read from this script element rather than falling back
+     to `undefined` (which produced `/build/undefined` → 403). -->
+<script src="https://checkout.razorpay.com/v1/checkout.js" async></script>
 <!-- AI library loads lazily on first use via dynamic import -->
 <style>
 :root {
@@ -5134,12 +5147,10 @@ document.addEventListener('click', e=>{
 });
 document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeAllModals(); });
 
-// Load Razorpay script lazily on first plan view
-(function loadRzp(){
-  const s=document.createElement('script');
-  s.src='https://checkout.razorpay.com/v1/checkout.js';
-  s.async=true; document.head.appendChild(s);
-})();
+// Razorpay Checkout SDK is now loaded declaratively from <head> via
+// <script src="https://checkout.razorpay.com/v1/checkout.js" async>.
+// See the head tag for context. `completePayment()` already guards on
+// `window.Razorpay` existence before instantiation.
 
 // Initialize auth UI on load
 refreshAuthUI();
