@@ -74,7 +74,7 @@
 
   <h2>Support &amp; general enquiries</h2>
   <div class="contact-grid">
-    <span>Email</span><strong><a href="mailto:loginfaster89@gmail.com">loginfaster89@gmail.com</a></strong>
+    <span>Email</span><strong><a class="email-obf" data-u="loginfaster89" data-d="gmail.com" href="#" rel="nofollow">reveal email</a></strong>
     <span>Response time</span><strong>Within 1–2 working days</strong>
     <span>Website</span><strong><a href="https://studioprint.pages.dev/">studioprint.pages.dev</a></strong>
     <span>Language</span><strong>English</strong>
@@ -92,7 +92,7 @@
   <p>Please follow the steps in our <a href="refund.html">Refund &amp; Cancellation Policy</a>. Include the Razorpay order ID and the reason for the refund.</p>
 
   <h2>Security &amp; privacy concerns</h2>
-  <p>If you believe you have discovered a security vulnerability or a privacy issue, email us at <strong>loginfaster89@gmail.com</strong> with the subject line <em>“Security report”</em>. Please do not publicly disclose the issue until we have had a reasonable opportunity to fix it.</p>
+  <p>If you believe you have discovered a security vulnerability or a privacy issue, email us (address revealed above on this page) with the subject line <em>“Security report”</em>. Please do not publicly disclose the issue until we have had a reasonable opportunity to fix it.</p>
 
   <h2>Business address</h2>
   <p>Studio Print is operated from India. Our registered correspondence address is available on request for legal and regulatory purposes — please email us.</p>
@@ -117,5 +117,15 @@
 
 <script src="assets/nav.js" defer></script>
 <script src="assets/auth.js" defer></script>
+<script>
+(function(){
+  document.querySelectorAll('.email-obf').forEach(function(el){
+    var u=el.dataset.u,d=el.dataset.d;if(!u||!d)return;
+    var addr=u+'@'+d,subject=el.dataset.subject;
+    el.href='mailto:'+addr+(subject?'?subject='+encodeURIComponent(subject):'');
+    el.textContent=addr;
+  });
+})();
+</script>
 </body>
 </html>
