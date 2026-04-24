@@ -335,6 +335,11 @@ R7 768px hero breakpoint shipped PR #131.
 P31 font preload shipped PR #132.
 S1 FAQPage JSON-LD structured data shipped PR #134.
 S2 WebApplication JSON-LD on passport-photo shipped PR #137.
+F14-F19 footer/UX cleanup shipped PR #139.
+G1-G5 single-feature glorification cleanup shipped PR #141.
+S3 BreadcrumbList JSON-LD on legal pages shipped this PR.
+S4 Organization JSON-LD on about.html shipped this PR.
+S5 max-image-preview:large on all pages shipped this PR.
 
 Architecture context (shipped — don't redo)
 
@@ -397,6 +402,16 @@ Architecture context (shipped — don't redo)
 - **S2 WebApplication JSON-LD** (PR #137): `WebApplication` structured
   data in `passport-photo.html` `<head>`. Tells Google the page is a
   photography web app with 3 pricing tiers + feature list. Pure SEO.
+- **S3 BreadcrumbList JSON-LD** (this PR): 2-level breadcrumb
+  (Home → page name) on all 6 legal pages for Google breadcrumb
+  rich results. Zero design change.
+- **S4 Organization JSON-LD** (this PR): `Organization` structured data
+  on `about.html` — name, URL, logo, description, founding date.
+  Enables knowledge-panel / brand rich results.
+- **S5 max-image-preview:large** (this PR): `<meta name="robots"
+  content="max-image-preview:large">` on all 8 indexable pages. Tells
+  Google it can show large image previews. Skipped on 404 + offline
+  (both `noindex`).
 
 ## Open backlog — pick one per session
 
@@ -426,11 +441,11 @@ all tools" / "Explore the tools". 404 CTA made generic. Dead
 Backlog is empty — next session can propose new features or do a fresh
 audit to find new polish opportunities.
 
-**SEO ideas for future sessions:**
+**SEO ideas (all shipped):**
 - ~~WebApplication JSON-LD on `passport-photo.html`~~ — **shipped PR #137.**
-- BreadcrumbList JSON-LD on legal pages.
-- Organization JSON-LD on `about.html`.
-- `<meta name="robots" content="max-image-preview:large">` on all pages.
+- ~~BreadcrumbList JSON-LD on legal pages~~ — **shipped this PR.**
+- ~~Organization JSON-LD on `about.html`~~ — **shipped this PR.**
+- ~~`<meta name="robots" content="max-image-preview:large">` on all pages~~ — **shipped this PR.**
 
 ## Default rules (same every session)
 - `passport-photo.html` editable (2026-04-24 unlock), minimum diff.

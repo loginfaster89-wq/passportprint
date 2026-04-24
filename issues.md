@@ -101,6 +101,9 @@ for a follow-up PR.
 | ~~P31~~ | Performance | **resolved PR #132.** `<link rel="preload">` for `syne-latin.woff2` (34 KB) + `dm-mono-400-latin.woff2` (15 KB) on all 10 pages. Eliminates render-blocking font-discovery waterfall, improves FCP/LCP. |
 | ~~S1~~ | SEO | **resolved PR #134.** FAQPage JSON-LD structured data (`<script type="application/ld+json">`) in `index.html` `<head>`. All 8 FAQ Q&A pairs marked up for Google rich-result snippets. Zero design change. |
 | ~~S2~~ | SEO | **resolved PR #137.** WebApplication JSON-LD in `passport-photo.html` `<head>`. Marks the page as a `PhotographyApplication` web app with 3 pricing tiers (Free/Weekly/Monthly), 5-item feature list, and creator info. Enables app-like rich results in Google Search. Zero design change. |
+| ~~S3~~ | SEO | **resolved this PR.** BreadcrumbList JSON-LD on all 6 legal pages (about, contact, privacy, terms, refund, shipping). Each page gets a 2-level breadcrumb (Home → page name) for Google breadcrumb rich results. Zero design change. |
+| ~~S4~~ | SEO | **resolved this PR.** Organization JSON-LD on `about.html`. Marks Studio Print as an Organization with name, URL, logo, description and founding date. Enables knowledge-panel / brand rich results. Zero design change. |
+| ~~S5~~ | SEO | **resolved this PR.** `<meta name="robots" content="max-image-preview:large">` on all 8 indexable pages (index, passport-photo, about, contact, privacy, terms, refund, shipping). Tells Google it can show large image previews in search results. Skipped on 404 + offline (both `noindex`). Zero design change. |
 
 ## C. Suggested PR sequence
 
