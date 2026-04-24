@@ -28,6 +28,13 @@
 <link rel="preconnect" href="https://passportprint-studio.onrender.com">
 <link rel="stylesheet" href="assets/legal.css">
 <link rel="stylesheet" href="assets/auth.css">
+<link rel="stylesheet" href="assets/pricing.css">
+<!-- Razorpay Checkout preconnects + SDK so the shared pricing modal (assets/pricing.js) can open checkout inline. -->
+<link rel="preconnect" href="https://checkout.razorpay.com" crossorigin>
+<link rel="preconnect" href="https://checkout-static-next.razorpay.com" crossorigin>
+<link rel="preconnect" href="https://api.razorpay.com" crossorigin>
+<link rel="preconnect" href="https://cdn.razorpay.com" crossorigin>
+<script src="https://checkout.razorpay.com/v1/checkout.js" async></script>
 <!-- Google Identity Services — powers the "Continue with Google" button in the shared auth modal. -->
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
@@ -180,6 +187,7 @@
 
 <script src="assets/nav.js" defer></script>
 <script src="assets/auth.js" defer></script>
+<script src="assets/pricing.js" defer></script>
 <script src="assets/pwa.js" defer></script>
 <script src="assets/footer.js" defer></script>
 </body>

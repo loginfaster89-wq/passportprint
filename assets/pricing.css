@@ -1,0 +1,301 @@
+/* Shared pricing module — Choose your Plan modal + Complete Payment modal.
+   Dropped in alongside assets/auth.* so any page with .legal-header can
+   offer the full plan-select → Razorpay checkout flow without forking a
+   per-page copy. Uses the tokens already defined in assets/legal.css
+   (--bg, --surface, --surface2, --border, --muted, --accent, etc.) and
+   mirrors the visual language of the inline modals in passport-photo.html
+   so the two pages feel identical. */
+
+/* Overlay / modal shell — sp-plans-* keeps these isolated from any other
+   .modal-overlay / .modal classes already on the page. */
+.sp-plans-overlay,
+.sp-pay-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.7);
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+  display: none; align-items: center; justify-content: center;
+  z-index: 10000; padding: 20px;
+  animation: spPlansFade .18s ease-out;
+}
+.sp-plans-overlay.active,
+.sp-pay-overlay.active { display: flex; }
+@keyframes spPlansFade { from { opacity: 0; } to { opacity: 1; } }
+
+.sp-plans-modal,
+.sp-pay-modal {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  width: 100%;
+  max-width: 820px;
+  max-height: 92dvh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0,0,0,.55);
+  animation: spPlansSlide .22s ease-out;
+  color: var(--text);
+  font-family: 'DM Mono', ui-monospace, Menlo, monospace;
+  position: relative;
+}
+.sp-pay-modal { max-width: 420px; }
+@keyframes spPlansSlide {
+  from { transform: translateY(16px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+.sp-plans-header,
+.sp-pay-header {
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; background: var(--surface);
+  z-index: 1;
+  border-radius: 14px 14px 0 0;
+}
+.sp-plans-title,
+.sp-pay-title {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 20px;
+  color: var(--text);
+}
+.sp-plans-title em,
+.sp-pay-title em { color: var(--accent); font-style: normal; }
+
+.sp-plans-close,
+.sp-pay-close {
+  background: transparent; border: none;
+  color: var(--muted); font-size: 22px; cursor: pointer;
+  width: 32px; height: 32px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .15s, color .15s;
+}
+.sp-plans-close:hover,
+.sp-pay-close:hover { background: var(--surface2); color: var(--text); }
+
+.sp-plans-body,
+.sp-pay-body { padding: 22px; }
+
+/* Tagline */
+.sp-plans-tagline {
+  text-align: center;
+  margin-bottom: 22px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.7;
+}
+.sp-plans-tagline .accent { color: var(--accent); }
+
+/* Plans grid */
+.sp-plans-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+@media (max-width: 720px) {
+  .sp-plans-grid { grid-template-columns: 1fr; }
+}
+
+.sp-plan-card {
+  background: var(--surface2);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 22px 18px;
+  display: flex; flex-direction: column;
+  position: relative;
+  transition: transform .2s, border-color .2s;
+  min-width: 0;
+}
+.sp-plan-card:hover { transform: translateY(-4px); border-color: var(--accent); }
+
+.sp-plan-card.featured {
+  border-color: var(--accent);
+  background:
+    linear-gradient(180deg, rgba(240,165,0,.08), transparent 60%),
+    var(--surface2);
+}
+.sp-plan-card.featured::before {
+  content: '⭐ POPULAR';
+  position: absolute; top: -10px; left: 50%;
+  transform: translateX(-50%);
+  background: var(--accent); color: #000;
+  padding: 3px 12px; border-radius: 20px;
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.sp-plan-card.current { border-color: var(--success, #4ade80); }
+.sp-plan-card.current::after {
+  content: '✓ CURRENT';
+  position: absolute; top: -10px; right: 14px;
+  background: var(--success, #4ade80); color: #000;
+  padding: 3px 10px; border-radius: 20px;
+  font-size: 10px; font-weight: 700;
+  letter-spacing: .5px;
+}
+
+.sp-plan-name {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 18px;
+  margin-bottom: 6px;
+}
+.sp-plan-tagline {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 14px;
+  min-height: 34px;
+  line-height: 1.5;
+}
+.sp-plan-price {
+  font-family: 'Syne', sans-serif;
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--accent);
+  margin: 8px 0 4px;
+}
+.sp-plan-price .currency { font-size: 18px; opacity: .8; }
+.sp-plan-price .period {
+  font-size: 13px; color: var(--muted);
+  font-weight: 400; margin-left: 4px;
+}
+.sp-plan-features {
+  list-style: none; padding: 0; margin: 0 0 18px;
+  flex: 1;
+}
+.sp-plan-features li {
+  font-size: 12px; color: var(--text);
+  padding: 6px 0; padding-left: 20px;
+  position: relative; line-height: 1.5;
+}
+.sp-plan-features li::before {
+  content: '✓';
+  position: absolute; left: 0;
+  color: var(--success, #4ade80);
+  font-weight: 700;
+}
+
+.sp-plan-btn {
+  width: 100%; padding: 11px;
+  border: none; border-radius: 8px;
+  font-family: 'DM Mono', ui-monospace, Menlo, monospace;
+  font-size: 13px; font-weight: 600;
+  cursor: pointer; transition: background .15s, transform .15s, border-color .15s;
+}
+.sp-plan-btn-primary { background: var(--accent); color: #000; }
+.sp-plan-btn-primary:hover { background: #ffc03a; transform: translateY(-1px); }
+.sp-plan-btn-current {
+  background: rgba(74,222,128,.15);
+  color: var(--success, #4ade80);
+  border: 1px solid rgba(74,222,128,.3);
+  cursor: default;
+}
+.sp-plan-btn-free {
+  background: var(--surface2);
+  color: var(--muted);
+  border: 1px solid var(--border);
+}
+
+/* Bottom note */
+.sp-plans-note {
+  margin-top: 18px;
+  padding: 14px;
+  background: var(--accent-dim, rgba(240,165,0,.06));
+  border: 1px solid rgba(240,165,0,.15);
+  border-radius: 8px;
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+.sp-plans-note strong { color: var(--accent); }
+
+/* ── Pay modal ── */
+.sp-pay-summary {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+.sp-pay-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 6px 0; font-size: 13px;
+  gap: 10px;
+}
+.sp-pay-row strong { color: var(--text); font-weight: 600; }
+.sp-pay-row.total {
+  border-top: 1px dashed var(--border);
+  padding-top: 12px; margin-top: 8px;
+  font-weight: 700; font-size: 15px;
+  color: var(--accent);
+}
+.sp-pay-label {
+  display: block;
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 6px;
+  letter-spacing: .5px;
+  text-transform: uppercase;
+}
+.sp-pay-methods {
+  display: flex; gap: 10px; margin: 0 0 14px;
+  flex-wrap: wrap;
+}
+.sp-pay-method {
+  flex: 1; min-width: 120px;
+  padding: 11px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface2);
+  cursor: pointer;
+  text-align: center;
+  transition: border-color .15s, background .15s, color .15s;
+  font-size: 12px;
+  color: var(--text);
+  line-height: 1.5;
+}
+.sp-pay-method small {
+  display: block;
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+.sp-pay-method.active {
+  border-color: var(--accent);
+  background: var(--accent-dim, rgba(240,165,0,.08));
+  color: var(--accent);
+}
+
+.sp-pay-cta {
+  width: 100%; padding: 13px;
+  border: none; border-radius: 8px;
+  background: var(--accent); color: #000;
+  font-family: 'DM Mono', ui-monospace, Menlo, monospace;
+  font-size: 14px; font-weight: 700;
+  cursor: pointer;
+  transition: background .15s, transform .15s;
+}
+.sp-pay-cta:hover { background: #ffc03a; transform: translateY(-1px); }
+.sp-pay-cta:disabled { opacity: .6; cursor: wait; transform: none; }
+
+.sp-pay-secure {
+  margin-top: 10px;
+  text-align: center;
+  font-size: 10px;
+  color: var(--muted);
+}
+
+/* Tighter spacing on small screens */
+@media (max-width: 560px) {
+  .sp-plans-overlay,
+  .sp-pay-overlay { padding: 12px; }
+  .sp-plans-modal,
+  .sp-pay-modal { border-radius: 12px; }
+  .sp-plans-header,
+  .sp-pay-header { padding: 14px 16px; }
+  .sp-plans-body,
+  .sp-pay-body { padding: 16px; }
+  .sp-plans-title,
+  .sp-pay-title { font-size: 17px; }
+  .sp-plan-card { padding: 18px 14px; }
+  .sp-plan-price { font-size: 28px; }
+}
