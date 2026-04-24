@@ -78,15 +78,17 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:0
 /* ── LEGAL FOOTER (shared with rest of site — matches assets/legal.css) ── */
 footer.legal-footer{
   margin-top:auto;border-top:1px solid var(--border);
-  background:var(--surface);padding:22px;text-align:center;
-  color:var(--muted2);font-size:12px;line-height:2;flex-shrink:0;
+  background:var(--surface);padding:14px 16px;text-align:center;
+  color:var(--muted2);font-size:12px;line-height:1.6;flex-shrink:0;
 }
-footer.legal-footer .links{margin-bottom:6px;}
-footer.legal-footer .links a{color:var(--muted);margin:0 8px;text-decoration:none;}
+footer.legal-footer .links{
+  margin-bottom:6px;display:flex;flex-wrap:wrap;justify-content:center;
+  gap:2px 6px;
+}
+footer.legal-footer .links a{color:var(--muted);text-decoration:none;padding:2px 4px;}
 footer.legal-footer .links a:hover{color:var(--accent);}
 @media (max-width:420px){
-  footer.legal-footer{padding:16px 12px;font-size:11px;}
-  footer.legal-footer .links a{margin:0 4px;}
+  footer.legal-footer{padding:10px 10px;font-size:11px;}
 }
 
 /* ── STEPS BAR ── */
@@ -1357,7 +1359,8 @@ header{flex-wrap:nowrap;}
   /* Hide the step progress bar on phones — too cramped, visually noisy.
      Users are guided through steps by the sidebar + canvas content itself. */
   .steps{display:none;}
-  .main{grid-template-rows:minmax(180px,1fr) auto;}
+  .main{grid-template-rows:minmax(220px,1fr) auto;}
+  .canvas-area{padding:16px 12px;}
   .sidebar{max-height:46dvh;}
   .sb-section{padding:10px 12px;}
   /* Upload inner card: tighter padding, smaller fixed max so it sits nicely
