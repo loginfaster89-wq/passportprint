@@ -79,7 +79,7 @@ for a follow-up PR.
 | ~~P8~~ | Social proof | **resolved PR #103.** Honest `By the numbers` strip on the homepage between TOOLS-PREVIEW and WHY — 4 stat cards using only product facts already documented elsewhere (0 photos uploaded, 2 free sheets/day, ₹149/30 days, 300 DPI A4). No fabricated testimonials or logos. Pure CSS using existing tokens, `.reveal` fade-in like other sections. |
 | ~~P9~~ | About page | **resolved PR #96.** Mission-hero (`Make every ₹10 print job feel like a browser tab.`) + founder-style pull-quote + 2024→2026 timeline (Idea / Prototype / Launch / Now) + 'What ships next' card (4 upcoming tools). Inline styles only, existing tokens. |
 | ~~P10~~ | Contact page | **resolved PR #98.** Inline `Send us a message` form on `contact.html` (name / email / 7-option category / message), `Replies within 1–2 working days` SLA badge, submit builds a prefilled `mailto:` with structured body. Obfuscated email block kept as fallback. |
-| P12 | Pricing | No comparison matrix ("Free vs Weekly vs Monthly" feature table). Multinational SaaS standard. |
+| ~~P12~~ | Pricing | **resolved PR #119.** Comparison matrix (Free vs Weekly vs Monthly) — 8-row feature table below pricing cards on homepage. Responsive, existing tokens only. |
 | ~~P13~~ | Pricing | **resolved PR #89.** `ribbon-pulse` + `featured-glow` keyframes on `.pricing-card.featured::before` and `.pricing-card.featured` (3.2s infinite, 0.45 → 0.75 alpha). Disabled under `prefers-reduced-motion`. |
 | ~~P14~~ | Navigation | **resolved PR #83.** `.sp-mobile-cta` pill on `≤640px`, shows after scroll > 1 viewport. |
 | ~~P15~~ | Footer | **resolved PR #95.** Multi-column footer — Product / Resources / Company / Legal + newsletter signup + social icon + locale switcher. Shared across all 8 pages via `legal.css` + `assets/footer.js`. |
@@ -109,7 +109,7 @@ All of the quick-win queue from the 2026-04-23 audit is now merged. The**open ba
 - `F11` passport-photo 1440 empty space below upload card — `passport-photo.html` edit, minimum-diff.
 
 **2026 polish roadmap (ordered by impact):**
-1. **P12** — Pricing comparison matrix (Free vs Weekly vs Monthly feature table).
+1. ~~**P12** — Pricing comparison matrix~~ — **shipped in PR #119.**
 2. **P30** — Homepage density break — one real "live demo" section between HERO and FEATURES.
 3. **P24** — Self-host Syne + DM Mono fonts (woff2 subset) — removes Google Fonts third-party.
 4. **P16** — Language switcher (`हि` ↔ `EN`) UI affordance.
