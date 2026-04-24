@@ -263,7 +263,8 @@ remain. See `issues.md` §E for details.
 *Passport-photo-specific backlog* (file is no longer locked, but still
 requires minimum-diff care — see Hard rule #1): `F11` 1440 empty space,
 `P20` AI-model download progress bar, `P21` inline error banner,
-`P29` step-bar progress fill, `R4` frame-corners clip at 375 px.
+~~`P29` step-bar progress fill~~ — **shipped PR #126**,
+`R4` frame-corners clip at 375 px.
 
 **How to audit again (reproducible)**
 
@@ -311,6 +312,7 @@ Clone ke baad pehle ye teen files padho:
 F13 stats-grid slider fixed PR #118.
 P24 self-host fonts shipped PR #124.
 P16 language switcher shipped PR #125.
+P29 step-bar progress fill shipped PR #126.
 
 ## Architecture context (shipped — don't redo)
 
@@ -342,14 +344,16 @@ P16 language switcher shipped PR #125.
 - **Language toggle** (PR #125): interactive `EN` / `हि` pill in footer
   on all 8 shared pages. `assets/lang.js` syncs with `pps_lang`
   localStorage. Existing tokens only.
+- **Step-bar progress fill** (PR #126): 2 px accent progress bar at
+  bottom of `.steps` fills 0→33→66→100% as user advances (300 ms
+  ease). Active `.step-num` enhanced amber glow + pulse.
 
 ## Open backlog — pick one per session
 
 All 5 polish roadmap items (P12/P30/P24/P16/P26) are now shipped.
 
 Passport-photo nits: `F11` 1440 empty space, `P20` AI-model progress
-bar, `P21` inline error banner, `P29` step-bar fill, `R4` frame-corners
-375 px.
+bar, `P21` inline error banner, `R4` frame-corners 375 px.
 
 Functional nits: `F6` audience grid sparse, `F11` 1440 empty space.
 
