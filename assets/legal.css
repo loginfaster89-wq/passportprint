@@ -278,6 +278,8 @@ footer.legal-footer:has(.footer-main){
   font-size:12px;color:var(--muted2);
 }
 .footer-copy{flex:1;min-width:200px;}
+.devin-credit{color:var(--muted);text-decoration:none;transition:color .15s;}
+.devin-credit:hover{color:var(--accent);text-decoration:none;}
 .footer-meta{display:flex;align-items:center;gap:14px;}
 .footer-social{
   display:inline-flex;align-items:center;justify-content:center;

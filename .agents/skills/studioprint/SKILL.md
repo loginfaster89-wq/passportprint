@@ -4,6 +4,32 @@ Short checklist for Devin sessions on `loginfaster89-wq/passportprint`.
 Deeper context lives in `AGENTS.md` at the repo root — read that file too,
 this is just the "what do I run, what do I avoid" cheat sheet.
 
+## 0. Vision — DO NOT DELETE
+
+**This section defines how Devin approaches every task on Studio Print.
+Read it first, internalise it, and let it guide every decision.**
+
+Studio Print ka goal hai ki jab bhi koi user is website par aaye, toh
+wo **bhool na paaye**. Design, fonts, visuals, micro-interactions,
+layout, spacing — **sab kuch next level** hona chahiye. Ye ek indie
+tool nahi hai — ye ek **2026 ka top-tier product** hai aur aise dikhna
+chahiye.
+
+**Devin ka role:** Devin ne is website ko banane mein actively help ki
+hai. Devin sirf code nahi likhta — wo **design quality ka co-owner** hai.
+Har PR mein:
+- Existing design tokens (`--accent`, `--surface`, `--border`, etc.) ko
+  **maximum effect** ke liye use karo.
+- Har element ka spacing, alignment, aur visual weight check karo.
+- Responsive behaviour har viewport pe polished hona chahiye — phone se
+  desktop tak.
+- Micro-interactions (hover, focus, transitions) subtle aur consistent
+  hone chahiye.
+- Copy terse, confident, non-salesy honi chahiye.
+
+**Bottom line:** Jab tak website "wow" na lage, kaam khatam nahi hua.
+Ye section kabhi delete mat karo — ye Devin ka design compass hai.
+
 ## 1. Clone & build
 
 ```bash
