@@ -96,7 +96,7 @@ for a follow-up PR.
 | ~~P26~~ | Cookies / privacy | **resolved PR #120.** Self-hosted essentials-only cookie banner on all 9 pages. "OK" click saves to localStorage, doesn't show again. |
 | ~~P27~~ | Tooling | **resolved PR #86.** Branded `404.html` with shared legal-header/footer, big amber "404" numeral, two CTAs, `noindex` meta, build.js now minifies it into `dist/`. |
 | ~~P28~~ | Tooling | **resolved PRs #93 + #94.** `assets/manifest.webmanifest` + installable icons on index + 7 legal pages (PR #93); `sw.js` with network-first HTML + stale-while-revalidate assets + `/offline.html` fallback (PR #94). Registered via `assets/pwa.js`. |
-| P29 | Passport-photo step bar | Static 1→2→3→4 pills. At 2026 polish level, fill a progress line as steps complete (with a 300 ms ease), highlight the active pill with the accent glow. |
+| ~~P29~~ | Passport-photo step bar | **resolved PR #126.** 2 px accent progress bar at bottom of `.steps` fills 0→33→66→100% as user advances (300 ms ease). Active `.step-num` gets enhanced amber glow + pulse. Minimum diff in `passport-photo.html` only. |
 | ~~P30~~ | Homepage density | **resolved PR #123.** 3-step horizontal workflow timeline (`.density-break`) between hero and features — breaks the repeating card-grid rhythm. Surface2 bg, numbered circles, connecting lines. Responsive, existing tokens only. |
 
 ## C. Suggested PR sequence
@@ -122,7 +122,7 @@ All of the quick-win queue from the 2026-04-23 audit is now merged. The**open ba
 - `F11` 1440 empty space below upload card.
 - `P20` top-of-page thin progress bar for AI-model download.
 - `P21` inline "something went wrong — retry" banner near upload zone.
-- `P29` step-bar progress line fill animation.
+- ~~`P29` step-bar progress line fill animation~~ — **shipped PR #126.**
 
 Section B items not listed above are still open but lower-impact — revisit as the project owner picks priorities.
 
