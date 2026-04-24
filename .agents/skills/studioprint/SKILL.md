@@ -238,6 +238,11 @@ doesn't re-fix already-merged work.
 - Homepage inline Razorpay checkout from pricing CTAs → PR #112.
 - Shared pricing modal (`assets/pricing.js` + `assets/pricing.css`) — every page now has a 2-step Choose Plan → Complete Payment flow without navigating to `passport-photo.html` → PR #114.
 
+**2026-04-24 re-audit (session #2): ALL CLEAR.** 9 pages × 8 viewports
+(72 combos) — zero horizontal scroll, zero broken images, no new console
+errors, no new layout bugs. Only pre-existing F1/F7/R2 cosmetic nits
+remain. See `issues.md` §E for details.
+
 **Open backlog (default priority order for next session):**
 
 *Functional nits:* `F6` audience grid sparse, `F7` GSI iframe warnings
@@ -337,4 +342,6 @@ bar, `P21` inline error banner, `P29` step-bar fill, `R4` frame-corners
 - One PR per logical task, minimum diff.
 - `npm run build` run karke verify karo.
 - Hinglish updates, quota-conscious, zero jargon.
+- Devin files (SKILL.md, issues.md) ko session ke kaam se update karo.
+- User last mein naya prompt dega — wo bhi Devin files mein update karo.
 ```

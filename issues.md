@@ -179,3 +179,42 @@ session VM (not committed).
    on every page. `auth.js` Upgrade/Change Plan button now opens this modal
    on the current page instead of redirecting to `passport-photo.html#plans`.
 R4 and R7 are low-value nits — leave open.
+
+---
+
+## E. Full responsive re-audit (2026-04-24, session #2)
+
+**Method:** headless Chromium via Playwright, 9 pages × 8 viewports =
+72 page-viewport combos. Viewports: iPhone SE 375×667, iPhone 13
+390×844, Pixel 7 412×915, iPad portrait 768×1024, iPad Air 820×1180,
+iPad landscape 1024×768, desktop 1440×900, desktop HD 1920×1080.
+Full-page screenshots + DOM probes (horizontal scroll, broken images,
+element overflow, text clipping, console errors, network errors).
+
+**Result: ALL CLEAR — no new issues found.**
+
+| Check | Result |
+|-------|--------|
+| Horizontal scroll | ZERO on all 72 combos |
+| Broken images | ZERO |
+| Header present | All pages |
+| Footer present | All pages |
+| Login button visible | All pages |
+| New console errors | None — only pre-existing F1/F7 |
+| New network errors | None |
+| New layout bugs | None |
+
+**Known issues re-confirmed (unchanged from §A/§D):**
+- F1: Razorpay `/build/undefined` 403 — SDK's own bug, payment flow unaffected.
+- F7: Google Sign-In SDK 403 in headless — works in real browsers, harmless.
+- `charAt` error from sliders.js — cosmetic, no visual impact.
+- R2: `.hero-sheet.right` decorative element extends past viewport — clipped by `overflow:hidden`, invisible to users.
+- Slider off-screen cards register as DOM overflows but are visually clipped by slider container — expected slider behaviour, not a bug.
+
+**New finding during audit:**
+- **F13**: `.stats-grid` (By the numbers section) was not included in
+  `sliders.js` SELECTORS — 4 stat cards produce a 3+1 orphan row at
+  820 px but never converted to a slider. **Fixed:** added `.stats-grid`
+  to SELECTORS + matching `.is-slider` CSS rules in `index.html`.
+
+**Evidence:** screenshots at `/home/ubuntu/audit-evidence-2/screenshots/`, full JSON at `/home/ubuntu/audit-evidence-2/audit.json` (session VM only, not committed).

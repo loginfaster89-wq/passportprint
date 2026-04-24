@@ -759,7 +759,8 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
 .audience-grid.is-slider,
 .why-grid.is-slider,
 .steps-grid.is-slider,
-.pricing-grid.is-slider{
+.pricing-grid.is-slider,
+.stats-grid.is-slider{
   display:flex;
   flex-wrap:nowrap;
   gap:12px;
@@ -776,12 +777,14 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
 .audience-grid.is-slider::-webkit-scrollbar,
 .why-grid.is-slider::-webkit-scrollbar,
 .steps-grid.is-slider::-webkit-scrollbar,
-.pricing-grid.is-slider::-webkit-scrollbar{display:none;}
+.pricing-grid.is-slider::-webkit-scrollbar,
+.stats-grid.is-slider::-webkit-scrollbar{display:none;}
 .features-grid.is-slider > .feature-card,
 .audience-grid.is-slider > .audience-card,
 .why-grid.is-slider > .why-card,
 .steps-grid.is-slider > .step-card,
-.pricing-grid.is-slider > .pricing-card{
+.pricing-grid.is-slider > .pricing-card,
+.stats-grid.is-slider > .stat-card{
   flex:0 0 86%;
   scroll-snap-align:start;
   min-height:0;
@@ -792,7 +795,8 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
   .audience-grid.is-slider > .audience-card,
   .why-grid.is-slider > .why-card,
   .steps-grid.is-slider > .step-card,
-  .pricing-grid.is-slider > .pricing-card{flex:0 0 48%;}
+  .pricing-grid.is-slider > .pricing-card,
+  .stats-grid.is-slider > .stat-card{flex:0 0 48%;}
 }
 .is-slider + .slider-dots{
   display:flex;
