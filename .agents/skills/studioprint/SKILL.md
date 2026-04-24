@@ -218,84 +218,25 @@ Include order on each page:
   mid-task, drop to the most terse mode possible — fewer tool calls,
   no speculative exploration, no re-explaining already-agreed plans.
 
-## 9. Known issues from the 2026-04-23 full-site audit
+## 9. Shipped work & open backlog
 
-See `issues.md` at the repo root for the full findings table. This skill
-just lists what's closed and what's still open so the next session
-doesn't re-fix already-merged work.
+Everything from PRs #70–#145 is shipped. See `issues.md` for the full
+audit trail. Do NOT re-fix any of the following — they are all merged:
 
-**All quick-win + responsive + flow items are now merged (do NOT re-fix):**
-- `F1` Razorpay decl. script → PR #70. `F2` One-Tap auto-prompt → PR #71.
-- `F3` features 820 heights → PR #73. `F4` hero H1 wrap → PR #74.
-- `F5` pricing 820 heights → PR #78. `F8` email obfuscation → PR #77.
-- `F9` ribbon centering → PR #80. `F10` preview chrome → PR #81.
-- `F12/P4` SVG icon pack → PR #85.
-- `P3+P7+P17` card/button/focus polish → PR #76.
-- `P6` FAQ smooth open + `−` toggle → PR #82.
-- `P13` Most-Popular ribbon pulse → PR #89.
-- `P14` mobile sticky CTA pill → PR #83.
-- `P18` FAQ deep-link IDs + auto-open → PR #88.
-- `P22` 1200×630 OG image → PR #84.
-- `P23` sitemap.xml lastmod + anchors → PR #90.
-- `P25` backend preconnect on all legal pages → PR #87.
-- `P27` branded 404 page → PR #86.
-- `P5` scroll-reveal IntersectionObserver → PR #91.
-- `P28` PWA manifest + installable icons → PR #93.
-- `P28` offline-capable SW + `/offline.html` fallback → PR #94.
-- `P15` multi-column footer (Product/Resources/Company/Legal + newsletter + social + locale) → PR #95.
-- `P9` About page rework (mission-hero + timeline + ships-next card) → PR #96.
-- `P10` contact form (name/email/category/message + SLA badge + mailto fallback) → PR #98.
-- `P19` inline tools-preview demo strip (upload → bg-removed → A4 sheet, 9 s loop) → PR #99.
-- `P2` hero A4-sheet mockups (two floating CSS sheets, pure CSS no raster) → PR #100.
-- `P1` hero animated accent-glow pulse (7 s CSS-only loop, reduced-motion safe) → PR #102.
-- `P8` `By the numbers` honest facts strip (4 stat cards, no testimonials) → PR #103.
-- `R1/R2/R3/R5/R6` responsive polish (hero H1 clamp, hero-sheet clamp, 820 breakpoint, 24 px slider-dot tap, footer link padding) → PR #108.
-- `U1` pricing buy-flow (`#buy-<planId>` hash handler + CTA hrefs) → PR #109.
-- Docs: unlock `passport-photo.html` → PR #110.
-- Homepage inline Razorpay checkout from pricing CTAs → PR #112.
-- Shared pricing modal (`assets/pricing.js` + `assets/pricing.css`) — every page now has a 2-step Choose Plan → Complete Payment flow without navigating to `passport-photo.html` → PR #114.
+- PRs #70–#114: original audit quick-wins + responsive + flow fixes.
+- PRs #118–#132: stats-grid slider, self-host fonts, step-bar progress,
+  audience grid, AI download bar, empty space, error banner,
+  frame-corners, 768px breakpoint, font preload.
+- PRs #134+#137: FAQPage + WebApplication JSON-LD.
+- PR #139: footer/UX cleanup (F14–F19).
+- PR #141: single-feature glorification cleanup (G1–G5).
+- PR #142: BreadcrumbList + Organization JSON-LD, max-image-preview.
+- PR #143: pricing cards removed, buy buttons in comparison table,
+  trust pills 2-row, footer email icon removed.
+- PR #145: hero eyebrow pill shrunk, one-at-a-time rule added.
 
-**2026-04-24 re-audit (session #2): ALL CLEAR.** 9 pages × 8 viewports
-(72 combos) — zero horizontal scroll, zero broken images, no new console
-errors, no new layout bugs. Only pre-existing F1/F7/R2 cosmetic nits
-remain. See `issues.md` §E for details.
-
-**Open backlog (default priority order for next session):**
-
-*Functional nits:* `F6` audience grid sparse, `F7` GSI iframe warnings
-(harmless, not our code), `F11` passport-photo 1440 empty space
-(passport-photo edit, minimum-diff).
-
-*2026 polish roadmap (by impact):*
-1. ~~`P12` Pricing comparison matrix~~ — **shipped PR #119.**
-2. ~~`P30` Homepage density break — live-demo section between HERO/FEATURES.~~ — **shipped PR #123.**
-3. ~~`P24` Self-host Syne + DM Mono (woff2 subset).~~ — **shipped PR #124.**
-4. ~~`P16` Language switcher UI affordance.~~ — **shipped PR #125.**
-5. ~~`P26` Cookie banner (self-hosted, essentials-only).~~ — **shipped PR #120.**
-
-*Responsive items — only low-priority nits remain:*
-- ~~`R4` passport-photo upload-card frame-corners clip at iPhone SE~~ — **shipped PR #130.**
-- ~~`R7` No dedicated 768 px hero breakpoint~~ — **shipped PR #131.** New `@media (min-width:761px) and (max-width:768px)` in `index.html` switches hero-preview to single column at iPad portrait.
-
-*Passport-photo-specific backlog* (file is no longer locked, but still
-requires minimum-diff care — see Hard rule #1): ~~`F11` 1440 empty space~~ —
-**shipped PR #129**, ~~`P21` inline error banner~~ — **shipped PR #130**,
-~~`P29` step-bar progress fill~~ — **shipped PR #126**,
-~~`R4` frame-corners clip at 375 px~~ — **shipped PR #130**.
-
-**How to audit again (reproducible)**
-
-```bash
-# 3 viewports × 8 pages via Playwright, ~30 s.
-mkdir -p /home/ubuntu/audit-evidence
-# See the script committed to issues.md's reference section; run:
-python3 -c "import playwright" || pip install playwright && playwright install chromium
-# Then adapt the PAGES/VIEWPORTS list in your script and iterate.
-```
-
-When auditing: check `audit.json` for `hasHScroll`, `brokenImages`,
-`consoleErrors`, `netErrors`. Per-page `logs/<page>__<viewport>.json`
-has full console + network.
+**Open:** only `F7` GSI iframe warnings (not our code, harmless).
+Backlog is empty — next session can propose new features or fresh audit.
 
 ## 10. Related repos
 
@@ -313,156 +254,38 @@ repo / PAT / rules / concrete scope so a new session can start working
 without re-auditing.
 
 ```
-Studio Print frontend par kaam karo.
-Repo: loginfaster89-wq/passportprint (private)
-PAT: GITHUB_PAT_PASSPORTPRINT (fine-grained, repo-scoped —
-Contents + Pull requests: Read and write on this repo).
-Agar saved secret na mile to session-only provide karunga.
+[TERSE MODE = ON] Minimum messages, zero re-explanation, sirf critical
+updates aur decisions. Ye default hai — har session mein auto-on.
+
+Studio Print frontend par kaam karo. Repo: loginfaster89-wq/passportprint
+(private) PAT: GITHUB_PAT_PASSPORTPRINT (fine-grained, repo-scoped —
+Contents + Pull requests: Read and write on this repo). Agar saved
+secret na mile to session-only provide karunga.
 
 Clone ke baad pehle ye teen files padho:
-1. .agents/skills/studioprint/SKILL.md — Devin recipe (build/preview,
-   hard rules, PAT curl snippet, Hinglish style, §9 merged/open backlog).
-2. AGENTS.md — full source of truth.
-3. issues.md — 2026-04-23 site audit + 2026-04-24 §D responsive / flow
-   follow-up + §E full re-audit.
 
-F13 stats-grid slider fixed PR #118.
-P24 self-host fonts shipped PR #124.
-P16 language switcher shipped PR #125.
-P29 step-bar progress fill shipped PR #126.
-F6 audience grid centred shipped PR #127.
-P20 AI-model download bar shipped PR #128.
-F11 1440 empty space fixed PR #129.
-P21 inline error banner shipped PR #130.
-R4 frame-corners 375px fix shipped PR #130.
-R7 768px hero breakpoint shipped PR #131.
-P31 font preload shipped PR #132.
-S1 FAQPage JSON-LD structured data shipped PR #134.
-S2 WebApplication JSON-LD on passport-photo shipped PR #137.
-F14-F19 footer/UX cleanup shipped PR #139.
-G1-G5 single-feature glorification cleanup shipped PR #141.
-S3 BreadcrumbList JSON-LD on legal pages shipped this PR.
-S4 Organization JSON-LD on about.html shipped this PR.
-S5 max-image-preview:large on all pages shipped this PR.
+.agents/skills/studioprint/SKILL.md — Devin recipe (build/preview,
+hard rules, PAT curl snippet, Hinglish style, §9 merged/open backlog).
+AGENTS.md — full source of truth.
+issues.md — 2026-04-23 site audit + 2026-04-24 §D responsive / flow
+follow-up + §E full re-audit + §F footer cleanup + §G single-feature
+glorification cleanup.
+last pr - PR #145 (eyebrow shrink + one-at-a-time rule)
 
-Architecture context (shipped — don't redo)
+Shipped summary (don't redo):
 
-- **Self-hosted fonts** (PR #124): Syne + DM Mono woff2 in `assets/fonts/`,
-  loaded via `assets/fonts.css`. Google Fonts CDN removed from all 10 pages.
-- **Pricing comparison matrix** (PR #119): Free vs Weekly vs Monthly
-  feature table (8 rows), pricing cards ke neeche.
-- **Cookie banner** (PR #120): self-hosted, essentials-only, all 9 pages.
-  "OK" click pe localStorage mein save, dobara nahi dikhta.
-- **Density-break workflow** (PR #123): 3-step horizontal timeline between
-  hero and features. `.density-break` + `.db-timeline` CSS in `index.html`
-  inline `<style>`. Breaks repeating card-grid rhythm.
-- **Shared pricing modal** (`assets/pricing.js` + `assets/pricing.css`,
-  PR #114): 2-step Choose Plan → Complete Payment → Razorpay. Included
-  on every page except `passport-photo.html` (which keeps its inline
-  copy). `window.openPlans` / `window.startCheckout` exposed globally.
-- **Auth.js Upgrade button** now calls `window.openPlans()` on the
-  current page instead of redirecting to `passport-photo.html#plans`
-  (fixed in PR #115).
-- **Homepage inline checkout** (PR #112): pricing CTAs open Razorpay
-  directly without page navigation.
-- **`passport-photo.html`** unlocked (PR #110) — editable with minimum
-  diff. Has `#plans` / `#buy-<planId>` hash-open script and inline
-  copies of nav/auth.
-- **Stats-grid slider** (PR #118): "By the numbers" cards now convert
-  to slider on orphan row / phones like all other grids.
-- Full responsive re-audit (PR #118 docs): 9 pages × 8 viewports = 72
-  combos — ALL CLEAR, no new issues.
-- ~~**Language toggle** (PR #125)~~: **removed in PR #139** — toggle
-  was non-functional (Hindi did nothing). `assets/lang.js` deleted,
-  CSS cleaned from `passport-photo.html`.
-- **Step-bar progress fill** (PR #126): 2 px accent progress bar at
-  bottom of `.steps` fills 0→33→66→100% as user advances (300 ms
-  ease). Active `.step-num` enhanced amber glow + pulse.
-- **Audience grid centred** (PR #127): `.audience-grid` now has
-  `max-width:720px` + auto margins — 2 cards centred, no more sparse
-  full-width stretch on desktop.
-- **AI download bar** (PR #128): fixed-position 3 px accent bar at
-  top of `passport-photo.html` during model download. Hooks into
-  existing `onProgress`, auto-hides at 97%.
-- **F11 1440 empty space** (PR #129): upload card shifted up via
-  `padding-bottom:14vh` at ≥1200 px + trust-spec strip at canvas bottom
-  (desktop only, auto-hides on step 2+).
-- **P21 inline error banner** (PR #130): replaces browser `alert()` on
-  image-load failure with inline danger-themed banner (Retry + dismiss)
-  below upload card. Auto-clears on new file selection.
-- **R4 frame-corners 375px** (PR #130): inner corner brackets shrunk
-  (22→16px, offset −10→−6px) at ≤420px so they no longer clip right
-  edge on iPhone SE.
-- **R7 768px hero breakpoint** (PR #131): `@media (min-width:761px) and
-  (max-width:768px)` switches hero-preview grid to single column at iPad
-  portrait. Fills the gap between 820 px (sheets hide) and 760 px (phone
-  compact layout).
-- **P31 Font preloading** (PR #132): `<link rel="preload">` for
-  `syne-latin.woff2` (34 KB) + `dm-mono-400-latin.woff2` (15 KB) on all
-  10 pages. Eliminates render-blocking font-discovery waterfall.
-- **S1 FAQPage JSON-LD** (PR #134): `<script type="application/ld+json">`
-  FAQPage structured data in `index.html` `<head>`. All 8 FAQ Q&A pairs
-  for Google rich-result snippets. Zero design change, pure SEO.
-- **S2 WebApplication JSON-LD** (PR #137): `WebApplication` structured
-  data in `passport-photo.html` `<head>`. Tells Google the page is a
-  photography web app with 3 pricing tiers + feature list. Pure SEO.
-- **S3 BreadcrumbList JSON-LD** (this PR): 2-level breadcrumb
-  (Home → page name) on all 6 legal pages for Google breadcrumb
-  rich results. Zero design change.
-- **S4 Organization JSON-LD** (this PR): `Organization` structured data
-  on `about.html` — name, URL, logo, description, founding date.
-  Enables knowledge-panel / brand rich results.
-- **S5 max-image-preview:large** (this PR): `<meta name="robots"
-  content="max-image-preview:large">` on all 8 indexable pages. Tells
-  Google it can show large image previews. Skipped on 404 + offline
-  (both `noindex`).
+PRs #70–#114: all original audit quick-wins + responsive + flow fixes.
+PRs #118–#132: stats-grid slider, self-host fonts, lang switcher,
+step-bar progress, audience grid, AI download bar, F11 empty space,
+error banner, frame-corners, 768px breakpoint, font preload.
+PRs #134+#137: FAQPage + WebApplication JSON-LD.
+PR #139: footer/UX cleanup (F14–F19).
+PR #141: single-feature glorification cleanup (G1–G5).
+PR #142: BreadcrumbList + Organization JSON-LD, max-image-preview.
+PR #143: pricing cards removed, buy buttons in comparison table,
+trust pills 2-row, footer email icon removed.
+PR #145: hero eyebrow pill shrunk + text changed to
+"No uploads · Print-ready", one-at-a-time rule added.
 
-## Open backlog — pick one per session
-
-All 5 polish roadmap items (P12/P30/P24/P16/P26) shipped. F6 + F11 +
-P21 + R4 + R7 + P31 (font preload) + S1 (FAQ JSON-LD) + S2
-(WebApplication JSON-LD) also shipped.
-
-Passport-photo nits: all shipped (P21 PR #130, R4 PR #130, F11 PR #129,
-P29 PR #126, P20 PR #128).
-
-Responsive nits: all shipped (R4 PR #130, R7 PR #131).
-
-Functional nits: `F7` GSI iframe warnings (not our code, harmless).
-
-P11 (monthly/yearly toggle) dropped — PR #113. Do not re-propose.
-
-**Footer & UX cleanup** (PR #139, session #3): lang switcher removed
-from all shared pages, floating "Open Passport Photo" CTA removed,
-footer compact on tablet/phone, upload card clipping fixed.
-
-**Single-feature glorification cleanup** (this PR, session #4): hero
-+ CTA band "Open Passport Photo" buttons replaced with generic "See
-all tools" / "Explore the tools". 404 CTA made generic. Dead
-`assets/lang.js` deleted. Dead lang-toggle CSS removed from
-`passport-photo.html`. See `issues.md` §G.
-
-Backlog is empty — next session can propose new features or do a fresh
-audit to find new polish opportunities.
-
-**SEO ideas (all shipped):**
-- ~~WebApplication JSON-LD on `passport-photo.html`~~ — **shipped PR #137.**
-- ~~BreadcrumbList JSON-LD on legal pages~~ — **shipped this PR.**
-- ~~Organization JSON-LD on `about.html`~~ — **shipped this PR.**
-- ~~`<meta name="robots" content="max-image-preview:large">` on all pages~~ — **shipped this PR.**
-
-## Default rules (same every session)
-- `passport-photo.html` editable (2026-04-24 unlock), minimum diff.
-- `.github/workflows/*.yml` mat chhedo.
-- Fonts / palette / CSS tokens unchanged.
-- One PR per logical task, minimum diff.
-- `npm run build` run karke verify karo.
-- Hinglish updates, quota-conscious, zero jargon.
-- Devin files (SKILL.md, issues.md) ko session ke kaam se time to time
-  jaldi se update karo.
-- Session ke end mein naya prompt bna ke SKILL.md §11 mein update karo
-  taaki next chat ready rahe.
-- **Terse mode:** Jab user chat start kare toh Devin auto terse mode
-  mein rahe — minimum messages, sirf important updates, zero
-  re-explanation.
+<yahan apna task likho>
 ```
