@@ -98,6 +98,7 @@ for a follow-up PR.
 | ~~P28~~ | Tooling | **resolved PRs #93 + #94.** `assets/manifest.webmanifest` + installable icons on index + 7 legal pages (PR #93); `sw.js` with network-first HTML + stale-while-revalidate assets + `/offline.html` fallback (PR #94). Registered via `assets/pwa.js`. |
 | ~~P29~~ | Passport-photo step bar | **resolved PR #126.** 2 px accent progress bar at bottom of `.steps` fills 0→33→66→100% as user advances (300 ms ease). Active `.step-num` gets enhanced amber glow + pulse. Minimum diff in `passport-photo.html` only. |
 | ~~P30~~ | Homepage density | **resolved PR #123.** 3-step horizontal workflow timeline (`.density-break`) between hero and features — breaks the repeating card-grid rhythm. Surface2 bg, numbered circles, connecting lines. Responsive, existing tokens only. |
+| ~~P31~~ | Performance | **resolved PR #132.** `<link rel="preload">` for `syne-latin.woff2` (34 KB) + `dm-mono-400-latin.woff2` (15 KB) on all 10 pages. Eliminates render-blocking font-discovery waterfall, improves FCP/LCP. |
 
 ## C. Suggested PR sequence
 
