@@ -13,7 +13,7 @@
 // silently break one of them, so keeping this code external is load-bearing
 // for the orphan-row detection to actually run on the deployed site.
 (function () {
-  var SELECTORS = ['.features-grid', '.audience-grid', '.why-grid', '.steps-grid', '.pricing-grid'];
+  var SELECTORS = ['.features-grid', '.audience-grid', '.why-grid', '.steps-grid', '.pricing-grid', '.stats-grid'];
   var MQ = window.matchMedia('(max-width: 760px)');
 
   function realCards(grid) {
