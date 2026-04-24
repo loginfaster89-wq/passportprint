@@ -120,7 +120,7 @@ All of the quick-win queue from the 2026-04-23 audit is now merged. The**open ba
 > Product only ships Weekly + Monthly plans — no yearly plan exists or is
 > planned. Do not re-propose.
 
-**Recently resolved (since last audit refresh):** P10 contact form (PR #98), P19 inline tools-preview demo strip (PR #99), P2 hero A4-sheet mockup (PR #100), P1 hero animated gradient pulse (PR #102), P8 honest numbers strip (PR #103).
+**Recently resolved (since last audit refresh):** P10 contact form (PR #98), P19 inline tools-preview demo strip (PR #99), P2 hero A4-sheet mockup (PR #100), P1 hero animated gradient pulse (PR #102), P8 honest numbers strip (PR #103), R1/R2/R3/R5/R6 responsive polish (PR #108), U1 pricing buy-flow (PR #109), passport-photo unlock (PR #110), homepage inline checkout (PR #112), P11 toggle dropped (PR #113), shared pricing modal (PR #114).
 
 **Passport-photo-specific backlog** (`passport-photo.html` is no longer locked — unlocked 2026-04-24 — but still requires minimum-diff care; see AGENTS.md Hard rule #1):
 - `F1` Razorpay `/build/undefined` 403 residual (payment flow works, SDK's own bug).
@@ -173,21 +173,16 @@ session VM (not committed).
 |---|------|----------|---------|
 | ~~U1~~ | home `.pcta` → login → `passport-photo.html#plans` | **resolved PR #109** | Clicking a paid plan on the homepage pricing cards now takes the user straight to Razorpay for the selected plan. `index.html` CTAs (`a.pcta[data-plan-cta]`) point at `passport-photo.html#buy-weekly` / `#buy-monthly`, and the signup-modal post-login redirect target is built from `data-plan-cta` too. `passport-photo.html` `maybeOpen()` gained a `#buy-<planId>` branch that calls `window.startCheckout(planId)` directly and clears the hash via `history.replaceState` so reload doesn't re-trigger checkout. (Actual function name is `startCheckout`, not `purchasePlan`.) |
 
-### D.3 Suggested PR sequence (next session)
+### D.3 PR sequence — all shipped
 
-Two logical PRs, independent:
-
-1. **Responsive polish (docs + `index.html`, `assets/legal.css` only):**
-   Fix `R1` (hero H1 clamp floor on phones), `R2` (clamp the hero-sheet
-   right offset so it never overflows), `R3` (raise the sheet-hide
-   breakpoint to 820 px), `R5` (expand slider-dot tap area), `R6`
-   (`padding-block` on footer column links).
-   No token / palette / font changes. No JS. No touch to
-   `passport-photo.html` or `.github/workflows/*.yml`.
-2. ~~**Pricing buy-flow (U1)**~~ — **shipped in PR #109.** `#buy-<planId>`
-   hash handler added to `passport-photo.html` (calls
-   `window.startCheckout(planId)`), plus `index.html` CTA hrefs and
-   post-login redirect target carry the plan id. No middle plan-picker
-   step.
+1. ~~**Responsive polish (R1/R2/R3/R5/R6)**~~ — **shipped in PR #108.**
+2. ~~**Pricing buy-flow (U1)**~~ — **shipped in PR #109.**
+3. ~~**Homepage inline checkout**~~ — **shipped in PR #112.** Pricing CTAs
+   open Razorpay directly without page navigation.
+4. ~~**Shared pricing modal**~~ — **shipped in PR #114.** `assets/pricing.js`
+   + `assets/pricing.css` — 2-step Choose Plan → Complete Payment → Razorpay
+   on every page. `auth.js` Upgrade/Change Plan button now opens this modal
+   on the current page instead of redirecting to `passport-photo.html#plans`.
+5. ~~**P11 toggle dropped**~~ — **PR #113.** No yearly plan.
 
 R4 and R7 are low-value nits — leave open.

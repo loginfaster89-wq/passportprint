@@ -538,11 +538,8 @@
       logout();
     });
     document.getElementById('spAccUpgrade').addEventListener('click', function () {
-      // Plans modal lives inside passport-photo.html. Navigate there with a
-      // hash so passport-photo auto-opens it on load.
-      var onPassport = /\/passport-photo(\.html)?(\/|$|[?#])/.test(location.pathname);
-      if (onPassport && typeof window.openPlans === 'function') {
-        closeAccount();
+      closeAccount();
+      if (typeof window.openPlans === 'function') {
         window.openPlans();
       } else {
         location.href = 'passport-photo.html#plans';

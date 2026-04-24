@@ -72,6 +72,7 @@ and overall aesthetic are not.
 | `passport-photo.html`      | The live passport photo tool (5000+ lines, with its own inline copies of the nav / auth / Google Sign-In markup and a small hash-open script) |
 | `about.html`, `contact.html`, `privacy.html`, `terms.html`, `refund.html`, `shipping.html` | Legal / info pages, share the header + footer with `index.html` |
 | `assets/auth.js` + `auth.css` | Shared login / signup / OTP / Google Sign-In modal + account modal (plan info, upgrade, delete account). `position: fixed; z-index: 10000` overlay. Include on any page that has `.legal-header` with a `#hdrAuthBtn` button. |
+| `assets/pricing.js` + `pricing.css` | Shared 2-step pricing modal (Choose Plan → Complete Payment → Razorpay). Included on every page except `passport-photo.html`. Exposes `window.openPlans` / `window.startCheckout`. Load AFTER `auth.js`. |
 | `assets/nav.js`            | Shared hamburger + Features dropdown behaviour. Hamburger breakpoint is **900px**. |
 | `assets/legal.css`         | Shared header/footer/typography for all legal pages. |
 | `build.js`                 | Runs HTML minifier + JS obfuscator → `dist/`        |
@@ -202,7 +203,7 @@ on this repo. Add `Actions: Read and write` only if editing workflow files.
 items from the original audit are now merged. Summary headlines for the
 next session:
 
-**Resolved (PRs #70-#103):** F1 Razorpay script, F2 One-Tap, F3 features
+**Resolved (PRs #70-#114):** F1 Razorpay script, F2 One-Tap, F3 features
 grid 820, F4 hero wrap, F5 pricing 820, F8 email obfuscation, F9 ribbon
 centering, F10 preview chrome, F12/P4 SVG icons, P3+P7+P17 card/button/
 focus polish, P5 scroll-reveal, P6 FAQ smooth open, P13 ribbon pulse,
@@ -212,7 +213,10 @@ P28 PWA manifest + offline SW (PRs #93/#94), P15 multi-column footer
 (PR #95), P9 About page rework (PR #96), P10 contact form (PR #98),
 P19 inline tools-preview demo strip (PR #99), P2 hero A4-sheet mockup
 (PR #100), P1 hero animated accent-glow pulse (PR #102), P8 honest
-`By the numbers` strip (PR #103).
+`By the numbers` strip (PR #103), R1/R2/R3/R5/R6 responsive polish
+(PR #108), U1 pricing buy-flow (PR #109), passport-photo unlock
+(PR #110), homepage inline checkout (PR #112), P11 toggle dropped
+(PR #113), shared pricing modal (PR #114).
 
 **Open backlog priority order for the next session:**
 1. P12 Pricing comparison matrix.
@@ -226,7 +230,8 @@ P19 inline tools-preview demo strip (PR #99), P2 hero A4-sheet mockup
 > not re-propose a yearly toggle in future sessions.
 
 **Lower-priority functional nits:** F6 audience grid sparse, F7 GSI
-iframe warnings (harmless, not our code).
+iframe warnings (harmless, not our code), R4 frame-corners at iPhone SE,
+R7 optional 768 px hero breakpoint.
 
 **Passport-photo-specific backlog** (this file is no longer locked — see
 Hard rule #1 — but still needs minimum-diff care): F11 1440 empty space,
