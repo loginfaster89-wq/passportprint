@@ -222,3 +222,25 @@ element overflow, text clipping, console errors, network errors).
   to SELECTORS + matching `.is-slider` CSS rules in `index.html`.
 
 **Evidence:** screenshots at `/home/ubuntu/audit-evidence-2/screenshots/`, full JSON at `/home/ubuntu/audit-evidence-2/audit.json` (session VM only, not committed).
+
+---
+
+## F. 2026-04-24 session #3 — responsive + cleanup fixes (PR #138)
+
+### Problems found (from owner screenshots on real devices)
+
+| # | Area | Problem | Fix |
+|---|------|---------|-----|
+| F14 | Footer (all shared pages) | Language switcher (EN/हि) non-functional — clicking Hindi does nothing, no actual translations exist | Deleted: `assets/lang.js` + `.footer-locale` HTML + CSS from all 8 pages |
+| F15 | Homepage mobile | Floating "Open Passport Photo →" sticky button glorifies one feature excessively — separate CTA for single feature is wrong when more features are coming | Deleted: `.sp-mobile-cta` element + CSS + IntersectionObserver JS |
+| R8 | Footer (iPad ~820px) | Too much whitespace wasted in footer — large padding, gaps, font sizes | Fixed: tighter padding (44→28px), gap (28→20px), 4-col nav preserved, smaller text |
+| R9 | Footer (phone ≤640px) | Footer-bottom not centered — copyright + meta left-aligned, looks unfinished | Fixed: centered `.footer-bottom` + `.footer-meta` |
+| R10 | Passport-photo (phone) | Upload card clipped at top/bottom — canvas-area `overflow:hidden` clips card when viewport height is small | Fixed: `overflow-y:auto` on canvas-area at ≤640px |
+
+### Design lessons for future sessions (DO NOT REPEAT)
+
+1. **Don't over-glorify a single feature.** When only one tool is live but more are planned, don't create dedicated sticky CTA buttons, hero animations, or special widgets just for that one tool. Use generic CTAs ("Try it free", "Get started") that work for any tool.
+2. **Footer = Devin's credit.** The footer says "Built with Devin AI" — if the footer looks messy, spacing is off, or non-functional elements exist (like a fake language switcher), it reflects badly on Devin. Footer quality must be impeccable on every device.
+3. **Test on real devices.** Desktop browser DevTools miss real-world issues (touch targets, actual viewport heights with browser chrome, scroll behaviour). Owner tests on Galaxy S24 Ultra + iPad — respect those viewport sizes.
+4. **Don't ship UI that doesn't work.** The language toggle looked polished but did literally nothing. If a feature isn't functional end-to-end, don't ship it — it's worse than not having it.
+5. **Space is precious on mobile.** Every pixel matters. Large padding, wide gaps, and oversized elements that look fine on desktop waste critical screen real estate on phones and tablets.
