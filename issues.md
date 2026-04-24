@@ -79,7 +79,6 @@ for a follow-up PR.
 | ~~P8~~ | Social proof | **resolved PR #103.** Honest `By the numbers` strip on the homepage between TOOLS-PREVIEW and WHY — 4 stat cards using only product facts already documented elsewhere (0 photos uploaded, 2 free sheets/day, ₹149/30 days, 300 DPI A4). No fabricated testimonials or logos. Pure CSS using existing tokens, `.reveal` fade-in like other sections. |
 | ~~P9~~ | About page | **resolved PR #96.** Mission-hero (`Make every ₹10 print job feel like a browser tab.`) + founder-style pull-quote + 2024→2026 timeline (Idea / Prototype / Launch / Now) + 'What ships next' card (4 upcoming tools). Inline styles only, existing tokens. |
 | ~~P10~~ | Contact page | **resolved PR #98.** Inline `Send us a message` form on `contact.html` (name / email / 7-option category / message), `Replies within 1–2 working days` SLA badge, submit builds a prefilled `mailto:` with structured body. Obfuscated email block kept as fallback. |
-| ~~P11~~ | Pricing | **Won't ship — product decision (2026-04-24).** Studio Print only offers Weekly (₹59/7 days) and Monthly (₹149/30 days). No yearly / annual plan exists or is planned. Do **not** propose a monthly/yearly toggle in future sessions. |
 | P12 | Pricing | No comparison matrix ("Free vs Weekly vs Monthly" feature table). Multinational SaaS standard. |
 | ~~P13~~ | Pricing | **resolved PR #89.** `ribbon-pulse` + `featured-glow` keyframes on `.pricing-card.featured::before` and `.pricing-card.featured` (3.2s infinite, 0.45 → 0.75 alpha). Disabled under `prefers-reduced-motion`. |
 | ~~P14~~ | Navigation | **resolved PR #83.** `.sp-mobile-cta` pill on `≤640px`, shows after scroll > 1 viewport. |
@@ -116,11 +115,7 @@ All of the quick-win queue from the 2026-04-23 audit is now merged. The**open ba
 4. **P16** — Language switcher (`हि` ↔ `EN`) UI affordance.
 5. **P26** — Cookie banner (self-hosted, essential-only).
 
-> `P11` (monthly/yearly toggle) was dropped from the roadmap on 2026-04-24.
-> Product only ships Weekly + Monthly plans — no yearly plan exists or is
-> planned. Do not re-propose.
-
-**Recently resolved (since last audit refresh):** P10 contact form (PR #98), P19 inline tools-preview demo strip (PR #99), P2 hero A4-sheet mockup (PR #100), P1 hero animated gradient pulse (PR #102), P8 honest numbers strip (PR #103), R1/R2/R3/R5/R6 responsive polish (PR #108), U1 pricing buy-flow (PR #109), passport-photo unlock (PR #110), homepage inline checkout (PR #112), P11 toggle dropped (PR #113), shared pricing modal (PR #114).
+**Recently resolved (since last audit refresh):** P10 contact form (PR #98), P19 inline tools-preview demo strip (PR #99), P2 hero A4-sheet mockup (PR #100), P1 hero animated gradient pulse (PR #102), P8 honest numbers strip (PR #103), R1/R2/R3/R5/R6 responsive polish (PR #108), U1 pricing buy-flow (PR #109), passport-photo unlock (PR #110), homepage inline checkout (PR #112), shared pricing modal (PR #114).
 
 **Passport-photo-specific backlog** (`passport-photo.html` is no longer locked — unlocked 2026-04-24 — but still requires minimum-diff care; see AGENTS.md Hard rule #1):
 - `F1` Razorpay `/build/undefined` 403 residual (payment flow works, SDK's own bug).
@@ -183,6 +178,4 @@ session VM (not committed).
    + `assets/pricing.css` — 2-step Choose Plan → Complete Payment → Razorpay
    on every page. `auth.js` Upgrade/Change Plan button now opens this modal
    on the current page instead of redirecting to `passport-photo.html#plans`.
-5. ~~**P11 toggle dropped**~~ — **PR #113.** No yearly plan.
-
 R4 and R7 are low-value nits — leave open.

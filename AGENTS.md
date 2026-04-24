@@ -215,8 +215,8 @@ P19 inline tools-preview demo strip (PR #99), P2 hero A4-sheet mockup
 (PR #100), P1 hero animated accent-glow pulse (PR #102), P8 honest
 `By the numbers` strip (PR #103), R1/R2/R3/R5/R6 responsive polish
 (PR #108), U1 pricing buy-flow (PR #109), passport-photo unlock
-(PR #110), homepage inline checkout (PR #112), P11 toggle dropped
-(PR #113), shared pricing modal (PR #114).
+(PR #110), homepage inline checkout (PR #112), shared pricing modal
+(PR #114).
 
 **Open backlog priority order for the next session:**
 1. P12 Pricing comparison matrix.
@@ -224,10 +224,6 @@ P19 inline tools-preview demo strip (PR #99), P2 hero A4-sheet mockup
 3. P24 Self-host Syne + DM Mono (woff2).
 4. P16 Language switcher UI.
 5. P26 Cookie banner.
-
-> **P11 (monthly/yearly toggle) is intentionally dropped.** Product only
-> ships Weekly + Monthly plans; no yearly plan exists or is planned. Do
-> not re-propose a yearly toggle in future sessions.
 
 **Lower-priority functional nits:** F6 audience grid sparse, F7 GSI
 iframe warnings (harmless, not our code), R4 frame-corners at iPhone SE,
