@@ -251,7 +251,7 @@ remain. See `issues.md` §E for details.
 
 *2026 polish roadmap (by impact):*
 1. ~~`P12` Pricing comparison matrix~~ — **shipped PR #119.**
-2. `P30` Homepage density break — live-demo section between HERO/FEATURES.
+2. ~~`P30` Homepage density break — live-demo section between HERO/FEATURES.~~ — **shipped PR #123.**
 3. `P24` Self-host Syne + DM Mono (woff2 subset).
 4. `P16` Language switcher UI affordance.
 5. ~~`P26` Cookie banner (self-hosted, essentials-only).~~ — **shipped PR #120.**
@@ -316,6 +316,9 @@ F13 stats-grid slider fixed PR #118.
   feature table (8 rows), pricing cards ke neeche.
 - **Cookie banner** (PR #120): self-hosted, essentials-only, all 9 pages.
   "OK" click pe localStorage mein save, dobara nahi dikhta.
+- **Density-break workflow** (PR #123): 3-step horizontal timeline between
+  hero and features. `.density-break` + `.db-timeline` CSS in `index.html`
+  inline `<style>`. Breaks repeating card-grid rhythm.
 - **Shared pricing modal** (`assets/pricing.js` + `assets/pricing.css`,
   PR #114): 2-step Choose Plan → Complete Payment → Razorpay. Included
   on every page except `passport-photo.html` (which keeps its inline

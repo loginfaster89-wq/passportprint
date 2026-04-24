@@ -97,7 +97,7 @@ for a follow-up PR.
 | ~~P27~~ | Tooling | **resolved PR #86.** Branded `404.html` with shared legal-header/footer, big amber "404" numeral, two CTAs, `noindex` meta, build.js now minifies it into `dist/`. |
 | ~~P28~~ | Tooling | **resolved PRs #93 + #94.** `assets/manifest.webmanifest` + installable icons on index + 7 legal pages (PR #93); `sw.js` with network-first HTML + stale-while-revalidate assets + `/offline.html` fallback (PR #94). Registered via `assets/pwa.js`. |
 | P29 | Passport-photo step bar | Static 1→2→3→4 pills. At 2026 polish level, fill a progress line as steps complete (with a 300 ms ease), highlight the active pill with the accent glow. |
-| P30 | Homepage density | Homepage is 6380 px tall on desktop (current audit measured). Every section is "header + 1 sentence + grid of cards + dots" — feels repetitive. Consider a single "live product" section between HERO and FEATURES (a real working mini-demo, or an embedded screenshot stack), to break the rhythm. |
+| ~~P30~~ | Homepage density | **resolved PR #123.** 3-step horizontal workflow timeline (`.density-break`) between hero and features — breaks the repeating card-grid rhythm. Surface2 bg, numbered circles, connecting lines. Responsive, existing tokens only. |
 
 ## C. Suggested PR sequence
 
@@ -110,7 +110,7 @@ All of the quick-win queue from the 2026-04-23 audit is now merged. The**open ba
 
 **2026 polish roadmap (ordered by impact):**
 1. ~~**P12** — Pricing comparison matrix~~ — **shipped in PR #119.**
-2. **P30** — Homepage density break — one real "live demo" section between HERO and FEATURES.
+2. ~~**P30** — Homepage density break — workflow timeline between HERO and FEATURES.~~ — **shipped in PR #123.**
 3. **P24** — Self-host Syne + DM Mono fonts (woff2 subset) — removes Google Fonts third-party.
 4. **P16** — Language switcher (`हि` ↔ `EN`) UI affordance.
 5. ~~**P26** — Cookie banner (self-hosted, essential-only).~~ — **shipped in PR #120.**
