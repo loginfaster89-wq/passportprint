@@ -74,6 +74,8 @@ and overall aesthetic are not.
 | `assets/auth.js` + `auth.css` | Shared login / signup / OTP / Google Sign-In modal + account modal (plan info, upgrade, delete account). `position: fixed; z-index: 10000` overlay. Include on any page that has `.legal-header` with a `#hdrAuthBtn` button. |
 | `assets/pricing.js` + `pricing.css` | Shared 2-step pricing modal (Choose Plan → Complete Payment → Razorpay). Included on every page except `passport-photo.html`. Exposes `window.openPlans` / `window.startCheckout`. Load AFTER `auth.js`. |
 | `assets/nav.js`            | Shared hamburger + Features dropdown behaviour. Hamburger breakpoint is **900px**. |
+| `assets/fonts.css`         | Self-hosted `@font-face` declarations for Syne + DM Mono (woff2). |
+| `assets/fonts/*.woff2`     | Syne + DM Mono woff2 subsets (latin + latin-ext). |
 | `assets/legal.css`         | Shared header/footer/typography for all legal pages. |
 | `build.js`                 | Runs HTML minifier + JS obfuscator → `dist/`        |
 | `.github/workflows/deploy.yml` | CI deploy to Cloudflare Pages on `main` push    |

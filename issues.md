@@ -91,7 +91,7 @@ for a follow-up PR.
 | P21 | Error / empty states | Haven't been able to audit them without signing in, but from code review `passport-photo.html` has toast-based errors only. A small "something went wrong — retry" inline banner near the upload zone would feel more polished. |
 | ~~P22~~ | SEO / social | **resolved PR #84.** Proper 1200×630 `assets/og-image.png` + richer social meta across 8 pages. |
 | ~~P23~~ | SEO | **resolved PR #90.** `<lastmod>2026-04-23</lastmod>` on every entry + 4 in-page landing sections (`/#features`, `/#how`, `/#pricing`, `/#faq`) with their own priorities. |
-| P24 | Performance | Fonts are loaded from Google Fonts CDN (`fonts.googleapis.com`). Self-hosting Syne + DM Mono (woff2, subset to Latin + ₹) removes a third-party request and shaves 100–200 ms FCP. |
+| ~~P24~~ | Performance | **resolved PR #124.** Syne + DM Mono self-hosted as woff2 (latin + latin-ext subsets) in `assets/fonts/`. New `assets/fonts.css` replaces Google Fonts CDN link on all 10 pages. |
 | ~~P25~~ | Performance | **resolved PR #87.** Backend preconnect added to all 7 shared-header pages (about/contact/privacy/terms/refund/shipping/404). |
 | ~~P26~~ | Cookies / privacy | **resolved PR #120.** Self-hosted essentials-only cookie banner on all 9 pages. "OK" click saves to localStorage, doesn't show again. |
 | ~~P27~~ | Tooling | **resolved PR #86.** Branded `404.html` with shared legal-header/footer, big amber "404" numeral, two CTAs, `noindex` meta, build.js now minifies it into `dist/`. |
@@ -111,7 +111,7 @@ All of the quick-win queue from the 2026-04-23 audit is now merged. The**open ba
 **2026 polish roadmap (ordered by impact):**
 1. ~~**P12** — Pricing comparison matrix~~ — **shipped in PR #119.**
 2. ~~**P30** — Homepage density break — workflow timeline between HERO and FEATURES.~~ — **shipped in PR #123.**
-3. **P24** — Self-host Syne + DM Mono fonts (woff2 subset) — removes Google Fonts third-party.
+3. ~~**P24** — Self-host Syne + DM Mono fonts (woff2 subset).~~ — **shipped in PR #124.**
 4. **P16** — Language switcher (`हि` ↔ `EN`) UI affordance.
 5. ~~**P26** — Cookie banner (self-hosted, essential-only).~~ — **shipped in PR #120.**
 

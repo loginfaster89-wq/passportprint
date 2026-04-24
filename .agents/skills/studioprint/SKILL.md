@@ -252,7 +252,7 @@ remain. See `issues.md` §E for details.
 *2026 polish roadmap (by impact):*
 1. ~~`P12` Pricing comparison matrix~~ — **shipped PR #119.**
 2. ~~`P30` Homepage density break — live-demo section between HERO/FEATURES.~~ — **shipped PR #123.**
-3. `P24` Self-host Syne + DM Mono (woff2 subset).
+3. ~~`P24` Self-host Syne + DM Mono (woff2 subset).~~ — **shipped PR #124.**
 4. `P16` Language switcher UI affordance.
 5. ~~`P26` Cookie banner (self-hosted, essentials-only).~~ — **shipped PR #120.**
 
@@ -309,9 +309,12 @@ Clone ke baad pehle ye teen files padho:
    follow-up + §E full re-audit.
 
 F13 stats-grid slider fixed PR #118.
+P24 self-host fonts shipped PR #124.
 
 ## Architecture context (shipped — don't redo)
 
+- **Self-hosted fonts** (PR #124): Syne + DM Mono woff2 in `assets/fonts/`,
+  loaded via `assets/fonts.css`. Google Fonts CDN removed from all 10 pages.
 - **Pricing comparison matrix** (PR #119): Free vs Weekly vs Monthly
   feature table (8 rows), pricing cards ke neeche.
 - **Cookie banner** (PR #120): self-hosted, essentials-only, all 9 pages.
@@ -338,8 +341,7 @@ F13 stats-grid slider fixed PR #118.
 
 ## Open backlog — pick one per session
 
-1. `P24` — Self-host Syne + DM Mono (woff2 subset).
-2. `P16` — Language switcher UI affordance.
+1. `P16` — Language switcher UI affordance.
 
 Passport-photo nits: `F11` 1440 empty space, `P20` AI-model progress
 bar, `P21` inline error banner, `P29` step-bar fill, `R4` frame-corners
