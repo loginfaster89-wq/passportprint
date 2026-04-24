@@ -220,7 +220,7 @@ Include order on each page:
 
 ## 9. Shipped work & open backlog
 
-Everything from PRs #70–#145 is shipped. See `issues.md` for the full
+Everything from PRs #70–#150 is shipped. See `issues.md` for the full
 audit trail. Do NOT re-fix any of the following — they are all merged:
 
 - PRs #70–#114: original audit quick-wins + responsive + flow fixes.
@@ -234,6 +234,21 @@ audit trail. Do NOT re-fix any of the following — they are all merged:
 - PR #143: pricing cards removed, buy buttons in comparison table,
   trust pills 2-row, footer email icon removed.
 - PR #145: hero eyebrow pill shrunk, one-at-a-time rule added.
+- PR #147: terse-mode prompt + pricing table polish.
+- PRs #148+#149: pricing table text size increase.
+- PR #150: pricing section full redesign — comparison table replaced
+  with 3 plan cards (Free / Weekly / Monthly). Bigger text (24px names,
+  46px prices, 16px features), "Best value" badge on Monthly, accent
+  border + glow on featured card. Mobile (≤900px) stacks cards
+  vertically in single column, max-width 440px. Each card lists all
+  6 features with ✓/— markers, tagline, and CTA button.
+
+**Pricing section design rule (post PR #150):** The pricing section uses
+card-based layout (`.plan-grid` with `.plan-card` divs), NOT a `<table>`.
+Text must stay large and readable — minimum 16px for feature text, 24px
+for plan names, 42px+ for prices. On mobile (≤900px) cards stack
+vertically. Never shrink text below these minimums. If adding features,
+add them to all 3 cards consistently.
 
 **Open:** only `F7` GSI iframe warnings (not our code, harmless).
 Backlog is empty — next session can propose new features or fresh audit.
@@ -270,7 +285,7 @@ AGENTS.md — full source of truth.
 issues.md — 2026-04-23 site audit + 2026-04-24 §D responsive / flow
 follow-up + §E full re-audit + §F footer cleanup + §G single-feature
 glorification cleanup.
-last pr - PR #145 (eyebrow shrink + one-at-a-time rule)
+last pr - PR #150 (pricing section full redesign — plan cards)
 
 Shipped summary (don't redo):
 
@@ -286,6 +301,10 @@ PR #143: pricing cards removed, buy buttons in comparison table,
 trust pills 2-row, footer email icon removed.
 PR #145: hero eyebrow pill shrunk + text changed to
 "No uploads · Print-ready", one-at-a-time rule added.
+PR #147: terse-mode prompt + pricing table polish.
+PRs #148+#149: pricing table text size increase.
+PR #150: pricing section full redesign — comparison table replaced
+with plan cards, bigger text, mobile-friendly stacked layout.
 
 <yahan apna task likho>
 ```
