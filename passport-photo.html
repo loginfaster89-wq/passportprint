@@ -885,11 +885,6 @@ canvas{display:block;}
 #bgCanvas { border-radius:6px; box-shadow:0 8px 40px rgba(0,0,0,.6); transition:box-shadow .3s; }
 
 
-/* ── LANGUAGE TOGGLE ── */
-.lang-toggle{display:flex;align-items:center;background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:3px;gap:2px;flex-shrink:0;}
-.lang-btn{padding:4px 12px;border-radius:16px;font-family:'DM Mono',monospace;font-size:12px;font-weight:600;cursor:pointer;border:none;background:transparent;color:var(--muted);transition:.2s;letter-spacing:.5px;}
-.lang-btn.active{background:var(--accent);color:#000;}
-
 /* ── HELP BUTTON ── */
 .help-btn{width:30px;height:30px;border-radius:50%;background:var(--surface2);border:1px solid var(--border);color:var(--muted);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.2s;}
 .help-btn:hover{border-color:var(--accent);color:var(--accent);}
@@ -1140,8 +1135,7 @@ canvas{display:block;}
   .comp-label-left{left:8px;bottom:8px;}
   .comp-label-right{right:8px;bottom:8px;}
 
-  .lang-toggle{padding:2px;}
-  .lang-btn{padding:3px 9px;font-size:11px;}
+
 }
 
 /* ── SMALL MOBILE (≤420px) ── */
@@ -1171,7 +1165,7 @@ canvas{display:block;}
   .step{padding:14px 22px;font-size:13px;gap:10px;}
   .step-num{width:22px;height:22px;font-size:11px;}
   .hdr-btn{padding:9px 14px;font-size:13px;border-radius:7px;}
-  .lang-btn{padding:6px 14px;font-size:12px;}
+
   .sb-section{padding:18px;}
   .sb-title{font-size:12px;margin-bottom:13px;letter-spacing:1px;}
   .preset-btn{padding:11px 6px;font-size:12px;}
@@ -1305,14 +1299,14 @@ input,select,textarea,button{max-width:100%;}
    "buttons sometimes respond, sometimes don't" feel on iPad; iPhone
    was less affected because Safari there usually resolves the delay
    faster at smaller viewports. */
-button,a,label,.step,.hdr-btn,.lang-btn,.preset-btn,.btn,.modal-close,
+button,a,label,.step,.hdr-btn,.preset-btn,.btn,.modal-close,
 .upload-zone,.upload-inner-card,.count-btn,.nav-login,.nav-toggle,
 .modal-overlay,[onclick]{touch-action:manipulation;}
 
 /* --- Header: prevent Plans/Login buttons from overlapping the logo on narrow widths --- */
 header{flex-wrap:nowrap;}
 .logo{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex-shrink:1;}
-.hdr-btn,.lang-toggle{flex-shrink:0;}
+.hdr-btn{flex-shrink:0;}
 
 /* --- Modals: make modal content scroll cleanly on small screens, never clip --- */
 .modal-overlay{padding:12px;}
@@ -2395,10 +2389,6 @@ let currentLang='en';
 
 function setLang(lang){
   currentLang=lang;
-  // Update ALL lang buttons (main header + tutorial header)
-  document.querySelectorAll('.lang-btn').forEach(b=>{
-    b.classList.toggle('active', b.textContent.toLowerCase()===lang);
-  });
   // Update all data-i18n text content. Values may contain simple inline
   // markup (<b>, <em>, <br>) authored in the LANG dictionary — e.g. the
   // Refine Edges hint. We use innerHTML only when the value contains a
