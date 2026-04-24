@@ -41,7 +41,18 @@ No dev server — edit source, `npm run build`, preview from `dist/`.
    `assets/auth.js`, `assets/auth.css`. Don't fork into per-page copies.
 7. **Pricing numbers** (free: 2 sheets/day; weekly: ₹59/7 days; monthly:
    ₹149/30 days) appear in `index.html`, `terms.html`, `refund.html`,
-   `shipping.html`. If one changes, update all four.
+   `shipping.html`. If one changes, update all four. Studio Print ships
+   **only Weekly + Monthly paid plans** — no yearly / annual plan exists
+   or is planned. Do not add yearly pricing, monthly/yearly toggles, or
+   "save X%" annual-discount copy in any PR.
+8. **Design / fonts / animations / effects = case-by-case approval
+   (2026-04-24).** Project owner wants top-tier 2026 polish, but any new
+   font, palette, token, animation, transition, hover effect, decorative
+   element, or layout restructuring requires **explicit owner approval
+   in-thread before the PR opens**. Modern motion / micro-interactions
+   are welcome *within* the existing tokens — but ask first. Minor
+   spacing / responsive fixes from `issues.md` do not need per-change
+   approval.
 
 ## 3. Create a PR (fine-grained PAT flow)
 
@@ -183,12 +194,16 @@ doesn't re-fix already-merged work.
 (passport-photo edit, minimum-diff).
 
 *2026 polish roadmap (by impact):*
-1. `P11` Pricing monthly/yearly toggle (copy-only phase 1) — highest value.
-2. `P12` Pricing comparison matrix.
-3. `P30` Homepage density break — live-demo section between HERO/FEATURES.
-4. `P24` Self-host Syne + DM Mono (woff2 subset).
-5. `P16` Language switcher UI affordance.
-6. `P26` Cookie banner (self-hosted, essentials-only).
+1. `P12` Pricing comparison matrix.
+2. `P30` Homepage density break — live-demo section between HERO/FEATURES.
+3. `P24` Self-host Syne + DM Mono (woff2 subset).
+4. `P16` Language switcher UI affordance.
+5. `P26` Cookie banner (self-hosted, essentials-only).
+
+> **`P11` monthly/yearly toggle dropped (2026-04-24).** Studio Print only
+> ships Weekly (₹59/7 days) + Monthly (₹149/30 days); no yearly plan
+> exists. Do not propose a monthly/yearly toggle, "Save X%" copy, or
+> annual pricing in future sessions.
 
 *Responsive + flow audit 2026-04-24 (details in `issues.md` §D):*
 - `R1` Hero H1 wraps awkwardly on phones (375/390 px) — tighten the

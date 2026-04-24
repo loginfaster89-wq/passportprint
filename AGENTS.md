@@ -135,6 +135,16 @@ iPad portrait / narrow tablets.
    it injects a `.sp-toast` element styled in `assets/auth.css`. Keep the
    two visually in sync — both use `var(--surface)` bg +
    `var(--accent)` border + `z-index: 10001`.
+7. **Design / fonts / animations / effects = case-by-case approval
+   (2026-04-24).** The project owner wants the site to feel like a
+   top-tier 2026 product — modern micro-interactions, motion, layout
+   polish are welcome within the existing tokens. BUT any new font,
+   new palette, new token, new animation / transition / hover effect,
+   new decorative element, or major layout restructuring requires
+   **explicit approval from the owner in the same thread, before the
+   PR is opened**. Do not ship design-level changes speculatively. Minor
+   CSS fixes (spacing tweaks, responsive nits listed in `issues.md`) do
+   not need per-change approval. When in doubt, ask first.
 
 ## Homepage grids → slider activation (post PR #64 / #65)
 
@@ -205,12 +215,15 @@ P19 inline tools-preview demo strip (PR #99), P2 hero A4-sheet mockup
 `By the numbers` strip (PR #103).
 
 **Open backlog priority order for the next session:**
-1. P11 Pricing monthly/yearly toggle (copy-only phase 1).
-2. P12 Pricing comparison matrix.
-3. P30 Homepage density break — live-demo section.
-4. P24 Self-host Syne + DM Mono (woff2).
-5. P16 Language switcher UI.
-6. P26 Cookie banner.
+1. P12 Pricing comparison matrix.
+2. P30 Homepage density break — live-demo section.
+3. P24 Self-host Syne + DM Mono (woff2).
+4. P16 Language switcher UI.
+5. P26 Cookie banner.
+
+> **P11 (monthly/yearly toggle) is intentionally dropped.** Product only
+> ships Weekly + Monthly plans; no yearly plan exists or is planned. Do
+> not re-propose a yearly toggle in future sessions.
 
 **Lower-priority functional nits:** F6 audience grid sparse, F7 GSI
 iframe warnings (harmless, not our code).
