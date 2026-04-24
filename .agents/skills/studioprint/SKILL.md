@@ -242,6 +242,9 @@ audit trail. Do NOT re-fix any of the following — they are all merged:
   border + glow on featured card. Mobile (≤900px) stacks cards
   vertically in single column, max-width 440px. Each card lists all
   6 features with ✓/— markers, tagline, and CTA button.
+- PR #152: hide `.hero-preview` on phones (≤640px), trust-pill row
+  gap increased to 14px on ≤480px so "300 DPI A4" doesn't stick to
+  the row above.
 
 **Pricing section design rule (post PR #150):** The pricing section uses
 card-based layout (`.plan-grid` with `.plan-card` divs), NOT a `<table>`.
@@ -285,7 +288,7 @@ AGENTS.md — full source of truth.
 issues.md — 2026-04-23 site audit + 2026-04-24 §D responsive / flow
 follow-up + §E full re-audit + §F footer cleanup + §G single-feature
 glorification cleanup.
-last pr - PR #150 (pricing section full redesign — plan cards)
+last pr - PR #152 (hero-preview hidden on phones, trust-pill spacing fix)
 
 Shipped summary (don't redo):
 
@@ -305,6 +308,8 @@ PR #147: terse-mode prompt + pricing table polish.
 PRs #148+#149: pricing table text size increase.
 PR #150: pricing section full redesign — comparison table replaced
 with plan cards, bigger text, mobile-friendly stacked layout.
+PR #152: hero-preview hidden on phones (≤640px), trust-pill row
+gap fix on mobile.
 
 <yahan apna task likho>
 ```
