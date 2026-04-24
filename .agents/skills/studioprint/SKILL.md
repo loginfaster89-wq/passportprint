@@ -320,6 +320,7 @@ P21 inline error banner shipped PR #130.
 R4 frame-corners 375px fix shipped PR #130.
 R7 768px hero breakpoint shipped PR #131.
 P31 font preload shipped PR #132.
+S1 FAQPage JSON-LD structured data shipped PR #134.
 
 ## Architecture context (shipped — don't redo)
 
@@ -376,11 +377,14 @@ P31 font preload shipped PR #132.
 - **P31 Font preloading** (PR #132): `<link rel="preload">` for
   `syne-latin.woff2` (34 KB) + `dm-mono-400-latin.woff2` (15 KB) on all
   10 pages. Eliminates render-blocking font-discovery waterfall.
+- **S1 FAQPage JSON-LD** (PR #134): `<script type="application/ld+json">`
+  FAQPage structured data in `index.html` `<head>`. All 8 FAQ Q&A pairs
+  for Google rich-result snippets. Zero design change, pure SEO.
 
 ## Open backlog — pick one per session
 
 All 5 polish roadmap items (P12/P30/P24/P16/P26) shipped. F6 + F11 +
-P21 + R4 + R7 + P31 (font preload) also shipped.
+P21 + R4 + R7 + P31 (font preload) + S1 (FAQ JSON-LD) also shipped.
 
 Passport-photo nits: all shipped (P21 PR #130, R4 PR #130, F11 PR #129,
 P29 PR #126, P20 PR #128).
@@ -393,6 +397,12 @@ P11 (monthly/yearly toggle) dropped — PR #113. Do not re-propose.
 
 Backlog is empty — next session can propose new features or do a fresh
 audit to find new polish opportunities.
+
+**SEO ideas for future sessions:**
+- WebApplication JSON-LD on `passport-photo.html`.
+- BreadcrumbList JSON-LD on legal pages.
+- Organization JSON-LD on `about.html`.
+- `<meta name="robots" content="max-image-preview:large">` on all pages.
 
 ## Default rules (same every session)
 - `passport-photo.html` editable (2026-04-24 unlock), minimum diff.

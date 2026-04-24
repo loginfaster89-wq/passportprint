@@ -99,6 +99,7 @@ for a follow-up PR.
 | ~~P29~~ | Passport-photo step bar | **resolved PR #126.** 2 px accent progress bar at bottom of `.steps` fills 0→33→66→100% as user advances (300 ms ease). Active `.step-num` gets enhanced amber glow + pulse. Minimum diff in `passport-photo.html` only. |
 | ~~P30~~ | Homepage density | **resolved PR #123.** 3-step horizontal workflow timeline (`.density-break`) between hero and features — breaks the repeating card-grid rhythm. Surface2 bg, numbered circles, connecting lines. Responsive, existing tokens only. |
 | ~~P31~~ | Performance | **resolved PR #132.** `<link rel="preload">` for `syne-latin.woff2` (34 KB) + `dm-mono-400-latin.woff2` (15 KB) on all 10 pages. Eliminates render-blocking font-discovery waterfall, improves FCP/LCP. |
+| ~~S1~~ | SEO | **resolved PR #134.** FAQPage JSON-LD structured data (`<script type="application/ld+json">`) in `index.html` `<head>`. All 8 FAQ Q&A pairs marked up for Google rich-result snippets. Zero design change. |
 
 ## C. Suggested PR sequence
 
