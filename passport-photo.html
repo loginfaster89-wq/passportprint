@@ -773,6 +773,9 @@ canvas{display:block;}
   background:var(--surface2);
   white-space:nowrap;
 }
+/* Touch-friendly CTA text — TAP + "to upload" hidden by default,
+   shown on phones via the ≤640px block below. */
+.cta-tap, .cta-tap-sub { display:none; }
 
 /* ── Enhanced buttons ── */
 .btn-primary {
@@ -1127,8 +1130,6 @@ canvas{display:block;}
   .upload-icon-wrap svg{width:26px;height:26px;}
   .upload-title{font-size:17px!important;}
   .upload-sub{font-size:12px;}
-  .upload-feat-pill{font-size:9px;padding:2px 7px;}
-
   .canvas-hint{font-size:9px;bottom:6px;padding:4px 10px;}
 
   .comp-handle{width:36px;height:36px;font-size:13px;}
@@ -1144,8 +1145,6 @@ canvas{display:block;}
   .logo{font-size:13px;}
   .step{padding:7px 9px;}
   .preset-grid{grid-template-columns:repeat(2,1fr);}
-  .upload-feats{gap:4px;}
-  .upload-feat-pill{font-size:9px;padding:2px 6px;}
 }
 
 /* ── TINY MOBILE (≤360px) ── */
@@ -1364,8 +1363,14 @@ header{flex-wrap:nowrap;}
   .upload-icon-wrap svg{width:22px;height:22px;}
   .upload-title{font-size:16px!important;margin-bottom:4px!important;}
   .upload-sub{font-size:11px!important;line-height:1.5!important;}
-  .upload-feats{margin-top:10px;gap:4px;}
-  .upload-feat-pill{font-size:9px;padding:2px 6px;}
+  /* Hide feature pills — tiny at 9px, adds visual clutter in 2 rows */
+  .upload-feats{display:none;}
+  /* Hide corner brackets — visual noise on small screens */
+  .corner-bracket-inner{display:none !important;}
+  /* Swap CLICK→TAP, hide "or drop your photo here" (no drag-drop on phones) */
+  .cta-click, .cta-drop{display:none;}
+  .cta-tap, .cta-tap-sub{display:inline;}
+  .upload-cta-hint{margin-top:10px !important;}
   /* Modal layout */
   .modal{border-radius:12px;}
   .modal.small{max-width:100%;}
@@ -1395,8 +1400,6 @@ header{flex-wrap:nowrap;}
   .sidebar{max-height:44dvh;}
   .sb-section{padding:9px 10px;}
   .upload-inner-card{width:min(96%,360px);padding:16px 14px;}
-  .upload-feats{gap:3px;}
-  .upload-feat-pill{font-size:8.5px;padding:2px 6px;}
   .modal-overlay{padding:6px;}
   .modal-title{font-size:16px;}
   .plan-card{padding:16px 12px;}
@@ -1754,9 +1757,9 @@ header.legal-header{
             <span class="upload-feat-pill">⬇ Instant Save</span>
           </div>
           <!-- CTA hint -->
-          <div style="margin-top:18px;font-size:12px;color:var(--muted2);">
-            <span style="background:var(--accent);color:#000;border-radius:4px;padding:2px 8px;font-weight:700;font-size:11px;">CLICK</span>
-            &nbsp;<span data-i18n="or_drop">or drop your photo here</span>
+          <div class="upload-cta-hint" style="margin-top:18px;font-size:12px;color:var(--muted2);">
+            <span class="cta-click" style="background:var(--accent);color:#000;border-radius:4px;padding:2px 8px;font-weight:700;font-size:11px;">CLICK</span><span class="cta-tap" style="background:var(--accent);color:#000;border-radius:4px;padding:2px 8px;font-weight:700;font-size:11px;">TAP</span>
+            &nbsp;<span class="cta-drop" data-i18n="or_drop">or drop your photo here</span><span class="cta-tap-sub">to upload your photo</span>
           </div>
         </div>
         </div>
