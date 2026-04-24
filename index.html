@@ -24,10 +24,8 @@
 <link rel="alternate icon" type="image/png" href="assets/favicon-32.png">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <link rel="manifest" href="assets/manifest.webmanifest">
-<!-- Faster first paint: preconnect to font CDN + warm-up backend so the first API call
-     on /passport-photo doesn't pay the full Render cold-start latency. -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Warm-up backend so the first API call on /passport-photo doesn't
+     pay the full Render cold-start latency. -->
 <link rel="preconnect" href="https://passportprint-studio.onrender.com">
 <link rel="dns-prefetch" href="https://passportprint-studio.onrender.com">
 <!-- Razorpay Checkout preconnects + SDK so the homepage pricing CTAs can open
@@ -37,7 +35,7 @@
 <link rel="preconnect" href="https://checkout-static-next.razorpay.com" crossorigin>
 <link rel="preconnect" href="https://api.razorpay.com" crossorigin>
 <link rel="preconnect" href="https://cdn.razorpay.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/fonts.css">
 <link rel="stylesheet" href="assets/legal.css">
 <link rel="stylesheet" href="assets/auth.css">
 <link rel="stylesheet" href="assets/pricing.css">
