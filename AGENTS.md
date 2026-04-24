@@ -205,7 +205,7 @@ on this repo. Add `Actions: Read and write` only if editing workflow files.
 items from the original audit are now merged. Summary headlines for the
 next session:
 
-**Resolved (PRs #70-#114):** F1 Razorpay script, F2 One-Tap, F3 features
+**Resolved (PRs #70-#137):** F1 Razorpay script, F2 One-Tap, F3 features
 grid 820, F4 hero wrap, F5 pricing 820, F8 email obfuscation, F9 ribbon
 centering, F10 preview chrome, F12/P4 SVG icons, P3+P7+P17 card/button/
 focus polish, P5 scroll-reveal, P6 FAQ smooth open, P13 ribbon pulse,
@@ -218,23 +218,22 @@ P19 inline tools-preview demo strip (PR #99), P2 hero A4-sheet mockup
 `By the numbers` strip (PR #103), R1/R2/R3/R5/R6 responsive polish
 (PR #108), U1 pricing buy-flow (PR #109), passport-photo unlock
 (PR #110), homepage inline checkout (PR #112), shared pricing modal
-(PR #114).
+(PR #114), F13 stats-grid slider (PR #118), P12 pricing matrix
+(PR #119), P26 cookie banner (PR #120), P30 density break (PR #123),
+P24 self-host fonts (PR #124), P16 language switcher (PR #125),
+P29 step-bar progress (PR #126), F6 audience grid (PR #127),
+P20 AI download bar (PR #128), F11 1440 empty space (PR #129),
+P21 inline error banner + R4 frame-corners (PR #130), R7 768 px hero
+(PR #131), P31 font preload (PR #132), S1 FAQPage JSON-LD (PR #134),
+S2 WebApplication JSON-LD (PR #137).
 
-**Open backlog priority order for the next session:**
-1. P12 Pricing comparison matrix.
-2. P30 Homepage density break — live-demo section.
-3. P24 Self-host Syne + DM Mono (woff2).
-4. P16 Language switcher UI.
-5. P26 Cookie banner.
+**All original audit backlog items shipped.** Only F7 (GSI iframe
+warnings — not our code, harmless) remains as a known cosmetic nit.
 
-**Lower-priority functional nits:** F6 audience grid sparse, F7 GSI
-iframe warnings (harmless, not our code), R4 frame-corners at iPhone SE,
-R7 optional 768 px hero breakpoint.
-
-**Passport-photo-specific backlog** (this file is no longer locked — see
-Hard rule #1 — but still needs minimum-diff care): F11 1440 empty space,
-P20 AI-model download progress bar, P21 inline error banner, P29 step-bar
-progress fill, R4 upload-card frame-corners clipping at iPhone SE.
+**SEO ideas for future sessions:**
+- BreadcrumbList JSON-LD on legal pages.
+- Organization JSON-LD on `about.html`.
+- `<meta name="robots" content="max-image-preview:large">` on all pages.
 
 ## Working style for human collaborators
 

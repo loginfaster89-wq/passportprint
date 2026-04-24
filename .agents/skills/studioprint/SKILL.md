@@ -327,6 +327,9 @@ Architecture context (shipped — don't redo)
 
 - **Self-hosted fonts** (PR #124): Syne + DM Mono woff2 in `assets/fonts/`,
   loaded via `assets/fonts.css`. Google Fonts CDN removed from all 10 pages.
+- **Font preloading** (PR #132): `<link rel="preload">` for
+  `syne-latin.woff2` (34 KB) + `dm-mono-400-latin.woff2` (15 KB) on all
+  10 pages. Eliminates render-blocking font-discovery waterfall.
 - **Pricing comparison matrix** (PR #119): Free vs Weekly vs Monthly
   feature table (8 rows), pricing cards ke neeche.
 - **Cookie banner** (PR #120): self-hosted, essentials-only, all 9 pages.
@@ -375,41 +378,30 @@ Architecture context (shipped — don't redo)
   (max-width:768px)` switches hero-preview grid to single column at iPad
   portrait. Fills the gap between 820 px (sheets hide) and 760 px (phone
   compact layout).
-- **P31 Font preloading** (PR #132): `<link rel="preload">` for
-  `syne-latin.woff2` (34 KB) + `dm-mono-400-latin.woff2` (15 KB) on all
-  10 pages. Eliminates render-blocking font-discovery waterfall.
-- **S1 FAQPage JSON-LD** (PR #134): `<script type="application/ld+json">`
-  FAQPage structured data in `index.html` `<head>`. All 8 FAQ Q&A pairs
-  for Google rich-result snippets. Zero design change, pure SEO.
+- **S1 FAQPage JSON-LD** (PR #134): FAQPage structured data in
+  `index.html` `<head>`. All 8 FAQ Q&A pairs for Google rich-result
+  snippets. Zero design change, pure SEO.
 - **S2 WebApplication JSON-LD** (PR #137): `WebApplication` structured
   data in `passport-photo.html` `<head>`. Tells Google the page is a
   photography web app with 3 pricing tiers + feature list. Pure SEO.
 
-## Open backlog — pick one per session
+Open backlog — pick one per session
 
-All 5 polish roadmap items (P12/P30/P24/P16/P26) shipped. F6 + F11 +
-P21 + R4 + R7 + P31 (font preload) + S1 (FAQ JSON-LD) + S2
-(WebApplication JSON-LD) also shipped.
-
-Passport-photo nits: all shipped (P21 PR #130, R4 PR #130, F11 PR #129,
-P29 PR #126, P20 PR #128).
-
-Responsive nits: all shipped (R4 PR #130, R7 PR #131).
-
-Functional nits: `F7` GSI iframe warnings (not our code, harmless).
+All original audit + polish + responsive + passport-photo + SEO backlog
+items shipped. Only F7 (GSI iframe warnings — not our code, harmless)
+remains.
 
 P11 (monthly/yearly toggle) dropped — PR #113. Do not re-propose.
 
-Backlog is empty — next session can propose new features or do a fresh
-audit to find new polish opportunities.
+Backlog is empty — next session can pick from SEO ideas below, propose
+new features, or do a fresh audit.
 
-**SEO ideas for future sessions:**
-- ~~WebApplication JSON-LD on `passport-photo.html`~~ — **shipped PR #137.**
+SEO ideas for future sessions:
 - BreadcrumbList JSON-LD on legal pages.
 - Organization JSON-LD on `about.html`.
 - `<meta name="robots" content="max-image-preview:large">` on all pages.
 
-## Default rules (same every session)
+Default rules (same every session)
 - `passport-photo.html` editable (2026-04-24 unlock), minimum diff.
 - `.github/workflows/*.yml` mat chhedo.
 - Fonts / palette / CSS tokens unchanged.
