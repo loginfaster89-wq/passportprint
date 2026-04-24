@@ -83,7 +83,7 @@ for a follow-up PR.
 | ~~P13~~ | Pricing | **resolved PR #89.** `ribbon-pulse` + `featured-glow` keyframes on `.pricing-card.featured::before` and `.pricing-card.featured` (3.2s infinite, 0.45 → 0.75 alpha). Disabled under `prefers-reduced-motion`. |
 | ~~P14~~ | Navigation | **resolved PR #83.** `.sp-mobile-cta` pill on `≤640px`, shows after scroll > 1 viewport. |
 | ~~P15~~ | Footer | **resolved PR #95.** Multi-column footer — Product / Resources / Company / Legal + newsletter signup + social icon + locale switcher. Shared across all 8 pages via `legal.css` + `assets/footer.js`. |
-| P16 | Internationalisation | No language switcher. Hindi copy was removed (SKILL §5), but adding `हि` ↔ `EN` toggle for Indian multinational feel would be a 1-day add. Current copy is English-only — acceptable, but a locale selector UI affordance signals "we thought about it". |
+| ~~P16~~ | Internationalisation | **resolved PR #125.** Interactive `EN` / `हि` pill toggle in footer on all 8 shared pages. Syncs with `passport-photo.html`'s `localStorage('pps_lang')`. New `assets/lang.js` (19 lines) + `.locale-btn` styles in `legal.css`. Existing tokens only. |
 | ~~P17~~ | Accessibility | **resolved PR #76.** Site-wide `:focus-visible{outline:2px solid var(--accent); outline-offset:2px}` added to `assets/legal.css`, with `:focus{outline:none}` fallback so mouse clicks don't show rings. Keyboard users now get a clean amber ring on nav links, Features dropdown, Login button, `<details>`, form elements. |
 | ~~P18~~ | Accessibility | **resolved PR #88.** Stable ids on all 8 FAQs (`faq-free-tier`, `faq-privacy`, `faq-countries`, `faq-no-software`, `faq-aadhaar-pan`, `faq-mobile`, `faq-refund`, `faq-print-shop`) + small IIFE opens the targeted `<details>` on hash match and smooth-scrolls. |
 | ~~P19~~ | Product-demo | **resolved PR #99.** Inline animated demo strip inside the hero tools-preview card on `index.html`: 3-phase ~9 s loop (upload → background removed → A4 sheet slides in). Pure CSS + tiny DOM primitives, no `<video>` asset. Respects `prefers-reduced-motion`. |
@@ -112,7 +112,7 @@ All of the quick-win queue from the 2026-04-23 audit is now merged. The**open ba
 1. ~~**P12** — Pricing comparison matrix~~ — **shipped in PR #119.**
 2. ~~**P30** — Homepage density break — workflow timeline between HERO and FEATURES.~~ — **shipped in PR #123.**
 3. ~~**P24** — Self-host Syne + DM Mono fonts (woff2 subset).~~ — **shipped in PR #124.**
-4. **P16** — Language switcher (`हि` ↔ `EN`) UI affordance.
+4. ~~**P16** — Language switcher (`हि` ↔ `EN`) UI affordance.~~ — **shipped in PR #125.**
 5. ~~**P26** — Cookie banner (self-hosted, essential-only).~~ — **shipped in PR #120.**
 
 **Recently resolved (since last audit refresh):** P10 contact form (PR #98), P19 inline tools-preview demo strip (PR #99), P2 hero A4-sheet mockup (PR #100), P1 hero animated gradient pulse (PR #102), P8 honest numbers strip (PR #103), R1/R2/R3/R5/R6 responsive polish (PR #108), U1 pricing buy-flow (PR #109), passport-photo unlock (PR #110), homepage inline checkout (PR #112), shared pricing modal (PR #114).

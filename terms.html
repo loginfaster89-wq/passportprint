@@ -209,14 +209,15 @@
           <path d="m3 7 9 6 9-6"/>
         </svg>
       </a>
-      <span class="footer-locale" aria-label="Language and region">
+      <span class="footer-locale" role="radiogroup" aria-label="Language">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <circle cx="12" cy="12" r="9"/>
           <path d="M3 12h18"/>
           <path d="M12 3a14 14 0 0 1 0 18"/>
           <path d="M12 3a14 14 0 0 0 0 18"/>
         </svg>
-        EN · India
+        <button type="button" class="locale-btn active" data-lang="en" aria-pressed="true">EN</button>
+        <button type="button" class="locale-btn" data-lang="hi" aria-pressed="false">हि</button>
       </span>
     </div>
   </div>
@@ -226,6 +227,7 @@
 <script src="assets/auth.js" defer></script>
 <script src="assets/pricing.js" defer></script>
 <script src="assets/pwa.js" defer></script>
+<script src="assets/lang.js" defer></script>
 <script src="assets/footer.js" defer></script>
 <script src="assets/cookie.js" defer></script>
 </body>
