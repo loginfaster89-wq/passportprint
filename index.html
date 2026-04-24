@@ -773,6 +773,15 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
   .feature-card.primary{grid-column:span 2;min-height:230px;}
 }
 
+/* R7: iPad-portrait (768 px) — hero-preview to single column so the
+   tool-demo tiles aren't cramped between the 820 px sheet-hide and
+   760 px phone breakpoints. */
+@media (min-width:761px) and (max-width:768px){
+  .hero-preview-grid,.hero-preview-demo{grid-template-columns:1fr;}
+  .hpv-tile{min-height:150px;}
+  .hero-preview-demo .hpv-tile.canvas{min-height:200px;}
+}
+
 /* Compact device-aware tweaks */
 @media (max-width:760px){
   .hero{padding-top:48px;}

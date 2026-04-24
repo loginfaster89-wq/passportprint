@@ -161,7 +161,7 @@ session VM (not committed).
 | ~~R4~~ | `passport-photo.html` | iphone-se 375 | **resolved PR #130** | Upload card inner corner brackets shrunk (22→16px, offset −10→−6px) at ≤420px so they no longer clip the right edge on iPhone SE. |
 | R5 | all | all | nit | Slider pagination dots are 7×7 px buttons — below the WCAG 2.5.5 AAA 24 px target and the commonly-recommended 44 px mobile target. Fix: keep the 7-px visual dot but expand the clickable area to ~24 px via `padding` + an inner `::before` dot, or use a `::after` transparent hit pad. |
 | R6 | legal pages (`about`, `contact`, `privacy`, `terms`, `refund`, `shipping`) | all mobile | nit | Multi-link rows in the new footer (PR #95) render at line-height 17–18 px on phones. Each link has only ~17 px vertical clickable area. Add `padding-block:6px` on `.footer-col a` so each row hits ~30 px without changing visual spacing much. |
-| R7 | `index.html` | ipad-portrait 768 | nit | No dedicated 768 breakpoint in the homepage CSS (closest are 760 and 820). A hero that clamps font-size / sheet position at ≥ 768 would smooth the exact-iPad-portrait transition instead of relying on the 1100 → 760 handoff. Optional polish. |
+| ~~R7~~ | `index.html` | ipad-portrait 768 | **resolved PR #131** | Dedicated `@media (min-width:761px) and (max-width:768px)` breakpoint switches hero-preview grid to single column at iPad portrait. Hero sheets already hidden at 820 px; phone layout at 760 px. The 761–768 px gap no longer leaves the tool-demo cramped in 2-column mode. |
 
 ### D.2 Flow / UX findings
 
@@ -179,7 +179,7 @@ session VM (not committed).
    + `assets/pricing.css` — 2-step Choose Plan → Complete Payment → Razorpay
    on every page. `auth.js` Upgrade/Change Plan button now opens this modal
    on the current page instead of redirecting to `passport-photo.html#plans`.
-R4 and R7 are low-value nits — leave open.
+~~R4~~ shipped PR #130. ~~R7~~ shipped PR #131.
 
 ---
 
