@@ -573,6 +573,50 @@ canvas{display:block;}
   animation: rotateBorder .8s linear infinite;
 }
 
+/* Inline error banner — shows near upload zone on load/decode failures */
+.upload-error-banner {
+  display:none;
+  align-items:center;
+  gap:10px;
+  background:rgba(248,113,113,.1);
+  border:1px solid rgba(248,113,113,.3);
+  border-radius:10px;
+  padding:10px 16px;
+  margin-top:14px;
+  font-size:13px;
+  color:var(--danger);
+  line-height:1.4;
+  z-index:2;
+  position:relative;
+  animation:toastIn .3s;
+  max-width:520px;
+  width:min(92%,520px);
+}
+.upload-error-banner.visible { display:flex; }
+.upload-error-banner .ueb-msg { flex:1; text-align:left; }
+.upload-error-banner .ueb-retry {
+  background:rgba(248,113,113,.15);
+  color:var(--danger);
+  border:1px solid rgba(248,113,113,.3);
+  border-radius:6px;
+  padding:5px 12px;
+  font-size:12px;
+  font-family:'DM Mono',monospace;
+  cursor:pointer;
+  white-space:nowrap;
+  transition:.15s;
+}
+.upload-error-banner .ueb-retry:hover { background:rgba(248,113,113,.25); }
+.upload-error-banner .ueb-close {
+  background:transparent;
+  border:none;
+  color:var(--muted);
+  font-size:16px;
+  cursor:pointer;
+  padding:0 2px;
+  line-height:1;
+}
+
 /* Corner accent brackets — outer canvas frame (desktop ≥901px) */
 .corner-bracket {
   position: absolute;
@@ -607,6 +651,15 @@ canvas{display:block;}
 .cbi-tr { top:-10px; right:-10px; border-top:2px solid var(--accent); border-right:2px solid var(--accent); border-radius:0 4px 0 0; }
 .cbi-bl { bottom:-10px; left:-10px; border-bottom:2px solid var(--accent); border-left:2px solid var(--accent); border-radius:0 0 0 4px; }
 .cbi-br { bottom:-10px; right:-10px; border-bottom:2px solid var(--accent); border-right:2px solid var(--accent); border-radius:0 0 4px 0; }
+
+/* R4 fix: shrink inner brackets at ≤420px so they don't clip the right edge */
+@media(max-width:420px){
+  .corner-bracket-inner { width:16px; height:16px; }
+  .cbi-tl, .cbi-bl { left:-6px; }
+  .cbi-tr, .cbi-br { right:-6px; }
+  .cbi-tl, .cbi-tr { top:-6px; }
+  .cbi-bl, .cbi-br { bottom:-6px; }
+}
 
 /* Drag-over full overlay pulse */
 .upload-zone.drag-over::before {
@@ -1664,6 +1717,13 @@ header.legal-header{
         </div>
         </div>
 
+        <!-- Inline error banner (P21) -->
+        <div class="upload-error-banner" id="uploadErrorBanner">
+          <span class="ueb-msg" id="uploadErrorMsg"></span>
+          <button class="ueb-retry" id="uploadErrorRetry">Retry</button>
+          <button class="ueb-close" id="uploadErrorClose">&times;</button>
+        </div>
+
       </div>
       <div class="canvas-specs">
         <span>300 DPI output</span><span class="cs-dot">·</span>
@@ -2380,6 +2440,7 @@ const uploadZone=document.getElementById('uploadZone');
 fileInput.addEventListener('change',e=>{
   const f=e.target.files[0];
   if(!f) return;
+  hideUploadError();
   // Clear value so selecting the SAME file again (e.g. after pressing "New Photo")
   // still fires a change event.
   fileInput.value='';
@@ -2444,7 +2505,7 @@ async function loadImage(file){
     });
   } catch (err) {
     console.error('[loadImage]', err);
-    alert('Image could not be loaded. Please try a different photo.');
+    showUploadError('Image could not be loaded — please try a different photo.');
   }
 }
 
@@ -5171,6 +5232,25 @@ async function completePayment(){
 window.openPlans=openPlans; window.startCheckout=startCheckout;
 window.selectPayMethod=selectPayMethod; window.completePayment=completePayment;
 window.downgradeToFree=downgradeToFree;
+
+// ── Inline upload error banner (P21) ──
+function showUploadError(msg){
+  const b=document.getElementById('uploadErrorBanner');
+  const m=document.getElementById('uploadErrorMsg');
+  if(!b||!m) return;
+  m.textContent=msg;
+  b.classList.add('visible');
+}
+function hideUploadError(){
+  const b=document.getElementById('uploadErrorBanner');
+  if(b) b.classList.remove('visible');
+}
+document.addEventListener('DOMContentLoaded',function(){
+  var retryBtn=document.getElementById('uploadErrorRetry');
+  var closeBtn=document.getElementById('uploadErrorClose');
+  if(retryBtn) retryBtn.addEventListener('click',function(){ hideUploadError(); document.getElementById('fileInput').click(); });
+  if(closeBtn) closeBtn.addEventListener('click', hideUploadError);
+});
 
 // ── Toast ──
 let _toastT=null;
