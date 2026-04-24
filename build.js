@@ -120,7 +120,7 @@ function obfuscateInlineScripts(html) {
       }
     }
     const trimmed = body.trim();
-    if (!trimmed || trimmed.length < 200) return match; // not worth obfuscating tiny snippets
+    if (!trimmed || trimmed.length < 1500) return match; // skip small utility IIFEs — multiple obfuscated blocks on the same page clash (same mangled decoder vars) and crash
     try {
       const result = JavaScriptObfuscator.obfuscate(body, OBFUSCATOR_OPTIONS).getObfuscatedCode();
       return `<script${attrs}>${result}</script>`;
