@@ -409,6 +409,44 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
   color:var(--muted);font-size:clamp(13px,1.6vw,15px);line-height:1.7;max-width:62ch;
 }
 
+/* ── P30: DENSITY BREAK ── */
+.density-break{
+  background:
+    radial-gradient(ellipse 50% 60% at 50% 100%, rgba(240,165,0,0.05), transparent 70%),
+    var(--surface2);
+}
+.db-timeline{
+  display:flex;align-items:flex-start;justify-content:center;gap:0;
+  max-width:900px;margin:0 auto;
+}
+.db-step{
+  flex:1;display:flex;flex-direction:column;align-items:center;
+  text-align:center;gap:10px;max-width:260px;
+}
+.db-num{
+  width:52px;height:52px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Syne',sans-serif;font-weight:800;font-size:22px;
+  color:var(--bg);background:var(--accent);
+  box-shadow:0 0 0 6px rgba(240,165,0,0.15),0 8px 24px -8px rgba(240,165,0,0.45);
+}
+.db-step h4{
+  font-family:'Syne',sans-serif;font-weight:700;font-size:16px;
+  color:#fff;letter-spacing:-0.2px;
+}
+.db-step p{color:var(--muted);font-size:13px;line-height:1.6;max-width:22ch;}
+.db-line{
+  flex:0 0 auto;width:60px;height:2px;
+  background:linear-gradient(90deg,var(--accent),rgba(240,165,0,0.2));
+  border-radius:1px;margin-top:26px;
+}
+@media(max-width:640px){
+  .db-timeline{flex-direction:column;align-items:center;gap:24px;}
+  .db-line{width:2px;height:32px;
+    background:linear-gradient(180deg,var(--accent),rgba(240,165,0,0.2));}
+  .db-step{max-width:none;}
+}
+
 /* ── FEATURES ── */
 .features-grid{
   display:grid;gap:18px;
@@ -1061,6 +1099,37 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
           <span class="hpv-mini-ic" aria-hidden="true"><svg class="ix" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-scissors"/></svg></span>
           <span class="hpv-mini-t">Background Studio</span>
           <span class="hpv-mini-s">Remove &amp; replace</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- P30: DENSITY BREAK — workflow showcase between hero and features.
+       Breaks the repeating "header + card-grid" rhythm with a horizontal
+       timeline layout. No card grid, surface2 bg for visual contrast. -->
+  <section class="section density-break reveal">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="section-tag">The workflow</span>
+        <h2>Photo in. Print-ready sheet out.</h2>
+      </div>
+      <div class="db-timeline">
+        <div class="db-step">
+          <span class="db-num">1</span>
+          <h4>Drop a photo</h4>
+          <p>Selfie, scan, or phone snap — stays on your device, never uploaded.</p>
+        </div>
+        <div class="db-line" aria-hidden="true"></div>
+        <div class="db-step">
+          <span class="db-num">2</span>
+          <h4>AI takes over</h4>
+          <p>Background gone, cropped to spec, country preset applied — in seconds.</p>
+        </div>
+        <div class="db-line" aria-hidden="true"></div>
+        <div class="db-step">
+          <span class="db-num">3</span>
+          <h4>Download &amp; print</h4>
+          <p>300 DPI A4 sheet with cut guides — feed it to any printer, done.</p>
         </div>
       </div>
     </div>

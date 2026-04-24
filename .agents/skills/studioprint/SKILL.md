@@ -251,10 +251,10 @@ remain. See `issues.md` §E for details.
 
 *2026 polish roadmap (by impact):*
 1. ~~`P12` Pricing comparison matrix~~ — **shipped PR #119.**
-2. `P30` Homepage density break — live-demo section between HERO/FEATURES.
+2. ~~`P30` Homepage density break — live-demo section between HERO/FEATURES.~~ — **shipped PR #123.**
 3. `P24` Self-host Syne + DM Mono (woff2 subset).
 4. `P16` Language switcher UI affordance.
-5. `P26` Cookie banner (self-hosted, essentials-only).
+5. ~~`P26` Cookie banner (self-hosted, essentials-only).~~ — **shipped PR #120.**
 
 *Responsive items — only low-priority nits remain:*
 - `R4` passport-photo upload-card frame-corners clip at iPhone SE (low priority).
@@ -290,68 +290,62 @@ has full console + network.
 
 ## 11. Ready-to-paste prompt for a new Devin chat
 
-Copy the block below into a fresh Devin session when you want to hand
-off the responsive + pricing-flow follow-up work. It self-contains
-repo / PAT / rules / concrete scope and references `issues.md` §D for
-details, so a new session can start working without re-auditing.
+Copy the block below into a fresh Devin session. It self-contains
+repo / PAT / rules / concrete scope so a new session can start working
+without re-auditing.
 
 ```
 Studio Print frontend par kaam karo.
 Repo: loginfaster89-wq/passportprint (private)
-PAT: GITHUB_PAT_PASSPORTPRINT (repo-scoped fine-grained secret —
+PAT: GITHUB_PAT_PASSPORTPRINT (fine-grained, repo-scoped —
 Contents + Pull requests: Read and write on this repo).
+Agar saved secret na mile to session-only provide karunga.
 
 Clone ke baad pehle ye teen files padho:
-1. .agents/skills/studioprint/SKILL.md — Devin-specific recipe
-   (build/preview, hard rules, PAT curl snippet, Hinglish style,
-   §7b pricing module, §9 closed/open backlog).
+1. .agents/skills/studioprint/SKILL.md — Devin recipe (build/preview,
+   hard rules, PAT curl snippet, Hinglish style, §9 merged/open backlog).
 2. AGENTS.md — full source of truth.
-3. issues.md — 2026-04-23 full-site audit + 2026-04-24 §D responsive
-   follow-up. All R-series / U-series items are shipped (PRs #108–#114).
+3. issues.md — 2026-04-23 site audit + 2026-04-24 §D responsive / flow
+   follow-up + §E full re-audit.
+
+F13 stats-grid slider fixed PR #118.
 
 ## Architecture context (shipped — don't redo)
 
+- **Pricing comparison matrix** (PR #119): Free vs Weekly vs Monthly
+  feature table (8 rows), pricing cards ke neeche.
+- **Cookie banner** (PR #120): self-hosted, essentials-only, all 9 pages.
+  "OK" click pe localStorage mein save, dobara nahi dikhta.
+- **Density-break workflow** (PR #123): 3-step horizontal timeline between
+  hero and features. `.density-break` + `.db-timeline` CSS in `index.html`
+  inline `<style>`. Breaks repeating card-grid rhythm.
 - **Shared pricing modal** (`assets/pricing.js` + `assets/pricing.css`,
   PR #114): 2-step Choose Plan → Complete Payment → Razorpay. Included
   on every page except `passport-photo.html` (which keeps its inline
   copy). `window.openPlans` / `window.startCheckout` exposed globally.
 - **Auth.js Upgrade button** now calls `window.openPlans()` on the
-  current page instead of redirecting to `passport-photo.html#plans`.
+  current page instead of redirecting to `passport-photo.html#plans`
+  (fixed in PR #115).
 - **Homepage inline checkout** (PR #112): pricing CTAs open Razorpay
   directly without page navigation.
 - **`passport-photo.html`** unlocked (PR #110) — editable with minimum
   diff. Has `#plans` / `#buy-<planId>` hash-open script and inline
   copies of nav/auth.
-
-## Architecture context (shipped — don't redo)
-
-- **Pricing comparison matrix** (PR #119): 8-row Free vs Weekly vs Monthly
-  feature table below pricing cards on homepage. `.compare-wrap` +
-  `.compare-table` CSS in `index.html` inline `<style>`.
-- **Shared pricing modal** (`assets/pricing.js` + `assets/pricing.css`,
-  PR #114): 2-step Choose Plan → Complete Payment → Razorpay. Included
-  on every page except `passport-photo.html` (which keeps its inline
-  copy). `window.openPlans` / `window.startCheckout` exposed globally.
-- **Auth.js Upgrade button** now calls `window.openPlans()` on the
-  current page instead of redirecting to `passport-photo.html#plans`.
-- **Homepage inline checkout** (PR #112): pricing CTAs open Razorpay
-  directly without page navigation.
-- **`passport-photo.html`** unlocked (PR #110) — editable with minimum
-  diff. Has `#plans` / `#buy-<planId>` hash-open script and inline
-  copies of nav/auth.
-- **Stats-grid slider** (PR #118): `.stats-grid` added to `sliders.js`
-  SELECTORS — 4 stat cards now convert to slider on orphan row / phones.
+- **Stats-grid slider** (PR #118): "By the numbers" cards now convert
+  to slider on orphan row / phones like all other grids.
+- Full responsive re-audit (PR #118 docs): 9 pages × 8 viewports = 72
+  combos — ALL CLEAR, no new issues.
 
 ## Open backlog — pick one per session
 
-1. `P30` — Homepage density break — live-demo section.
-2. `P24` — Self-host Syne + DM Mono (woff2 subset).
-3. `P16` — Language switcher UI affordance.
-4. `P26` — Cookie banner (self-hosted, essentials-only).
+1. `P24` — Self-host Syne + DM Mono (woff2 subset).
+2. `P16` — Language switcher UI affordance.
 
 Passport-photo nits: `F11` 1440 empty space, `P20` AI-model progress
 bar, `P21` inline error banner, `P29` step-bar fill, `R4` frame-corners
 375 px.
+
+P11 (monthly/yearly toggle) dropped — PR #113. Do not re-propose.
 
 ## Default rules (same every session)
 - `passport-photo.html` editable (2026-04-24 unlock), minimum diff.
@@ -360,6 +354,11 @@ bar, `P21` inline error banner, `P29` step-bar fill, `R4` frame-corners
 - One PR per logical task, minimum diff.
 - `npm run build` run karke verify karo.
 - Hinglish updates, quota-conscious, zero jargon.
-- Devin files (SKILL.md, issues.md) ko session ke kaam se update karo.
-- User last mein naya prompt dega — wo bhi Devin files mein update karo.
+- Devin files (SKILL.md, issues.md) ko session ke kaam se time to time
+  jaldi se update karo.
+- Session ke end mein naya prompt bna ke SKILL.md §11 mein update karo
+  taaki next chat ready rahe.
+- **Terse mode:** Jab user chat start kare toh Devin auto terse mode
+  mein rahe — minimum messages, sirf important updates, zero
+  re-explanation.
 ```
