@@ -218,9 +218,32 @@ Include order on each page:
   mid-task, drop to the most terse mode possible — fewer tool calls,
   no speculative exploration, no re-explaining already-agreed plans.
 
-## 9. Shipped work & open backlog
+## 9. Comparison table design rules
 
-Everything from PRs #70–#145 is shipped. See `issues.md` for the full
+The pricing comparison table (`.compare-table` in `index.html`) has been
+redesigned multiple times. Follow these rules to avoid repeat issues:
+
+1. **Text must be big enough to read on phone (390px).** Desktop base
+   ≥ 15px, mobile ≥ 13.5px. Row labels ≥ 15px desktop, ≥ 13.5px mobile.
+   Prices ≥ 28px desktop, ≥ 22px mobile. Never go below these.
+2. **Badge (Best value) must be on its own line** — `display:block` with
+   `margin:6px auto 0` and `width:fit-content`. Never inline next to
+   the column header text — it visually merges and looks broken.
+3. **Period labels (/7 days, /30 days)** should be `display:block` below
+   the price, not inline — keeps the price row clean.
+4. **Header row needs breathing room** — `padding-top:24px;padding-bottom:24px`
+   minimum. It anchors the whole table.
+5. **Monthly column accent tint** — header ≥ `rgba(240,165,0,0.08)`,
+   body cells ≥ `0.04`. Keeps the "best value" column visually distinct.
+6. **Always test both desktop AND phone viewport (390px)** before pushing.
+   The table has `overflow-x:auto` but text should still be readable
+   without scrolling on 390px if possible.
+7. **Mobile breakpoint is 480px** — bump sizes proportionally, not just
+   shrink everything. Keep the table looking intentional, not cramped.
+
+## 10. Shipped work & open backlog
+
+Everything from PRs #70–#149 is shipped. See `issues.md` for the full
 audit trail. Do NOT re-fix any of the following — they are all merged:
 
 - PRs #70–#114: original audit quick-wins + responsive + flow fixes.
@@ -234,11 +257,15 @@ audit trail. Do NOT re-fix any of the following — they are all merged:
 - PR #143: pricing cards removed, buy buttons in comparison table,
   trust pills 2-row, footer email icon removed.
 - PR #145: hero eyebrow pill shrunk, one-at-a-time rule added.
+- PR #147: terse-mode prompt + pricing table polish.
+- PR #148: pricing table polish (merged).
+- PR #149: pricing table text sizes + full redesign — badge on own line,
+  bigger text, better spacing, period labels on own line.
 
 **Open:** only `F7` GSI iframe warnings (not our code, harmless).
 Backlog is empty — next session can propose new features or fresh audit.
 
-## 10. Related repos
+## 11. Related repos
 
 - Frontend (this repo): `loginfaster89-wq/passportprint`
 - Backend: `loginfaster89-wq/PassportPrint-Studio` — Node/Express on
@@ -247,7 +274,7 @@ Backlog is empty — next session can propose new features or fresh audit.
   `https://passportprint-studio.onrender.com` in `passport-photo.html`
   and `assets/auth.js`.
 
-## 11. Ready-to-paste prompt for a new Devin chat
+## 12. Ready-to-paste prompt for a new Devin chat
 
 Copy the block below into a fresh Devin session. It self-contains
 repo / PAT / rules / concrete scope so a new session can start working
@@ -270,7 +297,7 @@ AGENTS.md — full source of truth.
 issues.md — 2026-04-23 site audit + 2026-04-24 §D responsive / flow
 follow-up + §E full re-audit + §F footer cleanup + §G single-feature
 glorification cleanup.
-last pr - PR #145 (eyebrow shrink + one-at-a-time rule)
+last pr - PR #149 (pricing table redesign — bigger text, badge fix)
 
 Shipped summary (don't redo):
 
@@ -286,6 +313,10 @@ PR #143: pricing cards removed, buy buttons in comparison table,
 trust pills 2-row, footer email icon removed.
 PR #145: hero eyebrow pill shrunk + text changed to
 "No uploads · Print-ready", one-at-a-time rule added.
+PR #147: terse-mode prompt + pricing table polish.
+PR #148: pricing table polish (merged).
+PR #149: pricing table text sizes + redesign — badge on own line,
+bigger text, better spacing, period labels on own line.
 
 <yahan apna task likho>
 ```
