@@ -651,6 +651,27 @@ canvas{display:block;}
    they overlap the upload card at mid-sized widths. */
 @media(max-width:1180px){ .float-chip { display:none; } }
 
+/* F11: reduce 1440 empty space — shift card up + trust strip at bottom */
+@media (min-width:1200px) {
+  #step1-canvas .upload-zone { padding-bottom: 14vh; }
+}
+.canvas-specs {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 11px;
+  color: var(--muted2);
+  letter-spacing: 0.3px;
+  z-index: 2;
+  white-space: nowrap;
+}
+.canvas-specs .cs-dot { opacity: 0.35; }
+@media (max-width:1199px) { .canvas-specs { display: none; } }
+
 /* Hide the post-upload radiating feature lines + chips on phones —
    they look cramped and weird around vertical photos on small screens. */
 @media(max-width:768px){
@@ -1643,6 +1664,12 @@ header.legal-header{
         </div>
         </div>
 
+      </div>
+      <div class="canvas-specs">
+        <span>300 DPI output</span><span class="cs-dot">·</span>
+        <span>On-device AI</span><span class="cs-dot">·</span>
+        <span>No photo uploads</span><span class="cs-dot">·</span>
+        <span>6+ country sizes</span>
       </div>
     </div>
 
