@@ -261,8 +261,8 @@ remain. See `issues.md` §E for details.
 - `R7` No dedicated 768 px hero breakpoint (optional polish).
 
 *Passport-photo-specific backlog* (file is no longer locked, but still
-requires minimum-diff care — see Hard rule #1): `F11` 1440 empty space,
-`P20` AI-model download progress bar, `P21` inline error banner,
+requires minimum-diff care — see Hard rule #1): ~~`F11` 1440 empty space~~ —
+**shipped PR #129**, `P21` inline error banner,
 ~~`P29` step-bar progress fill~~ — **shipped PR #126**,
 `R4` frame-corners clip at 375 px.
 
@@ -315,6 +315,7 @@ P16 language switcher shipped PR #125.
 P29 step-bar progress fill shipped PR #126.
 F6 audience grid centred shipped PR #127.
 P20 AI-model download bar shipped PR #128.
+F11 1440 empty space fixed PR #129.
 
 ## Architecture context (shipped — don't redo)
 
@@ -355,16 +356,17 @@ P20 AI-model download bar shipped PR #128.
 - **AI download bar** (PR #128): fixed-position 3 px accent bar at
   top of `passport-photo.html` during model download. Hooks into
   existing `onProgress`, auto-hides at 97%.
+- **F11 1440 empty space** (PR #129): upload card shifted up via
+  `padding-bottom:14vh` at ≥1200 px + trust-spec strip at canvas bottom
+  (desktop only, auto-hides on step 2+).
 
 ## Open backlog — pick one per session
 
-All 5 polish roadmap items (P12/P30/P24/P16/P26) are now shipped.
-F6 audience grid sparse also shipped (PR #127).
+All 5 polish roadmap items (P12/P30/P24/P16/P26) shipped. F6 + F11 also shipped.
 
-Passport-photo nits: `F11` 1440 empty space, ~~`P20` AI-model progress
-bar~~ — **shipped PR #128**, `P21` inline error banner, `R4` frame-corners 375 px.
+Passport-photo nits: `P21` inline error banner, `R4` frame-corners 375 px.
 
-Functional nits: `F11` 1440 empty space.
+Functional nits: `F7` GSI iframe warnings (not our code, harmless).
 
 P11 (monthly/yearly toggle) dropped — PR #113. Do not re-propose.
 

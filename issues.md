@@ -57,7 +57,7 @@ but workable), **nit** (polish).
 | ~~F8~~ | `about.html`, `contact.html` | all | **resolved PR #77** | Email `loginfaster89@gmail.com` was exposed as plain text (clickable `mailto:` + visible text) on both pages. Scrapable by spam bots within days. Fixed via `<a class="email-obf" data-u="…" data-d="…">` + tiny per-page IIFE that assembles the mailto on DOMContentLoaded. A contact form (P10) is still the full fix. |
 | ~~F9~~ | home `/` | desktop 1440 | **resolved PR #80.** Ribbon re-centered on the card's top edge. |
 | ~~F10~~ | home `/` | desktop 1440 | **resolved PR #81.** Fake window-chrome dots replaced with a single live-preview indicator. |
-| F11 | `passport-photo.html` | desktop 1440 | nit | At 1440×900, almost the entire lower half of the viewport (below the upload card, above the footer) is empty black space. Consider raising the footer or adding a "While you wait, try…" section to pull the fold up. |
+| ~~F11~~ | `passport-photo.html` | desktop 1440 | **resolved PR #129** | At 1440×900, almost the entire lower half of the viewport (below the upload card, above the footer) was empty black space. Fixed: upload card shifted upward via `padding-bottom:14vh` at ≥1200 px + trust-spec strip ("300 DPI output · On-device AI · No photo uploads · 6+ country sizes") anchored at bottom of step 1 canvas. Desktop only, auto-hides on step 2+. |
 | ~~F12~~ | home `/` | all | **resolved PR #85.** Emoji replaced with inline Lucide-style SVG sprite (`<use href="#i-…">`). No new fonts/deps. |
 
 ## B. "2026 multinational" polish gaps
@@ -107,7 +107,7 @@ All of the quick-win queue from the 2026-04-23 audit is now merged. The**open ba
 - ~~`F6` audience grid sparse~~ — **resolved PR #127.** Centred with `max-width:720px`.
 - `F7` GSI iframe Permissions-Policy console warnings — not our code; monitor on SDK updates.
 - ~~`P20` AI-model progress bar~~ — **resolved PR #128.**
-- `F11` passport-photo 1440 empty space below upload card — `passport-photo.html` edit, minimum-diff.
+- ~~`F11` passport-photo 1440 empty space below upload card~~ — **resolved PR #129.**
 
 **2026 polish roadmap (ordered by impact):**
 1. ~~**P12** — Pricing comparison matrix~~ — **shipped in PR #119.**
@@ -120,7 +120,7 @@ All of the quick-win queue from the 2026-04-23 audit is now merged. The**open ba
 
 **Passport-photo-specific backlog** (`passport-photo.html` is no longer locked — unlocked 2026-04-24 — but still requires minimum-diff care; see AGENTS.md Hard rule #1):
 - `F1` Razorpay `/build/undefined` 403 residual (payment flow works, SDK's own bug).
-- `F11` 1440 empty space below upload card.
+- ~~`F11` 1440 empty space below upload card~~ — **resolved PR #129.**
 - ~~`P20` top-of-page thin progress bar for AI-model download~~ — **resolved PR #128.**
 - `P21` inline "something went wrong — retry" banner near upload zone.
 - ~~`P29` step-bar progress line fill animation~~ — **shipped PR #126.**
