@@ -153,6 +153,10 @@ input[type=range]::-webkit-slider-thumb{appearance:none;width:14px;height:14px;b
 .swatch-custom{background:var(--surface3);border:1px solid var(--border)!important;display:flex;align-items:center;justify-content:center;font-size:13px;position:relative;overflow:hidden;}
 .swatch-custom input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
 
+/* ── AI DOWNLOAD BAR (top-of-page) ── */
+.ai-dl-bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--accent),#ffc03a);width:0;z-index:99999;transition:width .4s ease;pointer-events:none;opacity:0;}
+.ai-dl-bar.active{opacity:1;}
+
 /* ── PROGRESS ── */
 .progress-wrap{background:var(--surface3);border-radius:3px;height:5px;overflow:hidden;margin:8px 0;}
 .progress-bar{height:100%;background:linear-gradient(90deg,var(--accent),#ffc03a);border-radius:3px;transition:width .4s ease;width:0%;}
@@ -1517,6 +1521,7 @@ header.legal-header{
 </style>
 </head>
 <body>
+<div class="ai-dl-bar" id="aiDlBar"></div>
 
 <!-- HEADER -->
 <header class="legal-header">
@@ -2678,11 +2683,14 @@ async function startBgRemoval() {
   const barEl     = document.getElementById('progressBar');
 
   // Unified progress reporter
+  const dlBar = document.getElementById('aiDlBar');
   const onProgress = (msg, pct) => {
     if (bgCancelled) return;
     pct = Math.min(Math.max(pct, 0), 100);
     statusEl.textContent     = msg;
     barEl.style.width        = pct + '%';
+    if (pct < 97) { dlBar.classList.add('active'); dlBar.style.width = pct + '%'; }
+    else { dlBar.style.width = '100%'; setTimeout(() => { dlBar.classList.remove('active'); dlBar.style.width = '0'; }, 600); }
   };
 
   try {
@@ -3422,6 +3430,7 @@ function cancelBgRemoval(){
   bgCancelled=true;
   document.getElementById('bgProgressWrap').classList.add('hidden');
   document.getElementById('progressBar').style.width='0%';
+  const dlB=document.getElementById('aiDlBar'); dlB.classList.remove('active'); dlB.style.width='0';
   setBgBtnsDisabled(false);
 }
 
