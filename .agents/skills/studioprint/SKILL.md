@@ -313,6 +313,7 @@ F13 stats-grid slider fixed PR #118.
 P24 self-host fonts shipped PR #124.
 P16 language switcher shipped PR #125.
 P29 step-bar progress fill shipped PR #126.
+F6 audience grid centred shipped PR #127.
 
 ## Architecture context (shipped — don't redo)
 
@@ -347,15 +348,19 @@ P29 step-bar progress fill shipped PR #126.
 - **Step-bar progress fill** (PR #126): 2 px accent progress bar at
   bottom of `.steps` fills 0→33→66→100% as user advances (300 ms
   ease). Active `.step-num` enhanced amber glow + pulse.
+- **Audience grid centred** (PR #127): `.audience-grid` now has
+  `max-width:720px` + auto margins — 2 cards centred, no more sparse
+  full-width stretch on desktop.
 
 ## Open backlog — pick one per session
 
 All 5 polish roadmap items (P12/P30/P24/P16/P26) are now shipped.
+F6 audience grid sparse also shipped (PR #127).
 
 Passport-photo nits: `F11` 1440 empty space, `P20` AI-model progress
 bar, `P21` inline error banner, `R4` frame-corners 375 px.
 
-Functional nits: `F6` audience grid sparse, `F11` 1440 empty space.
+Functional nits: `F11` 1440 empty space.
 
 P11 (monthly/yearly toggle) dropped — PR #113. Do not re-propose.
 
