@@ -314,6 +314,7 @@ P24 self-host fonts shipped PR #124.
 P16 language switcher shipped PR #125.
 P29 step-bar progress fill shipped PR #126.
 F6 audience grid centred shipped PR #127.
+P20 AI-model download bar shipped PR #128.
 
 ## Architecture context (shipped — don't redo)
 
@@ -351,14 +352,17 @@ F6 audience grid centred shipped PR #127.
 - **Audience grid centred** (PR #127): `.audience-grid` now has
   `max-width:720px` + auto margins — 2 cards centred, no more sparse
   full-width stretch on desktop.
+- **AI download bar** (PR #128): fixed-position 3 px accent bar at
+  top of `passport-photo.html` during model download. Hooks into
+  existing `onProgress`, auto-hides at 97%.
 
 ## Open backlog — pick one per session
 
 All 5 polish roadmap items (P12/P30/P24/P16/P26) are now shipped.
 F6 audience grid sparse also shipped (PR #127).
 
-Passport-photo nits: `F11` 1440 empty space, `P20` AI-model progress
-bar, `P21` inline error banner, `R4` frame-corners 375 px.
+Passport-photo nits: `F11` 1440 empty space, ~~`P20` AI-model progress
+bar~~ — **shipped PR #128**, `P21` inline error banner, `R4` frame-corners 375 px.
 
 Functional nits: `F11` 1440 empty space.
 
