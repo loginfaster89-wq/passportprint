@@ -626,81 +626,95 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
   font-family:'DM Mono',monospace;letter-spacing:0.02em;
 }
 
-/* ── COMPARISON TABLE (P12) ── */
-.compare-wrap{
-  margin-top:32px;overflow-x:auto;-webkit-overflow-scrolling:touch;
-  border:1px solid var(--border);border-radius:16px;
-  background:var(--surface);
-  box-shadow:0 0 40px rgba(240,165,0,0.04),0 2px 12px rgba(0,0,0,0.25);
+/* ── PLAN CARDS (redesigned P12) ── */
+.plan-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:22px;
+  margin-top:40px;align-items:start;
 }
-.compare-table{
-  width:100%;border-collapse:collapse;
-  font-family:'DM Mono',monospace;font-size:15px;color:var(--muted);
+.plan-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:18px;
+  padding:40px 30px 36px;position:relative;
+  transition:transform .25s,box-shadow .25s;
 }
-.compare-table th,.compare-table td{
-  padding:18px 24px;text-align:center;
-  border-bottom:1px solid var(--border);
+.plan-card:hover{
+  transform:translateY(-5px);
+  box-shadow:0 8px 32px rgba(0,0,0,0.3);
 }
-/* Monthly column accent tint */
-.compare-table th:last-child,
-.compare-table td:last-child{
-  background:rgba(240,165,0,0.03);
+.plan-featured{
+  border-color:var(--accent);
+  box-shadow:0 0 40px rgba(240,165,0,0.08),0 4px 20px rgba(0,0,0,0.2);
 }
-.compare-table thead th{
-  font-family:'Syne',sans-serif;font-weight:700;font-size:16px;
-  color:var(--text);letter-spacing:-0.2px;
-  background:var(--surface2);
+.plan-featured:hover{
+  box-shadow:0 0 50px rgba(240,165,0,0.14),0 10px 40px rgba(0,0,0,0.3);
 }
-.compare-table thead th:last-child{
-  background:rgba(240,165,0,0.07);
+.plan-badge{
+  position:absolute;top:-14px;left:50%;transform:translateX(-50%);
+  background:var(--accent);color:#0d0d0d;
+  font-family:'DM Mono',monospace;font-size:12px;font-weight:700;
+  padding:5px 18px;border-radius:20px;letter-spacing:0.06em;
+  white-space:nowrap;
 }
-.compare-table thead th:first-child{border-radius:15px 0 0 0;}
-.compare-table thead th:last-child{border-radius:0 15px 0 0;}
-.compare-table .compare-feature{text-align:left;color:var(--muted2);font-size:12px;letter-spacing:0.12em;text-transform:uppercase;}
-.compare-table td:first-child{text-align:left;color:var(--text);font-size:14.5px;}
-.compare-table .compare-hl{color:var(--accent);}
-.compare-table tbody tr:not(.compare-price-row):not(.compare-cta-row){transition:background .2s;}
-.compare-table tbody tr:not(.compare-price-row):not(.compare-cta-row):hover{background:var(--surface2);}
-.compare-table tbody tr:not(.compare-price-row):not(.compare-cta-row):hover td:last-child{background:rgba(240,165,0,0.06);}
-.compare-table .compare-yes{color:var(--accent);font-weight:700;font-size:20px;}
-.compare-table .compare-no{color:var(--muted2);font-size:17px;}
-.compare-table .compare-note{color:var(--muted);font-size:14px;font-style:italic;}
-.compare-table .compare-per{font-size:12px;color:var(--muted2);margin-left:2px;}
-.compare-price-row td{
-  border-bottom:none;padding-top:22px;padding-bottom:8px;
+.plan-name{
+  font-family:'Syne',sans-serif;font-size:24px;font-weight:700;
+  color:var(--text);margin:0 0 18px;text-align:center;
 }
-.compare-price-row strong{color:#fff;font-size:26px;font-family:'Syne',sans-serif;letter-spacing:-0.5px;}
-.compare-price-row td:nth-child(3) strong,
-.compare-price-row td:last-child strong{color:var(--accent);}
-.compare-cta-row td{border-bottom:none;padding-top:8px;padding-bottom:22px;}
-.compare-buy{
-  display:inline-block;padding:12px 28px;border-radius:9px;
-  font-family:'DM Mono',monospace;font-size:14px;font-weight:600;
+.plan-price-wrap{text-align:center;margin-bottom:6px;}
+.plan-amount{
+  font-family:'Syne',sans-serif;font-size:46px;font-weight:800;
+  color:var(--text);letter-spacing:-1.5px;
+}
+.plan-featured .plan-amount{color:var(--accent);}
+.plan-period{
+  font-family:'DM Mono',monospace;font-size:16px;color:var(--muted2);
+  margin-left:4px;
+}
+.plan-tagline{
+  text-align:center;font-family:'DM Mono',monospace;font-size:15px;
+  color:var(--muted);margin:0 0 28px;
+}
+.plan-features{list-style:none;padding:0;margin:0 0 32px;}
+.plan-features li{
+  font-family:'DM Mono',monospace;font-size:16px;color:var(--muted);
+  padding:11px 0;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:14px;
+}
+.plan-features li:last-child{border-bottom:none;}
+.plan-features li::before{
+  content:'✓';color:var(--accent);font-weight:700;font-size:18px;
+  flex-shrink:0;width:22px;text-align:center;
+}
+.plan-features li.feat-no{color:var(--muted2);}
+.plan-features li.feat-no::before{content:'—';color:var(--muted2);font-weight:400;}
+.plan-cta{
+  display:block;text-align:center;padding:16px 24px;border-radius:10px;
+  font-family:'DM Mono',monospace;font-size:17px;font-weight:600;
   color:var(--text);border:1px solid var(--border);
-  text-decoration:none;transition:border-color .2s,color .2s,background .2s,transform .15s,box-shadow .2s;
+  text-decoration:none;transition:all .2s;
 }
-.compare-buy:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px);box-shadow:0 4px 12px rgba(240,165,0,0.08);}
-.compare-buy:active{transform:scale(.97);}
-.compare-buy-accent{background:var(--accent);color:#0d0d0d;border-color:var(--accent);box-shadow:0 2px 10px rgba(240,165,0,0.18);}
-.compare-buy-accent:hover{background:#ffb627;color:#0d0d0d;transform:translateY(-2px);box-shadow:0 6px 20px rgba(240,165,0,0.25);}
-.compare-badge{
-  display:inline-block;font-size:10.5px;font-family:'DM Mono',monospace;
-  color:#0d0d0d;background:var(--accent);
-  padding:3px 9px;border-radius:4px;letter-spacing:0.06em;margin-top:4px;
-  font-weight:600;
+.plan-cta:hover{
+  border-color:var(--accent);color:var(--accent);
+  transform:translateY(-2px);box-shadow:0 4px 16px rgba(240,165,0,0.1);
 }
-@media(max-width:480px){
-  .compare-table{font-size:13.5px;}
-  .compare-table th,.compare-table td{padding:14px 12px;font-size:13.5px;}
-  .compare-table thead th{font-size:14px;}
-  .compare-table .compare-feature{font-size:10.5px;}
-  .compare-table td:first-child{font-size:13px;}
-  .compare-price-row strong{font-size:20px;}
-  .compare-buy{padding:10px 18px;font-size:12.5px;}
-  .compare-badge{font-size:9.5px;padding:2px 7px;}
-  .compare-table .compare-per{font-size:11px;}
-  .compare-table .compare-yes{font-size:18px;}
-  .compare-table .compare-no{font-size:15px;}
+.plan-cta:active{transform:scale(.97);}
+.plan-cta-accent{
+  background:var(--accent);color:#0d0d0d;border-color:var(--accent);
+  box-shadow:0 2px 12px rgba(240,165,0,0.2);
+}
+.plan-cta-accent:hover{
+  background:#ffb627;color:#0d0d0d;
+  transform:translateY(-2px);box-shadow:0 6px 24px rgba(240,165,0,0.3);
+}
+.plan-no-renewal{
+  text-align:center;margin-top:24px;font-family:'DM Mono',monospace;
+  font-size:15px;color:var(--muted);font-style:italic;
+}
+@media(max-width:900px){
+  .plan-grid{grid-template-columns:1fr;max-width:440px;margin-left:auto;margin-right:auto;gap:28px;}
+  .plan-card{padding:36px 28px 32px;}
+  .plan-name{font-size:22px;}
+  .plan-amount{font-size:42px;}
+  .plan-features li{font-size:15px;}
+  .plan-cta{font-size:16px;}
 }
 
 /* ── FAQ ── */
@@ -1343,74 +1357,67 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
         <p>Start for free with no signup wall. Upgrade only when you're running a counter or printing dozens of sheets a week. One-time purchase — no auto-renewal.</p>
       </div>
 
-      <!-- P12 — Pricing comparison matrix -->
-      <div class="compare-wrap">
-        <table class="compare-table">
-          <thead>
-            <tr>
-              <th class="compare-feature">Feature</th>
-              <th>Free</th>
-              <th class="compare-hl">Weekly</th>
-              <th class="compare-hl">Monthly<span class="compare-badge">Best value</span></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>A4 sheets / day</td>
-              <td>2</td>
-              <td>Unlimited</td>
-              <td>Unlimited</td>
-            </tr>
-            <tr>
-              <td>Photos per sheet</td>
-              <td>Standard</td>
-              <td>Unlimited</td>
-              <td>Unlimited</td>
-            </tr>
-            <tr>
-              <td>Print resolution</td>
-              <td>300 DPI</td>
-              <td>600 DPI</td>
-              <td>600 DPI</td>
-            </tr>
-            <tr>
-              <td>Country presets</td>
-              <td>India only</td>
-              <td>All countries</td>
-              <td>All countries</td>
-            </tr>
-            <tr>
-              <td>Batch processing</td>
-              <td class="compare-no">—</td>
-              <td class="compare-no">—</td>
-              <td class="compare-yes">✓</td>
-            </tr>
-            <tr>
-              <td>Priority support</td>
-              <td class="compare-no">—</td>
-              <td class="compare-no">—</td>
-              <td class="compare-yes">✓</td>
-            </tr>
-            <tr>
-              <td>Auto-renewal</td>
-              <td colspan="3" class="compare-note">No auto-renewal on any plan</td>
-            </tr>
-            <tr class="compare-price-row">
-              <td>Price</td>
-              <td><strong>₹0</strong></td>
-              <td><strong>₹59</strong><span class="compare-per">/7 days</span></td>
-              <td><strong>₹149</strong><span class="compare-per">/30 days</span></td>
-            </tr>
-            <tr class="compare-cta-row">
-              <td></td>
-              <td><a class="compare-buy" href="passport-photo.html">Start free</a></td>
-              <td><a class="compare-buy" href="#pricing" data-plan="weekly">Buy Weekly</a></td>
-              <td><a class="compare-buy compare-buy-accent" href="#pricing" data-plan="monthly">Buy Monthly</a></td>
-            </tr>
-          </tbody>
-        </table>
+      <!-- P12 — Plan cards (redesigned) -->
+      <div class="plan-grid">
+        <!-- Free -->
+        <div class="plan-card">
+          <h3 class="plan-name">Free</h3>
+          <div class="plan-price-wrap">
+            <span class="plan-amount">₹0</span>
+          </div>
+          <p class="plan-tagline">No signup required</p>
+          <ul class="plan-features">
+            <li>2 A4 sheets per day</li>
+            <li>Standard photo layout</li>
+            <li>300 DPI print quality</li>
+            <li>India size presets</li>
+            <li class="feat-no">Batch processing</li>
+            <li class="feat-no">Priority support</li>
+          </ul>
+          <a class="plan-cta" href="passport-photo.html">Start free</a>
+        </div>
+
+        <!-- Weekly -->
+        <div class="plan-card">
+          <h3 class="plan-name">Weekly</h3>
+          <div class="plan-price-wrap">
+            <span class="plan-amount">₹59</span>
+            <span class="plan-period">/7 days</span>
+          </div>
+          <p class="plan-tagline">For regular print jobs</p>
+          <ul class="plan-features">
+            <li>Unlimited A4 sheets</li>
+            <li>Unlimited photos per sheet</li>
+            <li>600 DPI print quality</li>
+            <li>All country presets</li>
+            <li class="feat-no">Batch processing</li>
+            <li class="feat-no">Priority support</li>
+          </ul>
+          <a class="plan-cta" href="#pricing" data-plan="weekly">Buy Weekly</a>
+        </div>
+
+        <!-- Monthly — Best value -->
+        <div class="plan-card plan-featured">
+          <span class="plan-badge">Best value</span>
+          <h3 class="plan-name">Monthly</h3>
+          <div class="plan-price-wrap">
+            <span class="plan-amount">₹149</span>
+            <span class="plan-period">/30 days</span>
+          </div>
+          <p class="plan-tagline">Everything, unlimited</p>
+          <ul class="plan-features">
+            <li>Unlimited A4 sheets</li>
+            <li>Unlimited photos per sheet</li>
+            <li>600 DPI print quality</li>
+            <li>All country presets</li>
+            <li>Batch processing</li>
+            <li>Priority support</li>
+          </ul>
+          <a class="plan-cta plan-cta-accent" href="#pricing" data-plan="monthly">Buy Monthly</a>
+        </div>
       </div>
 
+      <p class="plan-no-renewal">No auto-renewal on any plan</p>
       <p class="pricing-note">Payments securely processed via Razorpay · UPI, cards, net-banking · <a href="refund.html" style="color:var(--accent);">Refund policy</a></p>
     </div>
   </section>
