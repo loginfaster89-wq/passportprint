@@ -89,6 +89,10 @@ No dev server — edit source, `npm run build`, preview from `dist/`.
 11. **Devin's credit is on the line.** The footer says "Built with
     Devin AI". Every messy footer, broken toggle, or wasted space
     reflects directly on Devin's quality. Test every viewport.
+12. **One problem at a time.** When fixing issues from `issues.md` or
+    any backlog, solve them **one by one** — one issue per PR, one PR
+    per commit cycle. Do not batch multiple unrelated fixes into a
+    single PR. Keeps diffs small, reviews fast, rollbacks safe.
 
 ## 3. Create a PR (fine-grained PAT flow)
 
@@ -130,7 +134,7 @@ Branch convention: `devin/<unix-timestamp>-<short-slug>`.
 ## 5. 2026 copy tone (post PR #61)
 
 - Hero: **"Every print job. One browser tab."** (accent on second line)
-- Eyebrow: `ON-DEVICE AI · BUILT IN INDIA · NEW IN 2026`
+- Eyebrow: `NO UPLOADS · PRINT-READY`
 - CTA heading: "Your next print job — right in this tab."
 - Passport-photo page title + plan tags refreshed to match.
 - English only — Hindi copy was removed site-wide in PR #60.

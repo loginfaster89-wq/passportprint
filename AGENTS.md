@@ -148,6 +148,10 @@ iPad portrait / narrow tablets.
    PR is opened**. Do not ship design-level changes speculatively. Minor
    CSS fixes (spacing tweaks, responsive nits listed in `issues.md`) do
    not need per-change approval. When in doubt, ask first.
+8. **One problem at a time.** When fixing issues from `issues.md` or any
+   backlog, solve them **one by one** — one issue per PR, one PR per
+   commit cycle. Do not batch multiple unrelated fixes into a single PR.
+   This keeps diffs small, reviews fast, and rollbacks safe.
 
 ## Homepage grids → slider activation (post PR #64 / #65)
 
