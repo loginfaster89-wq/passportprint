@@ -224,21 +224,19 @@ P19 inline tools-preview demo strip (PR #99), P2 hero A4-sheet mockup
 (PR #110), homepage inline checkout (PR #112), shared pricing modal
 (PR #114).
 
-**Open backlog priority order for the next session:**
-1. P12 Pricing comparison matrix.
-2. P30 Homepage density break — live-demo section.
-3. P24 Self-host Syne + DM Mono (woff2).
-4. P16 Language switcher UI.
-5. P26 Cookie banner.
+**Also shipped (PRs #118–#153):** stats-grid slider, self-host fonts,
+lang switcher, step-bar progress, audience grid, AI download bar,
+F11 empty space, error banner, frame-corners, 768px breakpoint, font
+preload, FAQPage + WebApplication JSON-LD, footer/UX cleanup,
+single-feature glorification cleanup, BreadcrumbList + Organization
+JSON-LD, max-image-preview, pricing cards → plan cards redesign,
+hero eyebrow pill, terse-mode prompt, pricing table text size,
+hero-preview hidden on phones, trust-pill spacing. **PR #153:**
+removed all "Soon" features from nav dropdown (all 9 pages) and
+homepage features grid — only live Passport Photo remains.
 
-**Lower-priority functional nits:** F6 audience grid sparse, F7 GSI
-iframe warnings (harmless, not our code), R4 frame-corners at iPhone SE,
-R7 optional 768 px hero breakpoint.
-
-**Passport-photo-specific backlog** (this file is no longer locked — see
-Hard rule #1 — but still needs minimum-diff care): F11 1440 empty space,
-P20 AI-model download progress bar, P21 inline error banner, P29 step-bar
-progress fill, R4 upload-card frame-corners clipping at iPhone SE.
+**Open:** only `F7` GSI iframe warnings (not our code, harmless).
+Backlog is empty — next session can propose new features or fresh audit.
 
 ## Working style for human collaborators
 

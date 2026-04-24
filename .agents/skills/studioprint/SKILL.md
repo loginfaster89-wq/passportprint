@@ -78,11 +78,13 @@ No dev server — edit source, `npm run build`, preview from `dist/`.
    approval.
 9. **No single-feature glorification (2026-04-24).** Never create
    dedicated hero CTAs, floating buttons, or workflow sections that
-   promote only one tool. Studio Print has multiple planned tools
-   (Passport Photo, Document Sheet, Certificate Editor, Background
-   Studio). Keep CTAs generic ("See all tools", "Explore the tools")
+   promote only one tool. When new tools launch, keep CTAs generic
    and let the features-grid cards serve as entry points per tool.
    This avoids costly rework when the next feature launches.
+   **Post PR #153:** All "Soon" feature cards and dropdown items
+   removed site-wide — only live Passport Photo remains. When a new
+   tool goes live, add it back to the features grid + nav dropdown
+   on all pages.
 10. **Delete dead code in the same PR.** When a feature is removed,
     delete ALL related files, CSS rules, and JS in the same PR. Don't
     leave orphaned files — they confuse future sessions.
@@ -220,7 +222,7 @@ Include order on each page:
 
 ## 9. Shipped work & open backlog
 
-Everything from PRs #70–#150 is shipped. See `issues.md` for the full
+Everything from PRs #70–#153 is shipped. See `issues.md` for the full
 audit trail. Do NOT re-fix any of the following — they are all merged:
 
 - PRs #70–#114: original audit quick-wins + responsive + flow fixes.
@@ -242,6 +244,12 @@ audit trail. Do NOT re-fix any of the following — they are all merged:
   border + glow on featured card. Mobile (≤900px) stacks cards
   vertically in single column, max-width 440px. Each card lists all
   6 features with ✓/— markers, tagline, and CTA button.
+- PR #152: hero-preview hidden on phones (≤640px), trust-pill row
+  gap fix on mobile.
+- PR #153: removed all "Soon" features from nav dropdown (all 9 pages)
+  and homepage features grid. Only live Passport Photo remains.
+  Dead `.soon` CSS deleted from index.html, legal.css,
+  passport-photo.html.
 
 **Pricing section design rule (post PR #150):** The pricing section uses
 card-based layout (`.plan-grid` with `.plan-card` divs), NOT a `<table>`.
@@ -285,7 +293,7 @@ AGENTS.md — full source of truth.
 issues.md — 2026-04-23 site audit + 2026-04-24 §D responsive / flow
 follow-up + §E full re-audit + §F footer cleanup + §G single-feature
 glorification cleanup.
-last pr - PR #150 (pricing section full redesign — plan cards)
+last pr - PR #153 (removed all 'Soon' features from nav & features grid)
 
 Shipped summary (don't redo):
 
@@ -305,6 +313,9 @@ PR #147: terse-mode prompt + pricing table polish.
 PRs #148+#149: pricing table text size increase.
 PR #150: pricing section full redesign — comparison table replaced
 with plan cards, bigger text, mobile-friendly stacked layout.
+PR #152: hero-preview hidden on phones, trust-pill spacing fix.
+PR #153: removed all 'Soon' features from nav dropdown + features
+grid. Only live Passport Photo remains. Dead .soon CSS cleaned.
 
 <yahan apna task likho>
 ```

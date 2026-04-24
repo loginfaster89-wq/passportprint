@@ -270,8 +270,23 @@ grid serve as the entry point for each tool.
 | G4 | `assets/lang.js` | Dead file — lang switcher was removed from shared pages in PR #139 but file was never deleted. Removed. | **fixed this PR** |
 | G5 | `passport-photo.html` | Dead `.lang-toggle` / `.lang-btn` CSS rules removed (no HTML element uses them). | **fixed this PR** |
 
+---
+
+## H. Remove non-live ("Soon") features — PR #153 (2026-04-24)
+
+Owner requested removal of all fake/upcoming features from the nav dropdown
+and homepage features section. Only live features should be visible.
+
+| # | Area | Finding | Status |
+|---|------|---------|--------|
+| H1 | Nav dropdown (all 9 pages) | Removed 4 "Soon" items (Document Sheet, Certificate Editor, ID & Visa Sheets, Background Studio) — only live Passport Photo remains. | **fixed PR #153** |
+| H2 | Homepage features grid (`index.html`) | Removed 4 "Soon" feature cards — only live Passport Photo card remains. | **fixed PR #153** |
+| H3 | Features section copy (`index.html`) | Updated description — removed roadmap/multi-tool reference. | **fixed PR #153** |
+| H4 | Dead CSS cleanup | Deleted `.feature-card.soon`, `.feature-card .tag.soon`, `.dropdown-panel .dd-item.soon`, `.dropdown-panel .dd-tag.soon` from `index.html`, `assets/legal.css`, `passport-photo.html`. | **fixed PR #153** |
+
 ### Learnings for future sessions
 
 6. **No single-feature glorification.** When a website has multiple planned tools, hero CTAs, floating buttons, and workflow demos must be generic. Each tool gets promoted through its own card in the features grid — not through dedicated hero buttons or floating CTAs. This avoids costly rework when the next tool launches.
 7. **Delete dead code immediately.** When a feature is removed (e.g. lang switcher), delete ALL related files and CSS in the same PR. Don't leave orphaned files or dead CSS rules — they confuse future sessions and bloat the codebase.
 8. **Devin's credit is on the line.** The footer says "Built with Devin AI". Every messy footer, broken toggle, or wasted space reflects directly on Devin's quality. Test every viewport before shipping.
+9. **Only show live features.** Don't show "Coming soon" placeholder features in the nav or feature grid — they mislead users and clutter the UI. When a new tool goes live, add it to the features grid + nav dropdown on all pages in the same PR.
