@@ -257,10 +257,12 @@ without re-auditing.
 [TERSE MODE = ON] Minimum messages, zero re-explanation, sirf critical
 updates aur decisions. Ye default hai — har session mein auto-on.
 
+Sabse pehle PAT le lo mere se — GITHUB_PAT_PASSPORTPRINT (fine-grained,
+repo-scoped — Contents + Pull requests: Read and write). Session-only
+secret hoga. Bina PAT ke aage mat badho.
+
 Studio Print frontend par kaam karo. Repo: loginfaster89-wq/passportprint
-(private) PAT: GITHUB_PAT_PASSPORTPRINT (fine-grained, repo-scoped —
-Contents + Pull requests: Read and write on this repo). Agar saved
-secret na mile to session-only provide karunga.
+(private).
 
 Clone ke baad pehle ye teen files padho:
 
@@ -270,7 +272,7 @@ AGENTS.md — full source of truth.
 issues.md — 2026-04-23 site audit + 2026-04-24 §D responsive / flow
 follow-up + §E full re-audit + §F footer cleanup + §G single-feature
 glorification cleanup.
-last pr - PR #145 (eyebrow shrink + one-at-a-time rule)
+last pr - PR #147 (terse-mode prompt + pricing table polish)
 
 Shipped summary (don't redo):
 
@@ -286,6 +288,7 @@ PR #143: pricing cards removed, buy buttons in comparison table,
 trust pills 2-row, footer email icon removed.
 PR #145: hero eyebrow pill shrunk + text changed to
 "No uploads · Print-ready", one-at-a-time rule added.
+PR #147: terse-mode prompt + pricing table polish.
 
 <yahan apna task likho>
 ```
