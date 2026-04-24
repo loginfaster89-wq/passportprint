@@ -175,6 +175,9 @@ doesn't re-fix already-merged work.
 - `P2` hero A4-sheet mockups (two floating CSS sheets, pure CSS no raster) → PR #100.
 - `P1` hero animated accent-glow pulse (7 s CSS-only loop, reduced-motion safe) → PR #102.
 - `P8` `By the numbers` honest facts strip (4 stat cards, no testimonials) → PR #103.
+- `R1` hero H1 clamp floor + `R2` `.hero-sheet.right` clamp + `R3` 820 px hide breakpoint + `R5` 24 px slider-dot tap area + `R6` footer link `padding-block` → PR #108.
+- `U1` pricing buy-flow: homepage CTAs → `passport-photo.html#buy-<planId>` → `startCheckout(planId)` direct. Plan-picker middle step skipped. → PR #109.
+- Policy unlock of `passport-photo.html` (locked-file rule lifted → minimum-diff rule in Hard rule #1) → PR #110.
 
 **Open backlog (default priority order for next session):**
 
@@ -191,26 +194,11 @@ doesn't re-fix already-merged work.
 6. `P26` Cookie banner (self-hosted, essentials-only).
 
 *Responsive + flow audit 2026-04-24 (details in `issues.md` §D):*
-- `R1` Hero H1 wraps awkwardly on phones (375/390 px) — tighten the
-  `.hero h1` clamp floor or drop `max-width:18ch` at ≤ 420 px.
-- `R2` `.hero-sheet.right` overflows the viewport right edge on
-  iPad-portrait + all desktop sizes; clip the `right` offset or add
-  `overflow:hidden` to `.hero`.
-- `R3` Same sheet still visible at iPad-portrait 768 — raise the
-  `.hero-sheets{display:none}` breakpoint from 760 to 820, or shrink
-  and inset the sheet further.
-- `R5` Slider pagination dots are 7×7 px — expand tap area to ~24 px
-  without changing the visual dot size.
-- `R6` Footer column links have ~17 px tap rows on phones — add
-  `padding-block:6px` on `.footer-col a` in `assets/legal.css`.
+R1/R2/R3/R5/R6 shipped in PR #108 and U1 in PR #109 — see 'merged'
+list above. Still open:
 - `R4` passport-photo upload-card frame-corners clip at iPhone SE
-  (low priority).
+  (low priority, `passport-photo.html` edit — minimum-diff).
 - `R7` No dedicated 768 px hero breakpoint (optional polish).
-- `U1` Home paid-plan CTA → login → lands on `passport-photo.html#plans`
-  and forces the user to re-pick the plan to reach Razorpay. Shipped
-  via PR #109: `#buy-<planId>` hash handler added to `passport-photo.html`
-  (calls `window.startCheckout(planId)` directly) + `index.html` CTA
-  hrefs + post-login redirect target now carry the plan id.
 
 *Passport-photo-specific backlog* (file is no longer locked, but still
 requires minimum-diff care — see Hard rule #1): `F11` 1440 empty space,
@@ -243,72 +231,61 @@ has full console + network.
 
 ## 11. Ready-to-paste prompt for a new Devin chat
 
-Copy the block below into a fresh Devin session when you want to hand
-off the responsive + pricing-flow follow-up work. It self-contains
-repo / PAT / rules / concrete scope and references `issues.md` §D for
-details, so a new session can start working without re-auditing.
+Copy the block below into a fresh Devin session. It self-contains
+repo / PAT / rules and points the session at the current top-priority
+backlog item. Swap in a different backlog item (from §9) if you want
+to work on something else that session.
 
 ```
 Studio Print frontend par kaam karo.
 Repo: loginfaster89-wq/passportprint (private)
-PAT: GITHUB_PAT_PASSPORTPRINT (repo-scoped fine-grained secret —
-Contents + Pull requests: Read and write on this repo).
+PAT: GITHUB_PAT_PASSPORTPRINT (fine-grained, repo-scoped —
+Contents + Pull requests: Read and write on this repo). Agar saved
+secret na mile to session-only provide karunga.
 
 Clone ke baad pehle ye teen files padho:
-1. .agents/skills/studioprint/SKILL.md — Devin-specific recipe
-   (build/preview, hard rules, PAT curl snippet, Hinglish style,
-   §9 closed/open backlog including R1-R7 + U1).
+1. .agents/skills/studioprint/SKILL.md — Devin recipe (build/preview,
+   hard rules, PAT curl snippet, Hinglish style, §9 merged/open backlog).
 2. AGENTS.md — full source of truth.
-3. issues.md — 2026-04-23 full-site audit + 2026-04-24 §D responsive
-   follow-up with R1–R7 (responsive gaps) and U1 (pricing buy-flow).
+3. issues.md — 2026-04-23 site audit + 2026-04-24 §D responsive / flow
+   follow-up (R1–R7, U1). R1/R2/R3/R5/R6 shipped PR #108; U1 shipped
+   PR #109; `passport-photo.html` unlocked in PR #110.
 
-## Aaj ka kaam — 2 independent PRs
+## Aaj ka kaam — P11 Pricing monthly/yearly toggle (phase 1, copy-only)
 
-### PR 1 — Responsive polish (no locked-file edits, ship first)
-- Fix R1: `.hero h1` ko phones par clean wrap karo. Clamp floor
-  tight karo (e.g. `clamp(28px, 8.6vw, 64px)` at `≤ 420px`) ya
-  `max-width:18ch` drop karo phones par, taaki `Every print job.`
-  ek line me fit ho.
-- Fix R2: `.hero-sheet.right` viewport ke right edge se bahar ja
-  raha hai. Ya to `right` offset clamp karo (e.g. `right:max(-3%,
-  -24px)`) ya `.hero { overflow:hidden }` lagao. Gray stripe gone.
-- Fix R3: `.hero-sheets { display:none }` breakpoint 760 se 820 px
-  tak uthao — iPad-portrait (768) par sheet nahi dikhni chahiye.
-- Fix R5: slider pagination dots (`.slider-dots button`) ka
-  clickable area ~24px karo (visual dot 7 px rehne do — padding
-  + `::before` / transparent hit pad).
-- Fix R6: `.footer-col a` me `padding-block:6px` add karo
-  (`assets/legal.css`) — footer links phones par easy tap.
-- Files: sirf `index.html` + `assets/legal.css`. No JS. No
-  `passport-photo.html`. No `.github/workflows/*.yml`. Tokens /
-  fonts / palette unchanged.
-- `npm run build` run karke verify karo, screenshots 375 / 768 /
-  820 / 1440 attach karo PR description me.
+Homepage pricing section (`#pricing` in `index.html`) ke upar ek small
+`.pricing-toggle` component add karo jo "Monthly" / "Yearly" ke beech
+switch kare. Phase 1 sirf copy-level hai — yearly plan abhi exist nahi
+karta, toh:
 
-### PR 2 — Pricing buy-flow (U1) — shipped in PR #109
+- Toggle UI: 2 pill-style buttons ya single-switch, existing `--surface`
+  / `--accent` vars use karke. Koi naya token/color/font nahi.
+- Default state: Monthly active.
+- Yearly selected hone par weekly/monthly cards me ek subtle badge /
+  footnote dikhe "Coming soon — save 2 months" type — prices ko
+  dummy ya placeholder me convert mat karo. Exact copy PR me decide
+  karenge; approve karwa ke hi commit karo.
+- Pure HTML/CSS preferred; agar JS lagta hai to inline IIFE rakho
+  (like `assets/sliders.js` pattern), no new dependencies.
+- Files: sirf `index.html` + `assets/legal.css` (ya naya inline
+  `<style>` block `index.html` me if cleaner).
+- `npm run build` green hona chahiye. Screenshots 375 / 820 / 1440
+  attach karo PR description me.
 
-For reference (this work is done):
-
-- `index.html` pricing CTAs (`a.pcta[data-plan-cta]`) ab directly
-  `passport-photo.html#buy-weekly` / `#buy-monthly` par point karte hain,
-  aur signup-modal post-login redirect target bhi `data-plan-cta` se
-  build hota hai.
-- `passport-photo.html` ke `maybeOpen()` hash handler me
-  `#buy-<planId>` branch hai jo `window.startCheckout(planId)` call karke
-  seedha Razorpay kholta hai, aur `history.replaceState` se hash clear
-  kar deta hai (reload par dobara checkout trigger nahi hota).
-- Actual function ka naam `startCheckout` hai (`passport-photo.html:5062`,
-  exposed on `window` at 5132) — `purchasePlan` nahi, agar kahin
-  purana reference dikhe to ignore karo.
+Agar P11 chhota lage to P12 (pricing comparison matrix) bhi same PR
+me add karne ka plan mujhe pehle bhej do; alag-alag PR bhi chalega.
 
 ## Default rules (same every session)
 - `passport-photo.html` editable hai (2026-04-24 unlock), but minimum
   diff only — 5000+ line file with inline nav/auth copies and a
   `#plans` / `#buy-<planId>` hash-open script. Shared-module churn
   elsewhere must stay compatible.
-- `.github/workflows/*.yml` mat chhedo.
+- `.github/workflows/*.yml` mat chhedo (fine-grained PAT has no
+  `Actions: write` scope).
 - Fonts / palette / CSS tokens unchanged.
 - One PR per logical task, minimum diff.
 - `npm run build` run karke verify karo.
+- PR creation: `git_pr` 404s on this repo — curl + PAT fallback use
+  karo (SKILL §3).
 - Hinglish updates, quota-conscious, zero jargon.
 ```

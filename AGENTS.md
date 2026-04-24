@@ -192,7 +192,7 @@ on this repo. Add `Actions: Read and write` only if editing workflow files.
 items from the original audit are now merged. Summary headlines for the
 next session:
 
-**Resolved (PRs #70-#103):** F1 Razorpay script, F2 One-Tap, F3 features
+**Resolved (PRs #70-#110):** F1 Razorpay script, F2 One-Tap, F3 features
 grid 820, F4 hero wrap, F5 pricing 820, F8 email obfuscation, F9 ribbon
 centering, F10 preview chrome, F12/P4 SVG icons, P3+P7+P17 card/button/
 focus polish, P5 scroll-reveal, P6 FAQ smooth open, P13 ribbon pulse,
@@ -202,7 +202,10 @@ P28 PWA manifest + offline SW (PRs #93/#94), P15 multi-column footer
 (PR #95), P9 About page rework (PR #96), P10 contact form (PR #98),
 P19 inline tools-preview demo strip (PR #99), P2 hero A4-sheet mockup
 (PR #100), P1 hero animated accent-glow pulse (PR #102), P8 honest
-`By the numbers` strip (PR #103).
+`By the numbers` strip (PR #103), R1 hero H1 clamp + R2 hero-sheet clamp
++ R3 820 breakpoint + R5 24 px slider-dot tap + R6 footer link padding
+(PR #108), U1 pricing buy-flow `#buy-<planId>` hash handler (PR #109),
+docs unlock of `passport-photo.html` (PR #110).
 
 **Open backlog priority order for the next session:**
 1. P11 Pricing monthly/yearly toggle (copy-only phase 1).
@@ -213,7 +216,8 @@ P19 inline tools-preview demo strip (PR #99), P2 hero A4-sheet mockup
 6. P26 Cookie banner.
 
 **Lower-priority functional nits:** F6 audience grid sparse, F7 GSI
-iframe warnings (harmless, not our code).
+iframe warnings (harmless, not our code), R7 optional 768 px hero
+breakpoint polish.
 
 **Passport-photo-specific backlog** (this file is no longer locked — see
 Hard rule #1 — but still needs minimum-diff care): F11 1440 empty space,
