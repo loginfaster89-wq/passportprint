@@ -447,8 +447,13 @@
       a.__spPricingWired = true;
       a.addEventListener('click', function (e) {
         e.preventDefault();
-        history.replaceState(null, '', '#pricing');
-        openPlans();
+        var planId = a.getAttribute('data-plan');
+        if (planId && PLANS[planId]) {
+          startCheckout(planId);
+        } else {
+          history.replaceState(null, '', '#pricing');
+          openPlans();
+        }
       });
     });
   }
@@ -465,9 +470,27 @@
     }
   }
 
+  function wireStartFree() {
+    document.querySelectorAll('[data-action="start-free"]').forEach(function (a) {
+      if (a.__spStartFreeWired) return;
+      a.__spStartFreeWired = true;
+      a.addEventListener('click', function (e) {
+        e.preventDefault();
+        var user = currentUser();
+        if (user) {
+          var el = document.getElementById('features');
+          if (el) el.scrollIntoView({ behavior: 'smooth' });
+        } else if (typeof window.openAuth === 'function') {
+          window.openAuth();
+        }
+      });
+    });
+  }
+
   function init() {
     ensureModals();
     wirePricingLinks();
+    wireStartFree();
     handleHash();
   }
 
