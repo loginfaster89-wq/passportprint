@@ -251,29 +251,95 @@ Clone ke baad pehle ye teen files padho:
    follow-up (R1–R7, U1). R1/R2/R3/R5/R6 shipped PR #108; U1 shipped
    PR #109; `passport-photo.html` unlocked in PR #110.
 
-## Aaj ka kaam — P11 Pricing monthly/yearly toggle (phase 1, copy-only)
+## Aaj ka kaam — Homepage-direct checkout (shared module refactor)
 
-Homepage pricing section (`#pricing` in `index.html`) ke upar ek small
-`.pricing-toggle` component add karo jo "Monthly" / "Yearly" ke beech
-switch kare. Phase 1 sirf copy-level hai — yearly plan abhi exist nahi
-karta, toh:
+**User-reported (2026-04-24):** Homepage pricing cards se `Get weekly pass`
+/ `Get monthly pass` click karne par user ko pehle `passport-photo.html`
+par redirect hota hai, tab jakar Razorpay / Complete Payment modal khulta
+hai. Expected behaviour — Razorpay modal homepage par hi khule, koi page
+navigation nahi. PR #109 (U1 buy-flow) ne plan-picker middle step hata
+diya tha, par redirect still happens kyunki checkout ka saara code sirf
+`passport-photo.html` me hai.
 
-- Toggle UI: 2 pill-style buttons ya single-switch, existing `--surface`
-  / `--accent` vars use karke. Koi naya token/color/font nahi.
-- Default state: Monthly active.
-- Yearly selected hone par weekly/monthly cards me ek subtle badge /
-  footnote dikhe "Coming soon — save 2 months" type — prices ko
-  dummy ya placeholder me convert mat karo. Exact copy PR me decide
-  karenge; approve karwa ke hi commit karo.
-- Pure HTML/CSS preferred; agar JS lagta hai to inline IIFE rakho
-  (like `assets/sliders.js` pattern), no new dependencies.
-- Files: sirf `index.html` + `assets/legal.css` (ya naya inline
-  `<style>` block `index.html` me if cleaner).
-- `npm run build` green hona chahiye. Screenshots 375 / 820 / 1440
-  attach karo PR description me.
+**Root cause (aaj ka architecture):**
+- `PLANS` constant — `passport-photo.html:4318`
+- `api()` backend helper — `passport-photo.html:4301`
+- `startCheckout(planId)` — `passport-photo.html:5062` (opens `payModal`)
+- `completePayment()` — `passport-photo.html:5081` (loads Razorpay, creates
+  order via `/api/create-order`, verifies via `/api/verify-payment`)
+- `payModal` DOM (Complete Payment card) — `passport-photo.html` only
+- Razorpay Checkout SDK `<script>` — `passport-photo.html` `<head>` only
+- `index.html` me kuch bhi nahi hai checkout ka.
 
-Agar P11 chhota lage to P12 (pricing comparison matrix) bhi same PR
-me add karne ka plan mujhe pehle bhej do; alag-alag PR bhi chalega.
+**Proposed refactor (approval liya ja chuka hai):**
+
+1. Naya **`assets/checkout.js`** shared module banao (pattern: `auth.js`
+   / `sliders.js`). Is me:
+   - `PLANS` object (exact same weekly / monthly shape).
+   - `api()` helper — ya to yahan duplicate karo ya
+     `assets/auth.js` ke `api` ko export karke reuse karo (whichever
+     keeps diff smaller; check auth.js existing shape pehle).
+   - `startCheckout(planId)` aur `completePayment()` — exact same logic
+     jo aaj `passport-photo.html` me hai. `currentUser()` /
+     `showToast()` ko `window` se padh lo (auth.js + inline already
+     expose karta hai).
+   - Pay-modal DOM lazy-inject karo (jaisa `auth.js` apna modal inject
+     karta hai) — ya `index.html` + `passport-photo.html` dono me
+     inline `<template>` rakho. Jo bhi chhota diff de.
+   - `window.startCheckout` / `window.completePayment` expose karo.
+
+2. Naya **`assets/checkout.css`** (optional) — sirf pay-modal styles
+   ke liye, `auth.css` pattern follow karte hue. Existing CSS tokens
+   use karo, koi naya color/font/spacing token nahi.
+
+3. **`index.html`** me changes:
+   - `<head>` me Razorpay SDK declarative include karo (same as
+     passport-photo.html): `<script src="https://checkout.razorpay.com/v1/checkout.js" async>`.
+   - `assets/checkout.js` + `assets/checkout.css` include karo.
+   - Pricing-card CTA click handler (line ~1485–1512 ka `<script>`
+     block) update karo:
+     - Logged-in users ke liye: `e.preventDefault()` + seedha
+       `window.startCheckout(plan)` call — koi navigation nahi.
+     - Logged-out users ke liye: signup modal kholo (current behavior),
+       modal band hone par agar login successful hai to
+       `window.startCheckout(plan)` call karo — `location.href`
+       redirect hata do.
+   - Pricing CTAs ka `href` ab `#buy-<plan>` ya sirf `#` rakh sakte
+     ho — navigation ab JS-level hai, hash fallback optional.
+
+4. **`passport-photo.html`** me changes:
+   - Inline `PLANS` / `api` / `startCheckout` / `completePayment`
+     hata ke shared module use karo (no duplication). `payModal` DOM
+     bhi shared module inject karega.
+   - `maybeOpen()` me `#buy-<planId>` branch preserve karo so passport-photo
+     pe aane wale deep-links (ya cross-page CTAs) still direct checkout
+     trigger karte rahein.
+   - Baaki auth / upload / sheet-building code untouched.
+   - **Locked file rule hat gaya hai (PR #110)** — minimum-diff still
+     enforce karo, mostly code is being extracted not rewritten.
+
+5. Backend untouched. `/api/create-order` aur `/api/verify-payment` same
+   URL / same payload.
+
+**Testing checklist:**
+- Homepage `Get weekly pass` (logged-in): Complete Payment modal
+  homepage par khule, URL change na ho.
+- Homepage `Get weekly pass` (logged-out): signup modal → OTP login →
+  modal close ke baad Complete Payment modal khule, URL change na ho.
+- Google Sign-In bhi same flow par test karo.
+- `passport-photo.html` par existing "Upgrade / Change Plan" button
+  (`openPlans()` wala) — still working, same modal sequence.
+- Razorpay test card: `4111 1111 1111 1111`, any future expiry / CVV.
+  (Owner live Razorpay test khud chalayega; hum sirf build + flow
+  verify karenge.)
+- `npm run build` green; console me koi naya error nahi.
+- Screenshots 375 / 820 / 1440 PR description me attach.
+
+**Size estimate:** medium \u2014 ~200-300 lines shifted across
+`assets/checkout.js` (new), `assets/checkout.css` (new, small),
+`index.html` (+Razorpay include, +checkout include, handler update),
+`passport-photo.html` (remove duplicated checkout code, keep
+`#buy-<planId>` hash handler).
 
 ## Default rules (same every session)
 - `passport-photo.html` editable hai (2026-04-24 unlock), but minimum
