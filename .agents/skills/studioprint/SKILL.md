@@ -250,7 +250,7 @@ remain. See `issues.md` §E for details.
 (passport-photo edit, minimum-diff).
 
 *2026 polish roadmap (by impact):*
-1. `P12` Pricing comparison matrix.
+1. ~~`P12` Pricing comparison matrix~~ — **shipped PR #119.**
 2. `P30` Homepage density break — live-demo section between HERO/FEATURES.
 3. `P24` Self-host Syne + DM Mono (woff2 subset).
 4. `P16` Language switcher UI affordance.
@@ -323,13 +323,31 @@ Clone ke baad pehle ye teen files padho:
   diff. Has `#plans` / `#buy-<planId>` hash-open script and inline
   copies of nav/auth.
 
+## Architecture context (shipped — don't redo)
+
+- **Pricing comparison matrix** (PR #119): 8-row Free vs Weekly vs Monthly
+  feature table below pricing cards on homepage. `.compare-wrap` +
+  `.compare-table` CSS in `index.html` inline `<style>`.
+- **Shared pricing modal** (`assets/pricing.js` + `assets/pricing.css`,
+  PR #114): 2-step Choose Plan → Complete Payment → Razorpay. Included
+  on every page except `passport-photo.html` (which keeps its inline
+  copy). `window.openPlans` / `window.startCheckout` exposed globally.
+- **Auth.js Upgrade button** now calls `window.openPlans()` on the
+  current page instead of redirecting to `passport-photo.html#plans`.
+- **Homepage inline checkout** (PR #112): pricing CTAs open Razorpay
+  directly without page navigation.
+- **`passport-photo.html`** unlocked (PR #110) — editable with minimum
+  diff. Has `#plans` / `#buy-<planId>` hash-open script and inline
+  copies of nav/auth.
+- **Stats-grid slider** (PR #118): `.stats-grid` added to `sliders.js`
+  SELECTORS — 4 stat cards now convert to slider on orphan row / phones.
+
 ## Open backlog — pick one per session
 
-1. `P12` — Pricing comparison matrix (Free vs Weekly vs Monthly table).
-2. `P30` — Homepage density break — live-demo section.
-3. `P24` — Self-host Syne + DM Mono (woff2 subset).
-4. `P16` — Language switcher UI affordance.
-5. `P26` — Cookie banner (self-hosted, essentials-only).
+1. `P30` — Homepage density break — live-demo section.
+2. `P24` — Self-host Syne + DM Mono (woff2 subset).
+3. `P16` — Language switcher UI affordance.
+4. `P26` — Cookie banner (self-hosted, essentials-only).
 
 Passport-photo nits: `F11` 1440 empty space, `P20` AI-model progress
 bar, `P21` inline error banner, `P29` step-bar fill, `R4` frame-corners
