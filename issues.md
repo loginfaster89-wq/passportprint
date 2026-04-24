@@ -107,7 +107,7 @@ All of the quick-win queue from the 2026-04-23 audit is now merged. The**open ba
 **Functional nits remaining:**
 - `F6` audience grid sparse (2 cards on desktop) — either add 3rd card or `max-width` + centre.
 - `F7` GSI iframe Permissions-Policy console warnings — not our code; monitor on SDK updates.
-- `F11` passport-photo 1440 empty space below upload card — **locked file**, needs explicit user approval.
+- `F11` passport-photo 1440 empty space below upload card — `passport-photo.html` edit, minimum-diff.
 
 **2026 polish roadmap (ordered by impact):**
 1. **P11** — Pricing monthly/yearly toggle (copy-only phase 1).
@@ -119,7 +119,7 @@ All of the quick-win queue from the 2026-04-23 audit is now merged. The**open ba
 
 **Recently resolved (since last audit refresh):** P10 contact form (PR #98), P19 inline tools-preview demo strip (PR #99), P2 hero A4-sheet mockup (PR #100), P1 hero animated gradient pulse (PR #102), P8 honest numbers strip (PR #103).
 
-**Locked-file items (needs user approval to touch `passport-photo.html`):**
+**Passport-photo-specific backlog** (`passport-photo.html` is no longer locked — unlocked 2026-04-24 — but still requires minimum-diff care; see AGENTS.md Hard rule #1):
 - `F1` Razorpay `/build/undefined` 403 residual (payment flow works, SDK's own bug).
 - `F11` 1440 empty space below upload card.
 - `P20` top-of-page thin progress bar for AI-model download.
@@ -150,7 +150,7 @@ session VM (not committed).
   grid. No `sliders.js` console errors anywhere.
 - No console errors on homepage / any legal page at any viewport.
   Only `passport-photo.html` logs the pre-existing Razorpay F1 403
-  (still open, locked file).
+  (still open).
 
 ### D.1 Responsive gaps
 
@@ -159,7 +159,7 @@ session VM (not committed).
 | R1 | `index.html` | iphone-se 375, iphone-13 390 | nit | Hero `<h1>Every print job.<br><em>One browser tab.</em></h1>` wraps the first sentence to two lines ("Every print" / "job.") because `.hero h1{font-size:clamp(34px,6.2vw,64px);max-width:18ch}` + `letter-spacing:-0.6px` still renders ~320 px wide at the 34 px clamp floor vs ~331 px usable width. Fix: tighten the clamp floor at `max-width:420px` (e.g. `clamp(28px,8.6vw,64px)`) or drop `max-width:18ch` on phones so each sentence fits one line. |
 | R2 | `index.html` | ipad-portrait 768, ipad-air 820, ipad-landscape 1024, desktop 1440, desktop-hd 1920 | nit | Decorative `.hero-sheet.right` (PR #100) overflows the viewport right edge by 60–300 px on every desktop/tablet viewport — the sheet's bounding box extends past `window.innerWidth`. Page itself does not horizontally scroll because `html,body{overflow-x:hidden}` on `assets/legal.css`, but at 768 px the clipped gray edge is visible as a stripe. Fix: either clamp `right` offset to `max(-3%, -24px)` so the sheet never pokes past a sane limit, or add `overflow:hidden` to the direct `.hero` parent. Currently only `.hero-sheets` itself has `overflow:hidden` and it is `inset:0` inside `.hero` which has no clip. |
 | R3 | `index.html` | ipad-portrait 768 | nit | Related to R2 — the `.hero-sheet.right` 1100 px-media rule (`top:58%;right:-10%;opacity:.55`) still leaves enough of the sheet visible at 768 to look like a layout glitch. Either drop the 760-px hide breakpoint down to 820, or scale the sheet smaller and more inset. |
-| R4 | `passport-photo.html` | iphone-se 375 | nit | Upload card's decorative L-bracket frame corners (`.frame-corners`, positioned with negative `top/right/bottom/left` offsets) clip off the right edge at 375 px. Visual nit only; upload still works. Locked file — user approval required. |
+| R4 | `passport-photo.html` | iphone-se 375 | nit | Upload card's decorative L-bracket frame corners (`.frame-corners`, positioned with negative `top/right/bottom/left` offsets) clip off the right edge at 375 px. Visual nit only; upload still works. |
 | R5 | all | all | nit | Slider pagination dots are 7×7 px buttons — below the WCAG 2.5.5 AAA 24 px target and the commonly-recommended 44 px mobile target. Fix: keep the 7-px visual dot but expand the clickable area to ~24 px via `padding` + an inner `::before` dot, or use a `::after` transparent hit pad. |
 | R6 | legal pages (`about`, `contact`, `privacy`, `terms`, `refund`, `shipping`) | all mobile | nit | Multi-link rows in the new footer (PR #95) render at line-height 17–18 px on phones. Each link has only ~17 px vertical clickable area. Add `padding-block:6px` on `.footer-col a` so each row hits ~30 px without changing visual spacing much. |
 | R7 | `index.html` | ipad-portrait 768 | nit | No dedicated 768 breakpoint in the homepage CSS (closest are 760 and 820). A hero that clamps font-size / sheet position at ≥ 768 would smooth the exact-iPad-portrait transition instead of relying on the 1100 → 760 handoff. Optional polish. |
@@ -168,7 +168,7 @@ session VM (not committed).
 
 | # | Path | Severity | Finding |
 |---|------|----------|---------|
-| U1 | home `.pcta` → login → `passport-photo.html#plans` | medium | User-reported. Clicking a paid plan button on the homepage pricing cards opens the signup modal (correct) but after successful login the post-login handler navigates to `passport-photo.html#plans`, which opens the **plans picker modal** — the user has to click the same plan **again** to trigger Razorpay. Current code: `index.html:1468-1503` sets `location.href = target` on modal close where `target` is just `passport-photo.html#plans` with `data-plan-cta` only used as a lookup attribute (not passed to the URL). Fix options: (a) pass the selected plan id in the hash, e.g. `#buy-weekly` / `#buy-monthly`; on `passport-photo.html` intercept those hashes and call the existing `purchasePlan(planId)` directly instead of `openPlans()`. This keeps `passport-photo.html` as a locked file edit (needs user ok) — the purchase entrypoint lives there. (b) Alternative: `openPlans(preselectedPlan)` already-open path would auto-trigger the plan's buy handler. Either way touches the locked file. |
+| ~~U1~~ | home `.pcta` → login → `passport-photo.html#plans` | **resolved PR #109** | Clicking a paid plan on the homepage pricing cards now takes the user straight to Razorpay for the selected plan. `index.html` CTAs (`a.pcta[data-plan-cta]`) point at `passport-photo.html#buy-weekly` / `#buy-monthly`, and the signup-modal post-login redirect target is built from `data-plan-cta` too. `passport-photo.html` `maybeOpen()` gained a `#buy-<planId>` branch that calls `window.startCheckout(planId)` directly and clears the hash via `history.replaceState` so reload doesn't re-trigger checkout. (Actual function name is `startCheckout`, not `purchasePlan`.) |
 
 ### D.3 Suggested PR sequence (next session)
 
@@ -181,11 +181,10 @@ Two logical PRs, independent:
    (`padding-block` on footer column links).
    No token / palette / font changes. No JS. No touch to
    `passport-photo.html` or `.github/workflows/*.yml`.
-2. **Pricing buy-flow (U1) — requires user approval** because the fix
-   has to land in `passport-photo.html` (locked file): add a hash
-   handler for `#buy-weekly` / `#buy-monthly` that calls the existing
-   purchase entrypoint directly, plus `index.html` change to set
-   `target = 'passport-photo.html#buy-' + planCta` in the post-login
-   redirect at `index.html:1487`.
+2. ~~**Pricing buy-flow (U1)**~~ — **shipped in PR #109.** `#buy-<planId>`
+   hash handler added to `passport-photo.html` (calls
+   `window.startCheckout(planId)`), plus `index.html` CTA hrefs and
+   post-login redirect target carry the plan id. No middle plan-picker
+   step.
 
 R4 and R7 are low-value nits — leave open.

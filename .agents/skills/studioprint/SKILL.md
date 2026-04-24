@@ -21,9 +21,12 @@ No dev server — edit source, `npm run build`, preview from `dist/`.
 
 ## 2. Hard rules (do NOT break these)
 
-1. **Never edit `passport-photo.html`** unless the user explicitly asks.
-   5000+ line working feature with its own inline copies of nav / auth /
-   header — shared-module changes must stay compatible with those.
+1. **`passport-photo.html` is editable — but minimum-diff only.** 5000+
+   line working feature with its own inline copies of nav / auth / header
+   plus a hash-open script (`#plans`, `#buy-<planId>`). Shared-module
+   changes elsewhere must stay compatible with those inline copies.
+   (Previously locked, unlocked 2026-04-24 at the owner's request —
+   PR #109 U1 buy-flow was the first approved edit.)
 2. **Never edit `.github/workflows/*.yml`** unless user confirms the PAT
    has `Actions: Read and write` (default fine-grained PAT only has
    Contents + Pull requests).
@@ -176,8 +179,8 @@ doesn't re-fix already-merged work.
 **Open backlog (default priority order for next session):**
 
 *Functional nits:* `F6` audience grid sparse, `F7` GSI iframe warnings
-(harmless, not our code), `F11` passport-photo 1440 empty space (locked
-file — needs user approval).
+(harmless, not our code), `F11` passport-photo 1440 empty space
+(passport-photo edit, minimum-diff).
 
 *2026 polish roadmap (by impact):*
 1. `P11` Pricing monthly/yearly toggle (copy-only phase 1) — highest value.
@@ -201,18 +204,19 @@ file — needs user approval).
 - `R6` Footer column links have ~17 px tap rows on phones — add
   `padding-block:6px` on `.footer-col a` in `assets/legal.css`.
 - `R4` passport-photo upload-card frame-corners clip at iPhone SE
-  (locked file, low priority).
+  (low priority).
 - `R7` No dedicated 768 px hero breakpoint (optional polish).
 - `U1` Home paid-plan CTA → login → lands on `passport-photo.html#plans`
-  and forces the user to re-pick the plan to reach Razorpay. Fix needs
-  a `#buy-<planId>` hash handler in `passport-photo.html` (locked file
-  — needs user ok) + 1-line change in `index.html:1487` to pass the
-  plan id in the post-login redirect target.
+  and forces the user to re-pick the plan to reach Razorpay. Shipped
+  via PR #109: `#buy-<planId>` hash handler added to `passport-photo.html`
+  (calls `window.startCheckout(planId)` directly) + `index.html` CTA
+  hrefs + post-login redirect target now carry the plan id.
 
-*Locked-file items (`passport-photo.html` — needs explicit user ok):*
-`F11`, `P20` AI-model download progress bar, `P21` inline error banner,
-`P29` step-bar progress fill, `R4` frame-corners clip at 375 px,
-`U1` pricing buy-flow skip-a-step.
+*Passport-photo-specific backlog* (file is no longer locked, but still
+requires minimum-diff care — see Hard rule #1): `F11` 1440 empty space,
+`P20` AI-model download progress bar, `P21` inline error banner,
+`P29` step-bar progress fill, `R4` frame-corners clip at 375 px.
+(`U1` was this track's first unlock — shipped in PR #109.)
 
 **How to audit again (reproducible)**
 
@@ -281,24 +285,27 @@ Clone ke baad pehle ye teen files padho:
 - `npm run build` run karke verify karo, screenshots 375 / 768 /
   820 / 1440 attach karo PR description me.
 
-### PR 2 — Pricing buy-flow (U1, REQUIRES USER APPROVAL)
-Skip unless the user explicitly says "locked file me jaao" — fix
-needs `passport-photo.html` edits.
+### PR 2 — Pricing buy-flow (U1) — shipped in PR #109
 
-- `index.html:1487` par `target` ko plan id ke saath build karo:
-  `target = 'passport-photo.html#buy-' + a.getAttribute('data-plan-cta')`.
-- `passport-photo.html` me us hash handler ke paas (jahan abhi
-  `#plans` detect karta hai + `openPlans()` call hota hai) ek
-  `#buy-weekly` / `#buy-monthly` branch add karo jo seedha
-  existing `purchasePlan(<planId>)` call kare (plan-picker modal
-  skip, direct Razorpay modal khole).
-- Expected flow: homepage `Get weekly pass` → signup modal →
-  login OTP → passport-photo.html#buy-weekly → Razorpay checkout
-  direct. No `#plans` intermediate step.
+For reference (this work is done):
+
+- `index.html` pricing CTAs (`a.pcta[data-plan-cta]`) ab directly
+  `passport-photo.html#buy-weekly` / `#buy-monthly` par point karte hain,
+  aur signup-modal post-login redirect target bhi `data-plan-cta` se
+  build hota hai.
+- `passport-photo.html` ke `maybeOpen()` hash handler me
+  `#buy-<planId>` branch hai jo `window.startCheckout(planId)` call karke
+  seedha Razorpay kholta hai, aur `history.replaceState` se hash clear
+  kar deta hai (reload par dobara checkout trigger nahi hota).
+- Actual function ka naam `startCheckout` hai (`passport-photo.html:5062`,
+  exposed on `window` at 5132) — `purchasePlan` nahi, agar kahin
+  purana reference dikhe to ignore karo.
 
 ## Default rules (same every session)
-- `passport-photo.html` me sirf copy / meta edits (ya jo user ne
-  explicitly approve kiya ho), otherwise no JS/ID/DOM change.
+- `passport-photo.html` editable hai (2026-04-24 unlock), but minimum
+  diff only — 5000+ line file with inline nav/auth copies and a
+  `#plans` / `#buy-<planId>` hash-open script. Shared-module churn
+  elsewhere must stay compatible.
 - `.github/workflows/*.yml` mat chhedo.
 - Fonts / palette / CSS tokens unchanged.
 - One PR per logical task, minimum diff.
