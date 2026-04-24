@@ -657,6 +657,41 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
   font-family:'DM Mono',monospace;
 }
 
+/* ── COMPARISON TABLE (P12) ── */
+.compare-wrap{
+  margin-top:28px;overflow-x:auto;-webkit-overflow-scrolling:touch;
+  border:1px solid var(--border);border-radius:14px;
+  background:var(--surface);
+}
+.compare-table{
+  width:100%;border-collapse:collapse;
+  font-family:'DM Mono',monospace;font-size:13px;color:var(--muted);
+}
+.compare-table th,.compare-table td{
+  padding:12px 16px;text-align:center;
+  border-bottom:1px solid var(--border);
+}
+.compare-table thead th{
+  font-family:'Syne',sans-serif;font-weight:700;font-size:13px;
+  color:var(--text);letter-spacing:-0.2px;
+  background:var(--surface2);
+}
+.compare-table thead th:first-child{border-radius:13px 0 0 0;}
+.compare-table thead th:last-child{border-radius:0 13px 0 0;}
+.compare-table .compare-feature{text-align:left;color:var(--muted2);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;}
+.compare-table td:first-child{text-align:left;color:var(--text);font-size:12.5px;}
+.compare-table .compare-hl{color:var(--accent);}
+.compare-table .compare-yes{color:var(--accent);font-weight:700;}
+.compare-table .compare-no{color:var(--muted2);}
+.compare-table .compare-note{color:var(--muted);font-size:12px;font-style:italic;}
+.compare-table .compare-per{font-size:10px;color:var(--muted2);margin-left:2px;}
+.compare-price-row td{border-bottom:none;}
+.compare-price-row strong{color:#fff;font-size:16px;font-family:'Syne',sans-serif;}
+@media(max-width:480px){
+  .compare-table th,.compare-table td{padding:10px 10px;font-size:12px;}
+  .compare-price-row strong{font-size:14px;}
+}
+
 /* ── FAQ ── */
 .faq-list{
   display:flex;flex-direction:column;gap:10px;
@@ -1259,6 +1294,68 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
           </ul>
           <a class="pcta" href="#pricing">See plan</a>
         </div>
+      </div>
+
+      <!-- P12 — Pricing comparison matrix -->
+      <div class="compare-wrap">
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th class="compare-feature">Feature</th>
+              <th>Free</th>
+              <th class="compare-hl">Weekly</th>
+              <th class="compare-hl">Monthly</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>A4 sheets / day</td>
+              <td>2</td>
+              <td>Unlimited</td>
+              <td>Unlimited</td>
+            </tr>
+            <tr>
+              <td>Photos per sheet</td>
+              <td>Standard</td>
+              <td>Unlimited</td>
+              <td>Unlimited</td>
+            </tr>
+            <tr>
+              <td>Print resolution</td>
+              <td>300 DPI</td>
+              <td>600 DPI</td>
+              <td>600 DPI</td>
+            </tr>
+            <tr>
+              <td>Country presets</td>
+              <td>India only</td>
+              <td>All countries</td>
+              <td>All countries</td>
+            </tr>
+            <tr>
+              <td>Batch processing</td>
+              <td class="compare-no">—</td>
+              <td class="compare-no">—</td>
+              <td class="compare-yes">✓</td>
+            </tr>
+            <tr>
+              <td>Priority support</td>
+              <td class="compare-no">—</td>
+              <td class="compare-no">—</td>
+              <td class="compare-yes">✓</td>
+            </tr>
+            <tr>
+              <td>Auto-renewal</td>
+              <td colspan="3" class="compare-note">No auto-renewal on any plan</td>
+            </tr>
+            <tr class="compare-price-row">
+              <td>Price</td>
+              <td><strong>₹0</strong></td>
+              <td><strong>₹59</strong><span class="compare-per">/7 days</span></td>
+              <td><strong>₹149</strong><span class="compare-per">/30 days</span></td>
+            </tr>
+          </tbody>
+        </table>
       </div>
 
       <p class="pricing-note">Payments securely processed via Razorpay · UPI, cards, net-banking · <a href="refund.html" style="color:var(--accent);">Refund policy</a></p>
