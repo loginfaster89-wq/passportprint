@@ -79,7 +79,7 @@ for a follow-up PR.
 | ~~P8~~ | Social proof | **resolved PR #103.** Honest `By the numbers` strip on the homepage between TOOLS-PREVIEW and WHY — 4 stat cards using only product facts already documented elsewhere (0 photos uploaded, 2 free sheets/day, ₹149/30 days, 300 DPI A4). No fabricated testimonials or logos. Pure CSS using existing tokens, `.reveal` fade-in like other sections. |
 | ~~P9~~ | About page | **resolved PR #96.** Mission-hero (`Make every ₹10 print job feel like a browser tab.`) + founder-style pull-quote + 2024→2026 timeline (Idea / Prototype / Launch / Now) + 'What ships next' card (4 upcoming tools). Inline styles only, existing tokens. |
 | ~~P10~~ | Contact page | **resolved PR #98.** Inline `Send us a message` form on `contact.html` (name / email / 7-option category / message), `Replies within 1–2 working days` SLA badge, submit builds a prefilled `mailto:` with structured body. Obfuscated email block kept as fallback. |
-| P11 | Pricing | No **monthly/yearly toggle**. Even though you only have weekly+monthly today, a toggle that shows "₹149/month → ₹1,499/year (save 16%)" preview would frame Monthly as the default and prime upsell. (Requires backend change later; phase 1 can be copy-only.) |
+| ~~P11~~ | Pricing | **Won't ship — product decision (2026-04-24).** Studio Print only offers Weekly (₹59/7 days) and Monthly (₹149/30 days). No yearly / annual plan exists or is planned. Do **not** propose a monthly/yearly toggle in future sessions. |
 | P12 | Pricing | No comparison matrix ("Free vs Weekly vs Monthly" feature table). Multinational SaaS standard. |
 | ~~P13~~ | Pricing | **resolved PR #89.** `ribbon-pulse` + `featured-glow` keyframes on `.pricing-card.featured::before` and `.pricing-card.featured` (3.2s infinite, 0.45 → 0.75 alpha). Disabled under `prefers-reduced-motion`. |
 | ~~P14~~ | Navigation | **resolved PR #83.** `.sp-mobile-cta` pill on `≤640px`, shows after scroll > 1 viewport. |
@@ -110,12 +110,15 @@ All of the quick-win queue from the 2026-04-23 audit is now merged. The**open ba
 - `F11` passport-photo 1440 empty space below upload card — `passport-photo.html` edit, minimum-diff.
 
 **2026 polish roadmap (ordered by impact):**
-1. **P11** — Pricing monthly/yearly toggle (copy-only phase 1).
-2. **P12** — Pricing comparison matrix (Free vs Weekly vs Monthly feature table).
-3. **P30** — Homepage density break — one real "live demo" section between HERO and FEATURES.
-4. **P24** — Self-host Syne + DM Mono fonts (woff2 subset) — removes Google Fonts third-party.
-5. **P16** — Language switcher (`हि` ↔ `EN`) UI affordance.
-6. **P26** — Cookie banner (self-hosted, essential-only).
+1. **P12** — Pricing comparison matrix (Free vs Weekly vs Monthly feature table).
+2. **P30** — Homepage density break — one real "live demo" section between HERO and FEATURES.
+3. **P24** — Self-host Syne + DM Mono fonts (woff2 subset) — removes Google Fonts third-party.
+4. **P16** — Language switcher (`हि` ↔ `EN`) UI affordance.
+5. **P26** — Cookie banner (self-hosted, essential-only).
+
+> `P11` (monthly/yearly toggle) was dropped from the roadmap on 2026-04-24.
+> Product only ships Weekly + Monthly plans — no yearly plan exists or is
+> planned. Do not re-propose.
 
 **Recently resolved (since last audit refresh):** P10 contact form (PR #98), P19 inline tools-preview demo strip (PR #99), P2 hero A4-sheet mockup (PR #100), P1 hero animated gradient pulse (PR #102), P8 honest numbers strip (PR #103).
 
