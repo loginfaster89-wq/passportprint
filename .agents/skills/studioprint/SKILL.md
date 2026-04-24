@@ -319,6 +319,7 @@ F11 1440 empty space fixed PR #129.
 P21 inline error banner shipped PR #130.
 R4 frame-corners 375px fix shipped PR #130.
 R7 768px hero breakpoint shipped PR #131.
+P31 font preload shipped PR #132.
 
 ## Architecture context (shipped — don't redo)
 
@@ -372,11 +373,14 @@ R7 768px hero breakpoint shipped PR #131.
   (max-width:768px)` switches hero-preview grid to single column at iPad
   portrait. Fills the gap between 820 px (sheets hide) and 760 px (phone
   compact layout).
+- **P31 Font preloading** (PR #132): `<link rel="preload">` for
+  `syne-latin.woff2` (34 KB) + `dm-mono-400-latin.woff2` (15 KB) on all
+  10 pages. Eliminates render-blocking font-discovery waterfall.
 
 ## Open backlog — pick one per session
 
 All 5 polish roadmap items (P12/P30/P24/P16/P26) shipped. F6 + F11 +
-P21 + R4 + R7 also shipped.
+P21 + R4 + R7 + P31 (font preload) also shipped.
 
 Passport-photo nits: all shipped (P21 PR #130, R4 PR #130, F11 PR #129,
 P29 PR #126, P20 PR #128).
@@ -386,6 +390,9 @@ Responsive nits: all shipped (R4 PR #130, R7 PR #131).
 Functional nits: `F7` GSI iframe warnings (not our code, harmless).
 
 P11 (monthly/yearly toggle) dropped — PR #113. Do not re-propose.
+
+Backlog is empty — next session can propose new features or do a fresh
+audit to find new polish opportunities.
 
 ## Default rules (same every session)
 - `passport-photo.html` editable (2026-04-24 unlock), minimum diff.
