@@ -224,12 +224,21 @@ P19 inline tools-preview demo strip (PR #99), P2 hero A4-sheet mockup
 (PR #110), homepage inline checkout (PR #112), shared pricing modal
 (PR #114).
 
+**Also resolved (PRs #118–#154):** PRs #118–#132 stats-grid slider,
+self-host fonts, step-bar progress, audience grid, AI download bar,
+empty space, error banner, frame-corners, 768px breakpoint, font
+preload. PRs #134+#137 FAQPage + WebApplication JSON-LD. PR #139
+footer/UX cleanup. PR #141 glorification cleanup. PR #142
+BreadcrumbList + Organization JSON-LD. PR #143 pricing cards removed,
+trust pills 2-row. PR #145 hero eyebrow pill. PR #147 terse-mode +
+pricing polish. PRs #148–#150 pricing redesign (plan cards). PR #152
+hero-preview hidden on phones. PR #153 'Soon' features removed from
+nav + features grid. PR #154 fake feature tiles removed from
+hero-preview section.
+
 **Open backlog priority order for the next session:**
-1. P12 Pricing comparison matrix.
-2. P30 Homepage density break — live-demo section.
-3. P24 Self-host Syne + DM Mono (woff2).
-4. P16 Language switcher UI.
-5. P26 Cookie banner.
+1. P26 Cookie banner.
+2. Fresh audit / new features.
 
 **Lower-priority functional nits:** F6 audience grid sparse, F7 GSI
 iframe warnings (harmless, not our code), R4 frame-corners at iPhone SE,
