@@ -87,7 +87,7 @@ for a follow-up PR.
 | ~~P17~~ | Accessibility | **resolved PR #76.** Site-wide `:focus-visible{outline:2px solid var(--accent); outline-offset:2px}` added to `assets/legal.css`, with `:focus{outline:none}` fallback so mouse clicks don't show rings. Keyboard users now get a clean amber ring on nav links, Features dropdown, Login button, `<details>`, form elements. |
 | ~~P18~~ | Accessibility | **resolved PR #88.** Stable ids on all 8 FAQs (`faq-free-tier`, `faq-privacy`, `faq-countries`, `faq-no-software`, `faq-aadhaar-pan`, `faq-mobile`, `faq-refund`, `faq-print-shop`) + small IIFE opens the targeted `<details>` on hash match and smooth-scrolls. |
 | ~~P19~~ | Product-demo | **resolved PR #99.** Inline animated demo strip inside the hero tools-preview card on `index.html`: 3-phase ~9 s loop (upload → background removed → A4 sheet slides in). Pure CSS + tiny DOM primitives, no `<video>` asset. Respects `prefers-reduced-motion`. |
-| P20 | Loading / perceived perf | No skeleton shimmer anywhere. `passport-photo.html` loads transformers.js (~large). On first visit there's no indication that a heavier model is being downloaded. Add a top-of-page thin progress bar for AI-model download. |
+| ~~P20~~ | Loading / perceived perf | **resolved PR #128.** Fixed-position 3 px accent bar at top of page during AI-model download (0→97%), auto-hides on completion. Hooks into existing `onProgress` callback. Cancel also resets bar. |
 | P21 | Error / empty states | Haven't been able to audit them without signing in, but from code review `passport-photo.html` has toast-based errors only. A small "something went wrong — retry" inline banner near the upload zone would feel more polished. |
 | ~~P22~~ | SEO / social | **resolved PR #84.** Proper 1200×630 `assets/og-image.png` + richer social meta across 8 pages. |
 | ~~P23~~ | SEO | **resolved PR #90.** `<lastmod>2026-04-23</lastmod>` on every entry + 4 in-page landing sections (`/#features`, `/#how`, `/#pricing`, `/#faq`) with their own priorities. |
@@ -106,6 +106,7 @@ All of the quick-win queue from the 2026-04-23 audit is now merged. The**open ba
 **Functional nits remaining:**
 - ~~`F6` audience grid sparse~~ — **resolved PR #127.** Centred with `max-width:720px`.
 - `F7` GSI iframe Permissions-Policy console warnings — not our code; monitor on SDK updates.
+- ~~`P20` AI-model progress bar~~ — **resolved PR #128.**
 - `F11` passport-photo 1440 empty space below upload card — `passport-photo.html` edit, minimum-diff.
 
 **2026 polish roadmap (ordered by impact):**
@@ -120,7 +121,7 @@ All of the quick-win queue from the 2026-04-23 audit is now merged. The**open ba
 **Passport-photo-specific backlog** (`passport-photo.html` is no longer locked — unlocked 2026-04-24 — but still requires minimum-diff care; see AGENTS.md Hard rule #1):
 - `F1` Razorpay `/build/undefined` 403 residual (payment flow works, SDK's own bug).
 - `F11` 1440 empty space below upload card.
-- `P20` top-of-page thin progress bar for AI-model download.
+- ~~`P20` top-of-page thin progress bar for AI-model download~~ — **resolved PR #128.**
 - `P21` inline "something went wrong — retry" banner near upload zone.
 - ~~`P29` step-bar progress line fill animation~~ — **shipped PR #126.**
 
