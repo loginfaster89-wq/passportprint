@@ -1354,18 +1354,22 @@ header{flex-wrap:nowrap;}
      Users are guided through steps by the sidebar + canvas content itself. */
   .steps{display:none;}
   .main{grid-template-rows:minmax(220px,1fr) auto;}
-  .canvas-area{padding:16px 12px;}
+  .canvas-area{padding:12px 10px;overflow-y:auto;}
   .sidebar{max-height:46dvh;}
   .sb-section{padding:10px 12px;}
+  /* Let upload zone scroll instead of clipping when card is taller than
+     the canvas viewport on small phones. */
+  #step1-canvas{align-items:safe center;}
+  .upload-zone{padding:12px 10px;}
   /* Upload inner card: tighter padding, smaller fixed max so it sits nicely
      centered in the canvas area without crowding the edges. */
-  .upload-inner-card{padding:18px 16px 16px;width:min(92%,360px);border-radius:16px;}
-  .upload-icon-wrap{width:48px;height:48px;margin-bottom:8px;}
-  .upload-icon-wrap svg{width:22px;height:22px;}
-  .upload-title{font-size:16px!important;margin-bottom:4px!important;}
-  .upload-sub{font-size:11px!important;line-height:1.5!important;}
-  .upload-feats{margin-top:10px;gap:4px;}
-  .upload-feat-pill{font-size:9px;padding:2px 6px;}
+  .upload-inner-card{padding:16px 14px 14px;width:min(92%,360px);border-radius:16px;}
+  .upload-icon-wrap{width:44px;height:44px;margin-bottom:6px;}
+  .upload-icon-wrap svg{width:20px;height:20px;}
+  .upload-title{font-size:15px!important;margin-bottom:4px!important;}
+  .upload-sub{font-size:11px!important;line-height:1.4!important;}
+  .upload-feats{margin-top:8px;gap:3px;}
+  .upload-feat-pill{font-size:8.5px;padding:2px 5px;}
   /* Modal layout */
   .modal{border-radius:12px;}
   .modal.small{max-width:100%;}
@@ -1394,9 +1398,9 @@ header{flex-wrap:nowrap;}
   .main{grid-template-rows:minmax(140px,1fr) auto;}
   .sidebar{max-height:44dvh;}
   .sb-section{padding:9px 10px;}
-  .upload-inner-card{width:min(96%,360px);padding:16px 14px;}
+  .upload-inner-card{width:min(96%,360px);padding:14px 12px 12px;}
   .upload-feats{gap:3px;}
-  .upload-feat-pill{font-size:8.5px;padding:2px 6px;}
+  .upload-feat-pill{font-size:8px;padding:2px 5px;}
   .modal-overlay{padding:6px;}
   .modal-title{font-size:16px;}
   .plan-card{padding:16px 12px;}
@@ -1754,7 +1758,7 @@ header.legal-header{
             <span class="upload-feat-pill">⬇ Instant Save</span>
           </div>
           <!-- CTA hint -->
-          <div style="margin-top:18px;font-size:12px;color:var(--muted2);">
+          <div style="margin-top:clamp(8px,2vw,18px);font-size:12px;color:var(--muted2);">
             <span style="background:var(--accent);color:#000;border-radius:4px;padding:2px 8px;font-weight:700;font-size:11px;">CLICK</span>
             &nbsp;<span data-i18n="or_drop">or drop your photo here</span>
           </div>
