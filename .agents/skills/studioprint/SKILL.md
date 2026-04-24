@@ -76,6 +76,19 @@ No dev server — edit source, `npm run build`, preview from `dist/`.
    are welcome *within* the existing tokens — but ask first. Minor
    spacing / responsive fixes from `issues.md` do not need per-change
    approval.
+9. **No single-feature glorification (2026-04-24).** Never create
+   dedicated hero CTAs, floating buttons, or workflow sections that
+   promote only one tool. Studio Print has multiple planned tools
+   (Passport Photo, Document Sheet, Certificate Editor, Background
+   Studio). Keep CTAs generic ("See all tools", "Explore the tools")
+   and let the features-grid cards serve as entry points per tool.
+   This avoids costly rework when the next feature launches.
+10. **Delete dead code in the same PR.** When a feature is removed,
+    delete ALL related files, CSS rules, and JS in the same PR. Don't
+    leave orphaned files — they confuse future sessions.
+11. **Devin's credit is on the line.** The footer says "Built with
+    Devin AI". Every messy footer, broken toggle, or wasted space
+    reflects directly on Devin's quality. Test every viewport.
 
 ## 3. Create a PR (fine-grained PAT flow)
 
@@ -350,9 +363,9 @@ Architecture context (shipped — don't redo)
   to slider on orphan row / phones like all other grids.
 - Full responsive re-audit (PR #118 docs): 9 pages × 8 viewports = 72
   combos — ALL CLEAR, no new issues.
-- **Language toggle** (PR #125): interactive `EN` / `हि` pill in footer
-  on all 8 shared pages. `assets/lang.js` syncs with `pps_lang`
-  localStorage. Existing tokens only.
+- ~~**Language toggle** (PR #125)~~: **removed in PR #139** — toggle
+  was non-functional (Hindi did nothing). `assets/lang.js` deleted,
+  CSS cleaned from `passport-photo.html`.
 - **Step-bar progress fill** (PR #126): 2 px accent progress bar at
   bottom of `.steps` fills 0→33→66→100% as user advances (300 ms
   ease). Active `.step-num` enhanced amber glow + pulse.
@@ -399,6 +412,16 @@ Responsive nits: all shipped (R4 PR #130, R7 PR #131).
 Functional nits: `F7` GSI iframe warnings (not our code, harmless).
 
 P11 (monthly/yearly toggle) dropped — PR #113. Do not re-propose.
+
+**Footer & UX cleanup** (PR #139, session #3): lang switcher removed
+from all shared pages, floating "Open Passport Photo" CTA removed,
+footer compact on tablet/phone, upload card clipping fixed.
+
+**Single-feature glorification cleanup** (this PR, session #4): hero
++ CTA band "Open Passport Photo" buttons replaced with generic "See
+all tools" / "Explore the tools". 404 CTA made generic. Dead
+`assets/lang.js` deleted. Dead lang-toggle CSS removed from
+`passport-photo.html`. See `issues.md` §G.
 
 Backlog is empty — next session can propose new features or do a fresh
 audit to find new polish opportunities.

@@ -245,3 +245,30 @@ Owner-reported issues from real-device testing (iPhone, iPad, Galaxy S24 Ultra).
 3. **Test language switcher before shipping.** P16 shipped a non-functional Hindi toggle — it should have been tested with actual translated content or not shipped at all.
 4. **Compact footers on mobile.** Multi-column footers need aggressive compacting on phones and tablets. Don't just stack columns — reduce gaps, font sizes, and padding proportionally.
 5. **Upload areas need breathing room on mobile.** Interactive areas (drop zones, upload cards) should have padding around them on small screens so they don't clip against viewport edges or adjacent elements.
+
+---
+
+## G. Single-feature glorification cleanup (2026-04-24, session #4)
+
+Owner-reported: the homepage over-glorifies Passport Photo as if it's the only product.
+When more tools (Document Sheet, Certificate Editor, Background Studio) launch,
+every feature-specific CTA, hero animation, and workflow demo will need reworking.
+
+**Rule (permanent):** Never create dedicated hero CTAs, floating buttons, or
+separate workflow sections for a single feature. Keep all CTAs generic
+("See all tools", "Get started", "Explore the tools") and let the features
+grid serve as the entry point for each tool.
+
+| # | Area | Finding | Status |
+|---|------|---------|--------|
+| G1 | Hero CTA (`index.html`) | "Open Passport Photo →" replaced with "See all tools →" linking to `#features`. | **fixed this PR** |
+| G2 | CTA band (`index.html`) | "Open Passport Photo — free →" replaced with "Explore the tools →" linking to `#features`. | **fixed this PR** |
+| G3 | 404 page | "Open Passport Photo" button replaced with "Explore the tools" linking to `index.html#features`. | **fixed this PR** |
+| G4 | `assets/lang.js` | Dead file — lang switcher was removed from shared pages in PR #139 but file was never deleted. Removed. | **fixed this PR** |
+| G5 | `passport-photo.html` | Dead `.lang-toggle` / `.lang-btn` CSS rules removed (no HTML element uses them). | **fixed this PR** |
+
+### Learnings for future sessions
+
+6. **No single-feature glorification.** When a website has multiple planned tools, hero CTAs, floating buttons, and workflow demos must be generic. Each tool gets promoted through its own card in the features grid — not through dedicated hero buttons or floating CTAs. This avoids costly rework when the next tool launches.
+7. **Delete dead code immediately.** When a feature is removed (e.g. lang switcher), delete ALL related files and CSS in the same PR. Don't leave orphaned files or dead CSS rules — they confuse future sessions and bloat the codebase.
+8. **Devin's credit is on the line.** The footer says "Built with Devin AI". Every messy footer, broken toggle, or wasted space reflects directly on Devin's quality. Test every viewport before shipping.

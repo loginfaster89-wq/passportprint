@@ -885,11 +885,6 @@ canvas{display:block;}
 #bgCanvas { border-radius:6px; box-shadow:0 8px 40px rgba(0,0,0,.6); transition:box-shadow .3s; }
 
 
-/* ── LANGUAGE TOGGLE ── */
-.lang-toggle{display:flex;align-items:center;background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:3px;gap:2px;flex-shrink:0;}
-.lang-btn{padding:4px 12px;border-radius:16px;font-family:'DM Mono',monospace;font-size:12px;font-weight:600;cursor:pointer;border:none;background:transparent;color:var(--muted);transition:.2s;letter-spacing:.5px;}
-.lang-btn.active{background:var(--accent);color:#000;}
-
 /* ── HELP BUTTON ── */
 .help-btn{width:30px;height:30px;border-radius:50%;background:var(--surface2);border:1px solid var(--border);color:var(--muted);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.2s;}
 .help-btn:hover{border-color:var(--accent);color:var(--accent);}
@@ -1140,8 +1135,6 @@ canvas{display:block;}
   .comp-label-left{left:8px;bottom:8px;}
   .comp-label-right{right:8px;bottom:8px;}
 
-  .lang-toggle{padding:2px;}
-  .lang-btn{padding:3px 9px;font-size:11px;}
 }
 
 /* ── SMALL MOBILE (≤420px) ── */
@@ -1312,7 +1305,7 @@ button,a,label,.step,.hdr-btn,.lang-btn,.preset-btn,.btn,.modal-close,
 /* --- Header: prevent Plans/Login buttons from overlapping the logo on narrow widths --- */
 header{flex-wrap:nowrap;}
 .logo{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex-shrink:1;}
-.hdr-btn,.lang-toggle{flex-shrink:0;}
+.hdr-btn{flex-shrink:0;}
 
 /* --- Modals: make modal content scroll cleanly on small screens, never clip --- */
 .modal-overlay{padding:12px;}
