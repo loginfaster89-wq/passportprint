@@ -275,3 +275,19 @@ grid serve as the entry point for each tool.
 6. **No single-feature glorification.** When a website has multiple planned tools, hero CTAs, floating buttons, and workflow demos must be generic. Each tool gets promoted through its own card in the features grid — not through dedicated hero buttons or floating CTAs. This avoids costly rework when the next tool launches.
 7. **Delete dead code immediately.** When a feature is removed (e.g. lang switcher), delete ALL related files and CSS in the same PR. Don't leave orphaned files or dead CSS rules — they confuse future sessions and bloat the codebase.
 8. **Devin's credit is on the line.** The footer says "Built with Devin AI". Every messy footer, broken toggle, or wasted space reflects directly on Devin's quality. Test every viewport before shipping.
+
+---
+
+## H. Passport-photo upload card — mobile polish (2026-04-24, session #5)
+
+Owner-reported: the upload card area on `passport-photo.html` doesn't look
+right on mobile phones (~390 px viewport). Visual inspection confirmed
+5 issues.
+
+| # | Area | Severity | Finding |
+|---|------|----------|---------|
+| H1 | `passport-photo.html` upload card (mobile) | **medium** | Card content too dense on mobile — camera icon + title + 2 subtitle lines + 5 feature pills (2 rows) + CLICK button all cramped into a small viewport. Reduce visual weight: consider hiding some pills on mobile, or collapsing subtitle to a single shorter line. |
+| H2 | `passport-photo.html` upload card (mobile) | **medium** | "or drop your photo here" text shows on mobile where drag-and-drop is not possible. Misleading UX — should be hidden at ≤768 px or replaced with tap-friendly copy. |
+| H3 | `passport-photo.html` upload card (mobile) | **nit** | Feature pills (`.upload-feats`) wrap to 2 rows on phones, adding visual clutter. Either reduce to 3 key pills on mobile or shrink/hide the row entirely. |
+| H4 | `passport-photo.html` upload card (mobile) | **nit** | Corner brackets (`.corner-bracket-inner`) add unnecessary visual noise on small screens. Consider reducing opacity further or hiding them on ≤420 px. |
+| H5 | `passport-photo.html` upload card (mobile) | **nit** | "CLICK" button label is desktop-oriented — phones use tap, not click. Change to "TAP" or "TAP TO SELECT" at ≤768 px via CSS `content` swap or JS. |
