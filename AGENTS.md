@@ -69,7 +69,7 @@ and overall aesthetic are not.
 | Path                       | What lives there                                      |
 | -------------------------- | ----------------------------------------------------- |
 | `index.html`               | Homepage (hero, features, audience, why, how, pricing, FAQ, CTA) |
-| `passport-photo.html`      | The live passport photo tool (5000+ lines, **see rules below**) |
+| `passport-photo.html`      | The live passport photo tool (5000+ lines, with its own inline copies of the nav / auth / Google Sign-In markup and a small hash-open script) |
 | `about.html`, `contact.html`, `privacy.html`, `terms.html`, `refund.html`, `shipping.html` | Legal / info pages, share the header + footer with `index.html` |
 | `assets/auth.js` + `auth.css` | Shared login / signup / OTP / Google Sign-In modal + account modal (plan info, upgrade, delete account). `position: fixed; z-index: 10000` overlay. Include on any page that has `.legal-header` with a `#hdrAuthBtn` button. |
 | `assets/nav.js`            | Shared hamburger + Features dropdown behaviour. Hamburger breakpoint is **900px**. |
@@ -93,7 +93,9 @@ modal directly without expanding the nav:
 ```
 
 `passport-photo.html` keeps its own pre-PR-#54 inline copy of the header
-(still `#hdrAuthBtn` inside `<nav>`) because we do not touch that file.
+(still `#hdrAuthBtn` inside `<nav>`). Any shared-module change elsewhere
+must stay compatible with that inline copy — or update both sides in the
+same PR.
 
 Post-PR #66: inside the `@media (max-width:900px)` block in
 `assets/legal.css`, `.nav-toggle` is explicitly `margin-left:0` so that
@@ -104,11 +106,13 @@ iPad portrait / narrow tablets.
 
 ## Hard rules
 
-1. **Do not modify `passport-photo.html`** unless the user explicitly asks.
-   It is a 5000+ line working feature with its own inline copies of the
-   nav/auth/Google Sign-In markup and a small hash-open script that calls
-   `openPlans()` when the URL hash is `#plans`. Any shared-module change you
-   make elsewhere should remain compatible with those inline copies.
+1. **`passport-photo.html` edits are allowed, but tread carefully.** It is a
+   5000+ line working feature with inline copies of the nav / auth / Google
+   Sign-In markup and a small hash-open script (`#plans` → `openPlans()`,
+   `#buy-<planId>` → `startCheckout(planId)`). Minimum diffs; re-run
+   `npm run build` before committing; don't fork shared-module behaviour
+   into this file. (Was previously a locked file requiring explicit user
+   approval — lifted 2026-04-24 at the project owner's request.)
 2. **Do not edit `.github/workflows/*.yml`** from a Devin session unless the
    user confirms the fine-grained PAT (`GITHUB_PAT_PASSPORTPRINT`) has the
    `Actions: Read and write` scope. Without that scope GitHub rejects
@@ -150,7 +154,7 @@ console errors at any viewport.
 
 ## Passport-photo defaults (post PR #58)
 
-Reference only — do not modify `passport-photo.html` without user approval.
+Current defaults — keep these intact unless the task explicitly changes them.
 
 - **Default sheet layout:** 5 photos, 5 cols × 1 row (`sheetCols=5`,
   `sheetRows=1`, `sheetTotal=5`). Was previously 8 photos in 4 × 2.
@@ -211,9 +215,10 @@ P19 inline tools-preview demo strip (PR #99), P2 hero A4-sheet mockup
 **Lower-priority functional nits:** F6 audience grid sparse, F7 GSI
 iframe warnings (harmless, not our code).
 
-**Locked-file items** (need explicit user approval to touch
-`passport-photo.html`): F11 1440 empty space, P20 AI-model download
-progress bar, P21 inline error banner, P29 step-bar progress fill.
+**Passport-photo-specific backlog** (this file is no longer locked — see
+Hard rule #1 — but still needs minimum-diff care): F11 1440 empty space,
+P20 AI-model download progress bar, P21 inline error banner, P29 step-bar
+progress fill, R4 upload-card frame-corners clipping at iPhone SE.
 
 ## Working style for human collaborators
 
