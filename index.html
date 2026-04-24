@@ -40,12 +40,13 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/legal.css">
 <link rel="stylesheet" href="assets/auth.css">
+<link rel="stylesheet" href="assets/pricing.css">
 <!-- Google Identity Services — powers the "Continue with Google" button in the shared auth modal. -->
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <!-- Razorpay Checkout SDK — declaratively loaded (not via createElement) so
      the SDK's build-hash manifest resolves correctly. Same pattern as
-     passport-photo.html. Enables in-page Razorpay checkout from the
-     pricing CTAs below. -->
+     passport-photo.html. Enables the shared Choose-your-Plan modal
+     (assets/pricing.js) to open Razorpay checkout directly. -->
 <script src="https://checkout.razorpay.com/v1/checkout.js" async></script>
 <style>
 /* ───── Homepage-specific styles ───── */
@@ -1226,7 +1227,7 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
             <li>300 DPI print-ready output</li>
             <li>Works on any device, no signup wall</li>
           </ul>
-          <a class="pcta" href="passport-photo.html">Start free</a>
+          <a class="pcta" href="#pricing">See plan</a>
         </div>
 
         <div class="pricing-card">
@@ -1239,7 +1240,7 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
             <li>All country presets (India, US, UK, UAE, Schengen…)</li>
             <li>No auto-renewal — one-time purchase</li>
           </ul>
-          <a class="pcta" href="passport-photo.html#buy-weekly" data-plan-cta="weekly">Get weekly pass</a>
+          <a class="pcta" href="#pricing">See plan</a>
         </div>
 
         <div class="pricing-card featured">
@@ -1252,7 +1253,7 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
             <li>Priority email support</li>
             <li>Best for print shops &amp; photo studios</li>
           </ul>
-          <a class="pcta" href="passport-photo.html#buy-monthly" data-plan-cta="monthly">Get monthly pass</a>
+          <a class="pcta" href="#pricing">See plan</a>
         </div>
       </div>
 
@@ -1415,6 +1416,7 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
 
 <script src="assets/nav.js" defer></script>
 <script src="assets/auth.js" defer></script>
+<script src="assets/pricing.js" defer></script>
 <script src="assets/sliders.js" defer></script>
 <script src="assets/reveal.js" defer></script>
 <script src="assets/pwa.js" defer></script>
@@ -1483,168 +1485,6 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
       open();
     }
     window.addEventListener('hashchange', open);
-  } catch (_) {}
-})();
-</script>
-<script>
-// Paid-plan pricing CTAs — homepage in-page Razorpay checkout.
-//
-// Previously the CTAs navigated to passport-photo.html#buy-<plan>, which
-// then showed an intermediate "Complete payment" modal before finally
-// opening Razorpay. From the homepage that's two full page-changes plus
-// an extra confirm click before the user can actually pay.
-//
-// This block keeps the signup-then-continue handoff for logged-out
-// visitors but opens Razorpay Checkout right here on index.html — no
-// navigation, no extra modal. The <a href="passport-photo.html#buy-…">
-// hrefs stay in the markup as a graceful fallback if the Razorpay SDK
-// fails to load (e.g. network-blocked CDN).
-//
-// Backend contract + plan ids mirror passport-photo.html's startCheckout
-// / completePayment (POST /api/create-order + POST /api/verify-payment
-// against passportprint-studio.onrender.com). No new dependencies — auth
-// state comes from window.currentUser() exposed by assets/auth.js.
-(function () {
-  try {
-    var ctas = document.querySelectorAll('.pricing-card .pcta[data-plan-cta]');
-    if (!ctas.length) return;
-
-    var BACKEND_URL = 'https://passportprint-studio.onrender.com';
-    var AUTH_TOKEN_KEY = 'pps_token_v1';
-    var PLANS = {
-      weekly:  { name: 'Weekly',  price: 59  },
-      monthly: { name: 'Monthly', price: 149 }
-    };
-
-    function loggedIn() {
-      try { return !!(typeof window.currentUser === 'function' && window.currentUser()); }
-      catch (_) { return false; }
-    }
-
-    // Lightweight toast. Reuses the .sp-toast element assets/auth.js
-    // already styles, or falls back to a fresh node.
-    var _toastTimer = null;
-    function notify(msg) {
-      if (!msg) return;
-      var el = document.getElementById('spToast');
-      if (!el) {
-        el = document.createElement('div');
-        el.id = 'spToast';
-        el.className = 'sp-toast';
-        el.setAttribute('role', 'status');
-        el.setAttribute('aria-live', 'polite');
-        document.body.appendChild(el);
-      }
-      el.textContent = msg;
-      el.classList.add('sp-toast-show');
-      clearTimeout(_toastTimer);
-      _toastTimer = setTimeout(function () {
-        el.classList.remove('sp-toast-show');
-      }, 3200);
-    }
-
-    async function api(path, opts) {
-      opts = opts || {};
-      var headers = { 'Content-Type': 'application/json' };
-      var token = null;
-      try { token = localStorage.getItem(AUTH_TOKEN_KEY); } catch (_) {}
-      if (token) headers['Authorization'] = 'Bearer ' + token;
-      var res = await fetch(BACKEND_URL + path, {
-        method: opts.method || 'GET',
-        headers: headers,
-        body: opts.body ? JSON.stringify(opts.body) : undefined
-      });
-      var data = null;
-      try { data = await res.json(); } catch (_) {}
-      if (!res.ok) {
-        var err = new Error((data && data.error) || ('HTTP ' + res.status));
-        err.status = res.status; err.data = data;
-        throw err;
-      }
-      return data;
-    }
-
-    // Graceful fallback: if the Razorpay SDK isn't on the page yet (still
-    // loading, blocked, etc.), send the user to the passport-photo flow
-    // which has its own loader + retry path. Users never get stuck.
-    function fallbackToPassportPage(planId) {
-      location.href = 'passport-photo.html#buy-' + planId;
-    }
-
-    async function openCheckout(planId) {
-      var p = PLANS[planId]; if (!p) return;
-      var user = (typeof window.currentUser === 'function') ? window.currentUser() : null;
-      if (!user) { notify('Please sign in to continue.'); return; }
-      if (!window.Razorpay) { fallbackToPassportPage(planId); return; }
-      try {
-        var order = await api('/api/create-order', { method: 'POST', body: { plan: planId } });
-        var rzp = new window.Razorpay({
-          key: order.keyId,
-          amount: order.amount,
-          currency: order.currency,
-          name: 'Studio Print',
-          description: p.name + ' Plan',
-          image: new URL('assets/logo.png', window.location.origin + window.location.pathname).href,
-          order_id: order.orderId,
-          prefill: { name: user.name || '', email: user.email || '' },
-          theme: { color: '#f0a500' },
-          handler: async function (resp) {
-            try {
-              await api('/api/verify-payment', {
-                method: 'POST',
-                body: {
-                  orderId: resp.razorpay_order_id,
-                  paymentId: resp.razorpay_payment_id,
-                  signature: resp.razorpay_signature,
-                  plan: planId
-                }
-              });
-              notify(p.name + ' plan activated.');
-              if (typeof window.refreshAuthUI === 'function') {
-                try { window.refreshAuthUI(); } catch (_) {}
-              }
-            } catch (ex) {
-              notify('Verification failed: ' + ex.message);
-            }
-          },
-          modal: { ondismiss: function () { notify('Payment cancelled.'); } }
-        });
-        rzp.open();
-      } catch (ex) {
-        notify('Could not start payment: ' + ex.message);
-      }
-    }
-
-    Array.prototype.forEach.call(ctas, function (a) {
-      a.addEventListener('click', function (e) {
-        var plan = a.getAttribute('data-plan-cta');
-        if (!plan || !PLANS[plan]) return; // safety: unknown plan → let <a> nav
-        e.preventDefault();
-
-        if (loggedIn()) { openCheckout(plan); return; }
-
-        if (typeof window.openAuth !== 'function') {
-          fallbackToPassportPage(plan);
-          return;
-        }
-        window.openAuth('signup');
-        setTimeout(function () {
-          var overlay = document.getElementById('spAuthModal');
-          if (!overlay) { fallbackToPassportPage(plan); return; }
-          var mo = new MutationObserver(function () {
-            if (!overlay.classList.contains('active')) {
-              mo.disconnect();
-              // Auth UI updates `currentUser()` before removing `.active`.
-              // Small delay lets any post-login re-render settle.
-              setTimeout(function () {
-                if (loggedIn()) { openCheckout(plan); }
-              }, 50);
-            }
-          });
-          mo.observe(overlay, { attributes: true, attributeFilter: ['class'] });
-        }, 0);
-      });
-    });
   } catch (_) {}
 })();
 </script>
