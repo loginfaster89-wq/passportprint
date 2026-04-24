@@ -41,10 +41,7 @@ No dev server — edit source, `npm run build`, preview from `dist/`.
    `assets/auth.js`, `assets/auth.css`. Don't fork into per-page copies.
 7. **Pricing numbers** (free: 2 sheets/day; weekly: ₹59/7 days; monthly:
    ₹149/30 days) appear in `index.html`, `terms.html`, `refund.html`,
-   `shipping.html`. If one changes, update all four. Studio Print ships
-   **only Weekly + Monthly paid plans** — no yearly / annual plan exists
-   or is planned. Do not add yearly pricing, monthly/yearly toggles, or
-   "save X%" annual-discount copy in any PR.
+   `shipping.html`. If one changes, update all four.
 8. **Design / fonts / animations / effects = case-by-case approval
    (2026-04-24).** Project owner wants top-tier 2026 polish, but any new
    font, palette, token, animation, transition, hover effect, decorative
@@ -212,7 +209,6 @@ doesn't re-fix already-merged work.
 - `R1/R2/R3/R5/R6` responsive polish (hero H1 clamp, hero-sheet clamp, 820 breakpoint, 24 px slider-dot tap, footer link padding) → PR #108.
 - `U1` pricing buy-flow (`#buy-<planId>` hash handler + CTA hrefs) → PR #109.
 - Docs: unlock `passport-photo.html` → PR #110.
-- `P11` monthly/yearly toggle **dropped** from backlog → PR #113.
 - Homepage inline Razorpay checkout from pricing CTAs → PR #112.
 - Shared pricing modal (`assets/pricing.js` + `assets/pricing.css`) — every page now has a 2-step Choose Plan → Complete Payment flow without navigating to `passport-photo.html` → PR #114.
 
@@ -228,11 +224,6 @@ doesn't re-fix already-merged work.
 3. `P24` Self-host Syne + DM Mono (woff2 subset).
 4. `P16` Language switcher UI affordance.
 5. `P26` Cookie banner (self-hosted, essentials-only).
-
-> **`P11` monthly/yearly toggle dropped (2026-04-24, PR #113).** Studio
-> Print only ships Weekly (₹59/7 days) + Monthly (₹149/30 days); no yearly
-> plan exists. Do not propose a monthly/yearly toggle, "Save X%" copy, or
-> annual pricing in future sessions.
 
 *Responsive items — only low-priority nits remain:*
 - `R4` passport-photo upload-card frame-corners clip at iPhone SE (low priority).
@@ -312,8 +303,6 @@ Clone ke baad pehle ye teen files padho:
 Passport-photo nits: `F11` 1440 empty space, `P20` AI-model progress
 bar, `P21` inline error banner, `P29` step-bar fill, `R4` frame-corners
 375 px.
-
-> `P11` (monthly/yearly toggle) dropped — PR #113. Do not re-propose.
 
 ## Default rules (same every session)
 - `passport-photo.html` editable (2026-04-24 unlock), minimum diff.
