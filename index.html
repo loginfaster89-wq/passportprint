@@ -1227,7 +1227,7 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
             <li>All country presets (India, US, UK, UAE, Schengen…)</li>
             <li>No auto-renewal — one-time purchase</li>
           </ul>
-          <a class="pcta" href="passport-photo.html#plans" data-plan-cta="weekly">Get weekly pass</a>
+          <a class="pcta" href="passport-photo.html#buy-weekly" data-plan-cta="weekly">Get weekly pass</a>
         </div>
 
         <div class="pricing-card featured">
@@ -1240,7 +1240,7 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
             <li>Priority email support</li>
             <li>Best for print shops &amp; photo studios</li>
           </ul>
-          <a class="pcta" href="passport-photo.html#plans" data-plan-cta="monthly">Get monthly pass</a>
+          <a class="pcta" href="passport-photo.html#buy-monthly" data-plan-cta="monthly">Get monthly pass</a>
         </div>
       </div>
 
@@ -1493,7 +1493,8 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
         if (loggedIn()) return; // let <a href="#plans"> navigation proceed
         if (typeof window.openAuth !== 'function') return; // safety: normal nav
         e.preventDefault();
-        var target = a.getAttribute('href') || 'passport-photo.html#plans';
+        var plan = a.getAttribute('data-plan-cta');
+        var target = 'passport-photo.html#buy-' + plan;
         window.openAuth('signup');
         setTimeout(function () {
           var overlay = document.getElementById('spAuthModal');

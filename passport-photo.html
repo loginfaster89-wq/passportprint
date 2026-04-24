@@ -5360,6 +5360,11 @@ restoreSession();
         try { window.openAuth('login'); } catch (e) {}
       } else if (h === '#plans' && typeof window.openPlans === 'function') {
         try { window.openPlans(); } catch (e) {}
+      } else if (h.indexOf('#buy-') === 0 && typeof window.startCheckout === 'function') {
+        var planId = h.slice(5); // "weekly" / "monthly"
+        // Clear hash so reload doesn't re-trigger checkout
+        try { history.replaceState(null, '', location.pathname + location.search); } catch(_) {}
+        try { window.startCheckout(planId); } catch (e) {}
       }
     }
     if (document.readyState === 'loading') {
