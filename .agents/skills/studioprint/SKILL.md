@@ -257,8 +257,8 @@ remain. See `issues.md` §E for details.
 5. ~~`P26` Cookie banner (self-hosted, essentials-only).~~ — **shipped PR #120.**
 
 *Responsive items — only low-priority nits remain:*
-- `R4` passport-photo upload-card frame-corners clip at iPhone SE (low priority).
-- `R7` No dedicated 768 px hero breakpoint (optional polish).
+- ~~`R4` passport-photo upload-card frame-corners clip at iPhone SE~~ — **shipped PR #130.**
+- ~~`R7` No dedicated 768 px hero breakpoint~~ — **shipped PR #131.** New `@media (min-width:761px) and (max-width:768px)` in `index.html` switches hero-preview to single column at iPad portrait.
 
 *Passport-photo-specific backlog* (file is no longer locked, but still
 requires minimum-diff care — see Hard rule #1): ~~`F11` 1440 empty space~~ —
@@ -318,6 +318,7 @@ P20 AI-model download bar shipped PR #128.
 F11 1440 empty space fixed PR #129.
 P21 inline error banner shipped PR #130.
 R4 frame-corners 375px fix shipped PR #130.
+R7 768px hero breakpoint shipped PR #131.
 
 ## Architecture context (shipped — don't redo)
 
@@ -367,16 +368,22 @@ R4 frame-corners 375px fix shipped PR #130.
 - **R4 frame-corners 375px** (PR #130): inner corner brackets shrunk
   (22→16px, offset −10→−6px) at ≤420px so they no longer clip right
   edge on iPhone SE.
+- **R7 768px hero breakpoint** (PR #131): `@media (min-width:761px) and
+  (max-width:768px)` switches hero-preview grid to single column at iPad
+  portrait. Fills the gap between 820 px (sheets hide) and 760 px (phone
+  compact layout).
 
 ## Open backlog — pick one per session
 
-All 5 polish roadmap items (P12/P30/P24/P16/P26) shipped. F6 + F11 also shipped.
+All 5 polish roadmap items (P12/P30/P24/P16/P26) shipped. F6 + F11 +
+P21 + R4 + R7 also shipped.
 
 Passport-photo nits: all shipped (P21 PR #130, R4 PR #130, F11 PR #129,
 P29 PR #126, P20 PR #128).
 
+Responsive nits: all shipped (R4 PR #130, R7 PR #131).
+
 Functional nits: `F7` GSI iframe warnings (not our code, harmless).
-`R7` optional 768px hero breakpoint (low priority).
 
 P11 (monthly/yearly toggle) dropped — PR #113. Do not re-propose.
 
