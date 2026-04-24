@@ -262,9 +262,9 @@ remain. See `issues.md` §E for details.
 
 *Passport-photo-specific backlog* (file is no longer locked, but still
 requires minimum-diff care — see Hard rule #1): ~~`F11` 1440 empty space~~ —
-**shipped PR #129**, `P21` inline error banner,
+**shipped PR #129**, ~~`P21` inline error banner~~ — **shipped PR #130**,
 ~~`P29` step-bar progress fill~~ — **shipped PR #126**,
-`R4` frame-corners clip at 375 px.
+~~`R4` frame-corners clip at 375 px~~ — **shipped PR #130**.
 
 **How to audit again (reproducible)**
 
@@ -316,6 +316,8 @@ P29 step-bar progress fill shipped PR #126.
 F6 audience grid centred shipped PR #127.
 P20 AI-model download bar shipped PR #128.
 F11 1440 empty space fixed PR #129.
+P21 inline error banner shipped PR #130.
+R4 frame-corners 375px fix shipped PR #130.
 
 ## Architecture context (shipped — don't redo)
 
@@ -359,14 +361,22 @@ F11 1440 empty space fixed PR #129.
 - **F11 1440 empty space** (PR #129): upload card shifted up via
   `padding-bottom:14vh` at ≥1200 px + trust-spec strip at canvas bottom
   (desktop only, auto-hides on step 2+).
+- **P21 inline error banner** (PR #130): replaces browser `alert()` on
+  image-load failure with inline danger-themed banner (Retry + dismiss)
+  below upload card. Auto-clears on new file selection.
+- **R4 frame-corners 375px** (PR #130): inner corner brackets shrunk
+  (22→16px, offset −10→−6px) at ≤420px so they no longer clip right
+  edge on iPhone SE.
 
 ## Open backlog — pick one per session
 
 All 5 polish roadmap items (P12/P30/P24/P16/P26) shipped. F6 + F11 also shipped.
 
-Passport-photo nits: `P21` inline error banner, `R4` frame-corners 375 px.
+Passport-photo nits: all shipped (P21 PR #130, R4 PR #130, F11 PR #129,
+P29 PR #126, P20 PR #128).
 
 Functional nits: `F7` GSI iframe warnings (not our code, harmless).
+`R7` optional 768px hero breakpoint (low priority).
 
 P11 (monthly/yearly toggle) dropped — PR #113. Do not re-propose.
 
