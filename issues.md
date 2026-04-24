@@ -222,3 +222,26 @@ element overflow, text clipping, console errors, network errors).
   to SELECTORS + matching `.is-slider` CSS rules in `index.html`.
 
 **Evidence:** screenshots at `/home/ubuntu/audit-evidence-2/screenshots/`, full JSON at `/home/ubuntu/audit-evidence-2/audit.json` (session VM only, not committed).
+
+---
+
+## F. Footer & UX cleanup (2026-04-24, session #3)
+
+Owner-reported issues from real-device testing (iPhone, iPad, Galaxy S24 Ultra).
+
+| # | Area | Finding | Status |
+|---|------|---------|--------|
+| F14 | Footer (all pages) | Language switcher (`EN` / `हि` toggle) non-functional — clicking Hindi does nothing visible. Removed from all 8 shared pages + CSS + `lang.js` script. | **fixed this PR** |
+| F15 | Homepage | "Open Passport Photo →" floating sticky CTA button on mobile (`sp-mobile-cta`) over-glorifies a single feature — unnecessary when more tools (Document Sheet, Certificate Editor, etc.) are planned. Removed element + CSS + JS. | **fixed this PR** |
+| F16 | Footer (iPad / tablet) | Footer wastes too much vertical space on iPad — brand column + 4 nav columns stack into separate rows with excessive gaps. Compacted: kept 4-col nav grid at tablet, reduced gaps and padding. | **fixed this PR** |
+| F17 | Footer (phone) | Footer bottom bar (`footer-bottom`) left-aligned on phones — looks messy. Changed to centered layout with centered meta icons. | **fixed this PR** |
+| F18 | passport-photo.html footer (phone) | Simple `.links` footer looks messy on phone — links run together without clear spacing. Converted to flex-wrap centered layout with proper gap. | **fixed this PR** |
+| F19 | passport-photo.html (phone) | Upload card ("Drop your photo here") gets cut off at top and bottom on phone screens. Added padding to `.canvas-area` and increased min-height from 180px to 220px at ≤640px. | **fixed this PR** |
+
+### Learnings for future sessions
+
+1. **Don't over-glorify a single feature.** When a website has multiple planned tools (Passport Photo, Document Sheet, Certificate Editor, etc.), avoid creating dedicated floating CTAs, hero animations, and workflow demos that only showcase one tool. Every such element will need reworking when the next feature launches.
+2. **Footer quality reflects on Devin AI credit.** The footer says "Built with Devin AI" — if the footer looks bad (wasted space, misaligned, broken features), it directly reflects on Devin's quality. Always test footer on real mobile/tablet viewports.
+3. **Test language switcher before shipping.** P16 shipped a non-functional Hindi toggle — it should have been tested with actual translated content or not shipped at all.
+4. **Compact footers on mobile.** Multi-column footers need aggressive compacting on phones and tablets. Don't just stack columns — reduce gaps, font sizes, and padding proportionally.
+5. **Upload areas need breathing room on mobile.** Interactive areas (drop zones, upload cards) should have padding around them on small screens so they don't clip against viewport edges or adjacent elements.
