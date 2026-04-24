@@ -254,7 +254,7 @@ remain. See `issues.md` §E for details.
 2. `P30` Homepage density break — live-demo section between HERO/FEATURES.
 3. `P24` Self-host Syne + DM Mono (woff2 subset).
 4. `P16` Language switcher UI affordance.
-5. `P26` Cookie banner (self-hosted, essentials-only).
+5. ~~`P26` Cookie banner~~ — **shipped PR #120.**
 
 *Responsive items — only low-priority nits remain:*
 - `R4` passport-photo upload-card frame-corners clip at iPhone SE (low priority).
@@ -341,13 +341,14 @@ Clone ke baad pehle ye teen files padho:
   copies of nav/auth.
 - **Stats-grid slider** (PR #118): `.stats-grid` added to `sliders.js`
   SELECTORS — 4 stat cards now convert to slider on orphan row / phones.
+- **Cookie banner** (PR #120): `assets/cookie.js` + `.sp-cookie` CSS in
+  `legal.css`. Self-hosted, essentials-only, localStorage dismiss. All 9 pages.
 
 ## Open backlog — pick one per session
 
 1. `P30` — Homepage density break — live-demo section.
 2. `P24` — Self-host Syne + DM Mono (woff2 subset).
 3. `P16` — Language switcher UI affordance.
-4. `P26` — Cookie banner (self-hosted, essentials-only).
 
 Passport-photo nits: `F11` 1440 empty space, `P20` AI-model progress
 bar, `P21` inline error banner, `P29` step-bar fill, `R4` frame-corners

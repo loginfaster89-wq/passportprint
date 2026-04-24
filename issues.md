@@ -93,7 +93,7 @@ for a follow-up PR.
 | ~~P23~~ | SEO | **resolved PR #90.** `<lastmod>2026-04-23</lastmod>` on every entry + 4 in-page landing sections (`/#features`, `/#how`, `/#pricing`, `/#faq`) with their own priorities. |
 | P24 | Performance | Fonts are loaded from Google Fonts CDN (`fonts.googleapis.com`). Self-hosting Syne + DM Mono (woff2, subset to Latin + ₹) removes a third-party request and shaves 100–200 ms FCP. |
 | ~~P25~~ | Performance | **resolved PR #87.** Backend preconnect added to all 7 shared-header pages (about/contact/privacy/terms/refund/shipping/404). |
-| P26 | Cookies / privacy | No cookie banner. India has no strict cookie-consent law yet, but EU / UK visitors expect one and the Google Identity SDK drops cookies. A lightweight self-hosted banner ("We only use essential cookies for login. [OK]") is enough for global polish. |
+| ~~P26~~ | Cookies / privacy | **resolved PR #120.** Self-hosted essential-only cookie banner on all 9 pages. `assets/cookie.js` + `.sp-cookie` CSS in `legal.css`. localStorage dismiss. |
 | ~~P27~~ | Tooling | **resolved PR #86.** Branded `404.html` with shared legal-header/footer, big amber "404" numeral, two CTAs, `noindex` meta, build.js now minifies it into `dist/`. |
 | ~~P28~~ | Tooling | **resolved PRs #93 + #94.** `assets/manifest.webmanifest` + installable icons on index + 7 legal pages (PR #93); `sw.js` with network-first HTML + stale-while-revalidate assets + `/offline.html` fallback (PR #94). Registered via `assets/pwa.js`. |
 | P29 | Passport-photo step bar | Static 1→2→3→4 pills. At 2026 polish level, fill a progress line as steps complete (with a 300 ms ease), highlight the active pill with the accent glow. |
@@ -113,7 +113,7 @@ All of the quick-win queue from the 2026-04-23 audit is now merged. The**open ba
 2. **P30** — Homepage density break — one real "live demo" section between HERO and FEATURES.
 3. **P24** — Self-host Syne + DM Mono fonts (woff2 subset) — removes Google Fonts third-party.
 4. **P16** — Language switcher (`हि` ↔ `EN`) UI affordance.
-5. **P26** — Cookie banner (self-hosted, essential-only).
+5. ~~**P26** — Cookie banner~~ — **shipped in PR #120.**
 
 **Recently resolved (since last audit refresh):** P10 contact form (PR #98), P19 inline tools-preview demo strip (PR #99), P2 hero A4-sheet mockup (PR #100), P1 hero animated gradient pulse (PR #102), P8 honest numbers strip (PR #103), R1/R2/R3/R5/R6 responsive polish (PR #108), U1 pricing buy-flow (PR #109), passport-photo unlock (PR #110), homepage inline checkout (PR #112), shared pricing modal (PR #114).
 
