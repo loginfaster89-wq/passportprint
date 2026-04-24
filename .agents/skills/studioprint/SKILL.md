@@ -253,7 +253,7 @@ remain. See `issues.md` §E for details.
 1. ~~`P12` Pricing comparison matrix~~ — **shipped PR #119.**
 2. ~~`P30` Homepage density break — live-demo section between HERO/FEATURES.~~ — **shipped PR #123.**
 3. ~~`P24` Self-host Syne + DM Mono (woff2 subset).~~ — **shipped PR #124.**
-4. `P16` Language switcher UI affordance.
+4. ~~`P16` Language switcher UI affordance.~~ — **shipped PR #125.**
 5. ~~`P26` Cookie banner (self-hosted, essentials-only).~~ — **shipped PR #120.**
 
 *Responsive items — only low-priority nits remain:*
@@ -310,6 +310,7 @@ Clone ke baad pehle ye teen files padho:
 
 F13 stats-grid slider fixed PR #118.
 P24 self-host fonts shipped PR #124.
+P16 language switcher shipped PR #125.
 
 ## Architecture context (shipped — don't redo)
 
@@ -338,14 +339,19 @@ P24 self-host fonts shipped PR #124.
   to slider on orphan row / phones like all other grids.
 - Full responsive re-audit (PR #118 docs): 9 pages × 8 viewports = 72
   combos — ALL CLEAR, no new issues.
+- **Language toggle** (PR #125): interactive `EN` / `हि` pill in footer
+  on all 8 shared pages. `assets/lang.js` syncs with `pps_lang`
+  localStorage. Existing tokens only.
 
 ## Open backlog — pick one per session
 
-1. `P16` — Language switcher UI affordance.
+All 5 polish roadmap items (P12/P30/P24/P16/P26) are now shipped.
 
 Passport-photo nits: `F11` 1440 empty space, `P20` AI-model progress
 bar, `P21` inline error banner, `P29` step-bar fill, `R4` frame-corners
 375 px.
+
+Functional nits: `F6` audience grid sparse, `F11` 1440 empty space.
 
 P11 (monthly/yearly toggle) dropped — PR #113. Do not re-propose.
 
