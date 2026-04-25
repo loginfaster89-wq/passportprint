@@ -272,26 +272,66 @@ audit trail. Do NOT re-fix any of the following — they are all merged:
 - PR #182: PAN/Aadhaar CR80 card size standardization + auto-trim both
   cards + test PDFs saved in `test-pdfs/`.
 
-**OPEN — Full card system rebuild (priority — see `issues.md` §L):**
-Owner directive: delete the entire old card crop/detection/sizing system
-and rebuild from scratch. Step-by-step, one PR per step:
-1. Fix PDF → card crop extraction (recalibrate crop coordinates)
-2. Standardize output to exact CR80 (85.6×54mm = 1011×638px at 300 DPI)
-3. Fix PAN Photo Only face isolation (§J bug)
-4. Front + back layout on A4 (fold-and-laminate workflow)
-5. Print alignment + margin fine-tuning
+**OPEN — ID Card Print feature (NEW — replaces old Document Sheet):**
+PR #185 deleted the old `document-sheet.html` and all its broken crop
+logic. A brand new `id-print.html` page will be built from scratch.
+
+**Research completed (session 2026-04-25):** Full competitor analysis,
+card sizes, lamination specs, and feature plan documented in
+`issues.md` §M. Key findings below.
+
+**Competitors researched:**
+- CardXpress (MySea Solutions) — Rs 2500 desktop, Aadhaar/PAN/Voter,
+  Epson L805 tray + A4 + Dragon sheet. Front+back preview, photo edit,
+  font change, BigQR, positioning controls.
+- eCardCutter (go24.info) — FREE browser tool, advance crop, toggles
+  (issue date, QR, mobile no, download date), rounded borders.
+- DocSet.in — FREE, 5 cards per A4, CR80 auto-alignment.
+- PVC Pro — Rs 1/file, multi-card, batch, AI crop.
 
 **Card size reference:**
 - CR80 standard: 85.6 × 54 mm = 1011 × 638 px at 300 DPI
 - Lamination pouch: 65 × 95 mm (Reston 125 micron)
 - Card fits inside pouch with ~4.7mm width margin, ~5.5mm height margin
+- A4 at 300 DPI: 2480 × 3508 px
+- Dragon sheet 4×6: 1205 × 1795 px (fits 2 cards)
 - Test PDFs: `test-pdfs/pan-test.pdf` (pw: `05071999`),
   `test-pdfs/aadhaar-test.pdf` (pw: `SUNI1986`)
 
-**PAN Photo Only bug (§J — still open):**
-Density-based `detectPhotoInCard` fails for PAN — Hindi header text and
-name text merge with photo. Hardcoded `PAN_PHOTO_FRAC` approach needs
-coordinate calibration using actual test PAN PDF.
+**eAadhaar PDF structure:**
+- A4 portrait (~595 × 842 pt). Front card area upper ~60-65%, back
+  lower ~30-35%. Password: first 4 CAPS letters of name + birth year.
+
+**ePAN PDF structure:**
+- Varies (A4 portrait or landscape). Providers: NSDL, UTI-ITSL,
+  Income Tax eFiling — each has slightly different layout. Password:
+  DOB in DDMMYYYY.
+
+**Phase 1 (MVP) — build `id-print.html`:**
+1. PDF upload + password unlock (pdf.js — already a project dependency)
+2. Auto-detect Aadhaar vs PAN (text extraction keyword matching)
+3. Auto-crop front + back from PDF page
+4. CR80 sized output (1011 × 638 px at 300 DPI)
+5. Front + back side-by-side preview
+6. A4 sheet layout with both sides (fold-and-laminate workflow)
+7. Download PNG + Print button
+8. All processing client-side (privacy-first)
+9. Shared nav/auth/footer (legal.css, nav.js, auth.js, pricing.js)
+
+**Phase 2 (follow-up PRs):**
+- Photo editing (brightness/contrast/saturation)
+- Multiple cards per A4 (4-5 pairs per sheet)
+- Cut marks/guides on A4 output
+- Rounded border option
+- Voter ID support
+- Dragon sheet (4×6) layout option
+
+**Phase 3 (future):**
+- Ayushman/Jan Aadhaar/eShram support
+- Batch processing (multiple PDFs)
+- PVC card tray layout (Epson L805/L8050)
+- Toggle options (issue date, QR, mobile no, download date)
+- Auto photo enhancement
 
 **Pricing section design rule (post PR #150):** The pricing section uses
 card-based layout (`.plan-grid` with `.plan-card` divs), NOT a `<table>`.
@@ -300,20 +340,7 @@ for plan names, 42px+ for prices. On mobile (≤900px) cards stack
 vertically. Never shrink text below these minimums. If adding features,
 add them to all 3 cards consistently.
 
-**Document Sheet editor rules (post PR #163):**
-- Full Document mode: edits (brightness/contrast/saturation/warmth/shadows)
-  apply to the full card image EXCEPT the photo region. Photo stays
-  original.
-- Photo Only mode: edits apply ONLY to the photo region.
-- Card crop constants (BEING REBUILT — see §L):
-  - Aadhaar: `{ x0: 0.045, y0: 0.675, x1: 0.955, y1: 0.885 }` of page
-  - PAN: `{ x0: 0.06, y0: 0.755, x1: 0.955, y1: 0.955 }` of page
-- A4 canvas: 2480×3508 px (300 DPI). Card centered horizontally,
-  60px from top.
-- CR80 output: `CARD_PRINT_W` = 1011 px, `CARD_PRINT_H` = 638 px.
-
-**Open:** `F7` GSI iframe warnings (not our code, harmless) +
-full card system rebuild (§L).
+**Open:** `F7` GSI iframe warnings (not our code, harmless).
 
 ## 10. Related repos
 
@@ -344,58 +371,51 @@ Studio Print frontend par kaam karo. Repo: loginfaster89-wq/passportprint
 Clone ke baad pehle ye teen files padho:
 
 .agents/skills/studioprint/SKILL.md — Devin recipe (build/preview,
-hard rules, PAT curl snippet, Hinglish style, §9 merged/open backlog).
+hard rules, PAT curl snippet, Hinglish style, §9 merged/open backlog,
+§9 ID print feature plan with competitor research).
 AGENTS.md — full source of truth.
-issues.md — 2026-04-23 site audit + 2026-04-24 §D responsive / flow
-follow-up + §E full re-audit + §F footer cleanup + §G single-feature
-glorification cleanup + §J PAN Photo Only bug (OPEN) + §K card size
-standardization + §L full card system rebuild (OPEN).
-Last PR: PR #182 (PAN/Aadhaar CR80 card size standardization + auto-trim
-both cards + test PDFs saved in repo)
+issues.md — §M ID Card Print feature research + implementation plan
+(NEW, added 2026-04-25).
+
+Last PR: PR #185 (removed old document-sheet.html — clean slate for
+new ID print feature)
 
 Shipped summary (don't redo):
 
-PRs #70–#114: all original audit quick-wins + responsive + flow fixes.
-PRs #118–#132: stats-grid slider, self-host fonts, lang switcher,
-step-bar progress, audience grid, AI download bar, F11 empty space,
-error banner, frame-corners, 768px breakpoint, font preload.
-PRs #134+#137: FAQPage + WebApplication JSON-LD.
-PR #139: footer/UX cleanup (F14–F19).
-PR #141: single-feature glorification cleanup (G1–G5).
-PR #142: BreadcrumbList + Organization JSON-LD, max-image-preview.
-PR #143: pricing cards removed, buy buttons in comparison table,
-trust pills 2-row, footer email icon removed.
-PR #145: hero eyebrow pill shrunk + text changed to
-"No uploads · Print-ready", one-at-a-time rule added.
-PR #147: terse-mode prompt + pricing table polish.
-PRs #148+#149: pricing table text size increase.
-PR #150: pricing section full redesign — plan cards, bigger text,
-mobile-friendly stacked layout.
-PR #152: hero-preview hidden on phones, trust-pill row gap fix.
-PR #153: removed 'Soon' features from nav dropdown + features grid.
-PR #154: fake feature tiles removed from hero-preview section.
-PR #156: Document Sheet feature card + multi-tool copy update.
-PR #157: Document Sheet tool page (Phase 1) — PDF upload +
-password unlock via pdf.js, page thumbnail preview.
-PR #159: dropdown feature icons fix on document-sheet page.
-PR #160: Aadhaar/PAN card detection on document-sheet page.
-PR #163: Document Sheet Phase 2 — editor step, A4 sheet generation,
-download PNG + print.
-PR #165: Full Document photo protection fix + Back to Edit button.
-PR #166: Photo Only crop fallback + per-mode edit state auto-save +
-back buttons on password/editor steps.
-PR #168: docs update.
-PR #170: PAN Photo Only vertical scan bounds (merged, NOT fully fixed).
-PR #171: docs update — PAN Photo Only bug documented.
-PR #182: PAN/Aadhaar CR80 card size standardization + auto-trim both
-cards + test PDFs in test-pdfs/.
+PRs #70–#185: all previous work shipped. Key highlights:
+- Original audit quick-wins + responsive + flow fixes (#70–#114)
+- Stats-grid, fonts, step-bar, audience, download bar (#118–#132)
+- JSON-LD, footer, glorification cleanup, pricing redesign (#134–#155)
+- Document Sheet feature (PRs #156–#182) — DELETED in PR #185
+  (old crop system was broken beyond repair)
+
+IMPORTANT: document-sheet.html was DELETED in PR #185. The new ID
+card print feature will be built from scratch as `id-print.html`.
+
+Research already done (don't re-research):
+- Competitor analysis: CardXpress, eCardCutter, DocSet, PVC Pro
+- Card sizes: CR80 = 85.6×54mm = 1011×638px at 300 DPI
+- Lamination: 65×95mm pouch (Reston 125 micron)
+- eAadhaar PDF: A4 portrait, front upper 60-65%, back lower 30-35%
+- ePAN PDF: varies by provider (NSDL/UTI/eFiling)
+- Full research in issues.md §M
 
 Test PDFs repo mein saved hain — bar bar dene ki zaroorat nahi:
 - test-pdfs/pan-test.pdf (password: 05071999)
 - test-pdfs/aadhaar-test.pdf (password: SUNI1986)
 
-Lamination pouch size: 65×95mm (Reston 125 micron).
-CR80 card size: 85.6×54mm (1011×638px at 300 DPI).
+TASK: Build Phase 1 (MVP) of ID Card Print feature.
+Create `id-print.html` with:
+1. PDF upload + password unlock (pdf.js)
+2. Auto-detect Aadhaar vs PAN (text extraction)
+3. Auto-crop front + back from PDF
+4. CR80 output (1011×638px at 300 DPI)
+5. Front + back side-by-side preview
+6. A4 sheet layout (fold-and-laminate workflow)
+7. Download PNG + Print
+8. Client-side only (no server upload)
+9. Shared nav/auth/footer
+10. Update homepage features grid + nav dropdown
 
-<yahan apna task likho>
+Phase 2/3 features listed in SKILL.md §9 — do NOT implement yet.
 ```

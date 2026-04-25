@@ -246,19 +246,19 @@ scan bounds (merged but did NOT fully fix). PR #171 docs update.
 PR #182 PAN/Aadhaar CR80 card size standardization + auto-trim both
 cards + test PDFs saved in `test-pdfs/`.
 
+**Also resolved (PRs #183–#185):** PR #183 card system rebuild docs.
+PR #184 front-card-only crop fix. PR #185 removed `document-sheet.html`
+entirely — clean slate for new ID print feature.
+
 **Open backlog:**
-- **Full card system rebuild (§L)** — owner directive to delete and
-  rebuild the entire card crop/detection/sizing system. Step-by-step:
-  1. Fix PDF → card crop extraction (recalibrate coordinates)
-  2. Standardize output to exact CR80 (85.6×54mm at 300 DPI)
-  3. Fix PAN Photo Only face isolation (§J)
-  4. Front + back layout on A4 (fold-and-laminate workflow)
-  5. Print alignment + margin fine-tuning
-  See `issues.md` §L for full plan, card size research, and key file
-  locations.
-- **PAN Photo Only face isolation bug (§J)** — density-based photo
-  detection fails for PAN cards (Hindi header + name text merge with
-  photo). Part of the rebuild plan (Step 3).
+- **ID Card Print feature (§M, NEW 2026-04-25)** — build `id-print.html`
+  from scratch. Replaces old `document-sheet.html` (deleted PR #185).
+  Full competitor research + implementation plan in `issues.md` §M and
+  `SKILL.md` §9. Phase 1 MVP: PDF upload + password unlock, auto-detect
+  Aadhaar/PAN, auto-crop front+back, CR80 output (1011×638px at 300 DPI),
+  side-by-side preview, A4 fold-and-laminate layout, download PNG + print.
+  Phase 2: photo editing, multi-card A4, cut marks, Voter ID.
+  Phase 3: Ayushman, batch, PVC tray, toggle options.
 - **Card size reference:** CR80 = 85.6×54mm = 1011×638px at 300 DPI.
   Lamination pouch = 65×95mm (Reston 125 micron). Test PDFs in repo:
   `test-pdfs/pan-test.pdf` (pw: `05071999`), `test-pdfs/aadhaar-test.pdf`

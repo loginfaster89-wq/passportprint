@@ -516,10 +516,163 @@ Already saved in repo — do NOT need to be re-provided:
 
 ### Key file locations
 
-- `document-sheet.html` lines ~890–892: `AADHAAR_CROP`, `PAN_CROP`, `getCrop()`
-- `document-sheet.html` lines ~898–944: `trimCardEdges()` auto-trim
-- `document-sheet.html` lines ~946–947: `PAN_PHOTO_FRAC` hardcoded photo region
-- `document-sheet.html` lines ~950–1013: `detectPhotoInCard()` density analysis
-- `document-sheet.html` lines ~1022–1023: `CARD_PRINT_W`, `CARD_PRINT_H` (CR80 at 300 DPI)
-- `document-sheet.html` lines ~1026–1094: `processPdf()` — crop + detect + editor
-- `document-sheet.html` lines ~1240–1340: `buildA4Sheet()` — A4 canvas generation
+**NOTE:** `document-sheet.html` was DELETED in PR #185. The file
+references below are historical only — they no longer exist in the repo.
+The new feature will be built from scratch as `id-print.html` (see §M).
+
+- ~~`document-sheet.html` lines ~890–892: `AADHAAR_CROP`, `PAN_CROP`, `getCrop()`~~
+- ~~`document-sheet.html` lines ~898–944: `trimCardEdges()` auto-trim~~
+- ~~`document-sheet.html` lines ~946–947: `PAN_PHOTO_FRAC` hardcoded photo region~~
+- ~~`document-sheet.html` lines ~950–1013: `detectPhotoInCard()` density analysis~~
+- ~~`document-sheet.html` lines ~1022–1023: `CARD_PRINT_W`, `CARD_PRINT_H` (CR80 at 300 DPI)~~
+- ~~`document-sheet.html` lines ~1026–1094: `processPdf()` — crop + detect + editor~~
+- ~~`document-sheet.html` lines ~1240–1340: `buildA4Sheet()` — A4 canvas generation~~
+
+---
+
+## M. ID Card Print feature — research + implementation plan (2026-04-25)
+
+**Status: OPEN — Phase 1 MVP ready to implement.**
+
+PR #185 deleted the old broken `document-sheet.html`. This section
+documents the competitor research and implementation plan for the
+replacement feature: `id-print.html`.
+
+### M.1 Competitor landscape
+
+| Software | Type | Price | Key Features |
+|----------|------|-------|-------------|
+| **CardXpress (MySea Solutions)** | Desktop (Windows .NET) | Rs 2500 lifetime | Aadhaar/PAN/Voter/Ayushman PDF crop, photo edit, font change, bold, BigQR, front+back preview, positioning controls, Epson L805/L8050 tray + A4 (5-10 cards) + Dragon sheet (4×6, 2 cards) |
+| **Smart Identity Pro (Radiumbox)** | Desktop (Windows) | Rs 3500 lifetime | One-click eAadhaar parse, card customization (header/footer/barcode/photobox toggle), photo edit, font adjust, preprinted card offset, print reports, A4 bulk (10 cards) |
+| **eCardCutter (go24.info)** | Web (browser) | FREE unlimited | Aadhaar/PAN/Voter/Jan Aadhaar/Ayushman/eShram/ABC ID crop. Advance: issue date toggle, download date, front QR, mobile no, photo brightness/contrast, rounded borders. Paper + PVC print. |
+| **DocSet.in** | Web (browser) | FREE | Aadhaar print — auto-align front+back on A4. 5 cards per A4 sheet. CR80 size (8.6×5.4 cm). High-res PDF. No install. |
+| **PVC Pro** | Web (browser) | Rs 1/file credits | Aadhaar/PAN/Voter/Ayushman/eShram/ABHA/DL/RC. Auto-crop AI. Live preview. Batch processing. Watermarked free demo. |
+
+### M.2 Card sizes and lamination
+
+| Item | Dimensions (mm) | Pixels (300 DPI) | Notes |
+|------|-----------------|-------------------|-------|
+| CR80 (standard ID card) | 85.6 × 54 | 1011 × 638 | ISO/IEC 7810 ID-1. Same as credit/debit cards. |
+| Lamination pouch (small) | 65 × 95 | 768 × 1122 | Most common for Aadhaar/PAN. Reston 125 micron. |
+| Lamination pouch (medium) | 70 × 100 | 827 × 1181 | BigFalcon brand. Slightly more margin. |
+| A4 paper | 210 × 297 | 2480 × 3508 | Standard print paper. |
+| Dragon sheet (4×6) | 102 × 152 | 1205 × 1795 | Fits 2 cards. PVC coated. |
+| PVC blank card | 85.5 × 54 × 0.76 | — | For Epson L805/L8050 card tray. |
+
+**Lamination math:** Card (85.6×54mm) inside pouch (65×95mm portrait).
+Card placed landscape → 85.6mm ≤ 95mm height (4.7mm margin each side),
+54mm ≤ 65mm width (5.5mm margin each side). Front+back printed, folded,
+placed inside pouch, heat-sealed.
+
+### M.3 PDF structures
+
+**eAadhaar PDF:**
+- Size: A4 portrait (~595 × 842 pt = 2480 × 3508 px at 300 DPI)
+- Pages: Usually 1 page with full letter format
+- Front card area: Upper portion (~top 60-65%)
+- Back card area: Lower portion (~bottom 30-35%)
+- Password: First 4 letters of name (CAPS) + birth year (e.g., SUNI1986)
+- Contents: Photo, name, DOB/age, gender, Aadhaar number, address,
+  QR code (front), VID, download date, address continued (back)
+- Source: UIDAI portal / Digilocker / mAadhaar (layout may vary slightly)
+
+**ePAN PDF:**
+- Size: Varies — some A4 portrait, some landscape
+- Pages: Usually 1 page
+- Password: DOB in DDMMYYYY format (e.g., 05071999)
+- Providers: NSDL, UTI-ITSL, Income Tax eFiling — each has slightly
+  different layout
+- Contents: PAN number, name, father's name, DOB, photo, signature,
+  hologram area (front), Hindi text, terms, QR code (back)
+
+### M.4 How print shops actually work
+
+1. Customer comes → shop downloads PDF from gov website
+2. PDF is password-protected → enter password
+3. Software auto-detects card type → auto-crops front + back
+4. Optional: photo edit (brightness/contrast)
+5. Print on: PVC tray (Epson L805) / Dragon sheet 4×6 / A4 paper
+6. Cut the printed card with scissors
+7. Fold front + back together
+8. Laminate in 65×95mm thermal pouch (125 micron)
+9. Charge customer Rs 30-100 per card
+
+### M.5 Studio Print advantage over competitors
+
+1. **Browser-based** — no software install needed
+2. **Mobile-friendly** — phone se bhi kaam chalega
+3. **Free unlimited** — no per-file charge, no license
+4. **Privacy-first** — PDF browser mein hi process hota hai, server pe
+   upload nahi (like passport photo tool)
+5. **Modern UI/UX** — 2026 dark theme, smooth interactions
+6. **Multi-device** — Chrome/Edge/Firefox sab pe chalega
+7. **PWA** — installable, offline capable
+8. **Auto-detect** — card type from PDF text extraction
+
+### M.6 Implementation plan — phased
+
+**Phase 1 (MVP) — one PR:**
+1. New page: `id-print.html`
+2. PDF upload + drag-and-drop + password unlock (pdf.js)
+3. Auto-detect Aadhaar vs PAN (text extraction via `getTextContent()`)
+4. Auto-crop front + back from PDF page (render page to canvas, crop
+   card regions using calibrated coordinates)
+5. CR80 sized output (1011 × 638 px at 300 DPI)
+6. Front + back side-by-side preview (dark canvas area)
+7. A4 sheet layout with both sides for fold-and-laminate
+8. Download PNG + Print button (window.print with CSS @media print)
+9. All processing client-side (no server upload)
+10. Shared nav/auth/footer (legal.css, nav.js, auth.js, pricing.js)
+11. Update homepage features grid card (currently "Soon" or missing)
+12. Update nav dropdown with link to new page
+
+**Phase 2 (follow-up PRs):**
+- Photo editing (brightness/contrast/saturation/warmth/shadows)
+- Multiple cards per A4 sheet (4-5 card pairs to save paper)
+- Cut marks / dashed guides on A4 output
+- Rounded border option
+- Voter ID support
+- Dragon sheet (4×6) layout option (2 cards per sheet)
+
+**Phase 3 (future):**
+- Ayushman / Jan Aadhaar / eShram support
+- Batch processing (multiple PDFs at once)
+- PVC card tray layout (Epson L805/L8050 direct print)
+- Toggle options (issue date, download date, QR code, mobile number)
+- Auto photo enhancement (AI brightness/contrast adjustment)
+- Signature box option (PAN)
+- Back-side hologram overlay (PAN)
+
+### M.7 Technical constants
+
+```javascript
+// Card dimensions
+const CR80_W_MM = 85.6;
+const CR80_H_MM = 54;
+const CR80_W_PX = 1011;  // at 300 DPI
+const CR80_H_PX = 638;   // at 300 DPI
+
+// Paper dimensions at 300 DPI
+const A4_W_PX = 2480;
+const A4_H_PX = 3508;
+const DRAGON_W_PX = 1205;  // 4×6 inch
+const DRAGON_H_PX = 1795;
+
+// Lamination pouch
+const POUCH_W_MM = 65;
+const POUCH_H_MM = 95;
+
+// Card type detection keywords (2+ matches confirms)
+// Aadhaar: "aadhaar", "uid", "uidai", "unique identification",
+//          "government of india", "vid"
+// PAN: "permanent account number", "income tax", "pan",
+//      "department", "nsdl", "utiitsl"
+// Voter: "election commission", "epic", "voter", "electoral"
+```
+
+### M.8 Key file locations (to be created)
+
+- `id-print.html` — new tool page (standalone like passport-photo.html)
+- Homepage `index.html` — features grid card update
+- Nav dropdown on all pages — add link to id-print.html
+- `build.js` — add id-print.html to build pipeline
