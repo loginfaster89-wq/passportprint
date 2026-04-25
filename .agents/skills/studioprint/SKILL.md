@@ -220,7 +220,7 @@ Include order on each page:
 
 ## 9. Shipped work & open backlog
 
-Everything from PRs #70–#165 is shipped. See `issues.md` for the full
+Everything from PRs #70–#168 is shipped. See `issues.md` for the full
 audit trail. Do NOT re-fix any of the following — they are all merged:
 
 - PRs #70–#114: original audit quick-wins + responsive + flow fixes.
@@ -262,6 +262,15 @@ audit trail. Do NOT re-fix any of the following — they are all merged:
 - PR #165: Full Document photo protection fix (restore original photo
   pixels from same buffer, bounds checking), Back to Edit button on
   A4 result page.
+- PR #166: Photo Only crop fallback (extract from card if photoImageData
+  null), per-mode edit state auto-save (switching Full Document ↔ Photo
+  Only retains each mode's slider values), back buttons on password +
+  editor steps.
+- PR #167: Photo Only dynamic photo detection replaces hardcoded crop.
+- PR #168: PAN-specific card crop + photo detection — per-doc-type crops
+  (`AADHAAR_CROP` unchanged, `PAN_CROP` {x0:0.06, y0:0.755, x1:0.955,
+  y1:0.955}), photo x-scan limited to 22% for PAN (avoids QR code false
+  positive), 45% for Aadhaar unchanged.
 
 **Pricing section design rule (post PR #150):** The pricing section uses
 card-based layout (`.plan-grid` with `.plan-card` divs), NOT a `<table>`.
@@ -275,8 +284,10 @@ add them to all 3 cards consistently.
   apply to the full card image EXCEPT the photo region. Photo stays
   original.
 - Photo Only mode: edits apply ONLY to the photo region.
-- Card crop: `{ x0: 0.045, y0: 0.675, x1: 0.955, y1: 0.885 }` of page.
-- Photo crop (Aadhaar): `{ x0: 0.045, y0: 0.69, x1: 0.23, y1: 0.87 }`.
+- Card crop is per-doc-type (post PR #168):
+  - Aadhaar: `{ x0: 0.045, y0: 0.675, x1: 0.955, y1: 0.885 }`
+  - PAN: `{ x0: 0.06, y0: 0.755, x1: 0.955, y1: 0.955 }`
+- Photo detection x-scan: 22% for PAN (avoids QR code), 45% for Aadhaar.
 - A4 canvas: 2480×3508 px (300 DPI). Card centered horizontally,
   60px from top.
 
@@ -316,7 +327,7 @@ AGENTS.md — full source of truth.
 issues.md — 2026-04-23 site audit + 2026-04-24 §D responsive / flow
 follow-up + §E full re-audit + §F footer cleanup + §G single-feature
 glorification cleanup.
-Last PR: PR #165 (Full Document photo fix + Back button)
+Last PR: PR #168 (PAN card crop + photo detection)
 
 Shipped summary (don't redo):
 
@@ -347,6 +358,9 @@ PR #160: Aadhaar/PAN card detection on document-sheet page.
 PR #163: Document Sheet Phase 2 — editor step, A4 sheet generation,
 download PNG + print.
 PR #165: Full Document photo protection fix + Back to Edit button.
+PR #166: Photo Only crop fallback, per-mode edit state, back buttons.
+PR #167: Photo Only dynamic photo detection.
+PR #168: PAN-specific card crop + photo detection.
 
 <yahan apna task likho>
 ```
