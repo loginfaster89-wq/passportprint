@@ -888,6 +888,9 @@
   var PAN_CROP     = { x0: 0.06,  y0: 0.755, x1: 0.955, y1: 0.955 };
   function getCrop(docType) { return docType === 'pan' ? PAN_CROP : AADHAAR_CROP; }
 
+  /* ── Hardcoded photo region for PAN (fraction of card crop) ── */
+  var PAN_PHOTO_FRAC = { x0: 0.03, y0: 0.28, x1: 0.23, y1: 0.60 };
+
   /* ── Detect photo region inside card using pixel density analysis ── */
   function detectPhotoInCard(cardData, docType) {
     var w = cardData.width, h = cardData.height, d = cardData.data;
@@ -989,15 +992,24 @@
           cardCropInfo = { sx: cx0, sy: cy0, sw: cw, sh: ch };
           cardImageData = ctx.getImageData(cx0, cy0, cw, ch);
 
-          var detected = detectPhotoInCard(cardImageData, docType);
-          if (detected) {
-            var px0 = cx0 + detected.x;
-            var py0 = cy0 + detected.y;
-            photoCropInfo = { sx: px0, sy: py0, sw: detected.w, sh: detected.h };
-            photoImageData = ctx.getImageData(px0, py0, detected.w, detected.h);
+          if (docType === 'pan') {
+            var ppx = Math.round(cx0 + cw * PAN_PHOTO_FRAC.x0);
+            var ppy = Math.round(cy0 + ch * PAN_PHOTO_FRAC.y0);
+            var ppw = Math.round(cw * (PAN_PHOTO_FRAC.x1 - PAN_PHOTO_FRAC.x0));
+            var pph = Math.round(ch * (PAN_PHOTO_FRAC.y1 - PAN_PHOTO_FRAC.y0));
+            photoCropInfo = { sx: ppx, sy: ppy, sw: ppw, sh: pph };
+            photoImageData = ctx.getImageData(ppx, ppy, ppw, pph);
           } else {
-            photoCropInfo = null;
-            photoImageData = null;
+            var detected = detectPhotoInCard(cardImageData, docType);
+            if (detected) {
+              var px0 = cx0 + detected.x;
+              var py0 = cy0 + detected.y;
+              photoCropInfo = { sx: px0, sy: py0, sw: detected.w, sh: detected.h };
+              photoImageData = ctx.getImageData(px0, py0, detected.w, detected.h);
+            } else {
+              photoCropInfo = null;
+              photoImageData = null;
+            }
           }
 
           hideSpinner();
