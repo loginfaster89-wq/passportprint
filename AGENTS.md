@@ -225,7 +225,7 @@ P19 inline tools-preview demo strip (PR #99), P2 hero A4-sheet mockup
 (PR #110), homepage inline checkout (PR #112), shared pricing modal
 (PR #114).
 
-**Also resolved (PRs #118–#170):** PRs #118–#132 stats-grid slider,
+**Also resolved (PRs #118–#182):** PRs #118–#132 stats-grid slider,
 self-host fonts, step-bar progress, audience grid, AI download bar,
 empty space, error banner, frame-corners, 768px breakpoint, font
 preload. PRs #134+#137 FAQPage + WebApplication JSON-LD. PR #139
@@ -243,13 +243,27 @@ Document Sheet Phase 2 (editor step, A4 sheet generation, download +
 print). PR #165 Full Document photo fix + Back to Edit button.
 PR #166 Photo Only crop fallback + per-mode edit state auto-save +
 back buttons. PR #168 docs update. PR #170 PAN Photo Only vertical
-scan bounds (merged but did NOT fully fix — see open backlog).
+scan bounds (merged but did NOT fully fix). PR #171 docs update.
+PR #182 PAN/Aadhaar CR80 card size standardization + auto-trim both
+cards + test PDFs saved in `test-pdfs/`.
 
 **Open backlog:**
-- **PAN Photo Only face isolation bug** — density-based photo detection
-  fails for PAN cards (Hindi header + name text merge with photo).
-  Needs hardcoded `PAN_PHOTO_FRAC` with calibrated coordinates. See
-  `issues.md` §J for full analysis + suggested fix approach.
+- **Full card system rebuild (§L)** — owner directive to delete and
+  rebuild the entire card crop/detection/sizing system. Step-by-step:
+  1. Fix PDF → card crop extraction (recalibrate coordinates)
+  2. Standardize output to exact CR80 (85.6×54mm at 300 DPI)
+  3. Fix PAN Photo Only face isolation (§J)
+  4. Front + back layout on A4 (fold-and-laminate workflow)
+  5. Print alignment + margin fine-tuning
+  See `issues.md` §L for full plan, card size research, and key file
+  locations.
+- **PAN Photo Only face isolation bug (§J)** — density-based photo
+  detection fails for PAN cards (Hindi header + name text merge with
+  photo). Part of the rebuild plan (Step 3).
+- **Card size reference:** CR80 = 85.6×54mm = 1011×638px at 300 DPI.
+  Lamination pouch = 65×95mm (Reston 125 micron). Test PDFs in repo:
+  `test-pdfs/pan-test.pdf` (pw: `05071999`), `test-pdfs/aadhaar-test.pdf`
+  (pw: `SUNI1986`).
 - F7 GSI iframe warnings (not our code, harmless — monitor only).
 
 ## Working style for human collaborators
