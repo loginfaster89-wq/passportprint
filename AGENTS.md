@@ -70,6 +70,7 @@ and overall aesthetic are not.
 | -------------------------- | ----------------------------------------------------- |
 | `index.html`               | Homepage (hero, features, audience, why, how, pricing, FAQ, CTA) |
 | `passport-photo.html`      | The live passport photo tool (5000+ lines, with its own inline copies of the nav / auth / Google Sign-In markup and a small hash-open script) |
+| `document-sheet.html`      | Document Sheet tool (Phase 1) — PDF upload, password-protected PDF detection + client-side unlock via pdf.js 3.11.174 (CDN), page thumbnail preview. Shared header/nav/footer/auth/pricing modules. |
 | `about.html`, `contact.html`, `privacy.html`, `terms.html`, `refund.html`, `shipping.html` | Legal / info pages, share the header + footer with `index.html` |
 | `assets/auth.js` + `auth.css` | Shared login / signup / OTP / Google Sign-In modal + account modal (plan info, upgrade, delete account). `position: fixed; z-index: 10000` overlay. Include on any page that has `.legal-header` with a `#hdrAuthBtn` button. |
 | `assets/pricing.js` + `pricing.css` | Shared 2-step pricing modal (Choose Plan → Complete Payment → Razorpay). Included on every page except `passport-photo.html`. Exposes `window.openPlans` / `window.startCheckout`. Load AFTER `auth.js`. |
@@ -224,7 +225,7 @@ P19 inline tools-preview demo strip (PR #99), P2 hero A4-sheet mockup
 (PR #110), homepage inline checkout (PR #112), shared pricing modal
 (PR #114).
 
-**Also resolved (PRs #118–#154):** PRs #118–#132 stats-grid slider,
+**Also resolved (PRs #118–#157):** PRs #118–#132 stats-grid slider,
 self-host fonts, step-bar progress, audience grid, AI download bar,
 empty space, error banner, frame-corners, 768px breakpoint, font
 preload. PRs #134+#137 FAQPage + WebApplication JSON-LD. PR #139
@@ -234,20 +235,14 @@ trust pills 2-row. PR #145 hero eyebrow pill. PR #147 terse-mode +
 pricing polish. PRs #148–#150 pricing redesign (plan cards). PR #152
 hero-preview hidden on phones. PR #153 'Soon' features removed from
 nav + features grid. PR #154 fake feature tiles removed from
-hero-preview section.
+hero-preview section. PR #155 docs update. PR #156 Document Sheet
+feature card + multi-tool copy. PR #157 Document Sheet tool page
+(Phase 1: PDF upload + password unlock via pdf.js).
 
-**Open backlog priority order for the next session:**
-1. P26 Cookie banner.
-2. Fresh audit / new features.
-
-**Lower-priority functional nits:** F6 audience grid sparse, F7 GSI
-iframe warnings (harmless, not our code), R4 frame-corners at iPhone SE,
-R7 optional 768 px hero breakpoint.
-
-**Passport-photo-specific backlog** (this file is no longer locked — see
-Hard rule #1 — but still needs minimum-diff care): F11 1440 empty space,
-P20 AI-model download progress bar, P21 inline error banner, P29 step-bar
-progress fill, R4 upload-card frame-corners clipping at iPhone SE.
+**Open backlog:**
+- Document Sheet Phase 2 (A4 sheet layout with cut guides).
+- F7 GSI iframe warnings (not our code, harmless — monitor only).
+- Fresh audit / new features as owner picks priorities.
 
 ## Working style for human collaborators
 

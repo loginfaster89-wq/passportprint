@@ -220,7 +220,7 @@ Include order on each page:
 
 ## 9. Shipped work & open backlog
 
-Everything from PRs #70–#154 is shipped. See `issues.md` for the full
+Everything from PRs #70–#157 is shipped. See `issues.md` for the full
 audit trail. Do NOT re-fix any of the following — they are all merged:
 
 - PRs #70–#114: original audit quick-wins + responsive + flow fixes.
@@ -236,17 +236,17 @@ audit trail. Do NOT re-fix any of the following — they are all merged:
 - PR #145: hero eyebrow pill shrunk, one-at-a-time rule added.
 - PR #147: terse-mode prompt + pricing table polish.
 - PRs #148+#149: pricing table text size increase.
-- PR #150: pricing section full redesign — comparison table replaced
-  with 3 plan cards (Free / Weekly / Monthly). Bigger text (24px names,
-  46px prices, 16px features), "Best value" badge on Monthly, accent
-  border + glow on featured card. Mobile (≤900px) stacks cards
-  vertically in single column, max-width 440px. Each card lists all
-  6 features with ✓/— markers, tagline, and CTA button.
-- PR #152: hero-preview hidden on phones (≤640px), trust-pill row
-  gap fix on mobile.
-- PR #153: removed 'Soon' features from nav dropdown and features grid.
-- PR #154: removed fake feature tiles (Aadhaar/PAN, Certificate Edit,
-  Background Studio) from hero-preview section, dead CSS/SVG cleanup.
+- PR #150: pricing section full redesign — plan cards, bigger text,
+  mobile-friendly stacked layout.
+- PR #152: hero-preview hidden on phones, trust-pill row gap fix.
+- PR #153: removed 'Soon' features from nav dropdown + features grid.
+- PR #154: fake feature tiles removed from hero-preview section.
+- PR #155: docs update (SKILL.md + AGENTS.md for #152-#154).
+- PR #156: Document Sheet feature card "Soon" + multi-tool copy update
+  (density-break, how-it-works, FAQ, footer, nav dropdown on all pages).
+- PR #157: Document Sheet tool page (Phase 1) — `document-sheet.html`
+  with PDF upload, password-protected PDF detection, client-side unlock
+  via pdf.js, page thumbnail preview. Nav/features updated Soon→Live.
 
 **Pricing section design rule (post PR #150):** The pricing section uses
 card-based layout (`.plan-grid` with `.plan-card` divs), NOT a `<table>`.
@@ -256,7 +256,9 @@ vertically. Never shrink text below these minimums. If adding features,
 add them to all 3 cards consistently.
 
 **Open:** only `F7` GSI iframe warnings (not our code, harmless).
-Backlog is empty — next session can propose new features or fresh audit.
+Document Sheet Phase 2 (A4 sheet layout with cut guides) is next.
+Backlog is otherwise empty — next session can propose new features or
+fresh audit.
 
 ## 10. Related repos
 
@@ -290,7 +292,7 @@ AGENTS.md — full source of truth.
 issues.md — 2026-04-23 site audit + 2026-04-24 §D responsive / flow
 follow-up + §E full re-audit + §F footer cleanup + §G single-feature
 glorification cleanup.
-last pr - PR #154 (fake feature tiles removed from hero-preview)
+last pr - PR #157 (Document Sheet tool — Phase 1)
 
 Shipped summary (don't redo):
 
@@ -308,11 +310,14 @@ PR #145: hero eyebrow pill shrunk + text changed to
 "No uploads · Print-ready", one-at-a-time rule added.
 PR #147: terse-mode prompt + pricing table polish.
 PRs #148+#149: pricing table text size increase.
-PR #150: pricing section full redesign — comparison table replaced
-with plan cards, bigger text, mobile-friendly stacked layout.
+PR #150: pricing section full redesign — plan cards, bigger text,
+mobile-friendly stacked layout.
 PR #152: hero-preview hidden on phones, trust-pill row gap fix.
 PR #153: removed 'Soon' features from nav dropdown + features grid.
 PR #154: fake feature tiles removed from hero-preview section.
+PR #156: Document Sheet feature card + multi-tool copy update.
+PR #157: Document Sheet tool page (Phase 1) — PDF upload +
+password unlock via pdf.js, page thumbnail preview.
 
 <yahan apna task likho>
 ```

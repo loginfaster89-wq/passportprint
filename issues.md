@@ -275,3 +275,17 @@ grid serve as the entry point for each tool.
 6. **No single-feature glorification.** When a website has multiple planned tools, hero CTAs, floating buttons, and workflow demos must be generic. Each tool gets promoted through its own card in the features grid — not through dedicated hero buttons or floating CTAs. This avoids costly rework when the next tool launches.
 7. **Delete dead code immediately.** When a feature is removed (e.g. lang switcher), delete ALL related files and CSS in the same PR. Don't leave orphaned files or dead CSS rules — they confuse future sessions and bloat the codebase.
 8. **Devin's credit is on the line.** The footer says "Built with Devin AI". Every messy footer, broken toggle, or wasted space reflects directly on Devin's quality. Test every viewport before shipping.
+
+---
+
+## H. Document Sheet feature (2026-04-25, session #5)
+
+Studio Print's second tool — Document Sheet (Aadhaar / PAN PDF → A4 sheet).
+Shipped in two PRs:
+
+| # | PR | What shipped | Status |
+|---|------|---------|--------|
+| H1 | PR #156 | **Feature card + multi-tool copy.** Features grid: new "Document Sheet" card with `Soon` tag. Nav dropdown on all 10 pages: Document Sheet entry with `Soon` tag. Density-break, how-it-works, FAQ copy updated from photo-only to generic multi-tool. Footer: Document Sheet + All Features links. New `#i-file-text` SVG icon. CSS: `.dd-tag.soon` + `.tag.soon` styles. | **merged** |
+| H2 | PR #157 | **Document Sheet tool page (Phase 1).** New `document-sheet.html` (647 lines): drag-and-drop + file-picker PDF upload (max 10 MB), automatic password-protected PDF detection, password input with tips (Aadhaar: first 4 letters + birth year; PAN: DOB DDMMYYYY), client-side PDF unlock via pdf.js 3.11.174 (CDN), page thumbnail preview (up to 6 pages), on-device badge. Shared header/nav/footer/auth/pricing modules. BreadcrumbList JSON-LD, OG/Twitter meta, robots directive. Responsive (375–1920 px). `index.html` features grid Soon→Live. Nav dropdown all pages Soon→Live link. `build.js` + `sitemap.xml` updated. | **merged** |
+
+**Next:** Document Sheet Phase 2 — A4 sheet layout with cut guides, print output.
