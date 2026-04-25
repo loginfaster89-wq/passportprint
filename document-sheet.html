@@ -660,7 +660,7 @@
     if (typeof faceapi === 'undefined') return Promise.resolve(false);
     if (faceModelLoading) return faceModelLoading;
     faceModelLoading = faceapi.nets.tinyFaceDetector.loadFromUri(
-      'https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/weights'
+      'https://raw.githubusercontent.com/justadudewhohacks/face-api.js/master/weights'
     ).then(function () { faceModelLoaded = true; return true; })
      .catch(function () { faceModelLoaded = false; return false; });
     return faceModelLoading;
@@ -932,7 +932,7 @@
   function getCrop(docType) { return docType === 'pan' ? PAN_CROP : AADHAAR_CROP; }
 
   /* ── PAN photo region as fraction of card crop (hardcoded — density detection fails for PAN) ── */
-  var PAN_PHOTO_FRAC = { x0: 0.04, y0: 0.22, x1: 0.26, y1: 0.62 };
+  var PAN_PHOTO_FRAC = { x0: 0.06, y0: 0.30, x1: 0.28, y1: 0.68 };
 
   /* ── Detect photo region inside card using pixel density analysis ── */
   function detectPhotoInCard(cardData, docType) {
