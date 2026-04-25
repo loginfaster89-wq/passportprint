@@ -288,4 +288,13 @@ Shipped in two PRs:
 | H1 | PR #156 | **Feature card + multi-tool copy.** Features grid: new "Document Sheet" card with `Soon` tag. Nav dropdown on all 10 pages: Document Sheet entry with `Soon` tag. Density-break, how-it-works, FAQ copy updated from photo-only to generic multi-tool. Footer: Document Sheet + All Features links. New `#i-file-text` SVG icon. CSS: `.dd-tag.soon` + `.tag.soon` styles. | **merged** |
 | H2 | PR #157 | **Document Sheet tool page (Phase 1).** New `document-sheet.html` (647 lines): drag-and-drop + file-picker PDF upload (max 10 MB), automatic password-protected PDF detection, password input with tips (Aadhaar: first 4 letters + birth year; PAN: DOB DDMMYYYY), client-side PDF unlock via pdf.js 3.11.174 (CDN), page thumbnail preview (up to 6 pages), on-device badge. Shared header/nav/footer/auth/pricing modules. BreadcrumbList JSON-LD, OG/Twitter meta, robots directive. Responsive (375–1920 px). `index.html` features grid Soon→Live. Nav dropdown all pages Soon→Live link. `build.js` + `sitemap.xml` updated. | **merged** |
 
-**Next:** Document Sheet Phase 2 — A4 sheet layout with cut guides, print output.
+## I. Document Sheet — detection, editor & A4 sheet (2026-04-25, sessions #6–#8)
+
+| # | PR | What shipped | Status |
+|---|------|---------|--------|
+| I1 | PR #159 | **Dropdown feature icons fix.** Added missing `.ix` CSS rule (`fill:none; stroke:currentColor`) on `document-sheet.html` so nav dropdown SVG icons render correctly. | **merged** |
+| I2 | PR #160 | **Aadhaar/PAN card detection.** Text extraction via pdf.js `getTextContent()`, keyword matching (2+ hits confirms doc type), styled detection badge (amber=Aadhaar, green=PAN), unsupported document rejection with error message. | **merged** |
+| I3 | PR #163 | **Document Sheet Phase 2 — editor + A4.** Editor step with brightness/contrast/saturation/warmth/shadows sliders. Full Document / Photo Only toggle (photo excluded from edits in full-document mode). Card crop + photo crop extraction from rendered PDF at 300 DPI. A4 sheet generation (2480×3508 canvas), download PNG + print. | **merged** |
+| I4 | PR #165 | **Full Document photo fix + Back button.** Fixed photo protection in Full Document mode — now restores original photo pixels directly from same card buffer with bounds checking (previous approach used separate `photoImageData` with coordinate translation that could fail). Added "Back to Edit" button on A4 result page so user can return to editor and adjust settings. | **merged** |
+
+**Next:** Backlog empty — fresh audit or new features as owner picks priorities.

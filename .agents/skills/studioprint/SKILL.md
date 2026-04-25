@@ -220,7 +220,7 @@ Include order on each page:
 
 ## 9. Shipped work & open backlog
 
-Everything from PRs #70–#157 is shipped. See `issues.md` for the full
+Everything from PRs #70–#165 is shipped. See `issues.md` for the full
 audit trail. Do NOT re-fix any of the following — they are all merged:
 
 - PRs #70–#114: original audit quick-wins + responsive + flow fixes.
@@ -247,6 +247,21 @@ audit trail. Do NOT re-fix any of the following — they are all merged:
 - PR #157: Document Sheet tool page (Phase 1) — `document-sheet.html`
   with PDF upload, password-protected PDF detection, client-side unlock
   via pdf.js, page thumbnail preview. Nav/features updated Soon→Live.
+- PR #159: dropdown feature icons fix on document-sheet page — added
+  missing `.ix` CSS (fill:none, stroke:currentColor).
+- PR #160: Aadhaar/PAN card detection on document-sheet page — text
+  extraction via pdf.js `getTextContent()`, keyword matching (2+ hits
+  confirms), styled detection badge (amber=Aadhaar, green=PAN),
+  unsupported doc rejection.
+- PR #163: Document Sheet Phase 2 — editor step (brightness, contrast,
+  saturation, warmth, shadows), Full Document / Photo Only toggle,
+  card crop + photo crop extraction, A4 sheet generation (2480×3508
+  canvas), download PNG + print. Photo-only mode applies edits to
+  photo region; full-document mode applies edits to card excluding
+  photo.
+- PR #165: Full Document photo protection fix (restore original photo
+  pixels from same buffer, bounds checking), Back to Edit button on
+  A4 result page.
 
 **Pricing section design rule (post PR #150):** The pricing section uses
 card-based layout (`.plan-grid` with `.plan-card` divs), NOT a `<table>`.
@@ -255,8 +270,17 @@ for plan names, 42px+ for prices. On mobile (≤900px) cards stack
 vertically. Never shrink text below these minimums. If adding features,
 add them to all 3 cards consistently.
 
+**Document Sheet editor rules (post PR #163):**
+- Full Document mode: edits (brightness/contrast/saturation/warmth/shadows)
+  apply to the full card image EXCEPT the photo region. Photo stays
+  original.
+- Photo Only mode: edits apply ONLY to the photo region.
+- Card crop: `{ x0: 0.045, y0: 0.675, x1: 0.955, y1: 0.885 }` of page.
+- Photo crop (Aadhaar): `{ x0: 0.045, y0: 0.69, x1: 0.23, y1: 0.87 }`.
+- A4 canvas: 2480×3508 px (300 DPI). Card centered horizontally,
+  60px from top.
+
 **Open:** only `F7` GSI iframe warnings (not our code, harmless).
-Document Sheet Phase 2 (A4 sheet layout with cut guides) is next.
 Backlog is otherwise empty — next session can propose new features or
 fresh audit.
 
@@ -292,7 +316,7 @@ AGENTS.md — full source of truth.
 issues.md — 2026-04-23 site audit + 2026-04-24 §D responsive / flow
 follow-up + §E full re-audit + §F footer cleanup + §G single-feature
 glorification cleanup.
-last pr - PR #157 (Document Sheet tool — Phase 1)
+Last PR: PR #165 (Full Document photo fix + Back button)
 
 Shipped summary (don't redo):
 
@@ -318,6 +342,11 @@ PR #154: fake feature tiles removed from hero-preview section.
 PR #156: Document Sheet feature card + multi-tool copy update.
 PR #157: Document Sheet tool page (Phase 1) — PDF upload +
 password unlock via pdf.js, page thumbnail preview.
+PR #159: dropdown feature icons fix on document-sheet page.
+PR #160: Aadhaar/PAN card detection on document-sheet page.
+PR #163: Document Sheet Phase 2 — editor step, A4 sheet generation,
+download PNG + print.
+PR #165: Full Document photo protection fix + Back to Edit button.
 
 <yahan apna task likho>
 ```
