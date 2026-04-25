@@ -892,7 +892,7 @@
   function getCrop(docType) { return docType === 'pan' ? PAN_CROP : AADHAAR_CROP; }
 
   /* ── PAN photo region as fraction of card crop (hardcoded — density detection fails for PAN) ── */
-  var PAN_PHOTO_FRAC = { x0: 0.02, y0: 0.24, x1: 0.15, y1: 0.54 };
+  var PAN_PHOTO_FRAC = { x0: 0.02, y0: 0.32, x1: 0.15, y1: 0.52 };
   
   /* ── Detect photo region inside card using pixel density analysis ── */
   function detectPhotoInCard(cardData, docType) {
