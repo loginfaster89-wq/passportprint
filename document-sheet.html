@@ -651,37 +651,44 @@
   var pwBack = document.getElementById('dsPwBack');
   var editorBack = document.getElementById('dsEditorBack');
 
-  /* ── AI face detection (face-api.js) ── */
-  var faceDetectorReady = false;
-  if (typeof faceapi !== 'undefined') {
-    faceapi.nets.tinyFaceDetector.loadFromUri(
+  /* ── AI face detection (face-api.js) — lazy model load ── */
+  var faceModelLoaded = false;
+  var faceModelLoading = null;
+
+  function ensureFaceModel() {
+    if (faceModelLoaded) return Promise.resolve(true);
+    if (typeof faceapi === 'undefined') return Promise.resolve(false);
+    if (faceModelLoading) return faceModelLoading;
+    faceModelLoading = faceapi.nets.tinyFaceDetector.loadFromUri(
       'https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/weights'
-    ).then(function () { faceDetectorReady = true; })
-     .catch(function () { faceDetectorReady = false; });
+    ).then(function () { faceModelLoaded = true; return true; })
+     .catch(function () { faceModelLoaded = false; return false; });
+    return faceModelLoading;
   }
 
   function detectFaceAI(cardCanvas) {
-    if (!faceDetectorReady || typeof faceapi === 'undefined') {
-      return Promise.resolve(null);
-    }
-    return faceapi.detectAllFaces(
-      cardCanvas,
-      new faceapi.TinyFaceDetectorOptions({ inputSize: 416, scoreThreshold: 0.35 })
-    ).then(function (detections) {
-      if (!detections || detections.length === 0) return null;
-      var best = detections[0];
-      for (var i = 1; i < detections.length; i++) {
-        if (detections[i].score > best.score) best = detections[i];
-      }
-      var b = best.box;
-      var pad = Math.round(Math.max(b.width, b.height) * 0.12);
-      var fx = Math.max(0, Math.round(b.x) - pad);
-      var fy = Math.max(0, Math.round(b.y) - pad);
-      var fw = Math.round(b.width) + 2 * pad;
-      var fh = Math.round(b.height) + 2 * pad;
-      fw = Math.min(fw, cardCanvas.width - fx);
-      fh = Math.min(fh, cardCanvas.height - fy);
-      return { x: fx, y: fy, w: fw, h: fh };
+    return ensureFaceModel().then(function (ready) {
+      if (!ready) return null;
+      return faceapi.detectAllFaces(
+        cardCanvas,
+        new faceapi.TinyFaceDetectorOptions({ inputSize: 416, scoreThreshold: 0.3 })
+      ).then(function (detections) {
+        if (!detections || detections.length === 0) return null;
+        var best = detections[0];
+        for (var i = 1; i < detections.length; i++) {
+          if (detections[i].score > best.score) best = detections[i];
+        }
+        var b = best.box;
+        var padX = Math.round(b.width * 0.35);
+        var padY = Math.round(b.height * 0.45);
+        var fx = Math.max(0, Math.round(b.x) - padX);
+        var fy = Math.max(0, Math.round(b.y) - padY);
+        var fw = Math.round(b.width) + 2 * padX;
+        var fh = Math.round(b.height) + 2 * padY;
+        fw = Math.min(fw, cardCanvas.width - fx);
+        fh = Math.min(fh, cardCanvas.height - fy);
+        return { x: fx, y: fy, w: fw, h: fh };
+      });
     }).catch(function () { return null; });
   }
 
@@ -925,7 +932,7 @@
   function getCrop(docType) { return docType === 'pan' ? PAN_CROP : AADHAAR_CROP; }
 
   /* ── PAN photo region as fraction of card crop (hardcoded — density detection fails for PAN) ── */
-  var PAN_PHOTO_FRAC = { x0: 0.04, y0: 0.34, x1: 0.24, y1: 0.72 };
+  var PAN_PHOTO_FRAC = { x0: 0.04, y0: 0.22, x1: 0.26, y1: 0.62 };
 
   /* ── Detect photo region inside card using pixel density analysis ── */
   function detectPhotoInCard(cardData, docType) {
