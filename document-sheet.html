@@ -888,6 +888,9 @@
   var PAN_CROP     = { x0: 0.06,  y0: 0.755, x1: 0.955, y1: 0.955 };
   function getCrop(docType) { return docType === 'pan' ? PAN_CROP : AADHAAR_CROP; }
 
+  /* ── PAN photo position as fraction of card crop (bypasses density detection) ── */
+  var PAN_PHOTO_FRAC = { x0: 0.01, y0: 0.14, x1: 0.28, y1: 0.60 };
+
   /* ── Detect photo region inside card using pixel density analysis ── */
   function detectPhotoInCard(cardData, docType) {
     var w = cardData.width, h = cardData.height, d = cardData.data;
@@ -989,7 +992,17 @@
           cardCropInfo = { sx: cx0, sy: cy0, sw: cw, sh: ch };
           cardImageData = ctx.getImageData(cx0, cy0, cw, ch);
 
-          var detected = detectPhotoInCard(cardImageData, docType);
+          var detected;
+          if (docType === 'pan') {
+            detected = {
+              x: Math.round(cw * PAN_PHOTO_FRAC.x0),
+              y: Math.round(ch * PAN_PHOTO_FRAC.y0),
+              w: Math.round(cw * (PAN_PHOTO_FRAC.x1 - PAN_PHOTO_FRAC.x0)),
+              h: Math.round(ch * (PAN_PHOTO_FRAC.y1 - PAN_PHOTO_FRAC.y0))
+            };
+          } else {
+            detected = detectPhotoInCard(cardImageData, docType);
+          }
           if (detected) {
             var px0 = cx0 + detected.x;
             var py0 = cy0 + detected.y;
