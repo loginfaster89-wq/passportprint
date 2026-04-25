@@ -885,8 +885,70 @@
 
   /* ── Card crop region (percentage of page) ── */
   var CARD_CROP = { x0: 0.045, y0: 0.675, x1: 0.955, y1: 0.885 };
-  var PHOTO_CROP_AADHAAR = { x0: 0.045, y0: 0.69, x1: 0.23, y1: 0.87 };
-  var PHOTO_CROP_PAN     = { x0: 0.045, y0: 0.69, x1: 0.23, y1: 0.87 };
+
+  /* ── Detect photo region inside card using pixel density analysis ── */
+  function detectPhotoInCard(cardData) {
+    var w = cardData.width, h = cardData.height, d = cardData.data;
+    var xMax = Math.round(w * 0.45);
+    var yTop = Math.round(h * 0.10);
+    var yBot = Math.round(h * 0.88);
+    var sH = yBot - yTop;
+    var cd = [];
+    for (var x = 0; x < xMax; x++) {
+      var n = 0;
+      for (var y = yTop; y < yBot; y++) {
+        var i = (y * w + x) * 4;
+        if ((d[i] + d[i + 1] + d[i + 2]) / 3 < 200) n++;
+      }
+      cd.push(n / sH);
+    }
+    var runs = [], rs = 0, rl = 0;
+    for (var x = 0; x < xMax; x++) {
+      if (cd[x] > 0.35) {
+        if (rl === 0) rs = x;
+        rl++;
+      } else {
+        if (rl > 0) { runs.push({ s: rs, l: rl }); rl = 0; }
+      }
+    }
+    if (rl > 0) runs.push({ s: rs, l: rl });
+    var best = null;
+    for (var j = 0; j < runs.length; j++) {
+      if (!best || runs[j].l > best.l) best = runs[j];
+    }
+    if (!best || best.l < w * 0.04) return null;
+    var px0 = best.s, px1 = best.s + best.l;
+    var rd = [];
+    for (var y = 0; y < h; y++) {
+      var n = 0;
+      for (var x = px0; x < px1; x++) {
+        var i = (y * w + x) * 4;
+        if ((d[i] + d[i + 1] + d[i + 2]) / 3 < 200) n++;
+      }
+      rd.push(n / best.l);
+    }
+    var yRuns = [], yrs = 0, yrl = 0;
+    for (var y = 0; y < h; y++) {
+      if (rd[y] > 0.35) {
+        if (yrl === 0) yrs = y;
+        yrl++;
+      } else {
+        if (yrl > 0) { yRuns.push({ s: yrs, l: yrl }); yrl = 0; }
+      }
+    }
+    if (yrl > 0) yRuns.push({ s: yrs, l: yrl });
+    var yBest = null;
+    for (var j = 0; j < yRuns.length; j++) {
+      if (!yBest || yRuns[j].l > yBest.l) yBest = yRuns[j];
+    }
+    if (!yBest || yBest.l < h * 0.05) return null;
+    var pad = 2;
+    var fx = Math.max(0, px0 - pad);
+    var fy = Math.max(0, yBest.s - pad);
+    var fw = Math.min(w - fx, best.l + 2 * pad);
+    var fh = Math.min(h - fy, yBest.l + 2 * pad);
+    return { x: fx, y: fy, w: fw, h: fh };
+  }
   var A4_W = 2480;
   var A4_H = 3508;
   var RENDER_SCALE = 300 / 72;
@@ -921,13 +983,16 @@
           cardCropInfo = { sx: cx0, sy: cy0, sw: cw, sh: ch };
           cardImageData = ctx.getImageData(cx0, cy0, cw, ch);
 
-          var pc = docType === 'aadhaar' ? PHOTO_CROP_AADHAAR : PHOTO_CROP_PAN;
-          var px0 = Math.round(vp.width * pc.x0);
-          var py0 = Math.round(vp.height * pc.y0);
-          var pw  = Math.round(vp.width * (pc.x1 - pc.x0));
-          var ph  = Math.round(vp.height * (pc.y1 - pc.y0));
-          photoCropInfo = { sx: px0, sy: py0, sw: pw, sh: ph };
-          photoImageData = ctx.getImageData(px0, py0, pw, ph);
+          var detected = detectPhotoInCard(cardImageData);
+          if (detected) {
+            var px0 = cx0 + detected.x;
+            var py0 = cy0 + detected.y;
+            photoCropInfo = { sx: px0, sy: py0, sw: detected.w, sh: detected.h };
+            photoImageData = ctx.getImageData(px0, py0, detected.w, detected.h);
+          } else {
+            photoCropInfo = null;
+            photoImageData = null;
+          }
 
           hideSpinner();
           showEditorStep();
