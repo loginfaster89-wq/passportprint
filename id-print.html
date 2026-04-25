@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<meta name="theme-color" content="#0d0d0d">
+<title>ID Card Print — Aadhaar & PAN to Print-Ready Sheet | Studio Print</title>
+<meta name="description" content="Print Aadhaar and PAN cards from PDF — auto-crop front &amp; back, CR80 card size, A4 fold-and-laminate sheet. 100% browser-based, no uploads.">
+<meta property="og:title" content="ID Card Print — Aadhaar & PAN Sheet Print | Studio Print">
+<meta property="og:description" content="Upload eAadhaar or ePAN PDF, auto-crop front &amp; back, print on A4 sheet for fold-and-laminate. All in your browser.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://studioprint.pages.dev/id-print.html">
+<meta name="robots" content="max-image-preview:large">
+<link rel="canonical" href="https://studioprint.pages.dev/id-print.html">
+<link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+<link rel="alternate icon" type="image/png" href="assets/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="manifest" href="assets/manifest.webmanifest">
+<link rel="preconnect" href="https://passportprint-studio.onrender.com">
+<link rel="dns-prefetch" href="https://passportprint-studio.onrender.com">
+<link rel="preconnect" href="https://checkout.razorpay.com" crossorigin>
+<link rel="preload" href="assets/fonts/syne-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/dm-mono-400-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/fonts.css">
+<link rel="stylesheet" href="assets/legal.css">
+<link rel="stylesheet" href="assets/auth.css">
+<link rel="stylesheet" href="assets/pricing.css">
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script src="https://checkout.razorpay.com/v1/checkout.js" async></script>
+<style>
+/* ───── ID Print page styles ───── */
+.idp-wrap{
+  max-width:960px;margin:0 auto;padding:32px 20px 56px;flex:1;width:100%;
+}
+.idp-hero{text-align:center;margin-bottom:36px;}
+.idp-hero h1{
+  font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(24px,5vw,36px);
+  color:var(--text);letter-spacing:-0.5px;margin-bottom:8px;
+}
+.idp-hero h1 em{color:var(--accent);font-style:normal;}
+.idp-hero p{color:var(--muted);font-size:14px;max-width:560px;margin:0 auto;}
+
+/* Steps indicator */
+.idp-steps{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  margin-bottom:28px;font-size:12px;font-family:'DM Mono',monospace;
+}
+.idp-step{
+  display:flex;align-items:center;gap:6px;color:var(--muted2);
+  padding:6px 14px;border-radius:999px;border:1px solid var(--border);
+  background:var(--surface);transition:all .25s;
+}
+.idp-step.active{color:var(--accent);border-color:rgba(240,165,0,0.4);background:var(--accent-dim);}
+.idp-step.done{color:var(--success);border-color:rgba(74,222,128,0.3);}
+.idp-step-num{
+  width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;border:1px solid currentColor;
+}
+.idp-step-dot{width:16px;height:1px;background:var(--border);}
+
+/* Upload area */
+.idp-upload{
+  border:2px dashed var(--border);border-radius:16px;
+  padding:48px 24px;text-align:center;cursor:pointer;
+  transition:border-color .2s,background .2s;
+  background:var(--surface);position:relative;
+}
+.idp-upload:hover,.idp-upload.drag-over{
+  border-color:var(--accent);background:var(--accent-dim);
+}
+.idp-upload-icon{font-size:48px;margin-bottom:12px;opacity:0.6;}
+.idp-upload h3{
+  font-family:'Syne',sans-serif;font-weight:700;font-size:18px;
+  color:var(--text);margin-bottom:6px;
+}
+.idp-upload p{color:var(--muted);font-size:13px;}
+.idp-upload input[type="file"]{
+  position:absolute;inset:0;opacity:0;cursor:pointer;
+}
+.idp-upload .accent{color:var(--accent);}
+
+/* Password step */
+.idp-password{
+  max-width:420px;margin:0 auto;text-align:center;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:16px;padding:36px 28px;
+}
+.idp-password h3{
+  font-family:'Syne',sans-serif;font-weight:700;font-size:18px;
+  color:var(--text);margin-bottom:6px;
+}
+.idp-password p{color:var(--muted);font-size:13px;margin-bottom:20px;}
+.idp-password .hint{color:var(--muted2);font-size:11px;margin-top:8px;}
+.idp-pw-row{display:flex;gap:10px;justify-content:center;}
+.idp-pw-input{
+  flex:1;max-width:240px;padding:10px 14px;border-radius:8px;
+  border:1px solid var(--border);background:var(--surface2);
+  color:var(--text);font-family:'DM Mono',monospace;font-size:14px;
+  outline:none;transition:border-color .2s;
+}
+.idp-pw-input:focus{border-color:var(--accent);}
+.idp-pw-btn{
+  padding:10px 20px;border-radius:8px;border:none;
+  background:var(--accent);color:#000;font-weight:700;
+  font-family:'Syne',sans-serif;cursor:pointer;font-size:14px;
+  transition:opacity .2s;
+}
+.idp-pw-btn:hover{opacity:0.85;}
+.idp-pw-btn:disabled{opacity:0.5;cursor:not-allowed;}
+
+/* Detection badge */
+.idp-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:6px 14px;border-radius:999px;font-size:12px;
+  font-family:'DM Mono',monospace;font-weight:600;
+  margin-top:14px;
+}
+.idp-badge.aadhaar{color:var(--accent);border:1px solid rgba(240,165,0,0.4);background:rgba(240,165,0,0.08);}
+.idp-badge.pan{color:var(--success);border:1px solid rgba(74,222,128,0.35);background:rgba(74,222,128,0.06);}
+
+/* Processing */
+.idp-processing{
+  text-align:center;padding:48px 20px;
+}
+.idp-processing .spinner{
+  width:40px;height:40px;border:3px solid var(--border);
+  border-top-color:var(--accent);border-radius:50%;
+  animation:idp-spin 0.7s linear infinite;margin:0 auto 16px;
+}
+@keyframes idp-spin{to{transform:rotate(360deg)}}
+.idp-processing p{color:var(--muted);font-size:14px;}
+
+/* Preview area */
+.idp-preview{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:16px;padding:24px;
+}
+.idp-preview-title{
+  font-family:'Syne',sans-serif;font-weight:700;font-size:16px;
+  color:var(--text);margin-bottom:16px;text-align:center;
+}
+.idp-cards{
+  display:flex;gap:20px;justify-content:center;flex-wrap:wrap;
+  margin-bottom:24px;
+}
+.idp-card-box{
+  text-align:center;
+}
+.idp-card-label{
+  font-size:12px;color:var(--muted);margin-bottom:8px;
+  font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:0.08em;
+}
+.idp-card-box canvas{
+  border-radius:8px;border:1px solid var(--border);
+  max-width:100%;height:auto;
+  background:#fff;
+}
+
+/* A4 sheet preview */
+.idp-a4-section{margin-top:28px;}
+.idp-a4-title{
+  font-family:'Syne',sans-serif;font-weight:700;font-size:15px;
+  color:var(--text);margin-bottom:6px;text-align:center;
+}
+.idp-a4-desc{
+  color:var(--muted);font-size:12px;text-align:center;margin-bottom:14px;
+}
+.idp-a4-wrap{
+  background:#fff;border-radius:8px;overflow:hidden;
+  max-width:500px;margin:0 auto;border:1px solid var(--border);
+}
+.idp-a4-wrap canvas{width:100%;height:auto;display:block;}
+
+/* Actions bar */
+.idp-actions{
+  display:flex;gap:12px;justify-content:center;flex-wrap:wrap;
+  margin-top:24px;
+}
+.idp-btn{
+  padding:12px 24px;border-radius:10px;border:none;
+  font-family:'Syne',sans-serif;font-weight:700;font-size:14px;
+  cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:8px;
+}
+.idp-btn-primary{background:var(--accent);color:#000;}
+.idp-btn-primary:hover{opacity:0.85;transform:translateY(-1px);}
+.idp-btn-secondary{
+  background:var(--surface2);color:var(--text);
+  border:1px solid var(--border);
+}
+.idp-btn-secondary:hover{border-color:var(--accent);color:var(--accent);}
+.idp-btn-ghost{
+  background:transparent;color:var(--muted);
+  border:1px solid var(--border);
+}
+.idp-btn-ghost:hover{color:var(--text);border-color:var(--muted);}
+
+/* Error */
+.idp-error{
+  background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.3);
+  color:#f87171;border-radius:10px;padding:14px 18px;
+  font-size:13px;text-align:center;margin-top:14px;
+}
+
+/* Hidden utility */
+.idp-hidden{display:none!important;}
+
+/* Print styles */
+@media print{
+  header.legal-header,footer.legal-footer,.idp-hero,.idp-steps,
+  .idp-actions,.idp-preview-title,.idp-a4-title,.idp-a4-desc,
+  .idp-cards,.no-print{display:none!important;}
+  body{background:#fff!important;margin:0;padding:0;}
+  .idp-wrap{max-width:none;padding:0;margin:0;}
+  .idp-preview{background:none;border:none;padding:0;}
+  .idp-a4-wrap{max-width:none;border:none;border-radius:0;}
+  .idp-a4-wrap canvas{width:210mm;height:297mm;}
+  @page{size:A4 portrait;margin:0;}
+}
+
+/* Responsive */
+@media (max-width:600px){
+  .idp-wrap{padding:20px 14px 40px;}
+  .idp-steps{gap:4px;flex-wrap:wrap;}
+  .idp-step{padding:5px 10px;font-size:11px;}
+  .idp-step-dot{width:8px;}
+  .idp-upload{padding:32px 16px;}
+  .idp-cards{gap:12px;}
+  .idp-pw-row{flex-direction:column;align-items:center;}
+  .idp-pw-input{max-width:100%;}
+  .idp-actions{flex-direction:column;align-items:stretch;}
+  .idp-btn{justify-content:center;}
+}
+</style>
+</head>
+<body>
+
+<header class="legal-header">
+  <a href="index.html" class="logo">Studio <em>Print</em></a>
+  <nav id="primaryNav">
+    <a href="index.html">Home</a>
+    <div class="has-dropdown">
+      <button class="nav-dd-btn" aria-haspopup="true" aria-expanded="false">Features <span class="caret" aria-hidden="true">▾</span></button>
+      <div class="dropdown-panel" role="menu">
+        <a href="passport-photo.html" role="menuitem">
+          <span class="dd-icon" aria-hidden="true">📷</span>
+          <span class="dd-meta"><strong>Passport Photo</strong><small>AI crop · 300 DPI A4 sheet</small></span>
+          <span class="dd-tag live">Live</span>
+        </a>
+        <a href="id-print.html" role="menuitem">
+          <span class="dd-icon" aria-hidden="true">🪪</span>
+          <span class="dd-meta"><strong>ID Card Print</strong><small>Aadhaar · PAN · fold &amp; laminate</small></span>
+          <span class="dd-tag live">Live</span>
+        </a>
+      </div>
+    </div>
+    <a href="index.html#pricing">Pricing</a>
+    <a href="index.html#faq">FAQ</a>
+  </nav>
+  <button type="button" class="nav-login" id="hdrAuthBtn" title="Login / Signup"><span class="hdr-lbl">Login</span></button>
+  <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="primaryNav">☰</button>
+</header>
+
+<main>
+<div class="idp-wrap">
+
+  <!-- Hero -->
+  <div class="idp-hero">
+    <h1>ID Card <em>Print</em></h1>
+    <p>Upload eAadhaar or ePAN PDF — auto-crop front &amp; back, print on A4 sheet, fold and laminate. Nothing leaves your browser.</p>
+  </div>
+
+  <!-- Steps -->
+  <div class="idp-steps">
+    <div class="idp-step active" data-step="1"><span class="idp-step-num">1</span> Upload</div>
+    <span class="idp-step-dot"></span>
+    <div class="idp-step" data-step="2"><span class="idp-step-num">2</span> Preview</div>
+    <span class="idp-step-dot"></span>
+    <div class="idp-step" data-step="3"><span class="idp-step-num">3</span> Print</div>
+  </div>
+
+  <!-- Step 1: Upload -->
+  <div id="stepUpload">
+    <div class="idp-upload" id="dropZone">
+      <input type="file" id="pdfInput" accept="application/pdf">
+      <div class="idp-upload-icon">📄</div>
+      <h3>Drop your PDF here</h3>
+      <p>or <span class="accent">click to browse</span> · eAadhaar / ePAN PDF</p>
+    </div>
+    <div id="uploadError" class="idp-error idp-hidden"></div>
+  </div>
+
+  <!-- Step 1b: Password -->
+  <div id="stepPassword" class="idp-hidden">
+    <div class="idp-password">
+      <h3>🔒 PDF is password-protected</h3>
+      <p>Enter the password to unlock your document.</p>
+      <div class="idp-pw-row">
+        <input type="password" id="pwInput" class="idp-pw-input" placeholder="Enter password" autocomplete="off">
+        <button id="pwBtn" class="idp-pw-btn">Unlock</button>
+      </div>
+      <p class="hint">Aadhaar: first 4 letters of name (CAPS) + birth year<br>PAN: date of birth in DDMMYYYY</p>
+      <div id="pwError" class="idp-error idp-hidden"></div>
+    </div>
+  </div>
+
+  <!-- Processing -->
+  <div id="stepProcessing" class="idp-hidden">
+    <div class="idp-processing">
+      <div class="spinner"></div>
+      <p id="processingMsg">Detecting card type…</p>
+    </div>
+  </div>
+
+  <!-- Step 2 & 3: Preview + Print -->
+  <div id="stepPreview" class="idp-hidden">
+    <div class="idp-preview">
+      <div class="idp-preview-title">
+        Card Preview <span id="detectionBadge" class="idp-badge idp-hidden"></span>
+      </div>
+
+      <div class="idp-cards">
+        <div class="idp-card-box">
+          <div class="idp-card-label">Front</div>
+          <canvas id="frontCanvas"></canvas>
+        </div>
+        <div class="idp-card-box">
+          <div class="idp-card-label">Back</div>
+          <canvas id="backCanvas"></canvas>
+        </div>
+      </div>
+
+      <!-- A4 Sheet -->
+      <div class="idp-a4-section">
+        <div class="idp-a4-title">A4 Sheet — fold &amp; laminate</div>
+        <div class="idp-a4-desc">Front and back side by side. Cut around the pair, fold in the middle, place in lamination pouch.</div>
+        <div class="idp-a4-wrap">
+          <canvas id="a4Canvas"></canvas>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="idp-actions">
+        <button class="idp-btn idp-btn-primary" id="btnDownload">⬇ Download PNG</button>
+        <button class="idp-btn idp-btn-secondary" id="btnPrint">🖨 Print A4</button>
+        <button class="idp-btn idp-btn-ghost" id="btnReset">↻ New card</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+</main>
+
+<footer class="legal-footer">
+  <div class="footer-main">
+    <div class="footer-brand">
+      <a href="index.html" class="footer-logo">Studio <em>Print</em></a>
+      <p class="footer-tagline">Every print job. One browser tab. On-device AI for passport photos, Aadhaar/PAN sheets and 300&nbsp;DPI A4 layouts — built in India.</p>
+    </div>
+    <nav class="footer-cols" aria-label="Footer">
+      <div class="footer-col">
+        <h4>Product</h4>
+        <ul>
+          <li><a href="passport-photo.html">Passport Photo</a></li>
+          <li><a href="id-print.html">ID Card Print</a></li>
+          <li><a href="index.html#features">All Features</a></li>
+          <li><a href="index.html#pricing">Pricing</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <ul>
+          <li><a href="index.html#how">How it works</a></li>
+          <li><a href="index.html#faq">FAQ</a></li>
+          <li><a href="sitemap.xml">Sitemap</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="privacy.html">Privacy</a></li>
+          <li><a href="terms.html">Terms</a></li>
+          <li><a href="refund.html">Refund</a></li>
+          <li><a href="shipping.html">Delivery</a></li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2026 Studio Print. All rights reserved. · Built with <a href="https://devin.ai" target="_blank" rel="noopener" class="devin-credit">Devin AI</a></div>
+  </div>
+</footer>
+
+<script src="assets/nav.js" defer></script>
+<script src="assets/auth.js" defer></script>
+<script src="assets/pricing.js" defer></script>
+<script src="assets/pwa.js" defer></script>
+<script src="assets/footer.js" defer></script>
+<script src="assets/cookie.js" defer></script>
+
+<!-- pdf.js from CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>
+(function(){
+'use strict';
+
+/* ── Constants ── */
+var CR80_W = 1011;
+var CR80_H = 638;
+var A4_W = 2480;
+var A4_H = 3508;
+var RENDER_SCALE = 4;
+
+/* Crop regions as fractions of page dimensions.
+   eAadhaar: single-page A4 portrait — front upper ~60%, back lower ~35%.
+   ePAN: varies by provider — front upper ~55%, back lower ~40%. */
+var CROPS = {
+  aadhaar: {
+    front: { x: 0.03, y: 0.02, w: 0.94, h: 0.56 },
+    back:  { x: 0.03, y: 0.58, w: 0.94, h: 0.38 }
+  },
+  pan: {
+    front: { x: 0.02, y: 0.03, w: 0.96, h: 0.50 },
+    back:  { x: 0.02, y: 0.52, w: 0.96, h: 0.44 }
+  }
+};
+
+/* Detection keywords — 2+ matches confirms type */
+var AADHAAR_KW = ['aadhaar','uid','uidai','unique identification','government of india','vid','enrolment'];
+var PAN_KW = ['permanent account number','income tax','pan','nsdl','utiitsl','department'];
+
+/* ── DOM refs ── */
+var stepUpload = document.getElementById('stepUpload');
+var stepPassword = document.getElementById('stepPassword');
+var stepProcessing = document.getElementById('stepProcessing');
+var stepPreview = document.getElementById('stepPreview');
+var uploadError = document.getElementById('uploadError');
+var pwError = document.getElementById('pwError');
+var pwInput = document.getElementById('pwInput');
+var pwBtn = document.getElementById('pwBtn');
+var pdfInput = document.getElementById('pdfInput');
+var dropZone = document.getElementById('dropZone');
+var processingMsg = document.getElementById('processingMsg');
+var detectionBadge = document.getElementById('detectionBadge');
+var frontCanvas = document.getElementById('frontCanvas');
+var backCanvas = document.getElementById('backCanvas');
+var a4Canvas = document.getElementById('a4Canvas');
+var btnDownload = document.getElementById('btnDownload');
+var btnPrint = document.getElementById('btnPrint');
+var btnReset = document.getElementById('btnReset');
+var steps = document.querySelectorAll('.idp-step');
+
+/* ── State ── */
+var pdfBytes = null;
+var cardType = null;
+
+/* ── Helpers ── */
+function show(el){ el.classList.remove('idp-hidden'); }
+function hide(el){ el.classList.add('idp-hidden'); }
+function showError(container, msg){
+  container.textContent = msg;
+  show(container);
+}
+function hideError(container){ hide(container); }
+function setStep(n){
+  for(var i = 0; i < steps.length; i++){
+    var s = steps[i];
+    var sn = parseInt(s.getAttribute('data-step'));
+    s.classList.remove('active','done');
+    if(sn < n) s.classList.add('done');
+    if(sn === n) s.classList.add('active');
+  }
+}
+
+/* ── PDF.js setup ── */
+var pdfjsLib = window['pdfjs-dist/build/pdf'] || window.pdfjsLib;
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+/* ── File handling ── */
+function handleFile(file){
+  if(!file || file.type !== 'application/pdf'){
+    showError(uploadError, 'Please upload a valid PDF file.');
+    return;
+  }
+  hideError(uploadError);
+  var reader = new FileReader();
+  reader.onload = function(e){
+    pdfBytes = new Uint8Array(e.target.result);
+    tryOpenPdf(null);
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+pdfInput.addEventListener('change', function(e){
+  if(e.target.files && e.target.files[0]) handleFile(e.target.files[0]);
+});
+
+dropZone.addEventListener('dragover', function(e){
+  e.preventDefault(); dropZone.classList.add('drag-over');
+});
+dropZone.addEventListener('dragleave', function(){
+  dropZone.classList.remove('drag-over');
+});
+dropZone.addEventListener('drop', function(e){
+  e.preventDefault(); dropZone.classList.remove('drag-over');
+  if(e.dataTransfer.files && e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
+});
+
+/* ── PDF open (with optional password) ── */
+function tryOpenPdf(password){
+  var loadingTask = pdfjsLib.getDocument({
+    data: pdfBytes.slice(0),
+    password: password || undefined
+  });
+  loadingTask.promise.then(function(pdf){
+    hide(stepUpload);
+    hide(stepPassword);
+    show(stepProcessing);
+    setStep(2);
+    processPdf(pdf);
+  }).catch(function(err){
+    if(err && err.name === 'PasswordException'){
+      hide(stepUpload);
+      show(stepPassword);
+      hideError(pwError);
+      pwInput.value = '';
+      pwInput.focus();
+    } else {
+      showError(uploadError, 'Could not read this PDF. It may be corrupted or unsupported.');
+    }
+  });
+}
+
+/* Password unlock */
+pwBtn.addEventListener('click', function(){
+  var pw = pwInput.value.trim();
+  if(!pw){
+    showError(pwError, 'Please enter a password.');
+    return;
+  }
+  pwBtn.disabled = true;
+  pwBtn.textContent = 'Unlocking…';
+  hideError(pwError);
+  var loadingTask = pdfjsLib.getDocument({
+    data: pdfBytes.slice(0),
+    password: pw
+  });
+  loadingTask.promise.then(function(pdf){
+    hide(stepPassword);
+    show(stepProcessing);
+    setStep(2);
+    processPdf(pdf);
+  }).catch(function(err){
+    pwBtn.disabled = false;
+    pwBtn.textContent = 'Unlock';
+    if(err && err.name === 'PasswordException'){
+      showError(pwError, 'Wrong password. Please try again.');
+    } else {
+      showError(pwError, 'Could not unlock PDF. Please check the file.');
+    }
+  });
+});
+pwInput.addEventListener('keydown', function(e){
+  if(e.key === 'Enter') pwBtn.click();
+});
+
+/* ── Process PDF ── */
+function processPdf(pdf){
+  processingMsg.textContent = 'Rendering PDF page…';
+  var page1Promise = pdf.getPage(1);
+  page1Promise.then(function(page){
+    /* Render at high resolution */
+    var vp = page.getViewport({ scale: 1 });
+    var scale = RENDER_SCALE;
+    var renderVp = page.getViewport({ scale: scale });
+    var tmpCanvas = document.createElement('canvas');
+    tmpCanvas.width = renderVp.width;
+    tmpCanvas.height = renderVp.height;
+    var ctx = tmpCanvas.getContext('2d');
+    page.render({ canvasContext: ctx, viewport: renderVp }).promise.then(function(){
+      /* Extract text for card type detection */
+      processingMsg.textContent = 'Detecting card type…';
+      page.getTextContent().then(function(textContent){
+        var fullText = '';
+        for(var i = 0; i < textContent.items.length; i++){
+          fullText += textContent.items[i].str + ' ';
+        }
+        fullText = fullText.toLowerCase();
+        cardType = detectCardType(fullText);
+
+        if(!cardType){
+          hide(stepProcessing);
+          show(stepUpload);
+          setStep(1);
+          showError(uploadError, 'Could not detect card type. Only eAadhaar and ePAN PDFs are supported.');
+          return;
+        }
+
+        processingMsg.textContent = 'Cropping front and back…';
+        var crop = CROPS[cardType];
+        var pw = tmpCanvas.width;
+        var ph = tmpCanvas.height;
+
+        /* Crop front */
+        var frontData = cropRegion(tmpCanvas, crop.front, pw, ph);
+        /* Crop back */
+        var backData = cropRegion(tmpCanvas, crop.back, pw, ph);
+
+        /* Auto-trim white edges */
+        frontData = trimWhiteEdges(frontData);
+        backData = trimWhiteEdges(backData);
+
+        /* Scale to CR80 */
+        var frontScaled = scaleToSize(frontData, CR80_W, CR80_H);
+        var backScaled = scaleToSize(backData, CR80_W, CR80_H);
+
+        /* Draw previews */
+        drawCanvas(frontCanvas, frontScaled, CR80_W, CR80_H);
+        drawCanvas(backCanvas, backScaled, CR80_W, CR80_H);
+
+        /* Build A4 sheet */
+        buildA4Sheet(frontScaled, backScaled);
+
+        /* Show detection badge */
+        detectionBadge.textContent = cardType === 'aadhaar' ? '🪪 Aadhaar Card' : '💳 PAN Card';
+        detectionBadge.className = 'idp-badge ' + cardType;
+        show(detectionBadge);
+
+        /* Show preview */
+        hide(stepProcessing);
+        show(stepPreview);
+        setStep(3);
+      });
+    });
+  });
+}
+
+/* ── Card type detection ── */
+function detectCardType(text){
+  var aadhaarScore = 0;
+  for(var i = 0; i < AADHAAR_KW.length; i++){
+    if(text.indexOf(AADHAAR_KW[i]) !== -1) aadhaarScore++;
+  }
+  var panScore = 0;
+  for(var j = 0; j < PAN_KW.length; j++){
+    if(text.indexOf(PAN_KW[j]) !== -1) panScore++;
+  }
+  if(aadhaarScore >= 2 && aadhaarScore > panScore) return 'aadhaar';
+  if(panScore >= 2 && panScore > aadhaarScore) return 'pan';
+  if(aadhaarScore >= 2) return 'aadhaar';
+  if(panScore >= 2) return 'pan';
+  return null;
+}
+
+/* ── Crop a region from canvas ── */
+function cropRegion(srcCanvas, region, pw, ph){
+  var x = Math.round(region.x * pw);
+  var y = Math.round(region.y * ph);
+  var w = Math.round(region.w * pw);
+  var h = Math.round(region.h * ph);
+  var c = document.createElement('canvas');
+  c.width = w; c.height = h;
+  var ctx = c.getContext('2d');
+  ctx.drawImage(srcCanvas, x, y, w, h, 0, 0, w, h);
+  return c;
+}
+
+/* ── Trim white/light edges ── */
+function trimWhiteEdges(canvas){
+  var ctx = canvas.getContext('2d');
+  var w = canvas.width, h = canvas.height;
+  var data = ctx.getImageData(0, 0, w, h).data;
+  var threshold = 240;
+  var top = 0, bottom = h - 1, left = 0, right = w - 1;
+
+  /* Find top */
+  outer_top:
+  for(var yt = 0; yt < h; yt++){
+    for(var xt = 0; xt < w; xt++){
+      var idx = (yt * w + xt) * 4;
+      if(data[idx] < threshold || data[idx+1] < threshold || data[idx+2] < threshold){
+        top = yt; break outer_top;
+      }
+    }
+  }
+  /* Find bottom */
+  outer_bottom:
+  for(var yb = h - 1; yb >= top; yb--){
+    for(var xb = 0; xb < w; xb++){
+      var idx2 = (yb * w + xb) * 4;
+      if(data[idx2] < threshold || data[idx2+1] < threshold || data[idx2+2] < threshold){
+        bottom = yb; break outer_bottom;
+      }
+    }
+  }
+  /* Find left */
+  outer_left:
+  for(var xl = 0; xl < w; xl++){
+    for(var yl = top; yl <= bottom; yl++){
+      var idx3 = (yl * w + xl) * 4;
+      if(data[idx3] < threshold || data[idx3+1] < threshold || data[idx3+2] < threshold){
+        left = xl; break outer_left;
+      }
+    }
+  }
+  /* Find right */
+  outer_right:
+  for(var xr = w - 1; xr >= left; xr--){
+    for(var yr = top; yr <= bottom; yr++){
+      var idx4 = (yr * w + xr) * 4;
+      if(data[idx4] < threshold || data[idx4+1] < threshold || data[idx4+2] < threshold){
+        right = xr; break outer_right;
+      }
+    }
+  }
+
+  var margin = 4;
+  top = Math.max(0, top - margin);
+  left = Math.max(0, left - margin);
+  bottom = Math.min(h - 1, bottom + margin);
+  right = Math.min(w - 1, right + margin);
+
+  var tw = right - left + 1;
+  var th = bottom - top + 1;
+  if(tw < 50 || th < 50) return canvas;
+
+  var trimmed = document.createElement('canvas');
+  trimmed.width = tw; trimmed.height = th;
+  trimmed.getContext('2d').drawImage(canvas, left, top, tw, th, 0, 0, tw, th);
+  return trimmed;
+}
+
+/* ── Scale canvas to exact size ── */
+function scaleToSize(srcCanvas, targetW, targetH){
+  var c = document.createElement('canvas');
+  c.width = targetW; c.height = targetH;
+  var ctx = c.getContext('2d');
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, targetW, targetH);
+
+  var srcRatio = srcCanvas.width / srcCanvas.height;
+  var targetRatio = targetW / targetH;
+  var drawW, drawH, drawX, drawY;
+
+  if(srcRatio > targetRatio){
+    drawW = targetW;
+    drawH = targetW / srcRatio;
+    drawX = 0;
+    drawY = (targetH - drawH) / 2;
+  } else {
+    drawH = targetH;
+    drawW = targetH * srcRatio;
+    drawX = (targetW - drawW) / 2;
+    drawY = 0;
+  }
+  ctx.drawImage(srcCanvas, 0, 0, srcCanvas.width, srcCanvas.height, drawX, drawY, drawW, drawH);
+  return c;
+}
+
+/* ── Draw to visible canvas ── */
+function drawCanvas(target, source, w, h){
+  target.width = w;
+  target.height = h;
+  target.style.maxWidth = '320px';
+  target.getContext('2d').drawImage(source, 0, 0);
+}
+
+/* ── Build A4 sheet with front + back side by side ──
+   Layout: centered on A4, front on left, back on right.
+   User cuts around the pair, folds down the middle,
+   front and back align, then laminates in 65×95mm pouch. */
+function buildA4Sheet(frontScaled, backScaled){
+  a4Canvas.width = A4_W;
+  a4Canvas.height = A4_H;
+  var ctx = a4Canvas.getContext('2d');
+
+  /* White background */
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, A4_W, A4_H);
+
+  /* Card pair dimensions */
+  var pairW = CR80_W * 2;
+  var pairH = CR80_H;
+
+  /* Center on A4 */
+  var pairX = Math.round((A4_W - pairW) / 2);
+  var pairY = Math.round((A4_H - pairH) / 2);
+
+  /* Draw front (left) */
+  ctx.drawImage(frontScaled, pairX, pairY, CR80_W, CR80_H);
+  /* Draw back (right) — mirror horizontally so it aligns when folded */
+  ctx.save();
+  ctx.translate(pairX + CR80_W + CR80_W, pairY);
+  ctx.scale(-1, 1);
+  ctx.drawImage(backScaled, 0, 0, CR80_W, CR80_H);
+  ctx.restore();
+
+  /* Dashed fold line */
+  ctx.setLineDash([12, 6]);
+  ctx.strokeStyle = '#999999';
+  ctx.lineWidth = 1.5;
+  var foldX = pairX + CR80_W;
+  ctx.beginPath();
+  ctx.moveTo(foldX, pairY - 30);
+  ctx.lineTo(foldX, pairY + pairH + 30);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  /* Cut marks at corners */
+  var markLen = 20;
+  ctx.strokeStyle = '#666666';
+  ctx.lineWidth = 1;
+  drawCutMark(ctx, pairX, pairY, markLen, -1, -1);
+  drawCutMark(ctx, pairX + pairW, pairY, markLen, 1, -1);
+  drawCutMark(ctx, pairX, pairY + pairH, markLen, -1, 1);
+  drawCutMark(ctx, pairX + pairW, pairY + pairH, markLen, 1, 1);
+
+  /* Fold label */
+  ctx.fillStyle = '#999999';
+  ctx.font = '24px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('← fold here →', foldX, pairY - 40);
+
+  /* Card size label */
+  ctx.font = '20px sans-serif';
+  ctx.fillStyle = '#aaaaaa';
+  ctx.fillText('CR80 · 85.6 × 54 mm · 300 DPI', A4_W / 2, pairY + pairH + 60);
+}
+
+function drawCutMark(ctx, x, y, len, dx, dy){
+  ctx.beginPath();
+  ctx.moveTo(x, y);
+  ctx.lineTo(x + len * dx, y);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(x, y);
+  ctx.lineTo(x, y + len * dy);
+  ctx.stroke();
+}
+
+/* ── Download ── */
+btnDownload.addEventListener('click', function(){
+  var link = document.createElement('a');
+  link.download = (cardType || 'id-card') + '-a4-sheet.png';
+  link.href = a4Canvas.toDataURL('image/png');
+  link.click();
+});
+
+/* ── Print ── */
+btnPrint.addEventListener('click', function(){
+  window.print();
+});
+
+/* ── Reset ── */
+btnReset.addEventListener('click', function(){
+  pdfBytes = null;
+  cardType = null;
+  hide(stepPreview);
+  hide(stepPassword);
+  hide(stepProcessing);
+  show(stepUpload);
+  hideError(uploadError);
+  pdfInput.value = '';
+  pwInput.value = '';
+  pwBtn.disabled = false;
+  pwBtn.textContent = 'Unlock';
+  setStep(1);
+});
+
+})();
+</script>
+</body>
+</html>
