@@ -886,18 +886,27 @@
     });
   }
 
-  /* ── Card crop region (percentage of page, per doc type) ── */
-  var AADHAAR_CROP = { x0: 0.045, y0: 0.675, x1: 0.955, y1: 0.885 };
-  var PAN_CROP     = { x0: 0.06,  y0: 0.755, x1: 0.955, y1: 0.955 };
+  /* ── Card crop region (percentage of page, per doc type) ──
+     FRONT CARD ONLY — left half of the card pair, below the dashed
+     cut line. Calibrated against test-pdfs/ at RENDER_SCALE (300/72).
+     Aadhaar: gap between front/back at ~x 0.39-0.43 of page.
+     PAN:     fold line between front/back at ~x 0.48-0.50 of page. */
+  var AADHAAR_CROP = { x0: 0.025, y0: 0.695, x1: 0.485, y1: 0.875 };
+  var PAN_CROP     = { x0: 0.04,  y0: 0.755, x1: 0.52,  y1: 0.955 };
   function getCrop(docType) { return docType === 'pan' ? PAN_CROP : AADHAAR_CROP; }
 
   /* ── Auto-trim whitespace / cut-mark edges from card crop ──
      Scans inward from each edge. A row/col counts as "content" when
      ≥ 8 % of its pixels are dark (avg < 220). We require 3 consecutive
-     content rows/cols to stop — this skips isolated cut-mark lines. */
+     content rows/cols to stop — this skips isolated cut-mark lines.
+     Safety: never trim more than 5 % of a dimension so sparse-text
+     edges (e.g. the right side of Aadhaar with just the number) are
+     not eaten by the trim. */
   function trimCardEdges(imageData) {
     var w = imageData.width, h = imageData.height, d = imageData.data;
     var thresh = 0.08, run = 3;
+    var maxH = Math.floor(h * 0.05);
+    var maxW = Math.floor(w * 0.05);
 
     function rowDark(y) {
       var n = 0;
@@ -917,25 +926,25 @@
     }
 
     var topTrim = 0;
-    for (var y = 0; y < h - run; y++) {
+    for (var y = 0; y < Math.min(h - run, maxH); y++) {
       var ok = true;
       for (var r = 0; r < run; r++) { if (rowDark(y + r) < thresh) { ok = false; break; } }
       if (ok) { topTrim = y; break; }
     }
     var botTrim = 0;
-    for (var y = h - 1; y >= run; y--) {
+    for (var y = h - 1; y >= Math.max(run, h - maxH); y--) {
       var ok = true;
       for (var r = 0; r < run; r++) { if (rowDark(y - r) < thresh) { ok = false; break; } }
       if (ok) { botTrim = h - 1 - y; break; }
     }
     var leftTrim = 0;
-    for (var x = 0; x < w - run; x++) {
+    for (var x = 0; x < Math.min(w - run, maxW); x++) {
       var ok = true;
       for (var r = 0; r < run; r++) { if (colDark(x + r) < thresh) { ok = false; break; } }
       if (ok) { leftTrim = x; break; }
     }
     var rightTrim = 0;
-    for (var x = w - 1; x >= run; x--) {
+    for (var x = w - 1; x >= Math.max(run, w - maxW); x--) {
       var ok = true;
       for (var r = 0; r < run; r++) { if (colDark(x - r) < thresh) { ok = false; break; } }
       if (ok) { rightTrim = w - 1 - x; break; }
