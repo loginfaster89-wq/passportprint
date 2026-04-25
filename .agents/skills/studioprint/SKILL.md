@@ -262,6 +262,21 @@ audit trail. Do NOT re-fix any of the following — they are all merged:
 - PR #165: Full Document photo protection fix (restore original photo
   pixels from same buffer, bounds checking), Back to Edit button on
   A4 result page.
+- PR #166: Photo Only crop fallback (extract from card if photoImageData
+  null), per-mode edit state auto-save (switching Full Document ↔
+  Photo Only retains each mode's slider values), back buttons on
+  password + editor steps.
+- PR #168: docs update (SKILL.md, AGENTS.md, issues.md for #166-#168).
+- PR #170: PAN Photo Only vertical scan bounds fix (merged but did NOT
+  fully fix the issue — see open bug below).
+
+**OPEN BUG — PAN Photo Only face isolation (priority for next session):**
+PAN Photo Only mode does NOT isolate just the face. It shows card
+header text + photo merged together. Density-based `detectPhotoInCard`
+fails for PAN because Hindi header text and name text merge with photo
+in pixel analysis. See `issues.md` §J for full root cause + suggested
+fix (hardcoded `PAN_PHOTO_FRAC` approach, needs coordinate calibration
+using actual test PAN PDF). Test PDF password: `05071999`.
 
 **Pricing section design rule (post PR #150):** The pricing section uses
 card-based layout (`.plan-grid` with `.plan-card` divs), NOT a `<table>`.
@@ -303,10 +318,12 @@ without re-auditing.
 [TERSE MODE = ON] Minimum messages, zero re-explanation, sirf critical
 updates aur decisions. Ye default hai — har session mein auto-on.
 
+Sabse pehle PAT le lo mere se — GITHUB_PAT_PASSPORTPRINT (fine-grained,
+repo-scoped — Contents + Pull requests: Read and write). Session-only
+secret hoga. Bina PAT ke aage mat badho.
+
 Studio Print frontend par kaam karo. Repo: loginfaster89-wq/passportprint
-(private) PAT: GITHUB_PAT_PASSPORTPRINT (fine-grained, repo-scoped —
-Contents + Pull requests: Read and write on this repo). Agar saved
-secret na mile to session-only provide karunga.
+(private).
 
 Clone ke baad pehle ye teen files padho:
 
@@ -315,8 +332,9 @@ hard rules, PAT curl snippet, Hinglish style, §9 merged/open backlog).
 AGENTS.md — full source of truth.
 issues.md — 2026-04-23 site audit + 2026-04-24 §D responsive / flow
 follow-up + §E full re-audit + §F footer cleanup + §G single-feature
-glorification cleanup.
-Last PR: PR #165 (Full Document photo fix + Back button)
+glorification cleanup + §J PAN Photo Only bug.
+Last PR: PR #170 (PAN Photo Only vertical scan bounds — merged but
+did NOT fully fix the issue)
 
 Shipped summary (don't redo):
 
@@ -347,6 +365,10 @@ PR #160: Aadhaar/PAN card detection on document-sheet page.
 PR #163: Document Sheet Phase 2 — editor step, A4 sheet generation,
 download PNG + print.
 PR #165: Full Document photo protection fix + Back to Edit button.
+PR #166: Photo Only crop fallback + per-mode edit state auto-save +
+back buttons on password/editor steps.
+PR #168: docs update.
+PR #170: PAN Photo Only vertical scan bounds (merged, NOT fully fixed).
 
 <yahan apna task likho>
 ```
