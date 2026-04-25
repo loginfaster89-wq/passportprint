@@ -497,6 +497,10 @@
     <p class="ds-a4-sub" id="dsA4Sub">Card extracted and placed on A4. Ready to download or print.</p>
     <div class="ds-a4-wrap"><canvas id="dsA4Canvas"></canvas></div>
     <div class="ds-a4-actions">
+      <button class="ds-btn-print" id="dsA4Back" type="button" style="border:1px solid var(--border)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        Back to Edit
+      </button>
       <button class="ds-btn-download" id="dsA4Download" type="button">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
         Download PNG
@@ -611,6 +615,7 @@
   var a4Result    = document.getElementById('dsA4Result');
   var a4Canvas    = document.getElementById('dsA4Canvas');
   var a4Sub       = document.getElementById('dsA4Sub');
+  var a4Back      = document.getElementById('dsA4Back');
   var a4Download  = document.getElementById('dsA4Download');
   var a4Print     = document.getElementById('dsA4Print');
   var badge       = document.querySelector('.ds-badge');
@@ -920,19 +925,20 @@
     var warmth = parseInt(ctrlWarmth.value, 10);
     var shadows = parseInt(ctrlShadows.value, 10);
     applyAdjustments(copy, bright, contrast, sat, warmth, shadows);
-    if (editorMode === 'document' && photoImageData && photoCropInfo && cardCropInfo) {
+    if (editorMode === 'document' && photoCropInfo && cardCropInfo) {
       var pi = photoCropInfo;
       var ci = cardCropInfo;
       var rx = pi.sx - ci.sx;
       var ry = pi.sy - ci.sy;
       for (var row = 0; row < pi.sh; row++) {
+        if (ry + row < 0 || ry + row >= src.height) continue;
         for (var col = 0; col < pi.sw; col++) {
-          var srcIdx = (row * pi.sw + col) * 4;
-          var dstIdx = ((ry + row) * src.width + (rx + col)) * 4;
-          copy.data[dstIdx]     = photoImageData.data[srcIdx];
-          copy.data[dstIdx + 1] = photoImageData.data[srcIdx + 1];
-          copy.data[dstIdx + 2] = photoImageData.data[srcIdx + 2];
-          copy.data[dstIdx + 3] = photoImageData.data[srcIdx + 3];
+          if (rx + col < 0 || rx + col >= src.width) continue;
+          var idx = ((ry + row) * src.width + (rx + col)) * 4;
+          copy.data[idx]     = src.data[idx];
+          copy.data[idx + 1] = src.data[idx + 1];
+          copy.data[idx + 2] = src.data[idx + 2];
+          copy.data[idx + 3] = src.data[idx + 3];
         }
       }
     }
@@ -1032,19 +1038,40 @@
         var shadows = parseInt(ctrlShadows.value, 10);
 
         if (editorMode === 'document') {
+          var savedPhoto = null;
+          if (photoCropInfo) {
+            var pi = photoCropInfo;
+            var rx = pi.sx - ci.sx;
+            var ry = pi.sy - ci.sy;
+            savedPhoto = new Uint8ClampedArray(pi.sw * pi.sh * 4);
+            for (var row = 0; row < pi.sh; row++) {
+              if (ry + row < 0 || ry + row >= ci.sh) continue;
+              for (var col = 0; col < pi.sw; col++) {
+                if (rx + col < 0 || rx + col >= ci.sw) continue;
+                var idx = ((ry + row) * ci.sw + (rx + col)) * 4;
+                var sIdx = (row * pi.sw + col) * 4;
+                savedPhoto[sIdx]     = editedCard.data[idx];
+                savedPhoto[sIdx + 1] = editedCard.data[idx + 1];
+                savedPhoto[sIdx + 2] = editedCard.data[idx + 2];
+                savedPhoto[sIdx + 3] = editedCard.data[idx + 3];
+              }
+            }
+          }
           applyAdjustments(editedCard, bright, contrast, sat, warmth, shadows);
-          if (photoImageData && photoCropInfo) {
+          if (savedPhoto && photoCropInfo) {
             var pi = photoCropInfo;
             var rx = pi.sx - ci.sx;
             var ry = pi.sy - ci.sy;
             for (var row = 0; row < pi.sh; row++) {
+              if (ry + row < 0 || ry + row >= ci.sh) continue;
               for (var col = 0; col < pi.sw; col++) {
-                var srcIdx = (row * pi.sw + col) * 4;
-                var dstIdx = ((ry + row) * ci.sw + (rx + col)) * 4;
-                editedCard.data[dstIdx]     = photoImageData.data[srcIdx];
-                editedCard.data[dstIdx + 1] = photoImageData.data[srcIdx + 1];
-                editedCard.data[dstIdx + 2] = photoImageData.data[srcIdx + 2];
-                editedCard.data[dstIdx + 3] = photoImageData.data[srcIdx + 3];
+                if (rx + col < 0 || rx + col >= ci.sw) continue;
+                var idx = ((ry + row) * ci.sw + (rx + col)) * 4;
+                var sIdx = (row * pi.sw + col) * 4;
+                editedCard.data[idx]     = savedPhoto[sIdx];
+                editedCard.data[idx + 1] = savedPhoto[sIdx + 1];
+                editedCard.data[idx + 2] = savedPhoto[sIdx + 2];
+                editedCard.data[idx + 3] = savedPhoto[sIdx + 3];
               }
             }
           }
@@ -1092,6 +1119,12 @@
       });
     });
   }
+
+  /* ── Back to editor from A4 ── */
+  a4Back.addEventListener('click', function () {
+    a4Result.className = 'ds-a4-result';
+    editorEl.className = 'ds-editor visible';
+  });
 
   /* ── Download A4 as PNG ── */
   a4Download.addEventListener('click', function () {
