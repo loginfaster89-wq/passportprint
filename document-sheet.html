@@ -230,6 +230,34 @@
   padding:12px 16px;border-radius:8px;background:var(--surface2);
 }
 
+/* ── Document type detection card ── */
+.ds-detect{
+  display:none;margin-top:24px;
+  padding:24px;border-radius:14px;
+  background:var(--surface);border:1px solid var(--border);
+}
+.ds-detect.visible{display:block;}
+.ds-detect h3{
+  font-family:'Syne',sans-serif;font-weight:700;font-size:17px;
+  color:var(--text);margin:0 0 8px;display:flex;align-items:center;gap:8px;
+}
+.ds-detect h3 svg{width:20px;height:20px;}
+.ds-detect .ds-detect-type{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:6px 14px;border-radius:8px;
+  font-size:13.5px;font-weight:600;letter-spacing:.02em;
+  margin-bottom:12px;
+}
+.ds-detect .ds-detect-type.aadhaar{
+  background:rgba(240,165,0,0.10);color:var(--accent);border:1px solid rgba(240,165,0,0.25);
+}
+.ds-detect .ds-detect-type.pan{
+  background:rgba(74,222,128,0.08);color:var(--success);border:1px solid rgba(74,222,128,0.25);
+}
+.ds-detect .ds-detect-info{
+  color:var(--muted);font-size:13px;line-height:1.6;margin:0;
+}
+
 /* ── On-device badge ── */
 .ds-badge{
   display:flex;align-items:center;justify-content:center;gap:6px;
@@ -360,6 +388,16 @@
     <div class="ds-status-text" id="dsStatusText"></div>
   </div>
 
+  <!-- Document type detection -->
+  <section class="ds-detect" id="dsDetect">
+    <h3 id="dsDetectTitle">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><use href="#i-file-text"/></svg>
+      Document detected
+    </h3>
+    <div class="ds-detect-type" id="dsDetectBadge"></div>
+    <p class="ds-detect-info" id="dsDetectInfo"></p>
+  </section>
+
   <!-- Preview area -->
   <section class="ds-preview" id="dsPreview">
     <h3>PDF unlocked</h3>
@@ -455,6 +493,9 @@
   var previewEl   = document.getElementById('dsPreview');
   var previewInfo = document.getElementById('dsPreviewInfo');
   var previewPages= document.getElementById('dsPreviewPages');
+  var detectEl    = document.getElementById('dsDetect');
+  var detectBadge = document.getElementById('dsDetectBadge');
+  var detectInfo  = document.getElementById('dsDetectInfo');
 
   var currentFile = null;
   var currentArrayBuffer = null;
@@ -495,6 +536,7 @@
     fileInfo.className = 'ds-file-info';
     pwSection.className = 'ds-password';
     previewEl.className = 'ds-preview';
+    detectEl.className = 'ds-detect';
     hideStatus();
     hideSpinner();
     uploadArea.style.display = '';
@@ -618,14 +660,55 @@
     }
   });
 
+  /* ── Document type detection ── */
+  var AADHAAR_KW = ['unique identification authority', 'uidai', 'aadhaar',
+    'enrolment no', 'vid :', 'आधार'];
+  var PAN_KW = ['income tax department', 'permanent account number',
+    'govt. of india', 'govt of india', 'nsdl', 'utiitsl'];
+  var PAN_RE = /\b[A-Z]{5}[0-9]{4}[A-Z]\b/;
+
+  function detectDocType(text) {
+    var t = text.toLowerCase();
+    var aadhaarHits = 0;
+    for (var i = 0; i < AADHAAR_KW.length; i++) {
+      if (t.indexOf(AADHAAR_KW[i]) !== -1) aadhaarHits++;
+    }
+    var panHits = 0;
+    for (var j = 0; j < PAN_KW.length; j++) {
+      if (t.indexOf(PAN_KW[j]) !== -1) panHits++;
+    }
+    if (PAN_RE.test(text)) panHits++;
+    if (aadhaarHits >= 2) return 'aadhaar';
+    if (panHits >= 2) return 'pan';
+    return null;
+  }
+
+  function extractTextFromPdf(pdf) {
+    var pages = [];
+    var done = 0;
+    var total = pdf.numPages;
+    return new Promise(function (resolve) {
+      for (var i = 1; i <= total; i++) {
+        (function (pn) {
+          pdf.getPage(pn).then(function (page) {
+            return page.getTextContent();
+          }).then(function (content) {
+            pages[pn - 1] = content.items.map(function (it) { return it.str; }).join(' ');
+            done++;
+            if (done === total) resolve(pages.join('\n'));
+          });
+        })(i);
+      }
+    });
+  }
+
   /* ── Show PDF preview (page thumbnails) ── */
   function showPdfPreview(pdf) {
     var numPages = pdf.numPages;
-    previewInfo.textContent = numPages + ' page' + (numPages !== 1 ? 's' : '') + ' detected. Document unlocked successfully.';
+
+    /* Render thumbnails first */
+    previewInfo.textContent = numPages + ' page' + (numPages !== 1 ? 's' : '') + ' detected.';
     previewPages.innerHTML = '';
-
-    showStatus('success', '<strong>PDF unlocked!</strong> ' + numPages + ' page' + (numPages !== 1 ? 's' : '') + ' ready. A4 sheet layout is coming in the next update.');
-
     var maxThumbs = Math.min(numPages, 6);
     for (var i = 1; i <= maxThumbs; i++) {
       (function (pageNum) {
@@ -645,8 +728,33 @@
       })(i);
     }
 
-    previewEl.className = 'ds-preview visible';
     pwSection.className = 'ds-password';
+
+    /* Run detection — controls which status/preview is shown */
+    showSpinner('Detecting document type\u2026');
+    extractTextFromPdf(pdf).then(function (fullText) {
+      hideSpinner();
+      var docType = detectDocType(fullText);
+      if (docType === 'aadhaar') {
+        detectBadge.className = 'ds-detect-type aadhaar';
+        detectBadge.textContent = 'Aadhaar Card';
+        detectInfo.textContent = 'Aadhaar PDF detected. The tool will extract and place the ID card on a print-ready A4 sheet.';
+        detectEl.className = 'ds-detect visible';
+        previewEl.className = 'ds-preview visible';
+        showStatus('success', '<strong>Aadhaar Card detected!</strong> ' + numPages + ' page' + (numPages !== 1 ? 's' : '') + ' ready. A4 sheet layout is coming in the next update.');
+      } else if (docType === 'pan') {
+        detectBadge.className = 'ds-detect-type pan';
+        detectBadge.textContent = 'PAN Card';
+        detectInfo.textContent = 'PAN card PDF detected. The tool will extract and place the ID card on a print-ready A4 sheet.';
+        detectEl.className = 'ds-detect visible';
+        previewEl.className = 'ds-preview visible';
+        showStatus('success', '<strong>PAN Card detected!</strong> ' + numPages + ' page' + (numPages !== 1 ? 's' : '') + ' ready. A4 sheet layout is coming in the next update.');
+      } else {
+        detectEl.className = 'ds-detect';
+        previewEl.className = 'ds-preview';
+        showStatus('error', '<strong>Unsupported document.</strong> This tool only works with Aadhaar Card and PAN Card PDFs. Please upload a valid Aadhaar or PAN PDF.');
+      }
+    });
   }
 
 })();
