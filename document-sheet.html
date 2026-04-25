@@ -1016,6 +1016,12 @@
   var A4_H = 3508;
   var RENDER_SCALE = 300 / 72;
 
+  /* ── Standard CR80 card size at 300 DPI (85.6 × 54 mm) ──
+     Both PAN and Aadhaar are printed at this exact size so they
+     fit identically inside a 65 × 95 mm lamination pouch. */
+  var CARD_PRINT_W = Math.round(85.6 / 25.4 * 300); // 1011 px
+  var CARD_PRINT_H = Math.round(54   / 25.4 * 300); //  638 px
+
   /* ── Process PDF after unlock: detect → crop → editor ── */
   function processPdf(pdf) {
     pwSection.className = 'ds-password';
@@ -1045,16 +1051,14 @@
           var cw  = Math.round(vp.width * (crop.x1 - crop.x0));
           var ch  = Math.round(vp.height * (crop.y1 - crop.y0));
 
-          /* For PAN: auto-trim whitespace / cut-mark edges */
-          if (docType === 'pan') {
-            var rawCard = ctx.getImageData(cx0, cy0, cw, ch);
-            var trim = trimCardEdges(rawCard);
-            if (trim.top > 0 || trim.bottom > 0 || trim.left > 0 || trim.right > 0) {
-              cx0 += trim.left;
-              cy0 += trim.top;
-              cw  -= (trim.left + trim.right);
-              ch  -= (trim.top + trim.bottom);
-            }
+          /* Auto-trim whitespace / cut-mark edges from card crop */
+          var rawCard = ctx.getImageData(cx0, cy0, cw, ch);
+          var trim = trimCardEdges(rawCard);
+          if (trim.top > 0 || trim.bottom > 0 || trim.left > 0 || trim.right > 0) {
+            cx0 += trim.left;
+            cy0 += trim.top;
+            cw  -= (trim.left + trim.right);
+            ch  -= (trim.top + trim.bottom);
           }
 
           cardCropInfo = { sx: cx0, sy: cy0, sw: cw, sh: ch };
@@ -1322,8 +1326,9 @@
         var a4ctx = a4Canvas.getContext('2d');
         a4ctx.fillStyle = '#ffffff';
         a4ctx.fillRect(0, 0, A4_W, A4_H);
-        var cardX = Math.round((A4_W - ci.sw) / 2);
-        a4ctx.drawImage(tempCard, 0, 0, ci.sw, ci.sh, cardX, 60, ci.sw, ci.sh);
+        /* Scale card to standard CR80 size — both PAN & Aadhaar same */
+        var cardX = Math.round((A4_W - CARD_PRINT_W) / 2);
+        a4ctx.drawImage(tempCard, 0, 0, ci.sw, ci.sh, cardX, 60, CARD_PRINT_W, CARD_PRINT_H);
 
         hideSpinner();
         var label = currentDocType === 'aadhaar' ? 'Aadhaar' : 'PAN';
