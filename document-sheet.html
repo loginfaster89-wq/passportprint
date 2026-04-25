@@ -891,8 +891,60 @@
   var PAN_CROP     = { x0: 0.06,  y0: 0.755, x1: 0.955, y1: 0.955 };
   function getCrop(docType) { return docType === 'pan' ? PAN_CROP : AADHAAR_CROP; }
 
-  /* ── PAN photo region as fraction of card crop (hardcoded — density detection fails for PAN) ── */
-  var PAN_PHOTO_FRAC = { x0: 0.02, y0: 0.31, x1: 0.15, y1: 0.58 };
+  /* ── Auto-trim whitespace / cut-mark edges from card crop ──
+     Scans inward from each edge. A row/col counts as "content" when
+     ≥ 8 % of its pixels are dark (avg < 220). We require 3 consecutive
+     content rows/cols to stop — this skips isolated cut-mark lines. */
+  function trimCardEdges(imageData) {
+    var w = imageData.width, h = imageData.height, d = imageData.data;
+    var thresh = 0.08, run = 3;
+
+    function rowDark(y) {
+      var n = 0;
+      for (var x = 0; x < w; x++) {
+        var i = (y * w + x) * 4;
+        if ((d[i] + d[i + 1] + d[i + 2]) / 3 < 220) n++;
+      }
+      return n / w;
+    }
+    function colDark(x) {
+      var n = 0;
+      for (var y = 0; y < h; y++) {
+        var i = (y * w + x) * 4;
+        if ((d[i] + d[i + 1] + d[i + 2]) / 3 < 220) n++;
+      }
+      return n / h;
+    }
+
+    var topTrim = 0;
+    for (var y = 0; y < h - run; y++) {
+      var ok = true;
+      for (var r = 0; r < run; r++) { if (rowDark(y + r) < thresh) { ok = false; break; } }
+      if (ok) { topTrim = y; break; }
+    }
+    var botTrim = 0;
+    for (var y = h - 1; y >= run; y--) {
+      var ok = true;
+      for (var r = 0; r < run; r++) { if (rowDark(y - r) < thresh) { ok = false; break; } }
+      if (ok) { botTrim = h - 1 - y; break; }
+    }
+    var leftTrim = 0;
+    for (var x = 0; x < w - run; x++) {
+      var ok = true;
+      for (var r = 0; r < run; r++) { if (colDark(x + r) < thresh) { ok = false; break; } }
+      if (ok) { leftTrim = x; break; }
+    }
+    var rightTrim = 0;
+    for (var x = w - 1; x >= run; x--) {
+      var ok = true;
+      for (var r = 0; r < run; r++) { if (colDark(x - r) < thresh) { ok = false; break; } }
+      if (ok) { rightTrim = w - 1 - x; break; }
+    }
+    return { top: topTrim, bottom: botTrim, left: leftTrim, right: rightTrim };
+  }
+
+  /* ── PAN photo region as fraction of card crop after trim (hardcoded — density detection fails for PAN) ── */
+  var PAN_PHOTO_FRAC = { x0: 0.03, y0: 0.18, x1: 0.27, y1: 0.72 };
   
   /* ── Detect photo region inside card using pixel density analysis ── */
   function detectPhotoInCard(cardData, docType) {
@@ -992,6 +1044,19 @@
           var cy0 = Math.round(vp.height * crop.y0);
           var cw  = Math.round(vp.width * (crop.x1 - crop.x0));
           var ch  = Math.round(vp.height * (crop.y1 - crop.y0));
+
+          /* For PAN: auto-trim whitespace / cut-mark edges */
+          if (docType === 'pan') {
+            var rawCard = ctx.getImageData(cx0, cy0, cw, ch);
+            var trim = trimCardEdges(rawCard);
+            if (trim.top > 0 || trim.bottom > 0 || trim.left > 0 || trim.right > 0) {
+              cx0 += trim.left;
+              cy0 += trim.top;
+              cw  -= (trim.left + trim.right);
+              ch  -= (trim.top + trim.bottom);
+            }
+          }
+
           cardCropInfo = { sx: cx0, sy: cy0, sw: cw, sh: ch };
           cardImageData = ctx.getImageData(cx0, cy0, cw, ch);
 
