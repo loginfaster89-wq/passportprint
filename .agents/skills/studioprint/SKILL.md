@@ -269,14 +269,29 @@ audit trail. Do NOT re-fix any of the following — they are all merged:
 - PR #168: docs update (SKILL.md, AGENTS.md, issues.md for #166-#168).
 - PR #170: PAN Photo Only vertical scan bounds fix (merged but did NOT
   fully fix the issue — see open bug below).
+- PR #182: PAN/Aadhaar CR80 card size standardization + auto-trim both
+  cards + test PDFs saved in `test-pdfs/`.
 
-**OPEN BUG — PAN Photo Only face isolation (priority for next session):**
-PAN Photo Only mode does NOT isolate just the face. It shows card
-header text + photo merged together. Density-based `detectPhotoInCard`
-fails for PAN because Hindi header text and name text merge with photo
-in pixel analysis. See `issues.md` §J for full root cause + suggested
-fix (hardcoded `PAN_PHOTO_FRAC` approach, needs coordinate calibration
-using actual test PAN PDF). Test PDF password: `05071999`.
+**OPEN — Full card system rebuild (priority — see `issues.md` §L):**
+Owner directive: delete the entire old card crop/detection/sizing system
+and rebuild from scratch. Step-by-step, one PR per step:
+1. Fix PDF → card crop extraction (recalibrate crop coordinates)
+2. Standardize output to exact CR80 (85.6×54mm = 1011×638px at 300 DPI)
+3. Fix PAN Photo Only face isolation (§J bug)
+4. Front + back layout on A4 (fold-and-laminate workflow)
+5. Print alignment + margin fine-tuning
+
+**Card size reference:**
+- CR80 standard: 85.6 × 54 mm = 1011 × 638 px at 300 DPI
+- Lamination pouch: 65 × 95 mm (Reston 125 micron)
+- Card fits inside pouch with ~4.7mm width margin, ~5.5mm height margin
+- Test PDFs: `test-pdfs/pan-test.pdf` (pw: `05071999`),
+  `test-pdfs/aadhaar-test.pdf` (pw: `SUNI1986`)
+
+**PAN Photo Only bug (§J — still open):**
+Density-based `detectPhotoInCard` fails for PAN — Hindi header text and
+name text merge with photo. Hardcoded `PAN_PHOTO_FRAC` approach needs
+coordinate calibration using actual test PAN PDF.
 
 **Pricing section design rule (post PR #150):** The pricing section uses
 card-based layout (`.plan-grid` with `.plan-card` divs), NOT a `<table>`.
@@ -290,14 +305,15 @@ add them to all 3 cards consistently.
   apply to the full card image EXCEPT the photo region. Photo stays
   original.
 - Photo Only mode: edits apply ONLY to the photo region.
-- Card crop: `{ x0: 0.045, y0: 0.675, x1: 0.955, y1: 0.885 }` of page.
-- Photo crop (Aadhaar): `{ x0: 0.045, y0: 0.69, x1: 0.23, y1: 0.87 }`.
+- Card crop constants (BEING REBUILT — see §L):
+  - Aadhaar: `{ x0: 0.045, y0: 0.675, x1: 0.955, y1: 0.885 }` of page
+  - PAN: `{ x0: 0.06, y0: 0.755, x1: 0.955, y1: 0.955 }` of page
 - A4 canvas: 2480×3508 px (300 DPI). Card centered horizontally,
   60px from top.
+- CR80 output: `CARD_PRINT_W` = 1011 px, `CARD_PRINT_H` = 638 px.
 
-**Open:** only `F7` GSI iframe warnings (not our code, harmless).
-Backlog is otherwise empty — next session can propose new features or
-fresh audit.
+**Open:** `F7` GSI iframe warnings (not our code, harmless) +
+full card system rebuild (§L).
 
 ## 10. Related repos
 
@@ -332,9 +348,10 @@ hard rules, PAT curl snippet, Hinglish style, §9 merged/open backlog).
 AGENTS.md — full source of truth.
 issues.md — 2026-04-23 site audit + 2026-04-24 §D responsive / flow
 follow-up + §E full re-audit + §F footer cleanup + §G single-feature
-glorification cleanup + §J PAN Photo Only bug.
-Last PR: PR #170 (PAN Photo Only vertical scan bounds — merged but
-did NOT fully fix the issue)
+glorification cleanup + §J PAN Photo Only bug (OPEN) + §K card size
+standardization + §L full card system rebuild (OPEN).
+Last PR: PR #182 (PAN/Aadhaar CR80 card size standardization + auto-trim
+both cards + test PDFs saved in repo)
 
 Shipped summary (don't redo):
 
@@ -369,6 +386,16 @@ PR #166: Photo Only crop fallback + per-mode edit state auto-save +
 back buttons on password/editor steps.
 PR #168: docs update.
 PR #170: PAN Photo Only vertical scan bounds (merged, NOT fully fixed).
+PR #171: docs update — PAN Photo Only bug documented.
+PR #182: PAN/Aadhaar CR80 card size standardization + auto-trim both
+cards + test PDFs in test-pdfs/.
+
+Test PDFs repo mein saved hain — bar bar dene ki zaroorat nahi:
+- test-pdfs/pan-test.pdf (password: 05071999)
+- test-pdfs/aadhaar-test.pdf (password: SUNI1986)
+
+Lamination pouch size: 65×95mm (Reston 125 micron).
+CR80 card size: 85.6×54mm (1011×638px at 300 DPI).
 
 <yahan apna task likho>
 ```

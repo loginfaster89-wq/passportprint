@@ -399,3 +399,127 @@ proportions, the resulting printed cards were different sizes.
 - **Card crop fractions** (`AADHAAR_CROP`, `PAN_CROP`) may need tuning
   for edge cases with different PDF layouts. Current values work for
   standard government-issued ePAN and eAadhaar PDFs.
+
+---
+
+## L. Full Aadhaar/PAN card system rebuild (2026-04-25, session #11)
+
+**Status: OPEN — full rebuild planned, step-by-step across multiple PRs.**
+
+### Background
+
+Owner tested PR #182 output (CR80 card size standardization). Despite
+the fix forcing both cards to identical pixel dimensions on the A4
+canvas, the **PDF crop itself** is still wrong — the extracted card
+region includes extra whitespace, cut marks, or text outside the actual
+card boundary. This means the "standardised" output is scaling a badly
+cropped region, not a clean card.
+
+Owner's directive: **delete the entire old card crop/detection/sizing
+system and rebuild from scratch.** Step-by-step, one PR per step.
+
+### User workflow (print → cut → fold → laminate)
+
+1. Upload eAadhaar or ePAN PDF → tool detects card type
+2. Tool extracts the card from the PDF page (front side only currently)
+3. Editor step: adjust brightness/contrast/saturation/warmth/shadows
+4. Build A4 sheet with card centered
+5. Download PNG or print directly
+6. **User cuts** the printed card with scissors
+7. **User folds** (front + back together — currently only front is placed)
+8. **User laminates** in a 65×95 mm thermal pouch (Reston 125 micron)
+
+For the lamination to work:
+- The printed card must be **exactly CR80** (85.6 × 54 mm)
+- The card crop from PDF must be **clean** — no extra whitespace, cut
+  marks, or text bleed outside the card boundary
+- Both PAN and Aadhaar must produce **identical output dimensions**
+
+### Card size research
+
+| Item | Dimensions | Notes |
+|------|-----------|-------|
+| CR80 standard (PVC card) | 85.6 × 54 mm (= 85.5 × 54 mm) | Same as credit/debit cards. Industry standard. |
+| CR80 at 300 DPI | 1011 × 638 px | Current `CARD_PRINT_W` / `CARD_PRINT_H`. |
+| Lamination pouch | 65 × 95 mm | Reston 125 micron thermal pouch. |
+| Card inside pouch | ~4.7 mm margin width, ~5.5 mm margin height | Card fits with lamination seal on all 4 sides. |
+| PVC blank card | 85.5 × 54 × 0.76 mm | For direct PVC printing (Epson L805/L8050 tray). |
+| eAadhaar PDF page | ~595 × 842 pt (A4) | Card is in lower ~21% of page height. |
+| ePAN PDF page | ~842 × 595 pt (A4 landscape) or varies | Card is in lower ~20% of page height. |
+
+Source: IndiaMART PVC card listings, MySea Solutions CardXpress software,
+UIDAI/NSDL standard specifications.
+
+### Current problems with existing code
+
+1. **Crop coordinates are approximate.** `AADHAAR_CROP` and `PAN_CROP`
+   were manually estimated as fractions of page dimensions. Different
+   PDF versions (UIDAI layout changes, different ePAN providers) may
+   have slightly different card positions.
+
+2. **Auto-trim is fragile.** `trimCardEdges()` uses a simple dark-pixel
+   density threshold (8% of row/col pixels below brightness 220). This
+   can fail when:
+   - Card has a dark border/frame that the trim should keep
+   - Cut marks or dashed lines near the card edges create false positives
+   - White card background near edges has very few dark pixels
+
+3. **PAN Photo Only detection fails (§J).** Hindi header text and name
+   text merge with photo in density analysis → `detectPhotoInCard()`
+   returns a huge region instead of just the face.
+
+4. **Only front side placed on A4.** The current `buildA4Sheet()` places
+   one card image. For the fold-and-laminate workflow, both front and
+   back should be on the sheet.
+
+5. **No visual validation.** There's no way for the user to see the crop
+   boundary before committing to the A4 sheet. A preview with adjustable
+   crop would catch bad extractions early.
+
+### Rebuild plan (step by step, one PR per step)
+
+**Step 1: Fix PDF → card crop extraction**
+- Recalibrate `AADHAAR_CROP` and `PAN_CROP` against actual test PDFs
+  using precise pixel measurements
+- Improve `trimCardEdges()` or replace with a more robust approach
+- Validate visually: the cropped region should contain ONLY the card,
+  no extra whitespace or cut marks
+- Test with both `test-pdfs/pan-test.pdf` and `test-pdfs/aadhaar-test.pdf`
+
+**Step 2: Standardize output to exact CR80 dimensions**
+- Both cards drawn at exact same pixel dimensions (1011 × 638) on A4
+- Aspect ratio handling: if crop aspect ratio differs from CR80, decide
+  whether to letterbox, stretch, or crop-to-fit
+- Verify with ruler measurement on printed output
+
+**Step 3: Fix PAN Photo Only face isolation**
+- Replace density-based detection with hardcoded `PAN_PHOTO_FRAC`
+- Calibrate coordinates using actual test PAN PDF
+- Ensure Aadhaar Photo Only is unaffected
+
+**Step 4: Front + back layout on A4**
+- Currently only front side is placed on A4 sheet
+- Add back side (from same PDF or second page) next to front
+- Layout: front | back side by side, both at CR80 size
+- User cuts around the pair, folds in middle, laminates
+
+**Step 5: Print alignment + margin fine-tuning**
+- Ensure the printed output matches physical measurements
+- Account for printer margins (most printers have 3-6mm unprintable margins)
+- Test with actual lamination pouches
+
+### Test PDFs
+
+Already saved in repo — do NOT need to be re-provided:
+- `test-pdfs/pan-test.pdf` (password: `05071999`)
+- `test-pdfs/aadhaar-test.pdf` (password: `SUNI1986`)
+
+### Key file locations
+
+- `document-sheet.html` lines ~890–892: `AADHAAR_CROP`, `PAN_CROP`, `getCrop()`
+- `document-sheet.html` lines ~898–944: `trimCardEdges()` auto-trim
+- `document-sheet.html` lines ~946–947: `PAN_PHOTO_FRAC` hardcoded photo region
+- `document-sheet.html` lines ~950–1013: `detectPhotoInCard()` density analysis
+- `document-sheet.html` lines ~1022–1023: `CARD_PRINT_W`, `CARD_PRINT_H` (CR80 at 300 DPI)
+- `document-sheet.html` lines ~1026–1094: `processPdf()` — crop + detect + editor
+- `document-sheet.html` lines ~1240–1340: `buildA4Sheet()` — A4 canvas generation
