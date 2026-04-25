@@ -225,7 +225,7 @@ P19 inline tools-preview demo strip (PR #99), P2 hero A4-sheet mockup
 (PR #110), homepage inline checkout (PR #112), shared pricing modal
 (PR #114).
 
-**Also resolved (PRs #118–#165):** PRs #118–#132 stats-grid slider,
+**Also resolved (PRs #118–#170):** PRs #118–#132 stats-grid slider,
 self-host fonts, step-bar progress, audience grid, AI download bar,
 empty space, error banner, frame-corners, 768px breakpoint, font
 preload. PRs #134+#137 FAQPage + WebApplication JSON-LD. PR #139
@@ -241,10 +241,16 @@ feature card + multi-tool copy. PR #157 Document Sheet tool page
 feature icons fix. PR #160 Aadhaar/PAN card detection. PR #163
 Document Sheet Phase 2 (editor step, A4 sheet generation, download +
 print). PR #165 Full Document photo fix + Back to Edit button.
+PR #166 Photo Only crop fallback + per-mode edit state auto-save +
+back buttons. PR #168 docs update. PR #170 PAN Photo Only vertical
+scan bounds (merged but did NOT fully fix — see open backlog).
 
 **Open backlog:**
+- **PAN Photo Only face isolation bug** — density-based photo detection
+  fails for PAN cards (Hindi header + name text merge with photo).
+  Needs hardcoded `PAN_PHOTO_FRAC` with calibrated coordinates. See
+  `issues.md` §J for full analysis + suggested fix approach.
 - F7 GSI iframe warnings (not our code, harmless — monitor only).
-- Fresh audit / new features as owner picks priorities.
 
 ## Working style for human collaborators
 

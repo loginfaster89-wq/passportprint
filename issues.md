@@ -297,4 +297,67 @@ Shipped in two PRs:
 | I3 | PR #163 | **Document Sheet Phase 2 — editor + A4.** Editor step with brightness/contrast/saturation/warmth/shadows sliders. Full Document / Photo Only toggle (photo excluded from edits in full-document mode). Card crop + photo crop extraction from rendered PDF at 300 DPI. A4 sheet generation (2480×3508 canvas), download PNG + print. | **merged** |
 | I4 | PR #165 | **Full Document photo fix + Back button.** Fixed photo protection in Full Document mode — now restores original photo pixels directly from same card buffer with bounds checking (previous approach used separate `photoImageData` with coordinate translation that could fail). Added "Back to Edit" button on A4 result page so user can return to editor and adjust settings. | **merged** |
 
-**Next:** Backlog empty — fresh audit or new features as owner picks priorities.
+**Next:** PAN Photo Only bug (see §J below).
+
+---
+
+## J. PAN Photo Only — face isolation bug (2026-04-25, session #9)
+
+**Status: OPEN — not fixed yet. Priority for next session.**
+
+### Problem
+
+PAN Photo Only mode does NOT isolate the face photo. Instead it shows
+a large region of the card (header text, name, DOB etc.) instead of
+just the passport-size face.
+
+Aadhaar Photo Only works correctly — cleanly extracts just the face.
+
+### Root cause analysis
+
+`detectPhotoInCard()` in `document-sheet.html` uses pixel density
+analysis to find the photo region inside the card crop. This works for
+Aadhaar but **fails for PAN** because:
+
+1. **Hindi header text** (आयकर विभाग / INCOME TAX DEPARTMENT) at the
+   top of the card has dark pixels in the same x-columns as the photo.
+2. **Name/DOB text** (DHARMENDER, RAJENDER, 05/07/1999) below the photo
+   also has dark pixels in the same x-columns.
+3. The vertical density scan merges header + photo + text into one
+   giant region instead of isolating just the face.
+
+### What was tried (didn't work)
+
+1. **PR #170 (merged):** Added PAN-specific vertical scan bounds
+   (`vTop=2%`, `vBot=58%` of card height) to limit the vertical scan
+   range. Result: still showed card header + photo merged together.
+   The Hindi header text within the left 22% strip still produces
+   enough density to merge with the photo run.
+
+2. **Hardcoded `PAN_PHOTO_FRAC` approach (not merged):** Defined
+   `PAN_PHOTO_FRAC = { x0: 0.02, y0: 0.14, x1: 0.27, y1: 0.58 }`
+   as fraction of card crop, bypassing density detection for PAN.
+   Code was pushed to PR #170 branch but coordinates may need
+   calibration against the actual PAN PDF.
+
+### Suggested fix approach for next session
+
+1. **Load the test PAN PDF** (`072679701357620_signed.pdf`, password:
+   `05071999`) in the browser on `document-sheet.html`.
+2. **Add `console.log` debugging** inside `processPdf()` to print the
+   actual pixel coordinates of `cardCropInfo` (cx0, cy0, cw, ch) and
+   the detected/hardcoded photo region (px0, py0, pw, ph).
+3. **Use browser DevTools** to inspect the rendered PDF canvas and
+   measure the exact photo position within the card crop.
+4. **Calibrate `PAN_PHOTO_FRAC`** coordinates based on actual
+   measurements. The photo position varies slightly between PAN card
+   versions but is always in the upper-left quadrant.
+5. **Test both PAN and Aadhaar** to confirm Aadhaar is unaffected.
+
+### Key file locations
+
+- `document-sheet.html` lines ~886–956: crop constants + `detectPhotoInCard()`
+- `document-sheet.html` lines ~985–1012: `processPdf()` where photo extraction happens
+- Card crop constants: `AADHAAR_CROP`, `PAN_CROP`
+- Photo detection: `detectPhotoInCard(cardData, docType)` — works for Aadhaar, fails for PAN
+- Test PDF: `072679701357620_signed.pdf` (password: `05071999`)
