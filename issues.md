@@ -360,4 +360,42 @@ Aadhaar but **fails for PAN** because:
 - `document-sheet.html` lines ~985–1012: `processPdf()` where photo extraction happens
 - Card crop constants: `AADHAAR_CROP`, `PAN_CROP`
 - Photo detection: `detectPhotoInCard(cardData, docType)` — works for Aadhaar, fails for PAN
-- Test PDF: `072679701357620_signed.pdf` (password: `05071999`)
+- Test PDFs saved in repo: `test-pdfs/pan-test.pdf` (password: `05071999`), `test-pdfs/aadhaar-test.pdf` (password: `SUNI1986`)
+
+---
+
+## K. Card size standardization + lamination fit (2026-04-25, session #10)
+
+**Status: PR #182 — fixes card size mismatch.**
+
+### Problem
+
+PAN card printed smaller than Aadhaar on A4 sheet. Both cards should be
+identical size for 65×95mm lamination pouches (Reston 125 micron).
+
+### Root cause
+
+`buildA4Sheet()` drew each card at its native PDF crop pixel size. Since
+PAN and Aadhaar PDFs have different page sizes and the cards occupy different
+proportions, the resulting printed cards were different sizes.
+
+### Fix (PR #182)
+
+1. **CR80 standard size constants** — `CARD_PRINT_W` (1011 px) and
+   `CARD_PRINT_H` (638 px) = 85.6×54mm at 300 DPI. Industry standard
+   PVC card size that fits inside 65×95mm lamination with ~4.7mm margin
+   on width and ~5.5mm on height.
+2. **Both cards scaled to CR80** — `drawImage` in `buildA4Sheet()` now
+   uses fixed `CARD_PRINT_W × CARD_PRINT_H` instead of native `ci.sw × ci.sh`.
+3. **Auto-trim for both card types** — `trimCardEdges()` was PAN-only,
+   now runs on Aadhaar too for cleaner card boundaries.
+4. **Test PDFs committed** — `test-pdfs/pan-test.pdf` (pw: `05071999`)
+   and `test-pdfs/aadhaar-test.pdf` (pw: `SUNI1986`) saved in repo.
+
+### Still open
+
+- **§J PAN Photo Only face isolation** — `PAN_PHOTO_FRAC` may still need
+  calibration. Separate fix, separate PR.
+- **Card crop fractions** (`AADHAAR_CROP`, `PAN_CROP`) may need tuning
+  for edge cases with different PDF layouts. Current values work for
+  standard government-issued ePAN and eAadhaar PDFs.
