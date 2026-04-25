@@ -307,6 +307,13 @@
   font-size:13.5px;font-weight:600;cursor:pointer;transition:opacity .2s;
 }
 .ds-btn-continue:hover{opacity:.88;}
+.ds-btn-back{
+  padding:9px 18px;border-radius:8px;
+  background:none;color:var(--muted);border:1px solid var(--border);
+  font-size:13.5px;font-weight:600;cursor:pointer;transition:opacity .2s,color .2s;
+  display:inline-flex;align-items:center;gap:5px;
+}
+.ds-btn-back:hover{opacity:.85;color:var(--text);}
 
 /* ── On-device badge ── */
 .ds-badge{
@@ -418,6 +425,10 @@
       <input type="password" id="dsPwInput" placeholder="Enter PDF password" autocomplete="off">
       <button type="button" id="dsPwUnlock">Unlock</button>
     </div>
+    <button type="button" class="ds-btn-back" id="dsPwBack" style="margin-bottom:14px">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        Back
+      </button>
     <div class="ds-tips">
       <h4>Password hints</h4>
       <div class="ds-tip">
@@ -483,6 +494,10 @@
       </label>
     </div>
     <div class="ds-editor-actions">
+      <button type="button" class="ds-btn-back" id="dsEditorBack">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        Back
+      </button>
       <button type="button" class="ds-btn-reset" id="dsEditReset">Reset</button>
       <button type="button" class="ds-btn-continue" id="dsEditContinue">Continue to A4 Sheet</button>
     </div>
@@ -629,6 +644,10 @@
   var cardCropInfo = null;
   var photoCropInfo = null;
   var currentDocType = null;
+  var docEdits = {brightness:0,contrast:0,saturation:0,warmth:0,shadows:0};
+  var photoEdits = {brightness:0,contrast:0,saturation:0,warmth:0,shadows:0};
+  var pwBack = document.getElementById('dsPwBack');
+  var editorBack = document.getElementById('dsEditorBack');
 
   /* ── Helpers ── */
   function formatBytes(bytes) {
@@ -682,8 +701,27 @@
     ctrlSat.value = 0; valSat.textContent = '0';
     ctrlWarmth.value = 0; valWarmth.textContent = '0';
     ctrlShadows.value = 0; valShadows.textContent = '0';
+    docEdits = {brightness:0,contrast:0,saturation:0,warmth:0,shadows:0};
+    photoEdits = {brightness:0,contrast:0,saturation:0,warmth:0,shadows:0};
     editDocBtn.classList.add('active');
     editPhotoBtn.classList.remove('active');
+  }
+
+  function saveCurrentEdits() {
+    var t = editorMode === 'photo' ? photoEdits : docEdits;
+    t.brightness = parseInt(ctrlBright.value, 10);
+    t.contrast = parseInt(ctrlContrast.value, 10);
+    t.saturation = parseInt(ctrlSat.value, 10);
+    t.warmth = parseInt(ctrlWarmth.value, 10);
+    t.shadows = parseInt(ctrlShadows.value, 10);
+  }
+
+  function loadEdits(e) {
+    ctrlBright.value = e.brightness; valBright.textContent = String(e.brightness);
+    ctrlContrast.value = e.contrast; valContrast.textContent = String(e.contrast);
+    ctrlSat.value = e.saturation; valSat.textContent = String(e.saturation);
+    ctrlWarmth.value = e.warmth; valWarmth.textContent = String(e.warmth);
+    ctrlShadows.value = e.shadows; valShadows.textContent = String(e.shadows);
   }
 
   /* ── Drag & drop ── */
@@ -901,19 +939,37 @@
   /* ── Editor step ── */
   function showEditorStep() {
     editorMode = 'document';
+    docEdits = {brightness:0,contrast:0,saturation:0,warmth:0,shadows:0};
+    photoEdits = {brightness:0,contrast:0,saturation:0,warmth:0,shadows:0};
     editDocBtn.classList.add('active');
     editPhotoBtn.classList.remove('active');
-    ctrlBright.value = 0; valBright.textContent = '0';
-    ctrlContrast.value = 0; valContrast.textContent = '0';
-    ctrlSat.value = 0; valSat.textContent = '0';
-    ctrlWarmth.value = 0; valWarmth.textContent = '0';
-    ctrlShadows.value = 0; valShadows.textContent = '0';
+    loadEdits(docEdits);
     renderEditorCanvas();
     editorEl.className = 'ds-editor visible';
   }
 
   function renderEditorCanvas() {
-    var src = editorMode === 'photo' ? photoImageData : cardImageData;
+    var src;
+    if (editorMode === 'photo') {
+      src = photoImageData;
+      if (!src && cardImageData && photoCropInfo && cardCropInfo) {
+        var rx = photoCropInfo.sx - cardCropInfo.sx;
+        var ry = photoCropInfo.sy - cardCropInfo.sy;
+        var pw = Math.min(photoCropInfo.sw, cardImageData.width - rx);
+        var ph = Math.min(photoCropInfo.sh, cardImageData.height - ry);
+        if (rx >= 0 && ry >= 0 && pw > 0 && ph > 0) {
+          var tmp = document.createElement('canvas');
+          tmp.width = cardImageData.width;
+          tmp.height = cardImageData.height;
+          var tc = tmp.getContext('2d');
+          tc.putImageData(cardImageData, 0, 0);
+          photoImageData = tc.getImageData(rx, ry, pw, ph);
+          src = photoImageData;
+        }
+      }
+    } else {
+      src = cardImageData;
+    }
     if (!src) return;
     editorCanvas.width = src.width;
     editorCanvas.height = src.height;
@@ -975,15 +1031,21 @@
 
   /* ── Editor toggle ── */
   editDocBtn.addEventListener('click', function () {
+    if (editorMode === 'document') return;
+    saveCurrentEdits();
     editorMode = 'document';
     editDocBtn.classList.add('active');
     editPhotoBtn.classList.remove('active');
+    loadEdits(docEdits);
     renderEditorCanvas();
   });
   editPhotoBtn.addEventListener('click', function () {
+    if (editorMode === 'photo') return;
+    saveCurrentEdits();
     editorMode = 'photo';
     editPhotoBtn.classList.add('active');
     editDocBtn.classList.remove('active');
+    loadEdits(photoEdits);
     renderEditorCanvas();
   });
 
@@ -1005,17 +1067,16 @@
   });
 
   editReset.addEventListener('click', function () {
-    ctrlBright.value = 0; valBright.textContent = '0';
-    ctrlContrast.value = 0; valContrast.textContent = '0';
-    ctrlSat.value = 0; valSat.textContent = '0';
-    ctrlWarmth.value = 0; valWarmth.textContent = '0';
-    ctrlShadows.value = 0; valShadows.textContent = '0';
+    var z = {brightness:0,contrast:0,saturation:0,warmth:0,shadows:0};
+    if (editorMode === 'photo') { photoEdits = z; } else { docEdits = z; }
+    loadEdits(z);
     renderEditorCanvas();
   });
 
   /* ── Continue to A4 ── */
   editContinue.addEventListener('click', function () {
     if (!unlockedPdf || !cardImageData) return;
+    saveCurrentEdits();
     buildA4Sheet();
   });
 
@@ -1031,60 +1092,60 @@
       page.render({ canvasContext: ctx, viewport: vp }).promise.then(function () {
         var ci = cardCropInfo;
         var editedCard = ctx.getImageData(ci.sx, ci.sy, ci.sw, ci.sh);
-        var bright = parseInt(ctrlBright.value, 10);
-        var contrast = parseInt(ctrlContrast.value, 10);
-        var sat = parseInt(ctrlSat.value, 10);
-        var warmth = parseInt(ctrlWarmth.value, 10);
-        var shadows = parseInt(ctrlShadows.value, 10);
 
-        if (editorMode === 'document') {
-          var savedPhoto = null;
-          if (photoCropInfo) {
-            var pi = photoCropInfo;
-            var rx = pi.sx - ci.sx;
-            var ry = pi.sy - ci.sy;
-            savedPhoto = new Uint8ClampedArray(pi.sw * pi.sh * 4);
-            for (var row = 0; row < pi.sh; row++) {
-              if (ry + row < 0 || ry + row >= ci.sh) continue;
-              for (var col = 0; col < pi.sw; col++) {
-                if (rx + col < 0 || rx + col >= ci.sw) continue;
-                var idx = ((ry + row) * ci.sw + (rx + col)) * 4;
-                var sIdx = (row * pi.sw + col) * 4;
-                savedPhoto[sIdx]     = editedCard.data[idx];
-                savedPhoto[sIdx + 1] = editedCard.data[idx + 1];
-                savedPhoto[sIdx + 2] = editedCard.data[idx + 2];
-                savedPhoto[sIdx + 3] = editedCard.data[idx + 3];
-              }
+        /* ── Always apply document edits to card (protect photo region) ── */
+        var savedPhoto = null;
+        if (photoCropInfo) {
+          var pi = photoCropInfo;
+          var rx = pi.sx - ci.sx;
+          var ry = pi.sy - ci.sy;
+          savedPhoto = new Uint8ClampedArray(pi.sw * pi.sh * 4);
+          for (var row = 0; row < pi.sh; row++) {
+            if (ry + row < 0 || ry + row >= ci.sh) continue;
+            for (var col = 0; col < pi.sw; col++) {
+              if (rx + col < 0 || rx + col >= ci.sw) continue;
+              var idx = ((ry + row) * ci.sw + (rx + col)) * 4;
+              var sIdx = (row * pi.sw + col) * 4;
+              savedPhoto[sIdx]     = editedCard.data[idx];
+              savedPhoto[sIdx + 1] = editedCard.data[idx + 1];
+              savedPhoto[sIdx + 2] = editedCard.data[idx + 2];
+              savedPhoto[sIdx + 3] = editedCard.data[idx + 3];
             }
           }
-          applyAdjustments(editedCard, bright, contrast, sat, warmth, shadows);
-          if (savedPhoto && photoCropInfo) {
-            var pi = photoCropInfo;
-            var rx = pi.sx - ci.sx;
-            var ry = pi.sy - ci.sy;
-            for (var row = 0; row < pi.sh; row++) {
-              if (ry + row < 0 || ry + row >= ci.sh) continue;
-              for (var col = 0; col < pi.sw; col++) {
-                if (rx + col < 0 || rx + col >= ci.sw) continue;
-                var idx = ((ry + row) * ci.sw + (rx + col)) * 4;
-                var sIdx = (row * pi.sw + col) * 4;
-                editedCard.data[idx]     = savedPhoto[sIdx];
-                editedCard.data[idx + 1] = savedPhoto[sIdx + 1];
-                editedCard.data[idx + 2] = savedPhoto[sIdx + 2];
-                editedCard.data[idx + 3] = savedPhoto[sIdx + 3];
-              }
+        }
+        var dE = docEdits;
+        if (dE.brightness || dE.contrast || dE.saturation || dE.warmth || dE.shadows) {
+          applyAdjustments(editedCard, dE.brightness, dE.contrast, dE.saturation, dE.warmth, dE.shadows);
+        }
+        if (savedPhoto && photoCropInfo) {
+          var pi = photoCropInfo;
+          var rx = pi.sx - ci.sx;
+          var ry = pi.sy - ci.sy;
+          for (var row = 0; row < pi.sh; row++) {
+            if (ry + row < 0 || ry + row >= ci.sh) continue;
+            for (var col = 0; col < pi.sw; col++) {
+              if (rx + col < 0 || rx + col >= ci.sw) continue;
+              var idx = ((ry + row) * ci.sw + (rx + col)) * 4;
+              var sIdx = (row * pi.sw + col) * 4;
+              editedCard.data[idx]     = savedPhoto[sIdx];
+              editedCard.data[idx + 1] = savedPhoto[sIdx + 1];
+              editedCard.data[idx + 2] = savedPhoto[sIdx + 2];
+              editedCard.data[idx + 3] = savedPhoto[sIdx + 3];
             }
           }
         }
 
-        if (editorMode === 'photo' && photoImageData) {
+        /* ── Always apply photo edits to photo region ── */
+        var pE = photoEdits;
+        if (photoCropInfo && photoImageData &&
+            (pE.brightness || pE.contrast || pE.saturation || pE.warmth || pE.shadows)) {
           var pi = photoCropInfo;
           var photoRelX = pi.sx - ci.sx;
           var photoRelY = pi.sy - ci.sy;
           var editedPhoto = new ImageData(
             new Uint8ClampedArray(photoImageData.data), photoImageData.width, photoImageData.height
           );
-          applyAdjustments(editedPhoto, bright, contrast, sat, warmth, shadows);
+          applyAdjustments(editedPhoto, pE.brightness, pE.contrast, pE.saturation, pE.warmth, pE.shadows);
           var dCard = editedCard.data;
           var dPhoto = editedPhoto.data;
           for (var row = 0; row < pi.sh; row++) {
@@ -1124,6 +1185,18 @@
   a4Back.addEventListener('click', function () {
     a4Result.className = 'ds-a4-result';
     editorEl.className = 'ds-editor visible';
+  });
+
+  /* ── Back from password to upload ── */
+  pwBack.addEventListener('click', function () {
+    resetAll();
+    fileInput.value = '';
+  });
+
+  /* ── Back from editor to upload ── */
+  editorBack.addEventListener('click', function () {
+    resetAll();
+    fileInput.value = '';
   });
 
   /* ── Download A4 as PNG ── */
