@@ -50,8 +50,7 @@
 </script>
 <!-- pdf.js for client-side PDF parsing (password unlock) -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" defer></script>
-<!-- face-api.js for AI face detection (PAN Photo Only) -->
-<script src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js" defer></script>
+
 <style>
 /* ── Shared icon base (Lucide-style stroke icons) ── */
 .ix{
@@ -651,39 +650,7 @@
   var pwBack = document.getElementById('dsPwBack');
   var editorBack = document.getElementById('dsEditorBack');
 
-  /* ── AI face detection (face-api.js) ── */
-  var faceDetectorReady = false;
-  if (typeof faceapi !== 'undefined') {
-    faceapi.nets.tinyFaceDetector.loadFromUri(
-      'https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/weights'
-    ).then(function () { faceDetectorReady = true; })
-     .catch(function () { faceDetectorReady = false; });
-  }
 
-  function detectFaceAI(cardCanvas) {
-    if (!faceDetectorReady || typeof faceapi === 'undefined') {
-      return Promise.resolve(null);
-    }
-    return faceapi.detectAllFaces(
-      cardCanvas,
-      new faceapi.TinyFaceDetectorOptions({ inputSize: 416, scoreThreshold: 0.35 })
-    ).then(function (detections) {
-      if (!detections || detections.length === 0) return null;
-      var best = detections[0];
-      for (var i = 1; i < detections.length; i++) {
-        if (detections[i].score > best.score) best = detections[i];
-      }
-      var b = best.box;
-      var pad = Math.round(Math.max(b.width, b.height) * 0.12);
-      var fx = Math.max(0, Math.round(b.x) - pad);
-      var fy = Math.max(0, Math.round(b.y) - pad);
-      var fw = Math.round(b.width) + 2 * pad;
-      var fh = Math.round(b.height) + 2 * pad;
-      fw = Math.min(fw, cardCanvas.width - fx);
-      fh = Math.min(fh, cardCanvas.height - fy);
-      return { x: fx, y: fy, w: fw, h: fh };
-    }).catch(function () { return null; });
-  }
 
   /* ── Helpers ── */
   function formatBytes(bytes) {
@@ -925,7 +892,7 @@
   function getCrop(docType) { return docType === 'pan' ? PAN_CROP : AADHAAR_CROP; }
 
   /* ── PAN photo region as fraction of card crop (hardcoded — density detection fails for PAN) ── */
-  var PAN_PHOTO_FRAC = { x0: 0.04, y0: 0.34, x1: 0.24, y1: 0.72 };
+  var PAN_PHOTO_FRAC = { x0: 0.03, y0: 0.28, x1: 0.25, y1: 0.58 };
 
   /* ── Detect photo region inside card using pixel density analysis ── */
   function detectPhotoInCard(cardData, docType) {
@@ -1043,25 +1010,12 @@
           }
 
           if (docType === 'pan') {
-            /* PAN: AI face detection → fallback to hardcoded PAN_PHOTO_FRAC */
-            var cardCanvas = document.createElement('canvas');
-            cardCanvas.width = cw;
-            cardCanvas.height = ch;
-            var cardCtx = cardCanvas.getContext('2d');
-            cardCtx.putImageData(cardImageData, 0, 0);
-
-            showSpinner('Detecting face\u2026');
-            detectFaceAI(cardCanvas).then(function (aiResult) {
-              if (aiResult) {
-                applyDetected(aiResult);
-              } else {
-                var phx = Math.round(cw * PAN_PHOTO_FRAC.x0);
-                var phy = Math.round(ch * PAN_PHOTO_FRAC.y0);
-                var phw = Math.round(cw * (PAN_PHOTO_FRAC.x1 - PAN_PHOTO_FRAC.x0));
-                var phh = Math.round(ch * (PAN_PHOTO_FRAC.y1 - PAN_PHOTO_FRAC.y0));
-                applyDetected({ x: phx, y: phy, w: phw, h: phh });
-              }
-            });
+            /* PAN: hardcoded crop — density detection fails for PAN */
+            var phx = Math.round(cw * PAN_PHOTO_FRAC.x0);
+            var phy = Math.round(ch * PAN_PHOTO_FRAC.y0);
+            var phw = Math.round(cw * (PAN_PHOTO_FRAC.x1 - PAN_PHOTO_FRAC.x0));
+            var phh = Math.round(ch * (PAN_PHOTO_FRAC.y1 - PAN_PHOTO_FRAC.y0));
+            applyDetected({ x: phx, y: phy, w: phw, h: phh });
           } else {
             applyDetected(detectPhotoInCard(cardImageData, docType));
           }
