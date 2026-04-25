@@ -255,8 +255,19 @@ for plan names, 42px+ for prices. On mobile (≤900px) cards stack
 vertically. Never shrink text below these minimums. If adding features,
 add them to all 3 cards consistently.
 
+- PR #159: dropdown feature icons fix on document-sheet page — added
+  missing .ix CSS.
+- PR #160: Aadhaar/PAN card detection on document-sheet page — text
+  extraction via pdf.js, keyword matching, styled detection badge.
+- PR #161: Aadhaar/PAN card crop + A4 placement.
+- PR #162: Document sheet flow polish — intermediate status steps
+  removed, image editor step added (brightness, contrast, sharpness,
+  Full Document / Photo Only toggle).
+- PR #163: Editor fix — Photo Only edits only the photo, Full Document
+  edits card details but preserves photo untouched. Sharpness removed,
+  Saturation / Warmth / Shadows added. Back to Editor button on A4 sheet.
+
 **Open:** only `F7` GSI iframe warnings (not our code, harmless).
-Document Sheet Phase 2 (A4 sheet layout with cut guides) is next.
 Backlog is otherwise empty — next session can propose new features or
 fresh audit.
 
@@ -292,7 +303,7 @@ AGENTS.md — full source of truth.
 issues.md — 2026-04-23 site audit + 2026-04-24 §D responsive / flow
 follow-up + §E full re-audit + §F footer cleanup + §G single-feature
 glorification cleanup.
-last pr - PR #157 (Document Sheet tool — Phase 1)
+Last PR: PR #163 (editor fix + back button on document-sheet page)
 
 Shipped summary (don't redo):
 
@@ -318,6 +329,12 @@ PR #154: fake feature tiles removed from hero-preview section.
 PR #156: Document Sheet feature card + multi-tool copy update.
 PR #157: Document Sheet tool page (Phase 1) — PDF upload +
 password unlock via pdf.js, page thumbnail preview.
+PR #159: dropdown feature icons fix on document-sheet page.
+PR #160: Aadhaar/PAN card detection on document-sheet page.
+PR #161: Aadhaar/PAN card crop + A4 placement.
+PR #162: document sheet flow polish — editor step added.
+PR #163: editor fix — photo/doc edit targets fixed, sharpness→
+saturation/warmth/shadows, back-to-editor button on A4 sheet.
 
 <yahan apna task likho>
 ```
