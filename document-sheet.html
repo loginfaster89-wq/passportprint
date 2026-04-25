@@ -205,31 +205,6 @@
 }
 @keyframes ds-spin{to{transform:rotate(360deg)}}
 
-/* ── Preview area (future) ── */
-.ds-preview{
-  display:none;margin-top:24px;
-  padding:24px;border-radius:14px;
-  background:var(--surface);border:1px solid var(--border);text-align:center;
-}
-.ds-preview.visible{display:block;}
-.ds-preview h3{
-  font-family:'Syne',sans-serif;font-weight:700;font-size:17px;
-  color:var(--text);margin:0 0 8px;
-}
-.ds-preview .ds-pv-info{color:var(--muted);font-size:13.5px;margin:0 0 16px;line-height:1.6;}
-.ds-preview .ds-pv-pages{
-  display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:16px;
-}
-.ds-preview .ds-pv-thumb{
-  width:120px;height:170px;border-radius:8px;overflow:hidden;
-  background:var(--surface2);border:1px solid var(--border);
-}
-.ds-preview .ds-pv-thumb canvas{width:100%;height:100%;object-fit:contain;}
-.ds-preview .ds-pv-note{
-  color:var(--muted2);font-size:12.5px;line-height:1.5;
-  padding:12px 16px;border-radius:8px;background:var(--surface2);
-}
-
 /* ── A4 result section ── */
 .ds-a4-result{
   display:none;margin-top:24px;
@@ -268,33 +243,70 @@
   background:var(--surface2);color:var(--text);border:1px solid var(--border);
 }
 
-/* ── Document type detection card ── */
-.ds-detect{
+/* ── Editor step ── */
+.ds-editor{
   display:none;margin-top:24px;
   padding:24px;border-radius:14px;
   background:var(--surface);border:1px solid var(--border);
 }
-.ds-detect.visible{display:block;}
-.ds-detect h3{
+.ds-editor.visible{display:block;}
+.ds-editor h3{
   font-family:'Syne',sans-serif;font-weight:700;font-size:17px;
   color:var(--text);margin:0 0 8px;display:flex;align-items:center;gap:8px;
 }
-.ds-detect h3 svg{width:20px;height:20px;}
-.ds-detect .ds-detect-type{
-  display:inline-flex;align-items:center;gap:6px;
-  padding:6px 14px;border-radius:8px;
-  font-size:13.5px;font-weight:600;letter-spacing:.02em;
-  margin-bottom:12px;
+.ds-editor h3 svg{width:20px;height:20px;color:var(--accent);}
+.ds-editor .ds-editor-sub{
+  color:var(--muted);font-size:13.5px;line-height:1.6;margin:0 0 18px;
 }
-.ds-detect .ds-detect-type.aadhaar{
-  background:rgba(240,165,0,0.10);color:var(--accent);border:1px solid rgba(240,165,0,0.25);
+.ds-editor-toggle{
+  display:flex;gap:0;border-radius:8px;overflow:hidden;
+  border:1px solid var(--border);margin-bottom:18px;width:fit-content;
 }
-.ds-detect .ds-detect-type.pan{
-  background:rgba(74,222,128,0.08);color:var(--success);border:1px solid rgba(74,222,128,0.25);
+.ds-et-btn{
+  padding:8px 18px;border:none;background:var(--bg);
+  color:var(--muted);font-size:13px;font-weight:600;
+  cursor:pointer;transition:background .2s,color .2s;
 }
-.ds-detect .ds-detect-info{
-  color:var(--muted);font-size:13px;line-height:1.6;margin:0;
+.ds-et-btn.active{background:var(--accent);color:var(--bg);}
+.ds-editor-canvas-wrap{
+  position:relative;display:flex;justify-content:center;
+  margin-bottom:20px;border:1px solid var(--border);border-radius:8px;
+  overflow:hidden;background:#fff;min-height:120px;
 }
+.ds-editor-canvas-wrap canvas{
+  display:block;max-width:100%;max-height:420px;height:auto;
+}
+.ds-editor-controls{
+  display:flex;flex-direction:column;gap:14px;margin-bottom:20px;
+}
+.ds-ctrl{
+  display:flex;align-items:center;gap:10px;
+}
+.ds-ctrl-label{
+  flex-shrink:0;width:90px;font-size:13px;color:var(--muted);font-weight:500;
+}
+.ds-ctrl input[type="range"]{
+  flex:1;accent-color:var(--accent);height:4px;
+}
+.ds-ctrl-val{
+  flex-shrink:0;width:32px;text-align:right;
+  font-size:12px;color:var(--muted);font-family:'DM Mono',monospace;
+}
+.ds-editor-actions{
+  display:flex;gap:10px;justify-content:flex-end;
+}
+.ds-btn-reset{
+  padding:9px 18px;border-radius:8px;
+  background:var(--surface2);color:var(--text);border:1px solid var(--border);
+  font-size:13.5px;font-weight:600;cursor:pointer;transition:opacity .2s;
+}
+.ds-btn-reset:hover{opacity:.85;}
+.ds-btn-continue{
+  padding:9px 22px;border-radius:8px;border:none;
+  background:var(--accent);color:var(--bg);
+  font-size:13.5px;font-weight:600;cursor:pointer;transition:opacity .2s;
+}
+.ds-btn-continue:hover{opacity:.88;}
 
 /* ── On-device badge ── */
 .ds-badge{
@@ -314,9 +326,13 @@
   .ds-password{padding:18px;}
   .ds-pw-field{flex-direction:column;}
   .ds-pw-field button{width:100%;}
-  .ds-preview .ds-pv-thumb{width:90px;height:127px;}
   .ds-a4-result .ds-a4-wrap canvas{max-width:280px;}
   .ds-a4-actions{flex-direction:column;align-items:stretch;}
+  .ds-editor-toggle{width:100%;}
+  .ds-et-btn{flex:1;}
+  .ds-editor-actions{flex-direction:column;align-items:stretch;}
+  .ds-ctrl{flex-wrap:wrap;}
+  .ds-ctrl-label{width:100%;margin-bottom:-6px;}
 }
 </style>
 </head>
@@ -412,10 +428,7 @@
         <strong>PAN Card PDF (from Income Tax / NSDL / UTIITSL)</strong>
         <span>Date of birth in DDMMYYYY format &mdash; e.g. <code>15061986</code></span>
       </div>
-      <div class="ds-tip">
-        <strong>Other government PDFs</strong>
-        <span>Usually your date of birth, mobile number, or a combination specified in the download email.</span>
-      </div>
+
     </div>
   </section>
 
@@ -428,21 +441,41 @@
     <div class="ds-status-text" id="dsStatusText"></div>
   </div>
 
-  <!-- Document type detection -->
-  <section class="ds-detect" id="dsDetect">
-    <h3 id="dsDetectTitle">
+  <!-- Editor step (after unlock, before A4) -->
+  <section class="ds-editor" id="dsEditor">
+    <h3>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><use href="#i-file-text"/></svg>
-      Document detected
+      Edit before printing
     </h3>
-    <div class="ds-detect-type" id="dsDetectBadge"></div>
-    <p class="ds-detect-info" id="dsDetectInfo"></p>
-  </section>
-
-  <!-- Preview area -->
-  <section class="ds-preview" id="dsPreview">
-    <h3>PDF unlocked</h3>
-    <p class="ds-pv-info" id="dsPreviewInfo"></p>
-    <div class="ds-pv-pages" id="dsPreviewPages"></div>
+    <p class="ds-editor-sub">Adjust brightness, contrast and sharpness. Choose whether to edit the photo or the full document.</p>
+    <div class="ds-editor-toggle">
+      <button type="button" class="ds-et-btn active" data-target="document" id="dsEditDoc">Full Document</button>
+      <button type="button" class="ds-et-btn" data-target="photo" id="dsEditPhoto">Photo Only</button>
+    </div>
+    <div class="ds-editor-canvas-wrap">
+      <canvas id="dsEditorCanvas"></canvas>
+    </div>
+    <div class="ds-editor-controls">
+      <label class="ds-ctrl">
+        <span class="ds-ctrl-label">Brightness</span>
+        <input type="range" id="dsCtrlBrightness" min="-100" max="100" value="0">
+        <span class="ds-ctrl-val" id="dsValBrightness">0</span>
+      </label>
+      <label class="ds-ctrl">
+        <span class="ds-ctrl-label">Contrast</span>
+        <input type="range" id="dsCtrlContrast" min="-100" max="100" value="0">
+        <span class="ds-ctrl-val" id="dsValContrast">0</span>
+      </label>
+      <label class="ds-ctrl">
+        <span class="ds-ctrl-label">Sharpness</span>
+        <input type="range" id="dsCtrlSharpness" min="0" max="100" value="0">
+        <span class="ds-ctrl-val" id="dsValSharpness">0</span>
+      </label>
+    </div>
+    <div class="ds-editor-actions">
+      <button type="button" class="ds-btn-reset" id="dsEditReset">Reset</button>
+      <button type="button" class="ds-btn-continue" id="dsEditContinue">Continue to A4 Sheet</button>
+    </div>
   </section>
 
   <!-- A4 result -->
@@ -549,21 +582,34 @@
   var statusEl    = document.getElementById('dsStatus');
   var statusIcon  = document.getElementById('dsStatusIcon');
   var statusText  = document.getElementById('dsStatusText');
-  var previewEl   = document.getElementById('dsPreview');
-  var previewInfo = document.getElementById('dsPreviewInfo');
-  var previewPages= document.getElementById('dsPreviewPages');
-  var detectEl    = document.getElementById('dsDetect');
-  var detectBadge = document.getElementById('dsDetectBadge');
-  var detectInfo  = document.getElementById('dsDetectInfo');
+  var editorEl    = document.getElementById('dsEditor');
+  var editorCanvas= document.getElementById('dsEditorCanvas');
+  var editDocBtn  = document.getElementById('dsEditDoc');
+  var editPhotoBtn= document.getElementById('dsEditPhoto');
+  var ctrlBright  = document.getElementById('dsCtrlBrightness');
+  var ctrlContrast= document.getElementById('dsCtrlContrast');
+  var ctrlSharp   = document.getElementById('dsCtrlSharpness');
+  var valBright   = document.getElementById('dsValBrightness');
+  var valContrast = document.getElementById('dsValContrast');
+  var valSharp    = document.getElementById('dsValSharpness');
+  var editReset   = document.getElementById('dsEditReset');
+  var editContinue= document.getElementById('dsEditContinue');
   var a4Result    = document.getElementById('dsA4Result');
   var a4Canvas    = document.getElementById('dsA4Canvas');
   var a4Sub       = document.getElementById('dsA4Sub');
   var a4Download  = document.getElementById('dsA4Download');
   var a4Print     = document.getElementById('dsA4Print');
+  var badge       = document.querySelector('.ds-badge');
 
   var currentFile = null;
   var currentArrayBuffer = null;
   var unlockedPdf = null;
+  var editorMode = 'document';
+  var cardImageData = null;
+  var photoImageData = null;
+  var cardCropInfo = null;
+  var photoCropInfo = null;
+  var currentDocType = null;
 
   /* ── Helpers ── */
   function formatBytes(bytes) {
@@ -597,15 +643,26 @@
     currentFile = null;
     currentArrayBuffer = null;
     unlockedPdf = null;
+    cardImageData = null;
+    photoImageData = null;
+    cardCropInfo = null;
+    photoCropInfo = null;
+    currentDocType = null;
+    editorMode = 'document';
     fileInfo.className = 'ds-file-info';
     pwSection.className = 'ds-password';
-    previewEl.className = 'ds-preview';
-    detectEl.className = 'ds-detect';
+    editorEl.className = 'ds-editor';
     a4Result.className = 'ds-a4-result';
     hideStatus();
     hideSpinner();
     uploadArea.style.display = '';
+    if (badge) badge.style.display = '';
     pwInput.value = '';
+    ctrlBright.value = 0; valBright.textContent = '0';
+    ctrlContrast.value = 0; valContrast.textContent = '0';
+    ctrlSharp.value = 0; valSharp.textContent = '0';
+    editDocBtn.classList.add('active');
+    editPhotoBtn.classList.remove('active');
   }
 
   /* ── Drag & drop ── */
@@ -639,7 +696,7 @@
     if (!file) return;
 
     if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
-      showStatus('error', '<strong>Not a PDF.</strong> Please select a PDF file (Aadhaar, PAN, or other government ID).');
+      showStatus('error', '<strong>Not a PDF.</strong> Please select a PDF file (Aadhaar or PAN).');
       return;
     }
 
@@ -655,6 +712,7 @@
     fileSize.textContent = formatBytes(file.size);
     fileInfo.className = 'ds-file-info visible';
     uploadArea.style.display = 'none';
+    if (badge) badge.style.display = 'none';
 
     var reader = new FileReader();
     reader.onload = function (e) {
@@ -680,7 +738,6 @@
 
     hideStatus();
     pwSection.className = 'ds-password';
-    previewEl.className = 'ds-preview';
     showSpinner(password ? 'Unlocking PDF\u2026' : 'Reading your PDF\u2026');
 
     var loadingParams = { data: currentArrayBuffer.slice(0) };
@@ -691,7 +748,7 @@
     loadingTask.promise.then(function (pdf) {
       hideSpinner();
       unlockedPdf = pdf;
-      showPdfPreview(pdf);
+      processPdf(pdf);
     }).catch(function (err) {
       hideSpinner();
 
@@ -769,38 +826,212 @@
 
   /* ── Card crop region (percentage of page) ── */
   var CARD_CROP = { x0: 0.045, y0: 0.675, x1: 0.955, y1: 0.885 };
-  var A4_W = 2480;  /* 300 DPI */
+  var PHOTO_CROP_AADHAAR = { x0: 0.045, y0: 0.69, x1: 0.23, y1: 0.87 };
+  var PHOTO_CROP_PAN     = { x0: 0.045, y0: 0.69, x1: 0.23, y1: 0.87 };
+  var A4_W = 2480;
   var A4_H = 3508;
   var RENDER_SCALE = 300 / 72;
 
-  /* ── Crop card from page and place on A4 ── */
-  function cropAndPlaceOnA4(pdf, docType) {
-    showSpinner('Extracting card\u2026');
-    pdf.getPage(1).then(function (page) {
+  /* ── Process PDF after unlock: detect → crop → editor ── */
+  function processPdf(pdf) {
+    pwSection.className = 'ds-password';
+    showSpinner('Detecting document type\u2026');
+
+    extractTextFromPdf(pdf).then(function (fullText) {
+      var docType = detectDocType(fullText);
+      if (!docType) {
+        hideSpinner();
+        showStatus('error', '<strong>Unsupported document.</strong> This tool only works with Aadhaar Card and PAN Card PDFs.');
+        return;
+      }
+      currentDocType = docType;
+      showSpinner('Extracting card\u2026');
+
+      pdf.getPage(1).then(function (page) {
+        var vp = page.getViewport({ scale: RENDER_SCALE });
+        var offscreen = document.createElement('canvas');
+        offscreen.width = vp.width;
+        offscreen.height = vp.height;
+        var ctx = offscreen.getContext('2d');
+
+        page.render({ canvasContext: ctx, viewport: vp }).promise.then(function () {
+          var cx0 = Math.round(vp.width * CARD_CROP.x0);
+          var cy0 = Math.round(vp.height * CARD_CROP.y0);
+          var cw  = Math.round(vp.width * (CARD_CROP.x1 - CARD_CROP.x0));
+          var ch  = Math.round(vp.height * (CARD_CROP.y1 - CARD_CROP.y0));
+          cardCropInfo = { sx: cx0, sy: cy0, sw: cw, sh: ch };
+          cardImageData = ctx.getImageData(cx0, cy0, cw, ch);
+
+          var pc = docType === 'aadhaar' ? PHOTO_CROP_AADHAAR : PHOTO_CROP_PAN;
+          var px0 = Math.round(vp.width * pc.x0);
+          var py0 = Math.round(vp.height * pc.y0);
+          var pw  = Math.round(vp.width * (pc.x1 - pc.x0));
+          var ph  = Math.round(vp.height * (pc.y1 - pc.y0));
+          photoCropInfo = { sx: px0, sy: py0, sw: pw, sh: ph };
+          photoImageData = ctx.getImageData(px0, py0, pw, ph);
+
+          hideSpinner();
+          showEditorStep();
+        });
+      });
+    });
+  }
+
+  /* ── Editor step ── */
+  function showEditorStep() {
+    editorMode = 'document';
+    editDocBtn.classList.add('active');
+    editPhotoBtn.classList.remove('active');
+    ctrlBright.value = 0; valBright.textContent = '0';
+    ctrlContrast.value = 0; valContrast.textContent = '0';
+    ctrlSharp.value = 0; valSharp.textContent = '0';
+    renderEditorCanvas();
+    editorEl.className = 'ds-editor visible';
+  }
+
+  function renderEditorCanvas() {
+    var src = editorMode === 'photo' ? photoImageData : cardImageData;
+    if (!src) return;
+    editorCanvas.width = src.width;
+    editorCanvas.height = src.height;
+    var ctx = editorCanvas.getContext('2d');
+    var copy = new ImageData(new Uint8ClampedArray(src.data), src.width, src.height);
+    var bright = parseInt(ctrlBright.value, 10);
+    var contrast = parseInt(ctrlContrast.value, 10);
+    var sharpen = parseInt(ctrlSharp.value, 10);
+    applyBrightnessContrast(copy, bright, contrast);
+    ctx.putImageData(copy, 0, 0);
+    if (sharpen > 0) applySharpen(ctx, src.width, src.height, sharpen / 100);
+  }
+
+  function clamp(v) { return v < 0 ? 0 : v > 255 ? 255 : Math.round(v); }
+
+  function applyBrightnessContrast(imageData, brightness, contrast) {
+    var d = imageData.data;
+    var f = (259 * (contrast + 255)) / (255 * (259 - contrast));
+    for (var i = 0; i < d.length; i += 4) {
+      d[i]     = clamp(f * (d[i]     - 128) + 128 + brightness);
+      d[i + 1] = clamp(f * (d[i + 1] - 128) + 128 + brightness);
+      d[i + 2] = clamp(f * (d[i + 2] - 128) + 128 + brightness);
+    }
+  }
+
+  function applySharpen(ctx, w, h, amount) {
+    var src = ctx.getImageData(0, 0, w, h);
+    var dst = ctx.createImageData(w, h);
+    var sd = src.data, dd = dst.data;
+    for (var y = 1; y < h - 1; y++) {
+      for (var x = 1; x < w - 1; x++) {
+        var idx = (y * w + x) * 4;
+        for (var c = 0; c < 3; c++) {
+          var center = sd[idx + c];
+          var nb = sd[((y-1)*w+x)*4+c] + sd[((y+1)*w+x)*4+c] +
+                   sd[(y*w+x-1)*4+c] + sd[(y*w+x+1)*4+c];
+          dd[idx + c] = clamp(center + amount * (4 * center - nb));
+        }
+        dd[idx + 3] = sd[idx + 3];
+      }
+    }
+    ctx.putImageData(dst, 0, 0);
+  }
+
+  /* ── Editor toggle ── */
+  editDocBtn.addEventListener('click', function () {
+    editorMode = 'document';
+    editDocBtn.classList.add('active');
+    editPhotoBtn.classList.remove('active');
+    renderEditorCanvas();
+  });
+  editPhotoBtn.addEventListener('click', function () {
+    editorMode = 'photo';
+    editPhotoBtn.classList.add('active');
+    editDocBtn.classList.remove('active');
+    renderEditorCanvas();
+  });
+
+  /* ── Slider handlers ── */
+  ctrlBright.addEventListener('input', function () {
+    valBright.textContent = ctrlBright.value; renderEditorCanvas();
+  });
+  ctrlContrast.addEventListener('input', function () {
+    valContrast.textContent = ctrlContrast.value; renderEditorCanvas();
+  });
+  ctrlSharp.addEventListener('input', function () {
+    valSharp.textContent = ctrlSharp.value; renderEditorCanvas();
+  });
+
+  editReset.addEventListener('click', function () {
+    ctrlBright.value = 0; valBright.textContent = '0';
+    ctrlContrast.value = 0; valContrast.textContent = '0';
+    ctrlSharp.value = 0; valSharp.textContent = '0';
+    renderEditorCanvas();
+  });
+
+  /* ── Continue to A4 ── */
+  editContinue.addEventListener('click', function () {
+    if (!unlockedPdf || !cardImageData) return;
+    buildA4Sheet();
+  });
+
+  function buildA4Sheet() {
+    showSpinner('Building A4 sheet\u2026');
+    unlockedPdf.getPage(1).then(function (page) {
       var vp = page.getViewport({ scale: RENDER_SCALE });
       var offscreen = document.createElement('canvas');
       offscreen.width = vp.width;
       offscreen.height = vp.height;
       var ctx = offscreen.getContext('2d');
+
       page.render({ canvasContext: ctx, viewport: vp }).promise.then(function () {
-        var cx0 = Math.round(vp.width * CARD_CROP.x0);
-        var cy0 = Math.round(vp.height * CARD_CROP.y0);
-        var cw  = Math.round(vp.width * (CARD_CROP.x1 - CARD_CROP.x0));
-        var ch  = Math.round(vp.height * (CARD_CROP.y1 - CARD_CROP.y0));
+        var ci = cardCropInfo;
+        var editedCard = ctx.getImageData(ci.sx, ci.sy, ci.sw, ci.sh);
+        var bright = parseInt(ctrlBright.value, 10);
+        var contrast = parseInt(ctrlContrast.value, 10);
+        var sharpen = parseInt(ctrlSharp.value, 10);
+
+        if (editorMode === 'document') {
+          applyBrightnessContrast(editedCard, bright, contrast);
+        }
+
+        var tempCard = document.createElement('canvas');
+        tempCard.width = ci.sw;
+        tempCard.height = ci.sh;
+        var tcCtx = tempCard.getContext('2d');
+        tcCtx.putImageData(editedCard, 0, 0);
+
+        if (editorMode === 'document' && sharpen > 0) {
+          applySharpen(tcCtx, ci.sw, ci.sh, sharpen / 100);
+        }
+
+        if (editorMode === 'photo' && photoImageData) {
+          var pi = photoCropInfo;
+          var photoRelX = pi.sx - ci.sx;
+          var photoRelY = pi.sy - ci.sy;
+          var editedPhoto = new ImageData(
+            new Uint8ClampedArray(photoImageData.data), photoImageData.width, photoImageData.height
+          );
+          applyBrightnessContrast(editedPhoto, bright, contrast);
+          var tempPhoto = document.createElement('canvas');
+          tempPhoto.width = pi.sw;
+          tempPhoto.height = pi.sh;
+          var tpCtx = tempPhoto.getContext('2d');
+          tpCtx.putImageData(editedPhoto, 0, 0);
+          if (sharpen > 0) applySharpen(tpCtx, pi.sw, pi.sh, sharpen / 100);
+          tcCtx.drawImage(tempPhoto, photoRelX, photoRelY);
+        }
 
         a4Canvas.width = A4_W;
         a4Canvas.height = A4_H;
         var a4ctx = a4Canvas.getContext('2d');
         a4ctx.fillStyle = '#ffffff';
         a4ctx.fillRect(0, 0, A4_W, A4_H);
-
-        var cardX = Math.round((A4_W - cw) / 2);
-        var cardY = 60;
-        a4ctx.drawImage(offscreen, cx0, cy0, cw, ch, cardX, cardY, cw, ch);
+        var cardX = Math.round((A4_W - ci.sw) / 2);
+        a4ctx.drawImage(tempCard, 0, 0, ci.sw, ci.sh, cardX, 60, ci.sw, ci.sh);
 
         hideSpinner();
-        var label = docType === 'aadhaar' ? 'Aadhaar' : 'PAN';
-        a4Sub.textContent = label + ' card extracted and placed on A4. Ready to download or print.';
+        var label = currentDocType === 'aadhaar' ? 'Aadhaar' : 'PAN';
+        a4Sub.textContent = label + ' card placed on A4. Ready to download or print.';
+        editorEl.className = 'ds-editor';
         a4Result.className = 'ds-a4-result visible';
       });
     });
@@ -827,63 +1058,6 @@
     );
     win.document.close();
   });
-
-  /* ── Show PDF preview (page thumbnails) ── */
-  function showPdfPreview(pdf) {
-    var numPages = pdf.numPages;
-
-    /* Render thumbnails */
-    previewInfo.textContent = numPages + ' page' + (numPages !== 1 ? 's' : '') + ' detected.';
-    previewPages.innerHTML = '';
-    var maxThumbs = Math.min(numPages, 6);
-    for (var i = 1; i <= maxThumbs; i++) {
-      (function (pageNum) {
-        var thumbDiv = document.createElement('div');
-        thumbDiv.className = 'ds-pv-thumb';
-        var canvas = document.createElement('canvas');
-        thumbDiv.appendChild(canvas);
-        previewPages.appendChild(thumbDiv);
-
-        pdf.getPage(pageNum).then(function (page) {
-          var vp = page.getViewport({ scale: 0.5 });
-          canvas.width = vp.width;
-          canvas.height = vp.height;
-          var ctx = canvas.getContext('2d');
-          page.render({ canvasContext: ctx, viewport: vp });
-        });
-      })(i);
-    }
-
-    pwSection.className = 'ds-password';
-
-    /* Run detection — controls which status/preview is shown */
-    showSpinner('Detecting document type\u2026');
-    extractTextFromPdf(pdf).then(function (fullText) {
-      hideSpinner();
-      var docType = detectDocType(fullText);
-      if (docType === 'aadhaar') {
-        detectBadge.className = 'ds-detect-type aadhaar';
-        detectBadge.textContent = 'Aadhaar Card';
-        detectInfo.textContent = 'Aadhaar PDF detected. Extracting and placing on a print-ready A4 sheet.';
-        detectEl.className = 'ds-detect visible';
-        previewEl.className = 'ds-preview visible';
-        showStatus('success', '<strong>Aadhaar Card detected!</strong> ' + numPages + ' page' + (numPages !== 1 ? 's' : '') + ' found. Preparing A4 sheet\u2026');
-        cropAndPlaceOnA4(pdf, 'aadhaar');
-      } else if (docType === 'pan') {
-        detectBadge.className = 'ds-detect-type pan';
-        detectBadge.textContent = 'PAN Card';
-        detectInfo.textContent = 'PAN card PDF detected. Extracting and placing on a print-ready A4 sheet.';
-        detectEl.className = 'ds-detect visible';
-        previewEl.className = 'ds-preview visible';
-        showStatus('success', '<strong>PAN Card detected!</strong> ' + numPages + ' page' + (numPages !== 1 ? 's' : '') + ' found. Preparing A4 sheet\u2026');
-        cropAndPlaceOnA4(pdf, 'pan');
-      } else {
-        detectEl.className = 'ds-detect';
-        previewEl.className = 'ds-preview';
-        showStatus('error', '<strong>Unsupported document.</strong> This tool only works with Aadhaar Card and PAN Card PDFs. Please upload a valid Aadhaar or PAN PDF.');
-      }
-    });
-  }
 
 })();
 </script>
