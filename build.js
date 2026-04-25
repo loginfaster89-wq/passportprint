@@ -15,6 +15,7 @@ const OUT = path.join(ROOT, 'dist');
 const HTML_FILES = [
   'index.html',
   'passport-photo.html',
+  'document-sheet.html',
   'about.html',
   'contact.html',
   'privacy.html',
