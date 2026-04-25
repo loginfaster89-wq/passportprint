@@ -447,7 +447,7 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><use href="#i-file-text"/></svg>
       Edit before printing
     </h3>
-    <p class="ds-editor-sub">Adjust brightness, contrast and sharpness. Choose whether to edit the photo or the full document.</p>
+    <p class="ds-editor-sub">Adjust brightness, contrast, saturation, warmth and shadows. Choose whether to edit the photo or the full document.</p>
     <div class="ds-editor-toggle">
       <button type="button" class="ds-et-btn active" data-target="document" id="dsEditDoc">Full Document</button>
       <button type="button" class="ds-et-btn" data-target="photo" id="dsEditPhoto">Photo Only</button>
@@ -467,9 +467,19 @@
         <span class="ds-ctrl-val" id="dsValContrast">0</span>
       </label>
       <label class="ds-ctrl">
-        <span class="ds-ctrl-label">Sharpness</span>
-        <input type="range" id="dsCtrlSharpness" min="0" max="100" value="0">
-        <span class="ds-ctrl-val" id="dsValSharpness">0</span>
+        <span class="ds-ctrl-label">Saturation</span>
+        <input type="range" id="dsCtrlSaturation" min="-100" max="100" value="0">
+        <span class="ds-ctrl-val" id="dsValSaturation">0</span>
+      </label>
+      <label class="ds-ctrl">
+        <span class="ds-ctrl-label">Warmth</span>
+        <input type="range" id="dsCtrlWarmth" min="-100" max="100" value="0">
+        <span class="ds-ctrl-val" id="dsValWarmth">0</span>
+      </label>
+      <label class="ds-ctrl">
+        <span class="ds-ctrl-label">Shadows</span>
+        <input type="range" id="dsCtrlShadows" min="-100" max="100" value="0">
+        <span class="ds-ctrl-val" id="dsValShadows">0</span>
       </label>
     </div>
     <div class="ds-editor-actions">
@@ -588,10 +598,14 @@
   var editPhotoBtn= document.getElementById('dsEditPhoto');
   var ctrlBright  = document.getElementById('dsCtrlBrightness');
   var ctrlContrast= document.getElementById('dsCtrlContrast');
-  var ctrlSharp   = document.getElementById('dsCtrlSharpness');
+  var ctrlSat     = document.getElementById('dsCtrlSaturation');
+  var ctrlWarmth  = document.getElementById('dsCtrlWarmth');
+  var ctrlShadows = document.getElementById('dsCtrlShadows');
   var valBright   = document.getElementById('dsValBrightness');
   var valContrast = document.getElementById('dsValContrast');
-  var valSharp    = document.getElementById('dsValSharpness');
+  var valSat      = document.getElementById('dsValSaturation');
+  var valWarmth   = document.getElementById('dsValWarmth');
+  var valShadows  = document.getElementById('dsValShadows');
   var editReset   = document.getElementById('dsEditReset');
   var editContinue= document.getElementById('dsEditContinue');
   var a4Result    = document.getElementById('dsA4Result');
@@ -660,7 +674,9 @@
     pwInput.value = '';
     ctrlBright.value = 0; valBright.textContent = '0';
     ctrlContrast.value = 0; valContrast.textContent = '0';
-    ctrlSharp.value = 0; valSharp.textContent = '0';
+    ctrlSat.value = 0; valSat.textContent = '0';
+    ctrlWarmth.value = 0; valWarmth.textContent = '0';
+    ctrlShadows.value = 0; valShadows.textContent = '0';
     editDocBtn.classList.add('active');
     editPhotoBtn.classList.remove('active');
   }
@@ -884,7 +900,9 @@
     editPhotoBtn.classList.remove('active');
     ctrlBright.value = 0; valBright.textContent = '0';
     ctrlContrast.value = 0; valContrast.textContent = '0';
-    ctrlSharp.value = 0; valSharp.textContent = '0';
+    ctrlSat.value = 0; valSat.textContent = '0';
+    ctrlWarmth.value = 0; valWarmth.textContent = '0';
+    ctrlShadows.value = 0; valShadows.textContent = '0';
     renderEditorCanvas();
     editorEl.className = 'ds-editor visible';
   }
@@ -898,41 +916,55 @@
     var copy = new ImageData(new Uint8ClampedArray(src.data), src.width, src.height);
     var bright = parseInt(ctrlBright.value, 10);
     var contrast = parseInt(ctrlContrast.value, 10);
-    var sharpen = parseInt(ctrlSharp.value, 10);
-    applyBrightnessContrast(copy, bright, contrast);
+    var sat = parseInt(ctrlSat.value, 10);
+    var warmth = parseInt(ctrlWarmth.value, 10);
+    var shadows = parseInt(ctrlShadows.value, 10);
+    applyAdjustments(copy, bright, contrast, sat, warmth, shadows);
+    if (editorMode === 'document' && photoImageData && photoCropInfo && cardCropInfo) {
+      var pi = photoCropInfo;
+      var ci = cardCropInfo;
+      var rx = pi.sx - ci.sx;
+      var ry = pi.sy - ci.sy;
+      for (var row = 0; row < pi.sh; row++) {
+        for (var col = 0; col < pi.sw; col++) {
+          var srcIdx = (row * pi.sw + col) * 4;
+          var dstIdx = ((ry + row) * src.width + (rx + col)) * 4;
+          copy.data[dstIdx]     = photoImageData.data[srcIdx];
+          copy.data[dstIdx + 1] = photoImageData.data[srcIdx + 1];
+          copy.data[dstIdx + 2] = photoImageData.data[srcIdx + 2];
+          copy.data[dstIdx + 3] = photoImageData.data[srcIdx + 3];
+        }
+      }
+    }
     ctx.putImageData(copy, 0, 0);
-    if (sharpen > 0) applySharpen(ctx, src.width, src.height, sharpen / 100);
   }
 
   function clamp(v) { return v < 0 ? 0 : v > 255 ? 255 : Math.round(v); }
 
-  function applyBrightnessContrast(imageData, brightness, contrast) {
+  function applyAdjustments(imageData, brightness, contrast, saturation, warmth, shadows) {
     var d = imageData.data;
-    var f = (259 * (contrast + 255)) / (255 * (259 - contrast));
+    var cf = (259 * (contrast + 255)) / (255 * (259 - contrast));
+    var sf = 1 + saturation / 100;
+    var wr = warmth * 0.15;
+    var wb = -warmth * 0.15;
+    var sh = shadows / 100;
     for (var i = 0; i < d.length; i += 4) {
-      d[i]     = clamp(f * (d[i]     - 128) + 128 + brightness);
-      d[i + 1] = clamp(f * (d[i + 1] - 128) + 128 + brightness);
-      d[i + 2] = clamp(f * (d[i + 2] - 128) + 128 + brightness);
-    }
-  }
-
-  function applySharpen(ctx, w, h, amount) {
-    var src = ctx.getImageData(0, 0, w, h);
-    var dst = ctx.createImageData(w, h);
-    var sd = src.data, dd = dst.data;
-    for (var y = 1; y < h - 1; y++) {
-      for (var x = 1; x < w - 1; x++) {
-        var idx = (y * w + x) * 4;
-        for (var c = 0; c < 3; c++) {
-          var center = sd[idx + c];
-          var nb = sd[((y-1)*w+x)*4+c] + sd[((y+1)*w+x)*4+c] +
-                   sd[(y*w+x-1)*4+c] + sd[(y*w+x+1)*4+c];
-          dd[idx + c] = clamp(center + amount * (4 * center - nb));
-        }
-        dd[idx + 3] = sd[idx + 3];
+      var r = d[i], g = d[i + 1], b = d[i + 2];
+      r = cf * (r - 128) + 128 + brightness;
+      g = cf * (g - 128) + 128 + brightness;
+      b = cf * (b - 128) + 128 + brightness;
+      var lum = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+      r = lum + sf * (r - lum);
+      g = lum + sf * (g - lum);
+      b = lum + sf * (b - lum);
+      r += wr; b += wb;
+      if (sh !== 0) {
+        var t = 1 - lum / 255;
+        var lift = sh * 60 * t * t;
+        r += lift; g += lift; b += lift;
       }
+      d[i] = clamp(r); d[i + 1] = clamp(g); d[i + 2] = clamp(b);
     }
-    ctx.putImageData(dst, 0, 0);
   }
 
   /* ── Editor toggle ── */
@@ -956,14 +988,22 @@
   ctrlContrast.addEventListener('input', function () {
     valContrast.textContent = ctrlContrast.value; renderEditorCanvas();
   });
-  ctrlSharp.addEventListener('input', function () {
-    valSharp.textContent = ctrlSharp.value; renderEditorCanvas();
+  ctrlSat.addEventListener('input', function () {
+    valSat.textContent = ctrlSat.value; renderEditorCanvas();
+  });
+  ctrlWarmth.addEventListener('input', function () {
+    valWarmth.textContent = ctrlWarmth.value; renderEditorCanvas();
+  });
+  ctrlShadows.addEventListener('input', function () {
+    valShadows.textContent = ctrlShadows.value; renderEditorCanvas();
   });
 
   editReset.addEventListener('click', function () {
     ctrlBright.value = 0; valBright.textContent = '0';
     ctrlContrast.value = 0; valContrast.textContent = '0';
-    ctrlSharp.value = 0; valSharp.textContent = '0';
+    ctrlSat.value = 0; valSat.textContent = '0';
+    ctrlWarmth.value = 0; valWarmth.textContent = '0';
+    ctrlShadows.value = 0; valShadows.textContent = '0';
     renderEditorCanvas();
   });
 
@@ -987,20 +1027,27 @@
         var editedCard = ctx.getImageData(ci.sx, ci.sy, ci.sw, ci.sh);
         var bright = parseInt(ctrlBright.value, 10);
         var contrast = parseInt(ctrlContrast.value, 10);
-        var sharpen = parseInt(ctrlSharp.value, 10);
+        var sat = parseInt(ctrlSat.value, 10);
+        var warmth = parseInt(ctrlWarmth.value, 10);
+        var shadows = parseInt(ctrlShadows.value, 10);
 
         if (editorMode === 'document') {
-          applyBrightnessContrast(editedCard, bright, contrast);
-        }
-
-        var tempCard = document.createElement('canvas');
-        tempCard.width = ci.sw;
-        tempCard.height = ci.sh;
-        var tcCtx = tempCard.getContext('2d');
-        tcCtx.putImageData(editedCard, 0, 0);
-
-        if (editorMode === 'document' && sharpen > 0) {
-          applySharpen(tcCtx, ci.sw, ci.sh, sharpen / 100);
+          applyAdjustments(editedCard, bright, contrast, sat, warmth, shadows);
+          if (photoImageData && photoCropInfo) {
+            var pi = photoCropInfo;
+            var rx = pi.sx - ci.sx;
+            var ry = pi.sy - ci.sy;
+            for (var row = 0; row < pi.sh; row++) {
+              for (var col = 0; col < pi.sw; col++) {
+                var srcIdx = (row * pi.sw + col) * 4;
+                var dstIdx = ((ry + row) * ci.sw + (rx + col)) * 4;
+                editedCard.data[dstIdx]     = photoImageData.data[srcIdx];
+                editedCard.data[dstIdx + 1] = photoImageData.data[srcIdx + 1];
+                editedCard.data[dstIdx + 2] = photoImageData.data[srcIdx + 2];
+                editedCard.data[dstIdx + 3] = photoImageData.data[srcIdx + 3];
+              }
+            }
+          }
         }
 
         if (editorMode === 'photo' && photoImageData) {
@@ -1010,15 +1057,24 @@
           var editedPhoto = new ImageData(
             new Uint8ClampedArray(photoImageData.data), photoImageData.width, photoImageData.height
           );
-          applyBrightnessContrast(editedPhoto, bright, contrast);
-          var tempPhoto = document.createElement('canvas');
-          tempPhoto.width = pi.sw;
-          tempPhoto.height = pi.sh;
-          var tpCtx = tempPhoto.getContext('2d');
-          tpCtx.putImageData(editedPhoto, 0, 0);
-          if (sharpen > 0) applySharpen(tpCtx, pi.sw, pi.sh, sharpen / 100);
-          tcCtx.drawImage(tempPhoto, photoRelX, photoRelY);
+          applyAdjustments(editedPhoto, bright, contrast, sat, warmth, shadows);
+          var dCard = editedCard.data;
+          var dPhoto = editedPhoto.data;
+          for (var row = 0; row < pi.sh; row++) {
+            for (var col = 0; col < pi.sw; col++) {
+              var si = (row * pi.sw + col) * 4;
+              var di = ((photoRelY + row) * ci.sw + (photoRelX + col)) * 4;
+              dCard[di] = dPhoto[si]; dCard[di+1] = dPhoto[si+1];
+              dCard[di+2] = dPhoto[si+2]; dCard[di+3] = dPhoto[si+3];
+            }
+          }
         }
+
+        var tempCard = document.createElement('canvas');
+        tempCard.width = ci.sw;
+        tempCard.height = ci.sh;
+        var tcCtx = tempCard.getContext('2d');
+        tcCtx.putImageData(editedCard, 0, 0);
 
         a4Canvas.width = A4_W;
         a4Canvas.height = A4_H;
