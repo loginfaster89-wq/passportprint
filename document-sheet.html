@@ -888,6 +888,9 @@
   var PAN_CROP     = { x0: 0.06,  y0: 0.755, x1: 0.955, y1: 0.955 };
   function getCrop(docType) { return docType === 'pan' ? PAN_CROP : AADHAAR_CROP; }
 
+  /* ── PAN photo position (fraction of card crop) — standard govt layout ── */
+  var PAN_PHOTO_FRAC = { x0: 0.02, y0: 0.14, x1: 0.27, y1: 0.58 };
+
   /* ── Detect photo region inside card using pixel density analysis ── */
   function detectPhotoInCard(cardData, docType) {
     var w = cardData.width, h = cardData.height, d = cardData.data;
@@ -921,10 +924,8 @@
     }
     if (!best || best.l < w * 0.04) return null;
     var px0 = best.s, px1 = best.s + best.l;
-    var vTop = (docType === 'pan') ? Math.round(h * 0.02) : 0;
-    var vBot = (docType === 'pan') ? Math.round(h * 0.58) : h;
     var rd = [];
-    for (var y = vTop; y < vBot; y++) {
+    for (var y = 0; y < h; y++) {
       var n = 0;
       for (var x = px0; x < px1; x++) {
         var i = (y * w + x) * 4;
@@ -933,7 +934,7 @@
       rd.push(n / best.l);
     }
     var yRuns = [], yrs = 0, yrl = 0;
-    for (var y = 0; y < rd.length; y++) {
+    for (var y = 0; y < h; y++) {
       if (rd[y] > 0.35) {
         if (yrl === 0) yrs = y;
         yrl++;
@@ -949,7 +950,7 @@
     if (!yBest || yBest.l < h * 0.05) return null;
     var pad = 2;
     var fx = Math.max(0, px0 - pad);
-    var fy = Math.max(0, vTop + yBest.s - pad);
+    var fy = Math.max(0, yBest.s - pad);
     var fw = Math.min(w - fx, best.l + 2 * pad);
     var fh = Math.min(h - fy, yBest.l + 2 * pad);
     return { x: fx, y: fy, w: fw, h: fh };
@@ -989,15 +990,25 @@
           cardCropInfo = { sx: cx0, sy: cy0, sw: cw, sh: ch };
           cardImageData = ctx.getImageData(cx0, cy0, cw, ch);
 
-          var detected = detectPhotoInCard(cardImageData, docType);
-          if (detected) {
-            var px0 = cx0 + detected.x;
-            var py0 = cy0 + detected.y;
-            photoCropInfo = { sx: px0, sy: py0, sw: detected.w, sh: detected.h };
-            photoImageData = ctx.getImageData(px0, py0, detected.w, detected.h);
+          if (docType === 'pan') {
+            var pf = PAN_PHOTO_FRAC;
+            var px0 = cx0 + Math.round(cw * pf.x0);
+            var py0 = cy0 + Math.round(ch * pf.y0);
+            var pw  = Math.round(cw * (pf.x1 - pf.x0));
+            var ph  = Math.round(ch * (pf.y1 - pf.y0));
+            photoCropInfo = { sx: px0, sy: py0, sw: pw, sh: ph };
+            photoImageData = ctx.getImageData(px0, py0, pw, ph);
           } else {
-            photoCropInfo = null;
-            photoImageData = null;
+            var detected = detectPhotoInCard(cardImageData, docType);
+            if (detected) {
+              var px0 = cx0 + detected.x;
+              var py0 = cy0 + detected.y;
+              photoCropInfo = { sx: px0, sy: py0, sw: detected.w, sh: detected.h };
+              photoImageData = ctx.getImageData(px0, py0, detected.w, detected.h);
+            } else {
+              photoCropInfo = null;
+              photoImageData = null;
+            }
           }
 
           hideSpinner();
