@@ -883,13 +883,16 @@
     });
   }
 
-  /* ── Card crop region (percentage of page) ── */
-  var CARD_CROP = { x0: 0.045, y0: 0.675, x1: 0.955, y1: 0.885 };
+  /* ── Card crop region (percentage of page, per doc type) ── */
+  var AADHAAR_CROP = { x0: 0.045, y0: 0.675, x1: 0.955, y1: 0.885 };
+  var PAN_CROP     = { x0: 0.06,  y0: 0.755, x1: 0.955, y1: 0.955 };
+  function getCrop(docType) { return docType === 'pan' ? PAN_CROP : AADHAAR_CROP; }
 
   /* ── Detect photo region inside card using pixel density analysis ── */
-  function detectPhotoInCard(cardData) {
+  function detectPhotoInCard(cardData, docType) {
     var w = cardData.width, h = cardData.height, d = cardData.data;
-    var xMax = Math.round(w * 0.45);
+    var xFrac = (docType === 'pan') ? 0.22 : 0.45;
+    var xMax = Math.round(w * xFrac);
     var yTop = Math.round(h * 0.10);
     var yBot = Math.round(h * 0.88);
     var sH = yBot - yTop;
@@ -976,14 +979,15 @@
         var ctx = offscreen.getContext('2d');
 
         page.render({ canvasContext: ctx, viewport: vp }).promise.then(function () {
-          var cx0 = Math.round(vp.width * CARD_CROP.x0);
-          var cy0 = Math.round(vp.height * CARD_CROP.y0);
-          var cw  = Math.round(vp.width * (CARD_CROP.x1 - CARD_CROP.x0));
-          var ch  = Math.round(vp.height * (CARD_CROP.y1 - CARD_CROP.y0));
+          var crop = getCrop(docType);
+          var cx0 = Math.round(vp.width * crop.x0);
+          var cy0 = Math.round(vp.height * crop.y0);
+          var cw  = Math.round(vp.width * (crop.x1 - crop.x0));
+          var ch  = Math.round(vp.height * (crop.y1 - crop.y0));
           cardCropInfo = { sx: cx0, sy: cy0, sw: cw, sh: ch };
           cardImageData = ctx.getImageData(cx0, cy0, cw, ch);
 
-          var detected = detectPhotoInCard(cardImageData);
+          var detected = detectPhotoInCard(cardImageData, docType);
           if (detected) {
             var px0 = cx0 + detected.x;
             var py0 = cy0 + detected.y;
