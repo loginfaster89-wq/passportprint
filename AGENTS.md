@@ -454,10 +454,38 @@ unlock, auto-detect, front+back preview, CR80 output, A4 sheet).
     `max-width 100%`. Wrap margin 20→14px (10px on mobile).
     Verified the dashed line was *not* drawn by buildSingleSheet
     (full ctx-draw audit) — it really was the source PDF.
+  - PR #262 feat — §AC.15 Push 1-Pair sheet flush to top + black
+    top edge line. `buildSingleSheet`: `var startY = 80;` →
+    `var startY = 30;` (~2.5mm @ 300 DPI, was ~7mm — cards now
+    sit at the practical top edge of the A4). After each
+    `ctx.drawImage(card.front/back, …)`, draw a 4 px solid
+    `#000` `fillRect` along the top edge of each card
+    (`x + (rounded ? r : 0), startY, cardW - (rounded ? 2*r : 0),
+    4`) — replaces the perforation-strip top border that §AC.14
+    cropped away, restoring visual symmetry on all 4 sides.
+    Multi-card / Dragon / PVC builders untouched (they already
+    draw cut guides + full borders).
+  - PR #263 feat — §AC.16 PAN crop fix to actual card row
+    (Aadhaar-parity layout). `CROP.pan`:
+    `front: [0.05, 0.08, 0.90, 0.42]` →
+    `[0.0685, 0.7567, 0.4335, 0.1952]` and
+    `back: [0.05, 0.54, 0.90, 0.40]` →
+    `[0.5141, 0.7567, 0.4314, 0.1952]`. Old crop assumed
+    1-card-per-page (full-width upper half = front, lower half
+    = back); actual e-PAN PDFs (Protean eGov / NSDL) ship the
+    same two-row layout as e-Aadhaar (formal Letter on top,
+    real plastic-card pair below the `---- Cut ----` indicator).
+    Coords measured from `test-pdfs/pan-test.pdf` at 300 DPI
+    (page 2480×3509 px). Aspect ≈ 1.57 (CR80 = 1.585). All
+    sheet builders are type-agnostic, so PAN now auto-inherits
+    §AC.15 flush-top + 4 px black-top-line treatment. Aadhaar
+    / Voter / Ayushman / Jan Aadhaar / eShram crop coords
+    untouched.
 - **NEXT — pick from candidates** (see SKILL.md §"TASK NEXT
   SESSION" for the full list):
   A. Audit multi-card / Dragon / PVC layouts for the same
-     perforation-strip artefact + flush-top treatment.
+     perforation-strip artefact + flush-top treatment, now that
+     PAN also rides on the same `buildSingleSheet` path.
   B. Phase 4 P3 Master Settings (DPI / padding per printer,
      persist in localStorage).
   C. Phase 4 P3 PrePrinted Card mode (back-only sheets).
