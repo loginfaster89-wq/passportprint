@@ -832,3 +832,14 @@ Tested locally with both test PDFs after PR #189 merge:
 - Auto photo enhancement (AI brightness/contrast adjustment)
 - Signature box option (PAN)
 - Back-side hologram overlay (PAN)
+
+---
+
+## S. Copy update — ID Card Print nav dropdown + feature card (2026-04-26, session #19)
+
+**Status: SHIPPED — PR #213.**
+
+||| # | PR | What shipped | Status |
+|||---|------|---------|--------|
+||| S1 | PR #213 | **Nav dropdown subtitle update (7 pages).** Changed from "Aadhaar · PAN · Voter ID · CR80 sheet" to "Aadhaar · PAN · Voter · Ayushman · more" on index.html, about.html, contact.html, privacy.html, terms.html, refund.html, shipping.html. Now matches id-print.html which was already updated in PR #205. | **merged** |
+||| S2 | PR #213 | **Homepage feature card description.** Updated to mention all 6 card types (Aadhaar, PAN, Voter ID, Ayushman, Jan Aadhaar, eShram) plus batch processing, multi-card A4, Dragon sheet, PVC tray print, photo editing. | **merged** |

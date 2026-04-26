@@ -295,6 +295,10 @@ PR #209 docs — mark batch shipped, add §Q, update prompt.
 PR #210 **ID Card Print Phase 3 PVC card tray layout** — 120×120mm
 (1417×1417px) canvas for Epson L805/L8050 CD/DVD tray, front+back
 card slots with corner marks and tray guides, rounded corners support.
+PR #212 docs — mark PVC tray shipped, add §R, update prompt.
+PR #213 **copy update** — nav dropdown subtitle on 7 pages updated
+to include Ayushman/eShram, homepage feature card description updated
+to reflect all Phase 2/3 features.
 
 **Verified (2026-04-26):** ID Card Print Phase 1 MVP fully tested with
 both test PDFs — PAN and Aadhaar flows ALL PASSED (upload, password

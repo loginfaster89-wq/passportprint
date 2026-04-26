@@ -229,10 +229,10 @@ Include order on each page:
 
 ## 9. Shipped work & open backlog
 
-Everything from PRs #70–#210 is shipped. See `issues.md` for the full
+Everything from PRs #70–#213 is shipped. See `issues.md` for the full
 audit trail (§N photo editing, §O multi-card/rounded corners/Voter ID/
 Dragon sheet, §P Ayushman/Jan Aadhaar/eShram, §Q batch processing,
-§R PVC card tray layout).
+§R PVC card tray layout, §S copy update).
 Do NOT re-fix any of the following — they are all merged:
 
 - PRs #70–#114: original audit quick-wins + responsive + flow fixes.
@@ -318,6 +318,14 @@ Do NOT re-fix any of the following — they are all merged:
   at once. File queue UI, "Add More" + "Process All" buttons, per-file
   password prompts, auto-detect + auto-crop each PDF, all cards combined
   on single A4 sheet. Single-file fallback to legacy path.
+- PR #209: docs — mark batch shipped, add §Q, update prompt.
+- PR #210: **ID Card Print Phase 3 PVC card tray** — 120×120mm canvas
+  for Epson L805/L8050 CD/DVD tray. Dual card slots, tray guides,
+  corner marks, rounded corners support.
+- PR #212: docs — mark PVC tray shipped (PR #210), add §R, update prompt.
+- PR #213: **copy update** — nav dropdown subtitle on 7 pages updated
+  to include Ayushman/eShram. Homepage feature card description updated
+  to reflect Phase 2/3 features.
 
 **Phase 2 is now COMPLETE.**
 
@@ -397,8 +405,8 @@ add them to all 3 cards consistently.
 
 **Open:** `F7` GSI iframe warnings (not our code, harmless).
 Phase 2 COMPLETE. Phase 3 Ayushman/Jan Aadhaar/eShram shipped (PR #205),
-batch processing shipped (PR #208), PVC tray shipped (PR #210).
-Remaining Phase 3 items — see list above.
+batch processing shipped (PR #208), PVC tray shipped (PR #210),
+copy update shipped (PR #213). Remaining Phase 3 items — see list above.
 
 ## 10. Related repos
 
@@ -434,10 +442,10 @@ issues.md — full audit + §M ID Card Print research + §O Phase 2 multi-card
   + §P Phase 3 Ayushman/Jan Aadhaar/eShram + §Q batch processing
   + §R PVC card tray
 
-Last PR: PR #210 (feat: PVC card tray layout — Epson L805/L8050)
+Last PR: PR #213 (copy: update ID Card Print nav dropdown + feature card)
 
 Shipped summary (don't redo):
-PRs #70–#210: all previous work shipped
+PRs #70–#213: all previous work shipped
 - PRs #70–#189: original audit + Document Sheet + ID Card Print Phase 1
 - PR #190: docs update
 - PR #191: ID Card Print Phase 2 — photo editing (brightness/contrast/
@@ -458,6 +466,8 @@ PRs #70–#210: all previous work shipped
 - PR #208: ID Card Print Phase 3 — batch processing (multiple PDFs)
 - PR #209: docs — mark batch shipped, add §Q, update prompt
 - PR #210: ID Card Print Phase 3 — PVC card tray layout (Epson L805/L8050)
+- PR #212: docs — mark PVC tray shipped, add §R, update prompt
+- PR #213: copy — update ID Card Print nav dropdown + feature card
 
 ID Card Print current state:
 - Phase 1 MVP COMPLETE + VERIFIED (PR #188)
