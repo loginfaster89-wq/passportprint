@@ -471,6 +471,10 @@ input.idp-range::-moz-range-thumb{
         <input type="checkbox" id="chkRounded">
         Rounded Corners
       </label>
+      <label class="idp-option">
+        <input type="checkbox" id="chkCutMarks" checked>
+        Cut Marks
+      </label>
       <!-- Panel A: Card Cleanup -->
       <div id="panelCleanup" class="idp-move">
         <span class="idp-move-label">Card Cleanup</span>
@@ -789,6 +793,7 @@ const batchSheetInfo = $('#batchSheetInfo');
 
 let currentLayout = 'multi';
 let roundedCorners = false;
+let cutMarks = true;
 const CARD_RADIUS = 36;
 
 /* Legacy single-card state (used when only 1 PDF) */
@@ -1495,28 +1500,40 @@ function buildSingleSheet() {
   }
 
   var foldX = startX + cardW + gap / 2;
-  ctx.setLineDash([10, 8]);
-  ctx.strokeStyle = '#000';
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.moveTo(foldX, startY - 30);
-  ctx.lineTo(foldX, startY + cardH + 30);
-  ctx.stroke();
-  ctx.setLineDash([]);
+  if (cutMarks) {
+    ctx.setLineDash([10, 8]);
+    ctx.strokeStyle = '#000';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(foldX, startY - 30);
+    ctx.lineTo(foldX, startY + cardH + 30);
+    ctx.stroke();
+    ctx.setLineDash([]);
 
-  ctx.save();
-  ctx.translate(foldX, startY - 40);
-  ctx.fillStyle = '#999';
-  ctx.font = '18px sans-serif';
-  ctx.textAlign = 'center';
-  ctx.fillText('\u2190 fold here \u2192', 0, 0);
-  ctx.restore();
+    ctx.save();
+    ctx.translate(foldX, startY - 40);
+    ctx.fillStyle = '#999';
+    ctx.font = '18px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('\u2190 fold here \u2192', 0, 0);
+    ctx.restore();
 
-  var markLen = 30;
-  ctx.strokeStyle = '#000';
-  ctx.lineWidth = 2;
-  ctx.setLineDash([]);
-  drawCornerMarks(ctx, startX, startY, pairW, cardH, markLen);
+    var markLen = 30;
+    ctx.strokeStyle = '#000';
+    ctx.lineWidth = 2;
+    ctx.setLineDash([]);
+    drawCornerMarks(ctx, startX, startY, pairW, cardH, markLen);
+
+    /* Seam-tick marks at top & bottom of foldX — short solid ticks
+       indicating the precise vertical cut/fold seam between front and
+       back halves. (Cut Marks toggle, default ON.) */
+    ctx.beginPath();
+    ctx.moveTo(foldX, startY - markLen);
+    ctx.lineTo(foldX, startY);
+    ctx.moveTo(foldX, startY + cardH);
+    ctx.lineTo(foldX, startY + cardH + markLen);
+    ctx.stroke();
+  }
 
   ctx.fillStyle = '#aaa';
   ctx.font = '16px sans-serif';
@@ -1786,6 +1803,7 @@ const valSat = $('#valSat');
 const btnResetEdit = $('#btnResetEdit');
 const btnAutoEnhance = $('#btnAutoEnhance');
 const chkRounded = $('#chkRounded');
+const chkCutMarks = $('#chkCutMarks');
 const aadhaarToggles = $('#aadhaarToggles');
 const chkHideQR = $('#chkHideQR');
 const chkHideMobile = $('#chkHideMobile');
@@ -1911,6 +1929,7 @@ function savePrefs() {
   try {
     var prefs = {
       rounded: chkRounded.checked,
+      cutMarks: chkCutMarks.checked,
       hideQR: chkHideQR.checked,
       hideMobile: chkHideMobile.checked,
       hideIssueDate: chkHideIssueDate.checked,
@@ -1935,6 +1954,10 @@ function loadPrefs() {
       roundedCorners = p.rounded;
       cardFrontCanvas.classList.toggle('rounded', p.rounded);
       cardBackCanvas.classList.toggle('rounded', p.rounded);
+    }
+    if (typeof p.cutMarks === 'boolean') {
+      chkCutMarks.checked = p.cutMarks;
+      cutMarks = p.cutMarks;
     }
     if (typeof p.hideQR === 'boolean') chkHideQR.checked = p.hideQR;
     if (typeof p.hideMobile === 'boolean') chkHideMobile.checked = p.hideMobile;
@@ -2134,6 +2157,12 @@ chkRounded.addEventListener('change', () => {
     c.classList.toggle('rounded', roundedCorners);
   });
   applyFilters();
+  savePrefs();
+});
+
+chkCutMarks.addEventListener('change', function() {
+  cutMarks = chkCutMarks.checked;
+  buildSheet();
   savePrefs();
 });
 
