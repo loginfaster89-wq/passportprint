@@ -259,6 +259,76 @@ input.idp-range::-moz-range-thumb{
 }
 .idp-card-wrap canvas.rounded{border-radius:3.6%;}
 
+/* Batch queue */
+.idp-batch{
+  margin-top:16px;background:var(--surface);border:1px solid var(--border);
+  border-radius:14px;padding:16px 18px;
+}
+.idp-batch-title{
+  font-family:'Syne',sans-serif;font-size:14px;font-weight:600;
+  color:var(--text);margin-bottom:12px;display:flex;align-items:center;
+  justify-content:space-between;
+}
+.idp-batch-title .count{
+  font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);
+  background:var(--surface2);padding:2px 8px;border-radius:999px;
+}
+.idp-batch-list{display:flex;flex-direction:column;gap:8px;}
+.idp-batch-item{
+  display:flex;align-items:center;gap:10px;padding:10px 14px;
+  background:var(--surface2);border:1px solid var(--border);border-radius:10px;
+  font-family:'DM Mono',monospace;font-size:12px;transition:border-color .2s;
+}
+.idp-batch-item.done{border-color:rgba(74,222,128,.3);}
+.idp-batch-item.error{border-color:rgba(239,68,68,.3);}
+.idp-batch-item.needs-pw{border-color:rgba(240,165,0,.3);}
+.idp-batch-icon{font-size:16px;flex-shrink:0;}
+.idp-batch-name{flex:1;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.idp-batch-status{
+  font-size:11px;padding:2px 8px;border-radius:999px;flex-shrink:0;
+}
+.idp-batch-status.processing{color:var(--accent);background:rgba(240,165,0,.08);}
+.idp-batch-status.done{color:var(--success);background:rgba(74,222,128,.08);}
+.idp-batch-status.error{color:#ef4444;background:rgba(239,68,68,.08);}
+.idp-batch-status.needs-pw{color:var(--accent);background:rgba(240,165,0,.08);}
+.idp-batch-pw{
+  display:flex;gap:6px;align-items:center;margin-top:6px;
+}
+.idp-batch-pw input{
+  padding:6px 10px;background:var(--bg);border:1px solid var(--border);
+  border-radius:6px;color:#fff;font-family:'DM Mono',monospace;font-size:12px;
+  width:160px;
+}
+.idp-batch-pw input:focus{outline:none;border-color:var(--accent);}
+.idp-batch-pw button{
+  padding:6px 12px;background:var(--accent);color:#0d0d0d;border:none;
+  border-radius:6px;font-family:'DM Mono',monospace;font-size:11px;
+  font-weight:600;cursor:pointer;white-space:nowrap;
+}
+.idp-batch-pw button:hover{background:#ffb627;}
+.idp-batch-item-inner{flex:1;min-width:0;}
+.idp-batch-actions{
+  display:flex;gap:8px;justify-content:center;margin-top:14px;
+}
+
+/* Batch preview cards grid */
+.idp-batch-cards{display:flex;flex-direction:column;gap:20px;margin-bottom:16px;}
+.idp-batch-card-group{
+  background:var(--surface2);border:1px solid var(--border);border-radius:12px;
+  padding:14px;
+}
+.idp-batch-card-header{
+  display:flex;align-items:center;gap:8px;margin-bottom:10px;
+  font-family:'DM Mono',monospace;font-size:12px;
+}
+.idp-batch-card-header .file-name{color:var(--text);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.idp-batch-card-remove{
+  background:none;border:1px solid var(--border);border-radius:6px;
+  color:var(--muted);font-size:11px;padding:2px 8px;cursor:pointer;
+  font-family:'DM Mono',monospace;transition:color .15s,border-color .15s;
+}
+.idp-batch-card-remove:hover{color:#ef4444;border-color:#ef4444;}
+
 /* Hidden util */
 .idp-hidden{display:none !important;}
 
@@ -267,6 +337,7 @@ input.idp-range::-moz-range-thumb{
   .legal-header,.legal-footer,.idp-hero,.idp-steps,.idp-upload,
   .idp-password,.idp-actions,.idp-info,.idp-detect,.idp-error,
   .idp-loading,.idp-btn,.idp-editor,.idp-option,.idp-layout-toggle,
+  .idp-batch,.idp-batch-card-header,.idp-batch-card-remove,
   #sheetTitle,#sheetDesc,nav,footer,header{display:none !important;}
   .idp-app{padding:0;max-width:none;margin:0;}
   .idp-preview{border:none;padding:0;background:none;}
@@ -351,26 +422,19 @@ input.idp-range::-moz-range-thumb{
   <div id="stepUpload">
     <div class="idp-upload" id="dropZone">
       <span class="idp-upload-icon" aria-hidden="true">📄</span>
-      <h3>Drop your PDF here</h3>
-      <p>eAadhaar · ePAN · e-EPIC · Ayushman · Jan Aadhaar · eShram · Password-protected PDFs supported</p>
-      <input type="file" id="pdfInput" accept=".pdf,application/pdf">
+      <h3>Drop your PDFs here</h3>
+      <p>Upload multiple PDFs at once — eAadhaar · ePAN · e-EPIC · Ayushman · Jan Aadhaar · eShram · Password-protected supported</p>
+      <input type="file" id="pdfInput" accept=".pdf,application/pdf" multiple>
     </div>
-  </div>
-
-  <!-- Password step (hidden by default) -->
-  <div id="stepPassword" class="idp-hidden">
-    <div class="idp-password">
-      <h3>🔒 PDF is password-protected</h3>
-      <p>Enter the password to unlock</p>
-      <input type="password" id="pdfPassword" placeholder="Enter PDF password" autocomplete="off">
-      <div style="margin-top:4px;">
-        <button class="idp-btn idp-btn-primary" id="btnUnlock">Unlock PDF</button>
+    <!-- Batch queue (shown after files are selected) -->
+    <div id="batchQueue" class="idp-batch idp-hidden">
+      <div class="idp-batch-title">Uploaded PDFs <span class="count" id="batchCount">0</span></div>
+      <div class="idp-batch-list" id="batchList"></div>
+      <div class="idp-batch-actions">
+        <button class="idp-btn idp-btn-ghost" id="btnBatchClear">Clear All</button>
+        <button class="idp-btn idp-btn-ghost" id="btnBatchAdd">+ Add More</button>
+        <button class="idp-btn idp-btn-primary" id="btnBatchProcess">Process All →</button>
       </div>
-      <p style="margin-top:12px;font-size:11px;color:var(--muted2);">
-        Aadhaar: first 4 letters of name (CAPS) + birth year<br>
-        PAN: date of birth in DDMMYYYY<br>
-        Voter ID / Ayushman / Jan Aadhaar / eShram: usually not password-protected
-      </p>
     </div>
   </div>
 
@@ -383,17 +447,25 @@ input.idp-range::-moz-range-thumb{
   <!-- Step 2: Preview -->
   <div id="stepPreview" class="idp-hidden">
     <div class="idp-preview">
-      <div id="detectBadge"></div>
-      <h3>Front &amp; Back Preview</h3>
-      <div class="idp-cards">
-        <div class="idp-card-wrap">
-          <span>Front</span>
-          <canvas id="cardFront" width="1011" height="638"></canvas>
+      <!-- Single card preview (1 PDF) -->
+      <div id="singlePreview">
+        <div id="detectBadge"></div>
+        <h3>Front &amp; Back Preview</h3>
+        <div class="idp-cards">
+          <div class="idp-card-wrap">
+            <span>Front</span>
+            <canvas id="cardFront" width="1011" height="638"></canvas>
+          </div>
+          <div class="idp-card-wrap">
+            <span>Back</span>
+            <canvas id="cardBack" width="1011" height="638"></canvas>
+          </div>
         </div>
-        <div class="idp-card-wrap">
-          <span>Back</span>
-          <canvas id="cardBack" width="1011" height="638"></canvas>
-        </div>
+      </div>
+      <!-- Batch cards preview (multiple PDFs) -->
+      <div id="batchPreview" class="idp-hidden">
+        <h3 id="batchPreviewTitle">Batch Preview — <span id="batchCardCount">0</span> Cards</h3>
+        <div class="idp-batch-cards" id="batchCardsPreview"></div>
       </div>
       <!-- Options -->
       <label class="idp-option">
@@ -427,7 +499,7 @@ input.idp-range::-moz-range-thumb{
         <span class="pill">Fold &amp; laminate ready</span>
       </div>
       <div class="idp-actions">
-        <button class="idp-btn idp-btn-ghost" id="btnBack">← New PDF</button>
+        <button class="idp-btn idp-btn-ghost" id="btnBack">← New Upload</button>
         <button class="idp-btn idp-btn-primary" id="btnSheet">Generate A4 Sheet →</button>
       </div>
     </div>
@@ -517,9 +589,10 @@ input.idp-range::-moz-range-thumb{
 <script src="assets/cookie.js" defer></script>
 
 <script type="module">
-/* ── ID Card Print — Phase 1 MVP ──
-   Client-side Aadhaar/PAN/Voter ID PDF → CR80 card crop → A4 fold-and-laminate sheet.
-   Uses pdf.js (CDN) for PDF rendering + text extraction. */
+/* ── ID Card Print — Phase 1 MVP + Phase 3 Batch Processing ──
+   Client-side Aadhaar/PAN/Voter ID/Ayushman/Jan Aadhaar/eShram PDF → CR80 card crop → A4 sheet.
+   Uses pdf.js (CDN) for PDF rendering + text extraction.
+   Batch mode: upload multiple PDFs, auto-detect + auto-crop all, combined A4 sheet. */
 
 const pdfjsLib = await import('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.min.mjs');
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.worker.min.mjs';
@@ -532,6 +605,7 @@ const A4_H = 3508;
 const DRAGON_W = 1205;
 const DRAGON_H = 1795;
 const RENDER_SCALE = 4;
+const MAX_BATCH = 5;
 
 const AADHAAR_KEYWORDS = ['aadhaar','uid','uidai','unique identification','government of india','vid','enrolment','download date','issue date'];
 const PAN_KEYWORDS = ['permanent account number','income tax','pan','department','nsdl','utiitsl'];
@@ -540,8 +614,6 @@ const AYUSHMAN_KEYWORDS = ['ayushman','pmjay','pradhan mantri jan arogya','natio
 const JANAADHAAR_KEYWORDS = ['jan aadhaar','janaadhaar','rajasthan','family id','jan aadhar','planning department','rajasthan jan aadhaar authority','janaadhar'];
 const ESHRAM_KEYWORDS = ['eshram','e-shram','unorganised worker','unorganized worker','ministry of labour','uan','universal account number','shram card','labour and employment'];
 
-/* Crop regions as fractions of page [x, y, w, h].
-   Calibrated against standard eAadhaar (UIDAI) and ePAN (NSDL) PDFs. */
 const CROP = {
   aadhaar: {
     front: [0.035, 0.06, 0.93, 0.52],
@@ -577,18 +649,18 @@ const CROP = {
   }
 };
 
+const LABELS = { aadhaar: 'Aadhaar Card Detected', pan: 'PAN Card Detected', voter: 'Voter ID Detected', ayushman: 'Ayushman Card Detected', janaadhaar: 'Jan Aadhaar Detected', eshram: 'eShram Card Detected' };
+const ICONS = { aadhaar: '\uD83C\uDD94', pan: '\uD83D\uDCB3', voter: '\uD83D\uDDF3\uFE0F', ayushman: '\uD83C\uDFE5', janaadhaar: '\uD83D\uDC68\u200D\uD83D\uDC69\u200D\uD83D\uDC67\u200D\uD83D\uDC66', eshram: '\uD83D\uDC77' };
+
 /* ── DOM refs ── */
 const $ = (s) => document.querySelector(s);
 const stepUpload = $('#stepUpload');
-const stepPassword = $('#stepPassword');
 const stepPreview = $('#stepPreview');
 const stepSheet = $('#stepSheet');
 const idpError = $('#idpError');
 const idpLoading = $('#idpLoading');
 const pdfInput = $('#pdfInput');
 const dropZone = $('#dropZone');
-const pdfPasswordInput = $('#pdfPassword');
-const btnUnlock = $('#btnUnlock');
 const btnBack = $('#btnBack');
 const btnSheet = $('#btnSheet');
 const btnBackPreview = $('#btnBackPreview');
@@ -600,25 +672,41 @@ const a4Canvas = $('#a4Canvas');
 const detectBadge = $('#detectBadge');
 const sheetTitle = $('#sheetTitle');
 const sheetDesc = $('#sheetDesc');
+const batchQueue = $('#batchQueue');
+const batchList = $('#batchList');
+const batchCount = $('#batchCount');
+const btnBatchClear = $('#btnBatchClear');
+const btnBatchAdd = $('#btnBatchAdd');
+const btnBatchProcess = $('#btnBatchProcess');
+const singlePreview = $('#singlePreview');
+const batchPreview = $('#batchPreview');
+const batchCardsPreview = $('#batchCardsPreview');
+const batchCardCount = $('#batchCardCount');
 
 let currentLayout = 'multi';
 let roundedCorners = false;
 const CARD_RADIUS = 36;
 
-let pdfArrayBuffer = null;
+/* Single-mode state (backward compat for 1 PDF) */
 let detectedType = null;
 let frontImageData = null;
 let backImageData = null;
 let originalFront = null;
 let originalBack = null;
 
+/* Batch state */
+var batchFiles = [];
+/* batchCards: [{type, front, back, origFront, origBack, fileName}, ...] */
+var batchCards = [];
+var isBatchMode = false;
+
 /* ── Step management ── */
 function showStep(n) {
-  [stepUpload, stepPassword, stepPreview, stepSheet].forEach(el => el.classList.add('idp-hidden'));
+  [stepUpload, stepPreview, stepSheet].forEach(function(el) { el.classList.add('idp-hidden'); });
   idpError.classList.remove('show');
   idpLoading.classList.remove('show');
 
-  document.querySelectorAll('.idp-step').forEach(s => {
+  document.querySelectorAll('.idp-step').forEach(function(s) {
     s.classList.remove('active','done');
     var sn = parseInt(s.dataset.step);
     if (sn < n) s.classList.add('done');
@@ -639,155 +727,436 @@ function showLoading(show) {
   idpLoading.classList.toggle('show', show);
 }
 
-function showPasswordStep() {
-  stepUpload.classList.add('idp-hidden');
-  stepPassword.classList.remove('idp-hidden');
-  pdfPasswordInput.value = '';
-  pdfPasswordInput.focus();
-}
-
 /* ── File handling ── */
-pdfInput.addEventListener('change', (e) => {
-  if (e.target.files && e.target.files[0]) handleFile(e.target.files[0]);
+pdfInput.addEventListener('change', function(e) {
+  if (e.target.files && e.target.files.length > 0) handleFiles(e.target.files);
 });
 
-dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('drag-over'); });
-dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
-dropZone.addEventListener('drop', (e) => {
+dropZone.addEventListener('dragover', function(e) { e.preventDefault(); dropZone.classList.add('drag-over'); });
+dropZone.addEventListener('dragleave', function() { dropZone.classList.remove('drag-over'); });
+dropZone.addEventListener('drop', function(e) {
   e.preventDefault();
   dropZone.classList.remove('drag-over');
-  if (e.dataTransfer.files && e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
+  if (e.dataTransfer.files && e.dataTransfer.files.length > 0) handleFiles(e.dataTransfer.files);
 });
 
-async function handleFile(file) {
-  if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
-    showError('Please upload a PDF file.');
+function handleFiles(fileList) {
+  var pdfFiles = [];
+  for (var i = 0; i < fileList.length; i++) {
+    var f = fileList[i];
+    if (f.type === 'application/pdf' || f.name.toLowerCase().endsWith('.pdf')) {
+      pdfFiles.push(f);
+    }
+  }
+  if (pdfFiles.length === 0) {
+    showError('Please upload PDF files.');
     return;
   }
-  pdfArrayBuffer = await file.arrayBuffer();
-  tryOpenPdf(null);
+
+  if (pdfFiles.length === 1 && batchFiles.length === 0) {
+    /* Single PDF — use classic flow */
+    isBatchMode = false;
+    handleSingleFile(pdfFiles[0]);
+    return;
+  }
+
+  /* Batch mode */
+  isBatchMode = true;
+  var totalAfterAdd = batchFiles.length + pdfFiles.length;
+  if (totalAfterAdd > MAX_BATCH) {
+    showError('Maximum ' + MAX_BATCH + ' PDFs per batch. You have ' + batchFiles.length + ', tried to add ' + pdfFiles.length + '.');
+    return;
+  }
+
+  for (var j = 0; j < pdfFiles.length; j++) {
+    batchFiles.push({
+      file: pdfFiles[j],
+      name: pdfFiles[j].name,
+      status: 'pending',
+      password: null,
+      arrayBuffer: null,
+      error: null
+    });
+  }
+  renderBatchQueue();
 }
 
-/* ── PDF processing ── */
-async function tryOpenPdf(password) {
+async function handleSingleFile(file) {
+  var ab = await file.arrayBuffer();
+  tryOpenPdfSingle(ab, null);
+}
+
+/* ── Batch queue UI ── */
+function renderBatchQueue() {
+  if (batchFiles.length === 0) {
+    batchQueue.classList.add('idp-hidden');
+    return;
+  }
+  batchQueue.classList.remove('idp-hidden');
+  batchCount.textContent = batchFiles.length;
+
+  var allDone = true;
+  var html = '';
+  for (var i = 0; i < batchFiles.length; i++) {
+    var bf = batchFiles[i];
+    var statusClass = bf.status;
+    var statusLabel = bf.status === 'pending' ? 'Pending' : bf.status === 'processing' ? 'Processing…' : bf.status === 'done' ? 'Done' : bf.status === 'needs-pw' ? 'Password needed' : 'Error';
+    var icon = bf.status === 'done' ? '\u2705' : bf.status === 'error' ? '\u274C' : bf.status === 'needs-pw' ? '\uD83D\uDD12' : '\uD83D\uDCC4';
+
+    html += '<div class="idp-batch-item ' + statusClass + '" data-idx="' + i + '">';
+    html += '<span class="idp-batch-icon">' + icon + '</span>';
+    html += '<div class="idp-batch-item-inner">';
+    html += '<span class="idp-batch-name">' + escHtml(bf.name) + '</span>';
+    if (bf.status === 'needs-pw') {
+      html += '<div class="idp-batch-pw">';
+      html += '<input type="password" placeholder="Enter password" data-pw-idx="' + i + '" autocomplete="off">';
+      html += '<button type="button" data-unlock-idx="' + i + '">Unlock</button>';
+      html += '</div>';
+    }
+    if (bf.status === 'error' && bf.error) {
+      html += '<div style="font-size:11px;color:#ef4444;margin-top:4px;">' + escHtml(bf.error) + '</div>';
+    }
+    html += '</div>';
+    html += '<span class="idp-batch-status ' + statusClass + '">' + statusLabel + '</span>';
+    html += '</div>';
+
+    if (bf.status !== 'done' && bf.status !== 'error') allDone = false;
+  }
+  batchList.innerHTML = html;
+
+  /* Bind password unlock buttons */
+  batchList.querySelectorAll('[data-unlock-idx]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var idx = parseInt(btn.dataset.unlockIdx);
+      var pwInput = batchList.querySelector('[data-pw-idx="' + idx + '"]');
+      if (pwInput && pwInput.value.trim()) {
+        batchFiles[idx].password = pwInput.value.trim();
+        batchFiles[idx].status = 'pending';
+        renderBatchQueue();
+        processBatchQueue();
+      }
+    });
+  });
+
+  /* Enter key on password inputs */
+  batchList.querySelectorAll('[data-pw-idx]').forEach(function(input) {
+    input.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        var idx = parseInt(input.dataset.pwIdx);
+        var unlockBtn = batchList.querySelector('[data-unlock-idx="' + idx + '"]');
+        if (unlockBtn) unlockBtn.click();
+      }
+    });
+  });
+
+  btnBatchProcess.disabled = allDone;
+}
+
+function escHtml(str) {
+  var div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+/* ── Batch processing ── */
+btnBatchProcess.addEventListener('click', function() {
+  processBatchQueue();
+});
+
+btnBatchClear.addEventListener('click', function() {
+  batchFiles = [];
+  batchCards = [];
+  isBatchMode = false;
+  pdfInput.value = '';
+  renderBatchQueue();
+});
+
+btnBatchAdd.addEventListener('click', function() {
+  /* Trigger file picker for adding more */
+  var tmpInput = document.createElement('input');
+  tmpInput.type = 'file';
+  tmpInput.accept = '.pdf,application/pdf';
+  tmpInput.multiple = true;
+  tmpInput.addEventListener('change', function(e) {
+    if (e.target.files && e.target.files.length > 0) handleFiles(e.target.files);
+  });
+  tmpInput.click();
+});
+
+async function processBatchQueue() {
+  var pendingItems = [];
+  for (var i = 0; i < batchFiles.length; i++) {
+    if (batchFiles[i].status === 'pending') pendingItems.push(i);
+  }
+  if (pendingItems.length === 0) {
+    /* All done or need passwords — check if we can go to preview */
+    finalizeBatch();
+    return;
+  }
+
+  showLoading(true);
+  idpError.classList.remove('show');
+
+  for (var j = 0; j < pendingItems.length; j++) {
+    var idx = pendingItems[j];
+    var bf = batchFiles[idx];
+    bf.status = 'processing';
+    renderBatchQueue();
+
+    try {
+      if (!bf.arrayBuffer) {
+        bf.arrayBuffer = await bf.file.arrayBuffer();
+      }
+      var loadingTask = pdfjsLib.getDocument({
+        data: bf.arrayBuffer.slice(0),
+        password: bf.password || undefined
+      });
+      var pdf = await loadingTask.promise;
+      var result = await extractCardFromPdf(pdf);
+      if (result.error) {
+        bf.status = 'error';
+        bf.error = result.error;
+      } else {
+        bf.status = 'done';
+        bf.cardData = result;
+      }
+    } catch (err) {
+      if (err.name === 'PasswordException') {
+        bf.status = 'needs-pw';
+        if (err.code === 2) bf.error = 'Wrong password';
+        else bf.error = null;
+      } else {
+        bf.status = 'error';
+        bf.error = err.message || 'Could not read PDF';
+      }
+    }
+    renderBatchQueue();
+  }
+
+  showLoading(false);
+  finalizeBatch();
+}
+
+function finalizeBatch() {
+  /* Check if any still need passwords */
+  var needsPw = false;
+  var hasDone = false;
+  for (var i = 0; i < batchFiles.length; i++) {
+    if (batchFiles[i].status === 'needs-pw') needsPw = true;
+    if (batchFiles[i].status === 'done') hasDone = true;
+  }
+  if (needsPw) {
+    showError('Some PDFs need passwords. Enter passwords and click Unlock.');
+    return;
+  }
+  if (!hasDone) {
+    showError('No PDFs were processed successfully.');
+    return;
+  }
+
+  /* Build batchCards from done items */
+  batchCards = [];
+  for (var j = 0; j < batchFiles.length; j++) {
+    if (batchFiles[j].status === 'done' && batchFiles[j].cardData) {
+      batchCards.push({
+        type: batchFiles[j].cardData.type,
+        front: batchFiles[j].cardData.front,
+        back: batchFiles[j].cardData.back,
+        origFront: batchFiles[j].cardData.origFront,
+        origBack: batchFiles[j].cardData.origBack,
+        fileName: batchFiles[j].name
+      });
+    }
+  }
+
+  if (batchCards.length === 1) {
+    /* Only 1 successful — switch to single mode */
+    isBatchMode = false;
+    detectedType = batchCards[0].type;
+    originalFront = batchCards[0].origFront;
+    originalBack = batchCards[0].origBack;
+    resetEditorSliders();
+    applyFilters();
+    detectBadge.innerHTML = '<div class="idp-detect ' + detectedType + '">' +
+      ICONS[detectedType] + ' ' + LABELS[detectedType] + '</div>';
+    singlePreview.classList.remove('idp-hidden');
+    batchPreview.classList.add('idp-hidden');
+    showStep(2);
+    return;
+  }
+
+  /* Multiple cards — batch preview */
+  isBatchMode = true;
+  singlePreview.classList.add('idp-hidden');
+  batchPreview.classList.remove('idp-hidden');
+  batchCardCount.textContent = batchCards.length;
+  applyBatchFilters();
+  renderBatchPreview();
+  showStep(2);
+}
+
+/* Extract card data from a single PDF (reusable for both single and batch) */
+async function extractCardFromPdf(pdf) {
+  var page = await pdf.getPage(1);
+  var textContent = await page.getTextContent();
+  var fullText = textContent.items.map(function(i) { return i.str; }).join(' ').toLowerCase();
+
+  var ayushmanHits = AYUSHMAN_KEYWORDS.filter(function(k) { return fullText.includes(k); }).length;
+  var janaadhaarHits = JANAADHAAR_KEYWORDS.filter(function(k) { return fullText.includes(k); }).length;
+  var eshramHits = ESHRAM_KEYWORDS.filter(function(k) { return fullText.includes(k); }).length;
+  var aadhaarHits = AADHAAR_KEYWORDS.filter(function(k) { return fullText.includes(k); }).length;
+  var panHits = PAN_KEYWORDS.filter(function(k) { return fullText.includes(k); }).length;
+  var voterHits = VOTER_KEYWORDS.filter(function(k) { return fullText.includes(k); }).length;
+
+  var type = null;
+  if (ayushmanHits >= 2) type = 'ayushman';
+  else if (janaadhaarHits >= 2) type = 'janaadhaar';
+  else if (eshramHits >= 2) type = 'eshram';
+  else if (aadhaarHits >= 2) type = 'aadhaar';
+  else if (panHits >= 2) type = 'pan';
+  else if (voterHits >= 2) type = 'voter';
+  else {
+    return { error: 'Could not detect card type' };
+  }
+
+  var viewport = page.getViewport({ scale: RENDER_SCALE });
+  var renderCanvas = document.createElement('canvas');
+  renderCanvas.width = viewport.width;
+  renderCanvas.height = viewport.height;
+  var ctx = renderCanvas.getContext('2d');
+  await page.render({ canvasContext: ctx, viewport: viewport }).promise;
+
+  var crop = CROP[type];
+  var frontCanvas, backCanvas;
+
+  if (pdf.numPages >= 2 && crop.frontPage) {
+    frontCanvas = cropRegion(renderCanvas, crop.frontPage);
+    var page2 = await pdf.getPage(2);
+    var vp2 = page2.getViewport({ scale: RENDER_SCALE });
+    var rc2 = document.createElement('canvas');
+    rc2.width = vp2.width;
+    rc2.height = vp2.height;
+    var c2 = rc2.getContext('2d');
+    await page2.render({ canvasContext: c2, viewport: vp2 }).promise;
+    backCanvas = cropRegion(rc2, crop.backPage);
+  } else {
+    frontCanvas = cropRegion(renderCanvas, crop.front);
+    backCanvas = cropRegion(renderCanvas, crop.back);
+  }
+
+  return { type: type, front: frontCanvas, back: backCanvas, origFront: frontCanvas, origBack: backCanvas };
+}
+
+/* ── Single PDF flow (backward compat) ── */
+async function tryOpenPdfSingle(arrayBuffer, password) {
   showLoading(true);
   idpError.classList.remove('show');
   try {
     var loadingTask = pdfjsLib.getDocument({
-      data: pdfArrayBuffer.slice(0),
+      data: arrayBuffer.slice(0),
       password: password || undefined
     });
     var pdf = await loadingTask.promise;
-    await processPdf(pdf);
-  } catch (err) {
-    showLoading(false);
-    if (err.name === 'PasswordException') {
-      if (err.code === 1) {
-        showPasswordStep();
-      } else if (err.code === 2) {
-        showPasswordStep();
-        showError('Wrong password. Try again.');
-      }
-    } else {
-      showError('Could not read PDF: ' + (err.message || err));
-    }
-  }
-}
-
-btnUnlock.addEventListener('click', () => {
-  var pw = pdfPasswordInput.value.trim();
-  if (!pw) { showError('Enter the password.'); return; }
-  stepPassword.classList.add('idp-hidden');
-  tryOpenPdf(pw);
-});
-
-pdfPasswordInput.addEventListener('keydown', (e) => {
-  if (e.key === 'Enter') btnUnlock.click();
-});
-
-/* ── Core PDF → card processing ── */
-async function processPdf(pdf) {
-  try {
-    var page = await pdf.getPage(1);
-
-    /* Text extraction for card type detection */
-    var textContent = await page.getTextContent();
-    var fullText = textContent.items.map(i => i.str).join(' ').toLowerCase();
-
-    var aadhaarHits = AADHAAR_KEYWORDS.filter(k => fullText.includes(k)).length;
-    var panHits = PAN_KEYWORDS.filter(k => fullText.includes(k)).length;
-    var voterHits = VOTER_KEYWORDS.filter(k => fullText.includes(k)).length;
-    var ayushmanHits = AYUSHMAN_KEYWORDS.filter(k => fullText.includes(k)).length;
-    var janaadhaarHits = JANAADHAAR_KEYWORDS.filter(k => fullText.includes(k)).length;
-    var eshramHits = ESHRAM_KEYWORDS.filter(k => fullText.includes(k)).length;
-
-    /* Check specific types before generic ones to avoid keyword overlap
-       (e.g. 'jan aadhaar' contains 'aadhaar') */
-    if (ayushmanHits >= 2) detectedType = 'ayushman';
-    else if (janaadhaarHits >= 2) detectedType = 'janaadhaar';
-    else if (eshramHits >= 2) detectedType = 'eshram';
-    else if (aadhaarHits >= 2) detectedType = 'aadhaar';
-    else if (panHits >= 2) detectedType = 'pan';
-    else if (voterHits >= 2) detectedType = 'voter';
-    else {
+    var result = await extractCardFromPdf(pdf);
+    if (result.error) {
       showLoading(false);
       showStep(1);
       showError('Could not detect card type. Supported: eAadhaar, ePAN, e-EPIC (Voter ID), Ayushman (PMJAY), Jan Aadhaar, eShram.');
       return;
     }
 
-    /* Render page at high resolution */
-    var viewport = page.getViewport({ scale: RENDER_SCALE });
-    var renderCanvas = document.createElement('canvas');
-    renderCanvas.width = viewport.width;
-    renderCanvas.height = viewport.height;
-    var ctx = renderCanvas.getContext('2d');
-
-    await page.render({ canvasContext: ctx, viewport: viewport }).promise;
-
-    /* Crop front and back */
-    var crop = CROP[detectedType];
-
-    if (pdf.numPages >= 2 && crop.frontPage) {
-      /* Multi-page PDF: front on page 1, back on page 2 */
-      frontImageData = cropRegion(renderCanvas, crop.frontPage);
-
-      var page2 = await pdf.getPage(2);
-      var vp2 = page2.getViewport({ scale: RENDER_SCALE });
-      var rc2 = document.createElement('canvas');
-      rc2.width = vp2.width;
-      rc2.height = vp2.height;
-      var c2 = rc2.getContext('2d');
-      await page2.render({ canvasContext: c2, viewport: vp2 }).promise;
-      backImageData = cropRegion(rc2, crop.backPage);
-    } else {
-      frontImageData = cropRegion(renderCanvas, crop.front);
-      backImageData = cropRegion(renderCanvas, crop.back);
-    }
-
-    /* Store originals for editing */
-    originalFront = frontImageData;
-    originalBack = backImageData;
+    detectedType = result.type;
+    originalFront = result.origFront;
+    originalBack = result.origBack;
     resetEditorSliders();
-
-    /* Draw to preview canvases */
     applyFilters();
 
-    /* Update badge */
-    var labels = { aadhaar: 'Aadhaar Card Detected', pan: 'PAN Card Detected', voter: 'Voter ID Detected', ayushman: 'Ayushman Card Detected', janaadhaar: 'Jan Aadhaar Detected', eshram: 'eShram Card Detected' };
-    var icons = { aadhaar: '🆔', pan: '💳', voter: '🗳️', ayushman: '🏥', janaadhaar: '👨‍👩‍👧‍👦', eshram: '👷' };
-    var label = labels[detectedType];
     detectBadge.innerHTML = '<div class="idp-detect ' + detectedType + '">' +
-      icons[detectedType] + ' ' + label + '</div>';
+      ICONS[detectedType] + ' ' + LABELS[detectedType] + '</div>';
 
+    singlePreview.classList.remove('idp-hidden');
+    batchPreview.classList.add('idp-hidden');
     showLoading(false);
     showStep(2);
   } catch (err) {
     showLoading(false);
-    showStep(1);
-    showError('Error processing PDF: ' + (err.message || err));
+    if (err.name === 'PasswordException') {
+      /* Show inline password prompt for single PDF */
+      singlePdfBuffer = arrayBuffer;
+      showSinglePasswordPrompt();
+    } else {
+      showError('Could not read PDF: ' + (err.message || err));
+    }
   }
 }
+
+/* Single-PDF password handling (inline, no separate step div) */
+var singlePdfBuffer = null;
+
+function showSinglePasswordPrompt() {
+  /* Reuse the batch queue UI for a single password-protected PDF */
+  isBatchMode = false;
+  batchFiles = [{
+    file: null,
+    name: 'Password-protected PDF',
+    status: 'needs-pw',
+    password: null,
+    arrayBuffer: singlePdfBuffer,
+    error: null
+  }];
+  renderBatchQueue();
+}
+
+/* Override batch process for single-PDF password case */
+var origProcessBatch = processBatchQueue;
+async function processBatchQueueOverride() {
+  if (!isBatchMode && batchFiles.length === 1 && batchFiles[0].arrayBuffer) {
+    var bf = batchFiles[0];
+    if (bf.status === 'pending' && bf.password) {
+      showLoading(true);
+      try {
+        var loadingTask = pdfjsLib.getDocument({
+          data: bf.arrayBuffer.slice(0),
+          password: bf.password
+        });
+        var pdf = await loadingTask.promise;
+        var result = await extractCardFromPdf(pdf);
+        showLoading(false);
+        if (result.error) {
+          showStep(1);
+          showError(result.error);
+          return;
+        }
+        detectedType = result.type;
+        originalFront = result.origFront;
+        originalBack = result.origBack;
+        batchFiles = [];
+        batchQueue.classList.add('idp-hidden');
+        resetEditorSliders();
+        applyFilters();
+        detectBadge.innerHTML = '<div class="idp-detect ' + detectedType + '">' +
+          ICONS[detectedType] + ' ' + LABELS[detectedType] + '</div>';
+        singlePreview.classList.remove('idp-hidden');
+        batchPreview.classList.add('idp-hidden');
+        showStep(2);
+      } catch (err) {
+        showLoading(false);
+        if (err.name === 'PasswordException' && err.code === 2) {
+          bf.status = 'needs-pw';
+          bf.error = 'Wrong password';
+          renderBatchQueue();
+          showError('Wrong password. Try again.');
+        } else {
+          showError('Could not read PDF: ' + (err.message || err));
+        }
+      }
+      return;
+    }
+  }
+  await origProcessBatch.call(null);
+}
+btnBatchProcess.removeEventListener('click', origProcessBatch);
+btnBatchProcess.addEventListener('click', function() { processBatchQueueOverride(); });
 
 /* ── Canvas helpers ── */
 function cropRegion(sourceCanvas, frac) {
@@ -805,16 +1174,108 @@ function cropRegion(sourceCanvas, frac) {
   return tmp;
 }
 
-function drawToCanvas(canvas, srcCanvas, w, h) {
-  canvas.width = w;
-  canvas.height = h;
-  var ctx = canvas.getContext('2d');
-  ctx.fillStyle = '#fff';
-  ctx.fillRect(0, 0, w, h);
-  ctx.drawImage(srcCanvas, 0, 0, w, h);
+/* ── Batch preview rendering ── */
+function renderBatchPreview() {
+  var html = '';
+  for (var i = 0; i < batchCards.length; i++) {
+    var card = batchCards[i];
+    var label = LABELS[card.type] || card.type;
+    var icon = ICONS[card.type] || '';
+    html += '<div class="idp-batch-card-group">';
+    html += '<div class="idp-batch-card-header">';
+    html += '<div class="idp-detect ' + card.type + '" style="margin-bottom:0;font-size:11px;padding:4px 10px;">' + icon + ' ' + label + '</div>';
+    html += '<span class="file-name">' + escHtml(card.fileName) + '</span>';
+    html += '<button type="button" class="idp-batch-card-remove" data-remove-idx="' + i + '">Remove</button>';
+    html += '</div>';
+    html += '<div class="idp-cards">';
+    html += '<div class="idp-card-wrap"><span>Front</span><canvas class="batch-front" data-card-idx="' + i + '" width="1011" height="638"></canvas></div>';
+    html += '<div class="idp-card-wrap"><span>Back</span><canvas class="batch-back" data-card-idx="' + i + '" width="1011" height="638"></canvas></div>';
+    html += '</div>';
+    html += '</div>';
+  }
+  batchCardsPreview.innerHTML = html;
+
+  /* Draw cards to canvases */
+  var filterStr = getFilterString();
+  for (var j = 0; j < batchCards.length; j++) {
+    var fc = batchCardsPreview.querySelector('.batch-front[data-card-idx="' + j + '"]');
+    var bc = batchCardsPreview.querySelector('.batch-back[data-card-idx="' + j + '"]');
+    if (fc && batchCards[j].origFront) drawFiltered(fc, batchCards[j].origFront, CR80_W, CR80_H, filterStr);
+    if (bc && batchCards[j].origBack) drawFiltered(bc, batchCards[j].origBack, CR80_W, CR80_H, filterStr);
+    if (roundedCorners) {
+      if (fc) fc.classList.add('rounded');
+      if (bc) bc.classList.add('rounded');
+    }
+  }
+
+  /* Store filtered versions */
+  updateBatchFilteredCards();
+
+  /* Bind remove buttons */
+  batchCardsPreview.querySelectorAll('[data-remove-idx]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var idx = parseInt(btn.dataset.removeIdx);
+      batchCards.splice(idx, 1);
+      if (batchCards.length === 0) {
+        resetAll();
+        showStep(1);
+        return;
+      }
+      if (batchCards.length === 1) {
+        isBatchMode = false;
+        detectedType = batchCards[0].type;
+        originalFront = batchCards[0].origFront;
+        originalBack = batchCards[0].origBack;
+        resetEditorSliders();
+        applyFilters();
+        detectBadge.innerHTML = '<div class="idp-detect ' + detectedType + '">' +
+          ICONS[detectedType] + ' ' + LABELS[detectedType] + '</div>';
+        singlePreview.classList.remove('idp-hidden');
+        batchPreview.classList.add('idp-hidden');
+        return;
+      }
+      batchCardCount.textContent = batchCards.length;
+      renderBatchPreview();
+    });
+  });
+}
+
+function updateBatchFilteredCards() {
+  var filterStr = getFilterString();
+  for (var i = 0; i < batchCards.length; i++) {
+    var filtered = document.createElement('canvas');
+    filtered.width = CR80_W;
+    filtered.height = CR80_H;
+    drawFiltered(filtered, batchCards[i].origFront, CR80_W, CR80_H, filterStr);
+    batchCards[i].front = document.createElement('canvas');
+    batchCards[i].front.width = CR80_W;
+    batchCards[i].front.height = CR80_H;
+    batchCards[i].front.getContext('2d').drawImage(filtered, 0, 0);
+
+    var filteredB = document.createElement('canvas');
+    filteredB.width = CR80_W;
+    filteredB.height = CR80_H;
+    drawFiltered(filteredB, batchCards[i].origBack, CR80_W, CR80_H, filterStr);
+    batchCards[i].back = document.createElement('canvas');
+    batchCards[i].back.width = CR80_W;
+    batchCards[i].back.height = CR80_H;
+    batchCards[i].back.getContext('2d').drawImage(filteredB, 0, 0);
+  }
+}
+
+function applyBatchFilters() {
+  updateBatchFilteredCards();
+  renderBatchPreview();
 }
 
 /* ── A4 Sheet generation ── */
+function getActiveCards() {
+  if (isBatchMode && batchCards.length > 0) {
+    return batchCards.map(function(c) { return { front: c.front, back: c.back, type: c.type }; });
+  }
+  return [{ front: frontImageData, back: backImageData, type: detectedType }];
+}
+
 function buildSheet() {
   if (currentLayout === 'multi') buildMultiCardSheet();
   else if (currentLayout === 'dragon') buildDragonSheet();
@@ -822,6 +1283,8 @@ function buildSheet() {
 }
 
 function buildSingleSheet() {
+  var cards = getActiveCards();
+  var card = cards[0];
   var ctx = a4Canvas.getContext('2d');
   a4Canvas.width = A4_W;
   a4Canvas.height = A4_H;
@@ -835,19 +1298,19 @@ function buildSingleSheet() {
   var startX = Math.round((A4_W - pairW) / 2);
   var startY = Math.round((A4_H - cardH) / 2);
 
-  var r = roundedCorners ? CARD_RADIUS : 0;
+  var radius = roundedCorners ? CARD_RADIUS : 0;
 
-  if (frontImageData) {
-    if (r > 0) drawCardClipped(ctx, frontImageData, startX, startY, cardW, cardH, r);
-    else ctx.drawImage(frontImageData, startX, startY, cardW, cardH);
+  if (card.front) {
+    if (radius > 0) drawCardClipped(ctx, card.front, startX, startY, cardW, cardH, radius);
+    else ctx.drawImage(card.front, startX, startY, cardW, cardH);
   }
 
-  if (backImageData) {
+  if (card.back) {
     ctx.save();
     ctx.translate(startX + cardW + gap + cardW, startY);
     ctx.scale(-1, 1);
-    if (r > 0) drawCardClipped(ctx, backImageData, 0, 0, cardW, cardH, r);
-    else ctx.drawImage(backImageData, 0, 0, cardW, cardH);
+    if (radius > 0) drawCardClipped(ctx, card.back, 0, 0, cardW, cardH, radius);
+    else ctx.drawImage(card.back, 0, 0, cardW, cardH);
     ctx.restore();
   }
 
@@ -882,6 +1345,7 @@ function buildSingleSheet() {
 }
 
 function buildMultiCardSheet() {
+  var cards = getActiveCards();
   var ctx = a4Canvas.getContext('2d');
   a4Canvas.width = A4_W;
   a4Canvas.height = A4_H;
@@ -898,7 +1362,6 @@ function buildMultiCardSheet() {
   var marginX = Math.round((A4_W - pairW) / 2);
   var marginY = Math.round((A4_H - totalH) / 2);
 
-  /* Column headers */
   ctx.fillStyle = '#999';
   ctx.font = '18px sans-serif';
   ctx.textAlign = 'center';
@@ -907,19 +1370,19 @@ function buildMultiCardSheet() {
 
   var radius = roundedCorners ? CARD_RADIUS : 0;
 
-  for (var r = 0; r < rows; r++) {
-    var y = marginY + r * (cardH + rowGap);
+  for (var row = 0; row < rows; row++) {
+    var y = marginY + row * (cardH + rowGap);
+    /* In batch mode, each row uses a different card; in single mode, repeat the same card */
+    var card = isBatchMode ? (cards[row % cards.length]) : cards[0];
 
-    /* Draw front card */
-    if (frontImageData) {
-      if (radius > 0) drawCardClipped(ctx, frontImageData, marginX, y, cardW, cardH, radius);
-      else ctx.drawImage(frontImageData, marginX, y, cardW, cardH);
+    if (card.front) {
+      if (radius > 0) drawCardClipped(ctx, card.front, marginX, y, cardW, cardH, radius);
+      else ctx.drawImage(card.front, marginX, y, cardW, cardH);
     }
 
-    /* Draw back card (NOT mirrored — flat cut, not fold) */
-    if (backImageData) {
-      if (radius > 0) drawCardClipped(ctx, backImageData, marginX + cardW + pairGap, y, cardW, cardH, radius);
-      else ctx.drawImage(backImageData, marginX + cardW + pairGap, y, cardW, cardH);
+    if (card.back) {
+      if (radius > 0) drawCardClipped(ctx, card.back, marginX + cardW + pairGap, y, cardW, cardH, radius);
+      else ctx.drawImage(card.back, marginX + cardW + pairGap, y, cardW, cardH);
     }
   }
 
@@ -931,20 +1394,18 @@ function buildMultiCardSheet() {
   var extH = 20;
   var extW = 20;
 
-  /* Horizontal cut lines (above first row, between rows, below last row) */
-  for (var r = 0; r <= rows; r++) {
-    var y = marginY + r * (cardH + rowGap) - (r > 0 ? rowGap / 2 : 0) + (r === 0 ? 0 : 0);
-    if (r === 0) y = marginY;
-    else if (r === rows) y = marginY + rows * cardH + (rows - 1) * rowGap;
-    else y = marginY + r * cardH + (r - 1) * rowGap + rowGap / 2;
+  for (var ri = 0; ri <= rows; ri++) {
+    var yy;
+    if (ri === 0) yy = marginY;
+    else if (ri === rows) yy = marginY + rows * cardH + (rows - 1) * rowGap;
+    else yy = marginY + ri * cardH + (ri - 1) * rowGap + rowGap / 2;
 
     ctx.beginPath();
-    ctx.moveTo(marginX - extW, y);
-    ctx.lineTo(marginX + pairW + extW, y);
+    ctx.moveTo(marginX - extW, yy);
+    ctx.lineTo(marginX + pairW + extW, yy);
     ctx.stroke();
   }
 
-  /* Vertical cut lines (left edge, between front/back, right edge) */
   var vLines = [marginX, marginX + cardW + pairGap / 2, marginX + pairW];
   vLines.forEach(function(x) {
     ctx.beginPath();
@@ -955,24 +1416,27 @@ function buildMultiCardSheet() {
 
   ctx.setLineDash([]);
 
-  /* Corner marks at each card for precision cutting */
   ctx.strokeStyle = '#999';
   ctx.lineWidth = 1.5;
   var markLen = 24;
-  for (var r = 0; r < rows; r++) {
-    var y = marginY + r * (cardH + rowGap);
-    drawCornerMarks(ctx, marginX, y, cardW, cardH, markLen);
-    drawCornerMarks(ctx, marginX + cardW + pairGap, y, cardW, cardH, markLen);
+  for (var rj = 0; rj < rows; rj++) {
+    var yj = marginY + rj * (cardH + rowGap);
+    drawCornerMarks(ctx, marginX, yj, cardW, cardH, markLen);
+    drawCornerMarks(ctx, marginX + cardW + pairGap, yj, cardW, cardH, markLen);
   }
 
-  /* Footer label */
+  var footerText = isBatchMode
+    ? 'CR80 \u00b7 85.6 \u00d7 54 mm \u00b7 ' + cards.length + ' cards \u00b7 300 DPI \u2014 Studio Print'
+    : 'CR80 \u00b7 85.6 \u00d7 54 mm \u00b7 5 pairs \u00b7 300 DPI \u2014 Studio Print';
   ctx.fillStyle = '#aaa';
   ctx.font = '16px sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText('CR80 \u00b7 85.6 \u00d7 54 mm \u00b7 5 pairs \u00b7 300 DPI \u2014 Studio Print', A4_W / 2, marginY + totalH + 50);
+  ctx.fillText(footerText, A4_W / 2, marginY + totalH + 50);
 }
 
 function buildDragonSheet() {
+  var cards = getActiveCards();
+  var card = cards[0];
   var ctx = a4Canvas.getContext('2d');
   a4Canvas.width = DRAGON_W;
   a4Canvas.height = DRAGON_H;
@@ -988,20 +1452,17 @@ function buildDragonSheet() {
 
   var radius = roundedCorners ? CARD_RADIUS : 0;
 
-  /* Card 1 — Front */
-  if (frontImageData) {
-    if (radius > 0) drawCardClipped(ctx, frontImageData, marginX, marginY, cardW, cardH, radius);
-    else ctx.drawImage(frontImageData, marginX, marginY, cardW, cardH);
+  if (card.front) {
+    if (radius > 0) drawCardClipped(ctx, card.front, marginX, marginY, cardW, cardH, radius);
+    else ctx.drawImage(card.front, marginX, marginY, cardW, cardH);
   }
 
-  /* Card 2 — Back */
-  if (backImageData) {
+  if (card.back) {
     var y2 = marginY + cardH + gap;
-    if (radius > 0) drawCardClipped(ctx, backImageData, marginX, y2, cardW, cardH, radius);
-    else ctx.drawImage(backImageData, marginX, y2, cardW, cardH);
+    if (radius > 0) drawCardClipped(ctx, card.back, marginX, y2, cardW, cardH, radius);
+    else ctx.drawImage(card.back, marginX, y2, cardW, cardH);
   }
 
-  /* Cut marks — dashed guides */
   ctx.setLineDash([8, 6]);
   ctx.strokeStyle = '#bbb';
   ctx.lineWidth = 1;
@@ -1009,7 +1470,6 @@ function buildDragonSheet() {
   var extH = 16;
   var extW = 16;
 
-  /* Horizontal cut lines (above card 1, between cards, below card 2) */
   var hLines = [marginY, marginY + cardH + gap / 2, marginY + totalH];
   hLines.forEach(function(y) {
     ctx.beginPath();
@@ -1018,7 +1478,6 @@ function buildDragonSheet() {
     ctx.stroke();
   });
 
-  /* Vertical cut lines (left, right) */
   var vLines = [marginX, marginX + cardW];
   vLines.forEach(function(x) {
     ctx.beginPath();
@@ -1029,21 +1488,18 @@ function buildDragonSheet() {
 
   ctx.setLineDash([]);
 
-  /* Corner marks */
   ctx.strokeStyle = '#999';
   ctx.lineWidth = 1.5;
   var markLen = 24;
   drawCornerMarks(ctx, marginX, marginY, cardW, cardH, markLen);
   drawCornerMarks(ctx, marginX, marginY + cardH + gap, cardW, cardH, markLen);
 
-  /* Labels */
   ctx.fillStyle = '#999';
   ctx.font = '16px sans-serif';
   ctx.textAlign = 'center';
   ctx.fillText('Front', marginX + cardW / 2, marginY - 12);
   ctx.fillText('Back', marginX + cardW / 2, marginY + cardH + gap - 12);
 
-  /* Footer label */
   ctx.fillStyle = '#aaa';
   ctx.font = '14px sans-serif';
   ctx.fillText('CR80 \u00b7 4\u00d76 Dragon Sheet \u00b7 300 DPI \u2014 Studio Print', DRAGON_W / 2, marginY + totalH + 40);
@@ -1103,7 +1559,6 @@ function drawCardClipped(ctx, src, x, y, w, h, radius) {
   ctx.clip();
   ctx.drawImage(src, x, y, w, h);
   ctx.restore();
-  /* Visible border around the rounded card */
   ctx.strokeStyle = '#ccc';
   ctx.lineWidth = 1.5;
   roundedRectPath(ctx, x, y, w, h, radius);
@@ -1129,7 +1584,6 @@ function applyFilters() {
   var f = getFilterString();
   if (originalFront) {
     drawFiltered(cardFrontCanvas, originalFront, CR80_W, CR80_H, f);
-    /* Store filtered version for A4 sheet */
     frontImageData = document.createElement('canvas');
     frontImageData.width = CR80_W;
     frontImageData.height = CR80_H;
@@ -1154,19 +1608,28 @@ function onSliderInput() {
   valBright.textContent = slBright.value + '%';
   valContrast.textContent = slContrast.value + '%';
   valSat.textContent = slSat.value + '%';
-  applyFilters();
+  if (isBatchMode) applyBatchFilters();
+  else applyFilters();
 }
 
 slBright.addEventListener('input', onSliderInput);
 slContrast.addEventListener('input', onSliderInput);
 slSat.addEventListener('input', onSliderInput);
-btnResetEdit.addEventListener('click', () => { resetEditorSliders(); applyFilters(); });
+btnResetEdit.addEventListener('click', function() {
+  resetEditorSliders();
+  if (isBatchMode) applyBatchFilters();
+  else applyFilters();
+});
 
-chkRounded.addEventListener('change', () => {
+chkRounded.addEventListener('change', function() {
   roundedCorners = chkRounded.checked;
-  cardFrontCanvas.classList.toggle('rounded', roundedCorners);
-  cardBackCanvas.classList.toggle('rounded', roundedCorners);
-  applyFilters();
+  if (isBatchMode) {
+    applyBatchFilters();
+  } else {
+    cardFrontCanvas.classList.toggle('rounded', roundedCorners);
+    cardBackCanvas.classList.toggle('rounded', roundedCorners);
+    applyFilters();
+  }
 });
 
 /* ── Layout toggle ── */
@@ -1182,8 +1645,14 @@ document.querySelectorAll('.idp-layout-opt').forEach(function(btn) {
 
 function updateSheetMeta() {
   if (currentLayout === 'multi') {
-    sheetTitle.textContent = 'A4 Sheet \u2014 5 Card Pairs';
-    sheetDesc.textContent = 'Print \u2192 cut along dashed lines \u2192 laminate each card separately. Saves paper.';
+    var cards = getActiveCards();
+    if (isBatchMode && cards.length > 1) {
+      sheetTitle.textContent = 'A4 Sheet \u2014 ' + cards.length + ' Cards (Batch)';
+      sheetDesc.textContent = 'Print \u2192 cut along dashed lines \u2192 laminate each card separately. ' + cards.length + ' different cards on one sheet.';
+    } else {
+      sheetTitle.textContent = 'A4 Sheet \u2014 5 Card Pairs';
+      sheetDesc.textContent = 'Print \u2192 cut along dashed lines \u2192 laminate each card separately. Saves paper.';
+    }
   } else if (currentLayout === 'dragon') {
     sheetTitle.textContent = 'Dragon Sheet \u2014 4\u00d76 (2 Cards)';
     sheetDesc.textContent = 'Print on 4\u00d76 photo paper \u2192 cut along guides \u2192 laminate each card.';
@@ -1193,35 +1662,47 @@ function updateSheetMeta() {
   }
 }
 
-/* ── Button handlers ── */
-btnSheet.addEventListener('click', () => {
-  updateSheetMeta();
-  buildSheet();
-  showStep(3);
-});
-
-btnBack.addEventListener('click', () => {
-  pdfArrayBuffer = null;
+/* ── Reset all state ── */
+function resetAll() {
   detectedType = null;
   frontImageData = null;
   backImageData = null;
   originalFront = null;
   originalBack = null;
+  batchFiles = [];
+  batchCards = [];
+  isBatchMode = false;
+  singlePdfBuffer = null;
   pdfInput.value = '';
+  batchQueue.classList.add('idp-hidden');
+  singlePreview.classList.remove('idp-hidden');
+  batchPreview.classList.add('idp-hidden');
+}
+
+/* ── Button handlers ── */
+btnSheet.addEventListener('click', function() {
+  updateSheetMeta();
+  buildSheet();
+  showStep(3);
+});
+
+btnBack.addEventListener('click', function() {
+  resetAll();
   showStep(1);
 });
 
-btnBackPreview.addEventListener('click', () => showStep(2));
+btnBackPreview.addEventListener('click', function() { showStep(2); });
 
-btnDownload.addEventListener('click', () => {
+btnDownload.addEventListener('click', function() {
   var link = document.createElement('a');
   var suffix = currentLayout === 'dragon' ? '-dragon-sheet.png' : '-a4-sheet.png';
-  link.download = (detectedType || 'id-card') + suffix;
+  var prefix = isBatchMode ? 'batch' : (detectedType || 'id-card');
+  link.download = prefix + suffix;
   link.href = a4Canvas.toDataURL('image/png');
   link.click();
 });
 
-btnPrint.addEventListener('click', () => window.print());
+btnPrint.addEventListener('click', function() { window.print(); });
 
 /* ── Init ── */
 showStep(1);
