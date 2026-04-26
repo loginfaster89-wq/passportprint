@@ -220,7 +220,7 @@ Include order on each page:
 
 ## 9. Shipped work & open backlog
 
-Everything from PRs #70–#165 is shipped. See `issues.md` for the full
+Everything from PRs #70–#189 is shipped. See `issues.md` for the full
 audit trail. Do NOT re-fix any of the following — they are all merged:
 
 - PRs #70–#114: original audit quick-wins + responsive + flow fixes.
@@ -253,28 +253,36 @@ audit trail. Do NOT re-fix any of the following — they are all merged:
   extraction via pdf.js `getTextContent()`, keyword matching (2+ hits
   confirms), styled detection badge (amber=Aadhaar, green=PAN),
   unsupported doc rejection.
-- PR #163: Document Sheet Phase 2 — editor step (brightness, contrast,
-  saturation, warmth, shadows), Full Document / Photo Only toggle,
-  card crop + photo crop extraction, A4 sheet generation (2480×3508
-  canvas), download PNG + print. Photo-only mode applies edits to
-  photo region; full-document mode applies edits to card excluding
-  photo.
-- PR #165: Full Document photo protection fix (restore original photo
-  pixels from same buffer, bounds checking), Back to Edit button on
-  A4 result page.
-- PR #166: Photo Only crop fallback (extract from card if photoImageData
-  null), per-mode edit state auto-save (switching Full Document ↔
-  Photo Only retains each mode's slider values), back buttons on
-  password + editor steps.
+- PR #163: Document Sheet Phase 2 — editor step, card/photo crop,
+  A4 sheet generation, download PNG + print.
+- PR #165: Full Document photo protection fix + Back to Edit button.
+- PR #166: Photo Only crop fallback + per-mode edit state auto-save.
 - PR #168: docs update (SKILL.md, AGENTS.md, issues.md for #166-#168).
-- PR #170: PAN Photo Only vertical scan bounds fix (merged but did NOT
-  fully fix the issue — see open bug below).
-- PR #182: PAN/Aadhaar CR80 card size standardization + auto-trim both
-  cards + test PDFs saved in `test-pdfs/`.
+- PR #170: PAN Photo Only vertical scan bounds fix.
+- PR #182: PAN/Aadhaar CR80 card size standardization + auto-trim +
+  test PDFs saved in `test-pdfs/`.
+- PR #183: card system rebuild docs.
+- PR #184: front-card-only crop fix for Aadhaar & PAN + trim safety.
+- PR #185: deleted old `document-sheet.html` — clean slate for new
+  ID print feature.
+- PR #186: docs — ID Card Print research + implementation plan (§M).
+- PR #188: **ID Card Print Phase 1 MVP** — new `id-print.html` with
+  PDF upload + password unlock, auto-detect Aadhaar/PAN, auto-crop
+  front+back, CR80 output (1011×638px at 300 DPI), side-by-side
+  preview, A4 fold-and-laminate layout, download PNG + print. All
+  client-side. Shared nav/auth/footer.
+- PR #189: fix Aadhaar PDF detection — expanded keyword list with
+  `enrolment`, `download date`, `issue date` (4 hits now vs 1 before).
 
-**OPEN — ID Card Print feature (NEW — replaces old Document Sheet):**
-PR #185 deleted the old `document-sheet.html` and all its broken crop
-logic. A brand new `id-print.html` page will be built from scratch.
+**Verified (2026-04-26):** Both test PDFs fully working:
+- PAN PDF: upload → password unlock (05071999) → auto-detect PAN →
+  front+back preview → CR80 output → A4 fold-and-laminate sheet →
+  download PNG + print. ALL PASSED.
+- Aadhaar PDF: upload → password unlock (SUNI1986) → auto-detect
+  Aadhaar (4 keyword hits: vid, enrolment, download date, issue date) →
+  front+back preview → CR80 output. ALL PASSED.
+
+**ID Card Print Phase 1 MVP is COMPLETE and VERIFIED.**
 
 **Research completed (session 2026-04-25):** Full competitor analysis,
 card sizes, lamination specs, and feature plan documented in
@@ -360,6 +368,7 @@ without re-auditing.
 ```
 [TERSE MODE = ON] Minimum messages, zero re-explanation, sirf critical
 updates aur decisions. Ye default hai — har session mein auto-on.
+Quota reminder pe koi message mat do — silently kaam karte raho.
 
 Sabse pehle PAT le lo mere se — GITHUB_PAT_PASSPORTPRINT (fine-grained,
 repo-scoped — Contents + Pull requests: Read and write). Session-only
@@ -369,53 +378,30 @@ Studio Print frontend par kaam karo. Repo: loginfaster89-wq/passportprint
 (private).
 
 Clone ke baad pehle ye teen files padho:
+.agents/skills/studioprint/SKILL.md — Devin recipe
+AGENTS.md — full source of truth
+issues.md — full audit + §M ID Card Print research
 
-.agents/skills/studioprint/SKILL.md — Devin recipe (build/preview,
-hard rules, PAT curl snippet, Hinglish style, §9 merged/open backlog,
-§9 ID print feature plan with competitor research).
-AGENTS.md — full source of truth.
-issues.md — §M ID Card Print feature research + implementation plan
-(NEW, added 2026-04-25).
-
-Last PR: PR #185 (removed old document-sheet.html — clean slate for
-new ID print feature)
+Last PR: PR #189 (fix: Aadhaar PDF detection — expand keyword list for
+eAadhaar text layer)
 
 Shipped summary (don't redo):
+PRs #70–#189: all previous work shipped
 
-PRs #70–#185: all previous work shipped. Key highlights:
-- Original audit quick-wins + responsive + flow fixes (#70–#114)
-- Stats-grid, fonts, step-bar, audience, download bar (#118–#132)
-- JSON-LD, footer, glorification cleanup, pricing redesign (#134–#155)
-- Document Sheet feature (PRs #156–#182) — DELETED in PR #185
-  (old crop system was broken beyond repair)
+PR #189 TEST RESULTS (tested 2026-04-26):
 
-IMPORTANT: document-sheet.html was DELETED in PR #185. The new ID
-card print feature will be built from scratch as `id-print.html`.
+PAN PDF: ALL PASSED — upload, password unlock, auto-detect, front+back
+preview, CR80 output, A4 fold-and-laminate sheet, download PNG, print.
+Aadhaar PDF: ALL PASSED — upload, password unlock, auto-detect (4 keyword
+hits: vid, enrolment, download date, issue date), front+back preview,
+CR80 output.
 
-Research already done (don't re-research):
-- Competitor analysis: CardXpress, eCardCutter, DocSet, PVC Pro
-- Card sizes: CR80 = 85.6×54mm = 1011×638px at 300 DPI
-- Lamination: 65×95mm pouch (Reston 125 micron)
-- eAadhaar PDF: A4 portrait, front upper 60-65%, back lower 30-35%
-- ePAN PDF: varies by provider (NSDL/UTI/eFiling)
-- Full research in issues.md §M
+Test PDFs repo mein saved hain:
+test-pdfs/pan-test.pdf (password: 05071999)
+test-pdfs/aadhaar-test.pdf (password: SUNI1986)
 
-Test PDFs repo mein saved hain — bar bar dene ki zaroorat nahi:
-- test-pdfs/pan-test.pdf (password: 05071999)
-- test-pdfs/aadhaar-test.pdf (password: SUNI1986)
+TASK: [INSERT NEXT TASK HERE]
 
-TASK: Build Phase 1 (MVP) of ID Card Print feature.
-Create `id-print.html` with:
-1. PDF upload + password unlock (pdf.js)
-2. Auto-detect Aadhaar vs PAN (text extraction)
-3. Auto-crop front + back from PDF
-4. CR80 output (1011×638px at 300 DPI)
-5. Front + back side-by-side preview
-6. A4 sheet layout (fold-and-laminate workflow)
-7. Download PNG + Print
-8. Client-side only (no server upload)
-9. Shared nav/auth/footer
-10. Update homepage features grid + nav dropdown
-
-Phase 2/3 features listed in SKILL.md §9 — do NOT implement yet.
+Phase 2/3 features listed in SKILL.md §9 — do NOT implement unless
+explicitly asked.
 ```

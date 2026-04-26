@@ -246,19 +246,27 @@ scan bounds (merged but did NOT fully fix). PR #171 docs update.
 PR #182 PAN/Aadhaar CR80 card size standardization + auto-trim both
 cards + test PDFs saved in `test-pdfs/`.
 
-**Also resolved (PRs #183–#185):** PR #183 card system rebuild docs.
+**Also resolved (PRs #183–#189):** PR #183 card system rebuild docs.
 PR #184 front-card-only crop fix. PR #185 removed `document-sheet.html`
-entirely — clean slate for new ID print feature.
+entirely — clean slate for new ID print feature. PR #186 ID Card Print
+research + implementation plan (§M). PR #188 **ID Card Print Phase 1
+MVP** — new `id-print.html` with PDF upload + password unlock,
+auto-detect Aadhaar/PAN, auto-crop front+back, CR80 output
+(1011×638px at 300 DPI), side-by-side preview, A4 fold-and-laminate
+layout, download PNG + print. PR #189 fix Aadhaar PDF detection —
+expanded keyword list (`enrolment`, `download date`, `issue date`).
+
+**Verified (2026-04-26):** ID Card Print Phase 1 MVP fully tested with
+both test PDFs — PAN and Aadhaar flows ALL PASSED (upload, password
+unlock, auto-detect, front+back preview, CR80 output, A4 sheet).
 
 **Open backlog:**
-- **ID Card Print feature (§M, NEW 2026-04-25)** — build `id-print.html`
-  from scratch. Replaces old `document-sheet.html` (deleted PR #185).
-  Full competitor research + implementation plan in `issues.md` §M and
-  `SKILL.md` §9. Phase 1 MVP: PDF upload + password unlock, auto-detect
-  Aadhaar/PAN, auto-crop front+back, CR80 output (1011×638px at 300 DPI),
-  side-by-side preview, A4 fold-and-laminate layout, download PNG + print.
-  Phase 2: photo editing, multi-card A4, cut marks, Voter ID.
-  Phase 3: Ayushman, batch, PVC tray, toggle options.
+- **ID Card Print Phase 2** — photo editing (brightness/contrast/
+  saturation), multiple cards per A4 (4-5 pairs), cut marks/guides,
+  rounded border option, Voter ID support, Dragon sheet layout.
+- **ID Card Print Phase 3** — Ayushman/Jan Aadhaar/eShram, batch
+  processing, PVC card tray (Epson L805/L8050), toggle options, auto
+  photo enhancement.
 - **Card size reference:** CR80 = 85.6×54mm = 1011×638px at 300 DPI.
   Lamination pouch = 65×95mm (Reston 125 micron). Test PDFs in repo:
   `test-pdfs/pan-test.pdf` (pw: `05071999`), `test-pdfs/aadhaar-test.pdf`

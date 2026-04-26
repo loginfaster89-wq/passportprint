@@ -664,15 +664,40 @@ const POUCH_H_MM = 95;
 
 // Card type detection keywords (2+ matches confirms)
 // Aadhaar: "aadhaar", "uid", "uidai", "unique identification",
-//          "government of india", "vid"
+//          "government of india", "vid", "enrolment",
+//          "download date", "issue date"
+//   (PR #189: added enrolment/download date/issue date — eAadhaar
+//    PDFs often lack "aadhaar"/"uid" in text layer but always have
+//    these 3. Verified 2026-04-26: 4 keyword hits on test PDF.)
 // PAN: "permanent account number", "income tax", "pan",
 //      "department", "nsdl", "utiitsl"
 // Voter: "election commission", "epic", "voter", "electoral"
 ```
 
-### M.8 Key file locations (to be created)
+### M.8 Key file locations (CREATED — PR #188)
 
-- `id-print.html` — new tool page (standalone like passport-photo.html)
-- Homepage `index.html` — features grid card update
-- Nav dropdown on all pages — add link to id-print.html
-- `build.js` — add id-print.html to build pipeline
+- `id-print.html` — ID Card Print tool page (Phase 1 MVP shipped)
+- Homepage `index.html` — features grid card links to id-print.html
+- Nav dropdown on all pages — links to id-print.html
+- `build.js` — includes id-print.html in build pipeline
+
+### M.9 Phase 1 MVP verification (2026-04-26)
+
+Tested locally with both test PDFs after PR #189 merge:
+
+| Test | Result |
+|------|--------|
+| PAN PDF upload | PASSED |
+| PAN password unlock (05071999) | PASSED |
+| PAN auto-detect | PASSED |
+| PAN front+back preview | PASSED |
+| PAN CR80 output (1011×638px, 300 DPI) | PASSED |
+| PAN A4 fold-and-laminate sheet | PASSED |
+| PAN Download PNG + Print buttons | PASSED |
+| Aadhaar PDF upload | PASSED |
+| Aadhaar password unlock (SUNI1986) | PASSED |
+| Aadhaar auto-detect (4 keyword hits) | PASSED |
+| Aadhaar front+back preview | PASSED |
+| Aadhaar CR80 output (1011×638px, 300 DPI) | PASSED |
+
+**Phase 1 MVP is COMPLETE and VERIFIED. Ready for Phase 2 when requested.**
