@@ -322,11 +322,19 @@ unlock, auto-detect, front+back preview, CR80 output, A4 sheet).
   4 checkboxes: Hide QR Code / Mobile No. / Issue Date / Download Date,
   white-mask regions on back card, all output layouts), Auto Enhance
   shipped (PR #218 — luminance histogram analysis, 1-click button),
-  PAN signature box research docs shipped (PR #220 — §U in issues.md
-  with PAN_OVERLAY_REGIONS coords + applyPanOverlays() design + 3
-  call-site list, mirroring the Aadhaar mask pattern).
-  Remaining Phase 3 code: signature box (PAN — code PR pending, plan in §U),
-  back-side hologram overlay (PAN — research + code pending).
+  PAN signature box research docs shipped (PR #220 — §U), PAN
+  signature box code shipped (PR #221 — but coords WRONG, overlap QR;
+  see §V.2.a for fix).
+- **ID Card Print Phase 4 — STARTED.** §V scope reset (PR #222) after
+  user feedback that §U was too narrow. 8 reference images committed
+  to `.agents/references/` (incl. CardXpress competitor UI). Phase 4
+  P1 backlog (next 2 PRs):
+  - P1 #223 fix-pan-signature-coords (4-line patch — §V.2.a)
+  - P1 #224 pan-hologram-overlay (~40 lines — back top-right silver
+    patch with HOLOGRAM label, §V.2.b)
+  P2-P4 backlog: Move/Zoom controls, Photo Editor split, Master
+  Settings, PrePrinted Card mode, Printer presets, Bold/BigQR
+  toggles, other-card overlays — full table in issues.md §V.4.
 - **Card size reference:** CR80 = 85.6×54mm = 1011×638px at 300 DPI.
   Lamination pouch = 65×95mm (Reston 125 micron). Test PDFs in repo:
   `test-pdfs/pan-test.pdf` (pw: `05071999`), `test-pdfs/aadhaar-test.pdf`
