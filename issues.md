@@ -1466,3 +1466,216 @@ Within the ~120-line estimate from §V.4. Single-problem PR per Rule #12.
 - No regression in batch-mode rendering (Move pad hidden, existing
   pipeline untouched).
 
+
+---
+
+## §X ID Card Print Phase 4 P2 — Per-side Zoom (scale within CR80) research
+
+**Status:** Research-only PR (Rule #14 first half). Code PR follows
+after §W Move code lands so they can be tested together.
+
+**Goal:** Match CardXpress "Zoom" dial — scale the front/back photo
+inside the CR80 1011×638 frame (50%–200%) so users can fix
+too-small ePAN scans (where the actual card is tiny on a big white
+page) and too-large Aadhaar PDFs (where the card overflows the crop).
+Pairs naturally with §W Move — Zoom alone is rarely useful, but
+Zoom + Move covers ~95% of "my card looks weird" support tickets.
+
+### X.1 Why this pairs with §W
+
+Same architectural levers as §W:
+- Same three filter passes (`drawFiltered`,
+  `drawFilteredToCanvas`, `applyBatchFilters`) — see §W.1.
+- Same per-card per-side state container — extend the §W shape, do
+  **not** add a parallel one.
+- Same "edit only when `batchCards.length === 1`" V1 scope.
+- Same cached-`card.front`/`card.back` propagation to all output
+  sheets (A4 / Dragon / PVC tray / multi-card) — no sheet-pipeline
+  changes required.
+- Same Photo Adjust Reset entry point.
+
+This is why Move ships first: the state shape, listener pattern,
+visibility toggle, and reset wiring all already exist after §W. §X
+adds one number per side and one `ctx.scale` call per render path.
+
+### X.2 State shape (extends §W)
+
+```js
+batchCards[i].offset = {
+  front: { dx: 0, dy: 0, scale: 1 },
+  back:  { dx: 0, dy: 0, scale: 1 }
+};
+```
+
+Add `scale: 1` to the §W init at the two card-creation sites (lines
+~968 and ~1036). Clamp `scale` to `[0.5, 2.0]`.
+
+### X.3 Render insertion (centred zoom)
+
+Zoom must scale around the **card centre** so the photo doesn't slide
+to the top-left when zoomed in. Standard transform sandwich:
+
+```js
+function drawWithTransform(ctx, src, w, h, off) {
+  ctx.save();
+  ctx.translate(w / 2 + off.dx, h / 2 + off.dy);
+  ctx.scale(off.scale, off.scale);
+  ctx.drawImage(src, -w / 2, -h / 2, w, h);
+  ctx.restore();
+}
+```
+
+Replaces the §W-modified `ctx.drawImage(src, off.dx, off.dy, w, h)`
+calls in all three filter passes:
+
+- `drawFiltered` — line ~1650.
+- `drawFilteredToCanvas` — line ~1187.
+- `applyBatchFilters` — lines ~1203 and ~1216.
+
+The `ctx.save`/`ctx.restore` matters because `ctx.filter` is set
+just before the `drawImage` and we don't want the transform to leak
+into the overlay calls that follow.
+
+Edge cases:
+- Zoom out (`scale < 1`): leaves blank strips on all 4 sides — same
+  white-canvas-underneath behaviour as §W's transparent-strip case.
+  No fill needed.
+- Zoom in (`scale > 1`): photo overflows CR80; `drawImage` on the
+  destination canvas naturally clips to the canvas bounds. No
+  manual clipping required.
+- Overlays still draw at fixed `(0,0)` coords (HOLOGRAM patch,
+  signature box, Aadhaar masks) — `ctx.restore()` ensures the
+  transform is gone before `applyPanOverlays` / `applyAadhaarMasks`
+  run.
+
+### X.4 UI — Zoom strip (CardXpress-style)
+
+Add a single row inside the §W `#movePad` block, below the pad grid:
+
+```html
+<div class="idp-zoom-row">
+  <span class="idp-move-label">Zoom</span>
+  <button type="button" id="zoomOut">−</button>
+  <input type="range" id="zoomSlider" min="50" max="200" value="100" step="5">
+  <button type="button" id="zoomIn">+</button>
+  <span class="idp-move-readout" id="zoomReadout">100%</span>
+</div>
+```
+
+- Range slider 50–200 with step 5 (matches CardXpress dial granularity).
+- −/+ buttons step by 10% per click.
+- Readout shows current % for the selected side (reuses §W side radio).
+- No new fonts, colours, or design tokens — reuses `.idp-move-*` styles.
+
+### X.5 Listeners
+
+```js
+const zoomSlider = $('#zoomSlider');
+const zoomReadout = $('#zoomReadout');
+
+function setZoom(pct) {
+  if (batchCards.length !== 1) return;
+  const side = currentMoveSide();
+  const s = Math.max(0.5, Math.min(2.0, pct / 100));
+  batchCards[0].offset[side].scale = s;
+  zoomReadout.textContent = Math.round(s * 100) + '%';
+  zoomSlider.value = Math.round(s * 100);
+  onFilterChange();
+}
+zoomSlider.addEventListener('input', () => setZoom(parseInt(zoomSlider.value, 10)));
+$('#zoomIn').addEventListener('click',  () => setZoom(parseInt(zoomSlider.value, 10) + 10));
+$('#zoomOut').addEventListener('click', () => setZoom(parseInt(zoomSlider.value, 10) - 10));
+```
+
+Side-radio change handler from §W extended to also refresh the zoom
+readout/slider:
+
+```js
+moveSideRadios.forEach(r => r.addEventListener('change', () => {
+  const o = batchCards[0].offset[currentMoveSide()];
+  moveReadout.textContent = o.dx + ', ' + o.dy;
+  zoomReadout.textContent = Math.round(o.scale * 100) + '%';
+  zoomSlider.value = Math.round(o.scale * 100);
+}));
+```
+
+### X.6 Reset wiring
+
+Photo Adjust Reset (button at line ~448) — extend the §W reset to
+also zero scale:
+
+```js
+batchCards[0].offset = {
+  front: { dx: 0, dy: 0, scale: 1 },
+  back:  { dx: 0, dy: 0, scale: 1 }
+};
+zoomReadout.textContent = '100%';
+zoomSlider.value = 100;
+```
+
+Move pad reset button (`#moveReset` from §W) resets dx/dy only — does
+**not** touch scale (separate semantic). To reset zoom, user can
+double-click the slider thumb to 100% or press the centre of the
+range.
+
+### X.7 Estimated diff
+
+| Area                                       | Lines |
+|--------------------------------------------|-------|
+| HTML (zoom row inside #movePad)            | ~10   |
+| CSS (.idp-zoom-row layout)                 | ~8    |
+| State init (extend §W defaults + clamp)    | ~4    |
+| `drawWithTransform` helper                 | ~8    |
+| Replace 4 drawImage call sites             | ~12   |
+| DOM refs + listeners (3 handlers)          | ~20   |
+| Side-change handler extension              | ~4    |
+| Reset wiring (extend §W reset)             | ~6    |
+| **Total (net)**                            | **~70–80** |
+
+Within §V.4 estimate. Single problem per Rule #12 (Zoom is one
+feature; pairs with Move at the architectural level but ships as its
+own diff so reviewers can isolate the scale-transform behaviour).
+
+### X.8 V1 scope limits (NOT in this PR)
+
+- **Zoom around mouse cursor / pinch point** — V2; centred zoom is V1.
+- **Independent X/Y scale** (anamorphic) — out of scope; uniform scale only.
+- **Persistence across PDF reloads** — same as §W, out of scope.
+- **Batch-mode Zoom** (per-card in 5+ batch) — needs the same card
+  picker §W defers.
+- **Keyboard shortcuts** (`+`/`-` / scroll wheel) — V2.
+
+### X.9 Test plan (for the code PR)
+
+1. Land §W Move code first. Confirm Move pad works.
+2. Apply §X. Load `test-pdfs/pan-test.pdf` (pw `05071999`).
+3. Front + zoom slider to 150% → photo zooms in around centre, edges
+   crop equally on all 4 sides. Readout `150%`.
+4. Switch to Back radio → readout reverts to back's `100%`.
+5. Front + Move ↑×3 + Zoom 130% → Move and Zoom compose correctly
+   (zoomed photo nudged up).
+6. Zoom out to 70% → photo shrinks centred, white margin appears on
+   all 4 sides. PAN HOLOGRAM patch (back) and signature box (front)
+   stay at their fixed coords — they do **not** shrink.
+7. Photo Adjust Reset → both Move (dx/dy) and Zoom (scale) zero
+   together for both sides; sliders reset; readouts reset.
+8. Generate PVC tray + 5-Pairs + Dragon sheets → Move + Zoom carry
+   through to all output sheets via the cached `card.front`/`card.back`.
+9. Load `test-pdfs/aadhaar-test.pdf` (pw `SUNI1986`) → repeat 3, 6.
+   Aadhaar QR/Mobile/Issue/Download masks stay at fixed coords when
+   the photo zooms underneath.
+10. Multi-page batch PDF → Move + Zoom controls hide; existing batch
+    flow unchanged.
+
+### X.10 Acceptance
+
+- Zoom is centred (no slide to top-left when zoomed in).
+- Move and Zoom compose correctly (translate → scale → drawImage).
+- Single Photo Adjust Reset zeroes Move + Zoom + sliders together.
+- Output sheets reflect both transforms with no sheet-pipeline change.
+- Overlays (Aadhaar masks, PAN signature, PAN HOLOGRAM) remain at
+  fixed coords irrespective of Zoom or Move.
+- `ctx.save`/`ctx.restore` brackets every transform so subsequent
+  overlay draws are unaffected.
+- No regression in batch-mode rendering.
+
