@@ -1706,7 +1706,7 @@ No behavioural change in `drawFiltered` / `applyFilters` /
 ## §Y ID Card Print — Phase 3 Auto Photo Enhancement
 
 **Status:** SHIPPED — Code PR #232 (rebased from closed #218),
-docs PR #233 (this file). Phase 3 follow-up — closes the last
+docs PR #234 (this file). Phase 3 follow-up — closes the last
 remaining Phase 3 gap left after toggle options (#217).
 
 ### Y.1 What this feature is
