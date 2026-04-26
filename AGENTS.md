@@ -161,6 +161,12 @@ iPad portrait / narrow tablets.
    shipped summary so the user can copy-paste it into the next session.
    Never skip the second half — the user needs updated docs and a fresh
    prompt to start the next session efficiently.
+10. **Research → docs → code (2026-04-26).** Kisi bhi naye feature par
+    coding shuru karne se PEHLE, usi session mein Devin helping files
+    (`SKILL.md`, `AGENTS.md`, `issues.md`) ko research findings ke saath
+    update karo — ek alag "docs update PR" banao. Quota khatam hone ya
+    session break hone par bhi research safe rahe. Rule: Research →
+    Docs PR → Coding PR. Kabhi skip mat karo.
 
 ## Homepage grids → slider activation (post PR #64 / #65)
 
@@ -311,9 +317,10 @@ unlock, auto-detect, front+back preview, CR80 output, A4 sheet).
   (PR #203).
 - **ID Card Print Phase 3 — PARTIAL.** Ayushman/Jan Aadhaar/eShram
   shipped (PR #205), batch processing shipped (PR #208), PVC card
-  tray shipped (PR #210), copy update shipped (PR #213). Remaining:
-  toggle options, auto photo enhancement, signature box (PAN),
-  back-side hologram overlay (PAN).
+  tray shipped (PR #210), copy update shipped (PR #213), toggle research
+  docs shipped (PR #215 — implementation plan in issues.md §T). Remaining
+  coding: toggle implementation (Aadhaar only), auto photo enhancement,
+  signature box (PAN), back-side hologram overlay (PAN).
 - **Card size reference:** CR80 = 85.6×54mm = 1011×638px at 300 DPI.
   Lamination pouch = 65×95mm (Reston 125 micron). Test PDFs in repo:
   `test-pdfs/pan-test.pdf` (pw: `05071999`), `test-pdfs/aadhaar-test.pdf`
