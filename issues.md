@@ -634,9 +634,9 @@ placed inside pouch, heat-sealed.
 
 **Phase 2 (follow-up PRs):**
 - ~~Photo editing (brightness/contrast/saturation)~~ — **shipped PR #191**
-- Multiple cards per A4 sheet (4-5 card pairs to save paper)
-- Cut marks / dashed guides on A4 output
-- Rounded border option
+- ~~Multiple cards per A4 sheet (5 card pairs per sheet)~~ — **shipped PR #193**
+- ~~Cut marks / dashed guides on A4 output~~ — **shipped PR #193**
+- ~~Rounded border option~~ — **shipped PR #194, bug fix PR #197**
 - Voter ID support
 - Dragon sheet (4×6) layout option (2 cards per sheet)
 
