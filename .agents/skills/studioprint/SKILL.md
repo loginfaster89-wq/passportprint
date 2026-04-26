@@ -93,16 +93,7 @@ No dev server — edit source, `npm run build`, preview from `dist/`.
     any backlog, solve them **one by one** — one issue per PR, one PR
     per commit cycle. Do not batch multiple unrelated fixes into a
     single PR. Keeps diffs small, reviews fast, rollbacks safe.
-13. **Half-half working (2026-04-26).** Split every session into two
-    halves. **First half:** actual coding / feature work — implement
-    the task, test, create PR. **Second half:** update Devin helping
-    files (`SKILL.md`, `AGENTS.md`, `issues.md`) with what shipped,
-    update the ready-to-paste prompt in §11 with the new last-PR and
-    shipped summary so the user can copy-paste it into the next session.
-    Never skip the second half — the user needs updated docs and a
-    fresh prompt to start the next session efficiently. If quota is
-    tight, prioritise the docs update over extra polish on the feature.
-14. **Research → docs → code (2026-04-26).** Kisi bhi naye feature par
+13. **Research → docs → code (2026-04-26).** Kisi bhi naye feature par
     coding shuru karne se PEHLE, usi session mein Devin helping files
     (`SKILL.md`, `AGENTS.md`, `issues.md`) ko research findings ke saath
     update karo — ek alag "docs update PR" banao. Ye ensure karta hai ki
