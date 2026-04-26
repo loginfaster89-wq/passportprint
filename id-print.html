@@ -692,9 +692,13 @@ const CROP = {
        back-right = address + QR card). PR #243 incorrectly cropped
        the upper row, capturing the Letter + Notice instead of the
        cards. Verified against test-pdfs/aadhaar-test.pdf and the
-       reference image .agents/references/aadhaar-clean-pvc-layout.png. */
-    front: [0.010, 0.682, 0.477, 0.231],
-    back:  [0.504, 0.682, 0.488, 0.231]
+       reference image .agents/references/aadhaar-clean-pvc-layout.png.
+       PR #248 tightened crop to hug the actual outer black border of the
+       cards (measured from test-pdfs/aadhaar-test.pdf): old crop left
+       ~85px white margin around content; new crop is edge-to-edge so
+       Fold & Laminate prints cards touching with no whitespace gap. */
+    front: [0.0520, 0.6657, 0.4471, 0.2159],
+    back:  [0.4991, 0.6657, 0.4465, 0.2159]
   },
   pan: {
     front: [0.05, 0.08, 0.90, 0.42],
@@ -739,10 +743,10 @@ const TYPE_LABELS = { aadhaar: 'Aadhaar Card', pan: 'PAN Card', voter: 'Voter ID
        (soft no-op). If a future eAadhaar variant prints mobile,
        this can be retuned without touching the UI. */
 const AADHAAR_FIELD_MASKS = {
-  qrCode:       { side: 'back', x: 535, y:  75, w: 390, h: 350 },
+  qrCode:       { side: 'back', x: 596, y: 128, w: 415, h: 374 },
   mobileNumber: { side: 'back', x:   0, y:   0, w:   0, h:   0 },
-  issueDate:    { side: 'back', x:   2, y: 105, w:  22, h: 145 },
-  downloadDate: { side: 'back', x:   2, y: 250, w:  22, h: 160 },
+  issueDate:    { side: 'back', x:  13, y: 160, w:  24, h: 155 },
+  downloadDate: { side: 'back', x:  13, y: 316, w:  24, h: 171 },
 };
 /* PAN overlay regions (at CR80 1011×638px) */
 const PAN_OVERLAY_REGIONS = {
@@ -1463,7 +1467,11 @@ function buildSingleSheet() {
 
   var cardW = CR80_W;
   var cardH = CR80_H;
-  var gap = 40;
+  /* gap = 0 so the front + back cards sit edge-to-edge on the printed
+     A4. CROP.aadhaar is now tight to the outer black border (PR #248)
+     so the two halves touch with no white whitespace between them,
+     matching the user's snipping-tool reference. */
+  var gap = 0;
   var pairW = cardW * 2 + gap;
   var startX = Math.round((A4_W - pairW) / 2);
   var startY = Math.round((A4_H - cardH) / 2);
