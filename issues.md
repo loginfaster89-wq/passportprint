@@ -1134,23 +1134,24 @@ printer presets.
 
 Two critical findings that **invalidate parts of §U / PR #221**:
 
-#### V.2.a §U signature box coordinates are WRONG
+#### V.2.a §U signature box coordinates are WRONG — **SHIPPED PR #223**
 
 §U set `signatureBox: { side: 'front', x: 540, y: 470, w: 380, h: 110 }`.
-That box sits at the **right-middle** of the front card — directly on top
+That box sat at the **right-middle** of the front card — directly on top
 of the QR code, not over the signature area.
 
 In the reference image, the actual signature row is at the **bottom-left
 to bottom-center**, below the photo + DOB columns:
 
-- Approx coords at CR80 1011×638px:
+- Corrected coords at CR80 1011×638px (shipped in PR #223):
   `signatureBox: { side: 'front', x: 280, y: 540, w: 280, h: 75 }`
 - Label "हस्ताक्षर / Signature" appears below the box at y ≈ 620.
 
-**Action:** PR #221 needs a coords-only follow-up patch (~4 lines) before
-shipping to users. Mark as P1.
+**Status:** Fixed in PR #223 (1-line patch in id-print.html
+`PAN_OVERLAY_REGIONS.signatureBox`). Box now sits in the bottom-left
+signature row, no longer overlaps QR.
 
-#### V.2.b PAN HOLOGRAM patch is the real missing overlay
+#### V.2.b PAN HOLOGRAM patch is the real missing overlay — **SHIPPED PR #224**
 
 The back of every genuine PAN PVC card has a silver/grey **HOLOGRAM**
 square at the **top-right** corner. ePAN PDFs ship with the hologram
@@ -1158,15 +1159,20 @@ area visible as a faded watermark. For PVC printing, the convention is
 to draw a labelled silver rectangle so the print shop can stick a real
 hologram sticker on top after lamination.
 
-- Approx coords at CR80 1011×638px:
+- Coords at CR80 1011×638px (shipped in PR #224):
   `hologram: { side: 'back', x: 800, y: 30, w: 180, h: 220 }`
-- Fill: silver gradient (`#c0c0c0` → `#e8e8e8`) or flat `#d0d0d0`.
-- Label: "HOLOGRAM" in DM Mono, white, centred, ~24px.
+- Fill: silver linear gradient (`#c0c0c0` → `#e8e8e8`).
+- Label: "HOLOGRAM" in DM Mono, white, centred, 24px.
 - Toggle: `chkHologram` in `#panToggles` (alongside `chkSignatureBox`).
 
-This is **higher priority** than the signature box because hologram is
-visible on every PAN card, while the signature box only matters for
-unsigned ePANs.
+**Status:** Shipped in PR #224. ~40 net lines in `id-print.html`:
+new `hologram` entry in `PAN_OVERLAY_REGIONS`, new `chkHologram`
+checkbox in `#panToggles`, `applyPanOverlays` refactored to loop
+pattern (mirrors `applyAadhaarMasks`) handling both `signature` and
+`hologram` kinds. Wired into listener array + reset; existing 3
+call-sites unchanged (function is generic per side). Output carries
+through to A4 / Dragon / PVC tray / multi-card sheets via
+`applyBatchFilters`.
 
 ### V.3 Aadhaar target-output analysis (from aadhaar-clean / target images)
 
@@ -1180,32 +1186,38 @@ unsigned ePANs.
 
 Each item is a separate research + code PR pair (per Rule #14).
 
-| Pri | Item                                    | Est PR size | Why |
-|-----|-----------------------------------------|-------------|-----|
-| P1  | Fix §U signature box coordinates        | ~4 lines    | Current coords overlap QR — broken in PR #221 |
-| P1  | PAN HOLOGRAM overlay                    | ~40 lines   | Visible on 100% of PAN cards, simple fill+label |
-| P2  | Per-side Move controls (X/Y nudge)      | ~120 lines  | Highest competitor-parity value; fixes off-centre crops |
-| P2  | Per-side Zoom (scale within CR80)       | ~80 lines   | Pairs with Move; fixes too-small/large crops |
-| P3  | Photo Editor split panel                | ~150 lines  | Reorganize sliders + add Bold + add presets |
-| P3  | Master Settings (DPI/padding/margins)   | ~200 lines  | Calibration screen with localStorage persistence |
-| P3  | PrePrinted Card mode                    | ~60 lines   | Skip front render, output back-only sheets |
-| P4  | Printer presets (Epson L805 etc)        | ~80 lines   | Dropdown of DPI/margin profiles per printer |
-| P4  | Bold / BigQR text-emphasis toggles      | ~40 lines   | Aadhaar text bolden + QR upscale |
-| P4  | Voter / Ayushman / Jan Aadhaar overlays | ~60 lines each | Same pattern as PAN once it lands |
+| Pri | Item                                    | Est PR size | Why | Status |
+|-----|-----------------------------------------|-------------|-----|--------|
+| ~~P1~~  | ~~Fix §U signature box coordinates~~        | ~~~4 lines~~    | ~~Current coords overlap QR — broken in PR #221~~ | **SHIPPED PR #223** |
+| ~~P1~~  | ~~PAN HOLOGRAM overlay~~                    | ~~~40 lines~~   | ~~Visible on 100% of PAN cards, simple fill+label~~ | **SHIPPED PR #224** |
+| P2  | Per-side Move controls (X/Y nudge)      | ~120 lines  | Highest competitor-parity value; fixes off-centre crops | open |
+| P2  | Per-side Zoom (scale within CR80)       | ~80 lines   | Pairs with Move; fixes too-small/large crops | open |
+| P3  | Photo Editor split panel                | ~150 lines  | Reorganize sliders + add Bold + add presets | open |
+| P3  | Master Settings (DPI/padding/margins)   | ~200 lines  | Calibration screen with localStorage persistence | open |
+| P3  | PrePrinted Card mode                    | ~60 lines   | Skip front render, output back-only sheets | open |
+| P4  | Printer presets (Epson L805 etc)        | ~80 lines   | Dropdown of DPI/margin profiles per printer | open |
+| P4  | Bold / BigQR text-emphasis toggles      | ~40 lines   | Aadhaar text bolden + QR upscale | open |
+| P4  | Voter / Ayushman / Jan Aadhaar overlays | ~60 lines each | Same pattern as PAN once it lands | open |
 
-### V.5 Recommended next 2 PRs (single session, ~half day)
+### V.5 Recommended next 2 PRs (single session, ~half day) — **SHIPPED**
 
-1. **PR #222 — fix-pan-signature-coords** (~4 line patch)
-   - Change `PAN_OVERLAY_REGIONS.signatureBox` to the corrected coords.
-   - Ship before any user notices PR #221 draws over the QR.
+1. **PR #223 — fix-pan-signature-coords** (1-line patch) — **SHIPPED**
+   - Changed `PAN_OVERLAY_REGIONS.signatureBox` to the corrected coords
+     `{ x: 280, y: 540, w: 280, h: 75 }`. Box no longer overlaps QR.
 
-2. **PR #223 — pan-hologram-overlay** (~40 line patch)
-   - Add `hologram` entry to `PAN_OVERLAY_REGIONS`.
-   - Add `chkHologram` checkbox to `#panToggles`.
-   - Extend `applyPanOverlays` to draw silver fill + "HOLOGRAM" label.
-   - Wire into the same 3 call-sites + listener array + reset.
+2. **PR #224 — pan-hologram-overlay** (~40 net lines) — **SHIPPED**
+   - Added `hologram` entry to `PAN_OVERLAY_REGIONS`
+     (`{ side: 'back', x: 800, y: 30, w: 180, h: 220 }`).
+   - Added `chkHologram` checkbox to `#panToggles`.
+   - Refactored `applyPanOverlays` to loop pattern (mirrors
+     `applyAadhaarMasks`) handling both `signature` and `hologram`.
+   - Silver linear gradient fill + white DM Mono "HOLOGRAM" label.
+   - Wired into listener array + reset; existing 3 call-sites unchanged.
 
-After those two, pick one P2 item (Move OR Zoom) for the next session.
+**Next session:** pick ONE P2 item (Move OR Zoom) per Rule #12. Move
+recommended first — Zoom builds on the same per-side state shape and
+the same `ctx.translate`/`ctx.scale` insertion points in
+`drawFiltered` / `drawFilteredToCanvas`.
 
 ### V.6 What's NOT in scope for §V (this is research only)
 
