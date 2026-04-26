@@ -180,6 +180,44 @@
 }
 @keyframes spin{to{transform:rotate(360deg);}}
 
+/* Photo editor controls */
+.idp-editor{
+  margin:20px 0 4px;padding:16px 20px;border-radius:12px;
+  background:var(--surface2);border:1px solid var(--border);
+}
+.idp-editor-title{
+  font-family:'Syne',sans-serif;font-size:13px;font-weight:600;
+  color:var(--text);margin-bottom:12px;display:flex;align-items:center;
+  justify-content:space-between;
+}
+.idp-editor-title button{
+  background:none;border:1px solid var(--border);border-radius:6px;
+  color:var(--muted);font-family:'DM Mono',monospace;font-size:11px;
+  padding:3px 10px;cursor:pointer;transition:color .15s,border-color .15s;
+}
+.idp-editor-title button:hover{color:var(--accent);border-color:var(--accent);}
+.idp-sliders{display:flex;flex-wrap:wrap;gap:14px 24px;}
+.idp-slider-group{flex:1 1 140px;min-width:120px;}
+.idp-slider-label{
+  display:flex;justify-content:space-between;align-items:center;
+  font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);
+  margin-bottom:4px;
+}
+.idp-slider-label span{color:var(--accent);font-weight:500;min-width:32px;text-align:right;}
+input.idp-range{
+  -webkit-appearance:none;appearance:none;width:100%;height:4px;
+  background:var(--border);border-radius:4px;outline:none;cursor:pointer;
+}
+input.idp-range::-webkit-slider-thumb{
+  -webkit-appearance:none;appearance:none;width:14px;height:14px;
+  background:var(--accent);border-radius:50%;cursor:pointer;
+  box-shadow:0 0 6px rgba(240,165,0,.4);
+}
+input.idp-range::-moz-range-thumb{
+  width:14px;height:14px;background:var(--accent);border:none;
+  border-radius:50%;cursor:pointer;box-shadow:0 0 6px rgba(240,165,0,.4);
+}
+
 /* Hidden util */
 .idp-hidden{display:none !important;}
 
@@ -187,7 +225,7 @@
 @media print{
   .legal-header,.legal-footer,.idp-hero,.idp-steps,.idp-upload,
   .idp-password,.idp-actions,.idp-info,.idp-detect,.idp-error,
-  .idp-loading,.idp-btn,nav,footer,header{display:none !important;}
+  .idp-loading,.idp-btn,.idp-editor,nav,footer,header{display:none !important;}
   .idp-app{padding:0;max-width:none;margin:0;}
   .idp-preview{border:none;padding:0;background:none;}
   .idp-a4-wrap{max-width:none;margin:0;}
@@ -203,6 +241,8 @@
   .idp-steps{font-size:10px;gap:0;}
   .idp-step{padding:4px 8px;}
   .idp-step-line{width:12px;}
+  .idp-sliders{gap:10px 16px;}
+  .idp-slider-group{flex:1 1 100%;}
 }
 </style>
 </head>
@@ -310,6 +350,25 @@
           <canvas id="cardBack" width="1011" height="638"></canvas>
         </div>
       </div>
+      <!-- Photo editor -->
+      <div class="idp-editor">
+        <div class="idp-editor-title">Photo Adjust <button type="button" id="btnResetEdit">Reset</button></div>
+        <div class="idp-sliders">
+          <div class="idp-slider-group">
+            <label class="idp-slider-label">Brightness <span id="valBright">100%</span></label>
+            <input type="range" class="idp-range" id="slBright" min="30" max="200" value="100">
+          </div>
+          <div class="idp-slider-group">
+            <label class="idp-slider-label">Contrast <span id="valContrast">100%</span></label>
+            <input type="range" class="idp-range" id="slContrast" min="30" max="200" value="100">
+          </div>
+          <div class="idp-slider-group">
+            <label class="idp-slider-label">Saturation <span id="valSat">100%</span></label>
+            <input type="range" class="idp-range" id="slSat" min="0" max="200" value="100">
+          </div>
+        </div>
+      </div>
+
       <div class="idp-info">
         <span class="pill">CR80 · 85.6 × 54 mm</span>
         <span class="pill">1011 × 638 px</span>
@@ -458,6 +517,8 @@ let pdfArrayBuffer = null;
 let detectedType = null;
 let frontImageData = null;
 let backImageData = null;
+let originalFront = null;
+let originalBack = null;
 
 /* ── Step management ── */
 function showStep(n) {
@@ -587,9 +648,13 @@ async function processPdf(pdf) {
     frontImageData = cropRegion(renderCanvas, crop.front);
     backImageData = cropRegion(renderCanvas, crop.back);
 
+    /* Store originals for editing */
+    originalFront = frontImageData;
+    originalBack = backImageData;
+    resetEditorSliders();
+
     /* Draw to preview canvases */
-    drawToCanvas(cardFrontCanvas, frontImageData, CR80_W, CR80_H);
-    drawToCanvas(cardBackCanvas, backImageData, CR80_W, CR80_H);
+    applyFilters();
 
     /* Update badge */
     var label = detectedType === 'aadhaar' ? 'Aadhaar Card Detected' : 'PAN Card Detected';
@@ -712,6 +777,71 @@ function drawCornerMarks(ctx, x, y, w, h, len) {
   });
 }
 
+/* ── Photo editor ── */
+const slBright = $('#slBright');
+const slContrast = $('#slContrast');
+const slSat = $('#slSat');
+const valBright = $('#valBright');
+const valContrast = $('#valContrast');
+const valSat = $('#valSat');
+const btnResetEdit = $('#btnResetEdit');
+
+function getFilterString() {
+  var b = slBright.value;
+  var c = slContrast.value;
+  var s = slSat.value;
+  if (b == 100 && c == 100 && s == 100) return 'none';
+  return 'brightness(' + b + '%) contrast(' + c + '%) saturate(' + s + '%)';
+}
+
+function drawFiltered(destCanvas, srcCanvas, w, h, filterStr) {
+  destCanvas.width = w;
+  destCanvas.height = h;
+  var ctx = destCanvas.getContext('2d');
+  ctx.fillStyle = '#fff';
+  ctx.fillRect(0, 0, w, h);
+  ctx.filter = filterStr;
+  ctx.drawImage(srcCanvas, 0, 0, w, h);
+  ctx.filter = 'none';
+}
+
+function applyFilters() {
+  var f = getFilterString();
+  if (originalFront) {
+    drawFiltered(cardFrontCanvas, originalFront, CR80_W, CR80_H, f);
+    /* Store filtered version for A4 sheet */
+    frontImageData = document.createElement('canvas');
+    frontImageData.width = CR80_W;
+    frontImageData.height = CR80_H;
+    frontImageData.getContext('2d').drawImage(cardFrontCanvas, 0, 0);
+  }
+  if (originalBack) {
+    drawFiltered(cardBackCanvas, originalBack, CR80_W, CR80_H, f);
+    backImageData = document.createElement('canvas');
+    backImageData.width = CR80_W;
+    backImageData.height = CR80_H;
+    backImageData.getContext('2d').drawImage(cardBackCanvas, 0, 0);
+  }
+}
+
+function resetEditorSliders() {
+  slBright.value = 100; valBright.textContent = '100%';
+  slContrast.value = 100; valContrast.textContent = '100%';
+  slSat.value = 100; valSat.textContent = '100%';
+}
+
+function onSliderInput() {
+  valBright.textContent = slBright.value + '%';
+  valContrast.textContent = slContrast.value + '%';
+  valSat.textContent = slSat.value + '%';
+  applyFilters();
+}
+
+slBright.addEventListener('input', onSliderInput);
+slContrast.addEventListener('input', onSliderInput);
+slSat.addEventListener('input', onSliderInput);
+btnResetEdit.addEventListener('click', () => { resetEditorSliders(); applyFilters(); });
+
 /* ── Button handlers ── */
 btnSheet.addEventListener('click', () => {
   buildA4Sheet();
@@ -723,6 +853,8 @@ btnBack.addEventListener('click', () => {
   detectedType = null;
   frontImageData = null;
   backImageData = null;
+  originalFront = null;
+  originalBack = null;
   pdfInput.value = '';
   showStep(1);
 });
