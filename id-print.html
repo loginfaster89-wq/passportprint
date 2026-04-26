@@ -685,11 +685,16 @@ const ESHRAM_KEYWORDS = ['eshram','e-shram','unorganised worker','unorganized wo
 
 const CROP = {
   aadhaar: {
-    /* eAadhaar PDFs place the actual card front + back side-by-side in
-       the upper portion of page 1; the lower portion is the formal
-       Aadhaar Letter back (not card-shaped, unwanted for printing). */
-    front: [0.04, 0.06, 0.45, 0.40],
-    back:  [0.51, 0.06, 0.45, 0.40]
+    /* eAadhaar PDFs (UIDAI 2024+ layout) ship two stacked rows on
+       page 1: the upper row is the formal Aadhaar Letter (front-left
+       enrolment letter + back-right info notice), and the lower row
+       is the actual plastic-card mock-ups (front-left = photo card,
+       back-right = address + QR card). PR #243 incorrectly cropped
+       the upper row, capturing the Letter + Notice instead of the
+       cards. Verified against test-pdfs/aadhaar-test.pdf and the
+       reference image .agents/references/aadhaar-clean-pvc-layout.png. */
+    front: [0.010, 0.682, 0.477, 0.231],
+    back:  [0.504, 0.682, 0.488, 0.231]
   },
   pan: {
     front: [0.05, 0.08, 0.90, 0.42],
@@ -723,12 +728,21 @@ const CROP = {
 
 const TYPE_LABELS = { aadhaar: 'Aadhaar Card', pan: 'PAN Card', voter: 'Voter ID', ayushman: 'Ayushman Card', janaadhaar: 'Jan Aadhaar', eshram: 'eShram Card' };
 
-/* Aadhaar back-card field mask regions (at CR80 1011×638px) */
+/* Aadhaar back-card field mask regions (at CR80 1011×638px).
+   Retuned for the small plastic-card mock-up layout (CROP.aadhaar
+   bottom-row crop). On the small card:
+     - QR sits in the right-middle, not the full-height right strip.
+     - Issue Date + Download Date are rotated 90° on the LEFT margin
+       (vertical text), not horizontal rows in the lower-left.
+     - Mobile number is NOT printed on the small card mock-up — the
+       toggle is kept for backward compatibility but masks 0×0px
+       (soft no-op). If a future eAadhaar variant prints mobile,
+       this can be retuned without touching the UI. */
 const AADHAAR_FIELD_MASKS = {
-  qrCode:       { side: 'back', x: 710, y:   8, w: 295, h: 622 },
-  mobileNumber: { side: 'back', x:   6, y: 308, w: 590, h:  82 },
-  issueDate:    { side: 'back', x:   6, y: 456, w: 490, h:  72 },
-  downloadDate: { side: 'back', x:   6, y: 536, w: 490, h:  90 },
+  qrCode:       { side: 'back', x: 540, y:  95, w: 305, h: 320 },
+  mobileNumber: { side: 'back', x:   0, y:   0, w:   0, h:   0 },
+  issueDate:    { side: 'back', x:   2, y: 105, w:  22, h: 145 },
+  downloadDate: { side: 'back', x:   2, y: 250, w:  22, h: 160 },
 };
 /* PAN overlay regions (at CR80 1011×638px) */
 const PAN_OVERLAY_REGIONS = {

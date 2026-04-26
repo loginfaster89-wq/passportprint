@@ -2089,7 +2089,13 @@ errors, so corrupt data never blocks the app.
 
 ## §AC ID Card Print — Aadhaar crop fix (front + back side-by-side)
 
-**Status:** SHIPPED — PR #243.
+**Status:** SUPERSEDED by §AC.6 (PR #245). PR #243 was based on
+an operator screenshot from a different eAadhaar variant, but
+the canonical UIDAI 2024+ layout — and the test PDF in this repo
+(`test-pdfs/aadhaar-test.pdf`) — places the actual cards in the
+**bottom row** of page 1, not the upper portion. AC.3's crop
+captured the formal Letter (not card-shaped) instead. See §AC.6
+for the corrective fix.
 
 ### AC.1 Field report
 
@@ -2144,16 +2150,118 @@ unwanted Letter content in the lower portion is dropped entirely.
 
 ### AC.5 Follow-up — AADHAAR_FIELD_MASKS retune
 
-Tracked here, not a separate section yet:
+**Status:** SHIPPED — combined with §AC.6 in PR #245.
 
-- Capture 5–10 cropped Aadhaar back canvases from current eAadhaar
-  PDFs at the new `[0.51, 0.06, 0.45, 0.40]` crop.
-- Measure pixel positions of: QR code, address block, mobile (if
-  present), issue date (if present), download date (if present).
-- Tighten `qrCode` mask to cover only the QR (currently full-height
-  right strip).
-- If mobile / dates do not appear on the small card, either:
-  (a) hide the toggles entirely when small-card mode is detected, or
-  (b) leave toggles visible and document them as soft no-ops.
-- Single PR, ~10–20 lines in `AADHAAR_FIELD_MASKS` + maybe a
-  layout-detection helper. Code-only per Rule #13.
+The retune is part of the corrective PR that also fixes the
+crop region, since the two are coupled: retuning masks for the
+wrong crop region (PR #243's upper-row crop) would have produced
+masks that don't line up with anything visible. The fix retunes
+both at once, against the actual small-card layout in the bottom
+row.
+
+---
+
+## §AC.6 ID Card Print — Aadhaar bottom-row crop + masks retune
+
+**Status:** SHIPPED — PR #245.
+
+### AC.6.1 Re-investigation of the layout
+
+After §AC was shipped (PR #243), the next session re-rendered the
+canonical test PDF (`test-pdfs/aadhaar-test.pdf`) at scale 2 and
+inspected the page bands directly, then compared against the
+reference image `.agents/references/aadhaar-clean-pvc-layout.png`.
+
+Result: the page is laid out in **two rows**, not one:
+
+| | Left | Right |
+|---|---|---|
+| **Upper row** (≈ y 0.06–0.46) | Formal Aadhaar Letter — Government of India header, enrolment number, "To" + address block, signature box, full Aadhaar number block | Information / Notice page — "सूचना" + INFORMATION header, bullet points "Aadhaar is a proof of identity, not of citizenship", verification instructions |
+| **Lower row** (≈ y 0.68–0.91) | Plastic-card front mock-up — Government of India strip, photo, name, DOB, gender, "3959 6199 6325", VID, "मेरा आधार, मेरी पहचान" footer | Plastic-card back mock-up — Unique Identification Authority strip, "पता:" + Hindi address, "Address:" + English address, vertical "Issue Date" / "Download Date" on left margin, QR code, Aadhaar number, VID, "1947 \| help@uidai.gov.in \| www.uidai.gov.in" footer |
+
+PR #243's crop targeted the **upper** row, capturing the formal
+Letter (no card border, no photo positioning) as 'front' and the
+Notice (no QR, no address) as 'back'. The reference image proves
+the operator wants the **lower** row.
+
+The PR #243 commit message attributed the side-by-side layout to
+an operator screenshot; that screenshot likely came from a third-
+party Aadhaar PDF variant or a misread of the original layout.
+The canonical test PDF + reference image agree on the bottom-row
+layout.
+
+### AC.6.2 Fix — CROP.aadhaar (lower row)
+
+```js
+const CROP = {
+  aadhaar: {
+    front: [0.010, 0.682, 0.477, 0.231],   // bottom-left card
+    back:  [0.504, 0.682, 0.488, 0.231]    // bottom-right card
+  },
+  // …
+};
+```
+
+Cropped CR80 outputs now match the reference image exactly.
+
+### AC.6.3 Fix — AADHAAR_FIELD_MASKS (small-card layout)
+
+Old positions were tuned for the formal Letter back (full-page
+layout). On the new small-card back, those rectangles would mask
+important content (English address, Aadhaar number, footer)
+instead of QR / mobile / dates.
+
+New positions, verified by overlaying mask rectangles on the
+rendered back canvas at CR80 1011×638:
+
+```js
+const AADHAAR_FIELD_MASKS = {
+  qrCode:       { side: 'back', x: 540, y:  95, w: 305, h: 320 },
+  mobileNumber: { side: 'back', x:   0, y:   0, w:   0, h:   0 },
+  issueDate:    { side: 'back', x:   2, y: 105, w:  22, h: 145 },
+  downloadDate: { side: 'back', x:   2, y: 250, w:  22, h: 160 },
+};
+```
+
+Mapping per field:
+- **qrCode** — middle-right rectangle. Tightened from the old
+  full-height right strip; covers the QR exactly with a small
+  bleed for safety.
+- **mobileNumber** — small-card mock-up does not print a mobile
+  number. Set to 0×0 px, which makes `ctx.fillRect()` a no-op.
+  UI toggle is preserved for backward compatibility and any
+  future eAadhaar variant that does print mobile (then this
+  entry can be retuned without touching the UI). Chose option
+  (b) "leave toggles visible and document as soft no-ops" from
+  §AC.5; option (a) "hide toggles when small-card mode is
+  detected" was rejected because there is no other layout mode
+  to detect against — small-card is the only mode now.
+- **issueDate** — vertical (rotated 90°) text "Issue Date:
+  28/12/2011" on the LEFT margin top. Narrow (22 px wide)
+  vertical strip.
+- **downloadDate** — vertical (rotated 90°) text "Download Date:
+  21/08/2022" on the LEFT margin middle. Narrow (22 px wide)
+  vertical strip below the issueDate strip.
+
+### AC.6.4 Verification
+
+- Rendered `test-pdfs/aadhaar-test.pdf` (password `SUNI1986`) at
+  scale 2 (1190×1684) using `pdfjs-dist` + `@napi-rs/canvas`.
+- Cropped front + back regions to CR80 1011×638. Visual match
+  against `.agents/references/aadhaar-clean-pvc-layout.png`.
+- Overlaid mask rectangles on the rendered back canvas.
+  Confirmed the qrCode mask covers the QR with a small margin;
+  the issueDate / downloadDate masks cover the rotated text on
+  the left margin exactly; English address and Aadhaar number
+  are preserved (not masked).
+- `npm run build` passes — `id-print.html  84.6 KB → 80.7 KB`
+  obfuscated output.
+
+### AC.6.5 Compatibility
+
+- Auto-swap detector (§AA, PR #240) unaffected — skin-pixel ROI
+  is fractional within the cropped canvas.
+- PAN / Voter / Ayushman / Jan Aadhaar / eShram crops unchanged.
+- Card Cleanup persistence (§AB, PR #242), inline auto-swap
+  notice (PR #241), Photo Editor split panel (§Z, PR #239),
+  AADHAAR_FIELD_MASKS UI toggles (§T, PR #236) unaffected.
