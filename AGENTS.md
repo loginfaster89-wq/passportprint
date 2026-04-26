@@ -269,13 +269,15 @@ photo editing** — brightness/contrast/saturation sliders with live
 preview, output carries through to A4 sheet, reset button, mobile-
 responsive.
 
-**Also resolved (PRs #192–#197):** PR #192 docs update for #190–#191.
+**Also resolved (PRs #192–#199):** PR #192 docs update for #190–#191.
 PR #193 **ID Card Print Phase 2 multi-card A4** — 5 card pairs per
 sheet, cut marks/dashed guides, layout toggle (single vs multi-card),
 corner marks. PR #194 **ID Card Print Phase 2 rounded corners** —
 toggle checkbox, canvas clip-path with arcTo, preview + A4 sheet.
 PR #197 fix `var r` variable shadowing bug in multi-card sheet
-generation + docs update.
+generation + docs update. PR #198 docs — add half-half working rule +
+fix PR #195→#197 references. PR #199 docs — mark shipped Phase 2
+items in issues.md §M.6 + update SKILL.md §11 prompt template.
 
 **Verified (2026-04-26):** ID Card Print Phase 1 MVP fully tested with
 both test PDFs — PAN and Aadhaar flows ALL PASSED (upload, password
