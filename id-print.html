@@ -220,20 +220,23 @@
 .idp-layout-opt.active{background:rgba(240,165,0,.1);color:var(--accent);font-weight:600;}
 .idp-layout-opt:hover:not(.active){color:var(--text);}
 
-/* A4 result — §AC.13 responsive: cap by viewport height so the sheet
-   doesn't dominate the screen on tall windows / phones in portrait. */
-.idp-a4-wrap{margin:20px auto;text-align:center;}
+/* A4 result — §AC.14 tighter responsive cap: §AC.13 still left the
+   sheet preview too tall (the empty bottom half of a 1-Pair sheet
+   pushed the canvas to ~78vh). Cap canvas at 55vh on desktop and
+   50vh on phones so the preview fits comfortably without scrolling
+   while keeping aspect ratio. */
+.idp-a4-wrap{margin:14px auto;text-align:center;}
 .idp-a4-wrap canvas{
   display:block;margin:0 auto;
-  max-width:min(100%,600px);
-  max-height:78vh;
+  max-width:min(100%,460px);
+  max-height:55vh;
   width:auto;height:auto;
   border:1px solid var(--border);border-radius:8px;
   background:#fff;
 }
 @media (max-width:640px){
-  .idp-a4-wrap{margin:14px auto;}
-  .idp-a4-wrap canvas{max-height:72vh;}
+  .idp-a4-wrap{margin:10px auto;}
+  .idp-a4-wrap canvas{max-height:50vh;max-width:100%;}
 }
 
 /* Error */
@@ -723,9 +726,13 @@ const CROP = {
        PR #248 tightened crop to hug the actual outer black border of the
        cards (measured from test-pdfs/aadhaar-test.pdf): old crop left
        ~85px white margin around content; new crop is edge-to-edge so
-       Fold & Laminate prints cards touching with no whitespace gap. */
-    front: [0.0520, 0.6657, 0.4471, 0.2159],
-    back:  [0.4991, 0.6657, 0.4465, 0.2159]
+       Fold & Laminate prints cards touching with no whitespace gap.
+       §AC.14: bumped y down by 0.0164 and reduced h by the same amount
+       (~5mm at A4) to crop out the dashed perforation strip that sits
+       just above each card in the e-Aadhaar PDF. New aspect now matches
+       CR80 (≈1.585:1). Bottom edge unchanged. */
+    front: [0.0520, 0.6821, 0.4471, 0.1995],
+    back:  [0.4991, 0.6821, 0.4465, 0.1995]
   },
   pan: {
     front: [0.05, 0.08, 0.90, 0.42],
@@ -1388,11 +1395,12 @@ function buildSingleSheet() {
   var gap = 0;
   var pairW = cardW * 2 + gap;
   var startX = Math.round((A4_W - pairW) / 2);
-  /* §AC.13 — Position the card pair at the TOP of the A4 (not vertically
-     centered) so users waste less paper / can re-use the empty bottom
-     half. Top white-stock padding matches the left/right margin so all
-     three sides have equal clean stock around the cards. */
-  var startY = startX;
+  /* §AC.14 — Push the card pair right to the TOP of the A4 with only a
+     tiny top margin (~7mm = 80px @ 300 DPI). User wants the cards as
+     close to the top edge as practical so the unused bottom half of
+     the sheet is as large as possible for re-use. (§AC.13 had used
+     startY = startX which still left ~19mm white at top.) */
+  var startY = 80;
 
   var r = roundedCorners ? CARD_RADIUS : 0;
 
