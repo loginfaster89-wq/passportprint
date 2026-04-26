@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
 <meta name="theme-color" content="#0d0d0d">
 <title>ID Card Print — Studio Print</title>
-<meta name="description" content="Print Aadhaar and PAN cards from PDF — auto-crop, CR80 size, fold-and-laminate A4 layout. 100% browser-based, nothing uploaded.">
+<meta name="description" content="Print Aadhaar, PAN and Voter ID cards from PDF — auto-crop, CR80 size, fold-and-laminate A4 layout. 100% browser-based, nothing uploaded.">
 <meta property="og:title" content="ID Card Print — Studio Print">
-<meta property="og:description" content="Print Aadhaar and PAN cards from PDF — auto-crop, CR80 size, fold-and-laminate A4 layout. Browser-based, nothing uploaded.">
+<meta property="og:description" content="Print Aadhaar, PAN and Voter ID cards from PDF — auto-crop, CR80 size, fold-and-laminate A4 layout. Browser-based, nothing uploaded.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://studioprint.pages.dev/id-print.html">
 <meta property="og:image" content="https://studioprint.pages.dev/assets/og-image.png">
@@ -107,6 +107,7 @@
 }
 .idp-detect.aadhaar{color:#f0a500;background:rgba(240,165,0,.08);border:1px solid rgba(240,165,0,.3);}
 .idp-detect.pan{color:#4ade80;background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.3);}
+.idp-detect.voter{color:#60a5fa;background:rgba(96,165,250,.08);border:1px solid rgba(96,165,250,.3);}
 
 /* Preview area */
 .idp-preview{
@@ -310,7 +311,7 @@ input.idp-range::-moz-range-thumb{
         </a>
         <a href="id-print.html" role="menuitem">
           <span class="dd-icon" aria-hidden="true"><svg class="ix" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-idcard"/></svg></span>
-          <span class="dd-meta"><strong>ID Card Print</strong><small>Aadhaar · PAN · CR80 sheet</small></span>
+          <span class="dd-meta"><strong>ID Card Print</strong><small>Aadhaar · PAN · Voter ID · CR80 sheet</small></span>
           <span class="dd-tag live">Live</span>
         </a>
       </div>
@@ -328,7 +329,7 @@ input.idp-range::-moz-range-thumb{
   <!-- Hero -->
   <div class="idp-hero">
     <h1>ID Card <em>Print</em></h1>
-    <p>Upload your eAadhaar or ePAN PDF — auto-crop, CR80 size, fold-and-laminate A4 layout. Everything stays in your browser.</p>
+    <p>Upload your eAadhaar, ePAN or e-EPIC (Voter ID) PDF — auto-crop, CR80 size, fold-and-laminate A4 layout. Everything stays in your browser.</p>
   </div>
 
   <!-- Steps -->
@@ -348,7 +349,7 @@ input.idp-range::-moz-range-thumb{
     <div class="idp-upload" id="dropZone">
       <span class="idp-upload-icon" aria-hidden="true">📄</span>
       <h3>Drop your PDF here</h3>
-      <p>eAadhaar or ePAN PDF · Password-protected PDFs supported</p>
+      <p>eAadhaar · ePAN · e-EPIC (Voter ID) · Password-protected PDFs supported</p>
       <input type="file" id="pdfInput" accept=".pdf,application/pdf">
     </div>
   </div>
@@ -364,7 +365,8 @@ input.idp-range::-moz-range-thumb{
       </div>
       <p style="margin-top:12px;font-size:11px;color:var(--muted2);">
         Aadhaar: first 4 letters of name (CAPS) + birth year<br>
-        PAN: date of birth in DDMMYYYY
+        PAN: date of birth in DDMMYYYY<br>
+        Voter ID: usually not password-protected
       </p>
     </div>
   </div>
@@ -455,7 +457,7 @@ input.idp-range::-moz-range-thumb{
   <div class="footer-main">
     <div class="footer-brand">
       <a href="index.html" class="footer-logo">Studio <em>Print</em></a>
-      <p class="footer-tagline">Every print job. One browser tab. On-device AI for passport photos, Aadhaar/PAN sheets and 300&nbsp;DPI A4 layouts — built in India.</p>
+      <p class="footer-tagline">Every print job. One browser tab. On-device AI for passport photos, Aadhaar/PAN/Voter ID sheets and 300&nbsp;DPI A4 layouts — built in India.</p>
       <form class="footer-news" data-u="loginfaster89" data-d="gmail.com" aria-label="Subscribe to product updates">
         <input type="email" name="email" placeholder="you@example.com" required autocomplete="email" aria-label="Your email">
         <button type="submit">Subscribe</button>
@@ -512,7 +514,7 @@ input.idp-range::-moz-range-thumb{
 
 <script type="module">
 /* ── ID Card Print — Phase 1 MVP ──
-   Client-side Aadhaar/PAN PDF → CR80 card crop → A4 fold-and-laminate sheet.
+   Client-side Aadhaar/PAN/Voter ID PDF → CR80 card crop → A4 fold-and-laminate sheet.
    Uses pdf.js (CDN) for PDF rendering + text extraction. */
 
 const pdfjsLib = await import('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.min.mjs');
@@ -527,6 +529,7 @@ const RENDER_SCALE = 4;
 
 const AADHAAR_KEYWORDS = ['aadhaar','uid','uidai','unique identification','government of india','vid','enrolment','download date','issue date'];
 const PAN_KEYWORDS = ['permanent account number','income tax','pan','department','nsdl','utiitsl'];
+const VOTER_KEYWORDS = ['election commission','epic','voter','electoral','electors photo identity','polling station','assembly constituency','parliamentary constituency'];
 
 /* Crop regions as fractions of page [x, y, w, h].
    Calibrated against standard eAadhaar (UIDAI) and ePAN (NSDL) PDFs. */
@@ -538,6 +541,10 @@ const CROP = {
   pan: {
     front: [0.05, 0.08, 0.90, 0.42],
     back:  [0.05, 0.54, 0.90, 0.40]
+  },
+  voter: {
+    front: [0.035, 0.05, 0.93, 0.45],
+    back:  [0.035, 0.53, 0.93, 0.42]
   }
 };
 
@@ -680,13 +687,15 @@ async function processPdf(pdf) {
 
     var aadhaarHits = AADHAAR_KEYWORDS.filter(k => fullText.includes(k)).length;
     var panHits = PAN_KEYWORDS.filter(k => fullText.includes(k)).length;
+    var voterHits = VOTER_KEYWORDS.filter(k => fullText.includes(k)).length;
 
     if (aadhaarHits >= 2) detectedType = 'aadhaar';
     else if (panHits >= 2) detectedType = 'pan';
+    else if (voterHits >= 2) detectedType = 'voter';
     else {
       showLoading(false);
       showStep(1);
-      showError('Could not detect card type. Only eAadhaar and ePAN PDFs are supported.');
+      showError('Could not detect card type. Only eAadhaar, ePAN and e-EPIC (Voter ID) PDFs are supported.');
       return;
     }
 
@@ -713,9 +722,11 @@ async function processPdf(pdf) {
     applyFilters();
 
     /* Update badge */
-    var label = detectedType === 'aadhaar' ? 'Aadhaar Card Detected' : 'PAN Card Detected';
+    var labels = { aadhaar: 'Aadhaar Card Detected', pan: 'PAN Card Detected', voter: 'Voter ID Detected' };
+    var icons = { aadhaar: '🆔', pan: '💳', voter: '🗳️' };
+    var label = labels[detectedType];
     detectBadge.innerHTML = '<div class="idp-detect ' + detectedType + '">' +
-      (detectedType === 'aadhaar' ? '🆔' : '💳') + ' ' + label + '</div>';
+      icons[detectedType] + ' ' + label + '</div>';
 
     showLoading(false);
     showStep(2);
