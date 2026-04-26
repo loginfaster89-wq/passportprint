@@ -755,7 +755,7 @@ Tested locally with both test PDFs after PR #189 merge:
 
 **Phase 3 (partial):**
 - ~~Ayushman / Jan Aadhaar / eShram support~~ — **shipped PR #205**
-- Batch processing (multiple PDFs at once)
+- ~~Batch processing (multiple PDFs at once)~~ — **shipped PR #208**
 - PVC card tray layout (Epson L805/L8050 direct print)
 - Toggle options (issue date, download date, QR code, mobile number)
 - Auto photo enhancement (AI brightness/contrast adjustment)
@@ -779,7 +779,32 @@ Tested locally with both test PDFs after PR #189 merge:
 
 ### What's still open (Phase 3 remaining)
 
-- Batch processing (multiple PDFs at once)
+- ~~Batch processing (multiple PDFs at once)~~ — **shipped PR #208**
+- PVC card tray layout (Epson L805/L8050 direct print)
+- Toggle options (issue date, download date, QR code, mobile number)
+- Auto photo enhancement (AI brightness/contrast adjustment)
+- Signature box option (PAN)
+- Back-side hologram overlay (PAN)
+
+---
+
+## Q. ID Card Print — Phase 3 Batch Processing (2026-04-26, session #17)
+
+**Status: SHIPPED — PR #208.**
+
+|| # | PR | What shipped | Status |
+||---|------|---------|--------|
+|| Q1 | PR #208 | **Multi-file upload.** `<input type="file" multiple>` + drag-and-drop now accepts multiple PDFs at once. Single-file uploads still work via legacy path (no queue UI shown). | **merged** |
+|| Q2 | PR #208 | **File queue UI.** `.idp-queue` displays each queued file with name, processing status badge (queued/processing/done/error), and a remove button (×). Styled with existing tokens (`--surface`, `--border`, `--text`). | **merged** |
+|| Q3 | PR #208 | **Queue actions.** "+ Add More PDFs" button to add more files after initial selection. "Process All →" button to start batch processing. Both hidden until 2+ files queued. | **merged** |
+|| Q4 | PR #208 | **Per-file password prompts.** Password-protected PDFs in batch are prompted one at a time via `pendingPasswordIdx`. After password entry, processing continues with remaining files. | **merged** |
+|| Q5 | PR #208 | **Batch auto-detect + auto-crop.** Each PDF individually auto-detected (Aadhaar/PAN/Voter/Ayushman/Jan Aadhaar/eShram) and auto-cropped. Results stored in `batchCards[]` array with type, front/back image data, and file name. | **merged** |
+|| Q6 | PR #208 | **Batch preview.** All processed cards shown in preview step with individual card pairs (front + back) per file. `batchCardsContainer` dynamically generates card pair elements for each processed PDF. Batch count info displayed. | **merged** |
+|| Q7 | PR #208 | **Batch A4 sheet.** All cards from batch combined onto single A4 sheet. Works with existing layout modes (single/multi-card/Dragon). | **merged** |
+|| Q8 | PR #208 | **Type labels + icons.** `TYPE_LABELS` and `TYPE_ICONS` maps for display names and emoji icons per card type (Aadhaar 🆔, PAN 💳, Voter 🗳️, Ayushman 🏥, Jan Aadhaar 👨‍👩‍👧‍👦, eShram 👷). | **merged** |
+
+### What's still open (Phase 3 remaining)
+
 - PVC card tray layout (Epson L805/L8050 direct print)
 - Toggle options (issue date, download date, QR code, mobile number)
 - Auto photo enhancement (AI brightness/contrast adjustment)
