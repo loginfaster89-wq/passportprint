@@ -438,6 +438,10 @@ input.idp-range::-moz-range-thumb{
         <label class="idp-option"><input type="checkbox" id="chkHideIssueDate"> Hide Issue Date</label>
         <label class="idp-option"><input type="checkbox" id="chkHideDownloadDate"> Hide Download Date</label>
       </div>
+      <!-- PAN overlays — shown only for PAN cards -->
+      <div id="panToggles" class="idp-hidden">
+        <label class="idp-option"><input type="checkbox" id="chkSignatureBox"> Add Signature Box</label>
+      </div>
 
       <!-- Photo editor -->
       <div class="idp-editor">
@@ -627,6 +631,10 @@ const AADHAAR_FIELD_MASKS = {
   mobileNumber: { side: 'back', x:   6, y: 308, w: 590, h:  82 },
   issueDate:    { side: 'back', x:   6, y: 456, w: 490, h:  72 },
   downloadDate: { side: 'back', x:   6, y: 536, w: 490, h:  90 },
+};
+/* PAN front-card overlay regions (at CR80 1011×638px) */
+const PAN_OVERLAY_REGIONS = {
+  signatureBox: { side: 'front', x: 540, y: 470, w: 380, h: 110 },
 };
 const TYPE_ICONS = { aadhaar: '\ud83c\udd94', pan: '\ud83d\udcb3', voter: '\ud83d\uddf3\ufe0f', ayushman: '\ud83c\udfe5', janaadhaar: '\ud83d\udc68\u200d\ud83d\udc69\u200d\ud83d\udc67\u200d\ud83d\udc66', eshram: '\ud83d\udc77' };
 
@@ -1032,6 +1040,7 @@ async function processPdf(pdf) {
     detectBadge.innerHTML = '<div class="idp-detect ' + detectedType + '">' +
       TYPE_ICONS[detectedType] + ' ' + TYPE_LABELS[detectedType] + ' Detected</div>';
     aadhaarToggles.classList.toggle('idp-hidden', detectedType !== 'aadhaar');
+    panToggles.classList.toggle('idp-hidden', detectedType !== 'pan');
 
     previewTitle.textContent = 'Front & Back Preview';
     batchSheetInfo.classList.add('idp-hidden');
@@ -1145,6 +1154,24 @@ function applyAadhaarMasks(ctx, ox, oy, side) {
   ctx.restore();
 }
 
+function applyPanOverlays(ctx, ox, oy, side) {
+  if (!chkSignatureBox.checked) return;
+  var m = PAN_OVERLAY_REGIONS.signatureBox;
+  if (m.side !== side) return;
+  ctx.save();
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(ox + m.x, oy + m.y, m.w, m.h);
+  ctx.strokeStyle = '#000000';
+  ctx.lineWidth = 2;
+  ctx.strokeRect(ox + m.x, oy + m.y, m.w, m.h);
+  ctx.fillStyle = '#000000';
+  ctx.font = '14px DM Mono, monospace';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'bottom';
+  ctx.fillText('Signature', ox + m.x + m.w / 2, oy + m.y + m.h - 6);
+  ctx.restore();
+}
+
 function drawFilteredToCanvas(canvas, srcCanvas, w, h, cardType, side) {
   canvas.width = w;
   canvas.height = h;
@@ -1160,6 +1187,7 @@ function drawFilteredToCanvas(canvas, srcCanvas, w, h, cardType, side) {
   ctx.drawImage(srcCanvas, 0, 0, w, h);
   ctx.filter = 'none';
   if (cardType === 'aadhaar' && side) applyAadhaarMasks(ctx, 0, 0, side);
+  if (cardType === 'pan' && side) applyPanOverlays(ctx, 0, 0, side);
 }
 
 function applyBatchFilters() {
@@ -1175,6 +1203,7 @@ function applyBatchFilters() {
     ctxF.drawImage(card.originalFront, 0, 0, CR80_W, CR80_H);
     ctxF.filter = 'none';
     if (card.type === 'aadhaar') applyAadhaarMasks(ctxF, 0, 0, 'front');
+    if (card.type === 'pan') applyPanOverlays(ctxF, 0, 0, 'front');
     card.front = tmpF;
 
     var tmpB = document.createElement('canvas');
@@ -1187,6 +1216,7 @@ function applyBatchFilters() {
     ctxB.drawImage(card.originalBack, 0, 0, CR80_W, CR80_H);
     ctxB.filter = 'none';
     if (card.type === 'aadhaar') applyAadhaarMasks(ctxB, 0, 0, 'back');
+    if (card.type === 'pan') applyPanOverlays(ctxB, 0, 0, 'back');
     card.back = tmpB;
   });
 
@@ -1569,6 +1599,8 @@ const chkHideQR = $('#chkHideQR');
 const chkHideMobile = $('#chkHideMobile');
 const chkHideIssueDate = $('#chkHideIssueDate');
 const chkHideDownloadDate = $('#chkHideDownloadDate');
+const panToggles = $('#panToggles');
+const chkSignatureBox = $('#chkSignatureBox');
 
 function getFilterString() {
   var b = slBright.value;
@@ -1618,6 +1650,7 @@ function drawFiltered(destCanvas, srcCanvas, w, h, filterStr, side) {
   ctx.drawImage(srcCanvas, 0, 0, w, h);
   ctx.filter = 'none';
   if (side && detectedType === 'aadhaar') applyAadhaarMasks(ctx, 0, 0, side);
+  if (side && detectedType === 'pan') applyPanOverlays(ctx, 0, 0, side);
 }
 
 function applyFilters() {
@@ -1674,7 +1707,7 @@ chkRounded.addEventListener('change', () => {
   applyFilters();
 });
 
-[chkHideQR, chkHideMobile, chkHideIssueDate, chkHideDownloadDate].forEach(function(chk) {
+[chkHideQR, chkHideMobile, chkHideIssueDate, chkHideDownloadDate, chkSignatureBox].forEach(function(chk) {
   chk.addEventListener('change', function() { applyFilters(); });
 });
 
@@ -1725,7 +1758,8 @@ btnBack.addEventListener('click', () => {
   pdfArrayBuffer = null;
   detectedType = null;
   aadhaarToggles.classList.add('idp-hidden');
-  [chkHideQR, chkHideMobile, chkHideIssueDate, chkHideDownloadDate].forEach(function(c) { c.checked = false; });
+  panToggles.classList.add('idp-hidden');
+  [chkHideQR, chkHideMobile, chkHideIssueDate, chkHideDownloadDate, chkSignatureBox].forEach(function(c) { c.checked = false; });
   frontImageData = null;
   backImageData = null;
   originalFront = null;
