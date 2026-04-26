@@ -841,20 +841,20 @@ function buildMultiCardSheet() {
   ctx.fillText('Front', marginX + cardW / 2, marginY - 16);
   ctx.fillText('Back', marginX + cardW + pairGap + cardW / 2, marginY - 16);
 
+  var rad = roundedCorners ? CARD_RADIUS : 0;
+
   for (var r = 0; r < rows; r++) {
     var y = marginY + r * (cardH + rowGap);
 
-    var r = roundedCorners ? CARD_RADIUS : 0;
-
     /* Draw front card */
     if (frontImageData) {
-      if (r > 0) drawCardClipped(ctx, frontImageData, marginX, y, cardW, cardH, r);
+      if (rad > 0) drawCardClipped(ctx, frontImageData, marginX, y, cardW, cardH, rad);
       else ctx.drawImage(frontImageData, marginX, y, cardW, cardH);
     }
 
     /* Draw back card (NOT mirrored — flat cut, not fold) */
     if (backImageData) {
-      if (r > 0) drawCardClipped(ctx, backImageData, marginX + cardW + pairGap, y, cardW, cardH, r);
+      if (rad > 0) drawCardClipped(ctx, backImageData, marginX + cardW + pairGap, y, cardW, cardH, rad);
       else ctx.drawImage(backImageData, marginX + cardW + pairGap, y, cardW, cardH);
     }
   }

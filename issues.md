@@ -634,9 +634,9 @@ placed inside pouch, heat-sealed.
 
 **Phase 2 (follow-up PRs):**
 - ~~Photo editing (brightness/contrast/saturation)~~ — **shipped PR #191**
-- Multiple cards per A4 sheet (4-5 card pairs to save paper)
-- Cut marks / dashed guides on A4 output
-- Rounded border option
+- ~~Multiple cards per A4 sheet (5 card pairs)~~ — **shipped PR #193**
+- ~~Cut marks / dashed guides on A4 output~~ — **shipped PR #193**
+- ~~Rounded border option~~ — **shipped PR #194 + bugfix PR #195**
 - Voter ID support
 - Dragon sheet (4×6) layout option (2 cards per sheet)
 
@@ -722,11 +722,13 @@ Tested locally with both test PDFs after PR #189 merge:
 ### What's still open (Phase 2 remainder + Phase 3)
 
 **Phase 2 (not yet implemented):**
-- Multiple cards per A4 sheet (4-5 card pairs to save paper)
-- Cut marks / dashed guides on A4 output
-- Rounded border option
 - Voter ID support
 - Dragon sheet (4×6) layout option (2 cards per sheet)
+
+**Phase 2 (shipped):**
+- ~~Photo editing (brightness/contrast/saturation)~~ — PR #191
+- ~~Multiple cards per A4 sheet (5 pairs per sheet, cut marks, layout toggle)~~ — PR #193
+- ~~Rounded border option (toggle in preview, applies to cards + A4 sheet)~~ — PR #194 + bugfix PR #195
 
 **Phase 3 (future):**
 - Ayushman / Jan Aadhaar / eShram support
@@ -736,3 +738,15 @@ Tested locally with both test PDFs after PR #189 merge:
 - Auto photo enhancement (AI brightness/contrast adjustment)
 - Signature box option (PAN)
 - Back-side hologram overlay (PAN)
+
+---
+
+## O. ID Card Print — Phase 2 multi-card + rounded corners (2026-04-26)
+
+**Status: SHIPPED — PRs #193, #194, #195.**
+
+| # | PR | What shipped | Status |
+|---|------|---------|--------|
+| O1 | PR #193 | **Multi-card A4 layout.** 5 card pairs per sheet, cut marks/dashed guides, layout toggle (single fold-and-laminate vs 5-pair multi-card). Column headers, corner marks, footer label. Default: multi-card. | **merged** |
+| O2 | PR #194 | **Rounded corners toggle.** Checkbox in preview step — "Rounded Corners" on/off. Clips front+back cards and A4 sheet cards with `border-radius` (preview CSS) + canvas `arcTo` clip path (A4 output). Default off. `CARD_RADIUS = 36` (≈ 3.6% of CR80 width). Styled checkbox matches design tokens. Hidden in `@media print`. | **merged** |
+| O3 | PR #195 | **Bugfix: multi-card infinite loop.** PR #194 introduced a variable name collision — `var r` for rounded radius shadowed the `for (var r …)` loop counter in `buildMultiCardSheet()`, causing an infinite loop (rounded off) or only 1 row drawn (rounded on). Fixed by hoisting radius to `var rad` before the loop. | **merged** |
