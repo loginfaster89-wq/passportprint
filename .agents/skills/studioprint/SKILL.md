@@ -510,12 +510,17 @@ issues.md — full audit + ID Card Print arc
    §AC crop / mirror / gap retunes —
    §AC.9 Cut Marks toggle (PR #251) —
    §AC.10 Card Cleanup removal (PR #252) —
-   §AC.11 Front+Back preview redesign — THIS SESSION'S TASK)
+   §AC.11 Front+Back unified landscape preview (PRs #254 + #256) —
+   §AC.12 Swap sides toggle (PR #258) —
+   §AC.13 Responsive A4 + 1-pair to top + drop Cut Marks UI (PR #259) —
+   §AC.14 Crop Aadhaar perforation + flush top + shrink preview (PR #260))
 
-Reference images in .agents/references/ — open
-preview-landscape-target.png before starting §AC.11 (it IS the spec).
+Reference images in .agents/references/ and `attached_assets/` — open
+the latest user-attached `aadhaar-a4-sheet_*.png` and the matching
+`Screenshot_(*)_*.png` set before starting any new layout work.
 
-Last shipped: PR #252 (refactor: remove "Card Cleanup" panel — §AC.10).
+Last shipped: PR #260 (feat: §AC.14 crop perforation strip, push
+1-pair flush to top, shrink preview).
 
 Shipped summary (don't redo) — see SKILL.md §9 for the full PR list.
 Highlights:
@@ -546,119 +551,122 @@ Highlights:
   applyPanOverlays, swapFrontBack, updateSwapNotice,
   clearAutoSwapFlag, shouldAutoSwap, skinPixelRatio, auto-swap flow).
   ~10 KB raw shrink in id-print.html. §AA auto-swap fully gone.
+- §AC.11 SHIPPED — PRs #254 + #256 Front+Back Step 2 preview
+  redesign. Two stacked canvases collapsed into ONE landscape
+  `#pairCanvas` (2022×638). Order **front-LEFT / back-RIGHT** (PR
+  #254 originally shipped back-LEFT; PR #256 swapped per user
+  correction "FRONT WALE KO LIFT MAIN KRO OR BACK WALE KO RIGHT
+  MAIN"). Per-half rounded clip, per-side Move/Zoom/filters/Auto
+  Enhance/Quick Presets/Reset all preserved. Sheet builders untouched.
+- §AC.12 SHIPPED — PR #258 Swap sides toggle. Small icon-button
+  (`#btnSwapSides`, ↔) below `#pairCanvas`. New `swapSides` boolean
+  (default false). `compositePair()` swaps args at top when true.
+  Persisted in `idp:prefs:v1.swapSides`. Works in batch mode via
+  `applyBatchFilters`. Sheet builders untouched (preview-only flip).
+- §AC.13 SHIPPED — PR #259 Responsive A4 preview + 1-pair to top +
+  Cut Marks UI removed. CSS `.idp-a4-wrap canvas`: `max-width: min(100%,600px)`
+  + `max-height: 78vh` (mobile 72vh). `buildSingleSheet`:
+  `startY = startX` (cards moved from centred to top, equal padding
+  left/right/top). Removed `#chkCutMarks` markup + JS ref + listener;
+  dropped `cutMarks` from savePrefs/loadPrefs (`idp:prefs:v1` schema
+  now `{rounded, swapSides, slider preset}`); `let cutMarks = true;`
+  → `const cutMarks = true;` (multi/Dragon/PVC builders unchanged).
+  Removed the entire `if (cutMarks){…}` block from buildSingleSheet
+  (no fold-here line, no caption, no corner ticks, no seam ticks).
+- §AC.14 SHIPPED — PR #260 Crop Aadhaar perforation strip + flush
+  top + shrink preview further. `CROP.aadhaar` retuned: front+back
+  `y` 0.6657 → 0.6821 and `h` 0.2159 → 0.1995 (bottom edge same;
+  crops out the dashed perforation cut-indicator strip the e-Aadhaar
+  PDF prints just above the card border; new aspect ≈ 1.585:1
+  matches CR80 exactly). `buildSingleSheet`: `startY = 80`
+  (~7mm @ 300 DPI, was ~19mm). CSS cap tightened: desktop
+  `max-width 600 → 460px`, `max-height 78vh → 55vh`; mobile
+  `max-height 72vh → 50vh`, `max-width 100%`. Wrap margin reduced.
+  Verified the dashed line was *not* drawn by buildSingleSheet
+  (full ctx-draw audit) — it really was the source PDF's perforation.
 
 Test PDFs repo mein saved hain:
 test-pdfs/pan-test.pdf (password: 05071999)
 test-pdfs/aadhaar-test.pdf (password: SUNI1986)
 
 ═══════════════════════════════════════════════════════════════
-TASK (THIS SESSION) — §AC.11 Front+Back preview redesign
+TASK (NEXT SESSION) — pick from candidates below
 ═══════════════════════════════════════════════════════════════
 
-User feedback (Hinglish, snipping-tool reference attached at
-.agents/references/preview-landscape-target.png):
+§AC.11–§AC.14 are all SHIPPED. Step 2 preview now uses a unified
+landscape `#pairCanvas` (front-LEFT / back-RIGHT, with a Swap
+sides toggle), the A4 result canvas is responsive (caps at 55vh
+desktop / 50vh mobile, max-width 460px), the 1-Pair sheet sits
+flush at the top of the A4 (~7mm) with no fold-here line / corner
+ticks / seam ticks, the Cut Marks UI option is gone, and the
+Aadhaar perforation strip is cropped out.
 
-  "Ye jo Front & Back Preview wala hai ye bhi shi karna hai. Phele
-   ye Front dikhata hai or fir neche Back. Ye shi kro jis trh se
-   PDF main se ID ko cut karte hai vaise hi preview main dikhna
-   chahiye — landscape main, RIGHT side Front or LEFT side Back.
-   Aapko full permission hai design ko adjust karne ke liye.
-   Maine snipping tool se ID ko cut kiya hai — ID ke charo side
-   diye gaye lines ka use kiya — waise hi aapko karna hai. Jo cut
-   hoga wo same to same preview main dikhana hai bina back or
-   front ko alag alag kre."
+Wait for the user's next request. If they confirm everything looks
+right after PR #260 deploys (Cloudflare Pages, ~1-2 min), here are
+the standing candidates for the next session:
 
-What this means:
-- Today: Step 2 preview = TWO stacked vertical canvases
-  (#frontCanvas on top, #backCanvas below) with "Front" / "Back"
-  labels.
-- Wanted: ONE single landscape canvas — front on LEFT, back on
-  RIGHT, no labels — visually identical to the printed 1-pair
-  sheet (which already prints front-then-back edge-to-edge after
-  PR #248 / §AC.8). NOTE: order revised post-§AC.11 merge per user
-  feedback (PR #256). Original brief read "back LEFT, front RIGHT";
-  the corrected spec is "front LEFT, back RIGHT".
+A. **Audit multi-card / Dragon / PVC layouts for the same
+   perforation-strip artefact.** The crop change in §AC.14 is
+   global (CROP.aadhaar is shared), so those layouts should already
+   benefit. Verify visually and tighten the *top placement* of the
+   first row in `buildMultiCardSheet` to match the §AC.13 / §AC.14
+   "flush at top, less waste" treatment if the user wants symmetry
+   across all four layouts.
 
-Full spec + acceptance criteria + edge cases: read issues.md
-§AC.11 (sections AC.11.1 … AC.11.11). Reference image is the
-target — match its proportions and seam placement.
+B. **Phase 4 P3 Master Settings.** DPI / padding / margins per
+   printer, persisted in localStorage (extend `idp:prefs:v1` or new
+   `idp:printer:v1`).
 
-Implementation outline (full details in §AC.11.4–AC.11.8):
+C. **Phase 4 P3 PrePrinted Card mode** (back-only sheets — for users
+   who buy pre-printed Aadhaar/PAN card stock and only need the
+   back side printed).
 
-1. Replace `#frontCanvas` + `#backCanvas` with one new
-   `#pairCanvas` element. Internal resolution 2022 × 638 px
-   (= 2 * CR80_W × CR80_H). CSS: `width:100%;
-   max-width:760px; aspect-ratio:2022/638; height:auto;`.
+D. **Phase 4 P4 Printer presets** (Epson L805 etc), BigQR toggle,
+   other-card overlays (Voter / Ayushman / Jan Aadhaar — fresh
+   design from scratch since the PAN overlays were deleted in
+   PR #252).
 
-2. Drop the "Front" / "Back" `<small>` captions in the preview
-   wrapper.
-
-3. Refactor `drawFiltered` (and `drawFilteredToCanvas`,
-   `applyFilters`, `applyBatchFilters`) so they composite both
-   sides into the single `#pairCanvas`:
-     - LEFT half (dx=0):       front card with front filters/move/zoom
-     - RIGHT half (dx=CR80_W): back card with back filters/move/zoom
-   Apply the rounded-corner clip per half (so each card retains
-   its own rounded silhouette if `rounded` is on).
-   (Order corrected post-merge — PR #256.)
-
-4. Position panel — Move d-pad (PR #229) + Zoom slider (PR #230)
-   + their shared Front/Back radio MUST keep working. The
-   selected side's offset/scale apply inside its half of the
-   unified canvas.
-
-5. Sheet builders (`buildSingleSheet`, `buildMultiCardSheet`,
-   `buildDragonSheet`, `buildPVCTraySheet`) MUST NOT be touched
-   — they already take `frontImageData` / `backImageData`
-   directly and arrange cards per layout.
-
-6. Edge cases (decide while implementing):
-   - If `backImageData` is null (some PAN PDFs): draw front in
-     the right half + leave left half a light-grey placeholder.
-   - Batch mode (`isBatchMode`): unify the same way, render
-     active batch card.
-
-Estimated diff: ~60–80 lines, single file (`id-print.html`),
-plus dist rebuild.
-
-Acceptance:
-- Step 2 preview = ONE wide landscape canvas at ~3.17:1.
-- LEFT visually = front card; RIGHT visually = back card.
-  (Corrected post-merge — PR #256.)
-- No "Front" / "Back" text captions around the preview.
-- Move / Zoom / brightness / contrast / saturate / rounded
-  corners / Auto Enhance / Quick Presets / Reset all still
-  apply per side.
-- 1-Pair / multi-card / Dragon / PVC sheet outputs unchanged.
-- `npm run build` clean.
-- Visual match against
-  .agents/references/preview-landscape-target.png (cards touch
-  at the seam, no gap).
+E. **"Print Tip" hint card** on the 1-Pair preview saying
+   "Bottom half is reusable — feed sheet again for second pair."
+   (Suggested at the end of PR #260; user has not committed.)
 
 ═══════════════════════════════════════════════════════════════
 
 Hard rules (do NOT skip — see AGENTS.md):
-1. ONE PR per logical task (Rule #12). §AC.11 is one PR.
-2. Research → docs → code (Rule #13/#14). §AC.11 research is
-   already in issues.md §AC.11; this session ships the CODE PR
-   directly. No new docs PR needed unless scope changes mid-flight.
+1. ONE PR per logical task (Rule #12).
+2. Research → docs → code (Rule #13/#14). For small follow-ups
+   like §AC.12–§AC.14 the docs entry can ride in the same PR
+   description + issues.md update; for new features, write the
+   issues.md section first.
 3. Minimum diff. Don't refactor adjacent code "while you're there".
 4. Use existing tokens / module boundaries.
 5. PR via GitHub REST API only — destructive git ops blocked.
-   Branch: `devin/<unix_ts>-preview-landscape-pair`. Base: main.
-6. Run `npm install && node build.js` before committing dist/.
+   Branch: `devin/<unix_ts>-<short-slug>`. Base: main. Use the
+   reusable script `/tmp/mkpr.mjs` (reads PAT from
+   `process.env.GITHUB_PAT_PASSPORTPRINT`, branch from
+   `/tmp/branch_name.txt`).
+6. Run `npm install && npm run build` before committing dist/.
    Both `id-print.html` and `dist/id-print.html` go in the same PR.
-7. Image-saving discipline (Rule new): every reference image the
-   user attaches goes into `.agents/references/<descriptive-name>.png`
-   AND gets cited in the relevant issues.md section.
+7. Image-saving discipline: every reference image the user attaches
+   goes into `.agents/references/<descriptive-name>.png` (or, if not
+   committed to repo, cited by its `attached_assets/` filename) AND
+   gets quoted in the relevant `issues.md` section.
 
-After §AC.11 ships, propose ONE of these as next-session candidates:
-- Phase 4 P3 Master Settings (DPI/padding per printer, persist in
-  localStorage — extend `idp:prefs:v1` or new `idp:printer:v1`).
-- Phase 4 P3 PrePrinted Card mode (back-only sheets).
-- Phase 4 P4 Printer presets (Epson L805 etc), BigQR toggle,
-  other-card overlays (Voter / Ayushman / Jan Aadhaar — same
-  pattern as the PAN overlays were, but those were just deleted in
-  PR #252, so this is a fresh design from scratch if the user
-  asks for them again).
+State of `idp:prefs:v1` schema (post-§AC.13):
+  `{ rounded: boolean, swapSides: boolean,
+     bright: int, contrast: int, sat: int }`
+  — `cutMarks` was REMOVED; stale values from old blobs are ignored.
+
+State of `CROP.aadhaar` (post-§AC.14):
+  front: [0.0520, 0.6821, 0.4471, 0.1995]
+  back:  [0.4991, 0.6821, 0.4465, 0.1995]
+  Aspect ≈ 1.585:1 (matches CR80). Bottom edge same as PR #248.
+  Rollback knob if too tight on a PDF variant: bump `y` back to
+  ≈0.6770 and `h` to ≈0.2046.
+
+State of `buildSingleSheet` (post-§AC.14):
+  `gap = 0`, `startX = (A4_W - pairW) / 2`, `startY = 80`
+  (~7mm @ 300 DPI). NO cut-marks / fold-here / corner-ticks /
+  seam-ticks branch. Caption `CR80 · 85.6 × 54 mm · 300 DPI —
+  Studio Print` still drawn at `startY + cardH + 70`.
 ```

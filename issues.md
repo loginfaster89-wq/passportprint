@@ -2752,3 +2752,180 @@ sweep + dist rebuild. One file (`id-print.html`).
 - Move (PR #229), Zoom (PR #230), Rounded Corners (PR #194), Cut
   Marks (PR #251) all behave correctly per side.
 - Sheet builders untouched — `npm run build` clean.
+
+---
+
+## §AC.12 ID Card Print — Swap sides toggle on Step 2 unified preview
+
+**Status:** SHIPPED — PR #258 (commit `d8acf0f`, merged into main).
+
+**User feedback (Hinglish, post-§AC.11/PR #256):**
+
+> User wanted a quick way to flip just the *preview* so back is on the
+> LEFT and front on the RIGHT (or vice-versa) without affecting the
+> printed sheet. The default front-LEFT / back-RIGHT (set by §AC.11 +
+> PR #256) stays unchanged on first paint; the toggle is opt-in and
+> remembered between sessions.
+
+**Change:**
+
+- New small icon-button `#btnSwapSides` (↔ icon, label "Swap sides",
+  Hindi tooltip "Front/Back ki side swap karo") rendered just below
+  the unified `#pairCanvas` in Step 2.
+- New state `let swapSides = false;` (default off).
+- `compositePair(canvas, frontReady, backReady)` — at the top, swaps
+  the two args when `swapSides === true`. The function then draws
+  "frontReady" at `dx=0` and "backReady" at `dx=CR80_W` exactly as
+  before, so per-half rounded-corner clip paths follow the swapped
+  order automatically.
+- Persisted in `localStorage.idp:prefs:v1` under new key `swapSides`.
+  Read on init via `loadPrefs()`, written on every toggle via
+  `savePrefs()`. Restored button state reflects active class +
+  `aria-pressed`.
+- Batch mode honoured: `applyBatchFilters()` already calls
+  `compositePair(c, tmpF, tmpB)` for every per-card pair canvas, so
+  toggling re-paints all of them in one click.
+- **Sheet builders untouched.** `buildSingleSheet` /
+  `buildMultiCardSheet` / `buildDragonSheet` / `buildPVCTraySheet`
+  keep consuming `frontImageData` / `backImageData` by side identity
+  — swap is preview-only.
+
+**Acceptance:**
+
+- [x] Default page load: front-LEFT, back-RIGHT (unchanged).
+- [x] Click toggle: front jumps to RIGHT, back to LEFT.
+- [x] Reload: order matches persisted preference (`idp:prefs:v1.swapSides`).
+- [x] Move (#229), Zoom (#230), Rounded Corners (#194), Cut Marks (#251)
+      all behave correctly per side regardless of toggle state.
+- [x] Sheet outputs (1-pair, multi, Dragon, PVC) unchanged in both
+      toggle states.
+- [x] `npm run build` clean. Both `id-print.html` and
+      `dist/id-print.html` in this PR.
+
+---
+
+## §AC.13 ID Card Print — Responsive A4 preview, 1-pair to top, drop Cut Marks UI
+
+**Status:** SHIPPED — PR #259 (commit `b5bf55c`, merged into main).
+
+**User feedback (3 screenshots — saved at `attached_assets/Screenshot_(353|354|355)_*.png` in the project history):**
+
+> 1. The A4 result canvas in Step 2 is way too big — it dominates the
+>    screen on phones and on tall desktop windows.
+> 2. On the 1-Pair Fold & Laminate layout, the card pair sits in the
+>    middle of the A4 — wastes paper. Move it to the TOP so the unused
+>    bottom half is reusable.
+> 3. Remove the **Cut Marks** UI option entirely (the `#chkCutMarks`
+>    checkbox in the Step 2 sidebar). And remove the "← fold here →"
+>    line + corner ticks above the cards on the 1-Pair sheet. Add
+>    matching white-stock padding on top so all four sides have
+>    consistent clean margin.
+
+**Change:**
+
+- **CSS — responsive `.idp-a4-wrap`:** wrap centred via
+  `text-align:center`. Canvas: `max-width: min(100%, 600px)`,
+  `max-height: 78vh`, `width:auto / height:auto` so aspect ratio is
+  preserved. Phone breakpoint (`max-width:640px`): `max-height: 72vh`,
+  wrap margin reduced.
+- **`buildSingleSheet`:** `startY = startX` (= `(A4_W - pairW) / 2`)
+  → cards drawn flush at top with the same white margin as left /
+  right. The entire `if (cutMarks) { … }` block deleted (no dashed
+  fold line, no fold-here caption, no `drawCornerMarks`, no seam
+  ticks).
+- **Markup + state — Cut Marks UI removed:**
+  - `<label class="idp-option"><input id="chkCutMarks" …>Cut Marks</label>`
+    deleted.
+  - JS ref `const chkCutMarks = $('#chkCutMarks');` deleted.
+  - `chkCutMarks.addEventListener('change', …)` listener deleted.
+  - `savePrefs()` no longer writes `cutMarks` to `idp:prefs:v1`.
+  - `loadPrefs()` no longer reads `cutMarks`. Stale values from
+    older prefs blobs are silently ignored.
+  - `let cutMarks = true;` → `const cutMarks = true;` (kept so
+    multi-card / Dragon / PVC builders keep drawing their cut guides
+    exactly as before).
+
+**Acceptance:**
+
+- [x] A4 preview canvas no longer overflows / dominates on mobile
+      portrait or tall desktop windows. Aspect ratio preserved.
+- [x] 1-Pair sheet: cards at TOP of A4, equal padding on top / left /
+      right.
+- [x] Cut Marks checkbox is gone from Step 2.
+- [x] 1-Pair sheet has no "← fold here →" line, no dashed seam, no
+      corner ticks.
+- [x] Multi-card / Dragon / PVC sheets visually unchanged (cut guides
+      still drawn).
+- [x] §AC.12 Swap sides toggle still works.
+- [x] `npm run build` clean. Both `id-print.html` and
+      `dist/id-print.html` in this PR.
+
+---
+
+## §AC.14 ID Card Print — Crop Aadhaar perforation strip, push 1-pair flush to top, shrink preview
+
+**Status:** SHIPPED — PR #260.
+
+**User feedback (Hinglish, screenshots saved at `attached_assets/aadhaar-a4-sheet_*.png`, `attached_assets/Screenshot_(356|357)_*.png`):**
+
+> 1. There is still a thin dashed horizontal line ABOVE the cards in
+>    the exported A4 PNG (user marked with red arrows). They want it
+>    gone, and they want the card border to look "complete on all 4
+>    sides".
+> 2. Cards still placed too far below the top edge — push them
+>    flush to the top.
+> 3. The A4 preview after §AC.13 is **still too tall** on desktop and
+>    phone — the empty bottom half of the sheet pushes the canvas to
+>    nearly full screen height.
+
+**Investigation (key finding):**
+
+`buildSingleSheet` was audited line-by-line (`rg ctx\\.(stroke|setLineDash|moveTo|lineTo|rect|fillRect|drawImage|fillText)`).
+It draws **only**: white fill, the front card image, the back card
+image, and the "CR80 · 85.6 × 54 mm · 300 DPI — Studio Print" caption
+*below* the cards. Nothing is drawn above the cards. The dashed line
+the user sees is therefore **part of the e-Aadhaar PDF source** —
+the perforation cut indicator strip that real e-Aadhaar PDFs print
+just above the card border. PR #248 had tightened `CROP.aadhaar` to
+"hug the outer black border" but apparently still included the
+perforation strip on the test PDF.
+
+**Change:**
+
+- `CROP.aadhaar`:
+  - front: `[0.0520, 0.6657, 0.4471, 0.2159]` →
+           `[0.0520, 0.6821, 0.4471, 0.1995]`
+  - back:  `[0.4991, 0.6657, 0.4465, 0.2159]` →
+           `[0.4991, 0.6821, 0.4465, 0.1995]`
+  - y bumped down by **+0.0164** and h reduced by the same **−0.0164**
+    (~5 mm at A4 = ~58 px in PDF render space) on both halves. Bottom
+    edge unchanged. New aspect ≈ **1.585 : 1** which matches CR80
+    exactly (was 1.464 : 1, slightly tall — that surplus *is* the
+    perforation strip).
+- `buildSingleSheet` — top margin: `var startY = startX;` (~229 px /
+  19 mm) → `var startY = 80;` (~7 mm @ 300 DPI). Side margins
+  untouched.
+- CSS `.idp-a4-wrap` / canvas tighter cap:
+  - `max-width: min(100%, 600px)` → `min(100%, 460px)` (desktop).
+  - `max-height: 78vh` → `55vh` (desktop).
+  - Mobile (`max-width:640px`): `max-height: 72vh` → `50vh`,
+    `max-width: 100%`.
+  - Wrap margin reduced 20px → 14px (10px on mobile).
+
+**Acceptance:**
+
+- [x] Exported A4 PNG no longer shows the dashed perforation line
+      above the Aadhaar card top border.
+- [x] 1-Pair sheet: cards sit ~7 mm from the top of the A4 (clearly
+      flush vs the previous ~19 mm).
+- [x] A4 preview canvas comfortably fits on desktop and phone without
+      dominating the screen.
+- [x] Multi-card / Dragon / PVC sheets visually unchanged.
+- [x] `npm run build` clean. Both `id-print.html` and
+      `dist/id-print.html` in this PR.
+
+**Rollback note:** if the new aadhaar crop happens to clip into the
+very top of the actual Aadhaar card content on some PDF variants,
+the simple rollback is to bump `y` back partway (e.g. `0.6770` and
+h `0.2046`) — values were derived from CR80 aspect math against
+`test-pdfs/aadhaar-test.pdf`, not measured on every variant.
