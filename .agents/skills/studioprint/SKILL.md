@@ -325,6 +325,61 @@ Do NOT re-fix any of the following — they are all merged:
 - PR #213: **copy update** — nav dropdown subtitle on 7 pages updated
   to include Ayushman/eShram. Homepage feature card description updated
   to reflect Phase 2/3 features.
+- PRs #214–#225: docs (gap-fill + research). #214 docs gaps. #215/#216
+  toggle-options research (§T). #217 Aadhaar field toggles code.
+  #218 closed (conflicted). #219 docs. #220 PAN signature box research
+  (§U). #221 PAN signature box code. #222 §V Phase 4 scope reset.
+  #223 fix PAN signature coords (§V.2.a). #224 PAN HOLOGRAM overlay
+  (§V.2.b). #225 docs.
+- PRs #226–#234: Phase 4 P2 + §Y. #226 §W Move research. #227 cut-marks
+  Sheet-only fix. #228 §X Zoom research. #229 per-side Move (X/Y nudge).
+  #230 per-side Zoom (50%–150%). #231 zoom slider DOM refresh fix.
+  #232 Auto Enhance (§Y, rebased from closed #218). #234 docs.
+- PRs #235 + #239: Phase 4 P3 §Z Photo Editor split panel.
+  #235 research, #239 code (Step 2 sidebar reorg into Card Cleanup /
+  Position / Photo Adjust + Bold toggle + 3 Quick Presets +
+  shared §W+§X Front/Back radio).
+- PRs #240–#248: §AA / §AB / §AC field-driven fixes.
+  #240 auto-detect & swap reversed Front/Back (Aadhaar/PAN, §AA,
+  `skinPixelRatio` over photo ROI). #241 inline `#swapNotice` (amber)
+  + Undo button. #242 persist Card Cleanup toggles + Quick Preset id
+  in localStorage `idp:prefs:v1` (§AB). #243 §AC.5 first crop retune
+  (regressed, superseded). #245 §AC.6 final retune for the bottom-row
+  plastic-card mock-ups. #246 §AC.6 follow-up — qrCode mask widened.
+  #247 §AC.7 — un-mirror Aadhaar back card on 1-pair sheet (legacy
+  fold artefact removed; cut + back-to-back stack workflow today).
+  #248 §AC.8 — tight `CROP.aadhaar` + `gap=0` on 1-pair sheet (cards
+  print edge-to-edge, matches user snipping-tool reference).
+- PR #251: feat — **Cut Marks toggle on 1-Pair Sheet (§AC.9).** Re-uses
+  the existing `cutMarks` boolean (already wired for multi-card /
+  Dragon / PVC). New `chkCutMarks` checkbox in Step 2 sidebar Position
+  panel (single-card mode). When ON, `buildSingleSheet` draws 4 short
+  black corner ticks around the merged card pair and skips the dashed
+  seam line. Default OFF. Persists in `idp:prefs:v1`.
+- PR #252: refactor — **Remove "Card Cleanup" panel (§AC.10).** User:
+  "iska koi kaam nahi hai feature main." Drops `panelCleanup` div +
+  `swapNotice` (Hide QR / Mobile / Issue Date / Download Date /
+  Signature Box / Hologram / Bold / Swap Front+Back / Undo Swap),
+  `AADHAAR_FIELD_MASKS`, `PAN_OVERLAY_REGIONS`, `applyAadhaarMasks`,
+  `applyPanOverlays`, `swapFrontBack` + `updateSwapNotice` +
+  `clearAutoSwapFlag` + `shouldAutoSwap` + `skinPixelRatio`,
+  auto-swap flags + flow in `fetchPdfCard`/`processPdf`, all related
+  DOM refs + listeners + reset entries, bold-text branch from
+  `getFilterString`. `idp:prefs:v1` schema reduced to
+  `{rounded, cutMarks, slider preset}`. ~10 KB raw shrink in
+  `id-print.html`. Position / Photo Adjust / Quick Presets / Auto
+  Enhance / Reset / Rounded Corners / Cut Marks (#251) all preserved.
+  §AA auto-swap fully gone — replaced by §AC.11 landscape preview
+  redesign (next session).
+
+**NEXT — §AC.11 Front+Back preview redesign.** User wants the Step 2
+preview to match the printed 1-pair sheet exactly: ONE landscape
+canvas (back on left, front on right), not two stacked vertical
+canvases. Reference image at
+`.agents/references/preview-landscape-target.png` (the user's
+snipping-tool capture, IS the spec). Full design + acceptance
+criteria in `issues.md` §AC.11. Estimated ~60–80 line code PR in
+`id-print.html` only; sheet builders untouched.
 
 **Phase 2 is now COMPLETE.**
 
@@ -436,7 +491,7 @@ without re-auditing.
 
 ```
 [TERSE MODE = ON] Minimum messages, zero re-explanation, sirf critical
-updates aur decisions. Ye default hai — har session mein auto-on.
+updates aur decisions. Hinglish. Ye default hai — har session mein auto-on.
 Quota reminder pe koi message mat do — silently kaam karte raho.
 
 Sabse pehle PAT le lo mere se — GITHUB_PAT_PASSPORTPRINT (fine-grained,
@@ -444,231 +499,162 @@ repo-scoped — Contents + Pull requests: Read and write). Session-only
 secret hoga. Bina PAT ke aage mat badho.
 
 Studio Print frontend par kaam karo. Repo: loginfaster89-wq/passportprint
-(private).
+(private). Last main HEAD has PR #253 (docs) merged.
 
 Clone ke baad pehle ye teen files padho:
-.agents/skills/studioprint/SKILL.md — Devin recipe
-AGENTS.md — full source of truth
-issues.md — full audit + §M ID Card Print research + §O Phase 2 multi-card
-  + §P Phase 3 Ayushman/Jan Aadhaar/eShram + §Q batch processing
-  + §R PVC card tray + §S copy update + §T toggle options research
-  + §U PAN signature box research
-  + §V Phase 4 CardXpress feature parity scope (8 reference images in
-    .agents/references/)
+.agents/skills/studioprint/SKILL.md — Devin recipe (this file)
+AGENTS.md — full source of truth (rules, layout, hard constraints)
+issues.md — full audit + ID Card Print arc
+  (§M Phase 1 — §V Phase 4 scope — §W Move — §X Zoom — §Y Auto Enhance —
+   §Z Photo Editor split — §AA auto-swap — §AB persist prefs —
+   §AC crop / mirror / gap retunes —
+   §AC.9 Cut Marks toggle (PR #251) —
+   §AC.10 Card Cleanup removal (PR #252) —
+   §AC.11 Front+Back preview redesign — THIS SESSION'S TASK)
 
-Last PR: PR #235 (docs: Phase 4 P3 §Z research — Photo
-  Editor split panel: reorganise Step 2 sidebar into Card Cleanup /
-  Position / Photo Adjust panels, add Bold text toggle, add Original/
-  Aadhaar/PAN quick presets, consolidate §W+§X Front/Back radios into
-  one shared radio. ~80–100 line code PR pending in a separate session
-  per Rule #13)
+Reference images in .agents/references/ — open
+preview-landscape-target.png before starting §AC.11 (it IS the spec).
 
-Shipped summary (don't redo):
-PRs #70–#230: all previous work shipped
-- PRs #70–#189: original audit + Document Sheet + ID Card Print Phase 1
-- PR #190: docs update
-- PR #191: ID Card Print Phase 2 — photo editing (brightness/contrast/
-  saturation sliders with live preview)
-- PR #192: docs update
-- PR #193: ID Card Print Phase 2 — multi-card A4 layout (5 pairs per
-  sheet, cut marks, layout toggle)
-- PR #194: ID Card Print Phase 2 — rounded corners toggle (canvas
-  clip-path with arcTo, preview + A4 sheet)
-- PR #197: fix rounded corners var shadowing bug in buildMultiCardSheet
-- PR #198: docs — fix PR #195→#197 refs (also added a half-half
-  rule that was later removed in PR #250)
-- PR #199: docs — mark shipped Phase 2 items + update prompt
-- PR #201: docs — fill Voter ID task in prompt, update AGENTS.md
-- PR #202: ID Card Print Phase 2 — Voter ID multi-page PDF support
-- PR #203: ID Card Print Phase 2 — Dragon sheet (4×6) layout
-- PR #205: ID Card Print Phase 3 — Ayushman/Jan Aadhaar/eShram support
-- PR #206: docs — add §P section + update prompt
-- PR #208: ID Card Print Phase 3 — batch processing (multiple PDFs)
-- PR #209: docs — mark batch shipped, add §Q, update prompt
-- PR #210: ID Card Print Phase 3 — PVC card tray layout (Epson L805/L8050)
-- PR #212: docs — mark PVC tray shipped, add §R, update prompt
-- PR #213: copy — update ID Card Print nav dropdown + feature card
-- PR #214: docs — fix gaps in SKILL.md §9/§11 + AGENTS.md open backlog
-- PR #215: docs — toggle options research (§T in issues.md) + new rules
-  (rule #14 in SKILL.md, rule #10 in AGENTS.md: research→docs→code)
-- PR #216: docs — §T full research plan, AADHAAR_FIELD_MASKS coords,
-  implementation steps (toggle options for Aadhaar)
-- PR #217: ID Card Print Phase 3 — Aadhaar field toggles (Hide QR Code /
-  Hide Mobile No. / Hide Issue Date / Hide Download Date). 4 checkboxes
-  in preview step, only visible for Aadhaar cards. White-mask pixel
-  regions on back card in preview + A4/Dragon/PVC/multi-card outputs.
-  AADHAAR_FIELD_MASKS constant + applyAadhaarMasks() helper. Paths:
-  drawFilteredToCanvas, drawFiltered, applyBatchFilters. Reset clears.
-- PR #218: CLOSED (conflicted, mixed code+docs against current
-  main). Superseded by PR #232 — same algorithm, code-only, rebased.
-- PR #219: docs — marking PRs #216-#218 shipped in SKILL.md + AGENTS.md.
-- PR #220: docs — PAN Signature Box research. Adds §U to issues.md
-  with PAN_OVERLAY_REGIONS coords (signatureBox at front x:540 y:470
-  w:380 h:110), `applyPanOverlays()` design mirroring `applyAadhaarMasks()`,
-  3 call-site list, batch-mode + reset notes. Updates SKILL.md §9
-  (signature box → research done) + §11 prompt template.
-- PR #221: feat(id-card-print) — PAN signature box overlay code per §U.
-  +36/-2 in id-print.html. NOTE: signature box coords WRONG (overlap QR);
-  P1 fix scoped in §V.2.a, ship before users hit it.
-- PR #222: docs — §V Phase 4 scope reset. After user feedback that §U is
-  too narrow vs full competitor scope, committed 8 reference images to
-  .agents/references/ (incl. CardXpress UI), wrote §V breakdown:
-  CardXpress UI features (15-row table), PAN signature coords bug,
-  PAN HOLOGRAM scope (back top-right silver patch), Aadhaar confirmation,
-  Phase 4 backlog (P1-P4 prioritized), recommended next 2 PRs (#223 fix
-  coords, #224 hologram). Updates SKILL.md §9 + §11.
-- PR #223: fix(id-card-print) — correct PAN signatureBox coords per
-  §V.2.a. 1-line change in id-print.html PAN_OVERLAY_REGIONS:
-  {x:540, y:470, w:380, h:110} → {x:280, y:540, w:280, h:75}. Box now
-  sits in bottom-left signature row, no longer overlaps QR.
-- PR #224: feat(id-card-print) — PAN HOLOGRAM overlay (Phase 4 P1) per
-  §V.2.b. ~40 net lines in id-print.html: new `hologram` entry in
-  PAN_OVERLAY_REGIONS (back x:800 y:30 w:180 h:220), new chkHologram
-  checkbox in #panToggles, applyPanOverlays refactored to loop pattern
-  (mirrors applyAadhaarMasks), silver gradient fill + white "HOLOGRAM"
-  label DM Mono 24px. Wired into listener array + reset; existing 3
-  call-sites unchanged (function is generic per side).
-- PR #225: docs — marks PRs #223/#224 shipped.
-  SKILL.md §9 marks Phase 4 P1 items shipped + §11 prompt template
-  refreshed (Last PR, shipped summary, next-task → P2 Move/Zoom).
-  AGENTS.md open backlog updated to show Phase 4 P1 SHIPPED.
-  issues.md §V.2.a/§V.2.b marked SHIPPED, §V.4 P1 rows struck,
-  §V.5 marked SHIPPED.
-- PR #226: docs — §W Move research (issues.md).
-- PR #227: fix(id-card-print) — cut marks Sheet-only fix.
-- PR #228: docs — §X Zoom research (issues.md, stacked on #226).
-- PR #229: feat(id-card-print) — Phase 4 P2 per-side Move (X/Y nudge)
-  controls (§W). Per-side offset state `batchCards[0].offset`, 4-arrow
-  d-pad, step size input, Front/Back radio, reset wiring. Hidden in
-  batch mode. Offset applied in `drawFiltered` via `getOffset(side)`.
-  66 insertions, single file.
-- PR #230: feat(id-card-print) — Phase 4 P2 per-side Zoom (scale)
-  control (§X). Per-side scale state `batchCards[0].scale`, range
-  slider 50%–150%, Front/Back radio, own Reset button. Zoom around
-  centre then offset applied on top in `drawFiltered`. Overlays
-  unaffected (no ctx transform). Hidden in batch mode. 66 insertions.
-- PR #231: fix(id-card-print) — refresh Zoom slider DOM on
-  `btnBack` + fresh PDF load (§X follow-up). Cosmetic-only fix:
-  scale state was already reset to 1.0/1.0, but slider thumb + %
-  readout retained stale value until user touched the radio or
-  dragged. Calls `refreshZoomReadout()` after zoomPad shown +
-  resets `slZoom.value`/`zoomReadout.textContent` in btnBack.
-  4 lines added.
-- PR #232: feat(id-card-print) — Auto Enhance button (§Y), rebased
-  from closed #218. One-click brightness/contrast/saturation
-  optimisation via front card luminance histogram. Algorithm:
-  bright = clamp(128/avgLum*100, 70, 160), contrast 115%, sat 110%.
-  ~25 lines added.
-- PR #234: docs — marks PRs #231/#232
-  shipped across SKILL.md §9/§11 + AGENTS.md backlog + issues.md
-  §X banner / §X.11 follow-up / new §Y section.
-- PR #235: docs (this PR) — Phase 4 P3 §Z research: Photo Editor
-  split panel. Designs the Step 2 sidebar reorg (3 labelled panels:
-  Card Cleanup / Position / Photo Adjust), adds Bold text toggle and
-  3 Quick Preset buttons, consolidates the §W+§X Front/Back radios.
-  Estimated code diff ~80–100 lines. Code PR pending.
+Last shipped: PR #252 (refactor: remove "Card Cleanup" panel — §AC.10).
 
-ID Card Print current state:
-- Phase 1 MVP COMPLETE + VERIFIED (PR #188)
-- Phase 2 COMPLETE — all items shipped:
-  photo editing (#191), multi-card A4 (#193), cut marks (#193),
-  rounded corners (#194/#197), Voter ID (#202), Dragon sheet (#203)
-- Phase 3 COMPLETE — Ayushman/Jan Aadhaar/eShram (#205) + batch (#208)
-  + PVC tray (#210) + copy update (#213) + toggle research docs (#215/#216)
-  + Aadhaar field toggles (#217) + Auto Enhance (#232, rebased from
-  closed #218) + signature box research docs (#220) + signature box
-  code (#221) + Phase 4 scope (#222).
-- Phase 4 P1 SHIPPED — see §V:
-  PR #223 fix-pan-signature-coords (corrects PR #221 coords, §V.2.a)
-  PR #224 pan-hologram-overlay (back top-right silver HOLOGRAM patch, §V.2.b)
-- Phase 4 P2 SHIPPED — see §W/§X:
-  PR #229 per-side Move controls (X/Y nudge, §W)
-  PR #230 per-side Zoom/scale control (50%–150%, §X)
-- Phase 4 P3+ NOT STARTED — Photo Editor split / Master Settings /
-  PrePrinted Card / Printer presets / Bold / BigQR / other-card
-  overlays. Full backlog in issues.md §V.4.
+Shipped summary (don't redo) — see SKILL.md §9 for the full PR list.
+Highlights:
+- ID Card Print Phase 1 MVP COMPLETE + VERIFIED (PR #188).
+- Phase 2 COMPLETE — photo edit, multi-card A4, cut marks, rounded
+  corners, Voter ID, Dragon sheet.
+- Phase 3 COMPLETE — Ayushman/Jan Aadhaar/eShram, batch processing,
+  PVC card tray, copy update.
+- Phase 4 P1 SHIPPED — PAN signature box + HOLOGRAM overlay.
+- Phase 4 P2 SHIPPED — per-side Move (X/Y nudge) + per-side Zoom
+  (50%–150%).
+- Phase 4 P3 §Z SHIPPED — Photo Editor split panel (Card Cleanup /
+  Position / Photo Adjust + Bold + Quick Presets + shared Front/Back
+  radio).
+- §AA SHIPPED — auto-detect & swap reversed Front/Back + manual
+  Swap button + amber #swapNotice + Undo. **REMOVED in PR #252.**
+- §AB SHIPPED — persist prefs in localStorage `idp:prefs:v1`.
+  **Schema reduced in PR #252 to {rounded, cutMarks, slider preset}.**
+- §AC.6/§AC.7/§AC.8 SHIPPED — Aadhaar crop retuned to bottom-row
+  plastic-card mock-ups, back un-mirrored, gap=0 on 1-pair sheet.
+- §AC.9 SHIPPED — PR #251 Cut Marks toggle on 1-Pair Sheet
+  (chkCutMarks in Position panel; 4 corner ticks; default OFF;
+  persisted in idp:prefs:v1).
+- §AC.10 SHIPPED — PR #252 Removed entire "Card Cleanup" panel
+  (Hide QR / Mobile / Issue Date / Download Date / Signature Box /
+  Hologram / Bold / Swap Front+Back / Undo Swap), all support code
+  (AADHAAR_FIELD_MASKS, PAN_OVERLAY_REGIONS, applyAadhaarMasks,
+  applyPanOverlays, swapFrontBack, updateSwapNotice,
+  clearAutoSwapFlag, shouldAutoSwap, skinPixelRatio, auto-swap flow).
+  ~10 KB raw shrink in id-print.html. §AA auto-swap fully gone.
 
 Test PDFs repo mein saved hain:
 test-pdfs/pan-test.pdf (password: 05071999)
 test-pdfs/aadhaar-test.pdf (password: SUNI1986)
 
-Phase 4 P2 COMPLETE:
-- PR #229: Per-side Move controls (X/Y nudge, §W) — SHIPPED
-- PR #230: Per-side Zoom/scale control (50%–150%, §X) — SHIPPED
-- PR #231: §X zoom slider DOM refresh fix — SHIPPED
-- PR #226: §W Move research docs — SHIPPED
-- PR #228: §X Zoom research docs — SHIPPED
-- PR #227: cut marks Sheet-only fix — SHIPPED
+═══════════════════════════════════════════════════════════════
+TASK (THIS SESSION) — §AC.11 Front+Back preview redesign
+═══════════════════════════════════════════════════════════════
 
-Phase 3 follow-up COMPLETE:
-- PR #232: Auto Enhance (§Y, rebased from closed #218) — SHIPPED
-- PR #234: docs second-half — SHIPPED
+User feedback (Hinglish, snipping-tool reference attached at
+.agents/references/preview-landscape-target.png):
 
-Phase 4 P3 §Z COMPLETE:
-- PR #235: §Z research — Photo Editor split panel — SHIPPED
-- PR #239: §Z code — sidebar reorg into 3 panels (Card Cleanup /
-  Position / Photo Adjust) + Bold toggle + 3 Quick Presets
-  (Original 100/100/100, Aadhaar 105/130/100, PAN 115/115/110) +
-  shared §W+§X Front/Back radio — SHIPPED
+  "Ye jo Front & Back Preview wala hai ye bhi shi karna hai. Phele
+   ye Front dikhata hai or fir neche Back. Ye shi kro jis trh se
+   PDF main se ID ko cut karte hai vaise hi preview main dikhna
+   chahiye — landscape main, RIGHT side Front or LEFT side Back.
+   Aapko full permission hai design ko adjust karne ke liye.
+   Maine snipping tool se ID ko cut kiya hai — ID ke charo side
+   diye gaye lines ka use kiya — waise hi aapko karna hai. Jo cut
+   hoga wo same to same preview main dikhana hai bina back or
+   front ko alag alag kre."
 
-Field-driven fixes (post-§Z) COMPLETE:
-- PR #240: §AA — auto-detect & swap reversed Front/Back for
-  Aadhaar/PAN PDFs. skinPixelRatio() + shouldAutoSwap() over
-  ROI [0.04,0.18,0.22,0.55], thresholds bSkin>0.04 && delta>0.02.
-  Manual Swap button in Panel A — SHIPPED
-- PR #241: §AA — inline #swapNotice (amber) above Front canvas
-  with one-click Undo button, single-card mode only — SHIPPED
-- PR #242: §AB — persist Card Cleanup toggles + Quick Preset id
-  in localStorage key idp:prefs:v1. savePrefs() on change,
-  loadPrefs() before applyFilters() in processPdf and
-  showBatchPreview — SHIPPED
-- PR #243: §AC — CROP.aadhaar retuned (FIRST attempt, regressed
-  to upper-row formal Letter + Notice). Superseded by §AC.6 / PR #245.
-- PR #245: §AC.6 — CROP.aadhaar re-retuned for the BOTTOM-row
-  plastic-card mock-ups (the actual printable cards): Front
-  [0.010,0.682,0.477,0.231], Back [0.504,0.682,0.488,0.231].
-  AADHAAR_FIELD_MASKS retuned for the small-card layout: qrCode
-  {535,75,390,350}, mobileNumber soft no-op {0,0,0,0}, issueDate
-  {2,105,22,145}, downloadDate {2,250,22,160} (narrow vertical
-  strips on left margin where rotated date text appears).
-  Closes §AC.5 follow-up. — SHIPPED
-- PR #246: §AC.6 follow-up — qrCode mask widened from
-  {535,75,390,350} to {596,128,415,374} after user reported QR
-  bleed on right edge. — SHIPPED
-- PR #247: §AC.7 — Un-mirror Aadhaar back card on "1 Pair · Fold
-  & Laminate" sheet. Removed ctx.scale(-1, 1) block in
-  buildSingleSheet (legacy fold-over-paper artefact). Now matches
-  multi-card / dragon / PVC layouts (back drawn straight). User
-  workflow today is cut + back-to-back stack, not fold. — SHIPPED
-- PR #248: §AC.8 — Tight CROP.aadhaar + gap=0 in 1-pair sheet.
-  CROP measured against test-pdfs/aadhaar-test.pdf at 200 DPI:
-  Front [0.0520,0.6657,0.4471,0.2159], Back
-  [0.4991,0.6657,0.4465,0.2159] (seam at x=0.4991). Old crop left
-  85–95 px white margin per card; new crop is edge-to-edge.
-  AADHAAR_FIELD_MASKS linear-scaled (canvas_x' ≈ 11 + x*1.093,
-  canvas_y' ≈ 48 + y*1.070): qrCode {596,128,415,374}, issueDate
-  {13,160,24,155}, downloadDate {13,316,24,171}, mobileNumber
-  {0,0,0,0} (still soft no-op). buildSingleSheet `var gap = 40`
-  → `var gap = 0` so front+back touch on A4. Matches user's
-  snipping-tool reference exactly. — SHIPPED
+What this means:
+- Today: Step 2 preview = TWO stacked vertical canvases
+  (#frontCanvas on top, #backCanvas below) with "Front" / "Back"
+  labels.
+- Wanted: ONE single landscape canvas — back on LEFT, front on
+  RIGHT, no labels — visually identical to the printed 1-pair
+  sheet (which already prints back-then-front edge-to-edge after
+  PR #248 / §AC.8).
 
-TASK: Phase 4 P3+ remaining items next. Per Rule #13, research first
-— open a docs PR with UX / state-shape research, THEN a code PR.
-Per Rule #12, ONE item per session.
+Full spec + acceptance criteria + edge cases: read issues.md
+§AC.11 (sections AC.11.1 … AC.11.11). Reference image is the
+target — match its proportions and seam placement.
 
-Recommended next (pick ONE per session):
+Implementation outline (full details in §AC.11.4–AC.11.8):
 
-(a) **P3 Master Settings** — DPI/padding/margins calibration per
-    printer. Persists in localStorage (extend idp:prefs:v1 schema
-    or new key idp:printer:v1). Research PR first.
+1. Replace `#frontCanvas` + `#backCanvas` with one new
+   `#pairCanvas` element. Internal resolution 2022 × 638 px
+   (= 2 * CR80_W × CR80_H). CSS: `width:100%;
+   max-width:760px; aspect-ratio:2022/638; height:auto;`.
 
-(b) **P3 PrePrinted Card mode** — back-only sheets for pre-printed
-    front cards. Toggle in Step 1 → skips front rendering, doubles
-    back density on A4. Research PR first.
+2. Drop the "Front" / "Back" `<small>` captions in the preview
+   wrapper.
 
-After P3, P4 backlog: Printer presets, BigQR toggle, other-card
-overlays (Voter / Ayushman / Jan Aadhaar — same pattern as PAN).
+3. Refactor `drawFiltered` (and `drawFilteredToCanvas`,
+   `applyFilters`, `applyBatchFilters`) so they composite both
+   sides into the single `#pairCanvas`:
+     - LEFT half (dx=0):       back card with back filters/move/zoom
+     - RIGHT half (dx=CR80_W): front card with front filters/move/zoom
+   Apply the rounded-corner clip per half (so each card retains
+   its own rounded silhouette if `rounded` is on).
 
-Reference images in .agents/references/ — open
-competitor-cardxpress-ui.jpeg before any P3+ research PR.
+4. Position panel — Move d-pad (PR #229) + Zoom slider (PR #230)
+   + their shared Front/Back radio MUST keep working. The
+   selected side's offset/scale apply inside its half of the
+   unified canvas.
+
+5. Sheet builders (`buildSingleSheet`, `buildMultiCardSheet`,
+   `buildDragonSheet`, `buildPVCTraySheet`) MUST NOT be touched
+   — they already take `frontImageData` / `backImageData`
+   directly and arrange cards per layout.
+
+6. Edge cases (decide while implementing):
+   - If `backImageData` is null (some PAN PDFs): draw front in
+     the right half + leave left half a light-grey placeholder.
+   - Batch mode (`isBatchMode`): unify the same way, render
+     active batch card.
+
+Estimated diff: ~60–80 lines, single file (`id-print.html`),
+plus dist rebuild.
+
+Acceptance:
+- Step 2 preview = ONE wide landscape canvas at ~3.17:1.
+- LEFT visually = back card; RIGHT visually = front card.
+- No "Front" / "Back" text captions around the preview.
+- Move / Zoom / brightness / contrast / saturate / rounded
+  corners / Auto Enhance / Quick Presets / Reset all still
+  apply per side.
+- 1-Pair / multi-card / Dragon / PVC sheet outputs unchanged.
+- `npm run build` clean.
+- Visual match against
+  .agents/references/preview-landscape-target.png (cards touch
+  at the seam, no gap).
+
+═══════════════════════════════════════════════════════════════
+
+Hard rules (do NOT skip — see AGENTS.md):
+1. ONE PR per logical task (Rule #12). §AC.11 is one PR.
+2. Research → docs → code (Rule #13/#14). §AC.11 research is
+   already in issues.md §AC.11; this session ships the CODE PR
+   directly. No new docs PR needed unless scope changes mid-flight.
+3. Minimum diff. Don't refactor adjacent code "while you're there".
+4. Use existing tokens / module boundaries.
+5. PR via GitHub REST API only — destructive git ops blocked.
+   Branch: `devin/<unix_ts>-preview-landscape-pair`. Base: main.
+6. Run `npm install && node build.js` before committing dist/.
+   Both `id-print.html` and `dist/id-print.html` go in the same PR.
+7. Image-saving discipline (Rule new): every reference image the
+   user attaches goes into `.agents/references/<descriptive-name>.png`
+   AND gets cited in the relevant issues.md section.
+
+After §AC.11 ships, propose ONE of these as next-session candidates:
+- Phase 4 P3 Master Settings (DPI/padding per printer, persist in
+  localStorage — extend `idp:prefs:v1` or new `idp:printer:v1`).
+- Phase 4 P3 PrePrinted Card mode (back-only sheets).
+- Phase 4 P4 Printer presets (Epson L805 etc), BigQR toggle,
+  other-card overlays (Voter / Ayushman / Jan Aadhaar — same
+  pattern as the PAN overlays were, but those were just deleted in
+  PR #252, so this is a fresh design from scratch if the user
+  asks for them again).
 ```
