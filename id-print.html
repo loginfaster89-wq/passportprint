@@ -151,6 +151,21 @@
 .idp-btn-ghost{background:var(--surface);color:var(--text);border-color:var(--border);}
 .idp-btn-ghost:hover{border-color:var(--accent);color:var(--accent);}
 
+/* Layout toggle */
+.idp-layout-toggle{
+  display:flex;gap:0;margin:0 auto 18px;max-width:420px;
+  border:1px solid var(--border);border-radius:10px;overflow:hidden;
+  font-family:'DM Mono',monospace;font-size:12px;
+}
+.idp-layout-opt{
+  flex:1;padding:9px 6px;text-align:center;cursor:pointer;
+  background:var(--surface);color:var(--muted);border:none;
+  transition:background .15s,color .15s;
+}
+.idp-layout-opt+.idp-layout-opt{border-left:1px solid var(--border);}
+.idp-layout-opt.active{background:rgba(240,165,0,.1);color:var(--accent);font-weight:600;}
+.idp-layout-opt:hover:not(.active){color:var(--text);}
+
 /* A4 result */
 .idp-a4-wrap{margin:20px auto;max-width:600px;}
 .idp-a4-wrap canvas{
@@ -225,7 +240,8 @@ input.idp-range::-moz-range-thumb{
 @media print{
   .legal-header,.legal-footer,.idp-hero,.idp-steps,.idp-upload,
   .idp-password,.idp-actions,.idp-info,.idp-detect,.idp-error,
-  .idp-loading,.idp-btn,.idp-editor,nav,footer,header{display:none !important;}
+  .idp-loading,.idp-btn,.idp-editor,.idp-layout-toggle,
+  #sheetTitle,#sheetDesc,nav,footer,header{display:none !important;}
   .idp-app{padding:0;max-width:none;margin:0;}
   .idp-preview{border:none;padding:0;background:none;}
   .idp-a4-wrap{max-width:none;margin:0;}
@@ -243,6 +259,8 @@ input.idp-range::-moz-range-thumb{
   .idp-step-line{width:12px;}
   .idp-sliders{gap:10px 16px;}
   .idp-slider-group{flex:1 1 100%;}
+  .idp-layout-toggle{font-size:11px;max-width:100%;}
+  .idp-layout-opt{padding:8px 4px;}
 }
 </style>
 </head>
@@ -385,8 +403,12 @@ input.idp-range::-moz-range-thumb{
   <!-- Step 3: A4 Sheet + Download/Print -->
   <div id="stepSheet" class="idp-hidden">
     <div class="idp-preview">
-      <h3>A4 Sheet — Fold &amp; Laminate Layout</h3>
-      <p style="color:var(--muted);font-size:12px;margin-bottom:16px;">Print → cut around cards → fold in half → laminate in 65×95mm pouch</p>
+      <h3 id="sheetTitle">A4 Sheet — Fold &amp; Laminate Layout</h3>
+      <p id="sheetDesc" style="color:var(--muted);font-size:12px;margin-bottom:16px;">Print → cut around cards → fold in half → laminate in 65×95mm pouch</p>
+      <div class="idp-layout-toggle">
+        <button type="button" class="idp-layout-opt" data-layout="single">1 Pair · Fold &amp; Laminate</button>
+        <button type="button" class="idp-layout-opt active" data-layout="multi">5 Pairs · Multi-Card</button>
+      </div>
       <div class="idp-a4-wrap">
         <canvas id="a4Canvas" width="2480" height="3508"></canvas>
       </div>
@@ -512,6 +534,10 @@ const cardFrontCanvas = $('#cardFront');
 const cardBackCanvas = $('#cardBack');
 const a4Canvas = $('#a4Canvas');
 const detectBadge = $('#detectBadge');
+const sheetTitle = $('#sheetTitle');
+const sheetDesc = $('#sheetDesc');
+
+let currentLayout = 'multi';
 
 let pdfArrayBuffer = null;
 let detectedType = null;
@@ -696,16 +722,18 @@ function drawToCanvas(canvas, srcCanvas, w, h) {
 }
 
 /* ── A4 Sheet generation ── */
-function buildA4Sheet() {
+function buildSheet() {
+  if (currentLayout === 'multi') buildMultiCardSheet();
+  else buildSingleSheet();
+}
+
+function buildSingleSheet() {
   var ctx = a4Canvas.getContext('2d');
   a4Canvas.width = A4_W;
   a4Canvas.height = A4_H;
   ctx.fillStyle = '#ffffff';
   ctx.fillRect(0, 0, A4_W, A4_H);
 
-  /* Layout: front and back side by side, centered on A4.
-     When printed, user cuts around the pair, folds in the middle,
-     and laminates in a 65×95mm pouch. */
   var cardW = CR80_W;
   var cardH = CR80_H;
   var gap = 40;
@@ -713,12 +741,10 @@ function buildA4Sheet() {
   var startX = Math.round((A4_W - pairW) / 2);
   var startY = Math.round((A4_H - cardH) / 2);
 
-  /* Draw front card */
   if (frontImageData) {
     ctx.drawImage(frontImageData, startX, startY, cardW, cardH);
   }
 
-  /* Draw back card (mirrored horizontally for fold) */
   if (backImageData) {
     ctx.save();
     ctx.translate(startX + cardW + gap + cardW, startY);
@@ -727,7 +753,6 @@ function buildA4Sheet() {
     ctx.restore();
   }
 
-  /* Fold line (dashed) */
   var foldX = startX + cardW + gap / 2;
   ctx.setLineDash([10, 8]);
   ctx.strokeStyle = '#999';
@@ -738,27 +763,111 @@ function buildA4Sheet() {
   ctx.stroke();
   ctx.setLineDash([]);
 
-  /* Fold label */
   ctx.save();
   ctx.translate(foldX, startY - 40);
   ctx.fillStyle = '#999';
   ctx.font = '18px sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText('← fold here →', 0, 0);
+  ctx.fillText('\u2190 fold here \u2192', 0, 0);
   ctx.restore();
 
-  /* Cut guides — corner marks */
   var markLen = 30;
   ctx.strokeStyle = '#ccc';
   ctx.lineWidth = 1;
   ctx.setLineDash([]);
   drawCornerMarks(ctx, startX, startY, pairW, cardH, markLen);
 
-  /* Size label at bottom */
   ctx.fillStyle = '#aaa';
   ctx.font = '16px sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText('CR80 · 85.6 × 54 mm · 300 DPI — Studio Print', A4_W / 2, startY + cardH + 70);
+  ctx.fillText('CR80 \u00b7 85.6 \u00d7 54 mm \u00b7 300 DPI \u2014 Studio Print', A4_W / 2, startY + cardH + 70);
+}
+
+function buildMultiCardSheet() {
+  var ctx = a4Canvas.getContext('2d');
+  a4Canvas.width = A4_W;
+  a4Canvas.height = A4_H;
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, A4_W, A4_H);
+
+  var cardW = CR80_W;
+  var cardH = CR80_H;
+  var pairGap = 20;
+  var rowGap = 20;
+  var rows = 5;
+  var pairW = cardW * 2 + pairGap;
+  var totalH = cardH * rows + rowGap * (rows - 1);
+  var marginX = Math.round((A4_W - pairW) / 2);
+  var marginY = Math.round((A4_H - totalH) / 2);
+
+  /* Column headers */
+  ctx.fillStyle = '#999';
+  ctx.font = '18px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('Front', marginX + cardW / 2, marginY - 16);
+  ctx.fillText('Back', marginX + cardW + pairGap + cardW / 2, marginY - 16);
+
+  for (var r = 0; r < rows; r++) {
+    var y = marginY + r * (cardH + rowGap);
+
+    /* Draw front card */
+    if (frontImageData) {
+      ctx.drawImage(frontImageData, marginX, y, cardW, cardH);
+    }
+
+    /* Draw back card (NOT mirrored — flat cut, not fold) */
+    if (backImageData) {
+      ctx.drawImage(backImageData, marginX + cardW + pairGap, y, cardW, cardH);
+    }
+  }
+
+  /* Cut marks — dashed guides */
+  ctx.setLineDash([8, 6]);
+  ctx.strokeStyle = '#bbb';
+  ctx.lineWidth = 1;
+
+  var extH = 20;
+  var extW = 20;
+
+  /* Horizontal cut lines (above first row, between rows, below last row) */
+  for (var r = 0; r <= rows; r++) {
+    var y = marginY + r * (cardH + rowGap) - (r > 0 ? rowGap / 2 : 0) + (r === 0 ? 0 : 0);
+    if (r === 0) y = marginY;
+    else if (r === rows) y = marginY + rows * cardH + (rows - 1) * rowGap;
+    else y = marginY + r * cardH + (r - 1) * rowGap + rowGap / 2;
+
+    ctx.beginPath();
+    ctx.moveTo(marginX - extW, y);
+    ctx.lineTo(marginX + pairW + extW, y);
+    ctx.stroke();
+  }
+
+  /* Vertical cut lines (left edge, between front/back, right edge) */
+  var vLines = [marginX, marginX + cardW + pairGap / 2, marginX + pairW];
+  vLines.forEach(function(x) {
+    ctx.beginPath();
+    ctx.moveTo(x, marginY - extH);
+    ctx.lineTo(x, marginY + totalH + extH);
+    ctx.stroke();
+  });
+
+  ctx.setLineDash([]);
+
+  /* Corner marks at each card for precision cutting */
+  ctx.strokeStyle = '#999';
+  ctx.lineWidth = 1.5;
+  var markLen = 24;
+  for (var r = 0; r < rows; r++) {
+    var y = marginY + r * (cardH + rowGap);
+    drawCornerMarks(ctx, marginX, y, cardW, cardH, markLen);
+    drawCornerMarks(ctx, marginX + cardW + pairGap, y, cardW, cardH, markLen);
+  }
+
+  /* Footer label */
+  ctx.fillStyle = '#aaa';
+  ctx.font = '16px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('CR80 \u00b7 85.6 \u00d7 54 mm \u00b7 5 pairs \u00b7 300 DPI \u2014 Studio Print', A4_W / 2, marginY + totalH + 50);
 }
 
 function drawCornerMarks(ctx, x, y, w, h, len) {
@@ -842,9 +951,31 @@ slContrast.addEventListener('input', onSliderInput);
 slSat.addEventListener('input', onSliderInput);
 btnResetEdit.addEventListener('click', () => { resetEditorSliders(); applyFilters(); });
 
+/* ── Layout toggle ── */
+document.querySelectorAll('.idp-layout-opt').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.idp-layout-opt').forEach(function(b) { b.classList.remove('active'); });
+    btn.classList.add('active');
+    currentLayout = btn.dataset.layout;
+    updateSheetMeta();
+    buildSheet();
+  });
+});
+
+function updateSheetMeta() {
+  if (currentLayout === 'multi') {
+    sheetTitle.textContent = 'A4 Sheet \u2014 5 Card Pairs';
+    sheetDesc.textContent = 'Print \u2192 cut along dashed lines \u2192 laminate each card separately. Saves paper.';
+  } else {
+    sheetTitle.textContent = 'A4 Sheet \u2014 Fold & Laminate Layout';
+    sheetDesc.textContent = 'Print \u2192 cut around cards \u2192 fold in half \u2192 laminate in 65\u00d795mm pouch';
+  }
+}
+
 /* ── Button handlers ── */
 btnSheet.addEventListener('click', () => {
-  buildA4Sheet();
+  updateSheetMeta();
+  buildSheet();
   showStep(3);
 });
 
