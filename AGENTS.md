@@ -409,22 +409,65 @@ unlock, auto-detect, front+back preview, CR80 output, A4 sheet).
     listeners + reset entries, bold-text branch from
     getFilterString. idp:prefs:v1 schema reduced to
     {rounded, cutMarks, slider preset}. ~10 KB raw shrink in
-    id-print.html. Position / Photo Adjust / Quick Presets /
-    Auto Enhance / Reset / Rounded Corners / Cut Marks (#251)
-    all preserved. §AA auto-swap fully gone — replaced by §AC.11
-    landscape preview redesign (next session).
-- **NEXT — §AC.11 Front+Back preview redesign (single landscape
-  canvas).** User wants Step 2 preview to match the printed 1-pair
-  sheet exactly: ONE wide landscape canvas with back on LEFT and
-  front on RIGHT, no labels, no separate Front/Back boxes — the
-  preview should be visually identical to what comes off the
-  printer / scissor. Reference image at
-  `.agents/references/preview-landscape-target.png` IS the spec.
-  Full design + acceptance criteria in `issues.md` §AC.11.
-  Estimated ~60–80 line code PR in `id-print.html` only; sheet
-  builders untouched. Move/Zoom per-side (PRs #229/#230) and
-  rounded corners (#194) MUST keep working per side inside the
-  unified canvas.
+    id-print.html. §AA auto-swap fully gone.
+  - PRs #254 + #256 feat — §AC.11 Front+Back unified landscape
+    preview. Step 2 preview's two stacked canvases collapsed into
+    one `#pairCanvas` (2022×638). PR #254 originally shipped
+    back-LEFT / front-RIGHT; PR #256 swapped to front-LEFT /
+    back-RIGHT per user correction "FRONT WALE KO LIFT MAIN KRO
+    OR BACK WALE KO RIGHT MAIN". Per-half rounded clip path,
+    per-side Move/Zoom/filters/Auto Enhance/Quick Presets/Reset
+    all preserved inside the unified canvas. Sheet builders
+    untouched.
+  - PR #258 feat — §AC.12 Swap sides toggle. Small icon-button
+    `#btnSwapSides` (↔) below the unified preview. New
+    `swapSides` boolean (default false). `compositePair()` swaps
+    its (frontReady, backReady) args at the top when true so the
+    rounded-clip and draw order both follow. Persisted in
+    `idp:prefs:v1.swapSides`. Works in batch mode via
+    `applyBatchFilters`. Sheet builders untouched (preview-only).
+  - PR #259 feat — §AC.13 Responsive A4 preview + 1-pair to top
+    + Cut Marks UI removed. CSS `.idp-a4-wrap canvas`:
+    `max-width: min(100%, 600px)` + `max-height: 78vh` (mobile
+    72vh), `width:auto / height:auto` so aspect ratio holds.
+    `buildSingleSheet`: `startY = startX` so cards moved from
+    centred to top with equal padding left/right/top. Removed
+    the entire `if (cutMarks){…}` block from buildSingleSheet
+    (no fold-here line, no caption, no corner ticks, no seam
+    ticks). UI: `#chkCutMarks` checkbox + label deleted, JS ref
+    + change listener deleted, `cutMarks` field dropped from
+    `savePrefs()` / `loadPrefs()` (stale values silently
+    ignored), `let cutMarks = true;` → `const cutMarks = true;`
+    so multi-card / Dragon / PVC builders keep their cut guides
+    unchanged. `idp:prefs:v1` schema now
+    `{rounded, swapSides, slider preset}`.
+  - PR #260 feat — §AC.14 Crop Aadhaar perforation strip + flush
+    top + shrink preview further. `CROP.aadhaar`: front+back
+    `y` 0.6657 → 0.6821 and `h` 0.2159 → 0.1995 (bottom edge
+    same; crops out the dashed perforation cut-indicator the
+    e-Aadhaar PDF prints just above the card border; new aspect
+    ≈ 1.585:1 matches CR80 exactly). `buildSingleSheet`:
+    `var startY = startX;` → `var startY = 80;` (~7mm @ 300
+    DPI, was ~19mm — cards now flush at top of A4). CSS cap
+    tightened: desktop `max-width 600 → 460px`,
+    `max-height 78vh → 55vh`; mobile `max-height 72vh → 50vh`,
+    `max-width 100%`. Wrap margin 20→14px (10px on mobile).
+    Verified the dashed line was *not* drawn by buildSingleSheet
+    (full ctx-draw audit) — it really was the source PDF.
+- **NEXT — pick from candidates** (see SKILL.md §"TASK NEXT
+  SESSION" for the full list):
+  A. Audit multi-card / Dragon / PVC layouts for the same
+     perforation-strip artefact + flush-top treatment.
+  B. Phase 4 P3 Master Settings (DPI / padding per printer,
+     persist in localStorage).
+  C. Phase 4 P3 PrePrinted Card mode (back-only sheets).
+  D. Phase 4 P4 Printer presets (Epson L805 etc), BigQR toggle,
+     other-card overlays.
+  E. "Print Tip" hint card on the 1-Pair preview noting the
+     bottom half of the sheet is reusable.
+  Pick whichever the user prioritises. Default to (A) if they
+  notice the same dashed line on the multi-card / Dragon / PVC
+  outputs after PR #260 deploys.
 - **Image-saving discipline (project rule).** Every reference image
   the user attaches goes into `.agents/references/<descriptive-name>.png`
   AND gets cited in the relevant `issues.md` section so future
