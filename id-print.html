@@ -1095,6 +1095,7 @@ async function processPdf(pdf) {
     panToggles.classList.toggle('idp-hidden', detectedType !== 'pan');
     movePad.classList.toggle('idp-hidden', batchCards.length !== 1);
     zoomPad.classList.toggle('idp-hidden', batchCards.length !== 1);
+    if (batchCards.length === 1) refreshZoomReadout();
 
     previewTitle.textContent = 'Front & Back Preview';
     batchSheetInfo.classList.add('idp-hidden');
@@ -1937,6 +1938,8 @@ btnBack.addEventListener('click', () => {
   movePad.classList.add('idp-hidden');
   zoomPad.classList.add('idp-hidden');
   if (moveReadout) moveReadout.textContent = '0, 0';
+  if (slZoom) slZoom.value = 100;
+  if (zoomReadout) zoomReadout.textContent = '100%';
   [chkHideQR, chkHideMobile, chkHideIssueDate, chkHideDownloadDate, chkSignatureBox, chkHologram].forEach(function(c) { c.checked = false; });
   frontImageData = null;
   backImageData = null;
