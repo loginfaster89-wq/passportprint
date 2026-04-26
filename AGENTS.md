@@ -70,7 +70,7 @@ and overall aesthetic are not.
 | -------------------------- | ----------------------------------------------------- |
 | `index.html`               | Homepage (hero, features, audience, why, how, pricing, FAQ, CTA) |
 | `passport-photo.html`      | The live passport photo tool (5000+ lines, with its own inline copies of the nav / auth / Google Sign-In markup and a small hash-open script) |
-| `id-print.html`            | ID Card Print tool — Aadhaar/PAN PDF upload, password unlock, auto-detect, auto-crop front+back, CR80 output, A4 fold-and-laminate sheet, photo editing (brightness/contrast/saturation), download PNG + print. All client-side. Shared nav/auth/footer. |
+| `id-print.html`            | ID Card Print tool — Aadhaar/PAN PDF upload, password unlock, auto-detect, auto-crop front+back, CR80 output, A4 fold-and-laminate sheet, photo editing (brightness/contrast/saturation), multi-card A4 layout (5 pairs per sheet, cut marks, layout toggle), rounded corners toggle, download PNG + print. All client-side. Shared nav/auth/footer. |
 | `about.html`, `contact.html`, `privacy.html`, `terms.html`, `refund.html`, `shipping.html` | Legal / info pages, share the header + footer with `index.html` |
 | `assets/auth.js` + `auth.css` | Shared login / signup / OTP / Google Sign-In modal + account modal (plan info, upgrade, delete account). `position: fixed; z-index: 10000` overlay. Include on any page that has `.legal-header` with a `#hdrAuthBtn` button. |
 | `assets/pricing.js` + `pricing.css` | Shared 2-step pricing modal (Choose Plan → Complete Payment → Razorpay). Included on every page except `passport-photo.html`. Exposes `window.openPlans` / `window.startCheckout`. Load AFTER `auth.js`. |

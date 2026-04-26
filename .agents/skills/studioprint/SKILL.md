@@ -441,8 +441,15 @@ Test PDFs repo mein saved hain:
 test-pdfs/pan-test.pdf (password: 05071999)
 test-pdfs/aadhaar-test.pdf (password: SUNI1986)
 
-TASK: [INSERT NEXT TASK HERE]
+TASK: ID Card Print Phase 2 — Voter ID support add karo id-print.html
+mein. Voter ID PDF upload, password unlock, auto-detect (keywords:
+"election commission", "epic", "voter", "electoral"), auto-crop
+front+back, CR80 output, preview, A4 sheet — same workflow as
+Aadhaar/PAN. Existing photo editing, multi-card, rounded corners
+sab Voter ID ke saath bhi kaam kare. Test karo aur PR banao.
 
-Phase 2 remainder / Phase 3 features listed in SKILL.md §9 — do NOT
-implement unless explicitly asked.
+Phase 2 remainder baad mein: Dragon sheet layout.
+
+Phase 3 features listed in SKILL.md §9 — do NOT implement unless
+explicitly asked.
 ```
