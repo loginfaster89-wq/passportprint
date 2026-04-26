@@ -441,6 +441,7 @@ input.idp-range::-moz-range-thumb{
       <!-- PAN overlays — shown only for PAN cards -->
       <div id="panToggles" class="idp-hidden">
         <label class="idp-option"><input type="checkbox" id="chkSignatureBox"> Add Signature Box</label>
+        <label class="idp-option"><input type="checkbox" id="chkHologram"> Add Hologram Patch</label>
       </div>
 
       <!-- Photo editor -->
@@ -632,9 +633,10 @@ const AADHAAR_FIELD_MASKS = {
   issueDate:    { side: 'back', x:   6, y: 456, w: 490, h:  72 },
   downloadDate: { side: 'back', x:   6, y: 536, w: 490, h:  90 },
 };
-/* PAN front-card overlay regions (at CR80 1011×638px) */
+/* PAN overlay regions (at CR80 1011×638px) */
 const PAN_OVERLAY_REGIONS = {
-  signatureBox: { side: 'front', x: 280, y: 540, w: 280, h: 75 },
+  signatureBox: { side: 'front', x: 540, y: 470, w: 380, h: 110 },
+  hologram:     { side: 'back',  x: 800, y:  30, w: 180, h: 220 },
 };
 const TYPE_ICONS = { aadhaar: '\ud83c\udd94', pan: '\ud83d\udcb3', voter: '\ud83d\uddf3\ufe0f', ayushman: '\ud83c\udfe5', janaadhaar: '\ud83d\udc68\u200d\ud83d\udc69\u200d\ud83d\udc67\u200d\ud83d\udc66', eshram: '\ud83d\udc77' };
 
@@ -1155,21 +1157,39 @@ function applyAadhaarMasks(ctx, ox, oy, side) {
 }
 
 function applyPanOverlays(ctx, ox, oy, side) {
-  if (!chkSignatureBox.checked) return;
-  var m = PAN_OVERLAY_REGIONS.signatureBox;
-  if (m.side !== side) return;
-  ctx.save();
-  ctx.fillStyle = '#ffffff';
-  ctx.fillRect(ox + m.x, oy + m.y, m.w, m.h);
-  ctx.strokeStyle = '#000000';
-  ctx.lineWidth = 2;
-  ctx.strokeRect(ox + m.x, oy + m.y, m.w, m.h);
-  ctx.fillStyle = '#000000';
-  ctx.font = '14px DM Mono, monospace';
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'bottom';
-  ctx.fillText('Signature', ox + m.x + m.w / 2, oy + m.y + m.h - 6);
-  ctx.restore();
+  var pairs = [
+    [chkSignatureBox, PAN_OVERLAY_REGIONS.signatureBox, 'signature'],
+    [chkHologram,     PAN_OVERLAY_REGIONS.hologram,     'hologram'],
+  ];
+  pairs.forEach(function(p) {
+    var chk = p[0]; var m = p[1]; var kind = p[2];
+    if (!chk.checked || m.side !== side) return;
+    ctx.save();
+    if (kind === 'signature') {
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(ox + m.x, oy + m.y, m.w, m.h);
+      ctx.strokeStyle = '#000000';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(ox + m.x, oy + m.y, m.w, m.h);
+      ctx.fillStyle = '#000000';
+      ctx.font = '14px DM Mono, monospace';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'bottom';
+      ctx.fillText('Signature', ox + m.x + m.w / 2, oy + m.y + m.h - 6);
+    } else if (kind === 'hologram') {
+      var grad = ctx.createLinearGradient(ox + m.x, oy + m.y, ox + m.x + m.w, oy + m.y + m.h);
+      grad.addColorStop(0, '#c0c0c0');
+      grad.addColorStop(1, '#e8e8e8');
+      ctx.fillStyle = grad;
+      ctx.fillRect(ox + m.x, oy + m.y, m.w, m.h);
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '24px DM Mono, monospace';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('HOLOGRAM', ox + m.x + m.w / 2, oy + m.y + m.h / 2);
+    }
+    ctx.restore();
+  });
 }
 
 function drawFilteredToCanvas(canvas, srcCanvas, w, h, cardType, side) {
@@ -1601,6 +1621,7 @@ const chkHideIssueDate = $('#chkHideIssueDate');
 const chkHideDownloadDate = $('#chkHideDownloadDate');
 const panToggles = $('#panToggles');
 const chkSignatureBox = $('#chkSignatureBox');
+const chkHologram = $('#chkHologram');
 
 function getFilterString() {
   var b = slBright.value;
@@ -1707,7 +1728,7 @@ chkRounded.addEventListener('change', () => {
   applyFilters();
 });
 
-[chkHideQR, chkHideMobile, chkHideIssueDate, chkHideDownloadDate, chkSignatureBox].forEach(function(chk) {
+[chkHideQR, chkHideMobile, chkHideIssueDate, chkHideDownloadDate, chkSignatureBox, chkHologram].forEach(function(chk) {
   chk.addEventListener('change', function() { applyFilters(); });
 });
 
@@ -1759,7 +1780,7 @@ btnBack.addEventListener('click', () => {
   detectedType = null;
   aadhaarToggles.classList.add('idp-hidden');
   panToggles.classList.add('idp-hidden');
-  [chkHideQR, chkHideMobile, chkHideIssueDate, chkHideDownloadDate, chkSignatureBox].forEach(function(c) { c.checked = false; });
+  [chkHideQR, chkHideMobile, chkHideIssueDate, chkHideDownloadDate, chkSignatureBox, chkHologram].forEach(function(c) { c.checked = false; });
   frontImageData = null;
   backImageData = null;
   originalFront = null;
