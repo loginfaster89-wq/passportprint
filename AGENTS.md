@@ -153,6 +153,14 @@ iPad portrait / narrow tablets.
    backlog, solve them **one by one** — one issue per PR, one PR per
    commit cycle. Do not batch multiple unrelated fixes into a single PR.
    This keeps diffs small, reviews fast, and rollbacks safe.
+9. **Half-half working (2026-04-26).** Split every session into two
+   halves. **First half:** actual coding / feature work — implement the
+   task, test, create PR. **Second half:** update Devin helping files
+   (`SKILL.md`, `AGENTS.md`, `issues.md`) with what shipped, update the
+   ready-to-paste prompt in SKILL.md §11 with the new last-PR and
+   shipped summary so the user can copy-paste it into the next session.
+   Never skip the second half — the user needs updated docs and a fresh
+   prompt to start the next session efficiently.
 
 ## Homepage grids → slider activation (post PR #64 / #65)
 
@@ -261,13 +269,13 @@ photo editing** — brightness/contrast/saturation sliders with live
 preview, output carries through to A4 sheet, reset button, mobile-
 responsive.
 
-**Also resolved (PRs #192–#195):** PR #192 docs update for #190–#191.
+**Also resolved (PRs #192–#197):** PR #192 docs update for #190–#191.
 PR #193 **ID Card Print Phase 2 multi-card A4** — 5 card pairs per
 sheet, cut marks/dashed guides, layout toggle (single vs multi-card),
 corner marks. PR #194 **ID Card Print Phase 2 rounded corners** —
 toggle checkbox, canvas clip-path with arcTo, preview + A4 sheet.
-PR #195 fix `var r` variable shadowing bug in multi-card sheet
-generation.
+PR #197 fix `var r` variable shadowing bug in multi-card sheet
+generation + docs update.
 
 **Verified (2026-04-26):** ID Card Print Phase 1 MVP fully tested with
 both test PDFs — PAN and Aadhaar flows ALL PASSED (upload, password
