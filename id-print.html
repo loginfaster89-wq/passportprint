@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
 <meta name="theme-color" content="#0d0d0d">
 <title>ID Card Print — Studio Print</title>
-<meta name="description" content="Print Aadhaar, PAN and Voter ID cards from PDF — auto-crop, CR80 size, fold-and-laminate A4 layout. 100% browser-based, nothing uploaded.">
+<meta name="description" content="Print Aadhaar, PAN, Voter ID, Ayushman, Jan Aadhaar and eShram cards from PDF — auto-crop, CR80 size, fold-and-laminate A4 layout. 100% browser-based, nothing uploaded.">
 <meta property="og:title" content="ID Card Print — Studio Print">
-<meta property="og:description" content="Print Aadhaar, PAN and Voter ID cards from PDF — auto-crop, CR80 size, fold-and-laminate A4 layout. Browser-based, nothing uploaded.">
+<meta property="og:description" content="Print Aadhaar, PAN, Voter ID, Ayushman, Jan Aadhaar and eShram cards from PDF — auto-crop, CR80 size, fold-and-laminate A4 layout. Browser-based, nothing uploaded.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://studioprint.pages.dev/id-print.html">
 <meta property="og:image" content="https://studioprint.pages.dev/assets/og-image.png">
@@ -108,6 +108,9 @@
 .idp-detect.aadhaar{color:#f0a500;background:rgba(240,165,0,.08);border:1px solid rgba(240,165,0,.3);}
 .idp-detect.pan{color:#4ade80;background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.3);}
 .idp-detect.voter{color:#60a5fa;background:rgba(96,165,250,.08);border:1px solid rgba(96,165,250,.3);}
+.idp-detect.ayushman{color:#c084fc;background:rgba(192,132,252,.08);border:1px solid rgba(192,132,252,.3);}
+.idp-detect.janaadhaar{color:#2dd4bf;background:rgba(45,212,191,.08);border:1px solid rgba(45,212,191,.3);}
+.idp-detect.eshram{color:#fb923c;background:rgba(251,146,60,.08);border:1px solid rgba(251,146,60,.3);}
 
 /* Preview area */
 .idp-preview{
@@ -311,7 +314,7 @@ input.idp-range::-moz-range-thumb{
         </a>
         <a href="id-print.html" role="menuitem">
           <span class="dd-icon" aria-hidden="true"><svg class="ix" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-idcard"/></svg></span>
-          <span class="dd-meta"><strong>ID Card Print</strong><small>Aadhaar · PAN · Voter ID · CR80 sheet</small></span>
+          <span class="dd-meta"><strong>ID Card Print</strong><small>Aadhaar · PAN · Voter · Ayushman · more</small></span>
           <span class="dd-tag live">Live</span>
         </a>
       </div>
@@ -329,7 +332,7 @@ input.idp-range::-moz-range-thumb{
   <!-- Hero -->
   <div class="idp-hero">
     <h1>ID Card <em>Print</em></h1>
-    <p>Upload your eAadhaar, ePAN or e-EPIC (Voter ID) PDF — auto-crop, CR80 size, fold-and-laminate A4 layout. Everything stays in your browser.</p>
+    <p>Upload your eAadhaar, ePAN, e-EPIC, Ayushman, Jan Aadhaar or eShram PDF — auto-crop, CR80 size, fold-and-laminate A4 layout. Everything stays in your browser.</p>
   </div>
 
   <!-- Steps -->
@@ -349,7 +352,7 @@ input.idp-range::-moz-range-thumb{
     <div class="idp-upload" id="dropZone">
       <span class="idp-upload-icon" aria-hidden="true">📄</span>
       <h3>Drop your PDF here</h3>
-      <p>eAadhaar · ePAN · e-EPIC (Voter ID) · Password-protected PDFs supported</p>
+      <p>eAadhaar · ePAN · e-EPIC · Ayushman · Jan Aadhaar · eShram · Password-protected PDFs supported</p>
       <input type="file" id="pdfInput" accept=".pdf,application/pdf">
     </div>
   </div>
@@ -366,7 +369,7 @@ input.idp-range::-moz-range-thumb{
       <p style="margin-top:12px;font-size:11px;color:var(--muted2);">
         Aadhaar: first 4 letters of name (CAPS) + birth year<br>
         PAN: date of birth in DDMMYYYY<br>
-        Voter ID: usually not password-protected
+        Voter ID / Ayushman / Jan Aadhaar / eShram: usually not password-protected
       </p>
     </div>
   </div>
@@ -515,7 +518,7 @@ input.idp-range::-moz-range-thumb{
 
 <script type="module">
 /* ── ID Card Print — Phase 1 MVP ──
-   Client-side Aadhaar/PAN/Voter ID PDF → CR80 card crop → A4 fold-and-laminate sheet.
+   Client-side Aadhaar/PAN/Voter ID/Ayushman/Jan Aadhaar/eShram PDF → CR80 card crop → A4 fold-and-laminate sheet.
    Uses pdf.js (CDN) for PDF rendering + text extraction. */
 
 const pdfjsLib = await import('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.min.mjs');
@@ -533,6 +536,9 @@ const RENDER_SCALE = 4;
 const AADHAAR_KEYWORDS = ['aadhaar','uid','uidai','unique identification','government of india','vid','enrolment','download date','issue date'];
 const PAN_KEYWORDS = ['permanent account number','income tax','pan','department','nsdl','utiitsl'];
 const VOTER_KEYWORDS = ['election commission','epic','voter','electoral','electors photo identity','polling station','assembly constituency','parliamentary constituency'];
+const AYUSHMAN_KEYWORDS = ['ayushman','pmjay','pradhan mantri jan arogya','national health authority','nha','jan arogya','ayushman bharat','beneficiary id','health benefit'];
+const JANAADHAAR_KEYWORDS = ['jan aadhaar','janaadhaar','jan aadhar','rajasthan','family id','parivar','jan aadhaar id','planning department'];
+const ESHRAM_KEYWORDS = ['e-shram','eshram','unorganized worker','universal account number','uan','ministry of labour','shram','shramik','unorganised worker'];
 
 /* Crop regions as fractions of page [x, y, w, h].
    Calibrated against standard eAadhaar (UIDAI) and ePAN (NSDL) PDFs. */
@@ -550,6 +556,24 @@ const CROP = {
     back:      [0.035, 0.53, 0.93, 0.42],
     frontPage: [0.035, 0.05, 0.93, 0.90],
     backPage:  [0.035, 0.05, 0.93, 0.90]
+  },
+  ayushman: {
+    front:     [0.03, 0.05, 0.94, 0.50],
+    back:      [0.03, 0.55, 0.94, 0.40],
+    frontPage: [0.03, 0.03, 0.94, 0.92],
+    backPage:  [0.03, 0.03, 0.94, 0.92]
+  },
+  janaadhaar: {
+    front:     [0.03, 0.05, 0.94, 0.50],
+    back:      [0.03, 0.55, 0.94, 0.40],
+    frontPage: [0.03, 0.03, 0.94, 0.92],
+    backPage:  [0.03, 0.03, 0.94, 0.92]
+  },
+  eshram: {
+    front:     [0.03, 0.05, 0.94, 0.48],
+    back:      [0.03, 0.55, 0.94, 0.40],
+    frontPage: [0.03, 0.03, 0.94, 0.92],
+    backPage:  [0.03, 0.03, 0.94, 0.92]
   }
 };
 
@@ -693,14 +717,20 @@ async function processPdf(pdf) {
     var aadhaarHits = AADHAAR_KEYWORDS.filter(k => fullText.includes(k)).length;
     var panHits = PAN_KEYWORDS.filter(k => fullText.includes(k)).length;
     var voterHits = VOTER_KEYWORDS.filter(k => fullText.includes(k)).length;
+    var ayushmanHits = AYUSHMAN_KEYWORDS.filter(k => fullText.includes(k)).length;
+    var janaadhaarHits = JANAADHAAR_KEYWORDS.filter(k => fullText.includes(k)).length;
+    var eshramHits = ESHRAM_KEYWORDS.filter(k => fullText.includes(k)).length;
 
     if (aadhaarHits >= 2) detectedType = 'aadhaar';
     else if (panHits >= 2) detectedType = 'pan';
     else if (voterHits >= 2) detectedType = 'voter';
+    else if (ayushmanHits >= 2) detectedType = 'ayushman';
+    else if (janaadhaarHits >= 2) detectedType = 'janaadhaar';
+    else if (eshramHits >= 2) detectedType = 'eshram';
     else {
       showLoading(false);
       showStep(1);
-      showError('Could not detect card type. Only eAadhaar, ePAN and e-EPIC (Voter ID) PDFs are supported.');
+      showError('Could not detect card type. Supported: eAadhaar, ePAN, e-EPIC, Ayushman Bharat, Jan Aadhaar, eShram.');
       return;
     }
 
@@ -716,8 +746,9 @@ async function processPdf(pdf) {
     /* Crop front and back */
     var crop = CROP[detectedType];
 
-    if (detectedType === 'voter' && pdf.numPages >= 2) {
-      /* Multi-page e-EPIC: front on page 1, back on page 2 */
+    var multiPageTypes = ['voter', 'ayushman', 'janaadhaar', 'eshram'];
+    if (multiPageTypes.indexOf(detectedType) !== -1 && pdf.numPages >= 2) {
+      /* Multi-page PDF: front on page 1, back on page 2 */
       frontImageData = cropRegion(renderCanvas, crop.frontPage);
 
       var page2 = await pdf.getPage(2);
@@ -742,8 +773,8 @@ async function processPdf(pdf) {
     applyFilters();
 
     /* Update badge */
-    var labels = { aadhaar: 'Aadhaar Card Detected', pan: 'PAN Card Detected', voter: 'Voter ID Detected' };
-    var icons = { aadhaar: '🆔', pan: '💳', voter: '🗳️' };
+    var labels = { aadhaar: 'Aadhaar Card Detected', pan: 'PAN Card Detected', voter: 'Voter ID Detected', ayushman: 'Ayushman Card Detected', janaadhaar: 'Jan Aadhaar Detected', eshram: 'eShram Card Detected' };
+    var icons = { aadhaar: '🆔', pan: '💳', voter: '🗳️', ayushman: '🏥', janaadhaar: '👨‍👩‍👧‍👦', eshram: '🛠️' };
     var label = labels[detectedType];
     detectBadge.innerHTML = '<div class="idp-detect ' + detectedType + '">' +
       icons[detectedType] + ' ' + label + '</div>';
