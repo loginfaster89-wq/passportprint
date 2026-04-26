@@ -232,12 +232,16 @@
   color:var(--text);margin-bottom:12px;display:flex;align-items:center;
   justify-content:space-between;
 }
-.idp-editor-title button{
+.idp-editor-title button,
+.idp-editor-actions button,
+.idp-quick-presets button{
   background:none;border:1px solid var(--border);border-radius:6px;
   color:var(--muted);font-family:'DM Mono',monospace;font-size:11px;
   padding:3px 10px;cursor:pointer;transition:color .15s,border-color .15s;
 }
-.idp-editor-title button:hover{color:var(--accent);border-color:var(--accent);}
+.idp-editor-title button:hover,
+.idp-editor-actions button:hover,
+.idp-quick-presets button:hover{color:var(--accent);border-color:var(--accent);}
 .idp-sliders{display:flex;flex-wrap:wrap;gap:14px 24px;}
 .idp-slider-group{flex:1 1 140px;min-width:120px;}
 .idp-slider-label{
@@ -447,56 +451,69 @@ input.idp-range::-moz-range-thumb{
         <input type="checkbox" id="chkRounded">
         Rounded Corners
       </label>
-      <!-- Aadhaar field toggles — shown only for Aadhaar cards -->
-      <div id="aadhaarToggles" class="idp-hidden">
-        <label class="idp-option"><input type="checkbox" id="chkHideQR"> Hide QR Code</label>
-        <label class="idp-option"><input type="checkbox" id="chkHideMobile"> Hide Mobile No.</label>
-        <label class="idp-option"><input type="checkbox" id="chkHideIssueDate"> Hide Issue Date</label>
-        <label class="idp-option"><input type="checkbox" id="chkHideDownloadDate"> Hide Download Date</label>
-      </div>
-      <!-- PAN overlays — shown only for PAN cards -->
-      <div id="panToggles" class="idp-hidden">
-        <label class="idp-option"><input type="checkbox" id="chkSignatureBox"> Add Signature Box</label>
-        <label class="idp-option"><input type="checkbox" id="chkHologram"> Add Hologram Patch</label>
+      <!-- Panel A: Card Cleanup -->
+      <div id="panelCleanup" class="idp-move">
+        <span class="idp-move-label">Card Cleanup</span>
+        <!-- Aadhaar field toggles — shown only for Aadhaar cards -->
+        <div id="aadhaarToggles" class="idp-hidden">
+          <label class="idp-option"><input type="checkbox" id="chkHideQR"> Hide QR Code</label>
+          <label class="idp-option"><input type="checkbox" id="chkHideMobile"> Hide Mobile No.</label>
+          <label class="idp-option"><input type="checkbox" id="chkHideIssueDate"> Hide Issue Date</label>
+          <label class="idp-option"><input type="checkbox" id="chkHideDownloadDate"> Hide Download Date</label>
+        </div>
+        <!-- PAN overlays — shown only for PAN cards -->
+        <div id="panToggles" class="idp-hidden">
+          <label class="idp-option"><input type="checkbox" id="chkSignatureBox"> Add Signature Box</label>
+          <label class="idp-option"><input type="checkbox" id="chkHologram"> Add Hologram Patch</label>
+        </div>
+        <label class="idp-option"><input type="checkbox" id="chkBold"> Bold Text</label>
       </div>
 
-      <!-- Per-side Move pad (single-card mode only) -->
-      <div id="movePad" class="idp-move idp-hidden">
+      <!-- Panel B: Position (single-card mode only) -->
+      <div id="panelPosition" class="idp-move idp-hidden">
         <div class="idp-move-row">
-          <span class="idp-move-label">Move</span>
-          <label><input type="radio" name="moveSide" value="front" checked> Front</label>
-          <label><input type="radio" name="moveSide" value="back"> Back</label>
-          <span class="idp-move-step">Step
-            <input type="number" id="moveStep" value="5" min="1" max="50" step="1">px
-          </span>
+          <span class="idp-move-label">Position</span>
+          <label><input type="radio" name="positionSide" value="front" checked> Front</label>
+          <label><input type="radio" name="positionSide" value="back"> Back</label>
         </div>
-        <div class="idp-move-pad">
-          <button type="button" id="moveUp" title="Move up">↑</button>
-          <button type="button" id="moveLeft" title="Move left">←</button>
-          <button type="button" id="moveReset" title="Reset position">⌖</button>
-          <button type="button" id="moveRight" title="Move right">→</button>
-          <button type="button" id="moveDown" title="Move down">↓</button>
+        <!-- Per-side Move pad -->
+        <div id="movePad">
+          <div class="idp-move-row">
+            <span class="idp-move-label">Move</span>
+            <span class="idp-move-step">Step
+              <input type="number" id="moveStep" value="5" min="1" max="50" step="1">px
+            </span>
+          </div>
+          <div class="idp-move-pad">
+            <button type="button" id="moveUp" title="Move up">↑</button>
+            <button type="button" id="moveLeft" title="Move left">←</button>
+            <button type="button" id="moveReset" title="Reset position">⌖</button>
+            <button type="button" id="moveRight" title="Move right">→</button>
+            <button type="button" id="moveDown" title="Move down">↓</button>
+          </div>
+          <div class="idp-move-readout" id="moveReadout">0, 0</div>
         </div>
-        <div class="idp-move-readout" id="moveReadout">0, 0</div>
+        <!-- Per-side Zoom control -->
+        <div id="zoomPad" style="margin-top:10px;">
+          <div class="idp-move-row">
+            <span class="idp-move-label">Zoom</span>
+            <button type="button" id="zoomReset" style="margin-left:auto;padding:2px 8px;font-size:11px;border:1px solid var(--border);border-radius:4px;background:transparent;color:inherit;cursor:pointer;">Reset</button>
+          </div>
+          <div class="idp-slider-group">
+            <label class="idp-slider-label">Scale <span id="zoomReadout">100%</span></label>
+            <input type="range" class="idp-range" id="slZoom" min="50" max="150" value="100" step="1">
+          </div>
+        </div>
       </div>
 
-      <!-- Per-side Zoom control (single-card mode only) -->
-      <div id="zoomPad" class="idp-move idp-hidden">
-        <div class="idp-move-row">
-          <span class="idp-move-label">Zoom</span>
-          <label><input type="radio" name="zoomSide" value="front" checked> Front</label>
-          <label><input type="radio" name="zoomSide" value="back"> Back</label>
-          <button type="button" id="zoomReset" style="padding:2px 8px;font-size:11px;border:1px solid var(--border);border-radius:4px;background:transparent;color:inherit;cursor:pointer;">Reset</button>
-        </div>
-        <div class="idp-slider-group">
-          <label class="idp-slider-label">Scale <span id="zoomReadout">100%</span></label>
-          <input type="range" class="idp-range" id="slZoom" min="50" max="150" value="100" step="1">
-        </div>
-      </div>
-
-      <!-- Photo editor -->
+      <!-- Panel C: Photo Adjust -->
       <div class="idp-editor">
-        <div class="idp-editor-title">Photo Adjust <button type="button" id="btnAutoEnhance">Auto</button> <button type="button" id="btnResetEdit">Reset</button></div>
+        <div class="idp-editor-title">Photo Adjust</div>
+        <div class="idp-quick-presets" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;">
+          <button type="button" id="presetOriginal">Original</button>
+          <button type="button" id="presetAadhaar">Aadhaar</button>
+          <button type="button" id="presetPan">PAN</button>
+        </div>
         <div class="idp-sliders">
           <div class="idp-slider-group">
             <label class="idp-slider-label">Brightness <span id="valBright">100%</span></label>
@@ -510,6 +527,10 @@ input.idp-range::-moz-range-thumb{
             <label class="idp-slider-label">Saturation <span id="valSat">100%</span></label>
             <input type="range" class="idp-range" id="slSat" min="0" max="200" value="100">
           </div>
+        </div>
+        <div class="idp-editor-actions" style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px;">
+          <button type="button" id="btnAutoEnhance">Auto</button>
+          <button type="button" id="btnResetEdit">Reset</button>
         </div>
       </div>
 
@@ -1093,8 +1114,7 @@ async function processPdf(pdf) {
       TYPE_ICONS[detectedType] + ' ' + TYPE_LABELS[detectedType] + ' Detected</div>';
     aadhaarToggles.classList.toggle('idp-hidden', detectedType !== 'aadhaar');
     panToggles.classList.toggle('idp-hidden', detectedType !== 'pan');
-    movePad.classList.toggle('idp-hidden', batchCards.length !== 1);
-    zoomPad.classList.toggle('idp-hidden', batchCards.length !== 1);
+    panelPosition.classList.toggle('idp-hidden', batchCards.length !== 1);
     if (batchCards.length === 1) refreshZoomReadout();
 
     previewTitle.textContent = 'Front & Back Preview';
@@ -1675,18 +1695,23 @@ const chkHideIssueDate = $('#chkHideIssueDate');
 const chkHideDownloadDate = $('#chkHideDownloadDate');
 const panToggles = $('#panToggles');
 const chkSignatureBox = $('#chkSignatureBox');
+const panelPosition = $('#panelPosition');
 const movePad = $('#movePad');
 const moveStep = $('#moveStep');
 const moveReadout = $('#moveReadout');
-const moveSideRadios = document.getElementsByName('moveSide');
+const positionSideRadios = document.getElementsByName('positionSide');
 const chkHologram = $('#chkHologram');
+const chkBold = $('#chkBold');
 
 function getFilterString() {
   var b = slBright.value;
   var c = slContrast.value;
   var s = slSat.value;
-  if (b == 100 && c == 100 && s == 100) return 'none';
-  return 'brightness(' + b + '%) contrast(' + c + '%) saturate(' + s + '%)';
+  var bold = chkBold && chkBold.checked;
+  if (b == 100 && c == 100 && s == 100 && !bold) return 'none';
+  var f = 'brightness(' + b + '%) contrast(' + c + '%) saturate(' + s + '%)';
+  if (bold) f += ' contrast(135%) brightness(95%)';
+  return f;
 }
 
 function roundedRectPath(ctx, x, y, w, h, r) {
@@ -1816,6 +1841,7 @@ slSat.addEventListener('input', onSliderInput);
 btnAutoEnhance.addEventListener('click', autoEnhance);
 btnResetEdit.addEventListener('click', () => {
   resetEditorSliders();
+  if (chkBold) chkBold.checked = false;
   if (batchCards.length === 1 && batchCards[0].offset) {
     batchCards[0].offset = { front: { dx: 0, dy: 0 }, back: { dx: 0, dy: 0 } };
     refreshMoveReadout();
@@ -1827,20 +1853,36 @@ btnResetEdit.addEventListener('click', () => {
   applyFilters();
 });
 
-function currentMoveSide() {
-  for (var i = 0; i < moveSideRadios.length; i++) {
-    if (moveSideRadios[i].checked) return moveSideRadios[i].value;
+/* Bold text toggle — layered on top of slider filters */
+chkBold.addEventListener('change', applyFilters);
+
+/* Quick presets — one-click slider combos */
+function applyPreset(b, c, s) {
+  slBright.value = b; valBright.textContent = b + '%';
+  slContrast.value = c; valContrast.textContent = c + '%';
+  slSat.value = s; valSat.textContent = s + '%';
+  applyFilters();
+}
+$('#presetOriginal').addEventListener('click', function(){ applyPreset(100, 100, 100); });
+$('#presetAadhaar').addEventListener('click', function(){ applyPreset(105, 130, 100); });
+$('#presetPan').addEventListener('click',     function(){ applyPreset(115, 115, 110); });
+
+function currentPositionSide() {
+  for (var i = 0; i < positionSideRadios.length; i++) {
+    if (positionSideRadios[i].checked) return positionSideRadios[i].value;
   }
   return 'front';
 }
+var currentMoveSide = currentPositionSide;
+var currentZoomSide = currentPositionSide;
 function refreshMoveReadout() {
   if (batchCards.length !== 1) return;
-  var o = batchCards[0].offset[currentMoveSide()];
+  var o = batchCards[0].offset[currentPositionSide()];
   moveReadout.textContent = o.dx + ', ' + o.dy;
 }
 function nudge(axis, dir) {
   if (batchCards.length !== 1) return;
-  var side = currentMoveSide();
+  var side = currentPositionSide();
   var step = Math.max(1, Math.min(50, parseInt(moveStep.value, 10) || 5));
   var o = batchCards[0].offset[side];
   o[axis] = Math.max(-100, Math.min(100, o[axis] + dir * step));
@@ -1853,48 +1895,43 @@ $('#moveLeft').addEventListener('click',  function(){ nudge('dx', -1); });
 $('#moveRight').addEventListener('click', function(){ nudge('dx',  1); });
 $('#moveReset').addEventListener('click', function(){
   if (batchCards.length !== 1) return;
-  var side = currentMoveSide();
+  var side = currentPositionSide();
   batchCards[0].offset[side] = { dx: 0, dy: 0 };
   refreshMoveReadout();
   applyFilters();
 });
-for (var __i = 0; __i < moveSideRadios.length; __i++) {
-  moveSideRadios[__i].addEventListener('change', refreshMoveReadout);
-}
 
 /* ── Per-side Zoom (§X) ── */
 const zoomPad = $('#zoomPad');
 const slZoom = $('#slZoom');
 const zoomReadout = $('#zoomReadout');
-const zoomSideRadios = document.getElementsByName('zoomSide');
 
-function currentZoomSide() {
-  for (var i = 0; i < zoomSideRadios.length; i++) {
-    if (zoomSideRadios[i].checked) return zoomSideRadios[i].value;
-  }
-  return 'front';
-}
 function refreshZoomReadout() {
   if (batchCards.length !== 1) return;
-  var s = batchCards[0].scale[currentZoomSide()];
+  var s = batchCards[0].scale[currentPositionSide()];
   zoomReadout.textContent = Math.round(s * 100) + '%';
   slZoom.value = Math.round(s * 100);
 }
 slZoom.addEventListener('input', function() {
   if (batchCards.length !== 1) return;
-  var side = currentZoomSide();
+  var side = currentPositionSide();
   batchCards[0].scale[side] = parseInt(slZoom.value, 10) / 100;
   zoomReadout.textContent = slZoom.value + '%';
   applyFilters();
 });
 $('#zoomReset').addEventListener('click', function() {
   if (batchCards.length !== 1) return;
-  batchCards[0].scale[currentZoomSide()] = 1.0;
+  batchCards[0].scale[currentPositionSide()] = 1.0;
   refreshZoomReadout();
   applyFilters();
 });
-for (var __zi = 0; __zi < zoomSideRadios.length; __zi++) {
-  zoomSideRadios[__zi].addEventListener('change', refreshZoomReadout);
+
+/* Shared Front/Back radio drives both Move and Zoom readouts */
+for (var __pi = 0; __pi < positionSideRadios.length; __pi++) {
+  positionSideRadios[__pi].addEventListener('change', function(){
+    refreshMoveReadout();
+    refreshZoomReadout();
+  });
 }
 
 chkRounded.addEventListener('change', () => {
@@ -1960,12 +1997,12 @@ btnBack.addEventListener('click', () => {
   detectedType = null;
   aadhaarToggles.classList.add('idp-hidden');
   panToggles.classList.add('idp-hidden');
-  movePad.classList.add('idp-hidden');
-  zoomPad.classList.add('idp-hidden');
+  panelPosition.classList.add('idp-hidden');
   if (moveReadout) moveReadout.textContent = '0, 0';
   if (slZoom) slZoom.value = 100;
   if (zoomReadout) zoomReadout.textContent = '100%';
-  [chkHideQR, chkHideMobile, chkHideIssueDate, chkHideDownloadDate, chkSignatureBox, chkHologram].forEach(function(c) { c.checked = false; });
+  [chkHideQR, chkHideMobile, chkHideIssueDate, chkHideDownloadDate, chkSignatureBox, chkHologram, chkBold].forEach(function(c) { c.checked = false; });
+  resetEditorSliders();
   frontImageData = null;
   backImageData = null;
   originalFront = null;
