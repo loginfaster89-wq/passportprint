@@ -93,6 +93,15 @@ No dev server — edit source, `npm run build`, preview from `dist/`.
     any backlog, solve them **one by one** — one issue per PR, one PR
     per commit cycle. Do not batch multiple unrelated fixes into a
     single PR. Keeps diffs small, reviews fast, rollbacks safe.
+13. **Half-half working (2026-04-26).** Split every session into two
+    halves. **First half:** actual coding / feature work — implement
+    the task, test, create PR. **Second half:** update Devin helping
+    files (`SKILL.md`, `AGENTS.md`, `issues.md`) with what shipped,
+    update the ready-to-paste prompt in §11 with the new last-PR and
+    shipped summary so the user can copy-paste it into the next session.
+    Never skip the second half — the user needs updated docs and a
+    fresh prompt to start the next session efficiently. If quota is
+    tight, prioritise the docs update over extra polish on the feature.
 
 ## 3. Create a PR (fine-grained PAT flow)
 
@@ -220,7 +229,7 @@ Include order on each page:
 
 ## 9. Shipped work & open backlog
 
-Everything from PRs #70–#195 is shipped. See `issues.md` for the full
+Everything from PRs #70–#198 is shipped. See `issues.md` for the full
 audit trail. Do NOT re-fix any of the following — they are all merged:
 
 - PRs #70–#114: original audit quick-wins + responsive + flow fixes.
@@ -284,9 +293,11 @@ audit trail. Do NOT re-fix any of the following — they are all merged:
   vs multi-card), corner marks for precision cutting.
 - PR #194: **ID Card Print Phase 2 rounded corners** — toggle checkbox,
   canvas clip-path with `arcTo`, applies to preview + A4 sheet.
-- PR #195: fix `var r` variable shadowing bug in `buildMultiCardSheet()`
-  (loop variable `r` was overwritten by radius `r` — caused infinite
-  loop when rounded corners off, only 1 row when on).
+- PR #197: fix `var r` variable shadowing bug in `buildMultiCardSheet()`
+  + docs update (loop variable `r` was overwritten by radius `r` —
+  caused infinite loop when rounded corners off, only 1 row when on).
+- PR #198: docs — add half-half working rule (SKILL.md §2 rule #13,
+  AGENTS.md rule #9) + fix PR #195→#197 references across all docs.
 
 **Verified (2026-04-26):** Both test PDFs fully working:
 - PAN PDF: upload → password unlock (05071999) → auto-detect PAN →
@@ -344,7 +355,7 @@ card sizes, lamination specs, and feature plan documented in
 - ~~Photo editing (brightness/contrast/saturation)~~ — **shipped PR #191**
 - ~~Multiple cards per A4 (4-5 pairs per sheet)~~ — **shipped PR #193**
 - ~~Cut marks/guides on A4 output~~ — **shipped PR #193**
-- ~~Rounded border option~~ — **shipped PR #194, bug fix PR #195**
+- ~~Rounded border option~~ — **shipped PR #194, bug fix PR #197**
 - Voter ID support
 - Dragon sheet (4×6) layout option
 
@@ -397,11 +408,11 @@ Clone ke baad pehle ye teen files padho:
 AGENTS.md — full source of truth
 issues.md — full audit + §M ID Card Print research + §O Phase 2 multi-card
 
-Last PR: PR #195 (fix: rounded corners variable shadowing bug in
-multi-card A4 sheet generation)
+Last PR: PR #198 (docs: add half-half working rule + fix PR #195→#197
+references)
 
 Shipped summary (don't redo):
-PRs #70–#195: all previous work shipped
+PRs #70–#198: all previous work shipped
 - PRs #70–#189: original audit + Document Sheet + ID Card Print Phase 1
 - PR #190: docs update
 - PR #191: ID Card Print Phase 2 — photo editing (brightness/contrast/
@@ -411,13 +422,15 @@ PRs #70–#195: all previous work shipped
   sheet, cut marks, layout toggle)
 - PR #194: ID Card Print Phase 2 — rounded corners toggle (canvas
   clip-path with arcTo, preview + A4 sheet)
-- PR #195: fix rounded corners var shadowing bug in buildMultiCardSheet
+- PR #197: fix rounded corners var shadowing bug in buildMultiCardSheet
+  + docs update
+- PR #198: docs — add half-half working rule + fix PR #195→#197 refs
 
 ID Card Print current state:
 - Phase 1 MVP COMPLETE + VERIFIED (PR #188)
 - Phase 2 photo editing SHIPPED (PR #191)
 - Phase 2 multi-card A4 SHIPPED (PR #193)
-- Phase 2 rounded corners SHIPPED (PR #194, bug fix #195)
+- Phase 2 rounded corners SHIPPED (PR #194, bug fix #197)
 - Phase 2 remainder OPEN: Voter ID, Dragon sheet
 - Phase 3 OPEN: Ayushman/Jan Aadhaar/eShram, batch, PVC tray, toggles
 
