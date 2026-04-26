@@ -315,7 +315,7 @@ unlock, auto-detect, front+back preview, CR80 output, A4 sheet).
   editing (PR #191), multi-card A4 (PR #193), cut marks (PR #193),
   rounded corners (PR #194/#197), Voter ID (PR #202), Dragon sheet
   (PR #203).
-- **ID Card Print Phase 3 — PARTIAL.** Ayushman/Jan Aadhaar/eShram
+- **ID Card Print Phase 3 — COMPLETE.** Ayushman/Jan Aadhaar/eShram
   shipped (PR #205), batch processing shipped (PR #208), PVC card
   tray shipped (PR #210), copy update shipped (PR #213), toggle research
   docs shipped (PR #215, #216), Aadhaar field toggles shipped (PR #217 —
@@ -323,18 +323,25 @@ unlock, auto-detect, front+back preview, CR80 output, A4 sheet).
   white-mask regions on back card, all output layouts), Auto Enhance
   shipped (PR #218 — luminance histogram analysis, 1-click button),
   PAN signature box research docs shipped (PR #220 — §U), PAN
-  signature box code shipped (PR #221 — but coords WRONG, overlap QR;
-  see §V.2.a for fix).
-- **ID Card Print Phase 4 — STARTED.** §V scope reset (PR #222) after
-  user feedback that §U was too narrow. 8 reference images committed
-  to `.agents/references/` (incl. CardXpress competitor UI). Phase 4
-  P1 backlog (next 2 PRs):
-  - P1 #223 fix-pan-signature-coords (4-line patch — §V.2.a)
-  - P1 #224 pan-hologram-overlay (~40 lines — back top-right silver
-    patch with HOLOGRAM label, §V.2.b)
-  P2-P4 backlog: Move/Zoom controls, Photo Editor split, Master
-  Settings, PrePrinted Card mode, Printer presets, Bold/BigQR
-  toggles, other-card overlays — full table in issues.md §V.4.
+  signature box code shipped (PR #221), Phase 4 scope research shipped
+  (PR #222 — §V).
+- **ID Card Print Phase 4 P1 — SHIPPED.**
+  - PR #223 fix-pan-signature-coords (1-line patch — corrects PR #221
+    coords from {540,470,380,110} → {280,540,280,75} per §V.2.a; box
+    now sits in bottom-left signature row, no longer overlaps QR).
+  - PR #224 pan-hologram-overlay (~40 net lines — new `hologram` entry
+    in PAN_OVERLAY_REGIONS at back x:800 y:30 w:180 h:220; new
+    chkHologram checkbox in #panToggles; applyPanOverlays refactored
+    to loop pattern mirroring applyAadhaarMasks; silver gradient fill
+    + white DM Mono "HOLOGRAM" label, 24px centred; §V.2.b).
+  - PR #225 docs (this PR) — Rule #13 second-half: marks PRs #223/#224
+    shipped across SKILL.md, AGENTS.md, issues.md; refreshes §11 prompt
+    template to point at Phase 4 P2 (Move/Zoom).
+- **ID Card Print Phase 4 P2+ — NOT STARTED.** Move/Zoom controls,
+  Photo Editor split, Master Settings, PrePrinted Card mode, Printer
+  presets, Bold/BigQR toggles, other-card overlays — full prioritized
+  table in issues.md §V.4. Next session pick ONE per Rule #12 (Move
+  controls recommended first — pairs naturally with Zoom).
 - **Card size reference:** CR80 = 85.6×54mm = 1011×638px at 300 DPI.
   Lamination pouch = 65×95mm (Reston 125 micron). Test PDFs in repo:
   `test-pdfs/pan-test.pdf` (pw: `05071999`), `test-pdfs/aadhaar-test.pdf`
