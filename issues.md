@@ -640,8 +640,8 @@ placed inside pouch, heat-sealed.
 - ~~Voter ID support~~ — **shipped PR #202**
 - ~~Dragon sheet (4×6) layout option (2 cards per sheet)~~ — **shipped PR #203**
 
-**Phase 3 (future):**
-- Ayushman / Jan Aadhaar / eShram support
+**Phase 3 (partial):**
+- ~~Ayushman / Jan Aadhaar / eShram support~~ — **shipped PR #205**
 - Batch processing (multiple PDFs at once)
 - PVC card tray layout (Epson L805/L8050 direct print)
 - Toggle options (issue date, download date, QR code, mobile number)
@@ -677,7 +677,23 @@ const POUCH_H_MM = 95;
 //    these 3. Verified 2026-04-26: 4 keyword hits on test PDF.)
 // PAN: "permanent account number", "income tax", "pan",
 //      "department", "nsdl", "utiitsl"
-// Voter: "election commission", "epic", "voter", "electoral"
+// Voter: "election commission", "epic", "voter", "electoral",
+//        "electors photo identity", "polling station",
+//        "assembly constituency", "parliamentary constituency"
+// Ayushman: "ayushman", "pmjay", "pradhan mantri jan arogya",
+//           "national health authority", "nha", "health card",
+//           "beneficiary", "jan arogya", "health id", "ayushman bharat"
+// Jan Aadhaar: "jan aadhaar", "janaadhaar", "rajasthan", "family id",
+//              "jan aadhar", "planning department",
+//              "rajasthan jan aadhaar authority", "janaadhar"
+// eShram: "eshram", "e-shram", "unorganised worker",
+//         "unorganized worker", "ministry of labour", "uan",
+//         "universal account number", "shram card",
+//         "labour and employment"
+//
+// Detection order (PR #205): Ayushman → Jan Aadhaar → eShram →
+// Aadhaar → PAN → Voter (specific before generic to avoid
+// keyword overlap, e.g. "jan aadhaar" contains "aadhaar")
 ```
 
 ### M.8 Key file locations (CREATED — PR #188)
@@ -737,8 +753,32 @@ Tested locally with both test PDFs after PR #189 merge:
 
 **Phase 2 — COMPLETE.** All items shipped (photo editing PR #191, multi-card A4 PR #193, cut marks PR #193, rounded corners PR #194/#197, Voter ID PR #202, Dragon sheet PR #203).
 
-**Phase 3 (future):**
-- Ayushman / Jan Aadhaar / eShram support
+**Phase 3 (partial):**
+- ~~Ayushman / Jan Aadhaar / eShram support~~ — **shipped PR #205**
+- Batch processing (multiple PDFs at once)
+- PVC card tray layout (Epson L805/L8050 direct print)
+- Toggle options (issue date, download date, QR code, mobile number)
+- Auto photo enhancement (AI brightness/contrast adjustment)
+- Signature box option (PAN)
+- Back-side hologram overlay (PAN)
+
+---
+
+## P. ID Card Print — Phase 3 Ayushman/Jan Aadhaar/eShram (2026-04-26, session #16)
+
+**Status: SHIPPED — PR #205.**
+
+|| # | PR | What shipped | Status |
+||---|------|---------|--------|
+|| P1 | PR #205 | **Ayushman Bharat (PMJAY) support.** Auto-detect via 10 keywords (`ayushman`, `pmjay`, `pradhan mantri jan arogya`, `national health authority`, `nha`, `health card`, `beneficiary`, `jan arogya`, `health id`, `ayushman bharat`). Crop regions for single-page and multi-page PDFs. Pink badge (`#f472b6`). CR80 output. | **merged** |
+|| P2 | PR #205 | **Jan Aadhaar (Rajasthan family ID) support.** Auto-detect via 8 keywords (`jan aadhaar`, `janaadhaar`, `rajasthan`, `family id`, `jan aadhar`, `planning department`, `rajasthan jan aadhaar authority`, `janaadhar`). Crop regions for single-page and multi-page PDFs. Orange badge (`#fb923c`). CR80 output. | **merged** |
+|| P3 | PR #205 | **eShram (unorganized worker UAN) support.** Auto-detect via 9 keywords (`eshram`, `e-shram`, `unorganised worker`, `unorganized worker`, `ministry of labour`, `uan`, `universal account number`, `shram card`, `labour and employment`). Crop regions for single-page and multi-page PDFs. Green badge (`#34d399`). CR80 output. | **merged** |
+|| P4 | PR #205 | **Detection order fix.** Specific types checked before generic ones to avoid keyword overlap (e.g. `jan aadhaar` contains `aadhaar`). Order: Ayushman → Jan Aadhaar → eShram → Aadhaar → PAN → Voter. | **merged** |
+|| P5 | PR #205 | **Multi-page PDF support generalized.** Previously Voter-only (`if detectedType === 'voter'`), now works for all card types with `frontPage`/`backPage` crop regions (`if pdf.numPages >= 2 && crop.frontPage`). | **merged** |
+|| P6 | PR #205 | **UI updates.** Hero text, drop zone text, password hints, meta descriptions, nav dropdown, footer tagline — all updated to include new card types. | **merged** |
+
+### What's still open (Phase 3 remaining)
+
 - Batch processing (multiple PDFs at once)
 - PVC card tray layout (Epson L805/L8050 direct print)
 - Toggle options (issue date, download date, QR code, mobile number)

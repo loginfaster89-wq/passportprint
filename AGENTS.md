@@ -288,9 +288,9 @@ unlock, auto-detect, front+back preview, CR80 output, A4 sheet).
   editing (PR #191), multi-card A4 (PR #193), cut marks (PR #193),
   rounded corners (PR #194/#197), Voter ID (PR #202), Dragon sheet
   (PR #203).
-- **ID Card Print Phase 3** — Ayushman/Jan Aadhaar/eShram, batch
-  processing, PVC card tray (Epson L805/L8050), toggle options, auto
-  photo enhancement.
+- **ID Card Print Phase 3 — PARTIAL.** Ayushman/Jan Aadhaar/eShram
+  shipped (PR #205). Remaining: batch processing, PVC card tray
+  (Epson L805/L8050), toggle options, auto photo enhancement.
 - **Card size reference:** CR80 = 85.6×54mm = 1011×638px at 300 DPI.
   Lamination pouch = 65×95mm (Reston 125 micron). Test PDFs in repo:
   `test-pdfs/pan-test.pdf` (pw: `05071999`), `test-pdfs/aadhaar-test.pdf`
