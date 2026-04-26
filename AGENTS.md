@@ -70,7 +70,7 @@ and overall aesthetic are not.
 | -------------------------- | ----------------------------------------------------- |
 | `index.html`               | Homepage (hero, features, audience, why, how, pricing, FAQ, CTA) |
 | `passport-photo.html`      | The live passport photo tool (5000+ lines, with its own inline copies of the nav / auth / Google Sign-In markup and a small hash-open script) |
-| `id-print.html`            | ID Card Print tool — Aadhaar/PAN PDF upload, password unlock, auto-detect, auto-crop front+back, CR80 output, A4 fold-and-laminate sheet, photo editing (brightness/contrast/saturation), multi-card A4 layout (5 pairs per sheet, cut marks, layout toggle), rounded corners toggle, download PNG + print. All client-side. Shared nav/auth/footer. |
+| `id-print.html`            | ID Card Print tool — Aadhaar/PAN/Voter ID PDF upload, password unlock, auto-detect, auto-crop front+back (multi-page e-EPIC support), CR80 output, A4 fold-and-laminate sheet, photo editing (brightness/contrast/saturation), multi-card A4 layout (5 pairs per sheet, cut marks, layout toggle), rounded corners toggle, download PNG + print. All client-side. Shared nav/auth/footer. |
 | `about.html`, `contact.html`, `privacy.html`, `terms.html`, `refund.html`, `shipping.html` | Legal / info pages, share the header + footer with `index.html` |
 | `assets/auth.js` + `auth.css` | Shared login / signup / OTP / Google Sign-In modal + account modal (plan info, upgrade, delete account). `position: fixed; z-index: 10000` overlay. Include on any page that has `.legal-header` with a `#hdrAuthBtn` button. |
 | `assets/pricing.js` + `pricing.css` | Shared 2-step pricing modal (Choose Plan → Complete Payment → Razorpay). Included on every page except `passport-photo.html`. Exposes `window.openPlans` / `window.startCheckout`. Load AFTER `auth.js`. |
@@ -278,15 +278,21 @@ PR #197 fix `var r` variable shadowing bug in multi-card sheet
 generation + docs update. PR #198 docs — add half-half working rule +
 fix PR #195→#197 references. PR #199 docs — mark shipped Phase 2
 items in issues.md §M.6 + update SKILL.md §11 prompt template.
+PR #201 docs — fill Voter ID task in prompt, update AGENTS.md
+id-print description. PR #202 **ID Card Print Phase 2 Voter ID
+support** — multi-page e-EPIC PDF handling (page 1 = front, page 2 =
+back), frontPage/backPage crop regions, single-page voter PDFs use
+existing crop. All features (photo editing, multi-card A4, rounded
+corners) work with Voter ID.
 
 **Verified (2026-04-26):** ID Card Print Phase 1 MVP fully tested with
 both test PDFs — PAN and Aadhaar flows ALL PASSED (upload, password
 unlock, auto-detect, front+back preview, CR80 output, A4 sheet).
 
 **Open backlog:**
-- **ID Card Print Phase 2 (remaining)** — Voter ID support, Dragon
+- **ID Card Print Phase 2 (remaining)** — Dragon
   sheet layout. (Photo editing, multi-card A4, cut marks, rounded
-  borders all shipped.)
+  borders, Voter ID all shipped.)
 - **ID Card Print Phase 3** — Ayushman/Jan Aadhaar/eShram, batch
   processing, PVC card tray (Epson L805/L8050), toggle options, auto
   photo enhancement.

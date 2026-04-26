@@ -301,6 +301,12 @@ audit trail. Do NOT re-fix any of the following — they are all merged:
 - PR #199: docs — mark shipped Phase 2 items in issues.md §M.6
   (multi-card PR #193, cut marks PR #193, rounded corners PR #194/
   #197), update §11 prompt template for next session.
+- PR #201: docs — fill Voter ID task in prompt, update AGENTS.md
+  id-print description.
+- PR #202: **ID Card Print Phase 2 Voter ID support** — multi-page
+  e-EPIC PDF handling (page 1 = front, page 2 = back),
+  frontPage/backPage crop regions, single-page voter PDFs use
+  existing crop. All features work with Voter ID.
 
 **Verified (2026-04-26):** Both test PDFs fully working:
 - PAN PDF: upload → password unlock (05071999) → auto-detect PAN →
@@ -359,7 +365,7 @@ card sizes, lamination specs, and feature plan documented in
 - ~~Multiple cards per A4 (4-5 pairs per sheet)~~ — **shipped PR #193**
 - ~~Cut marks/guides on A4 output~~ — **shipped PR #193**
 - ~~Rounded border option~~ — **shipped PR #194, bug fix PR #197**
-- Voter ID support
+- ~~Voter ID support~~ — **shipped PR #202**
 - Dragon sheet (4×6) layout option
 
 **Phase 3 (future):**
@@ -377,7 +383,7 @@ vertically. Never shrink text below these minimums. If adding features,
 add them to all 3 cards consistently.
 
 **Open:** `F7` GSI iframe warnings (not our code, harmless).
-Phase 2 remainder (Voter ID, Dragon sheet) + Phase 3 items — see lists above.
+Phase 2 remainder (Dragon sheet) + Phase 3 items — see lists above.
 
 ## 10. Related repos
 
@@ -411,11 +417,11 @@ Clone ke baad pehle ye teen files padho:
 AGENTS.md — full source of truth
 issues.md — full audit + §M ID Card Print research + §O Phase 2 multi-card
 
-Last PR: PR #199 (docs: mark shipped Phase 2 items in issues.md,
-update prompt template)
+Last PR: PR #202 (feat: ID Card Print Phase 2 — Voter ID multi-page
+PDF support)
 
 Shipped summary (don't redo):
-PRs #70–#199: all previous work shipped
+PRs #70–#202: all previous work shipped
 - PRs #70–#189: original audit + Document Sheet + ID Card Print Phase 1
 - PR #190: docs update
 - PR #191: ID Card Print Phase 2 — photo editing (brightness/contrast/
@@ -428,27 +434,25 @@ PRs #70–#199: all previous work shipped
 - PR #197: fix rounded corners var shadowing bug in buildMultiCardSheet
 - PR #198: docs — add half-half working rule
 - PR #199: docs — mark shipped Phase 2 items + update prompt
+- PR #201: docs — fill Voter ID task in prompt, update AGENTS.md
+- PR #202: ID Card Print Phase 2 — Voter ID multi-page PDF support
 
 ID Card Print current state:
 - Phase 1 MVP COMPLETE + VERIFIED (PR #188)
 - Phase 2 photo editing SHIPPED (PR #191)
 - Phase 2 multi-card A4 SHIPPED (PR #193)
 - Phase 2 rounded corners SHIPPED (PR #194, bug fix #197)
-- Phase 2 remainder OPEN: Voter ID, Dragon sheet
+- Phase 2 Voter ID SHIPPED (PR #202)
+- Phase 2 remainder OPEN: Dragon sheet
 - Phase 3 OPEN: Ayushman/Jan Aadhaar/eShram, batch, PVC tray, toggles
 
 Test PDFs repo mein saved hain:
 test-pdfs/pan-test.pdf (password: 05071999)
 test-pdfs/aadhaar-test.pdf (password: SUNI1986)
 
-TASK: ID Card Print Phase 2 — Voter ID support add karo id-print.html
-mein. Voter ID PDF upload, password unlock, auto-detect (keywords:
-"election commission", "epic", "voter", "electoral"), auto-crop
-front+back, CR80 output, preview, A4 sheet — same workflow as
-Aadhaar/PAN. Existing photo editing, multi-card, rounded corners
-sab Voter ID ke saath bhi kaam kare. Test karo aur PR banao.
-
-Phase 2 remainder baad mein: Dragon sheet layout.
+TASK: ID Card Print Phase 2 — Dragon sheet (4×6) layout add karo
+id-print.html mein. Layout toggle mein third option — Dragon sheet
+(1205×1795px, 2 cards per sheet). Test karo aur PR banao.
 
 Phase 3 features listed in SKILL.md §9 — do NOT implement unless
 explicitly asked.

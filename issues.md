@@ -637,7 +637,7 @@ placed inside pouch, heat-sealed.
 - ~~Multiple cards per A4 sheet (5 card pairs per sheet)~~ — **shipped PR #193**
 - ~~Cut marks / dashed guides on A4 output~~ — **shipped PR #193**
 - ~~Rounded border option~~ — **shipped PR #194, bug fix PR #197**
-- Voter ID support
+- ~~Voter ID support~~ — **shipped PR #202**
 - Dragon sheet (4×6) layout option (2 cards per sheet)
 
 **Phase 3 (future):**
@@ -733,8 +733,18 @@ Tested locally with both test PDFs after PR #189 merge:
 ### What's still open (Phase 2 remainder + Phase 3)
 
 **Phase 2 (not yet implemented):**
-- Voter ID support
+- ~~Voter ID support~~ — **shipped PR #202**
 - Dragon sheet (4×6) layout option (2 cards per sheet)
+
+---
+
+## P. ID Card Print — Phase 2 Voter ID support (2026-04-26, session #16)
+
+**Status: SHIPPED — PR #202.**
+
+| # | PR | What shipped | Status |
+|---|------|---------|--------|
+| P1 | PR #202 | **Voter ID multi-page PDF support.** Multi-page e-EPIC handling: when voter PDF has 2+ pages, page 1 = front, page 2 = back (separate render + crop). Added `frontPage`/`backPage` crop regions (90% page crop for per-page card extraction). Single-page voter PDFs continue using existing front/back crop regions. All existing features (photo editing, multi-card A4, rounded corners, download, print) work with Voter ID. Detection keywords: election commission, epic, voter, electoral, electors photo identity, polling station, assembly constituency, parliamentary constituency. Badge styling (blue) already present. | **merged** |
 
 **Phase 3 (future):**
 - Ayushman / Jan Aadhaar / eShram support
