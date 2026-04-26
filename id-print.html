@@ -1395,12 +1395,12 @@ function buildSingleSheet() {
   var gap = 0;
   var pairW = cardW * 2 + gap;
   var startX = Math.round((A4_W - pairW) / 2);
-  /* §AC.14 — Push the card pair right to the TOP of the A4 with only a
-     tiny top margin (~7mm = 80px @ 300 DPI). User wants the cards as
-     close to the top edge as practical so the unused bottom half of
-     the sheet is as large as possible for re-use. (§AC.13 had used
-     startY = startX which still left ~19mm white at top.) */
-  var startY = 80;
+  /* §AC.15 — Tighten the top margin further (~2.5mm = 30px @ 300 DPI).
+     §AC.14 used 80px (~7mm) but the user still saw too much white above
+     the cards in the preview. Going to 30px pushes the pair almost to
+     the very top edge of the A4, leaving the entire bottom of the sheet
+     free for re-use / second pass. */
+  var startY = 30;
 
   var r = roundedCorners ? CARD_RADIUS : 0;
 
@@ -1423,6 +1423,28 @@ function buildSingleSheet() {
   /* §AC.13 — Cut Marks block removed for the 1-Pair layout: no dashed
      fold-here line, no "← fold here →" caption, no corner ticks, no
      seam ticks. Sheet stays clean white around the card pair. */
+
+  /* §AC.15 — Add a solid black line along the TOP edge of each card to
+     replace the dashed perforation strip cropped out in §AC.14. The
+     left / right / bottom edges already carry the natural black border
+     printed on the e-Aadhaar card; the top edge lost its border when
+     the perforation strip was removed, so this line restores symmetry
+     with the other three sides. ~4px line ≈ matches the printed border
+     thickness at 300 DPI. When rounded corners are enabled the line is
+     inset by `r` so it does not stick out past the rounded curve. */
+  if (card) {
+    ctx.fillStyle = '#000';
+    var topLineH = 4;
+    if (card.front) {
+      if (r > 0) ctx.fillRect(startX + r, startY, cardW - 2 * r, topLineH);
+      else ctx.fillRect(startX, startY, cardW, topLineH);
+    }
+    if (card.back) {
+      var backXLine = startX + cardW + gap;
+      if (r > 0) ctx.fillRect(backXLine + r, startY, cardW - 2 * r, topLineH);
+      else ctx.fillRect(backXLine, startY, cardW, topLineH);
+    }
+  }
 
   ctx.fillStyle = '#aaa';
   ctx.font = '16px sans-serif';
