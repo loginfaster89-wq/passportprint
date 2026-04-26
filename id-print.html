@@ -467,6 +467,9 @@ input.idp-range::-moz-range-thumb{
           <label class="idp-option"><input type="checkbox" id="chkHologram"> Add Hologram Patch</label>
         </div>
         <label class="idp-option"><input type="checkbox" id="chkBold"> Bold Text</label>
+        <div class="idp-editor-actions" id="swapRow">
+          <button type="button" id="btnSwapSides">Swap Front / Back</button>
+        </div>
       </div>
 
       <!-- Panel B: Position (single-card mode only) -->
@@ -1037,6 +1040,10 @@ async function processPdfBatch(arrayBuffer, password, fileName) {
       back = cropRegion(renderCanvas, crop.back);
     }
 
+    if (shouldAutoSwap(front, back, type)) {
+      var tmpFB = front; front = back; back = tmpFB;
+    }
+
     return {
       card: { type: type, front: front, back: back, originalFront: front, originalBack: back, fileName: fileName, offset: { front: { dx: 0, dy: 0 }, back: { dx: 0, dy: 0 } } }
     };
@@ -1102,6 +1109,10 @@ async function processPdf(pdf) {
     } else {
       frontImageData = cropRegion(renderCanvas, crop.front);
       backImageData = cropRegion(renderCanvas, crop.back);
+    }
+
+    if (shouldAutoSwap(frontImageData, backImageData, detectedType)) {
+      var tmpSwap = frontImageData; frontImageData = backImageData; backImageData = tmpSwap;
     }
 
     originalFront = frontImageData;
@@ -1322,6 +1333,36 @@ function applyBatchFilters() {
       drawFilteredToCanvas(c, src, CR80_W, CR80_H, batchCards[idx].type, side);
     }
   });
+}
+
+/* ── Auto front/back orientation detection (Aadhaar/PAN) ──
+   Both eAadhaar and ePAN have a portrait photo in the upper-left of the
+   front. We sample that ROI on each cropped canvas and count "skin-tone"
+   pixels — if the back has materially more skin pixels than the front,
+   the user uploaded a PDF where the pages came in reversed and we swap. */
+function skinPixelRatio(canvas, fx, fy, fw, fh) {
+  if (!canvas || !canvas.width || !canvas.height) return 0;
+  var x = Math.max(0, Math.floor(fx * canvas.width));
+  var y = Math.max(0, Math.floor(fy * canvas.height));
+  var w = Math.min(canvas.width - x, Math.floor(fw * canvas.width));
+  var h = Math.min(canvas.height - y, Math.floor(fh * canvas.height));
+  if (w <= 0 || h <= 0) return 0;
+  try {
+    var data = canvas.getContext('2d').getImageData(x, y, w, h).data;
+    var skin = 0, total = data.length / 4;
+    for (var i = 0; i < data.length; i += 4) {
+      var r = data[i], g = data[i + 1], b = data[i + 2];
+      if (r > 95 && g > 40 && b > 20 && r > g && g > b && (r - b) > 15) skin++;
+    }
+    return skin / total;
+  } catch (e) { return 0; }
+}
+function shouldAutoSwap(frontC, backC, type) {
+  if (type !== 'aadhaar' && type !== 'pan') return false;
+  var roi = [0.04, 0.18, 0.22, 0.55];
+  var fSkin = skinPixelRatio(frontC, roi[0], roi[1], roi[2], roi[3]);
+  var bSkin = skinPixelRatio(backC, roi[0], roi[1], roi[2], roi[3]);
+  return bSkin > 0.04 && bSkin > fSkin + 0.02;
 }
 
 /* ── Canvas helpers ── */
@@ -1855,6 +1896,34 @@ btnResetEdit.addEventListener('click', () => {
 
 /* Bold text toggle — layered on top of slider filters */
 chkBold.addEventListener('change', applyFilters);
+
+const btnSwapSides = $('#btnSwapSides');
+function swapFrontBack() {
+  if (!frontImageData || !backImageData) return;
+  var tF = frontImageData, tB = backImageData;
+  frontImageData = tB; backImageData = tF;
+  var oF = originalFront, oB = originalBack;
+  originalFront = oB; originalBack = oF;
+  if (batchCards.length >= 1 && batchCards[0]) {
+    var c = batchCards[0];
+    var cF = c.front, cB = c.back;
+    c.front = cB; c.back = cF;
+    var coF = c.originalFront, coB = c.originalBack;
+    c.originalFront = coB; c.originalBack = coF;
+    if (c.offset) {
+      var of = c.offset.front || { dx: 0, dy: 0 };
+      var ob = c.offset.back || { dx: 0, dy: 0 };
+      c.offset.front = ob; c.offset.back = of;
+    }
+    if (c.scale) {
+      var sf = c.scale.front, sb = c.scale.back;
+      c.scale.front = sb; c.scale.back = sf;
+    }
+  }
+  applyFilters();
+  refreshMoveReadout();
+}
+btnSwapSides.addEventListener('click', swapFrontBack);
 
 /* Quick presets — one-click slider combos */
 function applyPreset(b, c, s) {
