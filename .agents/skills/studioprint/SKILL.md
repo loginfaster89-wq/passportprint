@@ -102,6 +102,13 @@ No dev server — edit source, `npm run build`, preview from `dist/`.
     Never skip the second half — the user needs updated docs and a
     fresh prompt to start the next session efficiently. If quota is
     tight, prioritise the docs update over extra polish on the feature.
+14. **Research → docs → code (2026-04-26).** When researching a topic
+    (competitor analysis, PDF structure, field positions, etc.), update
+    Devin files (`SKILL.md`, `AGENTS.md`, `issues.md`) with the
+    research findings **before** writing any implementation code. This
+    ensures knowledge is saved even if the session runs out of quota
+    mid-task. The next session can pick up from the documented research
+    without re-doing it.
 
 ## 3. Create a PR (fine-grained PAT flow)
 
@@ -326,6 +333,7 @@ Do NOT re-fix any of the following — they are all merged:
 - PR #213: **copy update** — nav dropdown subtitle on 7 pages updated
   to include Ayushman/eShram. Homepage feature card description updated
   to reflect Phase 2/3 features.
+- PR #214: docs — fix gaps in SKILL.md §9/§11 + AGENTS.md open backlog.
 
 **Phase 2 is now COMPLETE.**
 

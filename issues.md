@@ -843,3 +843,69 @@ Tested locally with both test PDFs after PR #189 merge:
 |||---|------|---------|--------|
 ||| S1 | PR #213 | **Nav dropdown subtitle update (7 pages).** Changed from "Aadhaar · PAN · Voter ID · CR80 sheet" to "Aadhaar · PAN · Voter · Ayushman · more" on index.html, about.html, contact.html, privacy.html, terms.html, refund.html, shipping.html. Now matches id-print.html which was already updated in PR #205. | **merged** |
 ||| S2 | PR #213 | **Homepage feature card description.** Updated to mention all 6 card types (Aadhaar, PAN, Voter ID, Ayushman, Jan Aadhaar, eShram) plus batch processing, multi-card A4, Dragon sheet, PVC tray print, photo editing. | **merged** |
+
+---
+
+## T. ID Card Print — Phase 3 Aadhaar Field Toggles (2026-04-26, session #21)
+
+**Status: RESEARCH COMPLETE — implementation pending.**
+
+### T.1 Competitor reference — eCardCutter (go24.info)
+
+eCardCutter "Advance Aadhar Card Crop and Print" page (`/aadhar-card-pdf-crop-and-print-online`) offers these toggles:
+- Issue Date
+- Download Date
+- Front QR Display
+- Mobile No Display
+- Citizenship or DOB Alert
+- VID No Display
+- ID Card Outline
+- Photo Edit Brightness Contrast
+
+Studio Print scope (this task): Issue Date, Download Date, QR Code, Mobile Number only — for Aadhaar cards. PAN/Voter ID toggles are separate future PRs.
+
+### T.2 eAadhaar PDF field locations (tested with `test-pdfs/aadhaar-test.pdf`)
+
+**Front card** (crop region `[0.035, 0.06, 0.93, 0.52]`):
+- Top: Govt of India logo + Aadhaar logo + "UIDAI" header
+- Middle: Enrolment No., Name, Address (with mobile number at bottom of address block)
+- Bottom-left: Signature area
+- Bottom-right: Large QR code (~35% width, ~40% height from bottom-right corner)
+- **Mobile Number** position: in address block, near bottom — approx `{x:0.02, y:0.82, w:0.55, h:0.06}` relative to cropped front card
+- **QR Code** position: bottom-right — approx `{x:0.60, y:0.58, w:0.38, h:0.40}` relative to cropped front card
+
+**Back card** (crop region `[0.035, 0.60, 0.93, 0.36]`):
+- Top: Aadhaar number, VID, "Mera Aadhaar Meri Pehchaan"
+- Middle: Govt logo, photo, name, DOB, gender
+- Left edge: **Issue Date** vertical text — approx `{x:0.0, y:0.0, w:0.04, h:1.0}` relative to cropped back card
+- Bottom: Aadhaar number repeated
+- **Download Date** position: varies by PDF source. Typically appears near Issue Date on left edge or at very bottom. Approx `{x:0.0, y:0.0, w:0.06, h:0.15}` or bottom strip.
+
+### T.3 Implementation plan
+
+1. **HTML:** Add 4 checkbox toggles (`.idp-option` style, same as Rounded Corners) below the existing Rounded Corners toggle. Wrap in a container div `.idp-aadhaar-toggles` that is shown/hidden based on `detectedType === 'aadhaar'`.
+2. **JS:** Define `AADHAAR_MASK_REGIONS` object mapping each toggle to `{side, x, y, w, h}` fractional coords relative to the cropped card. After cropping, iterate active masks and `ctx.fillStyle='#fff'; ctx.fillRect(...)` to white-out those regions.
+3. **Mask application point:** After `cropRegion()` returns the cropped canvas but BEFORE storing as `frontImageData`/`backImageData`. Create a helper `applyAadhaarMasks(canvas, side)` that checks each toggle state and fills white rects.
+4. **Re-render on toggle change:** Each checkbox `change` event should re-crop from the original rendered PDF page (stored in a new var `renderedPage1Canvas` / `renderedPage2Canvas`) and re-apply masks + filters.
+5. **All output layouts:** Since masks are applied at the source card level (before `batchCards[]` storage), all downstream layouts (single, multi, dragon, PVC) automatically get the masked version.
+6. **Batch mode:** For batch mode, store toggle state per-card or apply global toggles to all Aadhaar cards in the batch.
+
+### T.4 Mask region constants (to be calibrated during implementation)
+
+```js
+var AADHAAR_MASKS = {
+  qrCode:       { side: 'front', x: 0.60, y: 0.58, w: 0.38, h: 0.40 },
+  mobileNumber: { side: 'front', x: 0.02, y: 0.82, w: 0.55, h: 0.06 },
+  issueDate:    { side: 'back',  x: 0.0,  y: 0.0,  w: 0.04, h: 1.0  },
+  downloadDate: { side: 'back',  x: 0.0,  y: 0.0,  w: 0.06, h: 0.15 }
+};
+```
+
+These are approximate — need visual calibration with the test PDF during implementation.
+
+### What's still open (Phase 3 remaining)
+
+- Toggle options (issue date, download date, QR code, mobile number) — **research done, implementation pending**
+- Auto photo enhancement (AI brightness/contrast adjustment)
+- Signature box option (PAN)
+- Back-side hologram overlay (PAN)
