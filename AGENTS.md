@@ -354,7 +354,7 @@ unlock, auto-detect, front+back preview, CR80 output, A4 sheet).
   - PR #234 docs — Rule #13 second-half: marks PRs #231/#232
     shipped across SKILL.md §9/§11, AGENTS.md, issues.md §X/§Y.
 - **ID Card Print Phase 4 P3 — IN PROGRESS.**
-  - PR #__THIS__ docs (this PR) — §Z research for Photo Editor split
+  - PR #235 docs (this PR) — §Z research for Photo Editor split
     panel: 3-panel sidebar reorg (Card Cleanup / Position / Photo
     Adjust), Bold text toggle, 3 Quick Presets (Original/Aadhaar/PAN),
     shared §W+§X Front/Back radio. Est. ~80–100 line code PR.

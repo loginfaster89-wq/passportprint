@@ -464,7 +464,7 @@ issues.md — full audit + §M ID Card Print research + §O Phase 2 multi-card
   + §V Phase 4 CardXpress feature parity scope (8 reference images in
     .agents/references/)
 
-Last PR: PR #__THIS__ (docs: Phase 4 P3 §Z research — Photo
+Last PR: PR #235 (docs: Phase 4 P3 §Z research — Photo
   Editor split panel: reorganise Step 2 sidebar into Card Cleanup /
   Position / Photo Adjust panels, add Bold text toggle, add Original/
   Aadhaar/PAN quick presets, consolidate §W+§X Front/Back radios into
@@ -570,7 +570,7 @@ PRs #70–#230: all previous work shipped
 - PR #234: docs — Rule #13 second-half. Marks PRs #231/#232
   shipped across SKILL.md §9/§11 + AGENTS.md backlog + issues.md
   §X banner / §X.11 follow-up / new §Y section.
-- PR #__THIS__: docs (this PR) — Phase 4 P3 §Z research: Photo Editor
+- PR #235: docs (this PR) — Phase 4 P3 §Z research: Photo Editor
   split panel. Designs the Step 2 sidebar reorg (3 labelled panels:
   Card Cleanup / Position / Photo Adjust), adds Bold text toggle and
   3 Quick Preset buttons, consolidates the §W+§X Front/Back radios.
@@ -613,7 +613,7 @@ Phase 3 follow-up COMPLETE:
 - PR #234: docs second-half — SHIPPED
 
 Phase 4 P3 IN PROGRESS:
-- PR #__THIS__: §Z research — Photo Editor split panel (this PR) — SHIPPED
+- PR #235: §Z research — Photo Editor split panel (this PR) — SHIPPED
 - §Z code PR — pending (single-card sidebar reorg + Bold + presets)
 
 TASK: Phase 4 P3 items next. Per Rule #14, research first — open a
