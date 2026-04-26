@@ -2544,7 +2544,7 @@ all sheet builders (`buildSingleSheet`, `buildMultiCardSheet`,
 
 ## §AC.11 ID Card Print — Front+Back preview redesign (landscape, unified)
 
-**Status:** RESEARCH — code PR pending (next session).
+**Status:** SHIPPED — PR #254 (initial unified preview, back-LEFT / front-RIGHT) + PR #256 (order corrected to front-LEFT / back-RIGHT per user follow-up). See §AC.11.12 below for the correction note.
 
 ### AC.11.1 Field report
 
@@ -2563,10 +2563,18 @@ User feedback (with attached snipping-tool reference at
 
 Translation: today the Step 2 preview shows **two stacked vertical
 canvases** — Front on top, Back below. User wants a **single
-unified landscape preview** — Back on the LEFT, Front on the RIGHT
+unified landscape preview** — **Front on the LEFT, Back on the RIGHT**
 — matching exactly what the printed 1-pair sheet looks like after
 cut. No separate Front/Back labels, no two boxes — just one image
 that mirrors the printed output 1:1.
+
+> *Note on order:* the original brief above (verbatim Hinglish) reads
+> "right side Front or left side Back". On a follow-up after PR #254
+> shipped, the user clarified the preferred order is the opposite —
+> **front on the LEFT, back on the RIGHT** — matching how a card is
+> naturally held and read. PR #256 ships the swap. All the §AC.11
+> sub-sections below have been edited to reflect the corrected order;
+> see §AC.11.12 for the correction history.
 
 ### AC.11.2 Reference
 
@@ -2574,8 +2582,12 @@ that mirrors the printed output 1:1.
 committed this session). It is the user's snipping-tool capture
 of an Aadhaar card cut from the source PDF using the printed black
 border lines as the cut guide. Both halves are present, side by
-side, in landscape orientation: **left = back** (Hindi text, QR,
-address), **right = front** (photo, name, DOB, VID).
+side, in landscape orientation. The reference image happens to show
+**left = back, right = front**, but the *target order for the
+preview* — finalised after PR #254 — is the opposite: **left = front
+(photo, name, DOB, VID), right = back (Hindi text, QR, address)**.
+Treat the reference image purely for proportions and seam placement;
+the side assignment is set by §AC.11.4 / §AC.11.12 below.
 
 This image IS the spec for §AC.11. The Step 2 preview should look
 like this image.
@@ -2617,10 +2629,10 @@ internally loops both):
 ```js
 const ctx = pairCanvas.getContext('2d');
 ctx.clearRect(0, 0, 2022, 638);
-// LEFT half = BACK card
-drawCardInto(ctx, /*dx=*/0,        /*dy=*/0, backImageData,  'back');
-// RIGHT half = FRONT card
-drawCardInto(ctx, /*dx=*/CR80_W,   /*dy=*/0, frontImageData, 'front');
+// LEFT half = FRONT card
+drawCardInto(ctx, /*dx=*/0,        /*dy=*/0, frontImageData, 'front');
+// RIGHT half = BACK card
+drawCardInto(ctx, /*dx=*/CR80_W,   /*dy=*/0, backImageData,  'back');
 ```
 
 `drawCardInto` is `drawFilteredToCanvas` adapted to accept a target
@@ -2646,7 +2658,7 @@ expects `(side)`.
 
 - Per-side **Move** d-pad (PR #229) — keeps Front/Back radio. The
   selected side's offset still applies inside the new preview
-  (Front offset → right half, Back offset → left half).
+  (Front offset → LEFT half, Back offset → RIGHT half).
 - Per-side **Zoom** slider (PR #230) — same story, still works
   per side, just rendered into the unified canvas.
 
@@ -2654,9 +2666,8 @@ expects `(side)`.
 
 - Single-side cards (e.g. some PAN test PDFs render only the front
   page successfully) — if `backImageData` is null, draw the front in
-  the right half and leave the left half blank (light grey
-  placeholder), or centre the front. Spec to be finalised in the
-  code PR after seeing real-world PDFs.
+  the LEFT half and leave the RIGHT half as the `#eaeaea` light-grey
+  placeholder. (Order corrected post-merge — PR #256.)
 - Batch mode (`isBatchMode`) — preview already shows the first card
   of the batch; extend to render the pair view of the active batch
   card. Re-use the same `drawFiltered` path.
@@ -2675,8 +2686,8 @@ Total: ~60–80 line code PR. One file (`id-print.html`). Plus dist rebuild.
 
 - Step 2 preview renders **one wide landscape canvas** at ~3.17:1
   aspect ratio.
-- LEFT half visually matches the back card; RIGHT half visually
-  matches the front card.
+- LEFT half visually matches the front card; RIGHT half visually
+  matches the back card. (Order corrected post-merge — PR #256.)
 - No "Front" / "Back" text labels around the preview.
 - Move / Zoom / brightness / contrast / saturate / rounded corners
   /Auto Enhance all still apply per side.
@@ -2699,3 +2710,45 @@ ya nhi."* — Going forward, every reference image the user attaches
 goes into `.agents/references/` with a descriptive filename and a
 short note in the relevant `issues.md` section explaining what
 the image shows + which feature it pins.
+
+### AC.11.12 Order correction (post-PR #254)
+
+After PR #254 merged, the user asked for the Front/Back order in
+the unified preview to be flipped. Verbatim Hinglish:
+
+> "Front & Back Preview GALAT HAI FRONT WALE KO LIFT MAIN KRO OR
+> BACK WALE KO RIGHT MAIN"
+
+— i.e. the original brief (back LEFT, front RIGHT) was wrong; the
+correct order is **front LEFT, back RIGHT**. This matches how a
+card is naturally held and read (front face shown first, back
+revealed when flipped right).
+
+PR #256 ships the swap:
+
+- Single behaviour change in `compositePair()`: front-half draw now
+  uses `dx=0`, back-half draw uses `dx=CR80_W`.
+- Per-half rounded-clip paths swap with the draw order.
+- All explanatory comments in `id-print.html` (CSS rule, markup
+  comment, `applyFilters()`, `showBatchPreview()`,
+  `applyBatchFilters()`) updated to describe the new order.
+- All §AC.11 sub-sections above (AC.11.1–AC.11.9) edited to read
+  "front LEFT, back RIGHT" — the original Hinglish quote is kept
+  verbatim in §AC.11.1 with a note explaining the post-merge
+  clarification.
+- Sheet builders untouched. Move/Zoom/Rounded Corners/Cut Marks
+  still apply per-side (Front offset → LEFT half, Back offset →
+  RIGHT half).
+
+Estimated diff: ~6 line behaviour change + ~10 line comment
+sweep + dist rebuild. One file (`id-print.html`).
+
+**Acceptance for PR #256:**
+
+- Step 2 preview shows the front card on the LEFT half of the
+  unified landscape canvas and the back card on the RIGHT half.
+- Edge case (back missing): front renders on LEFT, RIGHT half
+  stays as `#eaeaea` placeholder.
+- Move (PR #229), Zoom (PR #230), Rounded Corners (PR #194), Cut
+  Marks (PR #251) all behave correctly per side.
+- Sheet builders untouched — `npm run build` clean.

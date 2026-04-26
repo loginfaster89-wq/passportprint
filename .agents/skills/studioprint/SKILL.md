@@ -572,10 +572,12 @@ What this means:
 - Today: Step 2 preview = TWO stacked vertical canvases
   (#frontCanvas on top, #backCanvas below) with "Front" / "Back"
   labels.
-- Wanted: ONE single landscape canvas — back on LEFT, front on
+- Wanted: ONE single landscape canvas — front on LEFT, back on
   RIGHT, no labels — visually identical to the printed 1-pair
-  sheet (which already prints back-then-front edge-to-edge after
-  PR #248 / §AC.8).
+  sheet (which already prints front-then-back edge-to-edge after
+  PR #248 / §AC.8). NOTE: order revised post-§AC.11 merge per user
+  feedback (PR #256). Original brief read "back LEFT, front RIGHT";
+  the corrected spec is "front LEFT, back RIGHT".
 
 Full spec + acceptance criteria + edge cases: read issues.md
 §AC.11 (sections AC.11.1 … AC.11.11). Reference image is the
@@ -594,10 +596,11 @@ Implementation outline (full details in §AC.11.4–AC.11.8):
 3. Refactor `drawFiltered` (and `drawFilteredToCanvas`,
    `applyFilters`, `applyBatchFilters`) so they composite both
    sides into the single `#pairCanvas`:
-     - LEFT half (dx=0):       back card with back filters/move/zoom
-     - RIGHT half (dx=CR80_W): front card with front filters/move/zoom
+     - LEFT half (dx=0):       front card with front filters/move/zoom
+     - RIGHT half (dx=CR80_W): back card with back filters/move/zoom
    Apply the rounded-corner clip per half (so each card retains
    its own rounded silhouette if `rounded` is on).
+   (Order corrected post-merge — PR #256.)
 
 4. Position panel — Move d-pad (PR #229) + Zoom slider (PR #230)
    + their shared Front/Back radio MUST keep working. The
@@ -620,7 +623,8 @@ plus dist rebuild.
 
 Acceptance:
 - Step 2 preview = ONE wide landscape canvas at ~3.17:1.
-- LEFT visually = back card; RIGHT visually = front card.
+- LEFT visually = front card; RIGHT visually = back card.
+  (Corrected post-merge — PR #256.)
 - No "Front" / "Back" text captions around the preview.
 - Move / Zoom / brightness / contrast / saturate / rounded
   corners / Auto Enhance / Quick Presets / Reset all still
