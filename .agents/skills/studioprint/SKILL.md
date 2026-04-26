@@ -612,27 +612,54 @@ Phase 3 follow-up COMPLETE:
 - PR #232: Auto Enhance (§Y, rebased from closed #218) — SHIPPED
 - PR #234: docs second-half — SHIPPED
 
-Phase 4 P3 IN PROGRESS:
-- PR #235: §Z research — Photo Editor split panel (this PR) — SHIPPED
-- §Z code PR — pending (single-card sidebar reorg + Bold + presets)
+Phase 4 P3 §Z COMPLETE:
+- PR #235: §Z research — Photo Editor split panel — SHIPPED
+- PR #239: §Z code — sidebar reorg into 3 panels (Card Cleanup /
+  Position / Photo Adjust) + Bold toggle + 3 Quick Presets
+  (Original 100/100/100, Aadhaar 105/130/100, PAN 115/115/110) +
+  shared §W+§X Front/Back radio — SHIPPED
 
-TASK: Phase 4 P3 items next. Per Rule #14, research first — open a
-docs PR with UX / state-shape research, THEN a code PR.
+Field-driven fixes (post-§Z) COMPLETE:
+- PR #240: §AA — auto-detect & swap reversed Front/Back for
+  Aadhaar/PAN PDFs. skinPixelRatio() + shouldAutoSwap() over
+  ROI [0.04,0.18,0.22,0.55], thresholds bSkin>0.04 && delta>0.02.
+  Manual Swap button in Panel A — SHIPPED
+- PR #241: §AA — inline #swapNotice (amber) above Front canvas
+  with one-click Undo button, single-card mode only — SHIPPED
+- PR #242: §AB — persist Card Cleanup toggles + Quick Preset id
+  in localStorage key idp:prefs:v1. savePrefs() on change,
+  loadPrefs() before applyFilters() in processPdf and
+  showBatchPreview — SHIPPED
+- PR #243: §AC — CROP.aadhaar retuned for current eAadhaar layout
+  where front + back card mock-ups sit side-by-side in upper
+  portion of page 1. Front [0.04,0.06,0.45,0.40], Back
+  [0.51,0.06,0.45,0.40]. Lower Letter portion dropped.
+  AADHAAR_FIELD_MASKS NOT retuned — follow-up tracked in §AC.5
+  — SHIPPED
+
+TASK: Phase 4 P3+ remaining items next. Per Rule #14, research first
+— open a docs PR with UX / state-shape research, THEN a code PR.
 Per Rule #12, ONE item per session.
 
 Recommended next (pick ONE per session):
 
-(a) **P3 Photo Editor split panel** — separate left/right panel for
-    photo editing controls (sliders, toggles, move, zoom). Currently
-    all inline in the preview step. Break out to sidebar.
+(a) **AADHAAR_FIELD_MASKS retune** (§AC.5 follow-up) — small,
+    high-value cleanup. Capture 5–10 cropped Aadhaar back canvases
+    at the new [0.51,0.06,0.45,0.40] crop, measure pixel positions
+    of QR / address / mobile / dates on the small card mock-up,
+    tighten qrCode mask, decide whether mobile/issue/download
+    toggles should be hidden when small-card layout is detected.
+    Single PR, ~10–20 lines. Code-only per Rule #13.
 
 (b) **P3 Master Settings** — DPI/padding/margins calibration per
-    printer. Persists in localStorage.
+    printer. Persists in localStorage (extend idp:prefs:v1 schema
+    or new key idp:printer:v1). Research PR first.
 
 (c) **P3 PrePrinted Card mode** — back-only sheets for pre-printed
-    front cards.
+    front cards. Toggle in Step 1 → skips front rendering, doubles
+    back density on A4. Research PR first.
 
-After P3, P4 backlog: Printer presets, Bold/BigQR toggles, other-card
+After P3, P4 backlog: Printer presets, BigQR toggle, other-card
 overlays (Voter / Ayushman / Jan Aadhaar — same pattern as PAN).
 
 Reference images in .agents/references/ — open
