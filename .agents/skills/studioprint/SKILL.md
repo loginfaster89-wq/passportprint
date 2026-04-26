@@ -229,8 +229,10 @@ Include order on each page:
 
 ## 9. Shipped work & open backlog
 
-Everything from PRs #70–#199 is shipped. See `issues.md` for the full
-audit trail. Do NOT re-fix any of the following — they are all merged:
+Everything from PRs #70–#205 is shipped. See `issues.md` for the full
+audit trail (§N photo editing, §O multi-card/rounded corners/Voter ID/
+Dragon sheet, §P Ayushman/Jan Aadhaar/eShram). Do NOT re-fix any of
+the following — they are all merged:
 
 - PRs #70–#114: original audit quick-wins + responsive + flow fixes.
 - PRs #118–#132: stats-grid slider, self-host fonts, step-bar progress,
@@ -422,11 +424,12 @@ Clone ke baad pehle ye teen files padho:
 .agents/skills/studioprint/SKILL.md — Devin recipe
 AGENTS.md — full source of truth
 issues.md — full audit + §M ID Card Print research + §O Phase 2 multi-card
+  + §P Phase 3 Ayushman/Jan Aadhaar/eShram
 
-Last PR: PR #205 (feat: ID Card Print Phase 3 — Ayushman/Jan Aadhaar/eShram)
+Last PR: PR #206 (docs: add §P section for Phase 3 Ayushman/Jan Aadhaar/eShram)
 
 Shipped summary (don't redo):
-PRs #70–#205: all previous work shipped
+PRs #70–#206: all previous work shipped
 - PRs #70–#189: original audit + Document Sheet + ID Card Print Phase 1
 - PR #190: docs update
 - PR #191: ID Card Print Phase 2 — photo editing (brightness/contrast/
@@ -443,6 +446,7 @@ PRs #70–#205: all previous work shipped
 - PR #202: ID Card Print Phase 2 — Voter ID multi-page PDF support
 - PR #203: ID Card Print Phase 2 — Dragon sheet (4×6) layout
 - PR #205: ID Card Print Phase 3 — Ayushman/Jan Aadhaar/eShram support
+- PR #206: docs — add §P section + update prompt
 
 ID Card Print current state:
 - Phase 1 MVP COMPLETE + VERIFIED (PR #188)
