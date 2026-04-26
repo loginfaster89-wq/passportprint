@@ -542,7 +542,7 @@ function showBatchPreview() {
     batchCardsContainer.appendChild(section);
 
     /* Build per-side filtered working canvases, then composite into the
-       pair canvas (back LEFT half, front RIGHT half). */
+       pair canvas (front LEFT half, back RIGHT half). */
     var tmpF = null, tmpB = null;
     if (card.originalFront) {
       tmpF = document.createElement('canvas');
@@ -619,7 +619,7 @@ function applyBatchFilters() {
     card.back = tmpB;
   });
 
-  /* Refresh preview canvases — §AC.11 unified pair (back LEFT, front RIGHT). */
+  /* Refresh preview canvases — §AC.11 unified pair (front LEFT, back RIGHT). */
   batchCardsContainer.querySelectorAll('canvas[data-batch-idx]').forEach(function(c) {
     var idx = parseInt(c.dataset.batchIdx);
     if (idx < batchCards.length) {
@@ -1064,7 +1064,7 @@ function drawCardClipped(ctx, src, x, y, w, h, radius) {
 }
 
 /* §AC.11 — composite a fully-rendered front+back card pair into ONE
-   landscape canvas (back LEFT, front RIGHT, edge-to-edge). frontReady /
+   landscape canvas (front LEFT, back RIGHT, edge-to-edge). frontReady /
    backReady are CR80_W × CR80_H canvases that already have filter +
    offset + zoom baked in by drawFiltered() / drawFilteredToCanvas().
    Rounded corners (when enabled) are clipped per-half so each card keeps
@@ -1077,22 +1077,22 @@ function compositePair(canvas, frontReady, backReady) {
   var ctx = canvas.getContext('2d');
   ctx.fillStyle = '#eaeaea';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
-  if (backReady) {
+  if (frontReady) {
     ctx.save();
     if (roundedCorners) {
       roundedRectPath(ctx, 0, 0, CR80_W, CR80_H, CARD_RADIUS);
       ctx.clip();
     }
-    ctx.drawImage(backReady, 0, 0, CR80_W, CR80_H);
+    ctx.drawImage(frontReady, 0, 0, CR80_W, CR80_H);
     ctx.restore();
   }
-  if (frontReady) {
+  if (backReady) {
     ctx.save();
     if (roundedCorners) {
       roundedRectPath(ctx, CR80_W, 0, CR80_W, CR80_H, CARD_RADIUS);
       ctx.clip();
     }
-    ctx.drawImage(frontReady, CR80_W, 0, CR80_W, CR80_H);
+    ctx.drawImage(backReady, CR80_W, 0, CR80_W, CR80_H);
     ctx.restore();
   }
 }
