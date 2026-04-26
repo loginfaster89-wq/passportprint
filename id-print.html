@@ -461,11 +461,6 @@ input.idp-range::-moz-range-thumb{
           </div>
         </div>
       </div>
-      <!-- Auto-swap notice (shown only when orientation auto-detect fired) -->
-      <div id="swapNotice" class="idp-swap-notice idp-hidden">
-        <span>Front / Back auto-swapped — pages were reversed in the PDF.</span>
-        <button type="button" id="btnUndoSwap">Undo</button>
-      </div>
       <!-- Options -->
       <label class="idp-option">
         <input type="checkbox" id="chkRounded">
@@ -475,26 +470,6 @@ input.idp-range::-moz-range-thumb{
         <input type="checkbox" id="chkCutMarks" checked>
         Cut Marks
       </label>
-      <!-- Panel A: Card Cleanup -->
-      <div id="panelCleanup" class="idp-move">
-        <span class="idp-move-label">Card Cleanup</span>
-        <!-- Aadhaar field toggles — shown only for Aadhaar cards -->
-        <div id="aadhaarToggles" class="idp-hidden">
-          <label class="idp-option"><input type="checkbox" id="chkHideQR"> Hide QR Code</label>
-          <label class="idp-option"><input type="checkbox" id="chkHideMobile"> Hide Mobile No.</label>
-          <label class="idp-option"><input type="checkbox" id="chkHideIssueDate"> Hide Issue Date</label>
-          <label class="idp-option"><input type="checkbox" id="chkHideDownloadDate"> Hide Download Date</label>
-        </div>
-        <!-- PAN overlays — shown only for PAN cards -->
-        <div id="panToggles" class="idp-hidden">
-          <label class="idp-option"><input type="checkbox" id="chkSignatureBox"> Add Signature Box</label>
-          <label class="idp-option"><input type="checkbox" id="chkHologram"> Add Hologram Patch</label>
-        </div>
-        <label class="idp-option"><input type="checkbox" id="chkBold"> Bold Text</label>
-        <div class="idp-editor-actions" id="swapRow">
-          <button type="button" id="btnSwapSides">Swap Front / Back</button>
-        </div>
-      </div>
 
       <!-- Panel B: Position (single-card mode only) -->
       <div id="panelPosition" class="idp-move idp-hidden">
@@ -736,27 +711,6 @@ const CROP = {
 
 const TYPE_LABELS = { aadhaar: 'Aadhaar Card', pan: 'PAN Card', voter: 'Voter ID', ayushman: 'Ayushman Card', janaadhaar: 'Jan Aadhaar', eshram: 'eShram Card' };
 
-/* Aadhaar back-card field mask regions (at CR80 1011×638px).
-   Retuned for the small plastic-card mock-up layout (CROP.aadhaar
-   bottom-row crop). On the small card:
-     - QR sits in the right-middle, not the full-height right strip.
-     - Issue Date + Download Date are rotated 90° on the LEFT margin
-       (vertical text), not horizontal rows in the lower-left.
-     - Mobile number is NOT printed on the small card mock-up — the
-       toggle is kept for backward compatibility but masks 0×0px
-       (soft no-op). If a future eAadhaar variant prints mobile,
-       this can be retuned without touching the UI. */
-const AADHAAR_FIELD_MASKS = {
-  qrCode:       { side: 'back', x: 596, y: 128, w: 415, h: 374 },
-  mobileNumber: { side: 'back', x:   0, y:   0, w:   0, h:   0 },
-  issueDate:    { side: 'back', x:  13, y: 160, w:  24, h: 155 },
-  downloadDate: { side: 'back', x:  13, y: 316, w:  24, h: 171 },
-};
-/* PAN overlay regions (at CR80 1011×638px) */
-const PAN_OVERLAY_REGIONS = {
-  signatureBox: { side: 'front', x: 540, y: 470, w: 380, h: 110 },
-  hologram:     { side: 'back',  x: 800, y:  30, w: 180, h: 220 },
-};
 const TYPE_ICONS = { aadhaar: '\ud83c\udd94', pan: '\ud83d\udcb3', voter: '\ud83d\uddf3\ufe0f', ayushman: '\ud83c\udfe5', janaadhaar: '\ud83d\udc68\u200d\ud83d\udc69\u200d\ud83d\udc67\u200d\ud83d\udc66', eshram: '\ud83d\udc77' };
 
 /* ── DOM refs ── */
@@ -1086,14 +1040,8 @@ async function processPdfBatch(arrayBuffer, password, fileName) {
       back = cropRegion(renderCanvas, crop.back);
     }
 
-    var autoSwapped = false;
-    if (shouldAutoSwap(front, back, type)) {
-      var tmpFB = front; front = back; back = tmpFB;
-      autoSwapped = true;
-    }
-
     return {
-      card: { type: type, front: front, back: back, originalFront: front, originalBack: back, fileName: fileName, offset: { front: { dx: 0, dy: 0 }, back: { dx: 0, dy: 0 } }, autoSwapped: autoSwapped }
+      card: { type: type, front: front, back: back, originalFront: front, originalBack: back, fileName: fileName, offset: { front: { dx: 0, dy: 0 }, back: { dx: 0, dy: 0 } } }
     };
   } catch (err) {
     if (err.name === 'PasswordException') {
@@ -1159,23 +1107,15 @@ async function processPdf(pdf) {
       backImageData = cropRegion(renderCanvas, crop.back);
     }
 
-    var didAutoSwap = false;
-    if (shouldAutoSwap(frontImageData, backImageData, detectedType)) {
-      var tmpSwap = frontImageData; frontImageData = backImageData; backImageData = tmpSwap;
-      didAutoSwap = true;
-    }
-
     originalFront = frontImageData;
     originalBack = backImageData;
-    batchCards = [{ type: detectedType, front: frontImageData, back: backImageData, originalFront: frontImageData, originalBack: backImageData, fileName: batchFiles.length > 0 ? batchFiles[0].name : 'PDF', offset: { front: { dx: 0, dy: 0 }, back: { dx: 0, dy: 0 } }, scale: { front: 1.0, back: 1.0 }, autoSwapped: didAutoSwap }];
+    batchCards = [{ type: detectedType, front: frontImageData, back: backImageData, originalFront: frontImageData, originalBack: backImageData, fileName: batchFiles.length > 0 ? batchFiles[0].name : 'PDF', offset: { front: { dx: 0, dy: 0 }, back: { dx: 0, dy: 0 } }, scale: { front: 1.0, back: 1.0 } }];
     resetEditorSliders();
     loadPrefs();
     applyFilters();
 
     detectBadge.innerHTML = '<div class="idp-detect ' + detectedType + '">' +
       TYPE_ICONS[detectedType] + ' ' + TYPE_LABELS[detectedType] + ' Detected</div>';
-    aadhaarToggles.classList.toggle('idp-hidden', detectedType !== 'aadhaar');
-    panToggles.classList.toggle('idp-hidden', detectedType !== 'pan');
     panelPosition.classList.toggle('idp-hidden', batchCards.length !== 1);
     if (batchCards.length === 1) refreshZoomReadout();
 
@@ -1184,7 +1124,6 @@ async function processPdf(pdf) {
 
     showLoading(false);
     showStep(2);
-    updateSwapNotice();
   } catch (err) {
     showLoading(false);
     showStep(1);
@@ -1274,62 +1213,6 @@ function showBatchPreview() {
     ' \u2192 ' + sheetsNeeded + ' A4 sheet' + (sheetsNeeded > 1 ? 's' : '') + ' (multi-card layout)';
 
   showStep(2);
-  updateSwapNotice();
-}
-
-function applyAadhaarMasks(ctx, ox, oy, side) {
-  var noMask = !chkHideQR.checked && !chkHideMobile.checked &&
-               !chkHideIssueDate.checked && !chkHideDownloadDate.checked;
-  if (noMask) return;
-  ctx.save();
-  ctx.fillStyle = '#ffffff';
-  var pairs = [
-    [chkHideQR, AADHAAR_FIELD_MASKS.qrCode],
-    [chkHideMobile, AADHAAR_FIELD_MASKS.mobileNumber],
-    [chkHideIssueDate, AADHAAR_FIELD_MASKS.issueDate],
-    [chkHideDownloadDate, AADHAAR_FIELD_MASKS.downloadDate],
-  ];
-  pairs.forEach(function(p) {
-    var chk = p[0]; var m = p[1];
-    if (chk.checked && m.side === side) ctx.fillRect(ox + m.x, oy + m.y, m.w, m.h);
-  });
-  ctx.restore();
-}
-
-function applyPanOverlays(ctx, ox, oy, side) {
-  var pairs = [
-    [chkSignatureBox, PAN_OVERLAY_REGIONS.signatureBox, 'signature'],
-    [chkHologram,     PAN_OVERLAY_REGIONS.hologram,     'hologram'],
-  ];
-  pairs.forEach(function(p) {
-    var chk = p[0]; var m = p[1]; var kind = p[2];
-    if (!chk.checked || m.side !== side) return;
-    ctx.save();
-    if (kind === 'signature') {
-      ctx.fillStyle = '#ffffff';
-      ctx.fillRect(ox + m.x, oy + m.y, m.w, m.h);
-      ctx.strokeStyle = '#000000';
-      ctx.lineWidth = 2;
-      ctx.strokeRect(ox + m.x, oy + m.y, m.w, m.h);
-      ctx.fillStyle = '#000000';
-      ctx.font = '14px DM Mono, monospace';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'bottom';
-      ctx.fillText('Signature', ox + m.x + m.w / 2, oy + m.y + m.h - 6);
-    } else if (kind === 'hologram') {
-      var grad = ctx.createLinearGradient(ox + m.x, oy + m.y, ox + m.x + m.w, oy + m.y + m.h);
-      grad.addColorStop(0, '#c0c0c0');
-      grad.addColorStop(1, '#e8e8e8');
-      ctx.fillStyle = grad;
-      ctx.fillRect(ox + m.x, oy + m.y, m.w, m.h);
-      ctx.fillStyle = '#ffffff';
-      ctx.font = '24px DM Mono, monospace';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText('HOLOGRAM', ox + m.x + m.w / 2, oy + m.y + m.h / 2);
-    }
-    ctx.restore();
-  });
 }
 
 function drawFilteredToCanvas(canvas, srcCanvas, w, h, cardType, side) {
@@ -1346,8 +1229,6 @@ function drawFilteredToCanvas(canvas, srcCanvas, w, h, cardType, side) {
   ctx.filter = f;
   ctx.drawImage(srcCanvas, 0, 0, w, h);
   ctx.filter = 'none';
-  if (cardType === 'aadhaar' && side) applyAadhaarMasks(ctx, 0, 0, side);
-  if (cardType === 'pan' && side) applyPanOverlays(ctx, 0, 0, side);
 }
 
 function applyBatchFilters() {
@@ -1362,8 +1243,6 @@ function applyBatchFilters() {
     ctxF.filter = f;
     ctxF.drawImage(card.originalFront, 0, 0, CR80_W, CR80_H);
     ctxF.filter = 'none';
-    if (card.type === 'aadhaar') applyAadhaarMasks(ctxF, 0, 0, 'front');
-    if (card.type === 'pan') applyPanOverlays(ctxF, 0, 0, 'front');
     card.front = tmpF;
 
     var tmpB = document.createElement('canvas');
@@ -1375,8 +1254,6 @@ function applyBatchFilters() {
     ctxB.filter = f;
     ctxB.drawImage(card.originalBack, 0, 0, CR80_W, CR80_H);
     ctxB.filter = 'none';
-    if (card.type === 'aadhaar') applyAadhaarMasks(ctxB, 0, 0, 'back');
-    if (card.type === 'pan') applyPanOverlays(ctxB, 0, 0, 'back');
     card.back = tmpB;
   });
 
@@ -1389,36 +1266,6 @@ function applyBatchFilters() {
       drawFilteredToCanvas(c, src, CR80_W, CR80_H, batchCards[idx].type, side);
     }
   });
-}
-
-/* ── Auto front/back orientation detection (Aadhaar/PAN) ──
-   Both eAadhaar and ePAN have a portrait photo in the upper-left of the
-   front. We sample that ROI on each cropped canvas and count "skin-tone"
-   pixels — if the back has materially more skin pixels than the front,
-   the user uploaded a PDF where the pages came in reversed and we swap. */
-function skinPixelRatio(canvas, fx, fy, fw, fh) {
-  if (!canvas || !canvas.width || !canvas.height) return 0;
-  var x = Math.max(0, Math.floor(fx * canvas.width));
-  var y = Math.max(0, Math.floor(fy * canvas.height));
-  var w = Math.min(canvas.width - x, Math.floor(fw * canvas.width));
-  var h = Math.min(canvas.height - y, Math.floor(fh * canvas.height));
-  if (w <= 0 || h <= 0) return 0;
-  try {
-    var data = canvas.getContext('2d').getImageData(x, y, w, h).data;
-    var skin = 0, total = data.length / 4;
-    for (var i = 0; i < data.length; i += 4) {
-      var r = data[i], g = data[i + 1], b = data[i + 2];
-      if (r > 95 && g > 40 && b > 20 && r > g && g > b && (r - b) > 15) skin++;
-    }
-    return skin / total;
-  } catch (e) { return 0; }
-}
-function shouldAutoSwap(frontC, backC, type) {
-  if (type !== 'aadhaar' && type !== 'pan') return false;
-  var roi = [0.04, 0.18, 0.22, 0.55];
-  var fSkin = skinPixelRatio(frontC, roi[0], roi[1], roi[2], roi[3]);
-  var bSkin = skinPixelRatio(backC, roi[0], roi[1], roi[2], roi[3]);
-  return bSkin > 0.04 && bSkin > fSkin + 0.02;
 }
 
 /* ── Canvas helpers ── */
@@ -1804,30 +1651,18 @@ const btnResetEdit = $('#btnResetEdit');
 const btnAutoEnhance = $('#btnAutoEnhance');
 const chkRounded = $('#chkRounded');
 const chkCutMarks = $('#chkCutMarks');
-const aadhaarToggles = $('#aadhaarToggles');
-const chkHideQR = $('#chkHideQR');
-const chkHideMobile = $('#chkHideMobile');
-const chkHideIssueDate = $('#chkHideIssueDate');
-const chkHideDownloadDate = $('#chkHideDownloadDate');
-const panToggles = $('#panToggles');
-const chkSignatureBox = $('#chkSignatureBox');
 const panelPosition = $('#panelPosition');
 const movePad = $('#movePad');
 const moveStep = $('#moveStep');
 const moveReadout = $('#moveReadout');
 const positionSideRadios = document.getElementsByName('positionSide');
-const chkHologram = $('#chkHologram');
-const chkBold = $('#chkBold');
 
 function getFilterString() {
   var b = slBright.value;
   var c = slContrast.value;
   var s = slSat.value;
-  var bold = chkBold && chkBold.checked;
-  if (b == 100 && c == 100 && s == 100 && !bold) return 'none';
-  var f = 'brightness(' + b + '%) contrast(' + c + '%) saturate(' + s + '%)';
-  if (bold) f += ' contrast(135%) brightness(95%)';
-  return f;
+  if (b == 100 && c == 100 && s == 100) return 'none';
+  return 'brightness(' + b + '%) contrast(' + c + '%) saturate(' + s + '%)';
 }
 
 function roundedRectPath(ctx, x, y, w, h, r) {
@@ -1886,8 +1721,6 @@ function drawFiltered(destCanvas, srcCanvas, w, h, filterStr, side) {
   var __sw = w * __sc, __sh = h * __sc;
   ctx.drawImage(srcCanvas, __off.dx + (w - __sw) / 2, __off.dy + (h - __sh) / 2, __sw, __sh);
   ctx.filter = 'none';
-  if (side && detectedType === 'aadhaar') applyAadhaarMasks(ctx, 0, 0, side);
-  if (side && detectedType === 'pan') applyPanOverlays(ctx, 0, 0, side);
 }
 
 function applyFilters() {
@@ -1921,7 +1754,7 @@ function resetEditorSliders() {
   slSat.value = 100; valSat.textContent = '100%';
 }
 
-/* ── Persisted preferences (Card Cleanup toggles + slider preset) ──
+/* ── Persisted preferences (Rounded Corners, Cut Marks, slider preset) ──
    Stored in localStorage so a returning operator doesn't re-tick the
    same toggles and re-pick the same preset on every PDF. */
 const PREFS_KEY = 'idp:prefs:v1';
@@ -1930,13 +1763,6 @@ function savePrefs() {
     var prefs = {
       rounded: chkRounded.checked,
       cutMarks: chkCutMarks.checked,
-      hideQR: chkHideQR.checked,
-      hideMobile: chkHideMobile.checked,
-      hideIssueDate: chkHideIssueDate.checked,
-      hideDownloadDate: chkHideDownloadDate.checked,
-      signatureBox: chkSignatureBox.checked,
-      hologram: chkHologram.checked,
-      bold: chkBold.checked,
       bright: parseInt(slBright.value, 10),
       contrast: parseInt(slContrast.value, 10),
       sat: parseInt(slSat.value, 10)
@@ -1959,13 +1785,6 @@ function loadPrefs() {
       chkCutMarks.checked = p.cutMarks;
       cutMarks = p.cutMarks;
     }
-    if (typeof p.hideQR === 'boolean') chkHideQR.checked = p.hideQR;
-    if (typeof p.hideMobile === 'boolean') chkHideMobile.checked = p.hideMobile;
-    if (typeof p.hideIssueDate === 'boolean') chkHideIssueDate.checked = p.hideIssueDate;
-    if (typeof p.hideDownloadDate === 'boolean') chkHideDownloadDate.checked = p.hideDownloadDate;
-    if (typeof p.signatureBox === 'boolean') chkSignatureBox.checked = p.signatureBox;
-    if (typeof p.hologram === 'boolean') chkHologram.checked = p.hologram;
-    if (typeof p.bold === 'boolean') chkBold.checked = p.bold;
     if (typeof p.bright === 'number') { slBright.value = p.bright; valBright.textContent = p.bright + '%'; }
     if (typeof p.contrast === 'number') { slContrast.value = p.contrast; valContrast.textContent = p.contrast + '%'; }
     if (typeof p.sat === 'number') { slSat.value = p.sat; valSat.textContent = p.sat + '%'; }
@@ -2009,7 +1828,6 @@ slSat.addEventListener('input', onSliderInput);
 btnAutoEnhance.addEventListener('click', autoEnhance);
 btnResetEdit.addEventListener('click', () => {
   resetEditorSliders();
-  if (chkBold) chkBold.checked = false;
   if (batchCards.length === 1 && batchCards[0].offset) {
     batchCards[0].offset = { front: { dx: 0, dy: 0 }, back: { dx: 0, dy: 0 } };
     refreshMoveReadout();
@@ -2019,54 +1837,6 @@ btnResetEdit.addEventListener('click', () => {
     refreshZoomReadout();
   }
   applyFilters();
-});
-
-/* Bold text toggle — layered on top of slider filters */
-chkBold.addEventListener('change', function() { applyFilters(); savePrefs(); });
-
-const btnSwapSides = $('#btnSwapSides');
-const swapNotice = $('#swapNotice');
-const btnUndoSwap = $('#btnUndoSwap');
-function updateSwapNotice() {
-  var show = batchCards.length === 1 && batchCards[0] && batchCards[0].autoSwapped === true;
-  swapNotice.classList.toggle('idp-hidden', !show);
-}
-function clearAutoSwapFlag() {
-  if (batchCards.length >= 1 && batchCards[0]) batchCards[0].autoSwapped = false;
-  updateSwapNotice();
-}
-function swapFrontBack() {
-  if (!frontImageData || !backImageData) return;
-  var tF = frontImageData, tB = backImageData;
-  frontImageData = tB; backImageData = tF;
-  var oF = originalFront, oB = originalBack;
-  originalFront = oB; originalBack = oF;
-  if (batchCards.length >= 1 && batchCards[0]) {
-    var c = batchCards[0];
-    var cF = c.front, cB = c.back;
-    c.front = cB; c.back = cF;
-    var coF = c.originalFront, coB = c.originalBack;
-    c.originalFront = coB; c.originalBack = coF;
-    if (c.offset) {
-      var of = c.offset.front || { dx: 0, dy: 0 };
-      var ob = c.offset.back || { dx: 0, dy: 0 };
-      c.offset.front = ob; c.offset.back = of;
-    }
-    if (c.scale) {
-      var sf = c.scale.front, sb = c.scale.back;
-      c.scale.front = sb; c.scale.back = sf;
-    }
-  }
-  applyFilters();
-  refreshMoveReadout();
-}
-btnSwapSides.addEventListener('click', function() {
-  swapFrontBack();
-  clearAutoSwapFlag();
-});
-btnUndoSwap.addEventListener('click', function() {
-  swapFrontBack();
-  clearAutoSwapFlag();
 });
 
 /* Quick presets — one-click slider combos */
@@ -2166,10 +1936,6 @@ chkCutMarks.addEventListener('change', function() {
   savePrefs();
 });
 
-[chkHideQR, chkHideMobile, chkHideIssueDate, chkHideDownloadDate, chkSignatureBox, chkHologram].forEach(function(chk) {
-  chk.addEventListener('change', function() { applyFilters(); savePrefs(); });
-});
-
 /* ── Layout toggle ── */
 document.querySelectorAll('.idp-layout-opt').forEach(function(btn) {
   btn.addEventListener('click', function() {
@@ -2216,14 +1982,10 @@ btnSheet.addEventListener('click', () => {
 btnBack.addEventListener('click', () => {
   pdfArrayBuffer = null;
   detectedType = null;
-  aadhaarToggles.classList.add('idp-hidden');
-  panToggles.classList.add('idp-hidden');
   panelPosition.classList.add('idp-hidden');
   if (moveReadout) moveReadout.textContent = '0, 0';
   if (slZoom) slZoom.value = 100;
   if (zoomReadout) zoomReadout.textContent = '100%';
-  [chkHideQR, chkHideMobile, chkHideIssueDate, chkHideDownloadDate, chkSignatureBox, chkHologram, chkBold].forEach(function(c) { c.checked = false; });
-  swapNotice.classList.add('idp-hidden');
   resetEditorSliders();
   frontImageData = null;
   backImageData = null;
