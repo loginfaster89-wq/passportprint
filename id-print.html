@@ -166,6 +166,18 @@
   max-width:100%;height:auto;
   background:#111;
 }
+/* Unified landscape Front+Back preview (§AC.11) — one canvas, back LEFT
+   half, front RIGHT half. CSS aspect-ratio matches the internal 2022×638
+   so the box is always landscape regardless of available width. Rounded
+   corners on each half are drawn into the canvas (per-half clip path),
+   so this CSS keeps a single subtle outer chrome only. */
+.idp-preview-canvas-pair{
+  display:block;width:100%;max-width:760px;height:auto;
+  margin:0 auto;
+  aspect-ratio:2022/638;
+  border:1px solid var(--border);border-radius:8px;
+  background:#111;
+}
 
 /* Info strip */
 .idp-info{
@@ -451,14 +463,11 @@ input.idp-range::-moz-range-thumb{
       <h3 id="previewTitle">Front &amp; Back Preview</h3>
       <div id="batchCardsContainer">
         <div class="idp-cards">
-          <div class="idp-card-wrap">
-            <span>Front</span>
-            <canvas id="cardFront" width="1011" height="638"></canvas>
-          </div>
-          <div class="idp-card-wrap">
-            <span>Back</span>
-            <canvas id="cardBack" width="1011" height="638"></canvas>
-          </div>
+          <!-- §AC.11 unified landscape preview: ONE canvas (no labels),
+               internal 2022×638 (= CR80_W * 2 × CR80_H). Back card is
+               drawn into the LEFT half, front card into the RIGHT half,
+               edge-to-edge — mirrors the 1-pair sheet output. -->
+          <canvas id="pairCanvas" class="idp-preview-canvas-pair" width="2022" height="638"></canvas>
         </div>
       </div>
       <!-- Options -->
@@ -730,8 +739,15 @@ const btnSheet = $('#btnSheet');
 const btnBackPreview = $('#btnBackPreview');
 const btnDownload = $('#btnDownload');
 const btnPrint = $('#btnPrint');
-const cardFrontCanvas = $('#cardFront');
-const cardBackCanvas = $('#cardBack');
+/* §AC.11 — cardFrontCanvas / cardBackCanvas are now offscreen working
+   canvases (the DOM only has #pairCanvas). drawFiltered() still writes
+   filtered+offset+zoom output to these per-side canvases, then
+   applyFilters() composites both halves into pairCanvas. */
+const cardFrontCanvas = document.createElement('canvas');
+cardFrontCanvas.width = CR80_W; cardFrontCanvas.height = CR80_H;
+const cardBackCanvas = document.createElement('canvas');
+cardBackCanvas.width = CR80_W; cardBackCanvas.height = CR80_H;
+const pairCanvas = $('#pairCanvas');
 const a4Canvas = $('#a4Canvas');
 const detectBadge = $('#detectBadge');
 const sheetTitle = $('#sheetTitle');
@@ -1146,7 +1162,8 @@ function showBatchPreview() {
   /* Restore persisted Cleanup + slider preferences before rendering */
   loadPrefs();
 
-  /* Build card previews */
+  /* Build card previews — §AC.11 unified landscape pair canvas per card,
+     no Front/Back labels. */
   batchCardsContainer.innerHTML = '';
   batchCards.forEach(function(card, idx) {
     var section = document.createElement('div');
@@ -1160,39 +1177,30 @@ function showBatchPreview() {
     var cardsDiv = document.createElement('div');
     cardsDiv.className = 'idp-cards';
 
-    var frontWrap = document.createElement('div');
-    frontWrap.className = 'idp-card-wrap';
-    var frontLabel = document.createElement('span');
-    frontLabel.textContent = 'Front';
-    var frontCanvas = document.createElement('canvas');
-    frontCanvas.width = CR80_W;
-    frontCanvas.height = CR80_H;
-    frontCanvas.className = roundedCorners ? 'rounded' : '';
-    frontCanvas.dataset.batchIdx = idx;
-    frontCanvas.dataset.side = 'front';
-    frontWrap.appendChild(frontLabel);
-    frontWrap.appendChild(frontCanvas);
+    var pair = document.createElement('canvas');
+    pair.className = 'idp-preview-canvas-pair';
+    pair.dataset.batchIdx = idx;
+    pair.width = CR80_W * 2;
+    pair.height = CR80_H;
+    cardsDiv.appendChild(pair);
 
-    var backWrap = document.createElement('div');
-    backWrap.className = 'idp-card-wrap';
-    var backLabel = document.createElement('span');
-    backLabel.textContent = 'Back';
-    var backCanvas = document.createElement('canvas');
-    backCanvas.width = CR80_W;
-    backCanvas.height = CR80_H;
-    backCanvas.className = roundedCorners ? 'rounded' : '';
-    backCanvas.dataset.batchIdx = idx;
-    backCanvas.dataset.side = 'back';
-    backWrap.appendChild(backLabel);
-    backWrap.appendChild(backCanvas);
-
-    cardsDiv.appendChild(frontWrap);
-    cardsDiv.appendChild(backWrap);
     section.appendChild(cardsDiv);
     batchCardsContainer.appendChild(section);
 
-    drawFilteredToCanvas(frontCanvas, card.originalFront, CR80_W, CR80_H, card.type, 'front');
-    drawFilteredToCanvas(backCanvas, card.originalBack, CR80_W, CR80_H, card.type, 'back');
+    /* Build per-side filtered working canvases, then composite into the
+       pair canvas (back LEFT half, front RIGHT half). */
+    var tmpF = null, tmpB = null;
+    if (card.originalFront) {
+      tmpF = document.createElement('canvas');
+      tmpF.width = CR80_W; tmpF.height = CR80_H;
+      drawFilteredToCanvas(tmpF, card.originalFront, CR80_W, CR80_H, card.type, 'front');
+    }
+    if (card.originalBack) {
+      tmpB = document.createElement('canvas');
+      tmpB.width = CR80_W; tmpB.height = CR80_H;
+      drawFilteredToCanvas(tmpB, card.originalBack, CR80_W, CR80_H, card.type, 'back');
+    }
+    compositePair(pair, tmpF, tmpB);
   });
 
   /* Update filtered data for sheet generation */
@@ -1257,13 +1265,23 @@ function applyBatchFilters() {
     card.back = tmpB;
   });
 
-  /* Refresh preview canvases */
+  /* Refresh preview canvases — §AC.11 unified pair (back LEFT, front RIGHT). */
   batchCardsContainer.querySelectorAll('canvas[data-batch-idx]').forEach(function(c) {
     var idx = parseInt(c.dataset.batchIdx);
-    var side = c.dataset.side;
     if (idx < batchCards.length) {
-      var src = side === 'front' ? batchCards[idx].originalFront : batchCards[idx].originalBack;
-      drawFilteredToCanvas(c, src, CR80_W, CR80_H, batchCards[idx].type, side);
+      var card = batchCards[idx];
+      var tmpF = null, tmpB = null;
+      if (card.originalFront) {
+        tmpF = document.createElement('canvas');
+        tmpF.width = CR80_W; tmpF.height = CR80_H;
+        drawFilteredToCanvas(tmpF, card.originalFront, CR80_W, CR80_H, card.type, 'front');
+      }
+      if (card.originalBack) {
+        tmpB = document.createElement('canvas');
+        tmpB.width = CR80_W; tmpB.height = CR80_H;
+        drawFilteredToCanvas(tmpB, card.originalBack, CR80_W, CR80_H, card.type, 'back');
+      }
+      compositePair(c, tmpF, tmpB);
     }
   });
 }
@@ -1691,6 +1709,40 @@ function drawCardClipped(ctx, src, x, y, w, h, radius) {
   ctx.stroke();
 }
 
+/* §AC.11 — composite a fully-rendered front+back card pair into ONE
+   landscape canvas (back LEFT, front RIGHT, edge-to-edge). frontReady /
+   backReady are CR80_W × CR80_H canvases that already have filter +
+   offset + zoom baked in by drawFiltered() / drawFilteredToCanvas().
+   Rounded corners (when enabled) are clipped per-half so each card keeps
+   its own rounded rectangle silhouette — matching how the cards actually
+   look after cutting. If a side is missing (e.g. some PAN PDFs render
+   only the front), that half stays as the light-grey placeholder. */
+function compositePair(canvas, frontReady, backReady) {
+  canvas.width = CR80_W * 2;
+  canvas.height = CR80_H;
+  var ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#eaeaea';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  if (backReady) {
+    ctx.save();
+    if (roundedCorners) {
+      roundedRectPath(ctx, 0, 0, CR80_W, CR80_H, CARD_RADIUS);
+      ctx.clip();
+    }
+    ctx.drawImage(backReady, 0, 0, CR80_W, CR80_H);
+    ctx.restore();
+  }
+  if (frontReady) {
+    ctx.save();
+    if (roundedCorners) {
+      roundedRectPath(ctx, CR80_W, 0, CR80_W, CR80_H, CARD_RADIUS);
+      ctx.clip();
+    }
+    ctx.drawImage(frontReady, CR80_W, 0, CR80_W, CR80_H);
+    ctx.restore();
+  }
+}
+
 function getOffset(side) {
   if (batchCards.length === 1 && batchCards[0].offset && batchCards[0].offset[side]) {
     return batchCards[0].offset[side];
@@ -1731,6 +1783,8 @@ function applyFilters() {
     frontImageData.width = CR80_W;
     frontImageData.height = CR80_H;
     frontImageData.getContext('2d').drawImage(cardFrontCanvas, 0, 0);
+  } else {
+    frontImageData = null;
   }
   if (originalBack) {
     drawFiltered(cardBackCanvas, originalBack, CR80_W, CR80_H, f, 'back');
@@ -1738,6 +1792,16 @@ function applyFilters() {
     backImageData.width = CR80_W;
     backImageData.height = CR80_H;
     backImageData.getContext('2d').drawImage(cardBackCanvas, 0, 0);
+  } else {
+    backImageData = null;
+  }
+
+  /* §AC.11 — single landscape preview (back LEFT, front RIGHT). The
+     static #pairCanvas is only used in single-PDF mode; batch mode
+     rebuilds its own per-card pair canvases via showBatchPreview() /
+     applyBatchFilters(). */
+  if (pairCanvas && batchCards.length <= 1) {
+    compositePair(pairCanvas, frontImageData, backImageData);
   }
 
   /* Also update batch cards if in batch mode */
