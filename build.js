@@ -21,6 +21,7 @@ const HTML_FILES = [
   'terms.html',
   'refund.html',
   'shipping.html',
+  'id-print.html',
   '404.html',
   'offline.html',
 ];
