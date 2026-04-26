@@ -1072,3 +1072,146 @@ Visual specification:
   scope; this is just the empty-box overlay.
 - Per-card signature box position tuning UI — fixed coordinates only.
 - Voter ID / Ayushman / Jan Aadhaar / eShram signature boxes — PAN only.
+
+---
+
+## V. ID Card Print — Phase 4 Scope Reset (CardXpress Feature Parity)
+
+**Trigger:** User feedback (2026-04-26): "signature box ek chhota piece hai,
+website pe abhi bhi bhut kuch karna baaki hai." User shared 8 reference
+images they originally gave to the previous agent (Devin) when planning
+this feature. Reviewing those images shows the §U signature box scope is
+~10% of the actual target — a single small overlay vs. a full
+competitor-parity card-print suite.
+
+This section captures the broader scope and corrects two issues found in
+§U / PR #221 during the image review.
+
+### V.0 Reference images (committed to repo)
+
+All 8 images live in `.agents/references/`:
+
+- `competitor-cardxpress-ui.jpeg` — CardXpress Pro v8.1 main window (the
+  paid competitor). The single most important reference.
+- `pan-target-output-with-hologram.png` — PAN front+back ePAN PDF with
+  HOLOGRAM patch visible on the back. Shows real signature position.
+- `pan-clean-pvc-layout.png` — same PAN, cropped to clean CR80 PVC layout.
+- `aadhaar-target-output.png` — clean Aadhaar PVC layout, full address.
+- `aadhaar-clean-pvc-layout.png` — Aadhaar front+back at print-ready size.
+- `workflow-pan-photoshop-demo.jpg` — competitor's Photoshop "one-click"
+  PAN action demo (input PDF → output PVC sheet).
+- `workflow-aadhaar-photoshop-demo.jpg` — same for Aadhaar.
+- `workflow-aadhaar-tutorial-thumbnail.jpg` — YouTube tutorial thumbnail
+  for context on the manual workflow we're replacing.
+
+### V.1 CardXpress UI feature breakdown (from `competitor-cardxpress-ui.jpeg`)
+
+The competitor exposes the following controls that we currently lack:
+
+| # | Control                  | What it does                                               | We have it? |
+|---|--------------------------|------------------------------------------------------------|-------------|
+| 1 | Card-type tabs           | Aadhaar / PAN / Voter / Ayushman tabs at top               | Auto-detect (better) |
+| 2 | PDF Path + Password      | File picker + password field                               | Yes |
+| 3 | Photo Editor button      | Opens dedicated photo-tweak panel (separate window)        | Inline sliders only |
+| 4 | Settings button          | Per-user prefs (default printer, layout, etc)              | No |
+| 5 | Master Setting button    | Calibration: DPI, padding, A4 margins                      | No |
+| 6 | PrePrinted Card mode     | Skip empty front, print only fillable fields on back       | No |
+| 7 | Move pad (X/Y/XZ/YZ)     | Per-side nudge to fix mis-aligned crops                    | **No — high value** |
+| 8 | Front/Back radio         | Pick which side the Move/Zoom controls target              | No |
+| 9 | Zoom dial                | Per-side scale within CR80 frame                           | **No — high value** |
+| 10 | Quality dropdown         | Medium / High / Draft print quality                        | No |
+| 11 | Bold checkbox            | Bolden printed text on card                                | No |
+| 12 | BigQR checkbox           | Enlarge QR for easier scan                                 | No |
+| 13 | Aadhaar Note checkbox    | Show/hide the info-note overlay                            | No |
+| 14 | Printer selector         | "Epson L805" → printer-specific DPI/margin profile         | No |
+| 15 | Preview / Card Print     | Two-step workflow buttons                                  | Yes (Generate Sheet) |
+
+We already win on: auto-detect (no tab clicking), batch upload, modern UI,
+in-browser (no install). We lose on: fine-alignment controls, calibration,
+printer presets.
+
+### V.2 PAN target-output analysis (from `pan-target-output-with-hologram.png`)
+
+Two critical findings that **invalidate parts of §U / PR #221**:
+
+#### V.2.a §U signature box coordinates are WRONG
+
+§U set `signatureBox: { side: 'front', x: 540, y: 470, w: 380, h: 110 }`.
+That box sits at the **right-middle** of the front card — directly on top
+of the QR code, not over the signature area.
+
+In the reference image, the actual signature row is at the **bottom-left
+to bottom-center**, below the photo + DOB columns:
+
+- Approx coords at CR80 1011×638px:
+  `signatureBox: { side: 'front', x: 280, y: 540, w: 280, h: 75 }`
+- Label "हस्ताक्षर / Signature" appears below the box at y ≈ 620.
+
+**Action:** PR #221 needs a coords-only follow-up patch (~4 lines) before
+shipping to users. Mark as P1.
+
+#### V.2.b PAN HOLOGRAM patch is the real missing overlay
+
+The back of every genuine PAN PVC card has a silver/grey **HOLOGRAM**
+square at the **top-right** corner. ePAN PDFs ship with the hologram
+area visible as a faded watermark. For PVC printing, the convention is
+to draw a labelled silver rectangle so the print shop can stick a real
+hologram sticker on top after lamination.
+
+- Approx coords at CR80 1011×638px:
+  `hologram: { side: 'back', x: 800, y: 30, w: 180, h: 220 }`
+- Fill: silver gradient (`#c0c0c0` → `#e8e8e8`) or flat `#d0d0d0`.
+- Label: "HOLOGRAM" in DM Mono, white, centred, ~24px.
+- Toggle: `chkHologram` in `#panToggles` (alongside `chkSignatureBox`).
+
+This is **higher priority** than the signature box because hologram is
+visible on every PAN card, while the signature box only matters for
+unsigned ePANs.
+
+### V.3 Aadhaar target-output analysis (from aadhaar-clean / target images)
+
+- Confirms §S/§T hide-toggles (QR / Mobile / Issue Date / Download Date)
+  are correct and well-positioned.
+- Address block on back is the most important content — must NEVER be
+  cropped or masked. Our current crop ratios preserve it.
+- No new Aadhaar overlays needed from these images.
+
+### V.4 Phase 4 backlog — prioritized
+
+Each item is a separate research + code PR pair (per Rule #14).
+
+| Pri | Item                                    | Est PR size | Why |
+|-----|-----------------------------------------|-------------|-----|
+| P1  | Fix §U signature box coordinates        | ~4 lines    | Current coords overlap QR — broken in PR #221 |
+| P1  | PAN HOLOGRAM overlay                    | ~40 lines   | Visible on 100% of PAN cards, simple fill+label |
+| P2  | Per-side Move controls (X/Y nudge)      | ~120 lines  | Highest competitor-parity value; fixes off-centre crops |
+| P2  | Per-side Zoom (scale within CR80)       | ~80 lines   | Pairs with Move; fixes too-small/large crops |
+| P3  | Photo Editor split panel                | ~150 lines  | Reorganize sliders + add Bold + add presets |
+| P3  | Master Settings (DPI/padding/margins)   | ~200 lines  | Calibration screen with localStorage persistence |
+| P3  | PrePrinted Card mode                    | ~60 lines   | Skip front render, output back-only sheets |
+| P4  | Printer presets (Epson L805 etc)        | ~80 lines   | Dropdown of DPI/margin profiles per printer |
+| P4  | Bold / BigQR text-emphasis toggles      | ~40 lines   | Aadhaar text bolden + QR upscale |
+| P4  | Voter / Ayushman / Jan Aadhaar overlays | ~60 lines each | Same pattern as PAN once it lands |
+
+### V.5 Recommended next 2 PRs (single session, ~half day)
+
+1. **PR #222 — fix-pan-signature-coords** (~4 line patch)
+   - Change `PAN_OVERLAY_REGIONS.signatureBox` to the corrected coords.
+   - Ship before any user notices PR #221 draws over the QR.
+
+2. **PR #223 — pan-hologram-overlay** (~40 line patch)
+   - Add `hologram` entry to `PAN_OVERLAY_REGIONS`.
+   - Add `chkHologram` checkbox to `#panToggles`.
+   - Extend `applyPanOverlays` to draw silver fill + "HOLOGRAM" label.
+   - Wire into the same 3 call-sites + listener array + reset.
+
+After those two, pick one P2 item (Move OR Zoom) for the next session.
+
+### V.6 What's NOT in scope for §V (this is research only)
+
+- Any code changes — this is a docs-only PR.
+- Implementing P1-P4 items — each gets its own Research → Docs → Code PR.
+- Choosing colours, exact pixel coords beyond §V.2 estimates — refine
+  during each item's research PR using the committed reference images.
+- Removing or rewriting §U — §U stays valid except for the wrong
+  signatureBox coords flagged in §V.2.a.

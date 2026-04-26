@@ -402,8 +402,18 @@ card sizes, lamination specs, and feature plan documented in
 - ~~PVC card tray layout (Epson L805/L8050)~~ — **shipped PR #210**
 - ~~Toggle options (issue date, QR, mobile no, download date)~~ — **shipped PR #217**
 - ~~Auto photo enhancement~~ — **shipped PR #218**
-- Signature box option (PAN) — **research done (this PR docs), coding ready — see §U in issues.md**
-- Back-side hologram overlay (PAN)
+- Signature box option (PAN) — **code PR #221 (coords WRONG — needs P1 fix per §V.2.a)**
+- Back-side hologram overlay (PAN) — **research scoped in §V.2.b (Phase 4 P1)**
+
+**Phase 4 (CardXpress feature parity — see §V in issues.md, scoped 2026-04-26):**
+- P1 Fix §U signature box coords (overlap QR — PR #221 follow-up)
+- P1 PAN HOLOGRAM overlay (back top-right silver patch)
+- P2 Per-side Move controls (X/Y nudge)
+- P2 Per-side Zoom (scale within CR80)
+- P3 Photo Editor split panel
+- P3 Master Settings (DPI/padding/margins)
+- P3 PrePrinted Card mode
+- P4 Printer presets (Epson L805 etc), Bold/BigQR toggles, other-card overlays
 
 **Pricing section design rule (post PR #150):** The pricing section uses
 card-based layout (`.plan-grid` with `.plan-card` divs), NOT a `<table>`.
@@ -451,12 +461,15 @@ issues.md — full audit + §M ID Card Print research + §O Phase 2 multi-card
   + §P Phase 3 Ayushman/Jan Aadhaar/eShram + §Q batch processing
   + §R PVC card tray + §S copy update + §T toggle options research
   + §U PAN signature box research
+  + §V Phase 4 CardXpress feature parity scope (8 reference images in
+    .agents/references/)
 
-Last PR: PR #220 (docs: PAN signature box research — §U in issues.md +
-  SKILL.md/AGENTS.md updates ahead of code PR)
+Last PR: PR #222 (docs: §V Phase 4 scope reset + 8 reference images +
+  SKILL.md/AGENTS.md backlog refresh; flags §U signature box coords
+  bug in PR #221)
 
 Shipped summary (don't redo):
-PRs #70–#220: all previous work shipped
+PRs #70–#222: all previous work shipped
 - PRs #70–#189: original audit + Document Sheet + ID Card Print Phase 1
 - PR #190: docs update
 - PR #191: ID Card Print Phase 2 — photo editing (brightness/contrast/
@@ -501,6 +514,16 @@ PRs #70–#220: all previous work shipped
   w:380 h:110), `applyPanOverlays()` design mirroring `applyAadhaarMasks()`,
   3 call-site list, batch-mode + reset notes. Updates SKILL.md §9
   (signature box → research done) + §11 prompt template.
+- PR #221: feat(id-card-print) — PAN signature box overlay code per §U.
+  +36/-2 in id-print.html. NOTE: signature box coords WRONG (overlap QR);
+  P1 fix scoped in §V.2.a, ship before users hit it.
+- PR #222: docs — §V Phase 4 scope reset. After user feedback that §U is
+  too narrow vs full competitor scope, committed 8 reference images to
+  .agents/references/ (incl. CardXpress UI), wrote §V breakdown:
+  CardXpress UI features (15-row table), PAN signature coords bug,
+  PAN HOLOGRAM scope (back top-right silver patch), Aadhaar confirmation,
+  Phase 4 backlog (P1-P4 prioritized), recommended next 2 PRs (#223 fix
+  coords, #224 hologram). Updates SKILL.md §9 + §11.
 
 ID Card Print current state:
 - Phase 1 MVP COMPLETE + VERIFIED (PR #188)
@@ -510,22 +533,40 @@ ID Card Print current state:
 - Phase 3 PARTIAL — Ayushman/Jan Aadhaar/eShram (#205) + batch (#208)
   + PVC tray (#210) + copy update (#213) + toggle research docs (#215/#216)
   + Aadhaar field toggles (#217) + Auto Enhance (#218) + signature box
-  research docs (#220) SHIPPED.
-  Remaining Phase 3 code: signature box option (PAN — code PR next, see §U),
-  back-side hologram overlay (PAN — research + code pending).
+  research docs (#220) + signature box code (#221) + Phase 4 scope (#222)
+  SHIPPED.
+- Phase 4 STARTED — see §V. Next 2 PRs queued:
+  P1 #223 fix-pan-signature-coords (4-line patch — PR #221 has wrong
+     coords overlapping QR, see §V.2.a)
+  P1 #224 pan-hologram-overlay (~40-line patch — back top-right silver
+     patch with HOLOGRAM label, see §V.2.b)
 
 Test PDFs repo mein saved hain:
 test-pdfs/pan-test.pdf (password: 05071999)
 test-pdfs/aadhaar-test.pdf (password: SUNI1986)
 
-TASK: Next session mein Signature Box (PAN) ka CODE PR karo — research
-already shipped in §U (PR #220). Implementation plan ready: 50-line diff
-in id-print.html (HTML toggle, PAN_OVERLAY_REGIONS, applyPanOverlays(),
-3 call sites, listener, reset). Test PDF: pan-test.pdf (pw: 05071999).
-Verify signature box appears on PAN front in preview + A4 + Dragon + PVC
-+ multi-card outputs, hidden for Aadhaar/Voter/etc. After code PR, do
-hologram overlay (PAN) — research first per Rule #14.
+TASK: Phase 4 P1 items queued in §V (issues.md). Pick ONE per session,
+follow Rule #14 (research already done in §V):
 
-Remaining Phase 3 features listed in SKILL.md §9 — do NOT implement
-unless explicitly asked.
+(a) PR #223 — fix-pan-signature-coords (4-line patch). Update
+    PAN_OVERLAY_REGIONS.signatureBox in id-print.html from
+    {x:540, y:470, w:380, h:110} → {x:280, y:540, w:280, h:75}
+    per §V.2.a. Test with pan-test.pdf (pw: 05071999) — box should
+    sit below QR in the bottom row, NOT over the QR.
+
+(b) PR #224 — pan-hologram-overlay (~40-line code PR). Add
+    `hologram` entry to PAN_OVERLAY_REGIONS at back x:800 y:30 w:180
+    h:220 with silver fill (#d0d0d0) + DM Mono "HOLOGRAM" label.
+    Add chkHologram checkbox to #panToggles. Extend applyPanOverlays
+    to handle both regions (loop pattern like applyAadhaarMasks).
+    Wire into 3 call-sites + listener array + reset (mirror §U code).
+
+Reference images in .agents/references/ — open
+pan-target-output-with-hologram.png + competitor-cardxpress-ui.jpeg
+before coding to confirm coords visually.
+
+P2-P4 items (Move/Zoom/Photo Editor split/Master Settings/PrePrinted
+Card/Printer presets/Bold/BigQR/other-card overlays) are listed in
+SKILL.md §9 + issues.md §V.4 — do NOT implement unless explicitly
+asked.
 ```
