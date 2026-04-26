@@ -1476,12 +1476,14 @@ function buildSingleSheet() {
   }
 
   if (card && card.back) {
-    ctx.save();
-    ctx.translate(startX + cardW + gap + cardW, startY);
-    ctx.scale(-1, 1);
-    if (r > 0) drawCardClipped(ctx, card.back, 0, 0, cardW, cardH, r);
-    else ctx.drawImage(card.back, 0, 0, cardW, cardH);
-    ctx.restore();
+    /* Draw back card NOT mirrored — matches multi-card / dragon /
+       PVC layouts. User cuts both halves apart and stacks them
+       back-to-back for lamination, so no horizontal flip is
+       needed. (Was previously scale(-1, 1) for the legacy
+       fold-over-paper workflow.) */
+    var backX = startX + cardW + gap;
+    if (r > 0) drawCardClipped(ctx, card.back, backX, startY, cardW, cardH, r);
+    else ctx.drawImage(card.back, backX, startY, cardW, cardH);
   }
 
   var foldX = startX + cardW + gap / 2;
