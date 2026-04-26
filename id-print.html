@@ -166,8 +166,8 @@
   max-width:100%;height:auto;
   background:#111;
 }
-/* Unified landscape Front+Back preview (§AC.11) — one canvas, back LEFT
-   half, front RIGHT half. CSS aspect-ratio matches the internal 2022×638
+/* Unified landscape Front+Back preview (§AC.11) — one canvas, front LEFT
+   half, back RIGHT half. CSS aspect-ratio matches the internal 2022×638
    so the box is always landscape regardless of available width. Rounded
    corners on each half are drawn into the canvas (per-half clip path),
    so this CSS keeps a single subtle outer chrome only. */
@@ -464,8 +464,8 @@ input.idp-range::-moz-range-thumb{
       <div id="batchCardsContainer">
         <div class="idp-cards">
           <!-- §AC.11 unified landscape preview: ONE canvas (no labels),
-               internal 2022×638 (= CR80_W * 2 × CR80_H). Back card is
-               drawn into the LEFT half, front card into the RIGHT half,
+               internal 2022×638 (= CR80_W * 2 × CR80_H). Front card is
+               drawn into the LEFT half, back card into the RIGHT half,
                edge-to-edge — mirrors the 1-pair sheet output. -->
           <canvas id="pairCanvas" class="idp-preview-canvas-pair" width="2022" height="638"></canvas>
         </div>
@@ -1188,7 +1188,7 @@ function showBatchPreview() {
     batchCardsContainer.appendChild(section);
 
     /* Build per-side filtered working canvases, then composite into the
-       pair canvas (back LEFT half, front RIGHT half). */
+       pair canvas (front LEFT half, back RIGHT half). */
     var tmpF = null, tmpB = null;
     if (card.originalFront) {
       tmpF = document.createElement('canvas');
@@ -1265,7 +1265,7 @@ function applyBatchFilters() {
     card.back = tmpB;
   });
 
-  /* Refresh preview canvases — §AC.11 unified pair (back LEFT, front RIGHT). */
+  /* Refresh preview canvases — §AC.11 unified pair (front LEFT, back RIGHT). */
   batchCardsContainer.querySelectorAll('canvas[data-batch-idx]').forEach(function(c) {
     var idx = parseInt(c.dataset.batchIdx);
     if (idx < batchCards.length) {
@@ -1710,7 +1710,7 @@ function drawCardClipped(ctx, src, x, y, w, h, radius) {
 }
 
 /* §AC.11 — composite a fully-rendered front+back card pair into ONE
-   landscape canvas (back LEFT, front RIGHT, edge-to-edge). frontReady /
+   landscape canvas (front LEFT, back RIGHT, edge-to-edge). frontReady /
    backReady are CR80_W × CR80_H canvases that already have filter +
    offset + zoom baked in by drawFiltered() / drawFilteredToCanvas().
    Rounded corners (when enabled) are clipped per-half so each card keeps
@@ -1723,22 +1723,22 @@ function compositePair(canvas, frontReady, backReady) {
   var ctx = canvas.getContext('2d');
   ctx.fillStyle = '#eaeaea';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
-  if (backReady) {
+  if (frontReady) {
     ctx.save();
     if (roundedCorners) {
       roundedRectPath(ctx, 0, 0, CR80_W, CR80_H, CARD_RADIUS);
       ctx.clip();
     }
-    ctx.drawImage(backReady, 0, 0, CR80_W, CR80_H);
+    ctx.drawImage(frontReady, 0, 0, CR80_W, CR80_H);
     ctx.restore();
   }
-  if (frontReady) {
+  if (backReady) {
     ctx.save();
     if (roundedCorners) {
       roundedRectPath(ctx, CR80_W, 0, CR80_W, CR80_H, CARD_RADIUS);
       ctx.clip();
     }
-    ctx.drawImage(frontReady, CR80_W, 0, CR80_W, CR80_H);
+    ctx.drawImage(backReady, CR80_W, 0, CR80_W, CR80_H);
     ctx.restore();
   }
 }
