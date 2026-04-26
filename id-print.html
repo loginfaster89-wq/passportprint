@@ -543,8 +543,10 @@ const CROP = {
     back:  [0.05, 0.54, 0.90, 0.40]
   },
   voter: {
-    front: [0.035, 0.05, 0.93, 0.45],
-    back:  [0.035, 0.53, 0.93, 0.42]
+    front:     [0.035, 0.05, 0.93, 0.45],
+    back:      [0.035, 0.53, 0.93, 0.42],
+    frontPage: [0.035, 0.05, 0.93, 0.90],
+    backPage:  [0.035, 0.05, 0.93, 0.90]
   }
 };
 
@@ -710,8 +712,23 @@ async function processPdf(pdf) {
 
     /* Crop front and back */
     var crop = CROP[detectedType];
-    frontImageData = cropRegion(renderCanvas, crop.front);
-    backImageData = cropRegion(renderCanvas, crop.back);
+
+    if (detectedType === 'voter' && pdf.numPages >= 2) {
+      /* Multi-page e-EPIC: front on page 1, back on page 2 */
+      frontImageData = cropRegion(renderCanvas, crop.frontPage);
+
+      var page2 = await pdf.getPage(2);
+      var vp2 = page2.getViewport({ scale: RENDER_SCALE });
+      var rc2 = document.createElement('canvas');
+      rc2.width = vp2.width;
+      rc2.height = vp2.height;
+      var c2 = rc2.getContext('2d');
+      await page2.render({ canvasContext: c2, viewport: vp2 }).promise;
+      backImageData = cropRegion(rc2, crop.backPage);
+    } else {
+      frontImageData = cropRegion(renderCanvas, crop.front);
+      backImageData = cropRegion(renderCanvas, crop.back);
+    }
 
     /* Store originals for editing */
     originalFront = frontImageData;
