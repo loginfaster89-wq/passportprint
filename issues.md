@@ -2266,3 +2266,154 @@ Mapping per field:
 - Card Cleanup persistence (§AB, PR #242), inline auto-swap
   notice (PR #241), Photo Editor split panel (§Z, PR #239),
   AADHAAR_FIELD_MASKS UI toggles (§T, PR #236) unaffected.
+
+---
+
+## §AC.7 ID Card Print — Un-mirror Aadhaar back on 1-Pair Fold & Laminate
+
+**Status:** SHIPPED — PR #247.
+
+### AC.7.1 Field report
+
+User: "1 Pair · Fold & Laminate" sheet ke right half (back card)
+mein text mirror ho raha hai (alta ulta print). Multi-card / Dragon /
+PVC layouts mein back card seedha print hota hai.
+
+### AC.7.2 Root cause
+
+`buildSingleSheet()` legacy fold-over-paper workflow ke liye likha
+gaya tha — paper ko bich se fold karne par back face neeche aata,
+isliye `ctx.scale(-1, 1)` lagaya gaya tha taaki fold ke baad text
+seedha dikhe. Aaj ka actual workflow: user dono halves alag-alag
+cut karke back-to-back stack karta hai (lamination ke liye), so
+mirror karne ki zarurat nahi.
+
+### AC.7.3 Fix
+
+In `buildSingleSheet()` (id-print.html ~line 1482):
+- Removed `ctx.save()` / `ctx.translate(...)` / `ctx.scale(-1, 1)` /
+  `ctx.restore()` block.
+- Replaced with simple `var backX = startX + cardW + gap;` +
+  `ctx.drawImage(card.back, backX, startY, cardW, cardH)` (or
+  `drawCardClipped(...)` when rounded corners enabled).
+- Added comment block explaining the change so future agents
+  don't restore the mirror "to fix" something else.
+
+### AC.7.4 Compatibility
+
+- Multi-card / Dragon / PVC layouts already drew back un-mirrored —
+  1-pair now matches them.
+- Fold-line dashed indicator + "fold here" label kept (still useful
+  as a cut-guide marker even when user cuts instead of folds).
+- No CROP / mask changes in this PR (one problem per PR — Rule #8).
+
+---
+
+## §AC.8 ID Card Print — Tighten Aadhaar crop to outer black border + gap=0
+
+**Status:** SHIPPED — PR #248.
+
+### AC.8.1 Field report
+
+User reference snip (`IS_TRHE_KA_CUT_KARNA_HAI_PDF_SE`): cards ke
+charo taraf jo black border hai usi tak cut karna hai (white margin
+nahi chahiye), AUR front + back ekdum sat ke print hone chahiye
+(no whitespace between them on the printed A4).
+
+### AC.8.2 Root cause
+
+(a) `CROP.aadhaar` (§AC.6, PR #245) cards ke around ~85px white
+    margin chhoot raha tha. Measured by rendering
+    `test-pdfs/aadhaar-test.pdf` at 200 DPI and detecting the
+    actual outer black-border line of the small plastic-card
+    mock-ups: cards lie in PDF fractional region
+    `x: 0.0520..0.9456`, `y: 0.6657..0.8816`, with a middle
+    vertical seam at `x=0.4991` separating front from back.
+
+(b) `buildSingleSheet()` had `var gap = 40` between front and back
+    canvases on the A4. Combined with (a)'s white margin this
+    looked like ~125px total whitespace at the seam.
+
+### AC.8.3 Fix — CROP.aadhaar (tight to outer border)
+
+```
+front: [0.0520, 0.6657, 0.4471, 0.2159]
+back:  [0.4991, 0.6657, 0.4465, 0.2159]
+```
+
+Both halves share the seam x=0.4991 — when drawn side-by-side
+they touch with zero whitespace. Verified with a measure script:
+new crop renders cards with 0 px margin on all four edges (vs
+85–95 px on the old crop).
+
+### AC.8.4 Fix — AADHAAR_FIELD_MASKS (linear-scaled)
+
+The CROP change shifts how PDF pixels map to the 1011×638 CR80
+canvas. Old vs new mapping for the back card:
+
+```
+canvas_x' ≈ 11 + canvas_x * 1.093
+canvas_y' ≈ 48 + canvas_y * 1.070
+w'        =     w        * 1.093
+h'        =     h        * 1.070
+```
+
+Applied to existing masks:
+
+```
+qrCode:       { side:'back', x: 596, y: 128, w: 415, h: 374 }
+mobileNumber: { side:'back', x:   0, y:   0, w:   0, h:   0 }
+issueDate:    { side:'back', x:  13, y: 160, w:  24, h: 155 }
+downloadDate: { side:'back', x:  13, y: 316, w:  24, h: 171 }
+```
+
+This preserves the same coverage region in PDF space, so the UI
+"Hide QR / Hide Issue Date / Hide Download Date" toggles continue
+to mask the correct content with the new tight crop.
+
+### AC.8.5 Fix — buildSingleSheet gap = 0
+
+`var gap = 40` → `var gap = 0`. Comment block added pointing to
+PR #248 / §AC.8 explaining why (so future agents don't re-add
+spacing thinking it was an oversight).
+
+`foldX = startX + cardW + gap / 2` becomes `startX + cardW` —
+the dashed fold/cut line lands exactly on the seam between the
+two cards. Visually clean since the seam is at the merged black
+border edges.
+
+### AC.8.6 Verification
+
+- `npm run build` clean: id-print.html 84.9 → 85.4 KB raw, 80.9 →
+  81.5 KB obfuscated.
+- Standalone measure script (`measure.js`, `find-qr.js`,
+  `render-crop.js`, `preview-final.js` — all gitignored,
+  not committed) at `/tmp/work/pp/`:
+  - Border detection: outer black borders at PDF px
+    `x=86..1563, y=1557..2062` (PNG 1653×2339 from 200 DPI render).
+  - Per-card region: width 738 × height 505 PDF px, scaled into
+    1011×638 canvas.
+  - Margin re-measure: new crop = 0,0,0,0 on all edges (vs old
+    crop 85,89,0,0 / 85,0,0,95).
+  - QR detection: PDF px x=1271..1489, y=1709..1936 (back card
+    right-middle), comfortably inside the new 596,128,415,374
+    mask.
+- Visual composite of new front+back at gap=0 with masks applied —
+  matches the user's snipping-tool reference (cards touch, QR
+  cleanly masked white, dates clean on left margin).
+
+### AC.8.7 Compatibility
+
+- `buildMultiCardSheet`, `buildDragonSheet`, `buildPVCTraySheet`
+  use `CR80_W` × `CR80_H` source canvases the same way; tighter
+  crop just means each card's content fills more of its CR80
+  canvas (no longer surrounded by white margin). Per-pair / per-row
+  gaps in those layouts are unchanged.
+- Auto-swap detector (§AA, PR #240) skin ROI is fractional within
+  the canvas — unaffected by absolute crop shift.
+- PAN / Voter / Ayushman / Jan Aadhaar / eShram crops unchanged.
+- AADHAAR_FIELD_MASKS UI toggles (§T) continue to work — masks
+  re-tuned to match the new mapping.
+- Mirror fix (§AC.7, PR #247) preserved — back card still drawn
+  un-mirrored; this PR only changes the gap value, not the draw
+  call.

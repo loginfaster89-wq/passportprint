@@ -640,6 +640,25 @@ Field-driven fixes (post-§Z) COMPLETE:
   {2,105,22,145}, downloadDate {2,250,22,160} (narrow vertical
   strips on left margin where rotated date text appears).
   Closes §AC.5 follow-up. — SHIPPED
+- PR #246: §AC.6 follow-up — qrCode mask widened from
+  {535,75,390,350} to {596,128,415,374} after user reported QR
+  bleed on right edge. — SHIPPED
+- PR #247: §AC.7 — Un-mirror Aadhaar back card on "1 Pair · Fold
+  & Laminate" sheet. Removed ctx.scale(-1, 1) block in
+  buildSingleSheet (legacy fold-over-paper artefact). Now matches
+  multi-card / dragon / PVC layouts (back drawn straight). User
+  workflow today is cut + back-to-back stack, not fold. — SHIPPED
+- PR #248: §AC.8 — Tight CROP.aadhaar + gap=0 in 1-pair sheet.
+  CROP measured against test-pdfs/aadhaar-test.pdf at 200 DPI:
+  Front [0.0520,0.6657,0.4471,0.2159], Back
+  [0.4991,0.6657,0.4465,0.2159] (seam at x=0.4991). Old crop left
+  85–95 px white margin per card; new crop is edge-to-edge.
+  AADHAAR_FIELD_MASKS linear-scaled (canvas_x' ≈ 11 + x*1.093,
+  canvas_y' ≈ 48 + y*1.070): qrCode {596,128,415,374}, issueDate
+  {13,160,24,155}, downloadDate {13,316,24,171}, mobileNumber
+  {0,0,0,0} (still soft no-op). buildSingleSheet `var gap = 40`
+  → `var gap = 0` so front+back touch on A4. Matches user's
+  snipping-tool reference exactly. — SHIPPED
 
 TASK: Phase 4 P3+ remaining items next. Per Rule #14, research first
 — open a docs PR with UX / state-shape research, THEN a code PR.
