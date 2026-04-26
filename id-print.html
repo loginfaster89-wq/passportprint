@@ -179,6 +179,17 @@
   background:#111;
 }
 
+/* QA toggle: append `?previewLegacy=1` to the URL to revert Step 2 to
+   the pre-§AC.11 split Front/Back canvases for visual A/B comparison.
+   Both DOM trees are always rendered; only one is shown at a time. */
+body.legacy-preview-mode .idp-preview-canvas-pair{display:none;}
+body:not(.legacy-preview-mode) .idp-preview-legacy{display:none;}
+.idp-preview-legacy{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;}
+.idp-preview-toggle-hint{
+  font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);
+  margin-top:8px;opacity:.55;
+}
+
 /* Info strip */
 .idp-info{
   display:flex;flex-wrap:wrap;gap:8px 16px;justify-content:center;
@@ -468,7 +479,21 @@ input.idp-range::-moz-range-thumb{
                drawn into the LEFT half, front card into the RIGHT half,
                edge-to-edge — mirrors the 1-pair sheet output. -->
           <canvas id="pairCanvas" class="idp-preview-canvas-pair" width="2022" height="638"></canvas>
+          <!-- Legacy split preview (pre-§AC.11) — kept for QA A/B
+               comparison via `?previewLegacy=1` URL param. Hidden by
+               default; CSS body.legacy-preview-mode swap shows it. -->
+          <div class="idp-preview-legacy">
+            <div class="idp-card-wrap">
+              <span>Front</span>
+              <canvas id="cardFront" width="1011" height="638"></canvas>
+            </div>
+            <div class="idp-card-wrap">
+              <span>Back</span>
+              <canvas id="cardBack" width="1011" height="638"></canvas>
+            </div>
+          </div>
         </div>
+        <div id="previewToggleHint" class="idp-preview-toggle-hint idp-hidden"></div>
       </div>
       <!-- Options -->
       <label class="idp-option">
@@ -739,15 +764,33 @@ const btnSheet = $('#btnSheet');
 const btnBackPreview = $('#btnBackPreview');
 const btnDownload = $('#btnDownload');
 const btnPrint = $('#btnPrint');
-/* §AC.11 — cardFrontCanvas / cardBackCanvas are now offscreen working
-   canvases (the DOM only has #pairCanvas). drawFiltered() still writes
-   filtered+offset+zoom output to these per-side canvases, then
-   applyFilters() composites both halves into pairCanvas. */
-const cardFrontCanvas = document.createElement('canvas');
-cardFrontCanvas.width = CR80_W; cardFrontCanvas.height = CR80_H;
-const cardBackCanvas = document.createElement('canvas');
-cardBackCanvas.width = CR80_W; cardBackCanvas.height = CR80_H;
+/* §AC.11 — cardFrontCanvas / cardBackCanvas point at the LEGACY split
+   DOM canvases (#cardFront / #cardBack). They stay in the DOM so that
+   the QA A/B toggle (?previewLegacy=1) can show the pre-§AC.11 layout
+   for visual comparison. drawFiltered() writes filter+offset+zoom
+   output to them, frontImageData / backImageData carry the same pixels
+   into compositePair(pairCanvas, …) for the unified landscape preview.
+   In normal mode CSS hides the legacy wrap; in legacy mode CSS hides
+   pairCanvas — both layers always render so the swap is instant. */
+const cardFrontCanvas = $('#cardFront');
+const cardBackCanvas = $('#cardBack');
 const pairCanvas = $('#pairCanvas');
+const previewToggleHint = $('#previewToggleHint');
+
+/* QA toggle: ?previewLegacy=1 swaps Step 2 to the legacy split layout. */
+(function initPreviewModeToggle() {
+  try {
+    var qs = new URLSearchParams(location.search);
+    if (qs.get('previewLegacy') === '1') {
+      document.body.classList.add('legacy-preview-mode');
+      if (previewToggleHint) {
+        previewToggleHint.textContent =
+          'Legacy split preview (QA mode) — remove ?previewLegacy=1 from the URL to return to the unified landscape preview.';
+        previewToggleHint.classList.remove('idp-hidden');
+      }
+    }
+  } catch (_) { /* URLSearchParams unavailable — ignore */ }
+})();
 const a4Canvas = $('#a4Canvas');
 const detectBadge = $('#detectBadge');
 const sheetTitle = $('#sheetTitle');
@@ -1163,7 +1206,8 @@ function showBatchPreview() {
   loadPrefs();
 
   /* Build card previews — §AC.11 unified landscape pair canvas per card,
-     no Front/Back labels. */
+     plus the legacy split Front/Back canvases (kept for the QA A/B
+     toggle). CSS hides whichever layout is inactive in the current mode. */
   batchCardsContainer.innerHTML = '';
   batchCards.forEach(function(card, idx) {
     var section = document.createElement('div');
@@ -1177,30 +1221,65 @@ function showBatchPreview() {
     var cardsDiv = document.createElement('div');
     cardsDiv.className = 'idp-cards';
 
+    /* Unified landscape preview (default). */
     var pair = document.createElement('canvas');
     pair.className = 'idp-preview-canvas-pair';
     pair.dataset.batchIdx = idx;
+    pair.dataset.layout = 'pair';
     pair.width = CR80_W * 2;
     pair.height = CR80_H;
     cardsDiv.appendChild(pair);
 
+    /* Legacy split preview (QA toggle). */
+    var legacy = document.createElement('div');
+    legacy.className = 'idp-preview-legacy';
+
+    var frontWrap = document.createElement('div');
+    frontWrap.className = 'idp-card-wrap';
+    var frontLabel = document.createElement('span');
+    frontLabel.textContent = 'Front';
+    var frontCanvas = document.createElement('canvas');
+    frontCanvas.width = CR80_W;
+    frontCanvas.height = CR80_H;
+    frontCanvas.className = roundedCorners ? 'rounded' : '';
+    frontCanvas.dataset.batchIdx = idx;
+    frontCanvas.dataset.layout = 'legacy';
+    frontCanvas.dataset.side = 'front';
+    frontWrap.appendChild(frontLabel);
+    frontWrap.appendChild(frontCanvas);
+
+    var backWrap = document.createElement('div');
+    backWrap.className = 'idp-card-wrap';
+    var backLabel = document.createElement('span');
+    backLabel.textContent = 'Back';
+    var backCanvas = document.createElement('canvas');
+    backCanvas.width = CR80_W;
+    backCanvas.height = CR80_H;
+    backCanvas.className = roundedCorners ? 'rounded' : '';
+    backCanvas.dataset.batchIdx = idx;
+    backCanvas.dataset.layout = 'legacy';
+    backCanvas.dataset.side = 'back';
+    backWrap.appendChild(backLabel);
+    backWrap.appendChild(backCanvas);
+
+    legacy.appendChild(frontWrap);
+    legacy.appendChild(backWrap);
+    cardsDiv.appendChild(legacy);
+
     section.appendChild(cardsDiv);
     batchCardsContainer.appendChild(section);
 
-    /* Build per-side filtered working canvases, then composite into the
-       pair canvas (back LEFT half, front RIGHT half). */
-    var tmpF = null, tmpB = null;
+    /* Build per-side filtered canvases (these double as the visible
+       legacy canvases) and composite into the pair canvas. */
     if (card.originalFront) {
-      tmpF = document.createElement('canvas');
-      tmpF.width = CR80_W; tmpF.height = CR80_H;
-      drawFilteredToCanvas(tmpF, card.originalFront, CR80_W, CR80_H, card.type, 'front');
+      drawFilteredToCanvas(frontCanvas, card.originalFront, CR80_W, CR80_H, card.type, 'front');
     }
     if (card.originalBack) {
-      tmpB = document.createElement('canvas');
-      tmpB.width = CR80_W; tmpB.height = CR80_H;
-      drawFilteredToCanvas(tmpB, card.originalBack, CR80_W, CR80_H, card.type, 'back');
+      drawFilteredToCanvas(backCanvas, card.originalBack, CR80_W, CR80_H, card.type, 'back');
     }
-    compositePair(pair, tmpF, tmpB);
+    compositePair(pair,
+      card.originalFront ? frontCanvas : null,
+      card.originalBack  ? backCanvas  : null);
   });
 
   /* Update filtered data for sheet generation */
@@ -1265,23 +1344,28 @@ function applyBatchFilters() {
     card.back = tmpB;
   });
 
-  /* Refresh preview canvases — §AC.11 unified pair (back LEFT, front RIGHT). */
-  batchCardsContainer.querySelectorAll('canvas[data-batch-idx]').forEach(function(c) {
-    var idx = parseInt(c.dataset.batchIdx);
-    if (idx < batchCards.length) {
-      var card = batchCards[idx];
-      var tmpF = null, tmpB = null;
-      if (card.originalFront) {
-        tmpF = document.createElement('canvas');
-        tmpF.width = CR80_W; tmpF.height = CR80_H;
-        drawFilteredToCanvas(tmpF, card.originalFront, CR80_W, CR80_H, card.type, 'front');
-      }
-      if (card.originalBack) {
-        tmpB = document.createElement('canvas');
-        tmpB.width = CR80_W; tmpB.height = CR80_H;
-        drawFilteredToCanvas(tmpB, card.originalBack, CR80_W, CR80_H, card.type, 'back');
-      }
-      compositePair(c, tmpF, tmpB);
+  /* Refresh preview canvases — refresh the visible legacy split canvases
+     directly (used when ?previewLegacy=1) and re-composite the unified
+     pair canvas from those same outputs. Both layers always update so
+     the QA toggle swap is instantaneous. */
+  batchCards.forEach(function(card, idx) {
+    var legacyFront = batchCardsContainer.querySelector(
+      'canvas[data-batch-idx="' + idx + '"][data-layout="legacy"][data-side="front"]');
+    var legacyBack = batchCardsContainer.querySelector(
+      'canvas[data-batch-idx="' + idx + '"][data-layout="legacy"][data-side="back"]');
+    var pair = batchCardsContainer.querySelector(
+      'canvas[data-batch-idx="' + idx + '"][data-layout="pair"]');
+
+    if (legacyFront && card.originalFront) {
+      drawFilteredToCanvas(legacyFront, card.originalFront, CR80_W, CR80_H, card.type, 'front');
+    }
+    if (legacyBack && card.originalBack) {
+      drawFilteredToCanvas(legacyBack, card.originalBack, CR80_W, CR80_H, card.type, 'back');
+    }
+    if (pair) {
+      compositePair(pair,
+        (legacyFront && card.originalFront) ? legacyFront : null,
+        (legacyBack  && card.originalBack)  ? legacyBack  : null);
     }
   });
 }
