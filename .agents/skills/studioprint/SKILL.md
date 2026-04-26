@@ -400,9 +400,9 @@ card sizes, lamination specs, and feature plan documented in
 - ~~Ayushman/Jan Aadhaar/eShram support~~ — **shipped PR #205**
 - ~~Batch processing (multiple PDFs)~~ — **shipped PR #208**
 - ~~PVC card tray layout (Epson L805/L8050)~~ — **shipped PR #210**
-- ~~Toggle options (issue date, QR, mobile no, download date)~~ — **research done (PR #215 docs), coding ready — see §T in issues.md**
-- Auto photo enhancement
-- Signature box option (PAN)
+- ~~Toggle options (issue date, QR, mobile no, download date)~~ — **shipped PR #217**
+- ~~Auto photo enhancement~~ — **shipped PR #218**
+- Signature box option (PAN) — **research done (this PR docs), coding ready — see §U in issues.md**
 - Back-side hologram overlay (PAN)
 
 **Pricing section design rule (post PR #150):** The pricing section uses
@@ -450,11 +450,13 @@ AGENTS.md — full source of truth
 issues.md — full audit + §M ID Card Print research + §O Phase 2 multi-card
   + §P Phase 3 Ayushman/Jan Aadhaar/eShram + §Q batch processing
   + §R PVC card tray + §S copy update + §T toggle options research
+  + §U PAN signature box research
 
-Last PR: PR #215 (docs: toggle options research + new rules in SKILL.md/AGENTS.md)
+Last PR: PR #220 (docs: PAN signature box research — §U in issues.md +
+  SKILL.md/AGENTS.md updates ahead of code PR)
 
 Shipped summary (don't redo):
-PRs #70–#215: all previous work shipped
+PRs #70–#220: all previous work shipped
 - PRs #70–#189: original audit + Document Sheet + ID Card Print Phase 1
 - PR #190: docs update
 - PR #191: ID Card Print Phase 2 — photo editing (brightness/contrast/
@@ -492,6 +494,13 @@ PRs #70–#215: all previous work shipped
   brightness/contrast/saturation optimization via front card luminance
   histogram. Algorithm: bright = clamp(128/avgLum*100, 70, 160),
   contrast 115%, sat 110%. Also updates issues.md §T (SHIPPED) + §U.
+- PR #219: docs — second-half update (Rule #13) marking PRs #216-#218
+  shipped in SKILL.md + AGENTS.md.
+- PR #220: docs — PAN Signature Box research. Adds §U to issues.md
+  with PAN_OVERLAY_REGIONS coords (signatureBox at front x:540 y:470
+  w:380 h:110), `applyPanOverlays()` design mirroring `applyAadhaarMasks()`,
+  3 call-site list, batch-mode + reset notes. Updates SKILL.md §9
+  (signature box → research done) + §11 prompt template.
 
 ID Card Print current state:
 - Phase 1 MVP COMPLETE + VERIFIED (PR #188)
@@ -500,16 +509,22 @@ ID Card Print current state:
   rounded corners (#194/#197), Voter ID (#202), Dragon sheet (#203)
 - Phase 3 PARTIAL — Ayushman/Jan Aadhaar/eShram (#205) + batch (#208)
   + PVC tray (#210) + copy update (#213) + toggle research docs (#215/#216)
-  + Aadhaar field toggles (#217) + Auto Enhance (#218) SHIPPED.
-  Remaining Phase 3: signature box option (PAN), back-side hologram
-  overlay (PAN)
+  + Aadhaar field toggles (#217) + Auto Enhance (#218) + signature box
+  research docs (#220) SHIPPED.
+  Remaining Phase 3 code: signature box option (PAN — code PR next, see §U),
+  back-side hologram overlay (PAN — research + code pending).
 
 Test PDFs repo mein saved hain:
 test-pdfs/pan-test.pdf (password: 05071999)
 test-pdfs/aadhaar-test.pdf (password: SUNI1986)
 
-TASK: Next session mein Signature Box (PAN) ya hologram overlay karo.
-Pehle research karo → docs PR → code PR (Rule #14 follow karo).
+TASK: Next session mein Signature Box (PAN) ka CODE PR karo — research
+already shipped in §U (PR #220). Implementation plan ready: 50-line diff
+in id-print.html (HTML toggle, PAN_OVERLAY_REGIONS, applyPanOverlays(),
+3 call sites, listener, reset). Test PDF: pan-test.pdf (pw: 05071999).
+Verify signature box appears on PAN front in preview + A4 + Dragon + PVC
++ multi-card outputs, hidden for Aadhaar/Voter/etc. After code PR, do
+hologram overlay (PAN) — research first per Rule #14.
 
 Remaining Phase 3 features listed in SKILL.md §9 — do NOT implement
 unless explicitly asked.
