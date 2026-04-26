@@ -395,6 +395,8 @@ card sizes, lamination specs, and feature plan documented in
 - ~~PVC card tray layout (Epson L805/L8050)~~ — **shipped PR #210**
 - Toggle options (issue date, QR, mobile no, download date)
 - Auto photo enhancement
+- Signature box option (PAN)
+- Back-side hologram overlay (PAN)
 
 **Pricing section design rule (post PR #150):** The pricing section uses
 card-based layout (`.plan-grid` with `.plan-card` divs), NOT a `<table>`.
@@ -440,7 +442,7 @@ Clone ke baad pehle ye teen files padho:
 AGENTS.md — full source of truth
 issues.md — full audit + §M ID Card Print research + §O Phase 2 multi-card
   + §P Phase 3 Ayushman/Jan Aadhaar/eShram + §Q batch processing
-  + §R PVC card tray
+  + §R PVC card tray + §S copy update
 
 Last PR: PR #213 (copy: update ID Card Print nav dropdown + feature card)
 
