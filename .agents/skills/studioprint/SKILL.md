@@ -326,6 +326,8 @@ Do NOT re-fix any of the following — they are all merged:
 - PR #213: **copy update** — nav dropdown subtitle on 7 pages updated
   to include Ayushman/eShram. Homepage feature card description updated
   to reflect Phase 2/3 features.
+- PR #214: docs — fix gaps in SKILL.md §9/§11 + AGENTS.md open backlog
+  (add §S ref, add signature box + hologram to remaining items).
 
 **Phase 2 is now COMPLETE.**
 
@@ -408,7 +410,8 @@ add them to all 3 cards consistently.
 **Open:** `F7` GSI iframe warnings (not our code, harmless).
 Phase 2 COMPLETE. Phase 3 Ayushman/Jan Aadhaar/eShram shipped (PR #205),
 batch processing shipped (PR #208), PVC tray shipped (PR #210),
-copy update shipped (PR #213). Remaining Phase 3 items — see list above.
+copy update shipped (PR #213), docs gap fix (PR #214).
+Remaining Phase 3 items — see list above.
 
 ## 10. Related repos
 
@@ -444,10 +447,10 @@ issues.md — full audit + §M ID Card Print research + §O Phase 2 multi-card
   + §P Phase 3 Ayushman/Jan Aadhaar/eShram + §Q batch processing
   + §R PVC card tray + §S copy update
 
-Last PR: PR #213 (copy: update ID Card Print nav dropdown + feature card)
+Last PR: PR #214 (docs: fix gaps in SKILL.md §9/§11 + AGENTS.md)
 
 Shipped summary (don't redo):
-PRs #70–#213: all previous work shipped
+PRs #70–#214: all previous work shipped
 - PRs #70–#189: original audit + Document Sheet + ID Card Print Phase 1
 - PR #190: docs update
 - PR #191: ID Card Print Phase 2 — photo editing (brightness/contrast/
@@ -470,6 +473,7 @@ PRs #70–#213: all previous work shipped
 - PR #210: ID Card Print Phase 3 — PVC card tray layout (Epson L805/L8050)
 - PR #212: docs — mark PVC tray shipped, add §R, update prompt
 - PR #213: copy — update ID Card Print nav dropdown + feature card
+- PR #214: docs — fix gaps in SKILL.md §9/§11 + AGENTS.md open backlog
 
 ID Card Print current state:
 - Phase 1 MVP COMPLETE + VERIFIED (PR #188)
@@ -477,7 +481,8 @@ ID Card Print current state:
   photo editing (#191), multi-card A4 (#193), cut marks (#193),
   rounded corners (#194/#197), Voter ID (#202), Dragon sheet (#203)
 - Phase 3 PARTIAL — Ayushman/Jan Aadhaar/eShram (#205) + batch (#208)
-  + PVC tray (#210) shipped. Remaining: toggles, auto enhance
+  + PVC tray (#210) + copy update (#213) shipped.
+  Remaining: toggles, auto enhance, signature box, hologram overlay
 
 Test PDFs repo mein saved hain:
 test-pdfs/pan-test.pdf (password: 05071999)
