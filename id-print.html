@@ -474,6 +474,7 @@ input.idp-range::-moz-range-thumb{
         <button type="button" class="idp-layout-opt" data-layout="single">1 Pair · Fold &amp; Laminate</button>
         <button type="button" class="idp-layout-opt active" data-layout="multi">5 Pairs · Multi-Card</button>
         <button type="button" class="idp-layout-opt" data-layout="dragon">2 Cards · Dragon Sheet</button>
+        <button type="button" class="idp-layout-opt" data-layout="pvc">PVC Tray · Epson</button>
       </div>
       <div class="idp-a4-wrap">
         <canvas id="a4Canvas" width="2480" height="3508"></canvas>
@@ -565,6 +566,8 @@ const A4_W = 2480;
 const A4_H = 3508;
 const DRAGON_W = 1205;
 const DRAGON_H = 1795;
+const PVC_W = 1417;
+const PVC_H = 1417;
 const RENDER_SCALE = 4;
 
 const AADHAAR_KEYWORDS = ['aadhaar','uid','uidai','unique identification','government of india','vid','enrolment','download date','issue date'];
@@ -1189,6 +1192,7 @@ function drawToCanvas(canvas, srcCanvas, w, h) {
 function buildSheet() {
   if (currentLayout === 'multi') buildMultiCardSheet();
   else if (currentLayout === 'dragon') buildDragonSheet();
+  else if (currentLayout === 'pvc') buildPVCTraySheet();
   else buildSingleSheet();
 }
 
@@ -1426,6 +1430,77 @@ function buildDragonSheet() {
   ctx.fillText('CR80 \u00b7 4\u00d76 Dragon Sheet \u00b7 300 DPI \u2014 Studio Print', DRAGON_W / 2, marginY + totalH + 40);
 }
 
+function buildPVCTraySheet() {
+  var cards = getActiveCards();
+  var card = cards.length > 0 ? cards[0] : null;
+
+  var ctx = a4Canvas.getContext('2d');
+  a4Canvas.width = PVC_W;
+  a4Canvas.height = PVC_H;
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, PVC_W, PVC_H);
+
+  var cardW = CR80_W;
+  var cardH = CR80_H;
+  var marginX = Math.round((PVC_W - cardW) / 2);
+  var topY = 35;
+  var gap = 71;
+  var bottomY = topY + cardH + gap;
+
+  var radius = roundedCorners ? CARD_RADIUS : 0;
+
+  if (card && card.front) {
+    if (radius > 0) drawCardClipped(ctx, card.front, marginX, topY, cardW, cardH, radius);
+    else ctx.drawImage(card.front, marginX, topY, cardW, cardH);
+  }
+
+  if (card && card.back) {
+    if (radius > 0) drawCardClipped(ctx, card.back, marginX, bottomY, cardW, cardH, radius);
+    else ctx.drawImage(card.back, marginX, bottomY, cardW, cardH);
+  }
+
+  /* Card slot outlines */
+  ctx.setLineDash([6, 4]);
+  ctx.strokeStyle = '#bbb';
+  ctx.lineWidth = 1;
+  if (radius > 0) {
+    roundedRectPath(ctx, marginX, topY, cardW, cardH, radius);
+    ctx.stroke();
+    roundedRectPath(ctx, marginX, bottomY, cardW, cardH, radius);
+    ctx.stroke();
+  } else {
+    ctx.strokeRect(marginX, topY, cardW, cardH);
+    ctx.strokeRect(marginX, bottomY, cardW, cardH);
+  }
+  ctx.setLineDash([]);
+
+  /* Corner marks */
+  ctx.strokeStyle = '#999';
+  ctx.lineWidth = 1.5;
+  var markLen = 20;
+  drawCornerMarks(ctx, marginX, topY, cardW, cardH, markLen);
+  drawCornerMarks(ctx, marginX, bottomY, cardW, cardH, markLen);
+
+  /* Labels */
+  ctx.fillStyle = '#999';
+  ctx.font = '16px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('Front', marginX + cardW / 2, topY - 10);
+  ctx.fillText('Back', marginX + cardW / 2, bottomY - 10);
+
+  /* Tray border */
+  ctx.strokeStyle = '#ddd';
+  ctx.lineWidth = 2;
+  ctx.setLineDash([12, 6]);
+  ctx.strokeRect(4, 4, PVC_W - 8, PVC_H - 8);
+  ctx.setLineDash([]);
+
+  /* Footer */
+  ctx.fillStyle = '#aaa';
+  ctx.font = '14px sans-serif';
+  ctx.fillText('PVC Tray \u00b7 Epson L805/L8050 \u00b7 120\u00d7120 mm \u00b7 300 DPI \u2014 Studio Print', PVC_W / 2, bottomY + cardH + 28);
+}
+
 function drawCornerMarks(ctx, x, y, w, h, len) {
   var corners = [
     [x, y], [x + w, y], [x, y + h], [x + w, y + h]
@@ -1582,6 +1657,9 @@ function updateSheetMeta() {
   } else if (currentLayout === 'dragon') {
     sheetTitle.textContent = 'Dragon Sheet \u2014 4\u00d76 (2 Cards)';
     sheetDesc.textContent = 'Print on 4\u00d76 photo paper \u2192 cut along guides \u2192 laminate each card.';
+  } else if (currentLayout === 'pvc') {
+    sheetTitle.textContent = 'PVC Tray \u2014 Epson L805/L8050';
+    sheetDesc.textContent = 'Load blank PVC cards in tray \u2192 print using CD/DVD mode \u2192 direct card print, no cutting needed.';
   } else {
     sheetTitle.textContent = 'A4 Sheet \u2014 Fold & Laminate Layout';
     sheetDesc.textContent = 'Print \u2192 cut around cards \u2192 fold in half \u2192 laminate in 65\u00d795mm pouch';
@@ -1622,7 +1700,7 @@ btnBackPreview.addEventListener('click', () => showStep(2));
 
 btnDownload.addEventListener('click', () => {
   var link = document.createElement('a');
-  var suffix = currentLayout === 'dragon' ? '-dragon-sheet.png' : '-a4-sheet.png';
+  var suffix = currentLayout === 'dragon' ? '-dragon-sheet.png' : currentLayout === 'pvc' ? '-pvc-tray.png' : '-a4-sheet.png';
   var cards = getActiveCards();
   var prefix = cards.length > 1 ? 'batch-' + cards.length + '-cards' : (detectedType || 'id-card');
   link.download = prefix + suffix;
