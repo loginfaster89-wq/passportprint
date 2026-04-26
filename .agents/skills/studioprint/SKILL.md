@@ -630,12 +630,16 @@ Field-driven fixes (post-§Z) COMPLETE:
   in localStorage key idp:prefs:v1. savePrefs() on change,
   loadPrefs() before applyFilters() in processPdf and
   showBatchPreview — SHIPPED
-- PR #243: §AC — CROP.aadhaar retuned for current eAadhaar layout
-  where front + back card mock-ups sit side-by-side in upper
-  portion of page 1. Front [0.04,0.06,0.45,0.40], Back
-  [0.51,0.06,0.45,0.40]. Lower Letter portion dropped.
-  AADHAAR_FIELD_MASKS NOT retuned — follow-up tracked in §AC.5
-  — SHIPPED
+- PR #243: §AC — CROP.aadhaar retuned (FIRST attempt, regressed
+  to upper-row formal Letter + Notice). Superseded by §AC.6 / PR #245.
+- PR #245: §AC.6 — CROP.aadhaar re-retuned for the BOTTOM-row
+  plastic-card mock-ups (the actual printable cards): Front
+  [0.010,0.682,0.477,0.231], Back [0.504,0.682,0.488,0.231].
+  AADHAAR_FIELD_MASKS retuned for the small-card layout: qrCode
+  {535,75,390,350}, mobileNumber soft no-op {0,0,0,0}, issueDate
+  {2,105,22,145}, downloadDate {2,250,22,160} (narrow vertical
+  strips on left margin where rotated date text appears).
+  Closes §AC.5 follow-up. — SHIPPED
 
 TASK: Phase 4 P3+ remaining items next. Per Rule #14, research first
 — open a docs PR with UX / state-shape research, THEN a code PR.
@@ -643,19 +647,11 @@ Per Rule #12, ONE item per session.
 
 Recommended next (pick ONE per session):
 
-(a) **AADHAAR_FIELD_MASKS retune** (§AC.5 follow-up) — small,
-    high-value cleanup. Capture 5–10 cropped Aadhaar back canvases
-    at the new [0.51,0.06,0.45,0.40] crop, measure pixel positions
-    of QR / address / mobile / dates on the small card mock-up,
-    tighten qrCode mask, decide whether mobile/issue/download
-    toggles should be hidden when small-card layout is detected.
-    Single PR, ~10–20 lines. Code-only per Rule #13.
-
-(b) **P3 Master Settings** — DPI/padding/margins calibration per
+(a) **P3 Master Settings** — DPI/padding/margins calibration per
     printer. Persists in localStorage (extend idp:prefs:v1 schema
     or new key idp:printer:v1). Research PR first.
 
-(c) **P3 PrePrinted Card mode** — back-only sheets for pre-printed
+(b) **P3 PrePrinted Card mode** — back-only sheets for pre-printed
     front cards. Toggle in Step 1 → skips front rendering, doubles
     back density on A4. Research PR first.
 
