@@ -642,8 +642,8 @@ placed inside pouch, heat-sealed.
 
 **Phase 3 (partial):**
 - ~~Ayushman / Jan Aadhaar / eShram support~~ — **shipped PR #205**
-- Batch processing (multiple PDFs at once)
-- PVC card tray layout (Epson L805/L8050 direct print)
+- ~~Batch processing (multiple PDFs at once)~~ — **shipped PR #208**
+- ~~PVC card tray layout (Epson L805/L8050 direct print)~~ — **shipped PR #210**
 - Toggle options (issue date, download date, QR code, mobile number)
 - Auto photo enhancement (AI brightness/contrast adjustment)
 - Signature box option (PAN)
@@ -756,7 +756,7 @@ Tested locally with both test PDFs after PR #189 merge:
 **Phase 3 (partial):**
 - ~~Ayushman / Jan Aadhaar / eShram support~~ — **shipped PR #205**
 - ~~Batch processing (multiple PDFs at once)~~ — **shipped PR #208**
-- PVC card tray layout (Epson L805/L8050 direct print)
+- ~~PVC card tray layout (Epson L805/L8050 direct print)~~ — **shipped PR #210**
 - Toggle options (issue date, download date, QR code, mobile number)
 - Auto photo enhancement (AI brightness/contrast adjustment)
 - Signature box option (PAN)
@@ -780,7 +780,7 @@ Tested locally with both test PDFs after PR #189 merge:
 ### What's still open (Phase 3 remaining)
 
 - ~~Batch processing (multiple PDFs at once)~~ — **shipped PR #208**
-- PVC card tray layout (Epson L805/L8050 direct print)
+- ~~PVC card tray layout (Epson L805/L8050 direct print)~~ — **shipped PR #210**
 - Toggle options (issue date, download date, QR code, mobile number)
 - Auto photo enhancement (AI brightness/contrast adjustment)
 - Signature box option (PAN)
@@ -805,7 +805,29 @@ Tested locally with both test PDFs after PR #189 merge:
 
 ### What's still open (Phase 3 remaining)
 
-- PVC card tray layout (Epson L805/L8050 direct print)
+- ~~PVC card tray layout (Epson L805/L8050 direct print)~~ — **shipped PR #210**
+- Toggle options (issue date, download date, QR code, mobile number)
+- Auto photo enhancement (AI brightness/contrast adjustment)
+- Signature box option (PAN)
+- Back-side hologram overlay (PAN)
+
+---
+
+## R. ID Card Print — Phase 3 PVC Card Tray Layout (2026-04-26, session #18)
+
+**Status: SHIPPED — PR #210.**
+
+|| # | PR | What shipped | Status |
+||---|------|---------|--------|
+|| R1 | PR #210 | **PVC card tray layout.** Fourth layout toggle option — 1417×1417px (120×120mm at 300 DPI) square canvas sized for Epson L805/L8050 CD/DVD card tray. | **merged** |
+|| R2 | PR #210 | **Dual card slots.** Front card at top, back card below with 71px gap matching physical tray slot spacing. Both centered horizontally. | **merged** |
+|| R3 | PR #210 | **Tray guides.** Dashed border around full canvas area to represent physical tray outline. Card slot outlines (dashed) around each card position for alignment. | **merged** |
+|| R4 | PR #210 | **Corner marks + labels.** Corner marks on both card positions for precision alignment. "Front" / "Back" labels above each slot. | **merged** |
+|| R5 | PR #210 | **Rounded corners support.** Existing rounded corners toggle applies to PVC tray layout — both card slots respect the setting. | **merged** |
+|| R6 | PR #210 | **Footer + download.** Footer text: "PVC Tray · Epson L805/L8050 · 120×120 mm · 300 DPI — Studio Print". Download filename suffix: `-pvc-tray.png`. | **merged** |
+
+### What's still open (Phase 3 remaining)
+
 - Toggle options (issue date, download date, QR code, mobile number)
 - Auto photo enhancement (AI brightness/contrast adjustment)
 - Signature box option (PAN)
