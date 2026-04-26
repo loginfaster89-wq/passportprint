@@ -346,17 +346,39 @@ input.idp-range::-moz-range-thumb{
 /* Hidden util */
 .idp-hidden{display:none !important;}
 
-/* Print styles */
+/* Print styles
+   §AC.17 — fix Print preview showing cards at ~30×20mm on an A4 sheet
+   (instead of the correct CR80 85.6×54mm). The desktop preview cap
+   `.idp-a4-wrap canvas { max-width: min(100%, 460px); max-height: 55vh; }`
+   was being inherited inside `@media print` because the print block
+   only set `width: 100%` without resetting the maxes. In print context,
+   `vh` refers to the printed page height, so 55vh capped the canvas
+   at ~163mm tall (out of 297mm A4) and the 460px width cap shrank it
+   to ~122mm wide (out of 210mm A4) — cards came out tiny and the rest
+   of the sheet went white. Fix: reset `max-width: none` and
+   `max-height: none`, set `width: 100%; height: auto` so aspect ratio
+   is preserved by the canvas bitmap. For 1-Pair / Multi-card the
+   bitmap is 2480×3508 (A4 @ 300 DPI), so width:100% (= 210mm) gives
+   height = 210 × 3508/2480 = 296.97mm ≈ A4 portrait → exact fit.
+   For Dragon (1205×1795) and PVC (1417×1417) the natural aspect is
+   preserved (no distortion). Also force `html/body` margin:0 so the
+   browser doesn't add its own page padding around the canvas. */
 @media print{
   .legal-header,.legal-footer,.idp-hero,.idp-steps,.idp-upload,
   .idp-password,.idp-actions,.idp-info,.idp-detect,.idp-error,
   .idp-loading,.idp-btn,.idp-editor,.idp-option,.idp-layout-toggle,
   .idp-swap-row,
   #sheetTitle,#sheetDesc,nav,footer,header{display:none !important;}
+  html,body{margin:0 !important;padding:0 !important;background:#fff !important;}
   .idp-app{padding:0;max-width:none;margin:0;}
   .idp-preview{border:none;padding:0;background:none;}
-  .idp-a4-wrap{max-width:none;margin:0;}
-  .idp-a4-wrap canvas{border:none;border-radius:0;width:100%;}
+  .idp-a4-wrap{max-width:none;max-height:none;margin:0;padding:0;}
+  .idp-a4-wrap canvas{
+    border:none;border-radius:0;
+    width:100%;height:auto;
+    max-width:none;max-height:none;
+    display:block;margin:0;padding:0;
+  }
   @page{size:A4 portrait;margin:0;}
 }
 
