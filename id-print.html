@@ -311,6 +311,22 @@ input.idp-range::-moz-range-thumb{
   .idp-layout-toggle{font-size:11px;max-width:100%;}
   .idp-layout-opt{padding:8px 4px;}
 }
+/* Move pad (Phase 4 P2 — per-side X/Y nudge, single-card mode only) */
+.idp-move{display:flex;flex-direction:column;gap:10px;margin:14px 0 0;padding:12px;border:1px solid var(--border);border-radius:8px;}
+.idp-move-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-size:13px;}
+.idp-move-label{font-weight:600;color:var(--accent);}
+.idp-move-row label{display:flex;align-items:center;gap:4px;cursor:pointer;}
+.idp-move-step{display:flex;align-items:center;gap:6px;margin-left:auto;}
+.idp-move-step input{width:50px;padding:2px 4px;border:1px solid var(--border);border-radius:4px;background:transparent;color:inherit;font:inherit;}
+.idp-move-pad{display:grid;grid-template-columns:36px 36px 36px;grid-template-rows:36px 36px 36px;gap:4px;justify-content:center;}
+.idp-move-pad button{border:1px solid var(--border);background:transparent;color:inherit;cursor:pointer;font-size:16px;border-radius:4px;padding:0;line-height:1;}
+.idp-move-pad button:hover{border-color:var(--accent);color:var(--accent);}
+.idp-move-pad #moveUp{grid-column:2;grid-row:1;}
+.idp-move-pad #moveLeft{grid-column:1;grid-row:2;}
+.idp-move-pad #moveReset{grid-column:2;grid-row:2;font-size:14px;}
+.idp-move-pad #moveRight{grid-column:3;grid-row:2;}
+.idp-move-pad #moveDown{grid-column:2;grid-row:3;}
+.idp-move-readout{margin-top:4px;text-align:center;font-size:12px;color:#888;font-family:'DM Mono',monospace;}
 </style>
 </head>
 <body>
@@ -442,6 +458,26 @@ input.idp-range::-moz-range-thumb{
       <div id="panToggles" class="idp-hidden">
         <label class="idp-option"><input type="checkbox" id="chkSignatureBox"> Add Signature Box</label>
         <label class="idp-option"><input type="checkbox" id="chkHologram"> Add Hologram Patch</label>
+      </div>
+
+      <!-- Per-side Move pad (single-card mode only) -->
+      <div id="movePad" class="idp-move idp-hidden">
+        <div class="idp-move-row">
+          <span class="idp-move-label">Move</span>
+          <label><input type="radio" name="moveSide" value="front" checked> Front</label>
+          <label><input type="radio" name="moveSide" value="back"> Back</label>
+          <span class="idp-move-step">Step
+            <input type="number" id="moveStep" value="5" min="1" max="50" step="1">px
+          </span>
+        </div>
+        <div class="idp-move-pad">
+          <button type="button" id="moveUp" title="Move up">↑</button>
+          <button type="button" id="moveLeft" title="Move left">←</button>
+          <button type="button" id="moveReset" title="Reset position">⌖</button>
+          <button type="button" id="moveRight" title="Move right">→</button>
+          <button type="button" id="moveDown" title="Move down">↓</button>
+        </div>
+        <div class="idp-move-readout" id="moveReadout">0, 0</div>
       </div>
 
       <!-- Photo editor -->
@@ -967,7 +1003,7 @@ async function processPdfBatch(arrayBuffer, password, fileName) {
     }
 
     return {
-      card: { type: type, front: front, back: back, originalFront: front, originalBack: back, fileName: fileName }
+      card: { type: type, front: front, back: back, originalFront: front, originalBack: back, fileName: fileName, offset: { front: { dx: 0, dy: 0 }, back: { dx: 0, dy: 0 } } }
     };
   } catch (err) {
     if (err.name === 'PasswordException') {
@@ -1035,7 +1071,7 @@ async function processPdf(pdf) {
 
     originalFront = frontImageData;
     originalBack = backImageData;
-    batchCards = [{ type: detectedType, front: frontImageData, back: backImageData, originalFront: frontImageData, originalBack: backImageData, fileName: batchFiles.length > 0 ? batchFiles[0].name : 'PDF' }];
+    batchCards = [{ type: detectedType, front: frontImageData, back: backImageData, originalFront: frontImageData, originalBack: backImageData, fileName: batchFiles.length > 0 ? batchFiles[0].name : 'PDF', offset: { front: { dx: 0, dy: 0 }, back: { dx: 0, dy: 0 } } }];
     resetEditorSliders();
     applyFilters();
 
@@ -1043,6 +1079,7 @@ async function processPdf(pdf) {
       TYPE_ICONS[detectedType] + ' ' + TYPE_LABELS[detectedType] + ' Detected</div>';
     aadhaarToggles.classList.toggle('idp-hidden', detectedType !== 'aadhaar');
     panToggles.classList.toggle('idp-hidden', detectedType !== 'pan');
+    movePad.classList.toggle('idp-hidden', batchCards.length !== 1);
 
     previewTitle.textContent = 'Front & Back Preview';
     batchSheetInfo.classList.add('idp-hidden');
@@ -1621,6 +1658,10 @@ const chkHideIssueDate = $('#chkHideIssueDate');
 const chkHideDownloadDate = $('#chkHideDownloadDate');
 const panToggles = $('#panToggles');
 const chkSignatureBox = $('#chkSignatureBox');
+const movePad = $('#movePad');
+const moveStep = $('#moveStep');
+const moveReadout = $('#moveReadout');
+const moveSideRadios = document.getElementsByName('moveSide');
 const chkHologram = $('#chkHologram');
 
 function getFilterString() {
@@ -1657,6 +1698,13 @@ function drawCardClipped(ctx, src, x, y, w, h, radius) {
   ctx.stroke();
 }
 
+function getOffset(side) {
+  if (batchCards.length === 1 && batchCards[0].offset && batchCards[0].offset[side]) {
+    return batchCards[0].offset[side];
+  }
+  return { dx: 0, dy: 0 };
+}
+
 function drawFiltered(destCanvas, srcCanvas, w, h, filterStr, side) {
   destCanvas.width = w;
   destCanvas.height = h;
@@ -1668,7 +1716,8 @@ function drawFiltered(destCanvas, srcCanvas, w, h, filterStr, side) {
     ctx.clip();
   }
   ctx.filter = filterStr;
-  ctx.drawImage(srcCanvas, 0, 0, w, h);
+  var __off = getOffset(side);
+  ctx.drawImage(srcCanvas, __off.dx, __off.dy, w, h);
   ctx.filter = 'none';
   if (side && detectedType === 'aadhaar') applyAadhaarMasks(ctx, 0, 0, side);
   if (side && detectedType === 'pan') applyPanOverlays(ctx, 0, 0, side);
@@ -1715,7 +1764,49 @@ function onSliderInput() {
 slBright.addEventListener('input', onSliderInput);
 slContrast.addEventListener('input', onSliderInput);
 slSat.addEventListener('input', onSliderInput);
-btnResetEdit.addEventListener('click', () => { resetEditorSliders(); applyFilters(); });
+btnResetEdit.addEventListener('click', () => {
+  resetEditorSliders();
+  if (batchCards.length === 1 && batchCards[0].offset) {
+    batchCards[0].offset = { front: { dx: 0, dy: 0 }, back: { dx: 0, dy: 0 } };
+    refreshMoveReadout();
+  }
+  applyFilters();
+});
+
+function currentMoveSide() {
+  for (var i = 0; i < moveSideRadios.length; i++) {
+    if (moveSideRadios[i].checked) return moveSideRadios[i].value;
+  }
+  return 'front';
+}
+function refreshMoveReadout() {
+  if (batchCards.length !== 1) return;
+  var o = batchCards[0].offset[currentMoveSide()];
+  moveReadout.textContent = o.dx + ', ' + o.dy;
+}
+function nudge(axis, dir) {
+  if (batchCards.length !== 1) return;
+  var side = currentMoveSide();
+  var step = Math.max(1, Math.min(50, parseInt(moveStep.value, 10) || 5));
+  var o = batchCards[0].offset[side];
+  o[axis] = Math.max(-100, Math.min(100, o[axis] + dir * step));
+  refreshMoveReadout();
+  applyFilters();
+}
+$('#moveUp').addEventListener('click',    function(){ nudge('dy', -1); });
+$('#moveDown').addEventListener('click',  function(){ nudge('dy',  1); });
+$('#moveLeft').addEventListener('click',  function(){ nudge('dx', -1); });
+$('#moveRight').addEventListener('click', function(){ nudge('dx',  1); });
+$('#moveReset').addEventListener('click', function(){
+  if (batchCards.length !== 1) return;
+  var side = currentMoveSide();
+  batchCards[0].offset[side] = { dx: 0, dy: 0 };
+  refreshMoveReadout();
+  applyFilters();
+});
+for (var __i = 0; __i < moveSideRadios.length; __i++) {
+  moveSideRadios[__i].addEventListener('change', refreshMoveReadout);
+}
 
 chkRounded.addEventListener('change', () => {
   roundedCorners = chkRounded.checked;
@@ -1780,6 +1871,8 @@ btnBack.addEventListener('click', () => {
   detectedType = null;
   aadhaarToggles.classList.add('idp-hidden');
   panToggles.classList.add('idp-hidden');
+  movePad.classList.add('idp-hidden');
+  if (moveReadout) moveReadout.textContent = '0, 0';
   [chkHideQR, chkHideMobile, chkHideIssueDate, chkHideDownloadDate, chkSignatureBox, chkHologram].forEach(function(c) { c.checked = false; });
   frontImageData = null;
   backImageData = null;
