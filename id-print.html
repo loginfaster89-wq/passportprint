@@ -313,6 +313,24 @@ input.idp-range::-moz-range-thumb{
 }
 .idp-card-wrap canvas.rounded{border-radius:3.6%;}
 
+/* §AC.12 Swap sides toggle — small icon-button below pairCanvas. */
+.idp-swap-row{
+  display:flex;justify-content:center;margin:10px 0 0;
+}
+.idp-swap-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:6px 12px;font-family:'DM Mono',monospace;font-size:11px;
+  letter-spacing:.04em;color:var(--muted);
+  background:var(--surface);border:1px solid var(--border);border-radius:6px;
+  cursor:pointer;transition:border-color .15s,color .15s,background .15s;
+}
+.idp-swap-btn:hover{border-color:var(--accent);color:var(--accent);}
+.idp-swap-btn.is-active{
+  border-color:var(--accent);color:var(--accent);
+  background:rgba(240,165,0,.08);
+}
+.idp-swap-icon{font-size:14px;line-height:1;}
+
 /* Hidden util */
 .idp-hidden{display:none !important;}
 
@@ -321,6 +339,7 @@ input.idp-range::-moz-range-thumb{
   .legal-header,.legal-footer,.idp-hero,.idp-steps,.idp-upload,
   .idp-password,.idp-actions,.idp-info,.idp-detect,.idp-error,
   .idp-loading,.idp-btn,.idp-editor,.idp-option,.idp-layout-toggle,
+  .idp-swap-row,
   #sheetTitle,#sheetDesc,nav,footer,header{display:none !important;}
   .idp-app{padding:0;max-width:none;margin:0;}
   .idp-preview{border:none;padding:0;background:none;}
@@ -469,6 +488,17 @@ input.idp-range::-moz-range-thumb{
                edge-to-edge — mirrors the 1-pair sheet output. -->
           <canvas id="pairCanvas" class="idp-preview-canvas-pair" width="2022" height="638"></canvas>
         </div>
+      </div>
+      <!-- §AC.12 Swap sides toggle (preview-only — sheet builders untouched).
+           Default: front-LEFT / back-RIGHT. Click to flip. State persists in
+           idp:prefs:v1 under `swapSides`. -->
+      <div class="idp-swap-row">
+        <button type="button" id="btnSwapSides" class="idp-swap-btn"
+                title="Front/Back ki side swap karo"
+                aria-label="Swap Front and Back sides">
+          <span class="idp-swap-icon" aria-hidden="true">&#8646;</span>
+          <span class="idp-swap-label">Swap sides</span>
+        </button>
       </div>
       <!-- Options -->
       <label class="idp-option">
@@ -764,6 +794,7 @@ const batchSheetInfo = $('#batchSheetInfo');
 let currentLayout = 'multi';
 let roundedCorners = false;
 let cutMarks = true;
+let swapSides = false; /* §AC.12 — preview-only flip; sheet builders untouched */
 const CARD_RADIUS = 36;
 
 /* Legacy single-card state (used when only 1 PDF) */
@@ -1669,6 +1700,7 @@ const btnResetEdit = $('#btnResetEdit');
 const btnAutoEnhance = $('#btnAutoEnhance');
 const chkRounded = $('#chkRounded');
 const chkCutMarks = $('#chkCutMarks');
+const btnSwapSides = $('#btnSwapSides'); /* §AC.12 */
 const panelPosition = $('#panelPosition');
 const movePad = $('#movePad');
 const moveStep = $('#moveStep');
@@ -1718,6 +1750,10 @@ function drawCardClipped(ctx, src, x, y, w, h, radius) {
    look after cutting. If a side is missing (e.g. some PAN PDFs render
    only the front), that half stays as the light-grey placeholder. */
 function compositePair(canvas, frontReady, backReady) {
+  /* §AC.12 — when swapSides is on, draw back-LEFT / front-RIGHT instead of
+     the default front-LEFT / back-RIGHT. Per-half rounded clip paths follow
+     the swapped order automatically since they're tied to dx position. */
+  if (swapSides) { var __t = frontReady; frontReady = backReady; backReady = __t; }
   canvas.width = CR80_W * 2;
   canvas.height = CR80_H;
   var ctx = canvas.getContext('2d');
@@ -1827,6 +1863,7 @@ function savePrefs() {
     var prefs = {
       rounded: chkRounded.checked,
       cutMarks: chkCutMarks.checked,
+      swapSides: swapSides,
       bright: parseInt(slBright.value, 10),
       contrast: parseInt(slContrast.value, 10),
       sat: parseInt(slSat.value, 10)
@@ -1848,6 +1885,11 @@ function loadPrefs() {
     if (typeof p.cutMarks === 'boolean') {
       chkCutMarks.checked = p.cutMarks;
       cutMarks = p.cutMarks;
+    }
+    if (typeof p.swapSides === 'boolean') {
+      swapSides = p.swapSides;
+      btnSwapSides.classList.toggle('is-active', swapSides);
+      btnSwapSides.setAttribute('aria-pressed', swapSides ? 'true' : 'false');
     }
     if (typeof p.bright === 'number') { slBright.value = p.bright; valBright.textContent = p.bright + '%'; }
     if (typeof p.contrast === 'number') { slContrast.value = p.contrast; valContrast.textContent = p.contrast + '%'; }
@@ -1997,6 +2039,19 @@ chkRounded.addEventListener('change', () => {
 chkCutMarks.addEventListener('change', function() {
   cutMarks = chkCutMarks.checked;
   buildSheet();
+  savePrefs();
+});
+
+/* §AC.12 — Swap sides toggle. Preview-only flip; sheet builders untouched.
+   Works in both single-PDF mode (re-runs applyFilters → repaints pairCanvas)
+   and batch mode (re-runs applyBatchFilters → repaints every per-card pair
+   canvas). State persists in idp:prefs:v1 under `swapSides`. */
+btnSwapSides.addEventListener('click', function() {
+  swapSides = !swapSides;
+  btnSwapSides.classList.toggle('is-active', swapSides);
+  btnSwapSides.setAttribute('aria-pressed', swapSides ? 'true' : 'false');
+  if (batchCards.length > 1) applyBatchFilters();
+  else applyFilters();
   savePrefs();
 });
 
