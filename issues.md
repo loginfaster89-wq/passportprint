@@ -843,3 +843,87 @@ Tested locally with both test PDFs after PR #189 merge:
 |||---|------|---------|--------|
 ||| S1 | PR #213 | **Nav dropdown subtitle update (7 pages).** Changed from "Aadhaar · PAN · Voter ID · CR80 sheet" to "Aadhaar · PAN · Voter · Ayushman · more" on index.html, about.html, contact.html, privacy.html, terms.html, refund.html, shipping.html. Now matches id-print.html which was already updated in PR #205. | **merged** |
 ||| S2 | PR #213 | **Homepage feature card description.** Updated to mention all 6 card types (Aadhaar, PAN, Voter ID, Ayushman, Jan Aadhaar, eShram) plus batch processing, multi-card A4, Dragon sheet, PVC tray print, photo editing. | **merged** |
+
+---
+
+## T. ID Card Print — Phase 3 Toggle Options (Aadhaar) — Research Complete
+
+**Status: RESEARCH DONE (PR #215 docs). Coding pending.**
+
+### T.1 What this feature is
+
+Aadhaar card ke preview + output (A4, Dragon sheet, PVC tray, multi-card) mein
+4 checkbox toggles add karne hain jo specific fields ko hide/show karein:
+- **Issue Date** (back card)
+- **Download Date** (back card)
+- **Mobile Number** (back card, partially masked)
+- **QR Code** (back card, bottom-right)
+
+Competitor reference: eCardCutter (go24.info) — already has this feature free.
+
+### T.2 Technical approach
+
+Card rendering is canvas-based — PDF page rasterized, then crop region extracted
+and scaled to CR80 (1011×638px). Fields ko hide karne ka method:
+**white rectangle overlay drawn post-crop** over fixed pixel regions.
+
+After `drawFilteredToCanvas()` ya `drawCardClipped()`, ek `applyAadhaarMasks()`
+function call hoga jo checked toggles ke basis par white/background-colored
+rectangles draw karega un regions par.
+
+### T.3 Approximate field positions on Aadhaar BACK card at CR80 (1011×638px)
+
+Ye positions eAadhaar standard layout se estimated hain — test PDF se
+verify + fine-tune karna hoga.
+
+```javascript
+const AADHAAR_FIELD_MASKS = {
+  qrCode:       { side: 'back', x: 710, y: 10,  w: 295, h: 615 }, // right column, full height
+  mobileNumber: { side: 'back', x:   8, y: 310, w: 580, h:  80 }, // middle-left row
+  issueDate:    { side: 'back', x:   8, y: 460, w: 480, h:  70 }, // lower-left row
+  downloadDate: { side: 'back', x:   8, y: 540, w: 480, h:  85 }, // bottom-left row
+};
+```
+
+**Note:** These are approximate — run test PDF (aadhaar-test.pdf pw: SUNI1986),
+visually inspect rendered back card, adjust x/y/w/h values to precisely cover
+each field without touching adjacent content.
+
+### T.4 Implementation plan (id-print.html only)
+
+1. **Add 4 checkboxes** in the preview step UI (`.idp-options` section, after
+   the existing Rounded Corners checkbox). Show only when `detectedType === 'aadhaar'`.
+   Labels: "Hide QR Code", "Hide Mobile No.", "Hide Issue Date", "Hide Download Date".
+   Default: all unchecked (show everything).
+
+2. **Add `applyAadhaarMasks(ctx, w, h)` function** — reads the 4 checkbox states,
+   draws `ctx.fillStyle = '#ffffff'` rectangles over matched regions (scaled to
+   actual canvas dimensions using w/h ratio from CR80 reference).
+
+3. **Call `applyAadhaarMasks()` everywhere a card canvas is finalized:**
+   - After `drawFilteredToCanvas()` in `refreshPreview()`
+   - After `drawCardClipped()` / `ctx.drawImage()` in `buildA4Sheet()`
+   - After card drawing in `buildDragonSheet()`
+   - After card drawing in `buildPvcTray()`
+   - After card drawing in batch preview refresh
+
+4. **Live toggle effect:** Each checkbox `change` event calls `refreshPreview()`
+   (already exists) — so masks apply immediately on toggle without re-processing
+   the PDF.
+
+5. **Batch mode:** In batch, `detectedType` per card is `card.type` — only show
+   mask UI for Aadhaar cards. For non-Aadhaar cards in batch, skip masks.
+
+### T.5 CSS / UI notes
+
+- Use existing `.idp-option` class for each checkbox row (same as Rounded Corners).
+- Group the 4 Aadhaar toggles under a small label like "Aadhaar field options"
+  or just add them as 4 separate `.idp-option` rows.
+- Hide the group with `display:none` for non-Aadhaar card types (JS toggle on
+  detect badge update).
+- No new CSS tokens — use existing `--surface`, `--border`, `--text`.
+
+### T.6 What's NOT in scope for this PR
+
+- PAN/Voter ID toggles — separate PR later, explicitly requested.
+- Auto photo enhancement, signature box, hologram overlay — separate PRs.

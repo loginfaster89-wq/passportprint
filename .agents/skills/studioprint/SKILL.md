@@ -102,6 +102,13 @@ No dev server — edit source, `npm run build`, preview from `dist/`.
     Never skip the second half — the user needs updated docs and a
     fresh prompt to start the next session efficiently. If quota is
     tight, prioritise the docs update over extra polish on the feature.
+14. **Research → docs → code (2026-04-26).** Kisi bhi naye feature par
+    coding shuru karne se PEHLE, usi session mein Devin helping files
+    (`SKILL.md`, `AGENTS.md`, `issues.md`) ko research findings ke saath
+    update karo — ek alag "docs update PR" banao. Ye ensure karta hai ki
+    quota khatam hone ya session break hone par bhi research safe rahe
+    aur agli session bina re-research ke directly coding shuru kar sake.
+    Rule: Research → Docs PR → Coding PR. Kabhi skip mat karo.
 
 ## 3. Create a PR (fine-grained PAT flow)
 
@@ -393,7 +400,7 @@ card sizes, lamination specs, and feature plan documented in
 - ~~Ayushman/Jan Aadhaar/eShram support~~ — **shipped PR #205**
 - ~~Batch processing (multiple PDFs)~~ — **shipped PR #208**
 - ~~PVC card tray layout (Epson L805/L8050)~~ — **shipped PR #210**
-- Toggle options (issue date, QR, mobile no, download date)
+- ~~Toggle options (issue date, QR, mobile no, download date)~~ — **research done (PR #215 docs), coding ready — see §T in issues.md**
 - Auto photo enhancement
 - Signature box option (PAN)
 - Back-side hologram overlay (PAN)
@@ -442,12 +449,12 @@ Clone ke baad pehle ye teen files padho:
 AGENTS.md — full source of truth
 issues.md — full audit + §M ID Card Print research + §O Phase 2 multi-card
   + §P Phase 3 Ayushman/Jan Aadhaar/eShram + §Q batch processing
-  + §R PVC card tray + §S copy update
+  + §R PVC card tray + §S copy update + §T toggle options research
 
-Last PR: PR #213 (copy: update ID Card Print nav dropdown + feature card)
+Last PR: PR #215 (docs: toggle options research + new rules in SKILL.md/AGENTS.md)
 
 Shipped summary (don't redo):
-PRs #70–#213: all previous work shipped
+PRs #70–#215: all previous work shipped
 - PRs #70–#189: original audit + Document Sheet + ID Card Print Phase 1
 - PR #190: docs update
 - PR #191: ID Card Print Phase 2 — photo editing (brightness/contrast/
@@ -470,6 +477,9 @@ PRs #70–#213: all previous work shipped
 - PR #210: ID Card Print Phase 3 — PVC card tray layout (Epson L805/L8050)
 - PR #212: docs — mark PVC tray shipped, add §R, update prompt
 - PR #213: copy — update ID Card Print nav dropdown + feature card
+- PR #214: docs — fix gaps in SKILL.md §9/§11 + AGENTS.md open backlog
+- PR #215: docs — toggle options research (§T in issues.md) + new rules
+  (rule #14 in SKILL.md, rule #10 in AGENTS.md: research→docs→code)
 
 ID Card Print current state:
 - Phase 1 MVP COMPLETE + VERIFIED (PR #188)
@@ -477,13 +487,16 @@ ID Card Print current state:
   photo editing (#191), multi-card A4 (#193), cut marks (#193),
   rounded corners (#194/#197), Voter ID (#202), Dragon sheet (#203)
 - Phase 3 PARTIAL — Ayushman/Jan Aadhaar/eShram (#205) + batch (#208)
-  + PVC tray (#210) shipped. Remaining: toggles, auto enhance
+  + PVC tray (#210) + copy update (#213) + toggle research docs (#215).
+  Remaining coding: toggle implementation, auto enhance
 
 Test PDFs repo mein saved hain:
 test-pdfs/pan-test.pdf (password: 05071999)
 test-pdfs/aadhaar-test.pdf (password: SUNI1986)
 
-TASK: <yahan task likho>
+TASK: ID Card Print Phase 3 — Aadhaar toggle options implement karo.
+issues.md §T mein poora implementation plan + field positions hai.
+Sirf id-print.html edit karo. Ek PR banao.
 
 Remaining Phase 3 features listed in SKILL.md §9 — do NOT implement
 unless explicitly asked.
