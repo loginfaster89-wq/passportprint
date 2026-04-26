@@ -70,6 +70,7 @@ and overall aesthetic are not.
 | -------------------------- | ----------------------------------------------------- |
 | `index.html`               | Homepage (hero, features, audience, why, how, pricing, FAQ, CTA) |
 | `passport-photo.html`      | The live passport photo tool (5000+ lines, with its own inline copies of the nav / auth / Google Sign-In markup and a small hash-open script) |
+| `id-print.html`            | ID Card Print tool — Aadhaar/PAN PDF upload, password unlock, auto-detect, auto-crop front+back, CR80 output, A4 fold-and-laminate sheet, photo editing (brightness/contrast/saturation), download PNG + print. All client-side. Shared nav/auth/footer. |
 | `about.html`, `contact.html`, `privacy.html`, `terms.html`, `refund.html`, `shipping.html` | Legal / info pages, share the header + footer with `index.html` |
 | `assets/auth.js` + `auth.css` | Shared login / signup / OTP / Google Sign-In modal + account modal (plan info, upgrade, delete account). `position: fixed; z-index: 10000` overlay. Include on any page that has `.legal-header` with a `#hdrAuthBtn` button. |
 | `assets/pricing.js` + `pricing.css` | Shared 2-step pricing modal (Choose Plan → Complete Payment → Razorpay). Included on every page except `passport-photo.html`. Exposes `window.openPlans` / `window.startCheckout`. Load AFTER `auth.js`. |
@@ -246,7 +247,7 @@ scan bounds (merged but did NOT fully fix). PR #171 docs update.
 PR #182 PAN/Aadhaar CR80 card size standardization + auto-trim both
 cards + test PDFs saved in `test-pdfs/`.
 
-**Also resolved (PRs #183–#189):** PR #183 card system rebuild docs.
+**Also resolved (PRs #183–#191):** PR #183 card system rebuild docs.
 PR #184 front-card-only crop fix. PR #185 removed `document-sheet.html`
 entirely — clean slate for new ID print feature. PR #186 ID Card Print
 research + implementation plan (§M). PR #188 **ID Card Print Phase 1
@@ -255,15 +256,20 @@ auto-detect Aadhaar/PAN, auto-crop front+back, CR80 output
 (1011×638px at 300 DPI), side-by-side preview, A4 fold-and-laminate
 layout, download PNG + print. PR #189 fix Aadhaar PDF detection —
 expanded keyword list (`enrolment`, `download date`, `issue date`).
+PR #190 docs update for #186–#189. PR #191 **ID Card Print Phase 2
+photo editing** — brightness/contrast/saturation sliders with live
+preview, output carries through to A4 sheet, reset button, mobile-
+responsive.
 
 **Verified (2026-04-26):** ID Card Print Phase 1 MVP fully tested with
 both test PDFs — PAN and Aadhaar flows ALL PASSED (upload, password
 unlock, auto-detect, front+back preview, CR80 output, A4 sheet).
 
 **Open backlog:**
-- **ID Card Print Phase 2** — photo editing (brightness/contrast/
-  saturation), multiple cards per A4 (4-5 pairs), cut marks/guides,
-  rounded border option, Voter ID support, Dragon sheet layout.
+- **ID Card Print Phase 2 (remaining)** — multiple cards per A4
+  (4-5 pairs), cut marks/guides, rounded border option, Voter ID
+  support, Dragon sheet layout. (Photo editing already shipped in
+  PR #191.)
 - **ID Card Print Phase 3** — Ayushman/Jan Aadhaar/eShram, batch
   processing, PVC card tray (Epson L805/L8050), toggle options, auto
   photo enhancement.

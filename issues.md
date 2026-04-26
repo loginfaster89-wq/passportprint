@@ -303,7 +303,9 @@ Shipped in two PRs:
 
 ## J. PAN Photo Only — face isolation bug (2026-04-25, session #9)
 
-**Status: OPEN — not fixed yet. Priority for next session.**
+**Status: SUPERSEDED — old `document-sheet.html` deleted (PR #185), new
+`id-print.html` (PR #188) uses a completely different crop system. This
+bug no longer applies.**
 
 ### Problem
 
@@ -366,7 +368,8 @@ Aadhaar but **fails for PAN** because:
 
 ## K. Card size standardization + lamination fit (2026-04-25, session #10)
 
-**Status: PR #182 — fixes card size mismatch.**
+**Status: SUPERSEDED — old code deleted (PR #185), rebuilt from scratch
+in `id-print.html` (PR #188) with correct CR80 sizing baked in.**
 
 ### Problem
 
@@ -404,7 +407,9 @@ proportions, the resulting printed cards were different sizes.
 
 ## L. Full Aadhaar/PAN card system rebuild (2026-04-25, session #11)
 
-**Status: OPEN — full rebuild planned, step-by-step across multiple PRs.**
+**Status: RESOLVED — PR #185 deleted old `document-sheet.html`, PR #188
+rebuilt from scratch as `id-print.html` (ID Card Print Phase 1 MVP).
+PR #189 fixed Aadhaar detection. PR #191 added Phase 2 photo editing.**
 
 ### Background
 
@@ -532,7 +537,8 @@ The new feature will be built from scratch as `id-print.html` (see §M).
 
 ## M. ID Card Print feature — research + implementation plan (2026-04-25)
 
-**Status: OPEN — Phase 1 MVP ready to implement.**
+**Status: Phase 1 COMPLETE (PR #188, verified 2026-04-26). Phase 2 photo
+editing SHIPPED (PR #191). Remaining Phase 2/3 items open — see §M.6.**
 
 PR #185 deleted the old broken `document-sheet.html`. This section
 documents the competitor research and implementation plan for the
@@ -627,7 +633,7 @@ placed inside pouch, heat-sealed.
 12. Update nav dropdown with link to new page
 
 **Phase 2 (follow-up PRs):**
-- Photo editing (brightness/contrast/saturation/warmth/shadows)
+- ~~Photo editing (brightness/contrast/saturation)~~ — **shipped PR #191**
 - Multiple cards per A4 sheet (4-5 card pairs to save paper)
 - Cut marks / dashed guides on A4 output
 - Rounded border option
@@ -701,3 +707,32 @@ Tested locally with both test PDFs after PR #189 merge:
 | Aadhaar CR80 output (1011×638px, 300 DPI) | PASSED |
 
 **Phase 1 MVP is COMPLETE and VERIFIED. Ready for Phase 2 when requested.**
+
+---
+
+## N. ID Card Print — Phase 2 photo editing (2026-04-26, session #13)
+
+**Status: SHIPPED — PR #191.**
+
+| # | PR | What shipped | Status |
+|---|------|---------|--------|
+| N1 | PR #190 | **Docs update.** Updated shipped summary + verification results for PRs #186–#189. | **merged** |
+| N2 | PR #191 | **Photo editing controls.** Real-time brightness/contrast/saturation sliders on preview step. Canvas `ctx.filter` (CSS filter syntax). Edited output carries through to A4 sheet generation. Reset button. Hidden in `@media print`. Mobile-responsive (sliders stack vertically ≤640px). Existing design tokens only, no new deps. | **merged** |
+
+### What's still open (Phase 2 remainder + Phase 3)
+
+**Phase 2 (not yet implemented):**
+- Multiple cards per A4 sheet (4-5 card pairs to save paper)
+- Cut marks / dashed guides on A4 output
+- Rounded border option
+- Voter ID support
+- Dragon sheet (4×6) layout option (2 cards per sheet)
+
+**Phase 3 (future):**
+- Ayushman / Jan Aadhaar / eShram support
+- Batch processing (multiple PDFs at once)
+- PVC card tray layout (Epson L805/L8050 direct print)
+- Toggle options (issue date, download date, QR code, mobile number)
+- Auto photo enhancement (AI brightness/contrast adjustment)
+- Signature box option (PAN)
+- Back-side hologram overlay (PAN)

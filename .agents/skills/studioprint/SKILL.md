@@ -273,6 +273,11 @@ audit trail. Do NOT re-fix any of the following — they are all merged:
   client-side. Shared nav/auth/footer.
 - PR #189: fix Aadhaar PDF detection — expanded keyword list with
   `enrolment`, `download date`, `issue date` (4 hits now vs 1 before).
+- PR #190: docs update for PRs #186–#189 verification results.
+- PR #191: **ID Card Print Phase 2 photo editing** —
+  brightness/contrast/saturation sliders with live preview via canvas
+  `ctx.filter`. Output carries through to A4 sheet. Reset button.
+  Mobile-responsive (≤640px stacks vertically). Existing tokens only.
 
 **Verified (2026-04-26):** Both test PDFs fully working:
 - PAN PDF: upload → password unlock (05071999) → auto-detect PAN →
@@ -327,7 +332,7 @@ card sizes, lamination specs, and feature plan documented in
 9. Shared nav/auth/footer (legal.css, nav.js, auth.js, pricing.js)
 
 **Phase 2 (follow-up PRs):**
-- Photo editing (brightness/contrast/saturation)
+- ~~Photo editing (brightness/contrast/saturation)~~ — **shipped PR #191**
 - Multiple cards per A4 (4-5 pairs per sheet)
 - Cut marks/guides on A4 output
 - Rounded border option
@@ -349,6 +354,7 @@ vertically. Never shrink text below these minimums. If adding features,
 add them to all 3 cards consistently.
 
 **Open:** `F7` GSI iframe warnings (not our code, harmless).
+Phase 2 remainder + Phase 3 items — see lists above.
 
 ## 10. Related repos
 
@@ -380,21 +386,24 @@ Studio Print frontend par kaam karo. Repo: loginfaster89-wq/passportprint
 Clone ke baad pehle ye teen files padho:
 .agents/skills/studioprint/SKILL.md — Devin recipe
 AGENTS.md — full source of truth
-issues.md — full audit + §M ID Card Print research
+issues.md — full audit + §M ID Card Print research + §N Phase 2
 
-Last PR: PR #189 (fix: Aadhaar PDF detection — expand keyword list for
-eAadhaar text layer)
+Last PR: PR #191 (feat: add photo editing controls to ID Card Print —
+brightness/contrast/saturation sliders)
 
 Shipped summary (don't redo):
-PRs #70–#189: all previous work shipped
+PRs #70–#191: all previous work shipped
+- PRs #70–#189: original audit + Document Sheet + ID Card Print Phase 1
+- PR #190: docs update
+- PR #191: ID Card Print Phase 2 — photo editing (brightness/contrast/
+  saturation sliders with live preview)
 
-PR #189 TEST RESULTS (tested 2026-04-26):
-
-PAN PDF: ALL PASSED — upload, password unlock, auto-detect, front+back
-preview, CR80 output, A4 fold-and-laminate sheet, download PNG, print.
-Aadhaar PDF: ALL PASSED — upload, password unlock, auto-detect (4 keyword
-hits: vid, enrolment, download date, issue date), front+back preview,
-CR80 output.
+ID Card Print current state:
+- Phase 1 MVP COMPLETE + VERIFIED (PR #188)
+- Phase 2 photo editing SHIPPED (PR #191)
+- Phase 2 remainder OPEN: multi-card A4, cut marks, rounded borders,
+  Voter ID, Dragon sheet
+- Phase 3 OPEN: Ayushman/Jan Aadhaar/eShram, batch, PVC tray, toggles
 
 Test PDFs repo mein saved hain:
 test-pdfs/pan-test.pdf (password: 05071999)
@@ -402,6 +411,6 @@ test-pdfs/aadhaar-test.pdf (password: SUNI1986)
 
 TASK: [INSERT NEXT TASK HERE]
 
-Phase 2/3 features listed in SKILL.md §9 — do NOT implement unless
-explicitly asked.
+Phase 2 remainder / Phase 3 features listed in SKILL.md §9 — do NOT
+implement unless explicitly asked.
 ```
