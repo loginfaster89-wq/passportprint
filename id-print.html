@@ -282,6 +282,20 @@ input.idp-range::-moz-range-thumb{
 }
 .idp-card-wrap canvas.rounded{border-radius:3.6%;}
 
+/* Aadhaar field toggles */
+.idp-aadhaar-toggles{
+  margin:14px 0 0;padding:12px 16px;border-radius:10px;
+  background:var(--surface2);border:1px solid var(--border);
+}
+.idp-toggles-title{
+  font-family:'Syne',sans-serif;font-size:12px;font-weight:600;
+  color:var(--text);margin-bottom:8px;letter-spacing:0.3px;
+}
+.idp-toggles-grid{
+  display:flex;flex-wrap:wrap;gap:6px 20px;
+}
+.idp-toggles-grid .idp-option{margin:0;}
+
 /* Hidden util */
 .idp-hidden{display:none !important;}
 
@@ -289,7 +303,7 @@ input.idp-range::-moz-range-thumb{
 @media print{
   .legal-header,.legal-footer,.idp-hero,.idp-steps,.idp-upload,
   .idp-password,.idp-actions,.idp-info,.idp-detect,.idp-error,
-  .idp-loading,.idp-btn,.idp-editor,.idp-option,.idp-layout-toggle,
+  .idp-loading,.idp-btn,.idp-editor,.idp-option,.idp-aadhaar-toggles,.idp-layout-toggle,
   #sheetTitle,#sheetDesc,nav,footer,header{display:none !important;}
   .idp-app{padding:0;max-width:none;margin:0;}
   .idp-preview{border:none;padding:0;background:none;}
@@ -431,6 +445,29 @@ input.idp-range::-moz-range-thumb{
         <input type="checkbox" id="chkRounded">
         Rounded Corners
       </label>
+
+      <!-- Aadhaar field toggles (visible only for Aadhaar cards) -->
+      <div id="aadhaarToggles" class="idp-aadhaar-toggles idp-hidden">
+        <div class="idp-toggles-title">Hide Fields</div>
+        <div class="idp-toggles-grid">
+          <label class="idp-option">
+            <input type="checkbox" id="chkHideIssueDate">
+            Issue Date
+          </label>
+          <label class="idp-option">
+            <input type="checkbox" id="chkHideQR">
+            QR Code
+          </label>
+          <label class="idp-option">
+            <input type="checkbox" id="chkHideMobile">
+            Mobile Number
+          </label>
+          <label class="idp-option">
+            <input type="checkbox" id="chkHideDownloadDate">
+            Download Date
+          </label>
+        </div>
+      </div>
 
       <!-- Photo editor -->
       <div class="idp-editor">
@@ -650,6 +687,20 @@ const batchSheetInfo = $('#batchSheetInfo');
 let currentLayout = 'multi';
 let roundedCorners = false;
 const CARD_RADIUS = 36;
+
+/* Aadhaar field toggle state */
+let hideIssueDate = false;
+let hideQR = false;
+let hideMobile = false;
+let hideDownloadDate = false;
+
+/* Mask regions: [x, y, w, h] as fractions of the cropped card canvas */
+const AADHAAR_MASKS = {
+  issueDate:    { side: 'front', region: [0.52, 0.84, 0.47, 0.16] },
+  qr:           { side: 'back',  region: [0.0,  0.0,  0.42, 0.88] },
+  mobile:       { side: 'back',  region: [0.0,  0.52, 1.0,  0.18] },
+  downloadDate: { side: 'back',  region: [0.0,  0.82, 1.0,  0.18] }
+};
 
 /* Legacy single-card state (used when only 1 PDF) */
 let pdfArrayBuffer = null;
@@ -1017,6 +1068,9 @@ async function processPdf(pdf) {
     detectBadge.innerHTML = '<div class="idp-detect ' + detectedType + '">' +
       TYPE_ICONS[detectedType] + ' ' + TYPE_LABELS[detectedType] + ' Detected</div>';
 
+    /* Show Aadhaar toggles only for Aadhaar cards */
+    aadhaarToggles.classList.toggle('idp-hidden', detectedType !== 'aadhaar');
+
     previewTitle.textContent = 'Front & Back Preview';
     batchSheetInfo.classList.add('idp-hidden');
 
@@ -1038,6 +1092,10 @@ function showBatchPreview() {
       TYPE_ICONS[card.type] + ' ' + TYPE_LABELS[card.type] + '</div>';
   });
   detectBadge.innerHTML = badgeHtml;
+
+  /* Show Aadhaar toggles if any batch card is Aadhaar */
+  var hasAadhaar = batchCards.some(function(c) { return c.type === 'aadhaar'; });
+  aadhaarToggles.classList.toggle('idp-hidden', !hasAadhaar);
 
   previewTitle.textContent = batchCards.length + ' Cards — Front & Back Preview';
 
@@ -1138,6 +1196,7 @@ function applyBatchFilters() {
     ctxF.filter = f;
     ctxF.drawImage(card.originalFront, 0, 0, CR80_W, CR80_H);
     ctxF.filter = 'none';
+    applyAadhaarMasks(tmpF, 'front', card.type);
     card.front = tmpF;
 
     var tmpB = document.createElement('canvas');
@@ -1149,6 +1208,7 @@ function applyBatchFilters() {
     ctxB.filter = f;
     ctxB.drawImage(card.originalBack, 0, 0, CR80_W, CR80_H);
     ctxB.filter = 'none';
+    applyAadhaarMasks(tmpB, 'back', card.type);
     card.back = tmpB;
   });
 
@@ -1159,6 +1219,7 @@ function applyBatchFilters() {
     if (idx < batchCards.length) {
       var src = side === 'front' ? batchCards[idx].originalFront : batchCards[idx].originalBack;
       drawFilteredToCanvas(c, src, CR80_W, CR80_H);
+      applyAadhaarMasks(c, side, batchCards[idx].type);
     }
   });
 }
@@ -1526,6 +1587,31 @@ const valContrast = $('#valContrast');
 const valSat = $('#valSat');
 const btnResetEdit = $('#btnResetEdit');
 const chkRounded = $('#chkRounded');
+const aadhaarToggles = $('#aadhaarToggles');
+const chkHideIssueDate = $('#chkHideIssueDate');
+const chkHideQR = $('#chkHideQR');
+const chkHideMobile = $('#chkHideMobile');
+const chkHideDownloadDate = $('#chkHideDownloadDate');
+
+function applyAadhaarMasks(canvas, side, type) {
+  if (type !== 'aadhaar') return;
+  var ctx = canvas.getContext('2d');
+  var w = canvas.width;
+  var h = canvas.height;
+  ctx.fillStyle = '#fff';
+  var masks = [
+    { enabled: hideIssueDate,    def: AADHAAR_MASKS.issueDate },
+    { enabled: hideQR,           def: AADHAAR_MASKS.qr },
+    { enabled: hideMobile,       def: AADHAAR_MASKS.mobile },
+    { enabled: hideDownloadDate, def: AADHAAR_MASKS.downloadDate }
+  ];
+  masks.forEach(function(m) {
+    if (m.enabled && m.def.side === side) {
+      var r = m.def.region;
+      ctx.fillRect(Math.round(r[0] * w), Math.round(r[1] * h), Math.round(r[2] * w), Math.round(r[3] * h));
+    }
+  });
+}
 
 function getFilterString() {
   var b = slBright.value;
@@ -1580,6 +1666,7 @@ function applyFilters() {
   var f = getFilterString();
   if (originalFront) {
     drawFiltered(cardFrontCanvas, originalFront, CR80_W, CR80_H, f);
+    applyAadhaarMasks(cardFrontCanvas, 'front', detectedType);
     frontImageData = document.createElement('canvas');
     frontImageData.width = CR80_W;
     frontImageData.height = CR80_H;
@@ -1587,6 +1674,7 @@ function applyFilters() {
   }
   if (originalBack) {
     drawFiltered(cardBackCanvas, originalBack, CR80_W, CR80_H, f);
+    applyAadhaarMasks(cardBackCanvas, 'back', detectedType);
     backImageData = document.createElement('canvas');
     backImageData.width = CR80_W;
     backImageData.height = CR80_H;
@@ -1629,6 +1717,19 @@ chkRounded.addEventListener('change', () => {
   });
   applyFilters();
 });
+
+/* Aadhaar field toggle handlers */
+function onAadhaarToggle() {
+  hideIssueDate = chkHideIssueDate.checked;
+  hideQR = chkHideQR.checked;
+  hideMobile = chkHideMobile.checked;
+  hideDownloadDate = chkHideDownloadDate.checked;
+  applyFilters();
+}
+chkHideIssueDate.addEventListener('change', onAadhaarToggle);
+chkHideQR.addEventListener('change', onAadhaarToggle);
+chkHideMobile.addEventListener('change', onAadhaarToggle);
+chkHideDownloadDate.addEventListener('change', onAadhaarToggle);
 
 /* ── Layout toggle ── */
 document.querySelectorAll('.idp-layout-opt').forEach(function(btn) {
@@ -1688,6 +1789,11 @@ btnBack.addEventListener('click', () => {
   queueActions.classList.add('idp-hidden');
   batchCount.classList.add('idp-hidden');
   batchSheetInfo.classList.add('idp-hidden');
+  /* Reset Aadhaar toggles */
+  hideIssueDate = false; hideQR = false; hideMobile = false; hideDownloadDate = false;
+  chkHideIssueDate.checked = false; chkHideQR.checked = false;
+  chkHideMobile.checked = false; chkHideDownloadDate.checked = false;
+  aadhaarToggles.classList.add('idp-hidden');
   /* Restore original preview HTML */
   batchCardsContainer.innerHTML = '<div class="idp-cards">' +
     '<div class="idp-card-wrap"><span>Front</span><canvas id="cardFront" width="1011" height="638"></canvas></div>' +
