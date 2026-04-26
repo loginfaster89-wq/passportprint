@@ -2929,3 +2929,197 @@ very top of the actual Aadhaar card content on some PDF variants,
 the simple rollback is to bump `y` back partway (e.g. `0.6770` and
 h `0.2046`) — values were derived from CR80 aspect math against
 `test-pdfs/aadhaar-test.pdf`, not measured on every variant.
+
+---
+
+## §AC.15 ID Card Print — Push 1-Pair sheet flush to top + black top edge line
+
+**Status:** SHIPPED — PR #262.
+
+**User feedback (Hinglish, follow-up to §AC.14):**
+
+> 1. Card abhi bhi top se thoda neeche hai, **bilkul top tak push** karo
+>    (ek dam upar le aao).
+> 2. Aadhaar card ke **upper wali side jo "sizer wali line" hai** uske
+>    jagah par ek **black line add karo** — currently top edge khali
+>    dikhta hai (perforation strip §AC.14 mein crop ho gayi thi, ab top
+>    border missing lagta hai).
+
+**Investigation:**
+
+- §AC.14 set `var startY = 80;` (~7 mm @ 300 DPI). User wants closer to
+  top — `startY = 30` (~2.5 mm) is the practical minimum that still
+  leaves room for printer feed margins on home printers.
+- Cropping the perforation strip in §AC.14 also stripped the **top edge
+  of the card border** itself on most e-Aadhaar PDFs (the perforation
+  was glued to the card border in the source PDF). Result: cards now
+  show a clean **bottom + left + right** border but **no top border**,
+  visually asymmetric.
+- Fix: draw a **4 px solid black line** along the very top edge of each
+  card in `buildSingleSheet`, after the `drawImage` call. Width =
+  `cardW`, height = 4 px, colour `#000`. If `rounded === true`, inset
+  the line by the corner radius `r` so it doesn't bleed past the
+  rounded clip mask.
+
+**Change (id-print.html, `buildSingleSheet`):**
+
+- `var startY = 80;` → `var startY = 30;` (~2.5 mm @ 300 DPI).
+- After each `ctx.drawImage(card.front/back, …)` call, add a
+  `ctx.fillStyle = '#000'; ctx.fillRect(x + (rounded ? r : 0), startY,
+  cardW - (rounded ? 2*r : 0), 4);` block (one for front, one for
+  back). Inset by `r` keeps the line inside the rounded-corner clip.
+- Multi-card / Dragon / PVC builders **untouched** — they already draw
+  cut guides and a full card border, so they don't need the fix.
+
+**Acceptance:**
+
+- [x] 1-Pair sheet: cards now sit ~2.5 mm from the top of the A4 (vs
+      ~7 mm before).
+- [x] Each card has a clean solid-black 4 px line along its top edge,
+      visually completing the border on all 4 sides.
+- [x] When `rounded` is enabled, the black line stops at the rounded
+      corner inset (no bleed past the clip).
+- [x] `npm run build` clean. Both `id-print.html` and
+      `dist/id-print.html` in this PR.
+
+---
+
+## §AC.16 ID Card Print — PAN crop fix to actual card row (Aadhaar-parity layout)
+
+**Status:** SHIPPED — PR #263.
+
+**User feedback (Hinglish):**
+
+> Abhi tak **PAN card** par kaam start nhi hua hai. **Aadhaar ke jaise
+> hi hai wo ID** — bhi same to same system uske liye bhi kaam karega.
+> (i.e. apply the §AC.14 / §AC.15 treatment to PAN too — flush-top
+> placement + black top edge — but first the crop has to actually point
+> at the PAN card, which it doesn't.)
+
+**Investigation:**
+
+`CROP.pan` was still using the **legacy assumption** from before the
+two-row e-PAN layout was understood:
+
+```js
+// OLD — wrong
+front: [0.05, 0.08, 0.90, 0.42]   // top half of page, full width
+back:  [0.05, 0.54, 0.90, 0.40]   // bottom half of page, full width
+```
+
+The actual e-PAN PDF (Protean eGov / NSDL — see
+`test-pdfs/pan-test.pdf`, password `05071999`) ships the **same
+two-row layout as e-Aadhaar**:
+
+1. **Upper row** — formal **e-PAN Letter** (full-width, with QR, photo,
+   signature, body text "If this card is lost / someone's lost card is
+   found, please inform / return to:").
+2. **Lower row** (below the dashed `---- Cut ----` indicator) — two
+   plastic-card mock-ups side by side: **front-LEFT** (photo, name,
+   father's name, DOB, signature) and **back-RIGHT** (return address,
+   hologram).
+
+With the old crop, the printed CR80 *front* became the giant Letter
+and the printed *back* became the tiny card row crammed into a
+card-sized region — totally unusable.
+
+**Measurement (`pdftoppm -upw 05071999 -r 300`):**
+
+PDF page = 2480 × 3509 px. Card-row Y range ≈ 2655 → 3340 px.
+Front card x-range ≈ 170 → 1245 px. Back card x-range ≈ 1275 → 2345 px.
+Aspect of each card ≈ 1.57 (CR80 = 1.585).
+
+**Change (id-print.html, `CROP.pan`):**
+
+- front: `[0.05, 0.08, 0.90, 0.42]` → `[0.0685, 0.7567, 0.4335, 0.1952]`
+- back:  `[0.05, 0.54, 0.90, 0.40]` → `[0.5141, 0.7567, 0.4314, 0.1952]`
+- Long inline comment block in `id-print.html` documents the layout +
+  measurement source so the next session doesn't need to re-derive.
+- **No code-path changes** — `buildSingleSheet`, multi-card builder,
+  Dragon and PVC builders are all type-agnostic (they draw whatever
+  `card.front` / `card.back` contain), so the §AC.15 flush-top + 4 px
+  black-top-line treatment now applies to **PAN cards automatically**,
+  exactly what the user asked for ("Aadhaar ke jaise hi").
+
+**Acceptance:**
+
+- [x] Uploading `test-pdfs/pan-test.pdf` (pw `05071999`) now produces a
+      Step-2 preview showing the actual PAN front (photo, name, DOB,
+      QR, signature) and back (return address, hologram), at correct
+      CR80 aspect, instead of the formal Letter cut into card-sized
+      rectangles.
+- [x] 1-Pair sheet auto-inherits §AC.15 flush-top placement and 4 px
+      black top edge line.
+- [x] Multi-card / Dragon / PVC sheets render the correct PAN cards.
+- [x] Aadhaar / Voter / Ayushman / Jan Aadhaar / eShram crop coords
+      untouched.
+- [x] `npm run build` clean. Both `id-print.html` and
+      `dist/id-print.html` in this PR.
+
+**Rollback note:** if a different e-PAN issuer (UTIITSL, etc.) ships a
+different layout and the crop misses, the simple rollback is to loosen
+slightly: `y: 0.7500, h: 0.2050` for both front + back. The commit is
+a 2-line `CROP` table change, easy to amend.
+
+---
+
+## §AC.17 ID Card Print — Print preview cards too small on A4
+
+**Status:** SHIPPED — PR #265.
+
+**User feedback (Hinglish, with screenshot of system print dialog):**
+
+> EK PROBLEM OR AA GAI HAI JAB MAIN SHEET PRINT KAR RHA HUN TOH IS
+> TRHE KA SHOW HOTA HAI ID SMALL HO JATI HAI, A4 SELECT KARNE PAR BHI
+> PAGE A4 JASIA NHI DIKHTA HAI
+
+Print preview (Microsoft Print to PDF, paper size A4) showed the two
+CR80 cards at ~30 × 20 mm at the top of an otherwise blank A4 sheet,
+instead of the correct 85.6 × 54 mm physical size with the lower half
+of the sheet reusable for a second pair.
+
+**Investigation:**
+
+The desktop preview cap added in §AC.14 —
+
+```css
+.idp-a4-wrap canvas {
+  max-width: min(100%, 460px);
+  max-height: 55vh;
+}
+```
+
+— was being **inherited inside `@media print`**. The existing print
+rule only set `width: 100%` and never reset the maxes. In print
+context `vh` refers to the printed page height, so `55vh` capped the
+canvas at ~163 mm out of 297 mm A4 height, and the `460px` width cap
+shrank it to ~122 mm out of 210 mm A4 width — cards came out at
+~58% × ~55% of their true CR80 physical size.
+
+**Change (id-print.html, only the `@media print { ... }` block):**
+
+- `.idp-a4-wrap canvas` now sets:
+  `max-width: none; max-height: none; width: 100%; height: auto`
+  → the canvas bitmap's natural aspect ratio drives the print size.
+  For 1-Pair / Multi-card the bitmap is **2480 × 3508** (A4 @ 300 DPI)
+  so `width: 100%` (= 210 mm) gives `height = 210 × 3508/2480 ≈
+  296.97 mm` ≈ A4 portrait → exact fit. Dragon (1205 × 1795) and PVC
+  (1417 × 1417) keep their natural aspect ratio, no distortion.
+- `html, body` forced to `margin: 0 !important; padding: 0 !important;
+  background: #fff !important` so the browser does not insert its own
+  page padding (some browsers default to 8 px body margin which
+  clipped the canvas right edge).
+- `@page { size: A4 portrait; margin: 0 }` unchanged.
+- Long inline comment block in `id-print.html` documents the trap.
+
+**Acceptance:**
+
+- [x] Print preview on a 1-Pair sheet: A4 page shows the two cards at
+      full CR80 size (85.6 × 54 mm each, side by side, flush at top
+      with §AC.15 black top edge line). Lower half empty (reusable).
+- [x] Multi-card sheet print: all 8 cards at full CR80 size on A4.
+- [x] Dragon and PVC print at their natural aspect ratios.
+- [x] No browser body-margin clipping.
+- [x] **No JS / sheet-builder changes** — pure print-CSS fix.
+- [x] `npm run build` clean. Both `id-print.html` and
+      `dist/id-print.html` in this PR.

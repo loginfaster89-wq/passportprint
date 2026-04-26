@@ -513,14 +513,18 @@ issues.md — full audit + ID Card Print arc
    §AC.11 Front+Back unified landscape preview (PRs #254 + #256) —
    §AC.12 Swap sides toggle (PR #258) —
    §AC.13 Responsive A4 + 1-pair to top + drop Cut Marks UI (PR #259) —
-   §AC.14 Crop Aadhaar perforation + flush top + shrink preview (PR #260))
+   §AC.14 Crop Aadhaar perforation + flush top + shrink preview (PR #260) —
+   §AC.15 1-pair fully flush top + black top-edge line (PR #262) —
+   §AC.16 PAN crop fix to actual card row, Aadhaar parity (PR #263) —
+   §AC.17 Print preview canvas full-A4 sizing fix (PR #265))
 
 Reference images in .agents/references/ and `attached_assets/` — open
 the latest user-attached `aadhaar-a4-sheet_*.png` and the matching
 `Screenshot_(*)_*.png` set before starting any new layout work.
 
-Last shipped: PR #260 (feat: §AC.14 crop perforation strip, push
-1-pair flush to top, shrink preview).
+Last shipped: PR #265 (fix: §AC.17 Print preview cards too small on
+A4 — pure print-CSS fix, reset max-width/max-height inside @media
+print so the canvas prints at full A4 portrait size).
 
 Shipped summary (don't redo) — see SKILL.md §9 for the full PR list.
 Highlights:
@@ -584,6 +588,44 @@ Highlights:
   `max-height 72vh → 50vh`, `max-width 100%`. Wrap margin reduced.
   Verified the dashed line was *not* drawn by buildSingleSheet
   (full ctx-draw audit) — it really was the source PDF's perforation.
+- §AC.15 SHIPPED — PR #262 1-pair sheet fully flush to top + black
+  top-edge line. `buildSingleSheet`: `startY = 80` → `startY = 30`
+  (~2.5mm @ 300 DPI). After each `ctx.drawImage(card.front/back, …)`,
+  draw a **4 px solid `#000` `fillRect`** along the top edge:
+  `(x + (rounded ? r : 0), startY, cardW - (rounded ? 2*r : 0), 4)`
+  — restores the top border that §AC.14's perforation crop stripped
+  away, so the card looks complete on all 4 sides. Multi-card /
+  Dragon / PVC builders untouched (they already draw cut guides).
+- §AC.16 SHIPPED — PR #263 PAN crop fix to actual card row
+  (Aadhaar-parity layout). `CROP.pan` retuned:
+  `front: [0.05, 0.08, 0.90, 0.42]` → `[0.0685, 0.7567, 0.4335, 0.1952]`,
+  `back: [0.05, 0.54, 0.90, 0.40]` → `[0.5141, 0.7567, 0.4314, 0.1952]`.
+  Old crop assumed 1-card-per-page (full-width upper half = front,
+  lower half = back); actual e-PAN PDFs (Protean eGov / NSDL) ship
+  the same two-row layout as e-Aadhaar (formal Letter on top, real
+  plastic-card pair below the `---- Cut ----` indicator: front-LEFT,
+  back-RIGHT). Coords measured from `test-pdfs/pan-test.pdf` at
+  300 DPI (page 2480×3509 px). Aspect ≈ 1.57 (CR80 = 1.585). All
+  sheet builders are type-agnostic, so PAN now auto-inherits §AC.15
+  flush-top + 4 px black-top-line treatment. Aadhaar / Voter /
+  Ayushman / Jan Aadhaar / eShram crop coords untouched.
+- §AC.17 SHIPPED — PR #265 Print preview cards too small on A4
+  (pure print-CSS fix). The desktop preview cap from §AC.14
+  (`max-width: min(100%, 460px); max-height: 55vh`) was being
+  inherited inside `@media print` because the print rule only set
+  `width: 100%` and never reset the maxes. In print context `vh` =
+  printed page height, so 55vh capped the canvas at ~163mm out of
+  297mm A4, and 460px width cap shrank it to ~122mm out of 210mm
+  A4 — cards came out at ~58% × ~55% of true CR80 size on a blank
+  A4 sheet. Fix: inside `@media print`, set canvas
+  `max-width: none; max-height: none; width: 100%; height: auto`.
+  Bitmap is 2480×3508 (A4 @ 300 DPI), so width:100% (210mm) gives
+  height ≈ 296.97mm ≈ A4 portrait → exact full-A4 fit at true CR80
+  sizing. Also force `html, body { margin:0; padding:0;
+  background:#fff }` to prevent the browser's default body padding
+  from clipping the canvas right edge. No JS / sheet-builder
+  changes. Dragon (1205×1795) and PVC (1417×1417) keep their
+  natural aspect ratio (no distortion).
 
 Test PDFs repo mein saved hain:
 test-pdfs/pan-test.pdf (password: 05071999)
@@ -593,25 +635,30 @@ test-pdfs/aadhaar-test.pdf (password: SUNI1986)
 TASK (NEXT SESSION) — pick from candidates below
 ═══════════════════════════════════════════════════════════════
 
-§AC.11–§AC.14 are all SHIPPED. Step 2 preview now uses a unified
+§AC.11–§AC.17 are all SHIPPED. Step 2 preview uses a unified
 landscape `#pairCanvas` (front-LEFT / back-RIGHT, with a Swap
 sides toggle), the A4 result canvas is responsive (caps at 55vh
 desktop / 50vh mobile, max-width 460px), the 1-Pair sheet sits
-flush at the top of the A4 (~7mm) with no fold-here line / corner
-ticks / seam ticks, the Cut Marks UI option is gone, and the
-Aadhaar perforation strip is cropped out.
+**fully flush at the top of the A4 (~2.5mm)** with a 4 px black
+top-edge line on each card and no fold-here line / corner ticks /
+seam ticks, **both Aadhaar AND PAN** cards crop correctly to the
+actual card row (the formal Letter is dropped) with Aadhaar-parity
+treatment, and the **Print preview now sizes the canvas to full
+A4 portrait** (cards at true CR80 85.6 × 54 mm) instead of being
+clipped to the on-screen preview cap.
 
 Wait for the user's next request. If they confirm everything looks
-right after PR #260 deploys (Cloudflare Pages, ~1-2 min), here are
-the standing candidates for the next session:
+right after PRs #262 + #263 deploy (Cloudflare Pages, ~1-2 min),
+here are the standing candidates for the next session:
 
 A. **Audit multi-card / Dragon / PVC layouts for the same
-   perforation-strip artefact.** The crop change in §AC.14 is
-   global (CROP.aadhaar is shared), so those layouts should already
-   benefit. Verify visually and tighten the *top placement* of the
-   first row in `buildMultiCardSheet` to match the §AC.13 / §AC.14
-   "flush at top, less waste" treatment if the user wants symmetry
-   across all four layouts.
+   perforation-strip artefact.** The crop changes in §AC.14
+   (Aadhaar) and §AC.16 (PAN) are global (CROP entries are shared),
+   so those layouts should already benefit. Verify visually and
+   tighten the *top placement* of the first row in
+   `buildMultiCardSheet` to match the §AC.13 / §AC.14 / §AC.15
+   "flush at top, less waste, black top-line" treatment if the user
+   wants symmetry across all four layouts.
 
 B. **Phase 4 P3 Master Settings.** DPI / padding / margins per
    printer, persisted in localStorage (extend `idp:prefs:v1` or new
@@ -664,9 +711,23 @@ State of `CROP.aadhaar` (post-§AC.14):
   Rollback knob if too tight on a PDF variant: bump `y` back to
   ≈0.6770 and `h` to ≈0.2046.
 
-State of `buildSingleSheet` (post-§AC.14):
-  `gap = 0`, `startX = (A4_W - pairW) / 2`, `startY = 80`
-  (~7mm @ 300 DPI). NO cut-marks / fold-here / corner-ticks /
-  seam-ticks branch. Caption `CR80 · 85.6 × 54 mm · 300 DPI —
-  Studio Print` still drawn at `startY + cardH + 70`.
+State of `CROP.pan` (post-§AC.16):
+  front: [0.0685, 0.7567, 0.4335, 0.1952]
+  back:  [0.5141, 0.7567, 0.4314, 0.1952]
+  Aspect ≈ 1.57 (close to CR80 1.585). Measured from
+  `test-pdfs/pan-test.pdf` (Protean eGov / NSDL layout) at 300 DPI
+  (page 2480×3509 px). Rollback if a UTIITSL or other variant
+  misses: loosen to `y: 0.7500, h: 0.2050` for both front + back.
+
+State of `buildSingleSheet` (post-§AC.15):
+  `gap = 0`, `startX = (A4_W - pairW) / 2`, `startY = 30`
+  (~2.5mm @ 300 DPI — fully flush at top of A4). After each
+  `ctx.drawImage(card.front/back, …)`, draw a 4 px solid `#000`
+  `fillRect` along the top edge: `(x + (rounded ? r : 0), startY,
+  cardW - (rounded ? 2*r : 0), 4)` — replaces the perforation-strip
+  top border that §AC.14's crop stripped away. NO cut-marks /
+  fold-here / corner-ticks / seam-ticks branch. Caption `CR80 ·
+  85.6 × 54 mm · 300 DPI — Studio Print` still drawn at
+  `startY + cardH + 70`. Type-agnostic, so it applies to Aadhaar
+  AND PAN (and any future ID type) uniformly.
 ```
