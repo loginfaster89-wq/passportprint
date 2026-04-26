@@ -446,13 +446,14 @@ issues.md — full audit + §M ID Card Print research + §O Phase 2 multi-card
   + §U PAN signature box research
   + §V Phase 4 CardXpress feature parity scope (8 reference images in
     .agents/references/)
+  + §W per-side Move (X/Y nudge) research + §X per-side Zoom research
+  + §Y Auto Enhance + §Z Photo Editor split panel research
 
-Last PR: PR #235 (docs: Phase 4 P3 §Z research — Photo
-  Editor split panel: reorganise Step 2 sidebar into Card Cleanup /
-  Position / Photo Adjust panels, add Bold text toggle, add Original/
-  Aadhaar/PAN quick presets, consolidate §W+§X Front/Back radios into
-  one shared radio. ~80–100 line code PR pending in a separate session
-  per Rule #14)
+Last PR: PR #237 (chore: drop "Research → docs → code" rule from
+  SKILL.md / AGENTS.md, stacked on PR #236 which dropped "Half-half
+  working" rule. Active workflow rules now end at #12: "One problem
+  per PR". History entries that mention old rules #13/#14 are kept
+  verbatim — they describe past work, not active rules.)
 
 Shipped summary (don't redo):
 PRs #70–#230: all previous work shipped
@@ -553,11 +554,17 @@ PRs #70–#230: all previous work shipped
 - PR #234: docs — Rule #13 second-half. Marks PRs #231/#232
   shipped across SKILL.md §9/§11 + AGENTS.md backlog + issues.md
   §X banner / §X.11 follow-up / new §Y section.
-- PR #235: docs (this PR) — Phase 4 P3 §Z research: Photo Editor
-  split panel. Designs the Step 2 sidebar reorg (3 labelled panels:
+- PR #235: docs — Phase 4 P3 §Z research: Photo Editor split
+  panel. Designs the Step 2 sidebar reorg (3 labelled panels:
   Card Cleanup / Position / Photo Adjust), adds Bold text toggle and
   3 Quick Preset buttons, consolidates the §W+§X Front/Back radios.
   Estimated code diff ~80–100 lines. Code PR pending.
+- PR #236: chore(rules) — drop "Half-half working" rule (was
+  SKILL.md #13 / AGENTS.md #9). Renumbered "Research → docs → code"
+  to fill the slot. Historical PR-summary references preserved.
+- PR #237: chore(rules) — drop "Research → docs → code" rule too
+  (was SKILL.md #13 / AGENTS.md #9 after #236). Active rule list
+  now ends at #12 ("One problem per PR"). Stacked on #236.
 
 ID Card Print current state:
 - Phase 1 MVP COMPLETE + VERIFIED (PR #188)
@@ -599,9 +606,10 @@ Phase 4 P3 IN PROGRESS:
 - PR #235: §Z research — Photo Editor split panel (this PR) — SHIPPED
 - §Z code PR — pending (single-card sidebar reorg + Bold + presets)
 
-TASK: Phase 4 P3 items next. Per Rule #14, research first — open a
-docs PR with UX / state-shape research, THEN a code PR.
-Per Rule #12, ONE item per session.
+TASK: Phase 4 P3 items next. Per Rule #12, ONE item per session.
+For new features research jab samjho tab kar lo — ab koi mandatory
+research-first PR rule nahi hai (PR #237 ne hata diya). §Z research
+already shipped in PR #235; jaane ka raasta saaf hai.
 
 Recommended next (pick ONE per session):
 
