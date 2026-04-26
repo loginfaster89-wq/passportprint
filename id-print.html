@@ -135,6 +135,21 @@
 .idp-detect.janaadhaar{color:#fb923c;background:rgba(251,146,60,.08);border:1px solid rgba(251,146,60,.3);}
 .idp-detect.eshram{color:#34d399;background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.3);}
 
+/* Auto-swap notice — shown after orientation auto-detect fires */
+.idp-swap-notice{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:10px 14px;margin:0 0 16px;border-radius:10px;
+  font-family:'DM Mono',monospace;font-size:12px;line-height:1.4;
+  color:#fbbf24;background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.3);
+}
+.idp-swap-notice button{
+  flex:0 0 auto;padding:5px 12px;border-radius:6px;
+  font-family:'DM Mono',monospace;font-size:12px;font-weight:500;cursor:pointer;
+  color:#fbbf24;background:transparent;border:1px solid rgba(251,191,36,.5);
+  transition:background .15s;
+}
+.idp-swap-notice button:hover{background:rgba(251,191,36,.12);}
+
 /* Preview area */
 .idp-preview{
   background:var(--surface);border:1px solid var(--border);border-radius:16px;
@@ -445,6 +460,11 @@ input.idp-range::-moz-range-thumb{
             <canvas id="cardBack" width="1011" height="638"></canvas>
           </div>
         </div>
+      </div>
+      <!-- Auto-swap notice (shown only when orientation auto-detect fired) -->
+      <div id="swapNotice" class="idp-swap-notice idp-hidden">
+        <span>Front / Back auto-swapped — pages were reversed in the PDF.</span>
+        <button type="button" id="btnUndoSwap">Undo</button>
       </div>
       <!-- Options -->
       <label class="idp-option">
@@ -1040,12 +1060,14 @@ async function processPdfBatch(arrayBuffer, password, fileName) {
       back = cropRegion(renderCanvas, crop.back);
     }
 
+    var autoSwapped = false;
     if (shouldAutoSwap(front, back, type)) {
       var tmpFB = front; front = back; back = tmpFB;
+      autoSwapped = true;
     }
 
     return {
-      card: { type: type, front: front, back: back, originalFront: front, originalBack: back, fileName: fileName, offset: { front: { dx: 0, dy: 0 }, back: { dx: 0, dy: 0 } } }
+      card: { type: type, front: front, back: back, originalFront: front, originalBack: back, fileName: fileName, offset: { front: { dx: 0, dy: 0 }, back: { dx: 0, dy: 0 } }, autoSwapped: autoSwapped }
     };
   } catch (err) {
     if (err.name === 'PasswordException') {
@@ -1111,13 +1133,15 @@ async function processPdf(pdf) {
       backImageData = cropRegion(renderCanvas, crop.back);
     }
 
+    var didAutoSwap = false;
     if (shouldAutoSwap(frontImageData, backImageData, detectedType)) {
       var tmpSwap = frontImageData; frontImageData = backImageData; backImageData = tmpSwap;
+      didAutoSwap = true;
     }
 
     originalFront = frontImageData;
     originalBack = backImageData;
-    batchCards = [{ type: detectedType, front: frontImageData, back: backImageData, originalFront: frontImageData, originalBack: backImageData, fileName: batchFiles.length > 0 ? batchFiles[0].name : 'PDF', offset: { front: { dx: 0, dy: 0 }, back: { dx: 0, dy: 0 } }, scale: { front: 1.0, back: 1.0 } }];
+    batchCards = [{ type: detectedType, front: frontImageData, back: backImageData, originalFront: frontImageData, originalBack: backImageData, fileName: batchFiles.length > 0 ? batchFiles[0].name : 'PDF', offset: { front: { dx: 0, dy: 0 }, back: { dx: 0, dy: 0 } }, scale: { front: 1.0, back: 1.0 }, autoSwapped: didAutoSwap }];
     resetEditorSliders();
     applyFilters();
 
@@ -1133,6 +1157,7 @@ async function processPdf(pdf) {
 
     showLoading(false);
     showStep(2);
+    updateSwapNotice();
   } catch (err) {
     showLoading(false);
     showStep(1);
@@ -1219,6 +1244,7 @@ function showBatchPreview() {
     ' \u2192 ' + sheetsNeeded + ' A4 sheet' + (sheetsNeeded > 1 ? 's' : '') + ' (multi-card layout)';
 
   showStep(2);
+  updateSwapNotice();
 }
 
 function applyAadhaarMasks(ctx, ox, oy, side) {
@@ -1898,6 +1924,16 @@ btnResetEdit.addEventListener('click', () => {
 chkBold.addEventListener('change', applyFilters);
 
 const btnSwapSides = $('#btnSwapSides');
+const swapNotice = $('#swapNotice');
+const btnUndoSwap = $('#btnUndoSwap');
+function updateSwapNotice() {
+  var show = batchCards.length === 1 && batchCards[0] && batchCards[0].autoSwapped === true;
+  swapNotice.classList.toggle('idp-hidden', !show);
+}
+function clearAutoSwapFlag() {
+  if (batchCards.length >= 1 && batchCards[0]) batchCards[0].autoSwapped = false;
+  updateSwapNotice();
+}
 function swapFrontBack() {
   if (!frontImageData || !backImageData) return;
   var tF = frontImageData, tB = backImageData;
@@ -1923,7 +1959,14 @@ function swapFrontBack() {
   applyFilters();
   refreshMoveReadout();
 }
-btnSwapSides.addEventListener('click', swapFrontBack);
+btnSwapSides.addEventListener('click', function() {
+  swapFrontBack();
+  clearAutoSwapFlag();
+});
+btnUndoSwap.addEventListener('click', function() {
+  swapFrontBack();
+  clearAutoSwapFlag();
+});
 
 /* Quick presets — one-click slider combos */
 function applyPreset(b, c, s) {
@@ -2071,6 +2114,7 @@ btnBack.addEventListener('click', () => {
   if (slZoom) slZoom.value = 100;
   if (zoomReadout) zoomReadout.textContent = '100%';
   [chkHideQR, chkHideMobile, chkHideIssueDate, chkHideDownloadDate, chkSignatureBox, chkHologram, chkBold].forEach(function(c) { c.checked = false; });
+  swapNotice.classList.add('idp-hidden');
   resetEditorSliders();
   frontImageData = null;
   backImageData = null;
