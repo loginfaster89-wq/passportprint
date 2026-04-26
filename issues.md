@@ -930,7 +930,7 @@ each field without touching adjacent content.
 
 ## U. ID Card Print — Phase 3 Signature Box (PAN) — Research Complete
 
-**Status: RESEARCH DONE (this PR docs). Coding pending — separate code PR per Rule #14.**
+**Status: RESEARCH DONE (this PR docs). Coding pending — separate code PR per Rule #13.**
 
 ### U.1 What this feature is
 
@@ -1178,7 +1178,7 @@ unsigned ePANs.
 
 ### V.4 Phase 4 backlog — prioritized
 
-Each item is a separate research + code PR pair (per Rule #14).
+Each item is a separate research + code PR pair (per Rule #13).
 
 | Pri | Item                                    | Est PR size | Why |
 |-----|-----------------------------------------|-------------|-----|
@@ -1974,13 +1974,11 @@ keys, no backend touches.
 - Drag-to-reorder panels — desktop product, no field demand.
 - Saving panel collapsed state — no `localStorage` work in §Z.
 
-### Z.10 Recommended next 2 PRs
+### Z.10 Recommended next PR
 
 1. **§Z code PR** — implement the panel split + Bold + presets per
    Z.2–Z.5. ~80–100 lines. Single-card mode tested manually with one
-   Aadhaar PDF + one ePAN PDF. Code-only per Rule #13.
-2. **§Z docs PR** — Rule #13 second-half — mark §Z.1 SHIPPED, update
-   V.4 P3 row to crossed-out fully, add to SKILL.md §9 shipped list.
+   Aadhaar PDF + one ePAN PDF.
 
 ---
 
