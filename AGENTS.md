@@ -311,8 +311,9 @@ unlock, auto-detect, front+back preview, CR80 output, A4 sheet).
   (PR #203).
 - **ID Card Print Phase 3 — PARTIAL.** Ayushman/Jan Aadhaar/eShram
   shipped (PR #205), batch processing shipped (PR #208), PVC card
-  tray shipped (PR #210). Remaining: toggle options, auto photo
-  enhancement.
+  tray shipped (PR #210), copy update shipped (PR #213). Remaining:
+  toggle options, auto photo enhancement, signature box (PAN),
+  back-side hologram overlay (PAN).
 - **Card size reference:** CR80 = 85.6×54mm = 1011×638px at 300 DPI.
   Lamination pouch = 65×95mm (Reston 125 micron). Test PDFs in repo:
   `test-pdfs/pan-test.pdf` (pw: `05071999`), `test-pdfs/aadhaar-test.pdf`
