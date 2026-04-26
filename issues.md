@@ -722,8 +722,8 @@ Tested locally with both test PDFs after PR #189 merge:
 ### What's still open (Phase 2 remainder + Phase 3)
 
 **Phase 2 (not yet implemented):**
-- Multiple cards per A4 sheet (4-5 card pairs to save paper)
-- Cut marks / dashed guides on A4 output
+- ~~Multiple cards per A4 sheet (4-5 card pairs to save paper)~~ — **shipped PR #193**
+- ~~Cut marks / dashed guides on A4 output~~ — **shipped PR #193**
 - Rounded border option
 - Voter ID support
 - Dragon sheet (4×6) layout option (2 cards per sheet)
@@ -736,3 +736,15 @@ Tested locally with both test PDFs after PR #189 merge:
 - Auto photo enhancement (AI brightness/contrast adjustment)
 - Signature box option (PAN)
 - Back-side hologram overlay (PAN)
+
+---
+
+## O. ID Card Print — Phase 2 multi-card A4 (2026-04-26, session #14)
+
+**Status: SHIPPED — PR #193.**
+
+| # | PR | What shipped | Status |
+|---|------|---------|--------|
+| O1 | PR #192 | **Docs update.** Updated shipped summary for PRs #190–#191 + new prompt. | **merged** |
+| O2 | PR #193 | **Multi-card A4 layout.** Layout toggle in Step 3 — "1 Pair · Fold & Laminate" vs "5 Pairs · Multi-Card" (default multi). `buildMultiCardSheet()`: 2 cols × 5 rows of CR80 cards per A4. Dashed horizontal/vertical cut guides + L-shaped corner marks at every card corner. Front/Back column headers. Cards NOT mirrored (flat cut workflow). Responsive toggle. Print CSS hides toggle/title. | **open** |
+| O3 | PR #194 | **Docs update.** Updated shipped summary for PR #193 + new prompt. | **open** |
