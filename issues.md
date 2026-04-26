@@ -846,7 +846,18 @@ Tested locally with both test PDFs after PR #189 merge:
 
 ---
 
-## T. ID Card Print — Phase 3 Toggle Options (Aadhaar) — Research Complete
+## T. ID Card Print — Phase 3 Toggle Options (Aadhaar)
+
+**Status: SHIPPED — PR #217 (2026-04-26, session #20).**
+
+| # | PR | What shipped | Status |
+|---|------|---------|--------|
+| T1 | PR #216 | **Docs update.** §T research plan, AADHAAR_FIELD_MASKS coordinates, implementation steps added. | **merged** |
+| T2 | PR #217 | **Aadhaar field toggles.** 4 checkboxes (Hide QR Code / Hide Mobile No. / Hide Issue Date / Hide Download Date). Visible only for Aadhaar cards. White-masks correct pixel regions in preview AND all 4 output layouts (A4 multi-card, Dragon sheet, PVC tray, single fold). `AADHAAR_FIELD_MASKS` constant, `applyAadhaarMasks(ctx, ox, oy, side)` helper. All mask paths: `drawFilteredToCanvas`, `drawFiltered`, `applyBatchFilters`. Reset clears all toggles on `btnBack`. | **pending merge** |
+
+---
+
+## T. ID Card Print — Phase 3 Toggle Options (Aadhaar) — Research (archived)
 
 **Status: RESEARCH DONE (PR #215 docs). Coding pending.**
 
@@ -927,3 +938,25 @@ each field without touching adjacent content.
 
 - PAN/Voter ID toggles — separate PR later, explicitly requested.
 - Auto photo enhancement, signature box, hologram overlay — separate PRs.
+
+---
+
+## U. ID Card Print — Phase 3 Auto Photo Enhancement (2026-04-26, session #21)
+
+**Status: SHIPPED — PR #218 (2026-04-26, session #21).**
+
+| # | PR | What shipped | Status |
+|---|------|---------|--------|
+| U1 | PR #218 | **Auto Enhance button.** One-click auto brightness/contrast/saturation optimization. Analyzes front card luminance histogram (avg + std deviation), computes ideal brightness compensator and contrast boost, sets slider values, calls `applyFilters()`. Reset button still available to undo. Hidden in `@media print`. | **pending merge** |
+
+### U.1 Algorithm
+
+```
+avgLum = mean luminance of originalFront pixels (0–255, NTSC weights)
+brightAdj = clamp(round(128 / avgLum * 100), 70, 160)  // target 50% grey
+contrastAdj = 115  // fixed mild boost
+satAdj     = 110  // fixed mild boost (skin tones pop)
+```
+
+Simple, fast, no dependencies. Works well for typical ID card photos
+which are often slightly underexposed from PDF rasterization.
