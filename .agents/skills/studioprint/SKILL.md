@@ -408,8 +408,8 @@ card sizes, lamination specs, and feature plan documented in
 **Phase 4 (CardXpress feature parity — see §V in issues.md, scoped 2026-04-26):**
 - P1 Fix §U signature box coords — **PR #223 in flight (4-line patch, §V.2.a)**
 - P1 PAN HOLOGRAM overlay — **PR #224 in flight (~40 lines, back top-right silver patch, §V.2.b)**
-- P2 Per-side Move controls (X/Y nudge)
-- P2 Per-side Zoom (scale within CR80)
+- ~~P2 Per-side Move controls (X/Y nudge)~~ — **shipped PR #229**
+- ~~P2 Per-side Zoom (scale within CR80)~~ — **shipped PR #230**
 - P3 Photo Editor split panel
 - P3 Master Settings (DPI/padding/margins)
 - P3 PrePrinted Card mode
@@ -464,13 +464,12 @@ issues.md — full audit + §M ID Card Print research + §O Phase 2 multi-card
   + §V Phase 4 CardXpress feature parity scope (8 reference images in
     .agents/references/)
 
-Last PR: PR #225 (docs: Rule #13 second-half — mark PRs #223/#224
-  shipped in SKILL.md §9/§11 + AGENTS.md open backlog + issues.md
-  §V.2.a/§V.2.b/§V.4/§V.5; refresh next-session prompt to Phase 4 P2
-  Move/Zoom)
+Last PR: PR #231 (docs: Rule #13 second-half — mark PRs #226–#230
+  shipped in SKILL.md §9/§11 + AGENTS.md + issues.md §W/§X;
+  Phase 4 P2 Move/Zoom COMPLETE)
 
 Shipped summary (don't redo):
-PRs #70–#225: all previous work shipped
+PRs #70–#230: all previous work shipped
 - PRs #70–#189: original audit + Document Sheet + ID Card Print Phase 1
 - PR #190: docs update
 - PR #191: ID Card Print Phase 2 — photo editing (brightness/contrast/
@@ -542,6 +541,19 @@ PRs #70–#225: all previous work shipped
   AGENTS.md open backlog updated to show Phase 4 P1 SHIPPED.
   issues.md §V.2.a/§V.2.b marked SHIPPED, §V.4 P1 rows struck,
   §V.5 marked SHIPPED.
+- PR #226: docs — §W Move research (issues.md).
+- PR #227: fix(id-card-print) — cut marks Sheet-only fix.
+- PR #228: docs — §X Zoom research (issues.md, stacked on #226).
+- PR #229: feat(id-card-print) — Phase 4 P2 per-side Move (X/Y nudge)
+  controls (§W). Per-side offset state `batchCards[0].offset`, 4-arrow
+  d-pad, step size input, Front/Back radio, reset wiring. Hidden in
+  batch mode. Offset applied in `drawFiltered` via `getOffset(side)`.
+  66 insertions, single file.
+- PR #230: feat(id-card-print) — Phase 4 P2 per-side Zoom (scale)
+  control (§X). Per-side scale state `batchCards[0].scale`, range
+  slider 50%–150%, Front/Back radio, own Reset button. Zoom around
+  centre then offset applied on top in `drawFiltered`. Overlays
+  unaffected (no ctx transform). Hidden in batch mode. 66 insertions.
 
 ID Card Print current state:
 - Phase 1 MVP COMPLETE + VERIFIED (PR #188)
@@ -555,38 +567,43 @@ ID Card Print current state:
 - Phase 4 P1 SHIPPED — see §V:
   PR #223 fix-pan-signature-coords (corrects PR #221 coords, §V.2.a)
   PR #224 pan-hologram-overlay (back top-right silver HOLOGRAM patch, §V.2.b)
-- Phase 4 P2+ NOT STARTED — Move / Zoom / Photo Editor split / Master
-  Settings / PrePrinted Card / Printer presets / Bold / BigQR /
-  other-card overlays. Full backlog in issues.md §V.4.
+- Phase 4 P2 SHIPPED — see §W/§X:
+  PR #229 per-side Move controls (X/Y nudge, §W)
+  PR #230 per-side Zoom/scale control (50%–150%, §X)
+- Phase 4 P3+ NOT STARTED — Photo Editor split / Master Settings /
+  PrePrinted Card / Printer presets / Bold / BigQR / other-card
+  overlays. Full backlog in issues.md §V.4.
 
 Test PDFs repo mein saved hain:
 test-pdfs/pan-test.pdf (password: 05071999)
 test-pdfs/aadhaar-test.pdf (password: SUNI1986)
 
-TASK: Phase 4 P2 items next. Per Rule #14, research first — open a
-docs PR with coords / UX / state-shape research, THEN a code PR.
+Phase 4 P2 COMPLETE:
+- PR #229: Per-side Move controls (X/Y nudge, §W) — SHIPPED
+- PR #230: Per-side Zoom/scale control (50%–150%, §X) — SHIPPED
+- PR #226: §W Move research docs — SHIPPED
+- PR #228: §X Zoom research docs — SHIPPED
+- PR #227: cut marks Sheet-only fix — SHIPPED
+
+TASK: Phase 4 P3 items next. Per Rule #14, research first — open a
+docs PR with UX / state-shape research, THEN a code PR.
 Per Rule #12, ONE item per session.
 
-Recommended next pair (pick ONE per session):
+Recommended next (pick ONE per session):
 
-(a) **P2 Per-side Move controls (X/Y nudge)** — ~120 lines.
-    UI: Front/Back radio + 4 arrow buttons (or X/Y number inputs)
-    in the editor panel. State: per-side `{dx, dy}` offsets in px,
-    persisted in batchCards[i].offset. Apply during drawFiltered /
-    drawFilteredToCanvas via ctx.translate before drawImage.
-    Reference: competitor-cardxpress-ui.jpeg (Move pad section).
+(a) **P3 Photo Editor split panel** — separate left/right panel for
+    photo editing controls (sliders, toggles, move, zoom). Currently
+    all inline in the preview step. Break out to sidebar.
 
-(b) **P2 Per-side Zoom (scale within CR80)** — ~80 lines, pairs with
-    Move. Scale dial / number input (50%-200%). State: per-side
-    `scale`. Apply via ctx.scale + ctx.translate to keep crop centred
-    after zoom. Same call-sites as Move.
+(b) **P3 Master Settings** — DPI/padding/margins calibration per
+    printer. Persists in localStorage.
 
-After Move/Zoom, P3 backlog: Photo Editor split panel, Master Settings
-(calibration: DPI/padding/margins), PrePrinted Card mode (back-only
-sheets). P4: Printer presets, Bold/BigQR toggles, other-card overlays
-(Voter / Ayushman / Jan Aadhaar — same pattern as PAN once it lands).
+(c) **P3 PrePrinted Card mode** — back-only sheets for pre-printed
+    front cards.
+
+After P3, P4 backlog: Printer presets, Bold/BigQR toggles, other-card
+overlays (Voter / Ayushman / Jan Aadhaar — same pattern as PAN).
 
 Reference images in .agents/references/ — open
-competitor-cardxpress-ui.jpeg before any P2+ research PR to confirm
-the Move/Zoom UX pattern.
+competitor-cardxpress-ui.jpeg before any P3+ research PR.
 ```

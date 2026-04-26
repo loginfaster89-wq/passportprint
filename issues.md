@@ -1182,10 +1182,10 @@ Each item is a separate research + code PR pair (per Rule #14).
 
 | Pri | Item                                    | Est PR size | Why |
 |-----|-----------------------------------------|-------------|-----|
-| P1  | Fix §U signature box coordinates        | ~4 lines    | Current coords overlap QR — broken in PR #221 |
-| P1  | PAN HOLOGRAM overlay                    | ~40 lines   | Visible on 100% of PAN cards, simple fill+label |
-| P2  | Per-side Move controls (X/Y nudge)      | ~120 lines  | Highest competitor-parity value; fixes off-centre crops |
-| P2  | Per-side Zoom (scale within CR80)       | ~80 lines   | Pairs with Move; fixes too-small/large crops |
+| ~~P1~~ | ~~Fix §U signature box coordinates~~ | ~~~4 lines~~ | **SHIPPED PR #223** |
+| ~~P1~~ | ~~PAN HOLOGRAM overlay~~             | ~~~40 lines~~ | **SHIPPED PR #224** |
+| ~~P2~~ | ~~Per-side Move controls (X/Y nudge)~~ | ~~~120 lines~~ | **SHIPPED PR #229 (§W)** |
+| ~~P2~~ | ~~Per-side Zoom (scale within CR80)~~ | ~~~80 lines~~ | **SHIPPED PR #230 (§X)** |
 | P3  | Photo Editor split panel                | ~150 lines  | Reorganize sliders + add Bold + add presets |
 | P3  | Master Settings (DPI/padding/margins)   | ~200 lines  | Calibration screen with localStorage persistence |
 | P3  | PrePrinted Card mode                    | ~60 lines   | Skip front render, output back-only sheets |
@@ -1220,7 +1220,7 @@ After those two, pick one P2 item (Move OR Zoom) for the next session.
 
 ## §W ID Card Print Phase 4 P2 — Per-side Move (X/Y nudge) research
 
-**Status:** Research-only PR (Rule #14 first half). Code PR follows in
+**Status:** SHIPPED — Research PR #226, Code PR #229. Code PR follows in
 a separate session.
 
 **Goal:** Match CardXpress "Move pad" UX so users can nudge the
@@ -1471,8 +1471,8 @@ Within the ~120-line estimate from §V.4. Single-problem PR per Rule #12.
 
 ## §X ID Card Print Phase 4 P2 — Per-side Zoom (scale within CR80) research
 
-**Status:** Research-only PR (Rule #14 first half). Code PR follows
-after §W Move code lands so they can be tested together.
+**Status:** SHIPPED — Research PR #228, Code PR #230. Code PR followed
+after §W Move code landed so they could be tested together.
 
 **Goal:** Match CardXpress "Zoom" dial — scale the front/back photo
 inside the CR80 1011×638 frame (50%–200%) so users can fix
