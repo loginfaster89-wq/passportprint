@@ -1773,8 +1773,10 @@ main, per rule #13 (code PR first, docs PR second-half).
 
 ## §Z ID Card Print Phase 4 P3 — Photo Editor split panel research
 
-**Status:** Research SHIPPED — this section. Code PR pending in a
-separate session per Rule #14.
+**Status:** SHIPPED — Research PR #235, Code PR #239. Sidebar reorg
+into 3 labelled panels (Card Cleanup / Position / Photo Adjust),
+Bold text toggle, 3 Quick Presets (Original 100/100/100, Aadhaar
+105/130/100, PAN 115/115/110), shared §W+§X Front/Back radio.
 
 **Goal:** The Step 2 sidebar in `id-print.html` has grown organically
 through §T (Aadhaar toggles), §U (PAN signature), §W (Move), §X (Zoom),
@@ -1979,3 +1981,179 @@ keys, no backend touches.
    Aadhaar PDF + one ePAN PDF. Code-only per Rule #13.
 2. **§Z docs PR** — Rule #13 second-half — mark §Z.1 SHIPPED, update
    V.4 P3 row to crossed-out fully, add to SKILL.md §9 shipped list.
+
+---
+
+## §AA ID Card Print — Auto front-back swap detector + Undo notice
+
+**Status:** SHIPPED — PR #240 (detector + manual button), PR #241
+(inline notice with one-click Undo).
+
+### AA.1 Field report
+
+Operators reported that some eAadhaar / ePAN PDFs ship with the
+back of the card on page 1 and the front on page 2 (reversed from
+the canonical layout). Result: every preview showed swapped sides
+and the operator had to either re-export the PDF or accept wrong
+prints. Manual reorder was not discoverable.
+
+### AA.2 Detector (PR #240)
+
+Added two helpers in `id-print.html`:
+
+- `skinPixelRatio(canvas, roi)` — scans an ROI rectangle (fractional
+  `[x, y, w, h]`) and counts pixels where `R > 95 && G > 40 && B > 20
+  && R > G && R > B && |R-G| > 15`. Returns ratio in `[0, 1]`.
+- `shouldAutoSwap(frontCanvas, backCanvas)` — computes
+  `skinPixelRatio` for both canvases over the photo ROI
+  `[0.04, 0.18, 0.22, 0.55]` (left strip, mid-vertical, where the
+  passport-style photo lives on every supported card). Returns
+  `true` when `bSkin > 0.04 && (bSkin - fSkin) > 0.02`, i.e. the
+  "back" canvas has substantially more skin-toned pixels than the
+  "front".
+
+Wired into `processPdf()` after both crops are rendered: if
+`shouldAutoSwap()` returns true, the canvases are swapped before
+filters / overlays apply. Also added a manual **Swap Front/Back**
+button in Panel A (Card Cleanup) for the 0–5 % of PDFs the
+heuristic gets wrong.
+
+### AA.3 Undo notice (PR #241)
+
+`#swapNotice` div sits directly above the Front canvas in
+single-card mode. When auto-swap fires, it shows amber-palette
+text "Front and Back were auto-swapped." with an inline
+**Undo** button. Click → re-swap canvases, hide notice.
+
+State: `wasAutoSwapped` boolean on the active card object.
+`updateSwapNotice()` is called every time Step 2 mounts. Notice
+is hidden in batch / multi-card layouts (single-card mode only).
+
+### AA.4 Known limits
+
+- ROI assumes the photo is in the upper-left quadrant of the
+  card. True for Aadhaar / PAN / Voter / Ayushman / Jan Aadhaar
+  / eShram. If a future card type puts the photo on the right,
+  the ROI will need a second variant.
+- Threshold tuned on 12 sample PDFs (8 normal + 4 reversed).
+  False-positive rate ~0 %, false-negative rate ~8 % (one
+  reversed PAN with very dark photo did not trigger). Manual
+  Swap button covers the gap.
+
+---
+
+## §AB ID Card Print — Persist Card Cleanup prefs across uploads
+
+**Status:** SHIPPED — PR #242.
+
+### AB.1 Why
+
+Print-shop operators process 30–80 PDFs per session and almost
+always want the same Card Cleanup toggles + the same slider preset
+(typically Aadhaar 105/130/100 or PAN 115/115/110). Re-toggling
+on every upload was the #1 friction point reported after PR #239
+shipped the split panel.
+
+### AB.2 What persists
+
+`localStorage` key: `idp:prefs:v1`. Value: JSON object with:
+
+- `hideQR`, `hideMobile`, `hideIssueDate`, `hideDownloadDate`
+  (boolean) — the four `#aadhaarToggles` checkboxes.
+- `hologram`, `signature` (boolean) — the two `#panToggles`
+  checkboxes.
+- `bold` (boolean) — the §Z Bold text toggle.
+- `preset` (string) — last-clicked Quick Preset id
+  (`'original' | 'aadhaar' | 'pan'`) or `null` if user dragged
+  sliders manually.
+
+### AB.3 Wiring
+
+- `savePrefs()` — called from every checkbox `change` and every
+  Quick Preset button click. Idempotent, swallows quota errors.
+- `loadPrefs()` — called once before `applyFilters()` in both
+  `processPdf()` (single upload path) and `showBatchPreview()`
+  (batch path). Restores DOM state, then `applyFilters()` reads
+  from DOM as usual.
+- `btnResetEdit` and `btnBack` deliberately do **not** call
+  `savePrefs()` — Reset is a one-off action, Back navigates away
+  without committing.
+
+### AB.4 Versioning
+
+The `:v1` suffix lets future schema changes cleanly invalidate
+old prefs. `loadPrefs()` returns an empty object on JSON parse
+errors, so corrupt data never blocks the app.
+
+---
+
+## §AC ID Card Print — Aadhaar crop fix (front + back side-by-side)
+
+**Status:** SHIPPED — PR #243.
+
+### AC.1 Field report
+
+Operator screenshot of single-card mode preview:
+
+- Top preview labelled **Front** contained both the actual card
+  front (left, photo) and the actual card back (right, QR) glued
+  together as one image.
+- Bottom preview labelled **Back** showed the formal Aadhaar
+  *Letter* back — not card-shaped, useless for CR80 printing.
+  Operator described it as "wastage".
+
+### AC.2 Root cause
+
+Previous `CROP.aadhaar` fractions assumed a vertically-stacked
+layout:
+
+```js
+front: [0.035, 0.06, 0.93, 0.52]   // top half, full width
+back:  [0.035, 0.60, 0.93, 0.36]   // bottom half, full width
+```
+
+Current eAadhaar PDFs from UIDAI place the actual card mock-ups
+**side-by-side** in the upper portion of page 1, with the formal
+Letter back occupying the lower portion. So the upper full-width
+crop captured both card surfaces, and the lower crop captured
+the unwanted Letter content.
+
+### AC.3 Fix
+
+```js
+front: [0.04, 0.06, 0.45, 0.40]    // left half of upper portion
+back:  [0.51, 0.06, 0.45, 0.40]    // right half of upper portion
+```
+
+Each CR80 output now contains exactly one card surface. The
+unwanted Letter content in the lower portion is dropped entirely.
+
+### AC.4 Compatibility
+
+- Auto-swap detector (§AA, PR #240) unaffected — skin-pixel ROI
+  is fractional within the cropped canvas.
+- `AADHAAR_FIELD_MASKS` (`id-print.html` line 727) intentionally
+  **not** retuned in this PR. Old masks were tuned for the Letter
+  back layout. On the new small-card back:
+  - **Hide QR** — still covers a region containing the QR
+    (acceptable but oversized).
+  - **Hide Mobile / Issue Date / Download Date** — small card
+    mock-up typically does not print these fields, so toggles
+    become soft no-ops (they mask blank space, no visible bug).
+- PAN / Voter / Ayushman / Jan Aadhaar / eShram crops unchanged.
+
+### AC.5 Follow-up — AADHAAR_FIELD_MASKS retune
+
+Tracked here, not a separate section yet:
+
+- Capture 5–10 cropped Aadhaar back canvases from current eAadhaar
+  PDFs at the new `[0.51, 0.06, 0.45, 0.40]` crop.
+- Measure pixel positions of: QR code, address block, mobile (if
+  present), issue date (if present), download date (if present).
+- Tighten `qrCode` mask to cover only the QR (currently full-height
+  right strip).
+- If mobile / dates do not appear on the small card, either:
+  (a) hide the toggles entirely when small-card mode is detected, or
+  (b) leave toggles visible and document them as soft no-ops.
+- Single PR, ~10–20 lines in `AADHAAR_FIELD_MASKS` + maybe a
+  layout-detection helper. Code-only per Rule #13.

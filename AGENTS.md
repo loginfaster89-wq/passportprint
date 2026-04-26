@@ -353,16 +353,35 @@ unlock, auto-detect, front+back preview, CR80 output, A4 sheet).
     One-click bright/contrast/sat via luminance histogram. ~25 lines.
   - PR #234 docs — Rule #13 second-half: marks PRs #231/#232
     shipped across SKILL.md §9/§11, AGENTS.md, issues.md §X/§Y.
-- **ID Card Print Phase 4 P3 — IN PROGRESS.**
-  - PR #235 docs (this PR) — §Z research for Photo Editor split
-    panel: 3-panel sidebar reorg (Card Cleanup / Position / Photo
-    Adjust), Bold text toggle, 3 Quick Presets (Original/Aadhaar/PAN),
-    shared §W+§X Front/Back radio. Est. ~80–100 line code PR.
-  - §Z code PR — pending in a separate session per Rule #14.
-- **ID Card Print Phase 4 P3+ — NOT STARTED.** Photo Editor split,
-  Master Settings, PrePrinted Card mode, Printer presets, Bold/BigQR
-  toggles, other-card overlays — full prioritized table in issues.md
-  §V.4.
+- **ID Card Print Phase 4 P3 §Z — SHIPPED.**
+  - PR #235 docs — §Z research, Photo Editor split panel.
+  - PR #239 feat — Step 2 sidebar reorg into 3 labelled panels
+    (Card Cleanup / Position / Photo Adjust), Bold text toggle,
+    3 Quick Presets (Original 100/100/100, Aadhaar 105/130/100,
+    PAN 115/115/110), shared §W+§X Front/Back radio.
+- **ID Card Print field-driven fixes (post-§Z) — SHIPPED.**
+  - PR #240 feat — auto-detect & swap reversed Front/Back for
+    Aadhaar/PAN PDFs (§AA). `skinPixelRatio()` + `shouldAutoSwap()`
+    over photo ROI `[0.04, 0.18, 0.22, 0.55]` with thresholds
+    `bSkin > 0.04 && delta > 0.02`. Manual Swap button in Panel A.
+  - PR #241 feat — inline `#swapNotice` (amber palette) above
+    Front canvas with one-click Undo button. Single-card mode only.
+  - PR #242 feat — persist Card Cleanup toggles + Quick Preset id
+    in `localStorage` key `idp:prefs:v1` (§AB). `savePrefs()` on
+    every change, `loadPrefs()` before `applyFilters()` in both
+    `processPdf()` and `showBatchPreview()`.
+  - PR #243 fix — `CROP.aadhaar` retuned for current eAadhaar
+    layout where front + back card mock-ups sit side-by-side in
+    the upper portion of page 1 (§AC). Front
+    `[0.04, 0.06, 0.45, 0.40]`, Back `[0.51, 0.06, 0.45, 0.40]`.
+    Lower Letter portion dropped. `AADHAAR_FIELD_MASKS` not
+    retuned — follow-up tracked in §AC.5.
+- **ID Card Print Phase 4 P3+ — REMAINING.** Master Settings (DPI/
+  padding/margins per printer, persist in localStorage), PrePrinted
+  Card mode (back-only sheets), Printer presets, BigQR toggle,
+  other-card overlays (Voter / Ayushman / Jan Aadhaar — same pattern
+  as PAN). `AADHAAR_FIELD_MASKS` retune for new small-card back
+  layout. Full prioritized table in issues.md §V.4.
 - **Card size reference:** CR80 = 85.6×54mm = 1011×638px at 300 DPI.
   Lamination pouch = 65×95mm (Reston 125 micron). Test PDFs in repo:
   `test-pdfs/pan-test.pdf` (pw: `05071999`), `test-pdfs/aadhaar-test.pdf`
