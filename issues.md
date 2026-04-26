@@ -3123,3 +3123,137 @@ shrank it to ~122 mm out of 210 mm A4 width — cards came out at
 - [x] **No JS / sheet-builder changes** — pure print-CSS fix.
 - [x] `npm run build` clean. Both `id-print.html` and
       `dist/id-print.html` in this PR.
+
+---
+
+## §AC.18 ID Card Print — Phone PNG download / Print breaks the front card (KNOWN BUG, NOT YET FIXED)
+
+**Status:** **OPEN — to be fixed in next session.** User filed this
+bug right after §AC.17 (PR #265) deployed and explicitly said:
+> "AB YE ERROR NEXT CHAT MAIN SHI KRENGE AB AAPKO YE ERROR HELPING
+> FILES UPDATE KARTE TIME ADD KARNI HAI OR NEW PROMPT BNANA HAI"
+
+So this section is the **handoff brief** — diagnose first, don't
+ship a code fix yet without confirming the root cause on actual
+mobile hardware.
+
+**User feedback (Hinglish, with reference screenshot
+`attached_assets/image_1777222600156.png`):**
+
+> ABHI EK PROBLEM OR HAI — JAB MAIN PHONE SE SHEET PNG DOWNLOAD
+> KARTA HUN YA PRINT KARTA HUN TOH ID SHI SE NHI DIKHTI HAI. IMAGE
+> MAIN AAP KHUD DEKH SKTE HO — ID KA FRONT SIDE SHI NHI HAI, NA
+> BORDER SHI SE KAAM KAR RHA HAI, OR ID KI INFO BHI REMOVE HO GAI
+> HAI.
+
+In plain English: on **mobile (phone) only**, both the **PNG export**
+(`btnDownload`) and the **Print** (`btnPrint`) flows produce a
+broken output. Desktop is fine (just confirmed in §AC.17). The
+specific symptoms are:
+
+1. The **front card** is rendered incorrectly (visually wrong vs the
+   on-screen preview).
+2. The **card border** is not drawn correctly (the §AC.15 black top
+   edge line and/or the §AC.13 / §AC.14 rounded clip border may be
+   missing or misaligned).
+3. **ID info text** (name, DOB, etc.) is missing from the rendered
+   front card — appears blanked-out or clipped.
+
+Back card behaviour was not specifically called out, but should be
+verified at the same time.
+
+### AC.18.1 Diagnostic hypotheses (rank-ordered, to test first)
+
+These are the **most likely root causes** based on what changed
+recently (§AC.14–§AC.17) and known mobile-canvas pitfalls. The next
+session should test each on actual phone hardware (Android Chrome
++ iOS Safari) before writing any fix:
+
+1. **`canvas.toDataURL('image/png')` size limit on iOS Safari.**
+   iOS Safari historically caps `toDataURL` output at ~5 MB / 4096²
+   pixels — A4 @ 300 DPI (2480×3508 = 8.7 MP) with photo content
+   easily exceeds this and silently returns a truncated / empty
+   blob. Affects PNG download path (`btnDownload` → `link.href =
+   a4Canvas.toDataURL('image/png')` at line ~2160). **Fix path:**
+   switch to `canvas.toBlob(blob => …, 'image/png')` and
+   `URL.createObjectURL(blob)`, which doesn't have the same limit.
+
+2. **`CanvasRenderingContext2D.roundRect()` not supported on older
+   mobile browsers.** Rolled out in Chrome 99 / Safari 16 (Sep 2022).
+   Phones older than ~2 years can fall through silently → no clip
+   path → no rounded corners and possibly no fill at all if the
+   `clip()` call is wrapped in something that errors. **Fix path:**
+   feature-detect (`if (typeof ctx.roundRect === 'function')`) and
+   manually walk the path with `arcTo` as a polyfill on older
+   browsers.
+
+3. **`ctx.filter` (canvas filter property) not supported on Safari
+   < 16.** Used by `compositePair` and the per-side bright/contrast/
+   sat sliders. On unsupported browsers the filters silently no-op
+   — front card might render with raw unfiltered colours that look
+   "wrong" vs the preview. **Fix path:** feature-detect; if not
+   supported, apply CSS filters to a wrapper div for the on-screen
+   preview, and skip canvas filter on export (with a warning).
+
+4. **PDF.js render scale on mobile.** On phones with constrained
+   memory, `pdfjsLib.getDocument(...).then(pdf => pdf.getPage(1))
+   .then(page => page.render({ canvasContext, viewport })` may
+   internally cap the viewport scale to avoid OOM. The crop
+   coordinates then pull from a smaller-than-expected pixel grid
+   → cropped output looks different than desktop. **Fix path:**
+   read the actual rendered viewport size after render and clamp
+   crop math to it.
+
+5. **`<meta name="viewport">` interaction with print.** On mobile,
+   the viewport meta can confuse the print stylesheet's
+   `width: 100%` calculation. **Fix path:** add an explicit
+   `<meta name="viewport" content="width=device-width">` check and
+   possibly override the viewport during print.
+
+6. **The §AC.15 4 px black top-line `fillRect`.** Inset uses
+   `(rounded ? r : 0)` — if `r` (corner radius) is undefined on a
+   code path mobile hits, `cardW - 2*undefined` = NaN → fillRect
+   silently does nothing → top border missing. **Fix path:** make
+   `r` always defined (use `r || 0`).
+
+### AC.18.2 Reproduction steps
+
+1. Open `https://studioprint.pages.dev/id-print` on a real Android
+   or iOS phone (Chrome / Safari respectively).
+2. Upload `test-pdfs/aadhaar-test.pdf` (password `SUNI1986`) or
+   `test-pdfs/pan-test.pdf` (password `05071999`).
+3. Wait for Step 2 preview to appear. Confirm it looks correct
+   on-screen.
+4. Tap "⬇ Download PNG" → save the file → open the saved PNG in
+   the phone's Photos app. **Compare against the desktop output
+   for the same PDF.** Capture both for the next-session brief.
+5. Tap "🖨 Print" → take a screenshot of the print dialog → save
+   as PDF if possible. Compare against desktop.
+
+### AC.18.3 Constraints for the fix
+
+- **Minimum diff.** This is a mobile-rendering bug, do not touch
+  desktop behaviour.
+- **No new dependencies.** Fix must work with the existing
+  PDF.js + vanilla canvas stack.
+- **One PR per logical fix.** If 2+ root causes turn out to be
+  involved, ship 2+ small PRs (one per cause), not a megafix.
+- **Verify on real phone before shipping.** Don't ship a
+  speculative fix based on the hypotheses alone.
+- **Hard rules from `AGENTS.md` still apply** — no
+  `.github/workflows/*.yml`, CSS tokens locked, both
+  `id-print.html` and `dist/id-print.html` in the same PR.
+
+### AC.18.4 Files / lines likely involved
+
+- `id-print.html` ~line 2154–2164 — `btnDownload` / `btnPrint`
+  handlers (toDataURL path).
+- `id-print.html` ~line 1397–1660 — all `buildXxxSheet` functions
+  (canvas drawing, including the §AC.15 4 px black top-line, the
+  rounded clip, and `ctx.filter`).
+- `id-print.html` ~line ?? — `compositePair()` and
+  `applyBatchFilters()` (canvas filter usage).
+- `id-print.html` ~line ?? — PDF.js render call (`pdf.getPage(1)
+  .then(page => page.render(...))`).
+- `id-print.html` print CSS block ~line 350–386 (§AC.17) — verify
+  it still works as intended on mobile after any changes.

@@ -499,8 +499,22 @@ unlock, auto-detect, front+back preview, CR80 output, A4 sheet).
     page padding. Pure print-CSS fix, no JS / sheet-builder
     changes. Dragon (1205×1795) and PVC (1417×1417) keep
     natural aspect ratio (no distortion).
+- **§AC.18 KNOWN BUG — phone PNG download / Print breaks the
+  front card.** OPEN, NOT YET FIXED. User reported right after
+  §AC.17 deployed: on **phone only**, the PNG export and the
+  Print flow produce broken output — front card looks wrong,
+  border doesn't render, ID info text disappears. Desktop is
+  fine. User explicitly asked to defer the fix to the next
+  session and to capture this as the next-session brief.
+  Full diagnosis hooks + rank-ordered hypotheses + repro steps
+  in `issues.md §AC.18`. **This is the next session's primary
+  task.**
 - **NEXT — pick from candidates** (see SKILL.md §"TASK NEXT
-  SESSION" for the full list):
+  SESSION" for the full list; **§AC.18 is the priority**):
+  0. **§AC.18 — fix phone PNG download / Print broken front
+     card.** Top hypothesis: `toDataURL` size limit on iOS
+     Safari → switch to `canvas.toBlob` + `URL.createObjectURL`.
+     Verify on real phone first. See `issues.md §AC.18`.
   A. Audit multi-card / Dragon / PVC layouts for the same
      perforation-strip artefact + flush-top treatment, now that
      PAN also rides on the same `buildSingleSheet` path.

@@ -516,15 +516,23 @@ issues.md — full audit + ID Card Print arc
    §AC.14 Crop Aadhaar perforation + flush top + shrink preview (PR #260) —
    §AC.15 1-pair fully flush top + black top-edge line (PR #262) —
    §AC.16 PAN crop fix to actual card row, Aadhaar parity (PR #263) —
-   §AC.17 Print preview canvas full-A4 sizing fix (PR #265))
+   §AC.17 Print preview canvas full-A4 sizing fix (PR #265) —
+   §AC.18 OPEN BUG: phone PNG download / Print breaks front card)
 
 Reference images in .agents/references/ and `attached_assets/` — open
-the latest user-attached `aadhaar-a4-sheet_*.png` and the matching
-`Screenshot_(*)_*.png` set before starting any new layout work.
+the latest user-attached `aadhaar-a4-sheet_*.png`, the matching
+`Screenshot_(*)_*.png` set, and `attached_assets/image_1777222600156.png`
+(§AC.18 reference) before starting any new layout work.
 
 Last shipped: PR #265 (fix: §AC.17 Print preview cards too small on
 A4 — pure print-CSS fix, reset max-width/max-height inside @media
 print so the canvas prints at full A4 portrait size).
+
+**OPEN: §AC.18** — phone (mobile) PNG download / Print produces
+broken front card (border missing, info removed). Desktop OK.
+User explicitly deferred fix to next session and asked for the
+brief to be captured. **This is THE next task.** Full diagnosis +
+hypotheses + repro steps in `issues.md §AC.18`.
 
 Shipped summary (don't redo) — see SKILL.md §9 for the full PR list.
 Highlights:
@@ -632,24 +640,79 @@ test-pdfs/pan-test.pdf (password: 05071999)
 test-pdfs/aadhaar-test.pdf (password: SUNI1986)
 
 ═══════════════════════════════════════════════════════════════
-TASK (NEXT SESSION) — pick from candidates below
+TASK (NEXT SESSION) — §AC.18 phone export / print bug
 ═══════════════════════════════════════════════════════════════
 
-§AC.11–§AC.17 are all SHIPPED. Step 2 preview uses a unified
-landscape `#pairCanvas` (front-LEFT / back-RIGHT, with a Swap
-sides toggle), the A4 result canvas is responsive (caps at 55vh
-desktop / 50vh mobile, max-width 460px), the 1-Pair sheet sits
-**fully flush at the top of the A4 (~2.5mm)** with a 4 px black
-top-edge line on each card and no fold-here line / corner ticks /
-seam ticks, **both Aadhaar AND PAN** cards crop correctly to the
-actual card row (the formal Letter is dropped) with Aadhaar-parity
-treatment, and the **Print preview now sizes the canvas to full
-A4 portrait** (cards at true CR80 85.6 × 54 mm) instead of being
-clipped to the on-screen preview cap.
+§AC.11–§AC.17 are SHIPPED. **§AC.18 is OPEN and is THE primary
+task for the next session** — user explicitly deferred the fix
+("AB YE ERROR NEXT CHAT MAIN SHI KRENGE") and asked for the
+handoff brief to be captured here.
 
-Wait for the user's next request. If they confirm everything looks
-right after PRs #262 + #263 deploy (Cloudflare Pages, ~1-2 min),
-here are the standing candidates for the next session:
+**Bug (one-liner):** On phone (mobile) only, both PNG download
+and Print produce a broken output — the **front card is wrong**,
+the **border isn't drawn**, and the **ID info text is missing**.
+Desktop is fine (just verified in §AC.17 / PR #265).
+
+**User reference image:** `attached_assets/image_1777222600156.png`.
+
+**Top hypothesis (to verify FIRST on real phone hardware):**
+`canvas.toDataURL('image/png')` size limit on iOS Safari. A4 @
+300 DPI = 2480×3508 = 8.7 MP, easily exceeds the ~5 MB / 4096²
+cap on older iOS, returns truncated/empty silently. **Fix path:**
+switch `btnDownload`'s `link.href = a4Canvas.toDataURL(...)` to
+`a4Canvas.toBlob(blob => { link.href = URL.createObjectURL(blob); …
+}, 'image/png')`.
+
+**Other hypotheses (in rank order — see `issues.md §AC.18.1` for
+detailed fix paths):**
+1. `toDataURL` size limit on iOS Safari (top suspect).
+2. `ctx.roundRect()` not supported on browsers older than
+   Chrome 99 / Safari 16 → no clip path → no card border.
+3. `ctx.filter` not supported on Safari < 16 → unfiltered
+   render looks "wrong" vs the preview.
+4. PDF.js render scale capped on memory-constrained phones →
+   crop math pulls from smaller-than-expected pixel grid.
+5. `<meta viewport>` interaction with the §AC.17 print CSS.
+6. The §AC.15 4 px `fillRect(x + (rounded ? r : 0), …)` —
+   if `r` is undefined on a code path mobile takes, NaN math
+   silently no-ops the top border.
+
+**Reproduction (do this FIRST):**
+1. Open `https://studioprint.pages.dev/id-print` on real
+   Android Chrome AND iOS Safari (test both).
+2. Upload `test-pdfs/aadhaar-test.pdf` (pw `SUNI1986`) AND
+   `test-pdfs/pan-test.pdf` (pw `05071999`).
+3. Confirm Step 2 preview looks correct on-screen.
+4. Tap "⬇ Download PNG" → save → open the saved file →
+   compare against the desktop output for the same PDF.
+   Capture both for the brief.
+5. Tap "🖨 Print" → screenshot the print dialog → save as
+   PDF if possible. Compare against desktop.
+
+**Constraints (hard, from `AGENTS.md`):**
+- **Minimum diff.** Mobile-rendering fix only — do not touch
+  desktop behaviour or any of the §AC.14–§AC.17 work.
+- **No new dependencies.**
+- **One PR per logical fix** — if 2+ root causes, ship 2+ PRs.
+- **Verify on real phone before shipping** — don't ship a
+  speculative fix based on hypotheses alone.
+- Standard rules still apply: no `.github/workflows/*.yml`,
+  CSS tokens locked, both `id-print.html` and
+  `dist/id-print.html` in the same PR, branch
+  `devin/<unix_ts>-<short-slug>`, PR via `/tmp/mkpr.mjs`.
+
+**Likely files / lines:**
+- `id-print.html` ~line 2154–2164 — `btnDownload` /
+  `btnPrint` handlers (toDataURL).
+- `id-print.html` ~line 1397–1660 — `buildXxxSheet`
+  functions (rounded clip, §AC.15 black top-line,
+  `ctx.filter`).
+- `id-print.html` `compositePair()` and
+  `applyBatchFilters()` — canvas filter usage.
+- `id-print.html` PDF.js render call.
+- `id-print.html` print CSS (~line 350–386, §AC.17).
+
+**After §AC.18 ships, the standing candidates remain:**
 
 A. **Audit multi-card / Dragon / PVC layouts for the same
    perforation-strip artefact.** The crop changes in §AC.14
