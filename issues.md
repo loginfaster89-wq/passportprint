@@ -637,8 +637,8 @@ placed inside pouch, heat-sealed.
 - ~~Multiple cards per A4 sheet (5 card pairs per sheet)~~ — **shipped PR #193**
 - ~~Cut marks / dashed guides on A4 output~~ — **shipped PR #193**
 - ~~Rounded border option~~ — **shipped PR #194, bug fix PR #197**
-- Voter ID support
-- Dragon sheet (4×6) layout option (2 cards per sheet)
+- ~~Voter ID support~~ — **shipped PR #202**
+- ~~Dragon sheet (4×6) layout option (2 cards per sheet)~~ — **shipped PR #203**
 
 **Phase 3 (future):**
 - Ayushman / Jan Aadhaar / eShram support
@@ -729,12 +729,13 @@ Tested locally with both test PDFs after PR #189 merge:
 | O2 | PR #193 | **Multi-card A4 layout.** 5 card pairs per sheet, cut marks/dashed guides, layout toggle (single fold-and-laminate vs 5-pair multi-card), column headers (Front/Back), corner marks for precision cutting. | **merged** |
 | O3 | PR #194 | **Rounded corners toggle.** Checkbox in preview step — “Rounded Corners” on/off. Canvas `roundedRectPath` + `drawCardClipped` clip-path via `arcTo`. Applies to preview canvases (CSS `border-radius` + canvas clip) and A4 sheet (canvas clip). Default off. `CARD_RADIUS = 36` px. | **merged** |
 | O4 | PR #197 | **Bug fix: `var r` variable shadowing + docs update.** In `buildMultiCardSheet()`, the loop variable `r` (row index) was overwritten by `var r = roundedCorners ? CARD_RADIUS : 0`. With `var` being function-scoped, this caused infinite loop when rounded corners off (r resets to 0 every iteration) and only 1 row drawn when on (r becomes 36, exceeds rows=5). Fix: moved radius calculation outside loop as `var radius`. Also updated SKILL.md, AGENTS.md, issues.md with shipped summary for PRs #192–#197. | **merged** |
+|| O5 | PR #201 | **Docs update.** Fill Voter ID task in prompt, update AGENTS.md. | **merged** |
+|| O6 | PR #202 | **Voter ID multi-page PDF support.** Multi-page Voter ID PDF (front page 1, back page 2), auto-detect via keywords, renders both pages at 300 DPI, auto-crop front+back, CR80 output, preview, A4 sheet. | **merged** |
+|| O7 | PR #203 | **Dragon sheet (4×6) layout.** Third layout toggle option — 1205×1795px sheet, 2 cards stacked vertically (front + back), cut marks, corner marks, rounded corners support, dedicated download filename. | **merged** |
 
-### What's still open (Phase 2 remainder + Phase 3)
+### What's still open (Phase 3)
 
-**Phase 2 (not yet implemented):**
-- Voter ID support
-- Dragon sheet (4×6) layout option (2 cards per sheet)
+**Phase 2 — COMPLETE.** All items shipped (photo editing PR #191, multi-card A4 PR #193, cut marks PR #193, rounded corners PR #194/#197, Voter ID PR #202, Dragon sheet PR #203).
 
 **Phase 3 (future):**
 - Ayushman / Jan Aadhaar / eShram support

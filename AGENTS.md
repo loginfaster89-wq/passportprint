@@ -284,9 +284,10 @@ both test PDFs — PAN and Aadhaar flows ALL PASSED (upload, password
 unlock, auto-detect, front+back preview, CR80 output, A4 sheet).
 
 **Open backlog:**
-- **ID Card Print Phase 2 (remaining)** — Voter ID support, Dragon
-  sheet layout. (Photo editing, multi-card A4, cut marks, rounded
-  borders all shipped.)
+- **ID Card Print Phase 2 — COMPLETE.** All items shipped: photo
+  editing (PR #191), multi-card A4 (PR #193), cut marks (PR #193),
+  rounded corners (PR #194/#197), Voter ID (PR #202), Dragon sheet
+  (PR #203).
 - **ID Card Print Phase 3** — Ayushman/Jan Aadhaar/eShram, batch
   processing, PVC card tray (Epson L805/L8050), toggle options, auto
   photo enhancement.
