@@ -93,16 +93,7 @@ No dev server — edit source, `npm run build`, preview from `dist/`.
     any backlog, solve them **one by one** — one issue per PR, one PR
     per commit cycle. Do not batch multiple unrelated fixes into a
     single PR. Keeps diffs small, reviews fast, rollbacks safe.
-13. **Half-half working (2026-04-26).** Split every session into two
-    halves. **First half:** actual coding / feature work — implement
-    the task, test, create PR. **Second half:** update Devin helping
-    files (`SKILL.md`, `AGENTS.md`, `issues.md`) with what shipped,
-    update the ready-to-paste prompt in §11 with the new last-PR and
-    shipped summary so the user can copy-paste it into the next session.
-    Never skip the second half — the user needs updated docs and a
-    fresh prompt to start the next session efficiently. If quota is
-    tight, prioritise the docs update over extra polish on the feature.
-14. **Research → docs → code (2026-04-26).** Kisi bhi naye feature par
+13. **Research → docs → code (2026-04-26).** Kisi bhi naye feature par
     coding shuru karne se PEHLE, usi session mein Devin helping files
     (`SKILL.md`, `AGENTS.md`, `issues.md`) ko research findings ke saath
     update karo — ek alag "docs update PR" banao. Ye ensure karta hai ki
@@ -306,8 +297,9 @@ Do NOT re-fix any of the following — they are all merged:
 - PR #197: fix `var r` variable shadowing bug in `buildMultiCardSheet()`
   + docs update (loop variable `r` was overwritten by radius `r` —
   caused infinite loop when rounded corners off, only 1 row when on).
-- PR #198: docs — add half-half working rule (SKILL.md §2 rule #13,
-  AGENTS.md rule #9) + fix PR #195→#197 references across all docs.
+- PR #198: docs — fix PR #195→#197 references across all docs.
+  (This PR also added a "half-half working" rule to SKILL.md §2 and
+  AGENTS.md, which was later removed in PR #250.)
 - PR #199: docs — mark shipped Phase 2 items in issues.md §M.6
   (multi-card PR #193, cut marks PR #193, rounded corners PR #194/
   #197), update §11 prompt template for next session.
@@ -469,7 +461,7 @@ Last PR: PR #235 (docs: Phase 4 P3 §Z research — Photo
   Position / Photo Adjust panels, add Bold text toggle, add Original/
   Aadhaar/PAN quick presets, consolidate §W+§X Front/Back radios into
   one shared radio. ~80–100 line code PR pending in a separate session
-  per Rule #14)
+  per Rule #13)
 
 Shipped summary (don't redo):
 PRs #70–#230: all previous work shipped
@@ -483,7 +475,8 @@ PRs #70–#230: all previous work shipped
 - PR #194: ID Card Print Phase 2 — rounded corners toggle (canvas
   clip-path with arcTo, preview + A4 sheet)
 - PR #197: fix rounded corners var shadowing bug in buildMultiCardSheet
-- PR #198: docs — add half-half working rule
+- PR #198: docs — fix PR #195→#197 refs (also added a half-half
+  rule that was later removed in PR #250)
 - PR #199: docs — mark shipped Phase 2 items + update prompt
 - PR #201: docs — fill Voter ID task in prompt, update AGENTS.md
 - PR #202: ID Card Print Phase 2 — Voter ID multi-page PDF support
@@ -508,8 +501,7 @@ PRs #70–#230: all previous work shipped
   drawFilteredToCanvas, drawFiltered, applyBatchFilters. Reset clears.
 - PR #218: CLOSED (conflicted, mixed code+docs against current
   main). Superseded by PR #232 — same algorithm, code-only, rebased.
-- PR #219: docs — second-half update (Rule #13) marking PRs #216-#218
-  shipped in SKILL.md + AGENTS.md.
+- PR #219: docs — marking PRs #216-#218 shipped in SKILL.md + AGENTS.md.
 - PR #220: docs — PAN Signature Box research. Adds §U to issues.md
   with PAN_OVERLAY_REGIONS coords (signatureBox at front x:540 y:470
   w:380 h:110), `applyPanOverlays()` design mirroring `applyAadhaarMasks()`,
@@ -536,7 +528,7 @@ PRs #70–#230: all previous work shipped
   (mirrors applyAadhaarMasks), silver gradient fill + white "HOLOGRAM"
   label DM Mono 24px. Wired into listener array + reset; existing 3
   call-sites unchanged (function is generic per side).
-- PR #225: docs — Rule #13 second-half update for PRs #223/#224.
+- PR #225: docs — marks PRs #223/#224 shipped.
   SKILL.md §9 marks Phase 4 P1 items shipped + §11 prompt template
   refreshed (Last PR, shipped summary, next-task → P2 Move/Zoom).
   AGENTS.md open backlog updated to show Phase 4 P1 SHIPPED.
@@ -566,8 +558,8 @@ PRs #70–#230: all previous work shipped
   from closed #218. One-click brightness/contrast/saturation
   optimisation via front card luminance histogram. Algorithm:
   bright = clamp(128/avgLum*100, 70, 160), contrast 115%, sat 110%.
-  Code-only per rule #13. ~25 lines added.
-- PR #234: docs — Rule #13 second-half. Marks PRs #231/#232
+  ~25 lines added.
+- PR #234: docs — marks PRs #231/#232
   shipped across SKILL.md §9/§11 + AGENTS.md backlog + issues.md
   §X banner / §X.11 follow-up / new §Y section.
 - PR #235: docs (this PR) — Phase 4 P3 §Z research: Photo Editor
@@ -660,7 +652,7 @@ Field-driven fixes (post-§Z) COMPLETE:
   → `var gap = 0` so front+back touch on A4. Matches user's
   snipping-tool reference exactly. — SHIPPED
 
-TASK: Phase 4 P3+ remaining items next. Per Rule #14, research first
+TASK: Phase 4 P3+ remaining items next. Per Rule #13, research first
 — open a docs PR with UX / state-shape research, THEN a code PR.
 Per Rule #12, ONE item per session.
 
