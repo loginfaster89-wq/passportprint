@@ -154,7 +154,7 @@
 
 /* Layout toggle */
 .idp-layout-toggle{
-  display:flex;gap:0;margin:0 auto 18px;max-width:420px;
+  display:flex;gap:0;margin:0 auto 18px;max-width:560px;
   border:1px solid var(--border);border-radius:10px;overflow:hidden;
   font-family:'DM Mono',monospace;font-size:12px;
 }
@@ -438,6 +438,7 @@ input.idp-range::-moz-range-thumb{
       <div class="idp-layout-toggle">
         <button type="button" class="idp-layout-opt" data-layout="single">1 Pair · Fold &amp; Laminate</button>
         <button type="button" class="idp-layout-opt active" data-layout="multi">5 Pairs · Multi-Card</button>
+        <button type="button" class="idp-layout-opt" data-layout="dragon">2 Cards · Dragon Sheet</button>
       </div>
       <div class="idp-a4-wrap">
         <canvas id="a4Canvas" width="2480" height="3508"></canvas>
@@ -525,6 +526,8 @@ const CR80_W = 1011;
 const CR80_H = 638;
 const A4_W = 2480;
 const A4_H = 3508;
+const DRAGON_W = 1205;
+const DRAGON_H = 1795;
 const RENDER_SCALE = 4;
 
 const AADHAAR_KEYWORDS = ['aadhaar','uid','uidai','unique identification','government of india','vid','enrolment','download date','issue date'];
@@ -782,6 +785,7 @@ function drawToCanvas(canvas, srcCanvas, w, h) {
 /* ── A4 Sheet generation ── */
 function buildSheet() {
   if (currentLayout === 'multi') buildMultiCardSheet();
+  else if (currentLayout === 'dragon') buildDragonSheet();
   else buildSingleSheet();
 }
 
@@ -936,6 +940,83 @@ function buildMultiCardSheet() {
   ctx.fillText('CR80 \u00b7 85.6 \u00d7 54 mm \u00b7 5 pairs \u00b7 300 DPI \u2014 Studio Print', A4_W / 2, marginY + totalH + 50);
 }
 
+function buildDragonSheet() {
+  var ctx = a4Canvas.getContext('2d');
+  a4Canvas.width = DRAGON_W;
+  a4Canvas.height = DRAGON_H;
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, DRAGON_W, DRAGON_H);
+
+  var cardW = CR80_W;
+  var cardH = CR80_H;
+  var gap = 20;
+  var totalH = cardH * 2 + gap;
+  var marginX = Math.round((DRAGON_W - cardW) / 2);
+  var marginY = Math.round((DRAGON_H - totalH) / 2);
+
+  var radius = roundedCorners ? CARD_RADIUS : 0;
+
+  /* Card 1 — Front */
+  if (frontImageData) {
+    if (radius > 0) drawCardClipped(ctx, frontImageData, marginX, marginY, cardW, cardH, radius);
+    else ctx.drawImage(frontImageData, marginX, marginY, cardW, cardH);
+  }
+
+  /* Card 2 — Back */
+  if (backImageData) {
+    var y2 = marginY + cardH + gap;
+    if (radius > 0) drawCardClipped(ctx, backImageData, marginX, y2, cardW, cardH, radius);
+    else ctx.drawImage(backImageData, marginX, y2, cardW, cardH);
+  }
+
+  /* Cut marks — dashed guides */
+  ctx.setLineDash([8, 6]);
+  ctx.strokeStyle = '#bbb';
+  ctx.lineWidth = 1;
+
+  var extH = 16;
+  var extW = 16;
+
+  /* Horizontal cut lines (above card 1, between cards, below card 2) */
+  var hLines = [marginY, marginY + cardH + gap / 2, marginY + totalH];
+  hLines.forEach(function(y) {
+    ctx.beginPath();
+    ctx.moveTo(marginX - extW, y);
+    ctx.lineTo(marginX + cardW + extW, y);
+    ctx.stroke();
+  });
+
+  /* Vertical cut lines (left, right) */
+  var vLines = [marginX, marginX + cardW];
+  vLines.forEach(function(x) {
+    ctx.beginPath();
+    ctx.moveTo(x, marginY - extH);
+    ctx.lineTo(x, marginY + totalH + extH);
+    ctx.stroke();
+  });
+
+  ctx.setLineDash([]);
+
+  /* Corner marks */
+  ctx.strokeStyle = '#999';
+  ctx.lineWidth = 1.5;
+  var markLen = 24;
+  drawCornerMarks(ctx, marginX, marginY, cardW, cardH, markLen);
+  drawCornerMarks(ctx, marginX, marginY + cardH + gap, cardW, cardH, markLen);
+
+  /* Labels */
+  ctx.fillStyle = '#999';
+  ctx.font = '16px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('Front', marginX + cardW / 2, marginY - 12);
+  ctx.fillText('Back', marginX + cardW / 2, marginY + cardH + gap - 12);
+
+  /* Footer label */
+  ctx.fillStyle = '#aaa';
+  ctx.font = '14px sans-serif';
+  ctx.fillText('CR80 \u00b7 4\u00d76 Dragon Sheet \u00b7 300 DPI \u2014 Studio Print', DRAGON_W / 2, marginY + totalH + 40);
+}
+
 function drawCornerMarks(ctx, x, y, w, h, len) {
   var corners = [
     [x, y], [x + w, y], [x, y + h], [x + w, y + h]
@@ -1071,6 +1152,9 @@ function updateSheetMeta() {
   if (currentLayout === 'multi') {
     sheetTitle.textContent = 'A4 Sheet \u2014 5 Card Pairs';
     sheetDesc.textContent = 'Print \u2192 cut along dashed lines \u2192 laminate each card separately. Saves paper.';
+  } else if (currentLayout === 'dragon') {
+    sheetTitle.textContent = 'Dragon Sheet \u2014 4\u00d76 (2 Cards)';
+    sheetDesc.textContent = 'Print on 4\u00d76 photo paper \u2192 cut along guides \u2192 laminate each card.';
   } else {
     sheetTitle.textContent = 'A4 Sheet \u2014 Fold & Laminate Layout';
     sheetDesc.textContent = 'Print \u2192 cut around cards \u2192 fold in half \u2192 laminate in 65\u00d795mm pouch';
@@ -1099,7 +1183,8 @@ btnBackPreview.addEventListener('click', () => showStep(2));
 
 btnDownload.addEventListener('click', () => {
   var link = document.createElement('a');
-  link.download = (detectedType || 'id-card') + '-a4-sheet.png';
+  var suffix = currentLayout === 'dragon' ? '-dragon-sheet.png' : '-a4-sheet.png';
+  link.download = (detectedType || 'id-card') + suffix;
   link.href = a4Canvas.toDataURL('image/png');
   link.click();
 });
