@@ -153,13 +153,6 @@ iPad portrait / narrow tablets.
    backlog, solve them **one by one** — one issue per PR, one PR per
    commit cycle. Do not batch multiple unrelated fixes into a single PR.
    This keeps diffs small, reviews fast, and rollbacks safe.
-9. **Research → docs → code (2026-04-26).** Kisi bhi naye feature par
-   coding shuru karne se PEHLE, usi session mein Devin helping files
-   (`SKILL.md`, `AGENTS.md`, `issues.md`) ko research findings ke saath
-   update karo — ek alag "docs update PR" banao. Quota khatam hone ya
-   session break hone par bhi research safe rahe. Rule: Research →
-   Docs PR → Coding PR. Kabhi skip mat karo.
-
 ## Homepage grids → slider activation (post PR #64 / #65)
 
 `assets/sliders.js` (plain JS, deliberately **not** obfuscated — PR #65
