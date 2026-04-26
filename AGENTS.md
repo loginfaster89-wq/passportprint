@@ -370,18 +370,21 @@ unlock, auto-detect, front+back preview, CR80 output, A4 sheet).
     in `localStorage` key `idp:prefs:v1` (§AB). `savePrefs()` on
     every change, `loadPrefs()` before `applyFilters()` in both
     `processPdf()` and `showBatchPreview()`.
-  - PR #243 fix — `CROP.aadhaar` retuned for current eAadhaar
-    layout where front + back card mock-ups sit side-by-side in
-    the upper portion of page 1 (§AC). Front
-    `[0.04, 0.06, 0.45, 0.40]`, Back `[0.51, 0.06, 0.45, 0.40]`.
-    Lower Letter portion dropped. `AADHAAR_FIELD_MASKS` not
-    retuned — follow-up tracked in §AC.5.
+  - PR #243 fix — `CROP.aadhaar` first retune (§AC), regressed to
+    upper-row formal Letter + Notice. Superseded by PR #245.
+  - PR #245 fix — `CROP.aadhaar` re-retuned for the BOTTOM-row
+    plastic-card mock-ups (§AC.6). Front `[0.010, 0.682, 0.477,
+    0.231]`, Back `[0.504, 0.682, 0.488, 0.231]`. Also retuned
+    `AADHAAR_FIELD_MASKS` for the small-card layout: `qrCode
+    {535,75,390,350}`, `mobileNumber {0,0,0,0}` (soft no-op),
+    `issueDate {2,105,22,145}`, `downloadDate {2,250,22,160}`
+    (narrow vertical strips on the left margin where rotated
+    date text appears). Closes §AC.5 follow-up.
 - **ID Card Print Phase 4 P3+ — REMAINING.** Master Settings (DPI/
   padding/margins per printer, persist in localStorage), PrePrinted
   Card mode (back-only sheets), Printer presets, BigQR toggle,
   other-card overlays (Voter / Ayushman / Jan Aadhaar — same pattern
-  as PAN). `AADHAAR_FIELD_MASKS` retune for new small-card back
-  layout. Full prioritized table in issues.md §V.4.
+  as PAN). Full prioritized table in issues.md §V.4.
 - **Card size reference:** CR80 = 85.6×54mm = 1011×638px at 300 DPI.
   Lamination pouch = 65×95mm (Reston 125 micron). Test PDFs in repo:
   `test-pdfs/pan-test.pdf` (pw: `05071999`), `test-pdfs/aadhaar-test.pdf`

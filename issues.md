@@ -2216,7 +2216,7 @@ rendered back canvas at CR80 1011×638:
 
 ```js
 const AADHAAR_FIELD_MASKS = {
-  qrCode:       { side: 'back', x: 540, y:  95, w: 305, h: 320 },
+  qrCode:       { side: 'back', x: 535, y:  75, w: 390, h: 350 },
   mobileNumber: { side: 'back', x:   0, y:   0, w:   0, h:   0 },
   issueDate:    { side: 'back', x:   2, y: 105, w:  22, h: 145 },
   downloadDate: { side: 'back', x:   2, y: 250, w:  22, h: 160 },
@@ -2224,9 +2224,10 @@ const AADHAAR_FIELD_MASKS = {
 ```
 
 Mapping per field:
-- **qrCode** — middle-right rectangle. Tightened from the old
-  full-height right strip; covers the QR exactly with a small
-  bleed for safety.
+- **qrCode** — middle-right rectangle covering the full QR with
+  ~5 px bleed on each side. Sized from the actual rendered QR
+  bounds (x≈541..916, y≈80..419) on the new bottom-row crop, so
+  no edge of the QR pattern leaks through.
 - **mobileNumber** — small-card mock-up does not print a mobile
   number. Set to 0×0 px, which makes `ctx.fillRect()` a no-op.
   UI toggle is preserved for backward compatibility and any
