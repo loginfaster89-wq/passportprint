@@ -153,20 +153,12 @@ iPad portrait / narrow tablets.
    backlog, solve them **one by one** — one issue per PR, one PR per
    commit cycle. Do not batch multiple unrelated fixes into a single PR.
    This keeps diffs small, reviews fast, and rollbacks safe.
-9. **Half-half working (2026-04-26).** Split every session into two
-   halves. **First half:** actual coding / feature work — implement the
-   task, test, create PR. **Second half:** update Devin helping files
-   (`SKILL.md`, `AGENTS.md`, `issues.md`) with what shipped, update the
-   ready-to-paste prompt in SKILL.md §11 with the new last-PR and
-   shipped summary so the user can copy-paste it into the next session.
-   Never skip the second half — the user needs updated docs and a fresh
-   prompt to start the next session efficiently.
-10. **Research → docs → code (2026-04-26).** Kisi bhi naye feature par
-    coding shuru karne se PEHLE, usi session mein Devin helping files
-    (`SKILL.md`, `AGENTS.md`, `issues.md`) ko research findings ke saath
-    update karo — ek alag "docs update PR" banao. Quota khatam hone ya
-    session break hone par bhi research safe rahe. Rule: Research →
-    Docs PR → Coding PR. Kabhi skip mat karo.
+9. **Research → docs → code (2026-04-26).** Kisi bhi naye feature par
+   coding shuru karne se PEHLE, usi session mein Devin helping files
+   (`SKILL.md`, `AGENTS.md`, `issues.md`) ko research findings ke saath
+   update karo — ek alag "docs update PR" banao. Quota khatam hone ya
+   session break hone par bhi research safe rahe. Rule: Research →
+   Docs PR → Coding PR. Kabhi skip mat karo.
 
 ## Homepage grids → slider activation (post PR #64 / #65)
 
@@ -281,8 +273,9 @@ sheet, cut marks/dashed guides, layout toggle (single vs multi-card),
 corner marks. PR #194 **ID Card Print Phase 2 rounded corners** —
 toggle checkbox, canvas clip-path with arcTo, preview + A4 sheet.
 PR #197 fix `var r` variable shadowing bug in multi-card sheet
-generation + docs update. PR #198 docs — add half-half working rule +
-fix PR #195→#197 references. PR #199 docs — mark shipped Phase 2
+generation + docs update. PR #198 docs — fix PR #195→#197
+references (this PR also added a "half-half working" rule that was
+later removed in PR #250). PR #199 docs — mark shipped Phase 2
 items in issues.md §M.6 + update SKILL.md §11 prompt template.
 
 **Also resolved (PRs #201–#208):** PR #201 docs — fill Voter ID task,
@@ -335,7 +328,7 @@ unlock, auto-detect, front+back preview, CR80 output, A4 sheet).
     chkHologram checkbox in #panToggles; applyPanOverlays refactored
     to loop pattern mirroring applyAadhaarMasks; silver gradient fill
     + white DM Mono "HOLOGRAM" label, 24px centred; §V.2.b).
-  - PR #225 docs (this PR) — Rule #13 second-half: marks PRs #223/#224
+  - PR #225 docs (this PR) — marks PRs #223/#224
     shipped across SKILL.md, AGENTS.md, issues.md; refreshes §11 prompt
     template to point at Phase 4 P2 (Move/Zoom).
 - **ID Card Print Phase 4 P2 — SHIPPED.**
@@ -351,7 +344,7 @@ unlock, auto-detect, front+back preview, CR80 output, A4 sheet).
 - **ID Card Print Phase 3 follow-up — SHIPPED.**
   - PR #232 feat — Auto Enhance button (§Y), rebased from closed #218.
     One-click bright/contrast/sat via luminance histogram. ~25 lines.
-  - PR #234 docs — Rule #13 second-half: marks PRs #231/#232
+  - PR #234 docs — marks PRs #231/#232
     shipped across SKILL.md §9/§11, AGENTS.md, issues.md §X/§Y.
 - **ID Card Print Phase 4 P3 §Z — SHIPPED.**
   - PR #235 docs — §Z research, Photo Editor split panel.
