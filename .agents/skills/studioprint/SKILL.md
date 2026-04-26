@@ -229,7 +229,7 @@ Include order on each page:
 
 ## 9. Shipped work & open backlog
 
-Everything from PRs #70–#197 is shipped. See `issues.md` for the full
+Everything from PRs #70–#198 is shipped. See `issues.md` for the full
 audit trail. Do NOT re-fix any of the following — they are all merged:
 
 - PRs #70–#114: original audit quick-wins + responsive + flow fixes.
@@ -296,6 +296,8 @@ audit trail. Do NOT re-fix any of the following — they are all merged:
 - PR #197: fix `var r` variable shadowing bug in `buildMultiCardSheet()`
   + docs update (loop variable `r` was overwritten by radius `r` —
   caused infinite loop when rounded corners off, only 1 row when on).
+- PR #198: docs — add half-half working rule (SKILL.md §2 rule #13,
+  AGENTS.md rule #9) + fix PR #195→#197 references across all docs.
 
 **Verified (2026-04-26):** Both test PDFs fully working:
 - PAN PDF: upload → password unlock (05071999) → auto-detect PAN →
@@ -406,11 +408,11 @@ Clone ke baad pehle ye teen files padho:
 AGENTS.md — full source of truth
 issues.md — full audit + §M ID Card Print research + §O Phase 2 multi-card
 
-Last PR: PR #197 (fix: rounded corners variable shadowing bug in
-multi-card A4 sheet generation + docs update)
+Last PR: PR #198 (docs: add half-half working rule + fix PR #195→#197
+references)
 
 Shipped summary (don't redo):
-PRs #70–#197: all previous work shipped
+PRs #70–#198: all previous work shipped
 - PRs #70–#189: original audit + Document Sheet + ID Card Print Phase 1
 - PR #190: docs update
 - PR #191: ID Card Print Phase 2 — photo editing (brightness/contrast/
@@ -422,6 +424,7 @@ PRs #70–#197: all previous work shipped
   clip-path with arcTo, preview + A4 sheet)
 - PR #197: fix rounded corners var shadowing bug in buildMultiCardSheet
   + docs update
+- PR #198: docs — add half-half working rule + fix PR #195→#197 refs
 
 ID Card Print current state:
 - Phase 1 MVP COMPLETE + VERIFIED (PR #188)
