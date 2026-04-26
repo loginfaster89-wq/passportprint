@@ -719,12 +719,20 @@ Tested locally with both test PDFs after PR #189 merge:
 | N1 | PR #190 | **Docs update.** Updated shipped summary + verification results for PRs #186–#189. | **merged** |
 | N2 | PR #191 | **Photo editing controls.** Real-time brightness/contrast/saturation sliders on preview step. Canvas `ctx.filter` (CSS filter syntax). Edited output carries through to A4 sheet generation. Reset button. Hidden in `@media print`. Mobile-responsive (sliders stack vertically ≤640px). Existing design tokens only, no new deps. | **merged** |
 
+## O. ID Card Print — Phase 2 multi-card + rounded corners (2026-04-26, sessions #14–#15)
+
+**Status: SHIPPED — PRs #193, #194, #195.**
+
+| # | PR | What shipped | Status |
+|---|------|---------|--------|
+| O1 | PR #192 | **Docs update.** Updated shipped summary for PRs #190–#191 + new prompt. | **merged** |
+| O2 | PR #193 | **Multi-card A4 layout.** 5 card pairs per sheet, cut marks/dashed guides, layout toggle (single fold-and-laminate vs 5-pair multi-card), column headers (Front/Back), corner marks for precision cutting. | **merged** |
+| O3 | PR #194 | **Rounded corners toggle.** Checkbox in preview step — “Rounded Corners” on/off. Canvas `roundedRectPath` + `drawCardClipped` clip-path via `arcTo`. Applies to preview canvases (CSS `border-radius` + canvas clip) and A4 sheet (canvas clip). Default off. `CARD_RADIUS = 36` px. | **merged** |
+| O4 | PR #195 | **Bug fix: `var r` variable shadowing.** In `buildMultiCardSheet()`, the loop variable `r` (row index) was overwritten by `var r = roundedCorners ? CARD_RADIUS : 0`. With `var` being function-scoped, this caused infinite loop when rounded corners off (r resets to 0 every iteration) and only 1 row drawn when on (r becomes 36, exceeds rows=5). Fix: moved radius calculation outside loop as `var radius`. | **merged** |
+
 ### What's still open (Phase 2 remainder + Phase 3)
 
 **Phase 2 (not yet implemented):**
-- Multiple cards per A4 sheet (4-5 card pairs to save paper)
-- Cut marks / dashed guides on A4 output
-- Rounded border option
 - Voter ID support
 - Dragon sheet (4×6) layout option (2 cards per sheet)
 

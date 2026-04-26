@@ -220,7 +220,7 @@ Include order on each page:
 
 ## 9. Shipped work & open backlog
 
-Everything from PRs #70–#189 is shipped. See `issues.md` for the full
+Everything from PRs #70–#195 is shipped. See `issues.md` for the full
 audit trail. Do NOT re-fix any of the following — they are all merged:
 
 - PRs #70–#114: original audit quick-wins + responsive + flow fixes.
@@ -278,6 +278,15 @@ audit trail. Do NOT re-fix any of the following — they are all merged:
   brightness/contrast/saturation sliders with live preview via canvas
   `ctx.filter`. Output carries through to A4 sheet. Reset button.
   Mobile-responsive (≤640px stacks vertically). Existing tokens only.
+- PR #192: docs update for PRs #190–#191.
+- PR #193: **ID Card Print Phase 2 multi-card A4** — 5 card pairs per
+  sheet, cut marks/dashed guides, layout toggle (single fold-and-laminate
+  vs multi-card), corner marks for precision cutting.
+- PR #194: **ID Card Print Phase 2 rounded corners** — toggle checkbox,
+  canvas clip-path with `arcTo`, applies to preview + A4 sheet.
+- PR #195: fix `var r` variable shadowing bug in `buildMultiCardSheet()`
+  (loop variable `r` was overwritten by radius `r` — caused infinite
+  loop when rounded corners off, only 1 row when on).
 
 **Verified (2026-04-26):** Both test PDFs fully working:
 - PAN PDF: upload → password unlock (05071999) → auto-detect PAN →
@@ -333,9 +342,9 @@ card sizes, lamination specs, and feature plan documented in
 
 **Phase 2 (follow-up PRs):**
 - ~~Photo editing (brightness/contrast/saturation)~~ — **shipped PR #191**
-- Multiple cards per A4 (4-5 pairs per sheet)
-- Cut marks/guides on A4 output
-- Rounded border option
+- ~~Multiple cards per A4 (4-5 pairs per sheet)~~ — **shipped PR #193**
+- ~~Cut marks/guides on A4 output~~ — **shipped PR #193**
+- ~~Rounded border option~~ — **shipped PR #194, bug fix PR #195**
 - Voter ID support
 - Dragon sheet (4×6) layout option
 
@@ -354,7 +363,7 @@ vertically. Never shrink text below these minimums. If adding features,
 add them to all 3 cards consistently.
 
 **Open:** `F7` GSI iframe warnings (not our code, harmless).
-Phase 2 remainder + Phase 3 items — see lists above.
+Phase 2 remainder (Voter ID, Dragon sheet) + Phase 3 items — see lists above.
 
 ## 10. Related repos
 
@@ -386,23 +395,30 @@ Studio Print frontend par kaam karo. Repo: loginfaster89-wq/passportprint
 Clone ke baad pehle ye teen files padho:
 .agents/skills/studioprint/SKILL.md — Devin recipe
 AGENTS.md — full source of truth
-issues.md — full audit + §M ID Card Print research + §N Phase 2
+issues.md — full audit + §M ID Card Print research + §O Phase 2 multi-card
 
-Last PR: PR #191 (feat: add photo editing controls to ID Card Print —
-brightness/contrast/saturation sliders)
+Last PR: PR #195 (fix: rounded corners variable shadowing bug in
+multi-card A4 sheet generation)
 
 Shipped summary (don't redo):
-PRs #70–#191: all previous work shipped
+PRs #70–#195: all previous work shipped
 - PRs #70–#189: original audit + Document Sheet + ID Card Print Phase 1
 - PR #190: docs update
 - PR #191: ID Card Print Phase 2 — photo editing (brightness/contrast/
   saturation sliders with live preview)
+- PR #192: docs update
+- PR #193: ID Card Print Phase 2 — multi-card A4 layout (5 pairs per
+  sheet, cut marks, layout toggle)
+- PR #194: ID Card Print Phase 2 — rounded corners toggle (canvas
+  clip-path with arcTo, preview + A4 sheet)
+- PR #195: fix rounded corners var shadowing bug in buildMultiCardSheet
 
 ID Card Print current state:
 - Phase 1 MVP COMPLETE + VERIFIED (PR #188)
 - Phase 2 photo editing SHIPPED (PR #191)
-- Phase 2 remainder OPEN: multi-card A4, cut marks, rounded borders,
-  Voter ID, Dragon sheet
+- Phase 2 multi-card A4 SHIPPED (PR #193)
+- Phase 2 rounded corners SHIPPED (PR #194, bug fix #195)
+- Phase 2 remainder OPEN: Voter ID, Dragon sheet
 - Phase 3 OPEN: Ayushman/Jan Aadhaar/eShram, batch, PVC tray, toggles
 
 Test PDFs repo mein saved hain:

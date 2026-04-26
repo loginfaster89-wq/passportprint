@@ -261,15 +261,22 @@ photo editing** — brightness/contrast/saturation sliders with live
 preview, output carries through to A4 sheet, reset button, mobile-
 responsive.
 
+**Also resolved (PRs #192–#195):** PR #192 docs update for #190–#191.
+PR #193 **ID Card Print Phase 2 multi-card A4** — 5 card pairs per
+sheet, cut marks/dashed guides, layout toggle (single vs multi-card),
+corner marks. PR #194 **ID Card Print Phase 2 rounded corners** —
+toggle checkbox, canvas clip-path with arcTo, preview + A4 sheet.
+PR #195 fix `var r` variable shadowing bug in multi-card sheet
+generation.
+
 **Verified (2026-04-26):** ID Card Print Phase 1 MVP fully tested with
 both test PDFs — PAN and Aadhaar flows ALL PASSED (upload, password
 unlock, auto-detect, front+back preview, CR80 output, A4 sheet).
 
 **Open backlog:**
-- **ID Card Print Phase 2 (remaining)** — multiple cards per A4
-  (4-5 pairs), cut marks/guides, rounded border option, Voter ID
-  support, Dragon sheet layout. (Photo editing already shipped in
-  PR #191.)
+- **ID Card Print Phase 2 (remaining)** — Voter ID support, Dragon
+  sheet layout. (Photo editing, multi-card A4, cut marks, rounded
+  borders all shipped.)
 - **ID Card Print Phase 3** — Ayushman/Jan Aadhaar/eShram, batch
   processing, PVC card tray (Epson L805/L8050), toggle options, auto
   photo enhancement.
