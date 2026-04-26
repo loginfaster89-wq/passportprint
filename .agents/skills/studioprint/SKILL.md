@@ -229,9 +229,10 @@ Include order on each page:
 
 ## 9. Shipped work & open backlog
 
-Everything from PRs #70–#208 is shipped. See `issues.md` for the full
+Everything from PRs #70–#210 is shipped. See `issues.md` for the full
 audit trail (§N photo editing, §O multi-card/rounded corners/Voter ID/
-Dragon sheet, §P Ayushman/Jan Aadhaar/eShram, §Q batch processing).
+Dragon sheet, §P Ayushman/Jan Aadhaar/eShram, §Q batch processing,
+§R PVC card tray layout).
 Do NOT re-fix any of the following — they are all merged:
 
 - PRs #70–#114: original audit quick-wins + responsive + flow fixes.
@@ -383,7 +384,7 @@ card sizes, lamination specs, and feature plan documented in
 **Phase 3:**
 - ~~Ayushman/Jan Aadhaar/eShram support~~ — **shipped PR #205**
 - ~~Batch processing (multiple PDFs)~~ — **shipped PR #208**
-- PVC card tray layout (Epson L805/L8050)
+- ~~PVC card tray layout (Epson L805/L8050)~~ — **shipped PR #210**
 - Toggle options (issue date, QR, mobile no, download date)
 - Auto photo enhancement
 
@@ -396,8 +397,8 @@ add them to all 3 cards consistently.
 
 **Open:** `F7` GSI iframe warnings (not our code, harmless).
 Phase 2 COMPLETE. Phase 3 Ayushman/Jan Aadhaar/eShram shipped (PR #205),
-batch processing shipped (PR #208). Remaining Phase 3 items — see list
-above.
+batch processing shipped (PR #208), PVC tray shipped (PR #210).
+Remaining Phase 3 items — see list above.
 
 ## 10. Related repos
 
@@ -432,10 +433,10 @@ AGENTS.md — full source of truth
 issues.md — full audit + §M ID Card Print research + §O Phase 2 multi-card
   + §P Phase 3 Ayushman/Jan Aadhaar/eShram
 
-Last PR: PR #208 (feat: batch processing — multiple PDFs at once)
+Last PR: PR #211 (docs: mark PVC tray shipped PR #210, add §R section, update prompt)
 
 Shipped summary (don't redo):
-PRs #70–#208: all previous work shipped
+PRs #70–#211: all previous work shipped
 - PRs #70–#189: original audit + Document Sheet + ID Card Print Phase 1
 - PR #190: docs update
 - PR #191: ID Card Print Phase 2 — photo editing (brightness/contrast/
@@ -454,6 +455,9 @@ PRs #70–#208: all previous work shipped
 - PR #205: ID Card Print Phase 3 — Ayushman/Jan Aadhaar/eShram support
 - PR #206: docs — add §P section + update prompt
 - PR #208: ID Card Print Phase 3 — batch processing (multiple PDFs)
+- PR #209: docs — mark batch shipped, add §Q, update prompt
+- PR #210: ID Card Print Phase 3 — PVC card tray layout (Epson L805/L8050)
+- PR #211: docs — mark PVC tray shipped, add §R, update prompt
 
 ID Card Print current state:
 - Phase 1 MVP COMPLETE + VERIFIED (PR #188)
@@ -461,7 +465,7 @@ ID Card Print current state:
   photo editing (#191), multi-card A4 (#193), cut marks (#193),
   rounded corners (#194/#197), Voter ID (#202), Dragon sheet (#203)
 - Phase 3 PARTIAL — Ayushman/Jan Aadhaar/eShram (#205) + batch (#208)
-  shipped. Remaining: PVC tray, toggles, auto enhance
+  + PVC tray (#210) shipped. Remaining: toggles, auto enhance
 
 Test PDFs repo mein saved hain:
 test-pdfs/pan-test.pdf (password: 05071999)

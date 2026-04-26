@@ -70,7 +70,7 @@ and overall aesthetic are not.
 | -------------------------- | ----------------------------------------------------- |
 | `index.html`               | Homepage (hero, features, audience, why, how, pricing, FAQ, CTA) |
 | `passport-photo.html`      | The live passport photo tool (5000+ lines, with its own inline copies of the nav / auth / Google Sign-In markup and a small hash-open script) |
-| `id-print.html`            | ID Card Print tool — Aadhaar/PAN/Voter ID/Ayushman/Jan Aadhaar/eShram PDF upload, password unlock, auto-detect, auto-crop front+back, CR80 output, A4 fold-and-laminate sheet, photo editing (brightness/contrast/saturation), multi-card A4 layout (5 pairs per sheet, cut marks, layout toggle), Dragon sheet (4×6), rounded corners toggle, batch processing (multiple PDFs at once with file queue UI), download PNG + print. All client-side. Shared nav/auth/footer. |
+| `id-print.html`            | ID Card Print tool — Aadhaar/PAN/Voter ID/Ayushman/Jan Aadhaar/eShram PDF upload, password unlock, auto-detect, auto-crop front+back, CR80 output, A4 fold-and-laminate sheet, photo editing (brightness/contrast/saturation), multi-card A4 layout (5 pairs per sheet, cut marks, layout toggle), Dragon sheet (4×6), PVC card tray layout (Epson L805/L8050, 120×120mm), rounded corners toggle, batch processing (multiple PDFs at once with file queue UI), download PNG + print. All client-side. Shared nav/auth/footer. |
 | `about.html`, `contact.html`, `privacy.html`, `terms.html`, `refund.html`, `shipping.html` | Legal / info pages, share the header + footer with `index.html` |
 | `assets/auth.js` + `auth.css` | Shared login / signup / OTP / Google Sign-In modal + account modal (plan info, upgrade, delete account). `position: fixed; z-index: 10000` overlay. Include on any page that has `.legal-header` with a `#hdrAuthBtn` button. |
 | `assets/pricing.js` + `pricing.css` | Shared 2-step pricing modal (Choose Plan → Complete Payment → Razorpay). Included on every page except `passport-photo.html`. Exposes `window.openPlans` / `window.startCheckout`. Load AFTER `auth.js`. |
@@ -291,6 +291,10 @@ Phase 3 batch processing** — multiple PDFs at once, file queue UI
 with status badges, “Add More” + “Process All” buttons, per-file
 password prompts, auto-detect + auto-crop each PDF individually, all
 cards combined on single A4 sheet, single-file fallback to legacy path.
+PR #209 docs — mark batch shipped, add §Q, update prompt.
+PR #210 **ID Card Print Phase 3 PVC card tray layout** — 120×120mm
+(1417×1417px) canvas for Epson L805/L8050 CD/DVD tray, front+back
+card slots with corner marks and tray guides, rounded corners support.
 
 **Verified (2026-04-26):** ID Card Print Phase 1 MVP fully tested with
 both test PDFs — PAN and Aadhaar flows ALL PASSED (upload, password
@@ -302,8 +306,8 @@ unlock, auto-detect, front+back preview, CR80 output, A4 sheet).
   rounded corners (PR #194/#197), Voter ID (PR #202), Dragon sheet
   (PR #203).
 - **ID Card Print Phase 3 — PARTIAL.** Ayushman/Jan Aadhaar/eShram
-  shipped (PR #205), batch processing shipped (PR #208). Remaining:
-  PVC card tray (Epson L805/L8050), toggle options, auto photo
+  shipped (PR #205), batch processing shipped (PR #208), PVC card
+  tray shipped (PR #210). Remaining: toggle options, auto photo
   enhancement.
 - **Card size reference:** CR80 = 85.6×54mm = 1011×638px at 300 DPI.
   Lamination pouch = 65×95mm (Reston 125 micron). Test PDFs in repo:

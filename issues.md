@@ -756,7 +756,7 @@ Tested locally with both test PDFs after PR #189 merge:
 **Phase 3 (partial):**
 - ~~Ayushman / Jan Aadhaar / eShram support~~ — **shipped PR #205**
 - ~~Batch processing (multiple PDFs at once)~~ — **shipped PR #208**
-- PVC card tray layout (Epson L805/L8050 direct print)
+- ~~PVC card tray layout (Epson L805/L8050 direct print)~~ — **shipped PR #210**
 - Toggle options (issue date, download date, QR code, mobile number)
 - Auto photo enhancement (AI brightness/contrast adjustment)
 - Signature box option (PAN)
@@ -780,7 +780,7 @@ Tested locally with both test PDFs after PR #189 merge:
 ### What's still open (Phase 3 remaining)
 
 - ~~Batch processing (multiple PDFs at once)~~ — **shipped PR #208**
-- PVC card tray layout (Epson L805/L8050 direct print)
+- ~~PVC card tray layout (Epson L805/L8050 direct print)~~ — **shipped PR #210**
 - Toggle options (issue date, download date, QR code, mobile number)
 - Auto photo enhancement (AI brightness/contrast adjustment)
 - Signature box option (PAN)
@@ -805,7 +805,28 @@ Tested locally with both test PDFs after PR #189 merge:
 
 ### What's still open (Phase 3 remaining)
 
-- PVC card tray layout (Epson L805/L8050 direct print)
+- ~~PVC card tray layout (Epson L805/L8050 direct print)~~ — **shipped PR #210**
+- Toggle options (issue date, download date, QR code, mobile number)
+- Auto photo enhancement (AI brightness/contrast adjustment)
+- Signature box option (PAN)
+- Back-side hologram overlay (PAN)
+
+---
+
+## R. ID Card Print — Phase 3 PVC Card Tray Layout (2026-04-26, session #18)
+
+**Status: SHIPPED — PR #210.**
+
+|| # | PR | What shipped | Status |
+||---|------|---------|--------|
+|| R1 | PR #210 | **PVC tray layout option.** Fourth layout toggle button "PVC Tray · Epson" alongside Single/Multi/Dragon. Generates 120×120mm canvas (1417×1417px at 300 DPI) matching Epson L805/L8050 CD/DVD tray printable area. | **merged** |
+|| R2 | PR #210 | **Card slot positioning.** Front card at top slot (y=35px), back card at bottom slot (y=744px), both horizontally centered. 71px gap between slots matches physical tray spacing. | **merged** |
+|| R3 | PR #210 | **Tray guides.** Dashed slot outlines around each card position, corner marks for alignment, dashed tray border, front/back labels above each slot. | **merged** |
+|| R4 | PR #210 | **Rounded corners support.** Works with existing rounded corners toggle — slot outlines use `roundedRectPath` when enabled. | **merged** |
+|| R5 | PR #210 | **Sheet metadata.** Title: "PVC Tray — Epson L805/L8050". Description: "Load blank PVC cards in tray → print using CD/DVD mode → direct card print, no cutting needed." Download filename suffix: `-pvc-tray.png`. | **merged** |
+
+### What's still open (Phase 3 remaining)
+
 - Toggle options (issue date, download date, QR code, mobile number)
 - Auto photo enhancement (AI brightness/contrast adjustment)
 - Signature box option (PAN)
