@@ -220,11 +220,20 @@
 .idp-layout-opt.active{background:rgba(240,165,0,.1);color:var(--accent);font-weight:600;}
 .idp-layout-opt:hover:not(.active){color:var(--text);}
 
-/* A4 result */
-.idp-a4-wrap{margin:20px auto;max-width:600px;}
+/* A4 result — §AC.13 responsive: cap by viewport height so the sheet
+   doesn't dominate the screen on tall windows / phones in portrait. */
+.idp-a4-wrap{margin:20px auto;text-align:center;}
 .idp-a4-wrap canvas{
-  width:100%;height:auto;border:1px solid var(--border);border-radius:8px;
+  display:block;margin:0 auto;
+  max-width:min(100%,600px);
+  max-height:78vh;
+  width:auto;height:auto;
+  border:1px solid var(--border);border-radius:8px;
   background:#fff;
+}
+@media (max-width:640px){
+  .idp-a4-wrap{margin:14px auto;}
+  .idp-a4-wrap canvas{max-height:72vh;}
 }
 
 /* Error */
@@ -505,10 +514,10 @@ input.idp-range::-moz-range-thumb{
         <input type="checkbox" id="chkRounded">
         Rounded Corners
       </label>
-      <label class="idp-option">
-        <input type="checkbox" id="chkCutMarks" checked>
-        Cut Marks
-      </label>
+      <!-- §AC.13 — Cut Marks toggle removed per user feedback. The 1-Pair
+           sheet no longer draws the dashed fold-here line / corner ticks.
+           Multi-card / Dragon / PVC layouts keep their built-in cut guides
+           (driven by the constant `cutMarks=true`). -->
 
       <!-- Panel B: Position (single-card mode only) -->
       <div id="panelPosition" class="idp-move idp-hidden">
@@ -793,7 +802,11 @@ const batchSheetInfo = $('#batchSheetInfo');
 
 let currentLayout = 'multi';
 let roundedCorners = false;
-let cutMarks = true;
+/* §AC.13 — Cut Marks UI option removed. Multi-card / Dragon / PVC sheet
+   builders still draw their cut guides driven by this constant. The
+   1-Pair Fold & Laminate sheet no longer draws any fold-here line or
+   corner ticks (handled inside buildSingleSheet). */
+const cutMarks = true;
 let swapSides = false; /* §AC.12 — preview-only flip; sheet builders untouched */
 const CARD_RADIUS = 36;
 
@@ -1375,7 +1388,11 @@ function buildSingleSheet() {
   var gap = 0;
   var pairW = cardW * 2 + gap;
   var startX = Math.round((A4_W - pairW) / 2);
-  var startY = Math.round((A4_H - cardH) / 2);
+  /* §AC.13 — Position the card pair at the TOP of the A4 (not vertically
+     centered) so users waste less paper / can re-use the empty bottom
+     half. Top white-stock padding matches the left/right margin so all
+     three sides have equal clean stock around the cards. */
+  var startY = startX;
 
   var r = roundedCorners ? CARD_RADIUS : 0;
 
@@ -1395,41 +1412,9 @@ function buildSingleSheet() {
     else ctx.drawImage(card.back, backX, startY, cardW, cardH);
   }
 
-  var foldX = startX + cardW + gap / 2;
-  if (cutMarks) {
-    ctx.setLineDash([10, 8]);
-    ctx.strokeStyle = '#000';
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.moveTo(foldX, startY - 30);
-    ctx.lineTo(foldX, startY + cardH + 30);
-    ctx.stroke();
-    ctx.setLineDash([]);
-
-    ctx.save();
-    ctx.translate(foldX, startY - 40);
-    ctx.fillStyle = '#999';
-    ctx.font = '18px sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('\u2190 fold here \u2192', 0, 0);
-    ctx.restore();
-
-    var markLen = 30;
-    ctx.strokeStyle = '#000';
-    ctx.lineWidth = 2;
-    ctx.setLineDash([]);
-    drawCornerMarks(ctx, startX, startY, pairW, cardH, markLen);
-
-    /* Seam-tick marks at top & bottom of foldX — short solid ticks
-       indicating the precise vertical cut/fold seam between front and
-       back halves. (Cut Marks toggle, default ON.) */
-    ctx.beginPath();
-    ctx.moveTo(foldX, startY - markLen);
-    ctx.lineTo(foldX, startY);
-    ctx.moveTo(foldX, startY + cardH);
-    ctx.lineTo(foldX, startY + cardH + markLen);
-    ctx.stroke();
-  }
+  /* §AC.13 — Cut Marks block removed for the 1-Pair layout: no dashed
+     fold-here line, no "← fold here →" caption, no corner ticks, no
+     seam ticks. Sheet stays clean white around the card pair. */
 
   ctx.fillStyle = '#aaa';
   ctx.font = '16px sans-serif';
@@ -1699,7 +1684,7 @@ const valSat = $('#valSat');
 const btnResetEdit = $('#btnResetEdit');
 const btnAutoEnhance = $('#btnAutoEnhance');
 const chkRounded = $('#chkRounded');
-const chkCutMarks = $('#chkCutMarks');
+/* §AC.13 — chkCutMarks ref removed (Cut Marks toggle deleted from UI). */
 const btnSwapSides = $('#btnSwapSides'); /* §AC.12 */
 const panelPosition = $('#panelPosition');
 const movePad = $('#movePad');
@@ -1862,7 +1847,7 @@ function savePrefs() {
   try {
     var prefs = {
       rounded: chkRounded.checked,
-      cutMarks: chkCutMarks.checked,
+      /* §AC.13 — `cutMarks` field dropped (toggle removed from UI). */
       swapSides: swapSides,
       bright: parseInt(slBright.value, 10),
       contrast: parseInt(slContrast.value, 10),
@@ -1882,10 +1867,8 @@ function loadPrefs() {
       cardFrontCanvas.classList.toggle('rounded', p.rounded);
       cardBackCanvas.classList.toggle('rounded', p.rounded);
     }
-    if (typeof p.cutMarks === 'boolean') {
-      chkCutMarks.checked = p.cutMarks;
-      cutMarks = p.cutMarks;
-    }
+    /* §AC.13 — `cutMarks` field no longer read (toggle removed from UI).
+       Stale values from old prefs blobs are simply ignored. */
     if (typeof p.swapSides === 'boolean') {
       swapSides = p.swapSides;
       btnSwapSides.classList.toggle('is-active', swapSides);
@@ -2036,11 +2019,7 @@ chkRounded.addEventListener('change', () => {
   savePrefs();
 });
 
-chkCutMarks.addEventListener('change', function() {
-  cutMarks = chkCutMarks.checked;
-  buildSheet();
-  savePrefs();
-});
+/* §AC.13 — chkCutMarks listener removed (option deleted from UI). */
 
 /* §AC.12 — Swap sides toggle. Preview-only flip; sheet builders untouched.
    Works in both single-PDF mode (re-runs applyFilters → repaints pairCanvas)
