@@ -1134,24 +1134,23 @@ printer presets.
 
 Two critical findings that **invalidate parts of §U / PR #221**:
 
-#### V.2.a §U signature box coordinates are WRONG — **SHIPPED PR #223**
+#### V.2.a §U signature box coordinates are WRONG
 
 §U set `signatureBox: { side: 'front', x: 540, y: 470, w: 380, h: 110 }`.
-That box sat at the **right-middle** of the front card — directly on top
+That box sits at the **right-middle** of the front card — directly on top
 of the QR code, not over the signature area.
 
 In the reference image, the actual signature row is at the **bottom-left
 to bottom-center**, below the photo + DOB columns:
 
-- Corrected coords at CR80 1011×638px (shipped in PR #223):
+- Approx coords at CR80 1011×638px:
   `signatureBox: { side: 'front', x: 280, y: 540, w: 280, h: 75 }`
 - Label "हस्ताक्षर / Signature" appears below the box at y ≈ 620.
 
-**Status:** Fixed in PR #223 (1-line patch in id-print.html
-`PAN_OVERLAY_REGIONS.signatureBox`). Box now sits in the bottom-left
-signature row, no longer overlaps QR.
+**Action:** PR #221 needs a coords-only follow-up patch (~4 lines) before
+shipping to users. Mark as P1.
 
-#### V.2.b PAN HOLOGRAM patch is the real missing overlay — **SHIPPED PR #224**
+#### V.2.b PAN HOLOGRAM patch is the real missing overlay
 
 The back of every genuine PAN PVC card has a silver/grey **HOLOGRAM**
 square at the **top-right** corner. ePAN PDFs ship with the hologram
@@ -1159,20 +1158,15 @@ area visible as a faded watermark. For PVC printing, the convention is
 to draw a labelled silver rectangle so the print shop can stick a real
 hologram sticker on top after lamination.
 
-- Coords at CR80 1011×638px (shipped in PR #224):
+- Approx coords at CR80 1011×638px:
   `hologram: { side: 'back', x: 800, y: 30, w: 180, h: 220 }`
-- Fill: silver linear gradient (`#c0c0c0` → `#e8e8e8`).
-- Label: "HOLOGRAM" in DM Mono, white, centred, 24px.
+- Fill: silver gradient (`#c0c0c0` → `#e8e8e8`) or flat `#d0d0d0`.
+- Label: "HOLOGRAM" in DM Mono, white, centred, ~24px.
 - Toggle: `chkHologram` in `#panToggles` (alongside `chkSignatureBox`).
 
-**Status:** Shipped in PR #224. ~40 net lines in `id-print.html`:
-new `hologram` entry in `PAN_OVERLAY_REGIONS`, new `chkHologram`
-checkbox in `#panToggles`, `applyPanOverlays` refactored to loop
-pattern (mirrors `applyAadhaarMasks`) handling both `signature` and
-`hologram` kinds. Wired into listener array + reset; existing 3
-call-sites unchanged (function is generic per side). Output carries
-through to A4 / Dragon / PVC tray / multi-card sheets via
-`applyBatchFilters`.
+This is **higher priority** than the signature box because hologram is
+visible on every PAN card, while the signature box only matters for
+unsigned ePANs.
 
 ### V.3 Aadhaar target-output analysis (from aadhaar-clean / target images)
 
@@ -1186,38 +1180,32 @@ through to A4 / Dragon / PVC tray / multi-card sheets via
 
 Each item is a separate research + code PR pair (per Rule #14).
 
-| Pri | Item                                    | Est PR size | Why | Status |
-|-----|-----------------------------------------|-------------|-----|--------|
-| ~~P1~~  | ~~Fix §U signature box coordinates~~        | ~~~4 lines~~    | ~~Current coords overlap QR — broken in PR #221~~ | **SHIPPED PR #223** |
-| ~~P1~~  | ~~PAN HOLOGRAM overlay~~                    | ~~~40 lines~~   | ~~Visible on 100% of PAN cards, simple fill+label~~ | **SHIPPED PR #224** |
-| P2  | Per-side Move controls (X/Y nudge)      | ~120 lines  | Highest competitor-parity value; fixes off-centre crops | open |
-| P2  | Per-side Zoom (scale within CR80)       | ~80 lines   | Pairs with Move; fixes too-small/large crops | open |
-| P3  | Photo Editor split panel                | ~150 lines  | Reorganize sliders + add Bold + add presets | open |
-| P3  | Master Settings (DPI/padding/margins)   | ~200 lines  | Calibration screen with localStorage persistence | open |
-| P3  | PrePrinted Card mode                    | ~60 lines   | Skip front render, output back-only sheets | open |
-| P4  | Printer presets (Epson L805 etc)        | ~80 lines   | Dropdown of DPI/margin profiles per printer | open |
-| P4  | Bold / BigQR text-emphasis toggles      | ~40 lines   | Aadhaar text bolden + QR upscale | open |
-| P4  | Voter / Ayushman / Jan Aadhaar overlays | ~60 lines each | Same pattern as PAN once it lands | open |
+| Pri | Item                                    | Est PR size | Why |
+|-----|-----------------------------------------|-------------|-----|
+| P1  | Fix §U signature box coordinates        | ~4 lines    | Current coords overlap QR — broken in PR #221 |
+| P1  | PAN HOLOGRAM overlay                    | ~40 lines   | Visible on 100% of PAN cards, simple fill+label |
+| P2  | Per-side Move controls (X/Y nudge)      | ~120 lines  | Highest competitor-parity value; fixes off-centre crops |
+| P2  | Per-side Zoom (scale within CR80)       | ~80 lines   | Pairs with Move; fixes too-small/large crops |
+| P3  | Photo Editor split panel                | ~150 lines  | Reorganize sliders + add Bold + add presets |
+| P3  | Master Settings (DPI/padding/margins)   | ~200 lines  | Calibration screen with localStorage persistence |
+| P3  | PrePrinted Card mode                    | ~60 lines   | Skip front render, output back-only sheets |
+| P4  | Printer presets (Epson L805 etc)        | ~80 lines   | Dropdown of DPI/margin profiles per printer |
+| P4  | Bold / BigQR text-emphasis toggles      | ~40 lines   | Aadhaar text bolden + QR upscale |
+| P4  | Voter / Ayushman / Jan Aadhaar overlays | ~60 lines each | Same pattern as PAN once it lands |
 
-### V.5 Recommended next 2 PRs (single session, ~half day) — **SHIPPED**
+### V.5 Recommended next 2 PRs (single session, ~half day)
 
-1. **PR #223 — fix-pan-signature-coords** (1-line patch) — **SHIPPED**
-   - Changed `PAN_OVERLAY_REGIONS.signatureBox` to the corrected coords
-     `{ x: 280, y: 540, w: 280, h: 75 }`. Box no longer overlaps QR.
+1. **PR #222 — fix-pan-signature-coords** (~4 line patch)
+   - Change `PAN_OVERLAY_REGIONS.signatureBox` to the corrected coords.
+   - Ship before any user notices PR #221 draws over the QR.
 
-2. **PR #224 — pan-hologram-overlay** (~40 net lines) — **SHIPPED**
-   - Added `hologram` entry to `PAN_OVERLAY_REGIONS`
-     (`{ side: 'back', x: 800, y: 30, w: 180, h: 220 }`).
-   - Added `chkHologram` checkbox to `#panToggles`.
-   - Refactored `applyPanOverlays` to loop pattern (mirrors
-     `applyAadhaarMasks`) handling both `signature` and `hologram`.
-   - Silver linear gradient fill + white DM Mono "HOLOGRAM" label.
-   - Wired into listener array + reset; existing 3 call-sites unchanged.
+2. **PR #223 — pan-hologram-overlay** (~40 line patch)
+   - Add `hologram` entry to `PAN_OVERLAY_REGIONS`.
+   - Add `chkHologram` checkbox to `#panToggles`.
+   - Extend `applyPanOverlays` to draw silver fill + "HOLOGRAM" label.
+   - Wire into the same 3 call-sites + listener array + reset.
 
-**Next session:** pick ONE P2 item (Move OR Zoom) per Rule #12. Move
-recommended first — Zoom builds on the same per-side state shape and
-the same `ctx.translate`/`ctx.scale` insertion points in
-`drawFiltered` / `drawFilteredToCanvas`.
+After those two, pick one P2 item (Move OR Zoom) for the next session.
 
 ### V.6 What's NOT in scope for §V (this is research only)
 
@@ -1227,3 +1215,467 @@ the same `ctx.translate`/`ctx.scale` insertion points in
   during each item's research PR using the committed reference images.
 - Removing or rewriting §U — §U stays valid except for the wrong
   signatureBox coords flagged in §V.2.a.
+
+---
+
+## §W ID Card Print Phase 4 P2 — Per-side Move (X/Y nudge) research
+
+**Status:** Research-only PR (Rule #14 first half). Code PR follows in
+a separate session.
+
+**Goal:** Match CardXpress "Move pad" UX so users can nudge the
+front/back crop window inside the CR80 1011×638 frame to fix
+off-centre PDFs (very common with ePAN re-issues and Aadhaar QR-shifts).
+
+### W.1 Current render pipeline (id-print.html, scouted 2026-04-26)
+
+Two filter functions both use `ctx.drawImage(srcCanvas, 0, 0, w, h)`:
+
+1. `drawFiltered(destCanvas, srcCanvas, w, h, filterStr, side)` —
+   line ~1639. Single-card editor preview (`cardFrontCanvas` /
+   `cardBackCanvas`). Called from the slider change handler at ~1655.
+2. `drawFilteredToCanvas(canvas, srcCanvas, w, h, cardType, side)` —
+   line ~1175. Batch grid preview (per-card mini canvases under
+   `#batchCardsContainer`).
+3. `applyBatchFilters()` — line ~1193. Rebuilds every cached
+   `card.front` / `card.back` from `card.originalFront` /
+   `card.originalBack` using `ctxF.drawImage(card.originalFront, 0, 0,
+   CR80_W, CR80_H)` and the same for back.
+
+Output sheets (A4, Dragon, PVC tray, multi-card) **all** consume the
+already-filtered `card.front` / `card.back` canvases — see
+`ctx.drawImage(card.front, ...)` at lines 1294, 1374, 1450, 1522 and
+back equivalents at 1302, 1379, 1456, 1527. **This means Move only
+needs to be inserted in the three filter passes above; output sheets
+inherit it for free** — same architectural property the §V overlays
+relied on.
+
+Overlays (`applyAadhaarMasks`, `applyPanOverlays`) draw at fixed
+PVC-card coords and **must NOT move with the photo** (the silver
+HOLOGRAM patch and signature box have to land at the printer's
+expected position regardless of crop offset). Overlay calls stay at
+`(ctx, 0, 0, side)` — no change required.
+
+### W.2 State shape
+
+Add per-card per-side offsets, default `{dx:0, dy:0}`:
+
+```js
+batchCards[i].offset = {
+  front: { dx: 0, dy: 0 },
+  back:  { dx: 0, dy: 0 }
+};
+```
+
+Initialise at the two card-creation sites:
+- Line ~968 (worker result push) — extend the `card:` literal.
+- Line ~1036 (single-card synchronous path) — extend the `batchCards = [{...}]` literal.
+
+Single-card editor reads/writes `batchCards[0].offset[side]`. No
+separate global needed (mirror not required since `batchCards` is
+always populated when the editor is visible).
+
+Clamp range: `±100px` per axis (≈ ±10% of CR80 width / 16% of height).
+Anything beyond that crops away too much real card area. Use
+`clamp(v, -100, 100)`.
+
+### W.3 Render insertion
+
+Three minimal edits, identical pattern:
+
+```js
+// drawFiltered — line ~1650
+var off = (batchCards[0] && batchCards[0].offset && batchCards[0].offset[side]) || { dx: 0, dy: 0 };
+ctx.drawImage(srcCanvas, off.dx, off.dy, w, h);
+```
+
+```js
+// drawFilteredToCanvas — line ~1187
+// caller passes card index; resolve offset there or accept an `offset` arg
+ctx.drawImage(srcCanvas, off.dx, off.dy, w, h);
+```
+
+```js
+// applyBatchFilters — lines ~1203 and ~1216
+var off = card.offset && card.offset.front || { dx:0, dy:0 };
+ctxF.drawImage(card.originalFront, off.dx, off.dy, CR80_W, CR80_H);
+// (same for back at 1216)
+```
+
+`drawFilteredToCanvas` currently has no card-index argument. Cleanest
+fix: add an optional `offset` arg defaulting to `{dx:0, dy:0}` and
+have the three call sites (lines 1114, 1115, 1229) resolve it from
+their `card`/`batchCards[idx]` reference. ~6 lines.
+
+Edge case — transparent strip: when `dx>0`, the left edge of the
+destination is uncovered. Source PDFs render onto an opaque white
+canvas during PDF.js extraction (see PDF render paths upstream), so
+the destination canvas keeps the white fill from the prior
+`ctx.fillRect`/`clearRect` step — visually equivalent to a white
+margin, which is the desired "PVC card edge" look. **No background
+fill needed.**
+
+### W.4 UI — Move pad (CardXpress-style)
+
+Insert a new block inside `.idp-editor` between the title row and
+`.idp-sliders` (line ~448). Shown only when `batchCards.length === 1`
+(V1 scope — multi-card batch needs a card picker which is out of
+scope for this PR pair).
+
+```html
+<div class="idp-move" id="movePad">
+  <div class="idp-move-row">
+    <span class="idp-move-label">Move</span>
+    <label><input type="radio" name="moveSide" value="front" checked> Front</label>
+    <label><input type="radio" name="moveSide" value="back"> Back</label>
+    <span class="idp-move-step">Step
+      <input type="number" id="moveStep" value="5" min="1" max="50" step="1">px
+    </span>
+  </div>
+  <div class="idp-move-pad">
+    <button type="button" id="moveUp">↑</button>
+    <button type="button" id="moveLeft">←</button>
+    <button type="button" id="moveReset">⌖</button>
+    <button type="button" id="moveRight">→</button>
+    <button type="button" id="moveDown">↓</button>
+    <span class="idp-move-readout" id="moveReadout">0, 0</span>
+  </div>
+</div>
+```
+
+Layout: 3-column grid for the pad (↑ centred top row, ← ⌖ → middle
+row, ↓ centred bottom row) — matches CardXpress reference image. CSS
+~10 lines using existing tokens (no new colours, no new fonts).
+
+Visibility toggle: when `batchCards.length === 1`, remove
+`idp-hidden` from `#movePad`; otherwise add it. Hook into the same
+place the editor is shown (~line 1042).
+
+### W.5 Listeners
+
+```js
+const movePad = $('#movePad');
+const moveStep = $('#moveStep');
+const moveReadout = $('#moveReadout');
+const moveSideRadios = document.getElementsByName('moveSide');
+
+function currentMoveSide() {
+  for (const r of moveSideRadios) if (r.checked) return r.value;
+  return 'front';
+}
+function nudge(axis, dir) {
+  if (batchCards.length !== 1) return;
+  const side = currentMoveSide();
+  const step = Math.max(1, Math.min(50, parseInt(moveStep.value, 10) || 5));
+  const o = batchCards[0].offset[side];
+  o[axis] = Math.max(-100, Math.min(100, o[axis] + dir * step));
+  moveReadout.textContent = o.dx + ', ' + o.dy;
+  // re-render via the existing slider-change path
+  onFilterChange();         // or whatever the slider handler is named
+}
+$('#moveUp').addEventListener('click',    () => nudge('dy', -1));
+$('#moveDown').addEventListener('click',  () => nudge('dy',  1));
+$('#moveLeft').addEventListener('click',  () => nudge('dx', -1));
+$('#moveRight').addEventListener('click', () => nudge('dx',  1));
+$('#moveReset').addEventListener('click', () => {
+  if (batchCards.length !== 1) return;
+  const side = currentMoveSide();
+  batchCards[0].offset[side] = { dx: 0, dy: 0 };
+  moveReadout.textContent = '0, 0';
+  onFilterChange();
+});
+moveSideRadios.forEach(r => r.addEventListener('change', () => {
+  const o = batchCards[0].offset[currentMoveSide()];
+  moveReadout.textContent = o.dx + ', ' + o.dy;
+}));
+```
+
+The slider re-render handler (around line 1655–1680) already calls
+`drawFiltered(...)` for both sides and `applyBatchFilters()` for
+batch mode — `nudge()` reuses that same function (likely named
+`renderFiltered` / `redraw` / similar; confirm during code PR).
+
+### W.6 Reset wiring
+
+Two places:
+
+1. `btnResetEdit` (Photo Adjust → Reset, ~line 448 + handler) — add
+   `batchCards[0].offset = { front:{dx:0,dy:0}, back:{dx:0,dy:0} };`
+   and `moveReadout.textContent = '0, 0';` to the existing handler.
+2. Full reset at ~line 1762 (clears toggles when a new PDF is loaded
+   or batch is cleared) — extend the existing forEach by zeroing
+   any in-memory offsets and resetting the readout. Since
+   `batchCards` is reassigned on PDF load, the per-card init at
+   §W.2 covers fresh loads automatically.
+
+### W.7 Estimated diff
+
+| Area                                           | Lines |
+|------------------------------------------------|-------|
+| HTML (#movePad block)                          | ~20   |
+| CSS (.idp-move / .idp-move-pad grid)           | ~15   |
+| State init (2 sites + clamp helper)            | ~8    |
+| `drawFilteredToCanvas` offset arg + 3 callers  | ~10   |
+| `drawFiltered` + `applyBatchFilters` insertion | ~10   |
+| Visibility toggle + DOM refs                   | ~10   |
+| Listeners (6 handlers + side-change)           | ~30   |
+| Reset wiring (2 sites)                         | ~10   |
+| **Total (net)**                                | **~110–125** |
+
+Within the ~120-line estimate from §V.4. Single-problem PR per Rule #12.
+
+### W.8 V1 scope limits (NOT in this PR)
+
+- **Batch-mode Move** (per-card editing in a batch of 5+ cards) — needs
+  a card picker UI first. Defer to a follow-up.
+- **Drag-to-move** on the preview canvas — V2; arrows are V1.
+- **Keyboard arrows** — V2; on-screen buttons cover the primary use
+  case (touch devices, print-shop counter staff).
+- **Per-side independent Step values** — V1 uses a single step input
+  applied to whichever side is selected.
+- **Persistence across PDF reloads** — out of scope; offsets reset
+  with each new PDF (matches CardXpress behaviour).
+
+### W.9 Test plan (for the code PR)
+
+1. Load `test-pdfs/pan-test.pdf` (pw `05071999`). Confirm Move pad
+   appears, both readouts show `0, 0`.
+2. Front + ↑×3 with step 5 → readout `0, -15`, photo nudges up,
+   white strip appears at bottom edge of front preview. QR/HOLOGRAM
+   stay in place (overlays at fixed coords).
+3. Switch radio to Back → readout shows back's current `0, 0`. ↓×2
+   → readout `0, 10`, back photo nudges down.
+4. Reset button on Move pad → only the current side zeros.
+5. Photo Adjust Reset → both sides + sliders zero together.
+6. Generate PVC tray sheet → both cards land at the nudged crop
+   confirming output pipeline carries the offset through.
+7. Load `test-pdfs/aadhaar-test.pdf` (pw `SUNI1986`). Repeat steps
+   2–3. Confirm Aadhaar QR/Mobile/Issue/Download masks stay at
+   fixed coords when the photo nudges underneath.
+8. Load a multi-page batch PDF → Move pad hides
+   (`batchCards.length > 1`); existing batch flow unchanged.
+
+### W.10 Acceptance
+
+- Per-side `dx, dy` survive between side switches.
+- Single Reset (Photo Adjust) zeroes Move + sliders together.
+- Output sheets (A4 / Dragon / PVC tray / multi-card) reflect the
+  per-side offset without any sheet-pipeline code change.
+- Overlays (Aadhaar masks, PAN signature, PAN HOLOGRAM) remain at
+  fixed coords irrespective of Move offsets.
+- No regression in batch-mode rendering (Move pad hidden, existing
+  pipeline untouched).
+
+
+---
+
+## §X ID Card Print Phase 4 P2 — Per-side Zoom (scale within CR80) research
+
+**Status:** Research-only PR (Rule #14 first half). Code PR follows
+after §W Move code lands so they can be tested together.
+
+**Goal:** Match CardXpress "Zoom" dial — scale the front/back photo
+inside the CR80 1011×638 frame (50%–200%) so users can fix
+too-small ePAN scans (where the actual card is tiny on a big white
+page) and too-large Aadhaar PDFs (where the card overflows the crop).
+Pairs naturally with §W Move — Zoom alone is rarely useful, but
+Zoom + Move covers ~95% of "my card looks weird" support tickets.
+
+### X.1 Why this pairs with §W
+
+Same architectural levers as §W:
+- Same three filter passes (`drawFiltered`,
+  `drawFilteredToCanvas`, `applyBatchFilters`) — see §W.1.
+- Same per-card per-side state container — extend the §W shape, do
+  **not** add a parallel one.
+- Same "edit only when `batchCards.length === 1`" V1 scope.
+- Same cached-`card.front`/`card.back` propagation to all output
+  sheets (A4 / Dragon / PVC tray / multi-card) — no sheet-pipeline
+  changes required.
+- Same Photo Adjust Reset entry point.
+
+This is why Move ships first: the state shape, listener pattern,
+visibility toggle, and reset wiring all already exist after §W. §X
+adds one number per side and one `ctx.scale` call per render path.
+
+### X.2 State shape (extends §W)
+
+```js
+batchCards[i].offset = {
+  front: { dx: 0, dy: 0, scale: 1 },
+  back:  { dx: 0, dy: 0, scale: 1 }
+};
+```
+
+Add `scale: 1` to the §W init at the two card-creation sites (lines
+~968 and ~1036). Clamp `scale` to `[0.5, 2.0]`.
+
+### X.3 Render insertion (centred zoom)
+
+Zoom must scale around the **card centre** so the photo doesn't slide
+to the top-left when zoomed in. Standard transform sandwich:
+
+```js
+function drawWithTransform(ctx, src, w, h, off) {
+  ctx.save();
+  ctx.translate(w / 2 + off.dx, h / 2 + off.dy);
+  ctx.scale(off.scale, off.scale);
+  ctx.drawImage(src, -w / 2, -h / 2, w, h);
+  ctx.restore();
+}
+```
+
+Replaces the §W-modified `ctx.drawImage(src, off.dx, off.dy, w, h)`
+calls in all three filter passes:
+
+- `drawFiltered` — line ~1650.
+- `drawFilteredToCanvas` — line ~1187.
+- `applyBatchFilters` — lines ~1203 and ~1216.
+
+The `ctx.save`/`ctx.restore` matters because `ctx.filter` is set
+just before the `drawImage` and we don't want the transform to leak
+into the overlay calls that follow.
+
+Edge cases:
+- Zoom out (`scale < 1`): leaves blank strips on all 4 sides — same
+  white-canvas-underneath behaviour as §W's transparent-strip case.
+  No fill needed.
+- Zoom in (`scale > 1`): photo overflows CR80; `drawImage` on the
+  destination canvas naturally clips to the canvas bounds. No
+  manual clipping required.
+- Overlays still draw at fixed `(0,0)` coords (HOLOGRAM patch,
+  signature box, Aadhaar masks) — `ctx.restore()` ensures the
+  transform is gone before `applyPanOverlays` / `applyAadhaarMasks`
+  run.
+
+### X.4 UI — Zoom strip (CardXpress-style)
+
+Add a single row inside the §W `#movePad` block, below the pad grid:
+
+```html
+<div class="idp-zoom-row">
+  <span class="idp-move-label">Zoom</span>
+  <button type="button" id="zoomOut">−</button>
+  <input type="range" id="zoomSlider" min="50" max="200" value="100" step="5">
+  <button type="button" id="zoomIn">+</button>
+  <span class="idp-move-readout" id="zoomReadout">100%</span>
+</div>
+```
+
+- Range slider 50–200 with step 5 (matches CardXpress dial granularity).
+- −/+ buttons step by 10% per click.
+- Readout shows current % for the selected side (reuses §W side radio).
+- No new fonts, colours, or design tokens — reuses `.idp-move-*` styles.
+
+### X.5 Listeners
+
+```js
+const zoomSlider = $('#zoomSlider');
+const zoomReadout = $('#zoomReadout');
+
+function setZoom(pct) {
+  if (batchCards.length !== 1) return;
+  const side = currentMoveSide();
+  const s = Math.max(0.5, Math.min(2.0, pct / 100));
+  batchCards[0].offset[side].scale = s;
+  zoomReadout.textContent = Math.round(s * 100) + '%';
+  zoomSlider.value = Math.round(s * 100);
+  onFilterChange();
+}
+zoomSlider.addEventListener('input', () => setZoom(parseInt(zoomSlider.value, 10)));
+$('#zoomIn').addEventListener('click',  () => setZoom(parseInt(zoomSlider.value, 10) + 10));
+$('#zoomOut').addEventListener('click', () => setZoom(parseInt(zoomSlider.value, 10) - 10));
+```
+
+Side-radio change handler from §W extended to also refresh the zoom
+readout/slider:
+
+```js
+moveSideRadios.forEach(r => r.addEventListener('change', () => {
+  const o = batchCards[0].offset[currentMoveSide()];
+  moveReadout.textContent = o.dx + ', ' + o.dy;
+  zoomReadout.textContent = Math.round(o.scale * 100) + '%';
+  zoomSlider.value = Math.round(o.scale * 100);
+}));
+```
+
+### X.6 Reset wiring
+
+Photo Adjust Reset (button at line ~448) — extend the §W reset to
+also zero scale:
+
+```js
+batchCards[0].offset = {
+  front: { dx: 0, dy: 0, scale: 1 },
+  back:  { dx: 0, dy: 0, scale: 1 }
+};
+zoomReadout.textContent = '100%';
+zoomSlider.value = 100;
+```
+
+Move pad reset button (`#moveReset` from §W) resets dx/dy only — does
+**not** touch scale (separate semantic). To reset zoom, user can
+double-click the slider thumb to 100% or press the centre of the
+range.
+
+### X.7 Estimated diff
+
+| Area                                       | Lines |
+|--------------------------------------------|-------|
+| HTML (zoom row inside #movePad)            | ~10   |
+| CSS (.idp-zoom-row layout)                 | ~8    |
+| State init (extend §W defaults + clamp)    | ~4    |
+| `drawWithTransform` helper                 | ~8    |
+| Replace 4 drawImage call sites             | ~12   |
+| DOM refs + listeners (3 handlers)          | ~20   |
+| Side-change handler extension              | ~4    |
+| Reset wiring (extend §W reset)             | ~6    |
+| **Total (net)**                            | **~70–80** |
+
+Within §V.4 estimate. Single problem per Rule #12 (Zoom is one
+feature; pairs with Move at the architectural level but ships as its
+own diff so reviewers can isolate the scale-transform behaviour).
+
+### X.8 V1 scope limits (NOT in this PR)
+
+- **Zoom around mouse cursor / pinch point** — V2; centred zoom is V1.
+- **Independent X/Y scale** (anamorphic) — out of scope; uniform scale only.
+- **Persistence across PDF reloads** — same as §W, out of scope.
+- **Batch-mode Zoom** (per-card in 5+ batch) — needs the same card
+  picker §W defers.
+- **Keyboard shortcuts** (`+`/`-` / scroll wheel) — V2.
+
+### X.9 Test plan (for the code PR)
+
+1. Land §W Move code first. Confirm Move pad works.
+2. Apply §X. Load `test-pdfs/pan-test.pdf` (pw `05071999`).
+3. Front + zoom slider to 150% → photo zooms in around centre, edges
+   crop equally on all 4 sides. Readout `150%`.
+4. Switch to Back radio → readout reverts to back's `100%`.
+5. Front + Move ↑×3 + Zoom 130% → Move and Zoom compose correctly
+   (zoomed photo nudged up).
+6. Zoom out to 70% → photo shrinks centred, white margin appears on
+   all 4 sides. PAN HOLOGRAM patch (back) and signature box (front)
+   stay at their fixed coords — they do **not** shrink.
+7. Photo Adjust Reset → both Move (dx/dy) and Zoom (scale) zero
+   together for both sides; sliders reset; readouts reset.
+8. Generate PVC tray + 5-Pairs + Dragon sheets → Move + Zoom carry
+   through to all output sheets via the cached `card.front`/`card.back`.
+9. Load `test-pdfs/aadhaar-test.pdf` (pw `SUNI1986`) → repeat 3, 6.
+   Aadhaar QR/Mobile/Issue/Download masks stay at fixed coords when
+   the photo zooms underneath.
+10. Multi-page batch PDF → Move + Zoom controls hide; existing batch
+    flow unchanged.
+
+### X.10 Acceptance
+
+- Zoom is centred (no slide to top-left when zoomed in).
+- Move and Zoom compose correctly (translate → scale → drawImage).
+- Single Photo Adjust Reset zeroes Move + Zoom + sliders together.
+- Output sheets reflect both transforms with no sheet-pipeline change.
+- Overlays (Aadhaar masks, PAN signature, PAN HOLOGRAM) remain at
+  fixed coords irrespective of Zoom or Move.
+- `ctx.save`/`ctx.restore` brackets every transform so subsequent
+  overlay draws are unaffected.
+- No regression in batch-mode rendering.
+
