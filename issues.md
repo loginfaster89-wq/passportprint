@@ -927,3 +927,148 @@ each field without touching adjacent content.
 
 - PAN/Voter ID toggles — separate PR later, explicitly requested.
 - Auto photo enhancement, signature box, hologram overlay — separate PRs.
+
+## U. ID Card Print — Phase 3 Signature Box (PAN) — Research Complete
+
+**Status: RESEARCH DONE (this PR docs). Coding pending — separate code PR per Rule #14.**
+
+### U.1 What this feature is
+
+PAN card ke FRONT side preview + saare output layouts (A4 fold-and-laminate,
+multi-card A4, Dragon sheet, PVC tray, batch) mein ek **empty signature box
+overlay** add karne ka option. Use case: ePAN PDFs (NSDL / UTI-ITSL / Income
+Tax e-Filing) mein cardholder ki signature kabhi missing hoti hai, kabhi
+faded hoti hai, ya physical signature ki zaroorat hoti hai post-lamination.
+Ye toggle ek labelled white box draw karta hai jahan user laminate karne ke
+baad pen se sign kar sake.
+
+Competitor reference:
+- **CardXpress (MySea Solutions)** — has dedicated "Signature Box" toggle for
+  PAN cards (paid Rs 2500 desktop tool).
+- **eCardCutter (go24.info)** — free web tool, has signature box overlay
+  option for PAN.
+
+Pattern is well-established; not a UX risk.
+
+### U.2 Technical approach
+
+Mirror `applyAadhaarMasks()` design exactly — same architecture, different
+visual (border + label vs solid white fill), different toggle scope (PAN
+only vs Aadhaar only).
+
+Steps:
+1. Single checkbox in preview UI (`#chkSignatureBox`) inside a new wrapper
+   `#panToggles` (parallels existing `#aadhaarToggles`). Visible only when
+   `detectedType === 'pan'`.
+2. New constant `PAN_OVERLAY_REGIONS.signatureBox = { side, x, y, w, h }`
+   at CR80 1011×638px reference.
+3. New function `applyPanOverlays(ctx, ox, oy, side)` — reads `chkSignatureBox.checked`,
+   draws a white-filled rectangle with a 2px black stroke and a small
+   "Signature" label above (DM Mono 18px, centered) inside `PAN_OVERLAY_REGIONS.signatureBox`
+   when `side === 'front'`.
+4. Wire `applyPanOverlays()` at the **same three call sites** as
+   `applyAadhaarMasks()`:
+   - `drawFilteredToCanvas()` — preview canvases (single + batch)
+   - `drawFiltered()` — A4/Dragon/PVC/multi-card output paths
+   - `applyBatchFilters()` — batch preview cache
+5. Visibility toggle on detect: extend the existing
+   `aadhaarToggles.classList.toggle('idp-hidden', detectedType !== 'aadhaar')`
+   line with a parallel `panToggles.classList.toggle('idp-hidden', detectedType !== 'pan')`.
+6. Live update: hook `chkSignatureBox.addEventListener('change', refreshPreview)`
+   alongside the existing Aadhaar toggle listeners.
+
+### U.3 Approximate signature-box position on PAN FRONT card at CR80 (1011×638px)
+
+Standard physical PAN card layout (NSDL/UTI/Income Tax e-Filing all share
+the same trim layout):
+- Top band: government emblem + "INCOME TAX DEPARTMENT" header
+- Left bottom: cardholder photo (~200×260px area at CR80)
+- Right column: Name / Father's Name / DOB / PAN number
+- Bottom-right: signature region (often empty in ePAN)
+
+Recommended box placement (signature region — bottom-right, below DOB):
+
+```javascript
+const PAN_OVERLAY_REGIONS = {
+  signatureBox: { side: 'front', x: 540, y: 470, w: 380, h: 110 },
+};
+```
+
+Visual specification:
+- Fill: `#ffffff` (solid white, covers any faded signature underneath)
+- Stroke: `#000000`, `lineWidth: 2`
+- Optional label: `"Signature"` in DM Mono / sans-serif `18px`, color `#333`,
+  drawn above the box top edge with `~6px` padding. Centered horizontally
+  within the box.
+- Inside the box: empty white space for ink-signing post-print.
+
+**Note:** Coordinates approximate — verify with `test-pdfs/pan-test.pdf`
+(password: `05071999`). May need ±20–30px tuning to:
+- Avoid clipping the printed PAN number / DOB row above
+- Stay clear of the bottom card edge (keep ≥10px margin)
+- Not overlap the photo on the left edge
+
+### U.4 Implementation plan (id-print.html only — ~50 line diff)
+
+1. **HTML** — after `#aadhaarToggles` block (line ~440), add:
+   ```html
+   <!-- PAN field overlays — shown only for PAN cards -->
+   <div id="panToggles" class="idp-hidden">
+     <label class="idp-option"><input type="checkbox" id="chkSignatureBox"> Add Signature Box</label>
+   </div>
+   ```
+
+2. **JS constants** — after `AADHAAR_FIELD_MASKS` block (line ~625), add
+   `PAN_OVERLAY_REGIONS` constant.
+
+3. **DOM refs** — add `const chkSignatureBox = $('#chkSignatureBox');` and
+   `const panToggles = $('#panToggles');` near the existing Aadhaar refs.
+
+4. **Detect-time visibility** — at line ~1034, add:
+   ```js
+   panToggles.classList.toggle('idp-hidden', detectedType !== 'pan');
+   ```
+
+5. **`applyPanOverlays(ctx, ox, oy, side)`** — new function right after
+   `applyAadhaarMasks()` (line ~1146). Returns early if box unchecked or
+   side !== 'front'. Draws white rect, then 2px black stroke, then "Signature"
+   label above using `ctx.fillText`.
+
+6. **Call sites** — extend the 3 existing Aadhaar mask call sites:
+   - `drawFilteredToCanvas()` line ~1162: add
+     `if (cardType === 'pan' && side) applyPanOverlays(ctx, 0, 0, side);`
+   - `applyBatchFilters()` lines ~1177, ~1189: add parallel PAN overlay calls
+     for front (and skip back since signature box is front-only).
+   - `drawFiltered()` line ~1620: add
+     `if (side && detectedType === 'pan') applyPanOverlays(ctx, 0, 0, side);`
+
+7. **Live toggle** — add `chkSignatureBox.addEventListener('change', refreshPreview);`
+   alongside the existing 4 Aadhaar checkbox listeners.
+
+8. **Reset path** — in the existing reset/back logic that clears state
+   (line ~1726), uncheck `chkSignatureBox` so a fresh upload starts clean.
+
+### U.5 Batch mode behaviour
+
+- `panToggles` visibility is driven by the **first card's** detected type
+  in single-card mode and by the existing per-card `card.type` check inside
+  `applyBatchFilters()` for batch.
+- In a mixed batch (e.g. 2 Aadhaar + 1 PAN), the PAN-only signature box
+  applies only to PAN-type cards inside the loop — non-PAN cards skip the
+  overlay. Same pattern as `applyAadhaarMasks` already uses for Aadhaar.
+- If batch contains zero PAN cards, hide `#panToggles` entirely.
+
+### U.6 CSS / UI notes
+
+- Use existing `.idp-option` class — no new CSS tokens.
+- `#panToggles` uses the same `idp-hidden` toggle pattern as `#aadhaarToggles`.
+- Single checkbox for now (room to grow later — e.g. "Add Photo Box" if
+  any ePAN provider strips the photo).
+
+### U.7 What's NOT in scope for this PR (or its follow-up code PR)
+
+- Back-side hologram overlay (PAN) — separate research + code PRs later.
+- Custom signature image upload (sign once, paste on every card) — out of
+  scope; this is just the empty-box overlay.
+- Per-card signature box position tuning UI — fixed coordinates only.
+- Voter ID / Ayushman / Jan Aadhaar / eShram signature boxes — PAN only.

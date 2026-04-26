@@ -321,8 +321,12 @@ unlock, auto-detect, front+back preview, CR80 output, A4 sheet).
   docs shipped (PR #215, #216), Aadhaar field toggles shipped (PR #217 —
   4 checkboxes: Hide QR Code / Mobile No. / Issue Date / Download Date,
   white-mask regions on back card, all output layouts), Auto Enhance
-  shipped (PR #218 — luminance histogram analysis, 1-click button).
-  Remaining Phase 3: signature box (PAN), back-side hologram overlay (PAN).
+  shipped (PR #218 — luminance histogram analysis, 1-click button),
+  PAN signature box research docs shipped (PR #220 — §U in issues.md
+  with PAN_OVERLAY_REGIONS coords + applyPanOverlays() design + 3
+  call-site list, mirroring the Aadhaar mask pattern).
+  Remaining Phase 3 code: signature box (PAN — code PR pending, plan in §U),
+  back-side hologram overlay (PAN — research + code pending).
 - **Card size reference:** CR80 = 85.6×54mm = 1011×638px at 300 DPI.
   Lamination pouch = 65×95mm (Reston 125 micron). Test PDFs in repo:
   `test-pdfs/pan-test.pdf` (pw: `05071999`), `test-pdfs/aadhaar-test.pdf`
