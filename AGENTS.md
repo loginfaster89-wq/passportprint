@@ -351,8 +351,14 @@ unlock, auto-detect, front+back preview, CR80 output, A4 sheet).
 - **ID Card Print Phase 3 follow-up — SHIPPED.**
   - PR #232 feat — Auto Enhance button (§Y), rebased from closed #218.
     One-click bright/contrast/sat via luminance histogram. ~25 lines.
-  - PR #234 docs (this PR) — Rule #13 second-half: marks PRs #231/#232
+  - PR #234 docs — Rule #13 second-half: marks PRs #231/#232
     shipped across SKILL.md §9/§11, AGENTS.md, issues.md §X/§Y.
+- **ID Card Print Phase 4 P3 — IN PROGRESS.**
+  - PR #235 docs (this PR) — §Z research for Photo Editor split
+    panel: 3-panel sidebar reorg (Card Cleanup / Position / Photo
+    Adjust), Bold text toggle, 3 Quick Presets (Original/Aadhaar/PAN),
+    shared §W+§X Front/Back radio. Est. ~80–100 line code PR.
+  - §Z code PR — pending in a separate session per Rule #14.
 - **ID Card Print Phase 4 P3+ — NOT STARTED.** Photo Editor split,
   Master Settings, PrePrinted Card mode, Printer presets, Bold/BigQR
   toggles, other-card overlays — full prioritized table in issues.md

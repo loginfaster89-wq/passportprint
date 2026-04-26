@@ -1186,7 +1186,7 @@ Each item is a separate research + code PR pair (per Rule #14).
 | ~~P1~~ | ~~PAN HOLOGRAM overlay~~             | ~~~40 lines~~ | **SHIPPED PR #224** |
 | ~~P2~~ | ~~Per-side Move controls (X/Y nudge)~~ | ~~~120 lines~~ | **SHIPPED PR #229 (§W)** |
 | ~~P2~~ | ~~Per-side Zoom (scale within CR80)~~ | ~~~80 lines~~ | **SHIPPED PR #230 (§X)** |
-| P3  | Photo Editor split panel                | ~150 lines  | Reorganize sliders + add Bold + add presets |
+| ~~P3~~ | ~~Photo Editor split panel — research~~ | ~~~150 lines~~ | **Research SHIPPED §Z. Code PR pending** |
 | P3  | Master Settings (DPI/padding/margins)   | ~200 lines  | Calibration screen with localStorage persistence |
 | P3  | PrePrinted Card mode                    | ~60 lines   | Skip front render, output back-only sheets |
 | P4  | Printer presets (Epson L805 etc)        | ~80 lines   | Dropdown of DPI/margin profiles per printer |
@@ -1768,3 +1768,214 @@ mixed code with `issues.md` updates that referenced an outdated §U
 letter (now occupied by PAN Signature). Closed in favour of PR #232,
 which carries the same algorithm code-only on a fresh branch from
 main, per rule #13 (code PR first, docs PR second-half).
+
+---
+
+## §Z ID Card Print Phase 4 P3 — Photo Editor split panel research
+
+**Status:** Research SHIPPED — this section. Code PR pending in a
+separate session per Rule #14.
+
+**Goal:** The Step 2 sidebar in `id-print.html` has grown organically
+through §T (Aadhaar toggles), §U (PAN signature), §W (Move), §X (Zoom),
+and §Y (Auto Enhance). It is now a single linear column of unrelated
+groups stacked top-to-bottom with no visual hierarchy. Reorganise it
+into a small set of clearly-labelled panels, add a **Bold** text-
+emphasis toggle that the field has been asking for since #217 landed,
+and add three **Quick Preset** buttons that one-click the most common
+slider combinations users actually pick.
+
+### Z.1 Current sidebar layout (id-print.html, scouted 2026-04-26)
+
+Inside `<div class="idp-preview">` (lines ~430–527), the children
+appear in this exact source order:
+
+1. `<h3 id="previewTitle">` — "Front & Back Preview" / single-card mode title
+2. Front + Back canvas pair
+3. Layout toggle (Standard / 3-up / Compact / Single)
+4. `#aadhaarToggles` (hidden unless Aadhaar detected) — 4 checkboxes
+5. `#panToggles` (hidden unless PAN detected) — Hologram + Signature
+6. `#movePad` (hidden unless single-card mode) — §W
+7. `#zoomPad` (hidden unless single-card mode) — §X
+8. `<div class="idp-editor">` — Photo Adjust title row (Auto + Reset)
+   followed by Brightness / Contrast / Saturation sliders
+9. `<div class="idp-info">` — 4 stat pills
+10. `<div class="idp-actions">` — Back + Generate buttons
+
+Issues with this layout:
+
+- **No grouping.** Move (§W) and Zoom (§X) are *Position* operations
+  but Auto Enhance (§Y) and the sliders are *Exposure* operations.
+  They are visually identical right now (same border, same padding,
+  same font).
+- **Auto + Reset are inline with the title text.** They look like
+  decorative chips, not action buttons. Auto in particular gets
+  missed in user testing — half of testers never notice it exists.
+- **No quick presets.** Most support tickets boil down to "make the
+  Aadhaar text darker" or "fix this washed-out PAN" — both are 2-3
+  slider tweaks the user has to discover by dragging. A one-click
+  preset solves them.
+- **No Bold toggle.** §T toggles let users hide unwanted Aadhaar
+  fields, but the *visible* fields are still rasterised at the source
+  PDF density and look thin on a CR80 print. Field requests for a
+  "Bold" / "Darken text" affordance pre-date PR #217 and have not
+  been actioned.
+
+### Z.2 Proposed split-panel structure
+
+Reorganise items 4–8 above into **three labelled panels** with the
+existing `.idp-move` border + 8px radius (no new tokens):
+
+```
+┌─ Panel A: Card Cleanup ────────────────────┐
+│  • Aadhaar toggles (when Aadhaar detected) │
+│  • PAN toggles    (when PAN detected)      │
+│  • Bold text          [ off | on ]   ← NEW │
+└────────────────────────────────────────────┘
+
+┌─ Panel B: Position (Single-card mode) ─────┐
+│  • Side: Front | Back  (shared radio)      │  ← NEW shared radio
+│  • Move pad     (§W)                       │
+│  • Zoom slider  (§X)                       │
+│  • Reset position                          │
+└────────────────────────────────────────────┘
+
+┌─ Panel C: Photo Adjust ────────────────────┐
+│  Quick:   [Original] [Aadhaar] [PAN]  ← NEW│
+│  Brightness  ━━━━━○━━━━━  120%             │
+│  Contrast    ━━━━━○━━━━━  115%             │
+│  Saturation  ━━━━━○━━━━━  110%             │
+│  [ Auto ]                  [ Reset ]  ← buttons promoted to row
+└────────────────────────────────────────────┘
+```
+
+Each panel uses the existing `.idp-move` style class so we get the
+border + radius for free without adding new CSS tokens. Panel
+headers reuse `.idp-move-label` (already `color:var(--accent)`,
+`font-weight:600`) so no new typography either.
+
+### Z.3 Single shared Front/Back radio (Panel B consolidation)
+
+Currently §W and §X each render their **own** Front/Back radio inside
+`#movePad` and `#zoomPad`. Both bind into the same per-side state
+(`batchCards[0].offsets[side]` and `batchCards[0].scale[side]`)
+but the two radios are independent — toggle Front in Move and the
+Zoom radio still shows whatever side it was on. Confusing.
+
+Proposed: hoist a single `<div id="positionSide">` radio above both
+sub-controls inside Panel B. Move and Zoom both read from
+`positionSide.querySelector('input:checked').value`. Saves DOM,
+removes the consistency bug, drops ~20 lines.
+
+### Z.4 Bold text toggle (Panel A) — implementation sketch
+
+A boolean checkbox that, when on, runs an extra
+`ctx.filter = 'contrast(135%) brightness(95%)'` pass over the
+existing rendered front/back canvases before they are composited into
+output sheets. Crucially this is **separate** from the Photo Adjust
+sliders — Bold layers *on top of* whatever the user has already dialled
+in via Brightness/Contrast/Saturation. Without this separation the
+user cannot turn Bold off without also resetting their custom
+adjustments.
+
+State: `bold: false` on `batchCards[0]`. Re-runs `drawFiltered`.
+Hidden in batch mode initially (Phase 4 P3 scope is single-card; batch
+Bold belongs in P4 alongside batch Auto Enhance).
+
+### Z.5 Quick Presets (Panel C) — three buttons
+
+| Button | Bright | Contrast | Sat | Use case |
+|--------|--------|----------|-----|----------|
+| Original | 100 | 100 | 100 | Restore (alias of Reset, but visually a preset) |
+| Aadhaar | 105 | 130 | 100 | Crisp dark text on Aadhaar's grey tint |
+| PAN     | 115 | 115 | 110 | Brighten washed-out ePAN scans |
+
+Each button just sets `slBright.value / slContrast.value / slSat.value`
+and calls `onSliderInput()` (existing function at id-print.html:1806)
+which already takes care of the readout text + `applyFilters` re-run.
+~12 lines of JS total + 3 `<button>` tags.
+
+Auto Enhance (§Y) stays as-is — it is *adaptive* (looks at the actual
+image), whereas presets are *fixed*. Both have a place: Auto for "this
+specific upload looks bad", presets for "I always want my Aadhaars to
+look like this".
+
+### Z.6 What changes vs. what stays
+
+**Changes:**
+- HTML reorder + 3 new `<div class="idp-move">` panel wrappers around
+  existing children (no children deleted, just re-parented).
+- New shared `#positionSide` radio in Panel B; remove per-control
+  Front/Back radios from `#movePad` and `#zoomPad`.
+- New `#chkBold` checkbox + handler.
+- New `#presetOriginal` / `#presetAadhaar` / `#presetPan` buttons +
+  click handlers in Panel C.
+- Auto + Reset buttons move from inline-with-title to a new
+  flex row at the bottom of Panel C (still uses existing
+  `.idp-editor-title button` styles).
+
+**Stays untouched:**
+- All slider min/max/value attributes (30–200, 0–200) — `autoEnhance()`
+  and Reset still write the same numbers.
+- `drawFiltered` / `applyFilters` / `getOffset` / `getScale` — pure
+  reorg of the *inputs* to these, not the rendering pipeline.
+- A4 sheet builders, PDF download, print path — zero impact.
+- §T Aadhaar toggles, §U PAN signature, §W Move maths, §X Zoom maths,
+  §Y Auto Enhance algorithm — all kept verbatim.
+- Batch mode behaviour — Panel B still hidden in batch (single-card
+  only); Panel A still shows toggles per detected card type; Panel C
+  sliders still apply globally to all batch cards (current behaviour).
+
+### Z.7 Estimated diff
+
+| Region | Lines |
+|--------|-------|
+| HTML restructure (3 panel wrappers + shared side radio) | ~40 |
+| Bold checkbox + handler + drawFiltered hook | ~25 |
+| 3 preset buttons + click handlers | ~20 |
+| Move + Zoom radio consolidation (delete duplicates, point at shared) | ~-15 net |
+| btnBack / btnResetEdit / fresh-PDF reset additions for Bold + presets | ~10 |
+| **Total** | **~80–100 net additions** |
+
+Lower than V.4's ~150 estimate because §W and §X already share the
+per-side state model — we are not building new state, just unifying
+its UI surface and adding two small features (Bold + presets) on top.
+
+### Z.8 Risks & rollback
+
+- **Risk: shared side radio breaks §W or §X.** Both sub-controls
+  currently read `movePad.querySelector('input[name="moveSide"]:checked')`
+  and `zoomPad.querySelector('input[name="zoomSide"]:checked')`
+  respectively. Changing those reads to a single `positionSide` radio
+  is a 2-line edit each. Easy to revert if a regression appears.
+- **Risk: Bold cumulative with Auto.** Auto sets contrast 115%; Bold
+  layers another contrast 135% on top → effective 155%. Acceptable
+  (still in 30–200 slider range mentally) but worth eyeballing on the
+  6 test PDFs from §Y.6 before merging.
+- **Risk: panel reorder confuses returning users.** Mitigation: ship
+  with a one-time ribbon "**New layout** — same controls, grouped" at
+  the top of Step 2 that dismisses on click. ~15 extra lines.
+  Or skip the ribbon (recommended — desktop-only product, low daily
+  re-use, change is intuitive).
+
+Rollback path: `git revert` of the code PR is clean since this is
+HTML reorg + small JS additions, no schema changes, no localStorage
+keys, no backend touches.
+
+### Z.9 Out of scope for the §Z code PR
+
+- Master Settings (DPI/padding/margins persistence) — V.4 P3 #2,
+  separate research §AA.
+- PrePrinted Card mode — V.4 P3 #3, separate research §AB.
+- Batch-mode Bold or batch-mode Auto — V.4 P4.
+- Per-side Bold (back-only emboss) — overkill for the feature ask.
+- Drag-to-reorder panels — desktop product, no field demand.
+- Saving panel collapsed state — no `localStorage` work in §Z.
+
+### Z.10 Recommended next 2 PRs
+
+1. **§Z code PR** — implement the panel split + Bold + presets per
+   Z.2–Z.5. ~80–100 lines. Single-card mode tested manually with one
+   Aadhaar PDF + one ePAN PDF. Code-only per Rule #13.
+2. **§Z docs PR** — Rule #13 second-half — mark §Z.1 SHIPPED, update
+   V.4 P3 row to crossed-out fully, add to SKILL.md §9 shipped list.

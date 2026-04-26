@@ -464,11 +464,12 @@ issues.md — full audit + §M ID Card Print research + §O Phase 2 multi-card
   + §V Phase 4 CardXpress feature parity scope (8 reference images in
     .agents/references/)
 
-Last PR: PR #234 (docs: Rule #13 second-half — mark PR #231
-  (§X zoom-slider DOM refresh fix) + PR #232 (§Y Auto Enhance,
-  rebased from closed #218) shipped in SKILL.md §9/§11 + AGENTS.md
-  + issues.md §X/§Y. Phase 4 P2 Move/Zoom + Phase 3 Auto Enhance
-  COMPLETE)
+Last PR: PR #235 (docs: Phase 4 P3 §Z research — Photo
+  Editor split panel: reorganise Step 2 sidebar into Card Cleanup /
+  Position / Photo Adjust panels, add Bold text toggle, add Original/
+  Aadhaar/PAN quick presets, consolidate §W+§X Front/Back radios into
+  one shared radio. ~80–100 line code PR pending in a separate session
+  per Rule #14)
 
 Shipped summary (don't redo):
 PRs #70–#230: all previous work shipped
@@ -566,9 +567,14 @@ PRs #70–#230: all previous work shipped
   optimisation via front card luminance histogram. Algorithm:
   bright = clamp(128/avgLum*100, 70, 160), contrast 115%, sat 110%.
   Code-only per rule #13. ~25 lines added.
-- PR #234: docs (this PR) — Rule #13 second-half. Marks PRs #231/#232
+- PR #234: docs — Rule #13 second-half. Marks PRs #231/#232
   shipped across SKILL.md §9/§11 + AGENTS.md backlog + issues.md
   §X banner / §X.11 follow-up / new §Y section.
+- PR #235: docs (this PR) — Phase 4 P3 §Z research: Photo Editor
+  split panel. Designs the Step 2 sidebar reorg (3 labelled panels:
+  Card Cleanup / Position / Photo Adjust), adds Bold text toggle and
+  3 Quick Preset buttons, consolidates the §W+§X Front/Back radios.
+  Estimated code diff ~80–100 lines. Code PR pending.
 
 ID Card Print current state:
 - Phase 1 MVP COMPLETE + VERIFIED (PR #188)
@@ -604,7 +610,11 @@ Phase 4 P2 COMPLETE:
 
 Phase 3 follow-up COMPLETE:
 - PR #232: Auto Enhance (§Y, rebased from closed #218) — SHIPPED
-- PR #234: docs second-half (this PR) — SHIPPED
+- PR #234: docs second-half — SHIPPED
+
+Phase 4 P3 IN PROGRESS:
+- PR #235: §Z research — Photo Editor split panel (this PR) — SHIPPED
+- §Z code PR — pending (single-card sidebar reorg + Bold + presets)
 
 TASK: Phase 4 P3 items next. Per Rule #14, research first — open a
 docs PR with UX / state-shape research, THEN a code PR.
