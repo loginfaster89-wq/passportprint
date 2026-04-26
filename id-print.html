@@ -496,7 +496,7 @@ input.idp-range::-moz-range-thumb{
 
       <!-- Photo editor -->
       <div class="idp-editor">
-        <div class="idp-editor-title">Photo Adjust <button type="button" id="btnResetEdit">Reset</button></div>
+        <div class="idp-editor-title">Photo Adjust <button type="button" id="btnAutoEnhance">Auto</button> <button type="button" id="btnResetEdit">Reset</button></div>
         <div class="idp-sliders">
           <div class="idp-slider-group">
             <label class="idp-slider-label">Brightness <span id="valBright">100%</span></label>
@@ -1666,6 +1666,7 @@ const valBright = $('#valBright');
 const valContrast = $('#valContrast');
 const valSat = $('#valSat');
 const btnResetEdit = $('#btnResetEdit');
+const btnAutoEnhance = $('#btnAutoEnhance');
 const chkRounded = $('#chkRounded');
 const aadhaarToggles = $('#aadhaarToggles');
 const chkHideQR = $('#chkHideQR');
@@ -1779,6 +1780,29 @@ function resetEditorSliders() {
   slSat.value = 100; valSat.textContent = '100%';
 }
 
+/* ── Auto Enhance (§Y) — luminance histogram → bright/contrast/sat ── */
+function autoEnhance() {
+  var src = originalFront || (batchCards.length > 0 ? batchCards[0].originalFront : null);
+  if (!src) return;
+  var tmpC = document.createElement('canvas');
+  tmpC.width = CR80_W; tmpC.height = CR80_H;
+  var tCtx = tmpC.getContext('2d');
+  tCtx.drawImage(src, 0, 0, CR80_W, CR80_H);
+  var data = tCtx.getImageData(0, 0, CR80_W, CR80_H).data;
+  var sum = 0, count = 0;
+  for (var i = 0; i < data.length; i += 4) {
+    sum += 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
+    count++;
+  }
+  var avg = count > 0 ? sum / count : 128;
+  var bright = Math.round((128 / Math.max(avg, 1)) * 100);
+  bright = Math.max(70, Math.min(160, bright));
+  slBright.value = bright;   valBright.textContent = bright + '%';
+  slContrast.value = 115;    valContrast.textContent = '115%';
+  slSat.value = 110;         valSat.textContent = '110%';
+  applyFilters();
+}
+
 function onSliderInput() {
   valBright.textContent = slBright.value + '%';
   valContrast.textContent = slContrast.value + '%';
@@ -1789,6 +1813,7 @@ function onSliderInput() {
 slBright.addEventListener('input', onSliderInput);
 slContrast.addEventListener('input', onSliderInput);
 slSat.addEventListener('input', onSliderInput);
+btnAutoEnhance.addEventListener('click', autoEnhance);
 btnResetEdit.addEventListener('click', () => {
   resetEditorSliders();
   if (batchCards.length === 1 && batchCards[0].offset) {
