@@ -93,14 +93,6 @@ No dev server — edit source, `npm run build`, preview from `dist/`.
     any backlog, solve them **one by one** — one issue per PR, one PR
     per commit cycle. Do not batch multiple unrelated fixes into a
     single PR. Keeps diffs small, reviews fast, rollbacks safe.
-13. **Research → docs → code (2026-04-26).** Kisi bhi naye feature par
-    coding shuru karne se PEHLE, usi session mein Devin helping files
-    (`SKILL.md`, `AGENTS.md`, `issues.md`) ko research findings ke saath
-    update karo — ek alag "docs update PR" banao. Ye ensure karta hai ki
-    quota khatam hone ya session break hone par bhi research safe rahe
-    aur agli session bina re-research ke directly coding shuru kar sake.
-    Rule: Research → Docs PR → Coding PR. Kabhi skip mat karo.
-
 ## 3. Create a PR (fine-grained PAT flow)
 
 `git_pr` / `list_repos` often return "Not Found" because the session's
