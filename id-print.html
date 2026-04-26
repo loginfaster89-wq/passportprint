@@ -1143,6 +1143,7 @@ async function processPdf(pdf) {
     originalBack = backImageData;
     batchCards = [{ type: detectedType, front: frontImageData, back: backImageData, originalFront: frontImageData, originalBack: backImageData, fileName: batchFiles.length > 0 ? batchFiles[0].name : 'PDF', offset: { front: { dx: 0, dy: 0 }, back: { dx: 0, dy: 0 } }, scale: { front: 1.0, back: 1.0 }, autoSwapped: didAutoSwap }];
     resetEditorSliders();
+    loadPrefs();
     applyFilters();
 
     detectBadge.innerHTML = '<div class="idp-detect ' + detectedType + '">' +
@@ -1176,6 +1177,9 @@ function showBatchPreview() {
   detectBadge.innerHTML = badgeHtml;
 
   previewTitle.textContent = batchCards.length + ' Cards — Front & Back Preview';
+
+  /* Restore persisted Cleanup + slider preferences before rendering */
+  loadPrefs();
 
   /* Build card previews */
   batchCardsContainer.innerHTML = '';
@@ -1872,6 +1876,52 @@ function resetEditorSliders() {
   slSat.value = 100; valSat.textContent = '100%';
 }
 
+/* ── Persisted preferences (Card Cleanup toggles + slider preset) ──
+   Stored in localStorage so a returning operator doesn't re-tick the
+   same toggles and re-pick the same preset on every PDF. */
+const PREFS_KEY = 'idp:prefs:v1';
+function savePrefs() {
+  try {
+    var prefs = {
+      rounded: chkRounded.checked,
+      hideQR: chkHideQR.checked,
+      hideMobile: chkHideMobile.checked,
+      hideIssueDate: chkHideIssueDate.checked,
+      hideDownloadDate: chkHideDownloadDate.checked,
+      signatureBox: chkSignatureBox.checked,
+      hologram: chkHologram.checked,
+      bold: chkBold.checked,
+      bright: parseInt(slBright.value, 10),
+      contrast: parseInt(slContrast.value, 10),
+      sat: parseInt(slSat.value, 10)
+    };
+    localStorage.setItem(PREFS_KEY, JSON.stringify(prefs));
+  } catch (e) { /* quota / private mode — silent */ }
+}
+function loadPrefs() {
+  try {
+    var raw = localStorage.getItem(PREFS_KEY);
+    if (!raw) return;
+    var p = JSON.parse(raw);
+    if (typeof p.rounded === 'boolean') {
+      chkRounded.checked = p.rounded;
+      roundedCorners = p.rounded;
+      cardFrontCanvas.classList.toggle('rounded', p.rounded);
+      cardBackCanvas.classList.toggle('rounded', p.rounded);
+    }
+    if (typeof p.hideQR === 'boolean') chkHideQR.checked = p.hideQR;
+    if (typeof p.hideMobile === 'boolean') chkHideMobile.checked = p.hideMobile;
+    if (typeof p.hideIssueDate === 'boolean') chkHideIssueDate.checked = p.hideIssueDate;
+    if (typeof p.hideDownloadDate === 'boolean') chkHideDownloadDate.checked = p.hideDownloadDate;
+    if (typeof p.signatureBox === 'boolean') chkSignatureBox.checked = p.signatureBox;
+    if (typeof p.hologram === 'boolean') chkHologram.checked = p.hologram;
+    if (typeof p.bold === 'boolean') chkBold.checked = p.bold;
+    if (typeof p.bright === 'number') { slBright.value = p.bright; valBright.textContent = p.bright + '%'; }
+    if (typeof p.contrast === 'number') { slContrast.value = p.contrast; valContrast.textContent = p.contrast + '%'; }
+    if (typeof p.sat === 'number') { slSat.value = p.sat; valSat.textContent = p.sat + '%'; }
+  } catch (e) { /* corrupt JSON — silent */ }
+}
+
 /* ── Auto Enhance (§Y) — luminance histogram → bright/contrast/sat ── */
 function autoEnhance() {
   var src = originalFront || (batchCards.length > 0 ? batchCards[0].originalFront : null);
@@ -1900,6 +1950,7 @@ function onSliderInput() {
   valContrast.textContent = slContrast.value + '%';
   valSat.textContent = slSat.value + '%';
   applyFilters();
+  savePrefs();
 }
 
 slBright.addEventListener('input', onSliderInput);
@@ -1921,7 +1972,7 @@ btnResetEdit.addEventListener('click', () => {
 });
 
 /* Bold text toggle — layered on top of slider filters */
-chkBold.addEventListener('change', applyFilters);
+chkBold.addEventListener('change', function() { applyFilters(); savePrefs(); });
 
 const btnSwapSides = $('#btnSwapSides');
 const swapNotice = $('#swapNotice');
@@ -1974,6 +2025,7 @@ function applyPreset(b, c, s) {
   slContrast.value = c; valContrast.textContent = c + '%';
   slSat.value = s; valSat.textContent = s + '%';
   applyFilters();
+  savePrefs();
 }
 $('#presetOriginal').addEventListener('click', function(){ applyPreset(100, 100, 100); });
 $('#presetAadhaar').addEventListener('click', function(){ applyPreset(105, 130, 100); });
@@ -2055,10 +2107,11 @@ chkRounded.addEventListener('change', () => {
     c.classList.toggle('rounded', roundedCorners);
   });
   applyFilters();
+  savePrefs();
 });
 
 [chkHideQR, chkHideMobile, chkHideIssueDate, chkHideDownloadDate, chkSignatureBox, chkHologram].forEach(function(chk) {
-  chk.addEventListener('change', function() { applyFilters(); });
+  chk.addEventListener('change', function() { applyFilters(); savePrefs(); });
 });
 
 /* ── Layout toggle ── */
