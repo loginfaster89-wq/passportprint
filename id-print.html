@@ -480,6 +480,20 @@ input.idp-range::-moz-range-thumb{
         <div class="idp-move-readout" id="moveReadout">0, 0</div>
       </div>
 
+      <!-- Per-side Zoom control (single-card mode only) -->
+      <div id="zoomPad" class="idp-move idp-hidden">
+        <div class="idp-move-row">
+          <span class="idp-move-label">Zoom</span>
+          <label><input type="radio" name="zoomSide" value="front" checked> Front</label>
+          <label><input type="radio" name="zoomSide" value="back"> Back</label>
+          <button type="button" id="zoomReset" style="padding:2px 8px;font-size:11px;border:1px solid var(--border);border-radius:4px;background:transparent;color:inherit;cursor:pointer;">Reset</button>
+        </div>
+        <div class="idp-slider-group">
+          <label class="idp-slider-label">Scale <span id="zoomReadout">100%</span></label>
+          <input type="range" class="idp-range" id="slZoom" min="50" max="150" value="100" step="1">
+        </div>
+      </div>
+
       <!-- Photo editor -->
       <div class="idp-editor">
         <div class="idp-editor-title">Photo Adjust <button type="button" id="btnResetEdit">Reset</button></div>
@@ -1071,7 +1085,7 @@ async function processPdf(pdf) {
 
     originalFront = frontImageData;
     originalBack = backImageData;
-    batchCards = [{ type: detectedType, front: frontImageData, back: backImageData, originalFront: frontImageData, originalBack: backImageData, fileName: batchFiles.length > 0 ? batchFiles[0].name : 'PDF', offset: { front: { dx: 0, dy: 0 }, back: { dx: 0, dy: 0 } } }];
+    batchCards = [{ type: detectedType, front: frontImageData, back: backImageData, originalFront: frontImageData, originalBack: backImageData, fileName: batchFiles.length > 0 ? batchFiles[0].name : 'PDF', offset: { front: { dx: 0, dy: 0 }, back: { dx: 0, dy: 0 } }, scale: { front: 1.0, back: 1.0 } }];
     resetEditorSliders();
     applyFilters();
 
@@ -1080,6 +1094,7 @@ async function processPdf(pdf) {
     aadhaarToggles.classList.toggle('idp-hidden', detectedType !== 'aadhaar');
     panToggles.classList.toggle('idp-hidden', detectedType !== 'pan');
     movePad.classList.toggle('idp-hidden', batchCards.length !== 1);
+    zoomPad.classList.toggle('idp-hidden', batchCards.length !== 1);
 
     previewTitle.textContent = 'Front & Back Preview';
     batchSheetInfo.classList.add('idp-hidden');
@@ -1705,6 +1720,13 @@ function getOffset(side) {
   return { dx: 0, dy: 0 };
 }
 
+function getScale(side) {
+  if (batchCards.length === 1 && batchCards[0].scale && batchCards[0].scale[side]) {
+    return batchCards[0].scale[side];
+  }
+  return 1.0;
+}
+
 function drawFiltered(destCanvas, srcCanvas, w, h, filterStr, side) {
   destCanvas.width = w;
   destCanvas.height = h;
@@ -1717,7 +1739,9 @@ function drawFiltered(destCanvas, srcCanvas, w, h, filterStr, side) {
   }
   ctx.filter = filterStr;
   var __off = getOffset(side);
-  ctx.drawImage(srcCanvas, __off.dx, __off.dy, w, h);
+  var __sc = getScale(side);
+  var __sw = w * __sc, __sh = h * __sc;
+  ctx.drawImage(srcCanvas, __off.dx + (w - __sw) / 2, __off.dy + (h - __sh) / 2, __sw, __sh);
   ctx.filter = 'none';
   if (side && detectedType === 'aadhaar') applyAadhaarMasks(ctx, 0, 0, side);
   if (side && detectedType === 'pan') applyPanOverlays(ctx, 0, 0, side);
@@ -1770,6 +1794,10 @@ btnResetEdit.addEventListener('click', () => {
     batchCards[0].offset = { front: { dx: 0, dy: 0 }, back: { dx: 0, dy: 0 } };
     refreshMoveReadout();
   }
+  if (batchCards.length === 1 && batchCards[0].scale) {
+    batchCards[0].scale = { front: 1.0, back: 1.0 };
+    refreshZoomReadout();
+  }
   applyFilters();
 });
 
@@ -1806,6 +1834,41 @@ $('#moveReset').addEventListener('click', function(){
 });
 for (var __i = 0; __i < moveSideRadios.length; __i++) {
   moveSideRadios[__i].addEventListener('change', refreshMoveReadout);
+}
+
+/* ── Per-side Zoom (§X) ── */
+const zoomPad = $('#zoomPad');
+const slZoom = $('#slZoom');
+const zoomReadout = $('#zoomReadout');
+const zoomSideRadios = document.getElementsByName('zoomSide');
+
+function currentZoomSide() {
+  for (var i = 0; i < zoomSideRadios.length; i++) {
+    if (zoomSideRadios[i].checked) return zoomSideRadios[i].value;
+  }
+  return 'front';
+}
+function refreshZoomReadout() {
+  if (batchCards.length !== 1) return;
+  var s = batchCards[0].scale[currentZoomSide()];
+  zoomReadout.textContent = Math.round(s * 100) + '%';
+  slZoom.value = Math.round(s * 100);
+}
+slZoom.addEventListener('input', function() {
+  if (batchCards.length !== 1) return;
+  var side = currentZoomSide();
+  batchCards[0].scale[side] = parseInt(slZoom.value, 10) / 100;
+  zoomReadout.textContent = slZoom.value + '%';
+  applyFilters();
+});
+$('#zoomReset').addEventListener('click', function() {
+  if (batchCards.length !== 1) return;
+  batchCards[0].scale[currentZoomSide()] = 1.0;
+  refreshZoomReadout();
+  applyFilters();
+});
+for (var __zi = 0; __zi < zoomSideRadios.length; __zi++) {
+  zoomSideRadios[__zi].addEventListener('change', refreshZoomReadout);
 }
 
 chkRounded.addEventListener('change', () => {
@@ -1872,6 +1935,7 @@ btnBack.addEventListener('click', () => {
   aadhaarToggles.classList.add('idp-hidden');
   panToggles.classList.add('idp-hidden');
   movePad.classList.add('idp-hidden');
+  zoomPad.classList.add('idp-hidden');
   if (moveReadout) moveReadout.textContent = '0, 0';
   [chkHideQR, chkHideMobile, chkHideIssueDate, chkHideDownloadDate, chkSignatureBox, chkHologram].forEach(function(c) { c.checked = false; });
   frontImageData = null;
