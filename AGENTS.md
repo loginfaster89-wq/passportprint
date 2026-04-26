@@ -394,11 +394,48 @@ unlock, auto-detect, front+back preview, CR80 output, A4 sheet).
     (still soft no-op). `buildSingleSheet` `var gap = 40` →
     `var gap = 0` so front+back touch on A4 — matches user's
     snipping-tool reference.
+  - PR #251 feat — Cut Marks toggle on 1-Pair Sheet (§AC.9).
+    chkCutMarks in Step 2 sidebar Position panel (single-card
+    mode); 4 corner ticks around the merged card pair; default
+    OFF; persisted in idp:prefs:v1.
+  - PR #252 refactor — REMOVE entire "Card Cleanup" panel (§AC.10).
+    User: "iska koi kaam nahi hai feature main." Drops Hide QR /
+    Mobile / Issue Date / Download Date / Signature Box / Hologram /
+    Bold / Swap Front+Back / Undo Swap UI; removes
+    AADHAAR_FIELD_MASKS, PAN_OVERLAY_REGIONS, applyAadhaarMasks,
+    applyPanOverlays, swapFrontBack, updateSwapNotice,
+    clearAutoSwapFlag, shouldAutoSwap, skinPixelRatio, auto-swap
+    flow in fetchPdfCard/processPdf, all related DOM refs +
+    listeners + reset entries, bold-text branch from
+    getFilterString. idp:prefs:v1 schema reduced to
+    {rounded, cutMarks, slider preset}. ~10 KB raw shrink in
+    id-print.html. Position / Photo Adjust / Quick Presets /
+    Auto Enhance / Reset / Rounded Corners / Cut Marks (#251)
+    all preserved. §AA auto-swap fully gone — replaced by §AC.11
+    landscape preview redesign (next session).
+- **NEXT — §AC.11 Front+Back preview redesign (single landscape
+  canvas).** User wants Step 2 preview to match the printed 1-pair
+  sheet exactly: ONE wide landscape canvas with back on LEFT and
+  front on RIGHT, no labels, no separate Front/Back boxes — the
+  preview should be visually identical to what comes off the
+  printer / scissor. Reference image at
+  `.agents/references/preview-landscape-target.png` IS the spec.
+  Full design + acceptance criteria in `issues.md` §AC.11.
+  Estimated ~60–80 line code PR in `id-print.html` only; sheet
+  builders untouched. Move/Zoom per-side (PRs #229/#230) and
+  rounded corners (#194) MUST keep working per side inside the
+  unified canvas.
+- **Image-saving discipline (project rule).** Every reference image
+  the user attaches goes into `.agents/references/<descriptive-name>.png`
+  AND gets cited in the relevant `issues.md` section so future
+  agents can verify the work matches the user's spec.
 - **ID Card Print Phase 4 P3+ — REMAINING.** Master Settings (DPI/
   padding/margins per printer, persist in localStorage), PrePrinted
   Card mode (back-only sheets), Printer presets, BigQR toggle,
   other-card overlays (Voter / Ayushman / Jan Aadhaar — same pattern
-  as PAN). Full prioritized table in issues.md §V.4.
+  as PAN; note: the PAN overlays themselves were deleted in PR #252,
+  so re-introducing overlays is a fresh design from scratch if the
+  user asks again). Full prioritized table in issues.md §V.4.
 - **Card size reference:** CR80 = 85.6×54mm = 1011×638px at 300 DPI.
   Lamination pouch = 65×95mm (Reston 125 micron). Test PDFs in repo:
   `test-pdfs/pan-test.pdf` (pw: `05071999`), `test-pdfs/aadhaar-test.pdf`

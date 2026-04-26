@@ -2415,3 +2415,287 @@ border edges.
 - Mirror fix (§AC.7, PR #247) preserved — back card still drawn
   un-mirrored; this PR only changes the gap value, not the draw
   call.
+
+---
+
+## §AC.9 ID Card Print — Cut Marks toggle on 1-Pair Sheet
+
+**Status:** SHIPPED — PR #251.
+
+### AC.9.1 Field report
+
+After §AC.8 (PR #248) tightened the Aadhaar crop and dropped the gap
+to zero, the front + back cards print edge-to-edge on the 1-pair
+sheet. The single dashed fold/cut line that ran down the seam is no
+longer needed for fold-and-laminate (workflow today is cut + stack
+back-to-back). User asked for an opt-in **Cut Marks** layer on the
+1-pair sheet — short tick marks at all four outer corners of the
+combined card pair, so a guillotine / scissor cut lands on the
+outer black border without guesswork.
+
+### AC.9.2 Fix
+
+Re-used the existing `cutMarks` boolean (already wired for multi-card
+/ Dragon / PVC paths). Added a new `chkCutMarks` checkbox in the
+Step 2 sidebar `panelPosition` (visible in single-card mode). On
+`change`: `cutMarks = chkCutMarks.checked; buildSheet(); savePrefs()`.
+
+`buildSingleSheet()`:
+
+- When `cutMarks` is true, draws 4 short black tick marks (8 px long,
+  1 px stroke) extending outward from each corner of the merged
+  cards rectangle (`startX, startY` to `startX + 2*cardW, startY + cardH`).
+- The dashed seam fold line is now skipped when `cutMarks` is on
+  (would clutter the cut guides; the seam itself already aligns
+  with the cards' inner black border).
+- Default OFF — cards print clean by default; user opts in only
+  when they want corner ticks for cutting accuracy.
+
+Persisted via existing `savePrefs()` / `loadPrefs()` on `idp:prefs:v1`.
+
+### AC.9.3 Verification
+
+- `npm run build` clean. id-print.html bumped slightly (+~0.6 KB).
+- 1-pair sheet with `cutMarks` ON: 4 corner ticks render correctly
+  on A4 preview, no seam line. OFF: clean cards, no ticks (default).
+- Multi-card / Dragon / PVC paths unchanged (they had cutMarks
+  rendering already).
+- Persists across page reloads via `localStorage`.
+
+### AC.9.4 Compatibility
+
+- Extends existing `cutMarks` global — no new prefs key.
+- `buildSingleSheet` is the only path touched; `buildMultiCardSheet`,
+  `buildDragonSheet`, `buildPVCTraySheet` left alone.
+
+---
+
+## §AC.10 ID Card Print — Remove "Card Cleanup" panel
+
+**Status:** SHIPPED — PR #252.
+
+### AC.10.1 Field report
+
+User: *"iska koi kaam nahi hai feature main"* (this panel has no
+operational value). The Card Cleanup panel — Hide QR / Hide Mobile
+No. / Hide Issue Date / Hide Download Date (Aadhaar), Add Signature
+Box / Add Hologram Patch (PAN), Bold Text, Swap Front/Back —
+introduced in PRs #217 / #221 / #224 / #239 plus the auto-swap
+notice (§AA, PRs #240/#241) was confirmed unused in real workflows.
+User explicitly confirmed full panel removal **including the Swap
+Front/Back button**.
+
+### AC.10.2 Fix — UI removed
+
+- `panelCleanup` div: `aadhaarToggles` (4 checkboxes), `panToggles`
+  (2 checkboxes), Bold Text checkbox, `swapRow` with Swap Front/Back.
+- `swapNotice` div + Undo button (§AA auto-swap notification —
+  auto-swap behaviour itself also removed).
+
+### AC.10.3 Fix — JS removed
+
+- **Constants:** `AADHAAR_FIELD_MASKS`, `PAN_OVERLAY_REGIONS`.
+- **Functions:** `applyAadhaarMasks`, `applyPanOverlays`,
+  `swapFrontBack`, `updateSwapNotice`, `clearAutoSwapFlag`,
+  `shouldAutoSwap`, `skinPixelRatio`.
+- **Auto-swap logic** in `fetchPdfCard` / `processPdf`
+  (`autoSwapped` / `didAutoSwap` flags, `card.autoSwapped` property
+  no longer set or read).
+- **DOM refs:** `aadhaarToggles`, `panToggles`, `chkHideQR`,
+  `chkHideMobile`, `chkHideIssueDate`, `chkHideDownloadDate`,
+  `chkSignatureBox`, `chkHologram`, `chkBold`, `btnSwapSides`,
+  `swapNotice`, `btnUndoSwap`.
+- **Bold-text branch** stripped from `getFilterString` (now pure
+  brightness/contrast/saturate).
+- **Cleanup-toggle entries** stripped from `savePrefs` / `loadPrefs`
+  (`idp:prefs:v1` schema now: `rounded`, `cutMarks`, slider preset).
+- **Cleanup-related entries** stripped from `btnResetEdit` and
+  `btnBack` reset paths.
+- **applyAadhaarMasks / applyPanOverlays call sites** in
+  `drawFilteredToCanvas`, `applyBatchFilters`, and `applyFilters`.
+
+### AC.10.4 Kept untouched
+
+Card-type detection + label badge, Position panel (move/zoom),
+Auto Enhance, slider presets, Rounded Corners, Cut Marks (PR #251),
+all sheet builders (`buildSingleSheet`, `buildMultiCardSheet`,
+`buildDragonSheet`, `buildPVCTraySheet`).
+
+### AC.10.5 Verification
+
+- `npm run build` clean. id-print.html: 86.3 KB → 75.7 KB raw
+  (~10 KB removal). dist obfuscated 75 → 72 KB.
+- `rg` confirms zero remaining references to removed identifiers.
+- Step 2 sidebar now shows only **Position** + **Photo Adjust** +
+  **Quick Presets** + Auto Enhance + Reset.
+
+### AC.10.6 Compatibility
+
+- `idp:prefs:v1` keys for removed toggles are simply ignored on
+  load (forward-compatible — old persisted state doesn't break).
+- Card-type detection still runs (used for the badge); only the
+  cleanup mask code paths are gone.
+- §AA auto-swap is fully gone; if the PDF arrives front/back swapped,
+  user no longer has an auto correction. **Replacement rendering**
+  is being designed in §AC.11 (preview redesign) which obviates the
+  need for a swap concept on the printed sheet.
+
+---
+
+## §AC.11 ID Card Print — Front+Back preview redesign (landscape, unified)
+
+**Status:** RESEARCH — code PR pending (next session).
+
+### AC.11.1 Field report
+
+User feedback (with attached snipping-tool reference at
+`.agents/references/preview-landscape-target.png`):
+
+> "Ye jo Front & Back Preview wala hai ye bhi shi karna hai. Phele
+> ye Front dikhata hai or fir neche Back. Ye shi kro jis trh se
+> PDF main se ID ko cut karte hai vaise hi preview main dikhna
+> chahiye — landscape main, **right side Front or left side Back**.
+> Aapko full permission hai design ko adjust karne ke liye. Maine
+> snipping tool se ID ko cut kiya hai — ID ke charo side diye gaye
+> lines ka use kiya — waise hi aapko karna hai. Jo cut hoga wo
+> same to same preview main dikhana hai bina back or front ko alag
+> alag kre."
+
+Translation: today the Step 2 preview shows **two stacked vertical
+canvases** — Front on top, Back below. User wants a **single
+unified landscape preview** — Back on the LEFT, Front on the RIGHT
+— matching exactly what the printed 1-pair sheet looks like after
+cut. No separate Front/Back labels, no two boxes — just one image
+that mirrors the printed output 1:1.
+
+### AC.11.2 Reference
+
+`.agents/references/preview-landscape-target.png` (635 × 278 PNG,
+committed this session). It is the user's snipping-tool capture
+of an Aadhaar card cut from the source PDF using the printed black
+border lines as the cut guide. Both halves are present, side by
+side, in landscape orientation: **left = back** (Hindi text, QR,
+address), **right = front** (photo, name, DOB, VID).
+
+This image IS the spec for §AC.11. The Step 2 preview should look
+like this image.
+
+### AC.11.3 Current state (what exists today)
+
+`#preview` markup (Step 2):
+
+```html
+<div class="idp-preview-wrap">
+  <canvas id="frontCanvas" class="idp-preview-canvas"></canvas>
+  <canvas id="backCanvas"  class="idp-preview-canvas"></canvas>
+</div>
+```
+
+`.idp-preview-wrap` is `display:flex; flex-direction:column;` with
+each canvas sized to its own CR80 1011×638 (scaled down via CSS).
+`drawFiltered(side)` writes to `frontCanvas` / `backCanvas`
+independently.
+
+### AC.11.4 Proposed redesign
+
+**Markup:** one canvas instead of two.
+
+```html
+<div class="idp-preview-wrap">
+  <canvas id="pairCanvas" class="idp-preview-canvas-pair"></canvas>
+</div>
+```
+
+Internal canvas resolution: `CR80_W * 2 × CR80_H` = 2022 × 638 px
+(matches 1-pair sheet at native scale). CSS scales down to fit
+container: `width:100%; max-width:760px; height:auto; aspect-ratio:
+2022/638;` (≈ 3.17:1 landscape).
+
+**Draw order:** in `drawFiltered()` (now takes no `side` arg, or
+internally loops both):
+
+```js
+const ctx = pairCanvas.getContext('2d');
+ctx.clearRect(0, 0, 2022, 638);
+// LEFT half = BACK card
+drawCardInto(ctx, /*dx=*/0,        /*dy=*/0, backImageData,  'back');
+// RIGHT half = FRONT card
+drawCardInto(ctx, /*dx=*/CR80_W,   /*dy=*/0, frontImageData, 'front');
+```
+
+`drawCardInto` is `drawFilteredToCanvas` adapted to accept a target
+context + offset, so it applies brightness/contrast/saturate filters,
+the per-side Move (`getOffset`), the per-side Zoom (`getScale`), and
+the rounded-corner clip path (if enabled — applied to each half
+separately so the rounded shape mirrors how the cards actually look).
+
+**Single image, no labels:** drop the "Front" / "Back" `<small>`
+captions — the layout makes it obvious. This matches the user's
+"bina back or front ko alag alag kre" requirement.
+
+### AC.11.5 Output paths — verify untouched
+
+Preview is just a UI layer. The A4 / Dragon / PVC sheet builders
+already render front/back independently from `frontImageData` and
+`backImageData` and arrange them per layout. **They MUST NOT be
+changed by §AC.11.** Touch only `#preview` markup, the new
+`pairCanvas` draw function, and any `drawFiltered` call site that
+expects `(side)`.
+
+### AC.11.6 Position panel compatibility
+
+- Per-side **Move** d-pad (PR #229) — keeps Front/Back radio. The
+  selected side's offset still applies inside the new preview
+  (Front offset → right half, Back offset → left half).
+- Per-side **Zoom** slider (PR #230) — same story, still works
+  per side, just rendered into the unified canvas.
+
+### AC.11.7 Edge cases
+
+- Single-side cards (e.g. some PAN test PDFs render only the front
+  page successfully) — if `backImageData` is null, draw the front in
+  the right half and leave the left half blank (light grey
+  placeholder), or centre the front. Spec to be finalised in the
+  code PR after seeing real-world PDFs.
+- Batch mode (`isBatchMode`) — preview already shows the first card
+  of the batch; extend to render the pair view of the active batch
+  card. Re-use the same `drawFiltered` path.
+
+### AC.11.8 Estimated diff
+
+- HTML: −2 canvas elements + 1 new canvas (~5 lines net).
+- CSS: replace two `.idp-preview-canvas` rules with one
+  `.idp-preview-canvas-pair` rule (~10 lines net).
+- JS: refactor `drawFiltered`, `applyFilters`, `applyBatchFilters`
+  to write into the single `pairCanvas` (~40–60 lines).
+
+Total: ~60–80 line code PR. One file (`id-print.html`). Plus dist rebuild.
+
+### AC.11.9 Acceptance
+
+- Step 2 preview renders **one wide landscape canvas** at ~3.17:1
+  aspect ratio.
+- LEFT half visually matches the back card; RIGHT half visually
+  matches the front card.
+- No "Front" / "Back" text labels around the preview.
+- Move / Zoom / brightness / contrast / saturate / rounded corners
+  /Auto Enhance all still apply per side.
+- 1-Pair sheet, multi-card, Dragon, PVC outputs unchanged.
+- `npm run build` clean.
+- Visually matches `.agents/references/preview-landscape-target.png`
+  proportions (cards touch at the seam, no gap).
+
+### AC.11.10 New session note
+
+User is starting a fresh account due to quota; new chat will pick
+up §AC.11 as the first task. The §11 prompt template in
+`.agents/skills/studioprint/SKILL.md` has been refreshed accordingly.
+
+### AC.11.11 Image-saving discipline
+
+User requested: *"Jab bhi main ye images dun ye bhi aapko save
+karke rakhni hai jisse aapko pta lag jaayega kaam shi ho rha hai
+ya nhi."* — Going forward, every reference image the user attaches
+goes into `.agents/references/` with a descriptive filename and a
+short note in the relevant `issues.md` section explaining what
+the image shows + which feature it pins.
