@@ -480,6 +480,18 @@ PRs #70–#215: all previous work shipped
 - PR #214: docs — fix gaps in SKILL.md §9/§11 + AGENTS.md open backlog
 - PR #215: docs — toggle options research (§T in issues.md) + new rules
   (rule #14 in SKILL.md, rule #10 in AGENTS.md: research→docs→code)
+- PR #216: docs — §T full research plan, AADHAAR_FIELD_MASKS coords,
+  implementation steps (toggle options for Aadhaar)
+- PR #217: ID Card Print Phase 3 — Aadhaar field toggles (Hide QR Code /
+  Hide Mobile No. / Hide Issue Date / Hide Download Date). 4 checkboxes
+  in preview step, only visible for Aadhaar cards. White-mask pixel
+  regions on back card in preview + A4/Dragon/PVC/multi-card outputs.
+  AADHAAR_FIELD_MASKS constant + applyAadhaarMasks() helper. Paths:
+  drawFilteredToCanvas, drawFiltered, applyBatchFilters. Reset clears.
+- PR #218: ID Card Print Phase 3 — Auto Enhance button. One-click
+  brightness/contrast/saturation optimization via front card luminance
+  histogram. Algorithm: bright = clamp(128/avgLum*100, 70, 160),
+  contrast 115%, sat 110%. Also updates issues.md §T (SHIPPED) + §U.
 
 ID Card Print current state:
 - Phase 1 MVP COMPLETE + VERIFIED (PR #188)
@@ -487,16 +499,17 @@ ID Card Print current state:
   photo editing (#191), multi-card A4 (#193), cut marks (#193),
   rounded corners (#194/#197), Voter ID (#202), Dragon sheet (#203)
 - Phase 3 PARTIAL — Ayushman/Jan Aadhaar/eShram (#205) + batch (#208)
-  + PVC tray (#210) + copy update (#213) + toggle research docs (#215).
-  Remaining coding: toggle implementation, auto enhance
+  + PVC tray (#210) + copy update (#213) + toggle research docs (#215/#216)
+  + Aadhaar field toggles (#217) + Auto Enhance (#218) SHIPPED.
+  Remaining Phase 3: signature box option (PAN), back-side hologram
+  overlay (PAN)
 
 Test PDFs repo mein saved hain:
 test-pdfs/pan-test.pdf (password: 05071999)
 test-pdfs/aadhaar-test.pdf (password: SUNI1986)
 
-TASK: ID Card Print Phase 3 — Aadhaar toggle options implement karo.
-issues.md §T mein poora implementation plan + field positions hai.
-Sirf id-print.html edit karo. Ek PR banao.
+TASK: Next session mein Signature Box (PAN) ya hologram overlay karo.
+Pehle research karo → docs PR → code PR (Rule #14 follow karo).
 
 Remaining Phase 3 features listed in SKILL.md §9 — do NOT implement
 unless explicitly asked.
