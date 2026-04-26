@@ -401,7 +401,7 @@ card sizes, lamination specs, and feature plan documented in
 - ~~Batch processing (multiple PDFs)~~ — **shipped PR #208**
 - ~~PVC card tray layout (Epson L805/L8050)~~ — **shipped PR #210**
 - ~~Toggle options (issue date, QR, mobile no, download date)~~ — **shipped PR #217**
-- ~~Auto photo enhancement~~ — **shipped PR #218**
+- ~~Auto photo enhancement~~ — **shipped PR #232 (rebased from closed #218)**
 - Signature box option (PAN) — **code PR #221 + coord fix PR #223 (in flight)**
 - Back-side hologram overlay (PAN) — **code PR #224 (in flight, ~40 lines, §V.2.b)**
 
@@ -464,9 +464,11 @@ issues.md — full audit + §M ID Card Print research + §O Phase 2 multi-card
   + §V Phase 4 CardXpress feature parity scope (8 reference images in
     .agents/references/)
 
-Last PR: PR #231 (docs: Rule #13 second-half — mark PRs #226–#230
-  shipped in SKILL.md §9/§11 + AGENTS.md + issues.md §W/§X;
-  Phase 4 P2 Move/Zoom COMPLETE)
+Last PR: PR #234 (docs: Rule #13 second-half — mark PR #231
+  (§X zoom-slider DOM refresh fix) + PR #232 (§Y Auto Enhance,
+  rebased from closed #218) shipped in SKILL.md §9/§11 + AGENTS.md
+  + issues.md §X/§Y. Phase 4 P2 Move/Zoom + Phase 3 Auto Enhance
+  COMPLETE)
 
 Shipped summary (don't redo):
 PRs #70–#230: all previous work shipped
@@ -503,10 +505,8 @@ PRs #70–#230: all previous work shipped
   regions on back card in preview + A4/Dragon/PVC/multi-card outputs.
   AADHAAR_FIELD_MASKS constant + applyAadhaarMasks() helper. Paths:
   drawFilteredToCanvas, drawFiltered, applyBatchFilters. Reset clears.
-- PR #218: ID Card Print Phase 3 — Auto Enhance button. One-click
-  brightness/contrast/saturation optimization via front card luminance
-  histogram. Algorithm: bright = clamp(128/avgLum*100, 70, 160),
-  contrast 115%, sat 110%. Also updates issues.md §T (SHIPPED) + §U.
+- PR #218: CLOSED (conflicted, mixed code+docs against current
+  main). Superseded by PR #232 — same algorithm, code-only, rebased.
 - PR #219: docs — second-half update (Rule #13) marking PRs #216-#218
   shipped in SKILL.md + AGENTS.md.
 - PR #220: docs — PAN Signature Box research. Adds §U to issues.md
@@ -554,6 +554,21 @@ PRs #70–#230: all previous work shipped
   slider 50%–150%, Front/Back radio, own Reset button. Zoom around
   centre then offset applied on top in `drawFiltered`. Overlays
   unaffected (no ctx transform). Hidden in batch mode. 66 insertions.
+- PR #231: fix(id-card-print) — refresh Zoom slider DOM on
+  `btnBack` + fresh PDF load (§X follow-up). Cosmetic-only fix:
+  scale state was already reset to 1.0/1.0, but slider thumb + %
+  readout retained stale value until user touched the radio or
+  dragged. Calls `refreshZoomReadout()` after zoomPad shown +
+  resets `slZoom.value`/`zoomReadout.textContent` in btnBack.
+  4 lines added.
+- PR #232: feat(id-card-print) — Auto Enhance button (§Y), rebased
+  from closed #218. One-click brightness/contrast/saturation
+  optimisation via front card luminance histogram. Algorithm:
+  bright = clamp(128/avgLum*100, 70, 160), contrast 115%, sat 110%.
+  Code-only per rule #13. ~25 lines added.
+- PR #234: docs (this PR) — Rule #13 second-half. Marks PRs #231/#232
+  shipped across SKILL.md §9/§11 + AGENTS.md backlog + issues.md
+  §X banner / §X.11 follow-up / new §Y section.
 
 ID Card Print current state:
 - Phase 1 MVP COMPLETE + VERIFIED (PR #188)
@@ -562,8 +577,9 @@ ID Card Print current state:
   rounded corners (#194/#197), Voter ID (#202), Dragon sheet (#203)
 - Phase 3 COMPLETE — Ayushman/Jan Aadhaar/eShram (#205) + batch (#208)
   + PVC tray (#210) + copy update (#213) + toggle research docs (#215/#216)
-  + Aadhaar field toggles (#217) + Auto Enhance (#218) + signature box
-  research docs (#220) + signature box code (#221) + Phase 4 scope (#222).
+  + Aadhaar field toggles (#217) + Auto Enhance (#232, rebased from
+  closed #218) + signature box research docs (#220) + signature box
+  code (#221) + Phase 4 scope (#222).
 - Phase 4 P1 SHIPPED — see §V:
   PR #223 fix-pan-signature-coords (corrects PR #221 coords, §V.2.a)
   PR #224 pan-hologram-overlay (back top-right silver HOLOGRAM patch, §V.2.b)
@@ -581,9 +597,14 @@ test-pdfs/aadhaar-test.pdf (password: SUNI1986)
 Phase 4 P2 COMPLETE:
 - PR #229: Per-side Move controls (X/Y nudge, §W) — SHIPPED
 - PR #230: Per-side Zoom/scale control (50%–150%, §X) — SHIPPED
+- PR #231: §X zoom slider DOM refresh fix — SHIPPED
 - PR #226: §W Move research docs — SHIPPED
 - PR #228: §X Zoom research docs — SHIPPED
 - PR #227: cut marks Sheet-only fix — SHIPPED
+
+Phase 3 follow-up COMPLETE:
+- PR #232: Auto Enhance (§Y, rebased from closed #218) — SHIPPED
+- PR #234: docs second-half (this PR) — SHIPPED
 
 TASK: Phase 4 P3 items next. Per Rule #14, research first — open a
 docs PR with UX / state-shape research, THEN a code PR.

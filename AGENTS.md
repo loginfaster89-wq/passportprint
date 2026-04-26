@@ -321,7 +321,8 @@ unlock, auto-detect, front+back preview, CR80 output, A4 sheet).
   docs shipped (PR #215, #216), Aadhaar field toggles shipped (PR #217 —
   4 checkboxes: Hide QR Code / Mobile No. / Issue Date / Download Date,
   white-mask regions on back card, all output layouts), Auto Enhance
-  shipped (PR #218 — luminance histogram analysis, 1-click button),
+  shipped (PR #232, rebased from closed #218 — luminance histogram
+  analysis, 1-click button),
   PAN signature box research docs shipped (PR #220 — §U), PAN
   signature box code shipped (PR #221), Phase 4 scope research shipped
   (PR #222 — §V).
@@ -345,7 +346,13 @@ unlock, auto-detect, front+back preview, CR80 output, A4 sheet).
     offset state, 4-arrow d-pad, step size, Front/Back radio, reset.
   - PR #230 feat — per-side Zoom/scale control (§X). Range slider
     50%–150%, zoom around centre then offset, overlays unaffected.
-  - PR #231 docs — Rule #13 second-half update for PRs #226–#230.
+  - PR #231 fix — refresh Zoom slider DOM on `btnBack` + fresh PDF
+    load (§X follow-up, cosmetic-only, 4 lines).
+- **ID Card Print Phase 3 follow-up — SHIPPED.**
+  - PR #232 feat — Auto Enhance button (§Y), rebased from closed #218.
+    One-click bright/contrast/sat via luminance histogram. ~25 lines.
+  - PR #234 docs (this PR) — Rule #13 second-half: marks PRs #231/#232
+    shipped across SKILL.md §9/§11, AGENTS.md, issues.md §X/§Y.
 - **ID Card Print Phase 4 P3+ — NOT STARTED.** Photo Editor split,
   Master Settings, PrePrinted Card mode, Printer presets, Bold/BigQR
   toggles, other-card overlays — full prioritized table in issues.md

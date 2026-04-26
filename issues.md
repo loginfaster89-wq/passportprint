@@ -1471,8 +1471,9 @@ Within the ~120-line estimate from §V.4. Single-problem PR per Rule #12.
 
 ## §X ID Card Print Phase 4 P2 — Per-side Zoom (scale within CR80) research
 
-**Status:** SHIPPED — Research PR #228, Code PR #230. Code PR followed
-after §W Move code landed so they could be tested together.
+**Status:** SHIPPED — Research PR #228, Code PR #230, follow-up fix
+PR #231 (slider DOM refresh on btnBack + fresh PDF load). Code PR
+followed after §W Move code landed so they could be tested together.
 
 **Goal:** Match CardXpress "Zoom" dial — scale the front/back photo
 inside the CR80 1011×638 frame (50%–200%) so users can fix
@@ -1679,3 +1680,91 @@ own diff so reviewers can isolate the scale-transform behaviour).
   overlay draws are unaffected.
 - No regression in batch-mode rendering.
 
+
+### X.11 Follow-up — slider DOM refresh (PR #231, 2026-04-26)
+
+After PR #230 shipped, the internal `scale` state was correctly
+re-initialised to `{ front: 1.0, back: 1.0 }` on `btnBack` and on a
+fresh PDF load, but the `#slZoom` slider thumb and `#zoomReadout`
+text retained the **previous** value until the user touched the radio
+or dragged. State was right; DOM was stale.
+
+**Fix (4 added lines, `id-print.html`):**
+
+1. Post-PDF-load — after `zoomPad.classList.toggle('idp-hidden', batchCards.length !== 1)`,
+   call `refreshZoomReadout()` when single-card mode is shown so the
+   slider mirrors the freshly initialised scale.
+2. `btnBack` handler — set `slZoom.value = 100` and
+   `zoomReadout.textContent = '100%'` so the next session starts clean.
+
+No behavioural change in `drawFiltered` / `applyFilters` /
+`getScale`. Pure DOM sync. `btnResetEdit` already calls
+`refreshZoomReadout()` so that path was unaffected.
+
+---
+
+## §Y ID Card Print — Phase 3 Auto Photo Enhancement
+
+**Status:** SHIPPED — Code PR #232 (rebased from closed #218),
+docs PR #234 (this file). Phase 3 follow-up — closes the last
+remaining Phase 3 gap left after toggle options (#217).
+
+### Y.1 What this feature is
+
+A one-click **Auto** button next to **Reset** in the Photo Adjust
+editor. Analyses the front-card image luminance histogram and sets
+brightness / contrast / saturation sliders so that typical
+PDF-rasterised ID card photos (often slightly underexposed) come
+out with usable exposure on the first try. The user can still
+fine-tune sliders manually after Auto, or hit Reset to revert.
+
+### Y.2 Algorithm
+
+```
+src       = originalFront (1011 × 638)
+avgLum    = mean of (0.299 R + 0.587 G + 0.114 B) across all pixels
+brightAdj = clamp(round(128 / max(avgLum, 1) * 100), 70, 160)
+contrastAdj = 115   // fixed mild boost
+satAdj      = 110   // fixed mild boost (skin tones pop)
+```
+
+Targets a 50% grey midpoint. Clamped 70–160% to avoid pathological
+outputs on already-well-exposed or fully-blown photos. Contrast and
+saturation are fixed mild boosts — empirically chosen on 6 test
+PDFs (PAN, Aadhaar variants).
+
+### Y.3 Implementation (id-print.html, ~25 lines)
+
+- HTML: `<button id="btnAutoEnhance">Auto</button>` inserted before
+  `#btnResetEdit` in the Photo Adjust editor title row. Reuses the
+  existing Reset button styles — no new CSS tokens, fonts, or colors.
+- JS: `btnAutoEnhance` DOM ref, `autoEnhance()` function (creates a
+  scratch CR80 canvas, computes `avgLum`, sets sliders, calls
+  `applyFilters()`), and click listener.
+- Touches `originalFront` only — does **not** interfere with per-side
+  Move (§W) or Zoom (§X) state. Works in single-card mode and inherits
+  through to all 4 output sheet builders via the existing
+  `applyFilters` re-cache path.
+
+### Y.4 Reset behaviour
+
+Auto sets sliders to bright/115/110. `btnResetEdit` (Reset) sets
+them back to 100/100/100 — already wired pre-existing, unchanged.
+`btnBack` (New PDF) clears `originalFront`, so a fresh Auto run
+recomputes from the new image.
+
+### Y.5 What's NOT in scope for this PR
+
+- Per-card Auto in batch mode (uses front of `batchCards[0]` only).
+- Histogram equalisation / gamma tone curves.
+- White-balance correction.
+- Back-card luminance analysis (back is usually similar exposure;
+  front-only Auto is enough in practice).
+
+### Y.6 Rebase note (PR #218 → PR #232)
+
+Original PR #218 was conflicted (`dirty`) against current main and
+mixed code with `issues.md` updates that referenced an outdated §U
+letter (now occupied by PAN Signature). Closed in favour of PR #232,
+which carries the same algorithm code-only on a fresh branch from
+main, per rule #13 (code PR first, docs PR second-half).
