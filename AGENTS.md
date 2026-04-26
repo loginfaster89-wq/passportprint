@@ -337,11 +337,19 @@ unlock, auto-detect, front+back preview, CR80 output, A4 sheet).
   - PR #225 docs (this PR) — Rule #13 second-half: marks PRs #223/#224
     shipped across SKILL.md, AGENTS.md, issues.md; refreshes §11 prompt
     template to point at Phase 4 P2 (Move/Zoom).
-- **ID Card Print Phase 4 P2+ — NOT STARTED.** Move/Zoom controls,
-  Photo Editor split, Master Settings, PrePrinted Card mode, Printer
-  presets, Bold/BigQR toggles, other-card overlays — full prioritized
-  table in issues.md §V.4. Next session pick ONE per Rule #12 (Move
-  controls recommended first — pairs naturally with Zoom).
+- **ID Card Print Phase 4 P2 — SHIPPED.**
+  - PR #226 docs — §W Move research.
+  - PR #227 fix — cut marks Sheet-only.
+  - PR #228 docs — §X Zoom research (stacked on #226).
+  - PR #229 feat — per-side Move controls (X/Y nudge, §W). Per-side
+    offset state, 4-arrow d-pad, step size, Front/Back radio, reset.
+  - PR #230 feat — per-side Zoom/scale control (§X). Range slider
+    50%–150%, zoom around centre then offset, overlays unaffected.
+  - PR #231 docs — Rule #13 second-half update for PRs #226–#230.
+- **ID Card Print Phase 4 P3+ — NOT STARTED.** Photo Editor split,
+  Master Settings, PrePrinted Card mode, Printer presets, Bold/BigQR
+  toggles, other-card overlays — full prioritized table in issues.md
+  §V.4.
 - **Card size reference:** CR80 = 85.6×54mm = 1011×638px at 300 DPI.
   Lamination pouch = 65×95mm (Reston 125 micron). Test PDFs in repo:
   `test-pdfs/pan-test.pdf` (pw: `05071999`), `test-pdfs/aadhaar-test.pdf`
