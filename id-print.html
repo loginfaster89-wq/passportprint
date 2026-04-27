@@ -422,11 +422,22 @@ input.idp-range::-moz-range-thumb{
      the canvas to a Blob URL and assigns it to #printImg
      before calling window.print(). */
   .idp-a4-wrap canvas{display:none !important;}
+  /* §AC.24 — anchor #printImg to the page viewport via position:fixed
+     + 100vw/100vh instead of position:absolute + 100%. §AC.23 used
+     percentage sizing on a chain (html → body → idp-app → idp-preview
+     → idp-a4-wrap → #printImg), which works on desktop Chrome but
+     COLLAPSES on mobile Chrome / Android print engines: those engines
+     don't always give <html> a definite height in print mode, so
+     height:100% cascaded to 0 down the chain and the image rendered
+     0 px tall → completely blank A4 page. position:fixed anchors
+     directly to the page viewport (vw/vh always resolve), so the
+     image fills the page regardless of any broken percentage-height
+     chain on its ancestors. */
   .idp-a4-wrap #printImg{
     display:block !important;
-    position:absolute !important;
+    position:fixed !important;
     top:0 !important;left:0 !important;
-    width:100% !important;height:100% !important;
+    width:100vw !important;height:100vh !important;
     max-width:none !important;max-height:none !important;
     min-width:0 !important;min-height:0 !important;
     object-fit:contain !important;
@@ -437,6 +448,7 @@ input.idp-range::-moz-range-thumb{
     page-break-inside:avoid !important;
     page-break-after:avoid !important;
     transform:none !important;
+    z-index:9999 !important;
   }
   @page{size:A4 portrait;margin:0 !important;}
 }
