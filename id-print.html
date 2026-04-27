@@ -922,8 +922,18 @@ let originalBack = null;
    for Voter/Ayushman/JanAadhaar/eShram per issues.md §AC.29.5; tighten
    when sample PDFs land. */
 const CARD_PHOTO_ROI = {
-  aadhaar:    { front: [0.04, 0.22, 0.22, 0.50], back: null },
-  pan:        { front: [0.04, 0.22, 0.18, 0.40], back: null },
+  /* Aadhaar QA (PR #285): the photo on the rendered Aadhaar front sits
+     ~8.5 % from the card's left edge, not 4 %. Shifting x right and
+     widening h slightly so the full portrait (head + shoulders) is
+     captured without leaking white card background into the left of
+     the Photo Only crop. */
+  aadhaar:    { front: [0.085, 0.215, 0.225, 0.530], back: null },
+  /* PAN photo position mirrors Aadhaar's left-margin layout; same
+     correction applied pre-emptively before QA. Width kept narrower
+     because PAN's photo box is visibly tighter than Aadhaar's. */
+  pan:        { front: [0.085, 0.220, 0.190, 0.430], back: null },
+  /* Remaining 4 types kept at the spec §AC.29.5 estimates — tighten
+     when sample PDFs land per the issues.md note. */
   voter:      { front: [0.04, 0.20, 0.25, 0.55], back: null },
   ayushman:   { front: [0.04, 0.20, 0.22, 0.55], back: null },
   janaadhaar: { front: [0.04, 0.20, 0.22, 0.55], back: null },
