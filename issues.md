@@ -4246,3 +4246,73 @@ Reference Screenshots saved in `.agents/references/`:
 ### Issue 2 — Other 4 card types still un-QA'd
 
 Voter / Ayushman / Jan Aadhaar / eShram ROIs remain the estimates from §AC.29.5. Tracked as §AC.31 — stays gated on operator supplying sample PDFs.
+
+## §AC.32 Aadhaar letter-size crop variant — IN PROGRESS (PR #295)
+
+### AC.32.1 Field report
+
+Operator reported a new regression pattern:
+
+- `test-pdfs/aadhaar-test.pdf` still renders acceptably.
+- A different real UIDAI Aadhaar PDF
+  (`EAadhaar_2725015377495820260407112933_25042026193335.pdf`,
+  password `ANUK2004`) does **not**.
+
+The request was initially phrased as "other Aadhaar card wali PDF use
+karta hun to result sahi nahi aata hai, test wali PDF sahi aati hai —
+kyun?"
+
+### AC.32.2 Root cause
+
+This was **not** a `CARD_PHOTO_ROI` problem.
+
+It is a **full-card Aadhaar crop** variant problem:
+
+- The repo's current `main` still carried the older Aadhaar crop:
+  - `front: [0.0520, 0.630, 0.4471, 0.255]`
+  - `back:  [0.4991, 0.630, 0.4465, 0.255]`
+- The repo test PDF is the earlier A4-ish UIDAI layout
+  (`595 × 842 pt`) and still looks acceptable under that band.
+- The real user PDF is a **letter-size** UIDAI variant (`612 × 792 pt`)
+  whose lower PVC card row sits deeper on the page.
+- That real variant advertises itself via text markers:
+  - `Details as on`
+  - `Aadhaar no. issued`
+
+Consequence: the old crop both (a) leaks upper-letter fragments and
+(b) clips the bottom edge of the actual lower card row on the letter-size
+variant.
+
+### AC.32.3 Fix in PR #295
+
+Open PR: `#295`
+
+- Restore the tighter Aadhaar default crop that matches the shipped
+  §AC.14 state:
+  - `front: [0.0520, 0.6821, 0.4471, 0.1995]`
+  - `back:  [0.4991, 0.6821, 0.4465, 0.1995]`
+- Add a **second Aadhaar crop branch** when page text contains either
+  `details as on` or `aadhaar no. issued`:
+  - `front: [0.075, 0.719, 0.423, 0.207]`
+  - `back:  [0.509, 0.719, 0.423, 0.207]`
+- Mirror the same logic in both:
+  - `id-print.html`
+  - `dist/id-print.html`
+
+### AC.32.4 Verification completed locally
+
+- `test-pdfs/aadhaar-test.pdf` routes through the **default** Aadhaar
+  crop branch.
+- `EAadhaar_2725015377495820260407112933_25042026193335.pdf`
+  (password `ANUK2004`) routes through the new **issued-details**
+  branch.
+- Overlay analysis of embedded assets / text confirmed that the new
+  issued-details crop hugs the lower PVC card row and excludes the
+  upper-letter fragments.
+
+### AC.32.5 Temporary limitation
+
+In the debugging environment used for PR #295, `npm` / normal local
+build tooling was unavailable, so `dist/id-print.html` was manually kept
+in sync with `id-print.html`. If a future session has the full Node/npm
+toolchain available, rebuild + re-verify before merge/deploy.

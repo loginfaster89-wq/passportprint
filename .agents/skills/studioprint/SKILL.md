@@ -695,6 +695,13 @@ Highlights:
   extended with `editScope` / `photoBright` / `photoContrast`
   / `photoSat`. Sheet builders ZERO-change.
 - §AC.29.11 SHIPPED — PR #289 ROI calibration. Aadhaar and PAN ROIs tightened to exclude the photo's native gray studio-backdrop frame.
+- §AC.32 IN PROGRESS — PR #295 Aadhaar full-card crop variant fix for
+  real 2026 UIDAI letter-size PDFs (`Details as on` / `Aadhaar no.
+  issued`). This is NOT a `CARD_PHOTO_ROI` issue. Patch restores the
+  tighter default Aadhaar crop and adds a second deeper crop branch for
+  the letter-size variant. Files: `id-print.html` +
+  `dist/id-print.html`. Before merging or deploying, verify PR #295
+  first; do not assume the old test PDF covers this real-world variant.
 
 Test PDFs repo mein saved hain:
 test-pdfs/pan-test.pdf (password: 05071999)
@@ -707,6 +714,11 @@ TASK (NEXT SESSION) — Choose from Candidates
 §AC.11–§AC.29 are all SHIPPED (PRs #251–#289). §AC.24 (PR #277)
 CONFIRMED WORKING on real phone. §AC.29 v1 (PR #285) + alpha fixes
 (PR #286) + ROI calibration (PR #289) are all merged.
+
+§AC.32 is currently OPEN in PR #295: Aadhaar full-card crop fix for the
+real 2026 UIDAI letter-size template (`Details as on` / `Aadhaar no.
+issued`). If that PR is still open in the next session, review / verify
+/ merge that work before jumping to a brand-new candidate.
 
 **On the next session:** Ask the user what they want to tackle next
 from the standing candidates list (A through G). Do not proceed

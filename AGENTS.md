@@ -566,6 +566,16 @@ unlock, auto-detect, front+back preview, CR80 output, A4 sheet).
   preview. Hardcoded `CARD_PHOTO_ROI` table (fractional CR80 coords)
   tightened for Aadhaar and PAN (PR #289). Sheet builders remain ZERO-change.
   Full details in `issues.md §AC.29`.
+- **§AC.32 IN PROGRESS (PR #295) — Aadhaar full-card crop variant
+  fix for real 2026 UIDAI letter-size PDFs.** Important: this is
+  **not** a `CARD_PHOTO_ROI` problem. The issue is the stale
+  `CROP.aadhaar` band on `main`, which still works on
+  `test-pdfs/aadhaar-test.pdf` but leaks upper-letter fragments and clips
+  the lower PVC row on real PDFs carrying `Details as on` /
+  `Aadhaar no. issued`. Patch restores the tighter default Aadhaar crop
+  and adds a second deeper crop branch for that letter-size variant.
+  Files in PR #295: `id-print.html` + `dist/id-print.html`. Rebuild /
+  re-verify before merge if a future environment has full npm tooling.
 - **Image-saving discipline (project rule).** Every reference image
   the user attaches goes into `.agents/references/<descriptive-name>.png`
   AND gets cited in the relevant `issues.md` section so future
