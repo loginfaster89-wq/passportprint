@@ -160,8 +160,18 @@ let originalBack = null;
    for Voter/Ayushman/JanAadhaar/eShram per issues.md §AC.29.5; tighten
    when sample PDFs land. */
 const CARD_PHOTO_ROI = {
-  aadhaar:    { front: [0.04, 0.22, 0.22, 0.50], back: null },
-  pan:        { front: [0.04, 0.22, 0.18, 0.40], back: null },
+  /* Aadhaar QA (PR #285): the photo on the rendered Aadhaar front sits
+     ~8.5 % from the card's left edge, not 4 %. Shifting x right and
+     widening h slightly so the full portrait (head + shoulders) is
+     captured without leaking white card background into the left of
+     the Photo Only crop. */
+  aadhaar:    { front: [0.085, 0.215, 0.225, 0.530], back: null },
+  /* PAN photo position mirrors Aadhaar's left-margin layout; same
+     correction applied pre-emptively before QA. Width kept narrower
+     because PAN's photo box is visibly tighter than Aadhaar's. */
+  pan:        { front: [0.085, 0.220, 0.190, 0.430], back: null },
+  /* Remaining 4 types kept at the spec §AC.29.5 estimates — tighten
+     when sample PDFs land per the issues.md note. */
   voter:      { front: [0.04, 0.20, 0.25, 0.55], back: null },
   ayushman:   { front: [0.04, 0.20, 0.22, 0.55], back: null },
   janaadhaar: { front: [0.04, 0.20, 0.22, 0.55], back: null },
@@ -1109,6 +1119,18 @@ function applyMaskedFilters(destCanvas, srcCanvas, w, h, cardType, side, applyRo
     ctx.beginPath();
     ctx.rect(roi.x, roi.y, roi.w, roi.h);
     ctx.clip();
+    /* §AC.29 fix — clear + re-fill the photo region before the second
+       paint. PDF-rendered cards often have non-1.0 alpha in dark photo
+       pixels; with default source-over compositing, drawing the same
+       image twice would alpha-compound and darken the photo plus etch
+       a visible seam at the clip boundary (regression observed on
+       Aadhaar in QA). clearRect → white fillRect ensures the second
+       drawImage lands on a clean, opaque surface — pixel-identical to
+       a single paint when both filter stacks are no-op (default), and
+       correct when photoFilters diverges. */
+    ctx.clearRect(roi.x, roi.y, roi.w, roi.h);
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(roi.x, roi.y, roi.w, roi.h);
     ctx.filter = getFilterString('photo');
     ctx.drawImage(srcCanvas, 0, 0, w, h);
     ctx.filter = 'none';
