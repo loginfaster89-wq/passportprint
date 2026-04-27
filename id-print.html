@@ -392,7 +392,8 @@ input.idp-range::-moz-range-thumb{
     width:210mm;height:297mm;
     max-width:210mm;max-height:297mm;
     object-fit:contain;
-    display:block;margin:0;padding:0;
+    object-position:center top;
+    display:block;margin:0 auto;padding:0;
     page-break-inside:avoid;
     page-break-after:avoid;
   }
@@ -1448,12 +1449,14 @@ function buildSingleSheet() {
   var gap = 0;
   var pairW = cardW * 2 + gap;
   var startX = Math.round((A4_W - pairW) / 2);
-  /* §AC.15 — Tighten the top margin further (~2.5mm = 30px @ 300 DPI).
-     §AC.14 used 80px (~7mm) but the user still saw too much white above
-     the cards in the preview. Going to 30px pushes the pair almost to
-     the very top edge of the A4, leaving the entire bottom of the sheet
-     free for re-use / second pass. */
-  var startY = 30;
+  /* §AC.20 — Place cards FLUSH to the top edge of the A4 sheet (no
+     top margin at all). §AC.15 used startY = 30 (~2.5 mm gap @ 300 DPI)
+     but the user wanted the cards "SABSE UPER" — at the very top — so
+     they can fold the rest of the sheet underneath cleanly. The §AC.15
+     4 px black top-edge line is still drawn at this y, so it ends up
+     at exactly y=0 on the printed page (matches the natural printed
+     border on the other three sides of the e-Aadhaar / e-PAN crop). */
+  var startY = 0;
 
   var r = roundedCorners ? CARD_RADIUS : 0;
 
