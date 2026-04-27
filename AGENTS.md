@@ -566,12 +566,19 @@ unlock, auto-detect, front+back preview, CR80 output, A4 sheet).
   preview. Hardcoded `CARD_PHOTO_ROI` table (fractional CR80 coords)
   tightened for Aadhaar and PAN (PR #289). Sheet builders remain ZERO-change.
   Full details in `issues.md §AC.29`.
-- **§AC.33 IN PROGRESS — PAN issuer-variant crop fallback.** Keep the
+- **§AC.32 SHIPPED — Aadhaar full-card crop fix for the 2026 UIDAI
+  issued-details letter-size variant.** This was not a `CARD_PHOTO_ROI`
+  issue. Default Aadhaar crop stays at
+  `[0.0520, 0.6821, 0.4471, 0.1995]` / `[0.4991, 0.6821, 0.4465, 0.1995]`;
+  when extracted text contains `details as on` or `aadhaar no. issued`, use
+  the deeper variant crop
+  `[0.075, 0.719, 0.423, 0.207]` / `[0.509, 0.719, 0.423, 0.207]`.
+- **§AC.33 SHIPPED — PAN issuer-variant crop fallback (PR #296).** Keep the
   default Protean/NSDL `CROP.pan` values, but if PAN text shows
   UTIITSL-style issuer markers (`utiitsl`, `uti infrastructure`, etc.),
   apply §AC.16's documented loose fallback on `y / h` only:
-  `y: 0.7500`, `h: 0.2050` for both front + back. This is a PAN
-  full-card crop safeguard, not a `CARD_PHOTO_ROI` change.
+  `y: 0.7500`, `h: 0.2050` for both front + back. This remains a heuristic
+  until a real UTIITSL sample PDF is available.
 - **Image-saving discipline (project rule).** Every reference image
   the user attaches goes into `.agents/references/<descriptive-name>.png`
   AND gets cited in the relevant `issues.md` section so future
