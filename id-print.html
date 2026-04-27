@@ -334,6 +334,35 @@ input.idp-range::-moz-range-thumb{
 /* §AC.28 — Swap sides toggle (§AC.12 / .idp-swap-row + .idp-swap-btn +
    .idp-swap-icon) removed per user request. */
 
+/* §AC.29 — Edit-scope segmented toggle (Whole Card / Photo Only) inside
+   the Photo Adjust panel. Reuses existing tokens — no new colors. */
+.idp-scope-toggle{
+  display:flex;gap:0;margin-bottom:14px;
+  border:1px solid var(--border);border-radius:8px;overflow:hidden;
+  background:var(--surface);
+}
+.idp-scope-btn{
+  flex:1 1 0;padding:8px 10px;border:none;background:transparent;
+  color:var(--muted);font-family:'DM Mono',monospace;font-size:11px;
+  letter-spacing:.5px;text-transform:uppercase;cursor:pointer;
+  transition:background .15s,color .15s;
+}
+.idp-scope-btn + .idp-scope-btn{border-left:1px solid var(--border);}
+.idp-scope-btn:hover:not([disabled]):not(.is-active){color:var(--text);}
+.idp-scope-btn.is-active{background:rgba(240,165,0,.12);color:var(--accent);font-weight:600;}
+.idp-scope-btn[disabled]{opacity:.4;cursor:not-allowed;}
+
+/* §AC.29 — Photo Only preview surface (white backdrop, photo centered
+   with padding, mirrors landscape pair canvas dimensions). */
+.idp-photo-only-wrap{
+  display:flex;gap:8px;justify-content:center;align-items:stretch;
+}
+.idp-photo-only-canvas{
+  flex:1 1 0;max-width:50%;background:#ffffff;
+  border:1px solid var(--border);border-radius:8px;
+  display:block;width:100%;height:auto;
+}
+
 /* Hidden util */
 .idp-hidden{display:none !important;}
 
@@ -564,6 +593,14 @@ input.idp-range::-moz-range-thumb{
                edge-to-edge — mirrors the 1-pair sheet output. -->
           <canvas id="pairCanvas" class="idp-preview-canvas-pair" width="2022" height="638"></canvas>
         </div>
+        <!-- §AC.29 Photo Only preview surface — hidden by default; shown
+             when user toggles to Photo Only scope. Front + back side-by-side
+             on white backdrop. Back canvas shows "No photo on this side"
+             placeholder when ROI is null for that side. -->
+        <div id="photoOnlyWrap" class="idp-photo-only-wrap idp-hidden">
+          <canvas id="photoOnlyFrontCanvas" class="idp-photo-only-canvas" width="600" height="600"></canvas>
+          <canvas id="photoOnlyBackCanvas" class="idp-photo-only-canvas" width="600" height="600"></canvas>
+        </div>
       </div>
       <!-- §AC.28 — Swap sides toggle (§AC.12) removed per user request.
            Preview always renders front-LEFT / back-RIGHT. -->
@@ -583,6 +620,16 @@ input.idp-range::-moz-range-thumb{
       <!-- Panel C: Photo Adjust -->
       <div class="idp-editor">
         <div class="idp-editor-title">Photo Adjust</div>
+        <!-- §AC.29 — Edit-scope segmented toggle. Whole Card edits the
+             card minus the photo region; Photo Only edits just the
+             auto-detected photo rectangle. Each scope keeps its own
+             independent slider state (cardFilters / photoFilters). -->
+        <div class="idp-scope-toggle" role="tablist" aria-label="Edit scope">
+          <button type="button" id="btnScopeWhole" class="idp-scope-btn is-active"
+                  role="tab" aria-selected="true">Whole Card</button>
+          <button type="button" id="btnScopePhoto" class="idp-scope-btn"
+                  role="tab" aria-selected="false">Photo Only</button>
+        </div>
         <div class="idp-quick-presets" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;">
           <button type="button" id="presetOriginal">Original</button>
           <button type="button" id="presetAadhaar">Aadhaar</button>
@@ -865,6 +912,33 @@ let frontImageData = null;
 let backImageData = null;
 let originalFront = null;
 let originalBack = null;
+
+/* §AC.29 — Photo-region ROI table per (cardType, side). Fractional coords
+   inside the post-crop CR80 card canvas (1011×638). Origin top-left.
+   Format: [x, y, w, h]. Front-side photo is universal across the 6 ID
+   types we support; back-side photos do not exist on any of them in v1
+   (see issues.md §AC.29.4). When a future card type ships with a back
+   photo, just add a `back` ROI here — no other code change. Estimates
+   for Voter/Ayushman/JanAadhaar/eShram per issues.md §AC.29.5; tighten
+   when sample PDFs land. */
+const CARD_PHOTO_ROI = {
+  aadhaar:    { front: [0.04, 0.22, 0.22, 0.50], back: null },
+  pan:        { front: [0.04, 0.22, 0.18, 0.40], back: null },
+  voter:      { front: [0.04, 0.20, 0.25, 0.55], back: null },
+  ayushman:   { front: [0.04, 0.20, 0.22, 0.55], back: null },
+  janaadhaar: { front: [0.04, 0.20, 0.22, 0.55], back: null },
+  eshram:     { front: [0.04, 0.18, 0.22, 0.55], back: null }
+};
+
+/* §AC.29 — Independent filter stacks for each edit scope. `editScope`
+   decides which stack the 3 sliders are bound to. Render pipeline always
+   applies cardFilters to whole canvas, then masks the photo ROI and
+   re-paints it with photoFilters — so the two stacks compose into one
+   final card image regardless of which scope the user is currently
+   touching. Defaults of 100/100/100 = no-op. */
+let editScope = 'whole';
+let cardFilters  = { bright: 100, contrast: 100, sat: 100 };
+let photoFilters = { bright: 100, contrast: 100, sat: 100 };
 
 /* ── Batch state ── */
 var batchFiles = [];        /* {file, name, arrayBuffer, status, password, error} */
@@ -1220,6 +1294,8 @@ async function processPdf(pdf) {
     batchCards = [{ type: detectedType, front: frontImageData, back: backImageData, originalFront: frontImageData, originalBack: backImageData, fileName: batchFiles.length > 0 ? batchFiles[0].name : 'PDF' }];
     resetEditorSliders();
     loadPrefs();
+    /* §AC.29 — Enable / disable Photo Only based on detected card type. */
+    refreshScopeAvailability();
     applyFilters();
 
     detectBadge.innerHTML = '<div class="idp-detect ' + detectedType + '">' +
@@ -1252,6 +1328,8 @@ function showBatchPreview() {
 
   /* Restore persisted Cleanup + slider preferences before rendering */
   loadPrefs();
+  /* §AC.29 — Photo Only availability depends on first card's type. */
+  refreshScopeAvailability();
 
   /* Build card previews — §AC.11 unified landscape pair canvas per card,
      no Front/Back labels. */
@@ -1314,46 +1392,31 @@ function showBatchPreview() {
   showStep(2);
 }
 
+/* §AC.29 — drawFilteredToCanvas now delegates to applyMaskedFilters so
+   the photo region (when ROI is configured for cardType+side) gets its
+   own independent filter pass. Same signature; sheet-builder consumers
+   are unchanged because the merged result is baked into the ready
+   canvas before they ever see it. */
 function drawFilteredToCanvas(canvas, srcCanvas, w, h, cardType, side) {
-  canvas.width = w;
-  canvas.height = h;
-  var ctx = canvas.getContext('2d');
-  ctx.fillStyle = '#fff';
-  ctx.fillRect(0, 0, w, h);
-  if (roundedCorners) {
-    roundedRectPath(ctx, 0, 0, w, h, CARD_RADIUS);
-    ctx.clip();
-  }
-  var f = getFilterString();
-  ctx.filter = f;
-  ctx.drawImage(srcCanvas, 0, 0, w, h);
-  ctx.filter = 'none';
+  applyMaskedFilters(canvas, srcCanvas, w, h, cardType, side, true);
 }
 
+/* §AC.29 — applyBatchFilters first loop now produces card.front /
+   card.back via applyMaskedFilters (no rounding here — sheet builders
+   apply their own rounded-corner clipping). Preview-update loop is
+   unchanged: it already routes through drawFilteredToCanvas. */
 function applyBatchFilters() {
-  var f = getFilterString();
   batchCards.forEach(function(card) {
-    var tmpF = document.createElement('canvas');
-    tmpF.width = CR80_W;
-    tmpF.height = CR80_H;
-    var ctxF = tmpF.getContext('2d');
-    ctxF.fillStyle = '#fff';
-    ctxF.fillRect(0, 0, CR80_W, CR80_H);
-    ctxF.filter = f;
-    ctxF.drawImage(card.originalFront, 0, 0, CR80_W, CR80_H);
-    ctxF.filter = 'none';
-    card.front = tmpF;
-
-    var tmpB = document.createElement('canvas');
-    tmpB.width = CR80_W;
-    tmpB.height = CR80_H;
-    var ctxB = tmpB.getContext('2d');
-    ctxB.fillStyle = '#fff';
-    ctxB.fillRect(0, 0, CR80_W, CR80_H);
-    ctxB.filter = f;
-    ctxB.drawImage(card.originalBack, 0, 0, CR80_W, CR80_H);
-    ctxB.filter = 'none';
-    card.back = tmpB;
+    if (card.originalFront) {
+      var tmpF = document.createElement('canvas');
+      applyMaskedFilters(tmpF, card.originalFront, CR80_W, CR80_H, card.type, 'front', false);
+      card.front = tmpF;
+    }
+    if (card.originalBack) {
+      var tmpB = document.createElement('canvas');
+      applyMaskedFilters(tmpB, card.originalBack, CR80_W, CR80_H, card.type, 'back', false);
+      card.back = tmpB;
+    }
   });
 
   /* Refresh preview canvases — §AC.11 unified pair (front LEFT, back RIGHT). */
@@ -1748,12 +1811,71 @@ const chkRounded = $('#chkRounded');
 /* §AC.27 — panelPosition / movePad / moveStep / moveReadout /
    positionSideRadios refs removed (Position panel deleted). */
 
-function getFilterString() {
-  var b = slBright.value;
-  var c = slContrast.value;
-  var s = slSat.value;
-  if (b == 100 && c == 100 && s == 100) return 'none';
-  return 'brightness(' + b + '%) contrast(' + c + '%) saturate(' + s + '%)';
+/* §AC.29 — getFilterString now reads from the requested scope's filter
+   stack (cardFilters / photoFilters) instead of the slider DOM. The
+   sliders bind to whichever stack is active via onSliderInput. Default
+   scope is 'whole' so legacy callers (none remaining post-§AC.29 — the
+   render path now reads each scope explicitly) get unchanged behaviour. */
+function getFilterString(scope) {
+  var s = (scope === 'photo') ? photoFilters : cardFilters;
+  if (s.bright == 100 && s.contrast == 100 && s.sat == 100) return 'none';
+  return 'brightness(' + s.bright + '%) contrast(' + s.contrast + '%) saturate(' + s.sat + '%)';
+}
+
+/* §AC.29 — Convert fractional ROI from CARD_PHOTO_ROI into pixel coords
+   for a canvas of width × height. Returns null if no ROI is configured
+   for (cardType, side). Fractional coords are CR80-relative; the same
+   table works for any output dimension. */
+function getPhotoROIPixels(cardType, side, w, h) {
+  var entry = cardType && CARD_PHOTO_ROI[cardType];
+  var roi = entry && entry[side];
+  if (!roi) return null;
+  return {
+    x: Math.round(roi[0] * w),
+    y: Math.round(roi[1] * h),
+    w: Math.round(roi[2] * w),
+    h: Math.round(roi[3] * h)
+  };
+}
+
+/* §AC.29 — Has-ROI helper: does this card type have ANY photo region
+   (front or back)? Used to enable / disable the Photo Only toggle. */
+function cardTypeHasPhotoROI(cardType) {
+  var entry = cardType && CARD_PHOTO_ROI[cardType];
+  return !!(entry && (entry.front || entry.back));
+}
+
+/* §AC.29 — Composite render: paint whole card with cardFilters, then
+   clip to the photo ROI and re-paint that region with photoFilters. The
+   two filter stacks combine in the final canvas regardless of which
+   scope the user last touched. Used by every render path that produces
+   the per-side ready canvases (single-PDF preview, batch preview, sheet
+   builders' input canvases). When no ROI exists for (cardType, side),
+   only the cardFilters pass runs — equivalent to pre-§AC.29 behaviour. */
+function applyMaskedFilters(destCanvas, srcCanvas, w, h, cardType, side, applyRound) {
+  destCanvas.width = w;
+  destCanvas.height = h;
+  var ctx = destCanvas.getContext('2d');
+  ctx.fillStyle = '#fff';
+  ctx.fillRect(0, 0, w, h);
+  if (applyRound && roundedCorners) {
+    roundedRectPath(ctx, 0, 0, w, h, CARD_RADIUS);
+    ctx.clip();
+  }
+  ctx.filter = getFilterString('whole');
+  ctx.drawImage(srcCanvas, 0, 0, w, h);
+  ctx.filter = 'none';
+  var roi = getPhotoROIPixels(cardType, side, w, h);
+  if (roi) {
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(roi.x, roi.y, roi.w, roi.h);
+    ctx.clip();
+    ctx.filter = getFilterString('photo');
+    ctx.drawImage(srcCanvas, 0, 0, w, h);
+    ctx.filter = 'none';
+    ctx.restore();
+  }
 }
 
 function roundedRectPath(ctx, x, y, w, h, r) {
@@ -1832,28 +1954,19 @@ function getScale(side) {
   return 1.0;
 }
 
-function drawFiltered(destCanvas, srcCanvas, w, h, filterStr, side) {
-  destCanvas.width = w;
-  destCanvas.height = h;
-  var ctx = destCanvas.getContext('2d');
-  ctx.fillStyle = '#fff';
-  ctx.fillRect(0, 0, w, h);
-  if (roundedCorners) {
-    roundedRectPath(ctx, 0, 0, w, h, CARD_RADIUS);
-    ctx.clip();
-  }
-  ctx.filter = filterStr;
-  var __off = getOffset(side);
-  var __sc = getScale(side);
-  var __sw = w * __sc, __sh = h * __sc;
-  ctx.drawImage(srcCanvas, __off.dx + (w - __sw) / 2, __off.dy + (h - __sh) / 2, __sw, __sh);
-  ctx.filter = 'none';
+/* §AC.29 — drawFiltered now delegates to applyMaskedFilters (with
+   rounding) so the photo region gets its own filter pass. Per §AC.27
+   getOffset / getScale always return 0 / 1 (Position panel removed),
+   so the prior offset+scale code path is functionally a no-op and is
+   not preserved here — re-introducing it would require recomputing the
+   ROI in source-image space, which is out of scope for v1. */
+function drawFiltered(destCanvas, srcCanvas, w, h, cardType, side) {
+  applyMaskedFilters(destCanvas, srcCanvas, w, h, cardType, side, true);
 }
 
 function applyFilters() {
-  var f = getFilterString();
   if (originalFront) {
-    drawFiltered(cardFrontCanvas, originalFront, CR80_W, CR80_H, f, 'front');
+    drawFiltered(cardFrontCanvas, originalFront, CR80_W, CR80_H, detectedType, 'front');
     frontImageData = document.createElement('canvas');
     frontImageData.width = CR80_W;
     frontImageData.height = CR80_H;
@@ -1862,7 +1975,7 @@ function applyFilters() {
     frontImageData = null;
   }
   if (originalBack) {
-    drawFiltered(cardBackCanvas, originalBack, CR80_W, CR80_H, f, 'back');
+    drawFiltered(cardBackCanvas, originalBack, CR80_W, CR80_H, detectedType, 'back');
     backImageData = document.createElement('canvas');
     backImageData.width = CR80_W;
     backImageData.height = CR80_H;
@@ -1885,6 +1998,11 @@ function applyFilters() {
     batchCards[0].front = frontImageData;
     batchCards[0].back = backImageData;
   }
+
+  /* §AC.29 — Always refresh the Photo Only preview canvases too. They
+     are display:none unless editScope === 'photo', so the work is cheap
+     when the user hasn't entered Photo Only mode (skip if hidden). */
+  repaintPhotoOnly();
 }
 
 function resetEditorSliders() {
@@ -1895,7 +2013,12 @@ function resetEditorSliders() {
 
 /* ── Persisted preferences (Rounded Corners, Cut Marks, slider preset) ──
    Stored in localStorage so a returning operator doesn't re-tick the
-   same toggles and re-pick the same preset on every PDF. */
+   same toggles and re-pick the same preset on every PDF.
+   §AC.29 — schema extended with `editScope` + per-scope filter triplets
+   (`bright/contrast/sat` = card scope, `photoBright/photoContrast/photoSat`
+   = photo scope). Old blobs that only carry `bright/contrast/sat` still
+   load: those values populate cardFilters and photoFilters defaults to
+   100/100/100. */
 const PREFS_KEY = 'idp:prefs:v1';
 function savePrefs() {
   try {
@@ -1903,9 +2026,15 @@ function savePrefs() {
       rounded: chkRounded.checked,
       /* §AC.13 — `cutMarks` field dropped (toggle removed from UI). */
       /* §AC.28 — `swapSides` field dropped (Swap sides toggle removed). */
-      bright: parseInt(slBright.value, 10),
-      contrast: parseInt(slContrast.value, 10),
-      sat: parseInt(slSat.value, 10)
+      /* §AC.29 — Card-scope filters (back-compat field names). */
+      bright: cardFilters.bright,
+      contrast: cardFilters.contrast,
+      sat: cardFilters.sat,
+      /* §AC.29 — Photo-scope filters + active scope. */
+      photoBright: photoFilters.bright,
+      photoContrast: photoFilters.contrast,
+      photoSat: photoFilters.sat,
+      editScope: editScope
     };
     localStorage.setItem(PREFS_KEY, JSON.stringify(prefs));
   } catch (e) { /* quota / private mode — silent */ }
@@ -1925,13 +2054,39 @@ function loadPrefs() {
        Stale values from old prefs blobs are simply ignored. */
     /* §AC.28 — `swapSides` no longer read from prefs (toggle removed).
        Stale values from old prefs blobs are ignored. */
-    if (typeof p.bright === 'number') { slBright.value = p.bright; valBright.textContent = p.bright + '%'; }
-    if (typeof p.contrast === 'number') { slContrast.value = p.contrast; valContrast.textContent = p.contrast + '%'; }
-    if (typeof p.sat === 'number') { slSat.value = p.sat; valSat.textContent = p.sat + '%'; }
+    /* §AC.29 — Hydrate per-scope filter stacks. */
+    if (typeof p.bright === 'number') cardFilters.bright = p.bright;
+    if (typeof p.contrast === 'number') cardFilters.contrast = p.contrast;
+    if (typeof p.sat === 'number') cardFilters.sat = p.sat;
+    if (typeof p.photoBright === 'number') photoFilters.bright = p.photoBright;
+    if (typeof p.photoContrast === 'number') photoFilters.contrast = p.photoContrast;
+    if (typeof p.photoSat === 'number') photoFilters.sat = p.photoSat;
+    /* Active scope from prefs — but refreshScopeAvailability() called
+       after PDF load may force-revert to 'whole' if current card has
+       no ROI for any side. */
+    if (p.editScope === 'photo' || p.editScope === 'whole') editScope = p.editScope;
+    /* Sync slider DOM to whichever scope is active. */
+    syncSlidersFromState();
   } catch (e) { /* corrupt JSON — silent */ }
 }
 
-/* ── Auto Enhance (§Y) — luminance histogram → bright/contrast/sat ── */
+/* §AC.29 — Bidirectional state ↔ slider DOM sync. */
+function syncSlidersFromState() {
+  var src = (editScope === 'photo') ? photoFilters : cardFilters;
+  slBright.value = src.bright;     valBright.textContent = src.bright + '%';
+  slContrast.value = src.contrast; valContrast.textContent = src.contrast + '%';
+  slSat.value = src.sat;           valSat.textContent = src.sat + '%';
+}
+function syncSlidersToState() {
+  var dest = (editScope === 'photo') ? photoFilters : cardFilters;
+  dest.bright = parseInt(slBright.value, 10);
+  dest.contrast = parseInt(slContrast.value, 10);
+  dest.sat = parseInt(slSat.value, 10);
+}
+
+/* ── Auto Enhance (§Y) — luminance histogram → bright/contrast/sat ──
+   §AC.29 — Auto-enhance writes into the *currently active* scope (so
+   the operator can quickly tune the photo region in isolation). */
 function autoEnhance() {
   var src = originalFront || (batchCards.length > 0 ? batchCards[0].originalFront : null);
   if (!src) return;
@@ -1951,13 +2106,16 @@ function autoEnhance() {
   slBright.value = bright;   valBright.textContent = bright + '%';
   slContrast.value = 115;    valContrast.textContent = '115%';
   slSat.value = 110;         valSat.textContent = '110%';
+  syncSlidersToState();
   applyFilters();
+  savePrefs();
 }
 
 function onSliderInput() {
   valBright.textContent = slBright.value + '%';
   valContrast.textContent = slContrast.value + '%';
   valSat.textContent = slSat.value + '%';
+  syncSlidersToState();
   applyFilters();
   savePrefs();
 }
@@ -1967,22 +2125,137 @@ slContrast.addEventListener('input', onSliderInput);
 slSat.addEventListener('input', onSliderInput);
 btnAutoEnhance.addEventListener('click', autoEnhance);
 btnResetEdit.addEventListener('click', () => {
-  /* §AC.27 — Position panel removed; Reset only resets Photo Adjust sliders. */
+  /* §AC.27 — Position panel removed; Reset only resets Photo Adjust sliders.
+     §AC.29 — Reset only the *currently active* scope; the other scope's
+     filters stay as the operator left them. */
   resetEditorSliders();
+  syncSlidersToState();
   applyFilters();
+  savePrefs();
 });
 
-/* Quick presets — one-click slider combos */
+/* Quick presets — one-click slider combos.
+   §AC.29 — Presets write into the currently active scope. */
 function applyPreset(b, c, s) {
   slBright.value = b; valBright.textContent = b + '%';
   slContrast.value = c; valContrast.textContent = c + '%';
   slSat.value = s; valSat.textContent = s + '%';
+  syncSlidersToState();
   applyFilters();
   savePrefs();
 }
 $('#presetOriginal').addEventListener('click', function(){ applyPreset(100, 100, 100); });
 $('#presetAadhaar').addEventListener('click', function(){ applyPreset(105, 130, 100); });
 $('#presetPan').addEventListener('click',     function(){ applyPreset(115, 115, 110); });
+
+/* ── §AC.29 — Edit-scope toggle (Whole Card / Photo Only) ───────────
+   Switching scope is purely a UI rebind: each scope owns its own
+   filter stack, render pipeline always composes both, so no source
+   image manipulation is needed. We only:
+     1. Update editScope state
+     2. Repoint sliders to the new scope's stack
+     3. Toggle button is-active classes + aria-selected
+     4. Swap visibility of the pair canvas vs. the photo-only wrap
+     5. Repaint everything (cheap — same source canvases, just CSS
+        filter strings change)
+     6. Persist via savePrefs */
+const btnScopeWhole     = $('#btnScopeWhole');
+const btnScopePhoto     = $('#btnScopePhoto');
+const photoOnlyWrap     = $('#photoOnlyWrap');
+const photoOnlyFrontCanvas = $('#photoOnlyFrontCanvas');
+const photoOnlyBackCanvas  = $('#photoOnlyBackCanvas');
+
+function setEditScope(scope) {
+  if (scope !== 'photo' && scope !== 'whole') return;
+  /* Guard: never enter photo scope if current card has no ROI. */
+  if (scope === 'photo') {
+    var t = (batchCards[0] && batchCards[0].type) || detectedType;
+    if (!cardTypeHasPhotoROI(t)) return;
+  }
+  editScope = scope;
+  syncSlidersFromState();
+  btnScopeWhole.classList.toggle('is-active', scope === 'whole');
+  btnScopeWhole.setAttribute('aria-selected', String(scope === 'whole'));
+  btnScopePhoto.classList.toggle('is-active', scope === 'photo');
+  btnScopePhoto.setAttribute('aria-selected', String(scope === 'photo'));
+  /* Swap previews: in photo scope, hide the standard pair preview and
+     show the cropped photo-only surface. The underlying card render
+     pipeline is unchanged either way — the operator just sees the
+     region they're currently editing. */
+  var cards = batchCardsContainer.querySelector('.idp-cards');
+  if (cards) cards.classList.toggle('idp-hidden', scope === 'photo');
+  photoOnlyWrap.classList.toggle('idp-hidden', scope !== 'photo');
+  applyFilters();
+  savePrefs();
+}
+btnScopeWhole.addEventListener('click', function(){ setEditScope('whole'); });
+btnScopePhoto.addEventListener('click', function(){ setEditScope('photo'); });
+
+/* §AC.29 — Enable / disable Photo Only button based on whether the
+   current card type has a photo ROI configured. Called after every
+   PDF load (single + batch) and after batch type detection completes. */
+function refreshScopeAvailability() {
+  var t = (batchCards[0] && batchCards[0].type) || detectedType;
+  var hasROI = cardTypeHasPhotoROI(t);
+  btnScopePhoto.disabled = !hasROI;
+  btnScopePhoto.title = hasROI ? '' : 'Photo region detect nahi hua — Whole Card mode use karo.';
+  /* If user was in photo scope but new card has no ROI, gracefully
+     fall back to whole-card editing. */
+  if (!hasROI && editScope === 'photo') setEditScope('whole');
+}
+
+/* §AC.29 — Photo Only preview painter. Renders just the ROI of the
+   source canvas onto a white-padded surface. Called from applyFilters
+   for both sides; null-ROI sides show the centered placeholder text
+   per spec §AC.29 ("No photo on this side"). */
+function paintPhotoOnly(canvas, srcCanvas, cardType, side) {
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var W = canvas.width, H = canvas.height;
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, W, H);
+  var roi = srcCanvas ? getPhotoROIPixels(cardType, side, CR80_W, CR80_H) : null;
+  if (!roi) {
+    ctx.fillStyle = '#888';
+    ctx.font = '20px "DM Mono", monospace';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(srcCanvas ? 'No photo on this side' : '—', W / 2, H / 2);
+    return;
+  }
+  /* Fit the ROI inside the canvas with 10% padding on all sides,
+     preserving aspect ratio. */
+  var pad = 0.10;
+  var availW = W * (1 - 2 * pad);
+  var availH = H * (1 - 2 * pad);
+  var srcAspect = roi.w / roi.h;
+  var dispW, dispH;
+  if (availW / availH > srcAspect) {
+    dispH = availH; dispW = dispH * srcAspect;
+  } else {
+    dispW = availW; dispH = dispW / srcAspect;
+  }
+  var dx = (W - dispW) / 2;
+  var dy = (H - dispH) / 2;
+  ctx.filter = getFilterString('photo');
+  ctx.drawImage(srcCanvas, roi.x, roi.y, roi.w, roi.h, dx, dy, dispW, dispH);
+  ctx.filter = 'none';
+}
+
+function repaintPhotoOnly() {
+  var srcF = null, srcB = null, type = null;
+  if (batchCards.length > 0) {
+    srcF = batchCards[0].originalFront;
+    srcB = batchCards[0].originalBack;
+    type = batchCards[0].type;
+  } else {
+    srcF = originalFront;
+    srcB = originalBack;
+    type = detectedType;
+  }
+  paintPhotoOnly(photoOnlyFrontCanvas, srcF, type, 'front');
+  paintPhotoOnly(photoOnlyBackCanvas,  srcB, type, 'back');
+}
 
 /* §AC.27 — Position panel removed: per-side Move (§W / PR #229) and
    per-side Zoom (§X / PR #230) controls + helpers (currentPositionSide,
