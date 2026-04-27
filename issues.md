@@ -3671,13 +3671,13 @@ full cascade).
 
 ### AC.24.1 Verification status
 
-**SHIPPED but NOT YET CONFIRMED on real phone hardware.** Once
-Cloudflare Pages redeploys PR #277, expectation: print preview
-on phone shows cards horizontally centered + flush at the top
-edge of the page; **no** cookie banner anywhere on the page;
-image visible at full size on **both** A4 and Letter paper
-selections. User to force-quit + reopen the browser before
-re-testing (busts service-worker / CDN cache).
+**CONFIRMED WORKING — cards visible, not blank.** User tested on
+real phone after Cloudflare redeploy of PR #277. `position: fixed`
++ `100vw`/`100vh` fixed the blank-page regression from §AC.23.
+Two new symptoms reported → §AC.25.
+
+Reference screenshot:
+`.agents/references/ac25-phone-print-new-symptom-20260427.png`
 
 ### AC.24.2 If still wrong
 
@@ -3713,3 +3713,54 @@ the rollback is:
 
 That preserves the cookie-banner hide and paper-agnostic intent
 without the viewport-anchor change.
+
+## §AC.25 Print output cleanup — remove footer text + add top margin (SHIPPED — PR #279, AWAITING TEST)
+
+**Status:** SHIPPED. AWAITING USER CONFIRMATION on real phone
+hardware after Cloudflare redeploy.
+
+**User report after §AC.24 (PR #277) confirmed working on phone:**
+Cards are now visible in print preview (not blank). Two new symptoms:
+
+1. **Cards too high.** `startY = 0` (set in §AC.20 per user's
+   "SABSE UPER" request) places the card pair flush at the very
+   top edge of the printed paper. On the real phone print preview
+   this looked too tight — user asked to move down slightly.
+
+2. **Footer info text printed below cards.** All 4 sheet builders
+   (`buildSingleSheet`, `buildMultiCardSheet`, `buildDragonSheet`,
+   `buildPVCTraySheet`) drew a branding line on the canvas:
+   `'CR80 · 85.6 × 54 mm · 300 DPI — Studio Print'`. This text
+   was baked into the sheet image and visible in the printed output.
+   User asked to remove it.
+
+Reference screenshot:
+`.agents/references/ac25-phone-print-new-symptom-20260427.png`
+
+**Fix (PR #279):**
+
+1. `buildSingleSheet()`: `startY` changed from `0` to `30`
+   (~2.5 mm @ 300 DPI). This was the original §AC.15 value
+   before §AC.20 zeroed it out.
+
+2. Footer `fillText` calls removed from all 4 sheet builders.
+   The 'Front'/'Back' column headers in Multi/Dragon/PVC are
+   kept — only the branding footer line is removed.
+
+### AC.25.1 Verification status
+
+**SHIPPED but NOT YET CONFIRMED on real phone hardware.** After
+Cloudflare Pages redeploys PR #279:
+- Cards should have a small (~2.5 mm) breathing room at the top
+  instead of being flush at the very edge.
+- No info text visible below the cards on any layout.
+- All other print behaviour (centering, no cookie banner, full-size
+  image) should remain unchanged from §AC.24.
+
+### AC.25.2 Rollback
+
+If the 30 px top margin is too much or too little:
+- Adjust `startY` in `buildSingleSheet()` — 30 ≈ 2.5 mm,
+  60 ≈ 5 mm, 15 ≈ 1.3 mm at 300 DPI.
+- Multi-card/Dragon/PVC layouts are unaffected (they use
+  centered `marginY` calculated from total content height).

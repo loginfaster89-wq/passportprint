@@ -529,18 +529,21 @@ unlock, auto-detect, front+back preview, CR80 output, A4 sheet).
   `.sp-cookie` to the @media print display:none list. Cookie
   banner fix worked; the 100% sizing introduced §AC.24's
   blank-page bug on phone. See `issues.md §AC.23`.
-- **§AC.24 SHIPPED (PR #277) — `#printImg` anchored to the
-  page viewport via `position: fixed` + `100vw` / `100vh`.**
-  §AC.23's `height: 100%` chain collapsed to 0 on mobile
-  Chrome (mobile print engines don't always give `<html>` a
-  definite height in print mode), causing a completely blank
-  A4 page. `position: fixed` + viewport units bypass the
-  ancestor chain entirely so the image always fills the
-  page. AWAITING TEST on real phone hardware. See
-  `issues.md §AC.24`.
+- **§AC.24 SHIPPED, CONFIRMED WORKING (PR #277) — `#printImg`
+  anchored to the page viewport via `position: fixed` +
+  `100vw` / `100vh`.** Confirmed on real phone — cards visible,
+  not blank. Two cosmetic issues remained → §AC.25.
+- **§AC.25 SHIPPED (PR #279) — remove footer info text from all
+  sheet builders + add ~2.5 mm top margin on 1-Pair layout.**
+  After §AC.24 confirmed working, user reported: (1) cards too
+  tight at top edge (`startY=0`), (2) "CR80 · 85.6 × 54 mm ·
+  300 DPI — Studio Print" text baked into canvas visible in
+  printed output. Fix: `startY` → 30, footer `fillText` removed
+  from all 4 builders. AWAITING TEST on real phone.
+  See `issues.md §AC.25`.
 - **NEXT — pick from candidates** (see SKILL.md §"TASK NEXT
   SESSION" for the full list; no current priority — wait for
-  user to confirm §AC.24 on phone, then pick from below):
+  user to confirm §AC.25 on phone, then pick from below):
   A. Audit multi-card / Dragon / PVC layouts for the same
      perforation-strip artefact + flush-top treatment, now that
      PAN also rides on the same `buildSingleSheet` path.
