@@ -700,8 +700,8 @@ input.idp-range::-moz-range-thumb{
       <h3 id="sheetTitle">A4 Sheet — Fold &amp; Laminate Layout</h3>
       <p id="sheetDesc" style="color:var(--muted);font-size:12px;margin-bottom:16px;">Print → cut around cards → fold in half → laminate in 65×95mm pouch</p>
       <div class="idp-layout-toggle">
-        <button type="button" class="idp-layout-opt" data-layout="single">1 Pair · Fold &amp; Laminate</button>
-        <button type="button" class="idp-layout-opt active" data-layout="multi">5 Pairs · Multi-Card</button>
+        <button type="button" class="idp-layout-opt active" data-layout="single">1 Pair · Fold &amp; Laminate</button>
+        <button type="button" class="idp-layout-opt" data-layout="multi">5 Pairs · Multi-Card</button>
         <button type="button" class="idp-layout-opt" data-layout="dragon">2 Cards · Dragon Sheet</button>
         <button type="button" class="idp-layout-opt" data-layout="pvc">PVC Tray · Epson</button>
       </div>
@@ -920,7 +920,7 @@ const batchCardsContainer = $('#batchCardsContainer');
 const previewTitle = $('#previewTitle');
 const batchSheetInfo = $('#batchSheetInfo');
 
-let currentLayout = 'multi';
+let currentLayout = 'single';
 let roundedCorners = false;
 /* §AC.13 — Cut Marks UI option removed. Multi-card / Dragon / PVC sheet
    builders still draw their cut guides driven by this constant. The
