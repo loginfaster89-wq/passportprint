@@ -454,6 +454,7 @@ async function processPdfBatch(arrayBuffer, password, fileName) {
 
     var crop = CROP[type];
     var isIssuedDetailsAadhaar = fullText.includes('details as on') || fullText.includes('aadhaar no. issued');
+    var isUtiPanVariant = fullText.includes('utiitsl') || fullText.includes('uti infrastructure') || fullText.includes('uti infrastructure technology and services limited');
     if (type === 'aadhaar' && fullText.includes('citizenship')) {
       // New Aadhaar format is taller to fit the red citizenship box.
       crop = JSON.parse(JSON.stringify(crop));
@@ -469,6 +470,14 @@ async function processPdfBatch(arrayBuffer, password, fileName) {
       crop = JSON.parse(JSON.stringify(crop));
       crop.front = [0.075, 0.719, 0.423, 0.207];
       crop.back = [0.509, 0.719, 0.423, 0.207];
+    } else if (type === 'pan' && isUtiPanVariant) {
+      // UTIITSL-style PAN issuers can sit slightly taller / higher than the
+      // Protean/NSDL sample, so use the documented loose y/h fallback.
+      crop = JSON.parse(JSON.stringify(crop));
+      crop.front[1] = 0.7500;
+      crop.front[3] = 0.2050;
+      crop.back[1] = 0.7500;
+      crop.back[3] = 0.2050;
     }
     var front, back;
 
@@ -539,6 +548,7 @@ async function processPdf(pdf) {
 
     var crop = CROP[detectedType];
     var isIssuedDetailsAadhaar = fullText.includes('details as on') || fullText.includes('aadhaar no. issued');
+    var isUtiPanVariant = fullText.includes('utiitsl') || fullText.includes('uti infrastructure') || fullText.includes('uti infrastructure technology and services limited');
     if (detectedType === 'aadhaar' && fullText.includes('citizenship')) {
       // New Aadhaar format is taller to fit the red citizenship box.
       crop = JSON.parse(JSON.stringify(crop));
@@ -554,6 +564,14 @@ async function processPdf(pdf) {
       crop = JSON.parse(JSON.stringify(crop));
       crop.front = [0.075, 0.719, 0.423, 0.207];
       crop.back = [0.509, 0.719, 0.423, 0.207];
+    } else if (detectedType === 'pan' && isUtiPanVariant) {
+      // UTIITSL-style PAN issuers can sit slightly taller / higher than the
+      // Protean/NSDL sample, so use the documented loose y/h fallback.
+      crop = JSON.parse(JSON.stringify(crop));
+      crop.front[1] = 0.7500;
+      crop.front[3] = 0.2050;
+      crop.back[1] = 0.7500;
+      crop.back[3] = 0.2050;
     }
 
     if (pdf.numPages >= 2 && crop.frontPage) {

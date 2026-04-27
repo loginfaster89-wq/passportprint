@@ -566,6 +566,12 @@ unlock, auto-detect, front+back preview, CR80 output, A4 sheet).
   preview. Hardcoded `CARD_PHOTO_ROI` table (fractional CR80 coords)
   tightened for Aadhaar and PAN (PR #289). Sheet builders remain ZERO-change.
   Full details in `issues.md §AC.29`.
+- **§AC.33 IN PROGRESS — PAN issuer-variant crop fallback.** Keep the
+  default Protean/NSDL `CROP.pan` values, but if PAN text shows
+  UTIITSL-style issuer markers (`utiitsl`, `uti infrastructure`, etc.),
+  apply §AC.16's documented loose fallback on `y / h` only:
+  `y: 0.7500`, `h: 0.2050` for both front + back. This is a PAN
+  full-card crop safeguard, not a `CARD_PHOTO_ROI` change.
 - **Image-saving discipline (project rule).** Every reference image
   the user attaches goes into `.agents/references/<descriptive-name>.png`
   AND gets cited in the relevant `issues.md` section so future
