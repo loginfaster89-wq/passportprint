@@ -357,12 +357,14 @@ input.idp-range::-moz-range-thumb{
 .idp-photo-only-wrap{
   display:flex;gap:8px;justify-content:center;align-items:stretch;
 }
+.idp-photo-only-wrap.single-side .idp-photo-only-canvas{
+  flex:0 1 420px;max-width:420px;
+}
 .idp-photo-only-canvas{
   flex:1 1 0;max-width:50%;background:#ffffff;
   border:1px solid var(--border);border-radius:8px;
   display:block;width:100%;height:auto;
 }
-
 /* Hidden util */
 .idp-hidden{display:none !important;}
 
@@ -605,7 +607,7 @@ input.idp-range::-moz-range-thumb{
       <!-- §AC.28 — Swap sides toggle (§AC.12) removed per user request.
            Preview always renders front-LEFT / back-RIGHT. -->
       <!-- Options -->
-      <label class="idp-option">
+      <label id="roundedOption" class="idp-option">
         <input type="checkbox" id="chkRounded">
         Rounded Corners
       </label>
@@ -781,7 +783,7 @@ const PVC_H = 1417;
 const RENDER_SCALE = 4;
 
 const AADHAAR_KEYWORDS = ['aadhaar','uid','uidai','unique identification','government of india','vid','enrolment','download date','issue date'];
-const PAN_KEYWORDS = ['permanent account number','income tax','pan','department','nsdl','utiitsl'];
+const PAN_KEYWORDS = ['permanent account number','income tax','pan','department','nsdl'];
 const VOTER_KEYWORDS = ['election commission','epic','voter','electoral','electors photo identity','polling station','assembly constituency','parliamentary constituency'];
 const AYUSHMAN_KEYWORDS = ['ayushman','pmjay','pradhan mantri jan arogya','national health authority','nha','health card','beneficiary','jan arogya','health id','ayushman bharat'];
 const JANAADHAAR_KEYWORDS = ['jan aadhaar','janaadhaar','rajasthan','family id','jan aadhar','planning department','rajasthan jan aadhaar authority','janaadhar'];
@@ -824,8 +826,8 @@ const CROP = {
        PAN card pair. New top = 0.7729, new h = 0.1753, bottom edge
        preserved. The §AC.15 flush-top + black-top-line treatment in
        buildSingleSheet then applies to PAN cards automatically. */
-    front: [0.0685, 0.7729, 0.4335, 0.1753],
-    back:  [0.5141, 0.7729, 0.4314, 0.1753]
+    front: [0.1149, 0.7724, 0.3949, 0.1767],
+    back:  [0.5179, 0.7724, 0.3946, 0.1762]
   },
   voter: {
     front:     [0.035, 0.05, 0.93, 0.45],
@@ -931,9 +933,9 @@ const CARD_PHOTO_ROI = {
   /* §AC.34 — PAN Photo Only retuned after the default crop tightened.
      The prior ROI started too high on the CR80 card, so Photo Only
      preview leaked the "INCOME TAX DEPARTMENT" header instead of the
-     actual PAN photo area. New ROI stays inside the front-side photo
-     block after the top cut-strip is removed. */
-  pan:        { front: [0.090, 0.225, 0.175, 0.320], back: null },
+     actual PAN photo area. This ROI keeps the full rectangular photo
+     box (with its small white margin) — not a face-only crop. */
+  pan:        { front: [0.041, 0.253, 0.179, 0.296], back: null },
   /* Remaining 4 types kept at the spec §AC.29.5 estimates — tighten
      when sample PDFs land per the issues.md note. */
   voter:      { front: [0.04, 0.20, 0.25, 0.55], back: null },
@@ -1218,7 +1220,6 @@ async function processPdfBatch(arrayBuffer, password, fileName) {
 
     var crop = CROP[type];
     var isIssuedDetailsAadhaar = fullText.includes('details as on') || fullText.includes('aadhaar no. issued');
-    var isUtiPanVariant = fullText.includes('utiitsl') || fullText.includes('uti infrastructure') || fullText.includes('uti infrastructure technology and services limited');
     if (type === 'aadhaar' && fullText.includes('citizenship')) {
       // New Aadhaar format is taller to fit the red citizenship box.
       crop = JSON.parse(JSON.stringify(crop));
@@ -1234,14 +1235,6 @@ async function processPdfBatch(arrayBuffer, password, fileName) {
       crop = JSON.parse(JSON.stringify(crop));
       crop.front = [0.075, 0.719, 0.423, 0.207];
       crop.back = [0.509, 0.719, 0.423, 0.207];
-    } else if (type === 'pan' && isUtiPanVariant) {
-      // UTIITSL-style PAN issuers can sit slightly taller / higher than the
-      // Protean/NSDL sample, so use the documented loose y/h fallback.
-      crop = JSON.parse(JSON.stringify(crop));
-      crop.front[1] = 0.7500;
-      crop.front[3] = 0.2050;
-      crop.back[1] = 0.7500;
-      crop.back[3] = 0.2050;
     }
     var front, back;
 
@@ -1312,7 +1305,6 @@ async function processPdf(pdf) {
 
     var crop = CROP[detectedType];
     var isIssuedDetailsAadhaar = fullText.includes('details as on') || fullText.includes('aadhaar no. issued');
-    var isUtiPanVariant = fullText.includes('utiitsl') || fullText.includes('uti infrastructure') || fullText.includes('uti infrastructure technology and services limited');
     if (detectedType === 'aadhaar' && fullText.includes('citizenship')) {
       // New Aadhaar format is taller to fit the red citizenship box.
       crop = JSON.parse(JSON.stringify(crop));
@@ -1328,14 +1320,6 @@ async function processPdf(pdf) {
       crop = JSON.parse(JSON.stringify(crop));
       crop.front = [0.075, 0.719, 0.423, 0.207];
       crop.back = [0.509, 0.719, 0.423, 0.207];
-    } else if (detectedType === 'pan' && isUtiPanVariant) {
-      // UTIITSL-style PAN issuers can sit slightly taller / higher than the
-      // Protean/NSDL sample, so use the documented loose y/h fallback.
-      crop = JSON.parse(JSON.stringify(crop));
-      crop.front[1] = 0.7500;
-      crop.front[3] = 0.2050;
-      crop.back[1] = 0.7500;
-      crop.back[3] = 0.2050;
     }
 
     if (pdf.numPages >= 2 && crop.frontPage) {
@@ -1568,7 +1552,7 @@ function buildSingleSheet() {
      tight — the user asked to move cards down slightly. */
   var startY = 30;
 
-  var r = roundedCorners ? CARD_RADIUS : 0;
+  var r = useRoundedCorners() ? CARD_RADIUS : 0;
 
   if (card && card.front) {
     if (r > 0) drawCardClipped(ctx, card.front, startX, startY, cardW, cardH, r);
@@ -1646,7 +1630,7 @@ function buildMultiCardSheet() {
   ctx.fillText('Front', marginX + cardW / 2, marginY - 16);
   ctx.fillText('Back', marginX + cardW + pairGap + cardW / 2, marginY - 16);
 
-  var radius = roundedCorners ? CARD_RADIUS : 0;
+  var radius = useRoundedCorners() ? CARD_RADIUS : 0;
 
   for (var r = 0; r < rows; r++) {
     var y = marginY + r * (cardH + rowGap);
@@ -1723,7 +1707,7 @@ function buildDragonSheet() {
   var marginX = Math.round((DRAGON_W - cardW) / 2);
   var marginY = Math.round((DRAGON_H - totalH) / 2);
 
-  var radius = roundedCorners ? CARD_RADIUS : 0;
+  var radius = useRoundedCorners() ? CARD_RADIUS : 0;
 
   if (card && card.front) {
     if (radius > 0) drawCardClipped(ctx, card.front, marginX, marginY, cardW, cardH, radius);
@@ -1793,7 +1777,7 @@ function buildPVCTraySheet() {
   var gap = 71;
   var bottomY = topY + cardH + gap;
 
-  var radius = roundedCorners ? CARD_RADIUS : 0;
+  var radius = useRoundedCorners() ? CARD_RADIUS : 0;
 
   if (card && card.front) {
     if (radius > 0) drawCardClipped(ctx, card.front, marginX, topY, cardW, cardH, radius);
@@ -1894,6 +1878,11 @@ function getPhotoROIPixels(cardType, side, w, h) {
   var entry = cardType && CARD_PHOTO_ROI[cardType];
   var roi = entry && entry[side];
   if (!roi) return null;
+  return getROIPixelsFromFrac(roi, w, h);
+}
+
+function getROIPixelsFromFrac(roi, w, h) {
+  if (!roi) return null;
   return {
     x: Math.round(roi[0] * w),
     y: Math.round(roi[1] * h),
@@ -1909,6 +1898,23 @@ function cardTypeHasPhotoROI(cardType) {
   return !!(entry && (entry.front || entry.back));
 }
 
+function cardTypeHasPhotoROISide(cardType, side) {
+  var entry = cardType && CARD_PHOTO_ROI[cardType];
+  return !!(entry && entry[side]);
+}
+
+function getCurrentCardType() {
+  return (batchCards[0] && batchCards[0].type) || detectedType;
+}
+
+function roundedCornersAllowed() {
+  return editScope !== 'photo' && getCurrentCardType() !== 'pan';
+}
+
+function useRoundedCorners() {
+  return roundedCorners && roundedCornersAllowed();
+}
+
 /* §AC.29 — Composite render: paint whole card with cardFilters, then
    clip to the photo ROI and re-paint that region with photoFilters. The
    two filter stacks combine in the final canvas regardless of which
@@ -1922,7 +1928,7 @@ function applyMaskedFilters(destCanvas, srcCanvas, w, h, cardType, side, applyRo
   var ctx = destCanvas.getContext('2d');
   ctx.fillStyle = '#fff';
   ctx.fillRect(0, 0, w, h);
-  if (applyRound && roundedCorners) {
+  if (applyRound && useRoundedCorners()) {
     roundedRectPath(ctx, 0, 0, w, h, CARD_RADIUS);
     ctx.clip();
   }
@@ -1998,7 +2004,7 @@ function compositePair(canvas, frontReady, backReady) {
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   if (frontReady) {
     ctx.save();
-    if (roundedCorners) {
+    if (useRoundedCorners()) {
       roundedRectPath(ctx, 0, 0, CR80_W, CR80_H, CARD_RADIUS);
       ctx.clip();
     }
@@ -2007,7 +2013,7 @@ function compositePair(canvas, frontReady, backReady) {
   }
   if (backReady) {
     ctx.save();
-    if (roundedCorners) {
+    if (useRoundedCorners()) {
       roundedRectPath(ctx, CR80_W, 0, CR80_W, CR80_H, CARD_RADIUS);
       ctx.clip();
     }
@@ -2123,8 +2129,6 @@ function loadPrefs() {
     if (typeof p.rounded === 'boolean') {
       chkRounded.checked = p.rounded;
       roundedCorners = p.rounded;
-      cardFrontCanvas.classList.toggle('rounded', p.rounded);
-      cardBackCanvas.classList.toggle('rounded', p.rounded);
     }
     /* §AC.13 — `cutMarks` field no longer read (toggle removed from UI).
        Stale values from old prefs blobs are simply ignored. */
@@ -2143,6 +2147,7 @@ function loadPrefs() {
     if (p.editScope === 'photo' || p.editScope === 'whole') editScope = p.editScope;
     /* Sync slider DOM to whichever scope is active. */
     syncSlidersFromState();
+    refreshRoundedCornersUI();
   } catch (e) { /* corrupt JSON — silent */ }
 }
 
@@ -2240,6 +2245,26 @@ const btnScopePhoto     = $('#btnScopePhoto');
 const photoOnlyWrap     = $('#photoOnlyWrap');
 const photoOnlyFrontCanvas = $('#photoOnlyFrontCanvas');
 const photoOnlyBackCanvas  = $('#photoOnlyBackCanvas');
+const roundedOption = $('#roundedOption');
+
+function refreshRoundedCornersUI() {
+  var allowed = roundedCornersAllowed();
+  var effective = useRoundedCorners();
+  if (roundedOption) roundedOption.classList.toggle('idp-hidden', !allowed);
+  cardFrontCanvas.classList.toggle('rounded', effective);
+  cardBackCanvas.classList.toggle('rounded', effective);
+  batchCardsContainer.querySelectorAll('canvas[data-batch-idx]').forEach(function(c) {
+    c.classList.toggle('rounded', effective);
+  });
+}
+
+function refreshPhotoOnlyLayout() {
+  var t = getCurrentCardType();
+  var srcB = (batchCards[0] && batchCards[0].originalBack) || originalBack;
+  var showBack = !!(srcB && cardTypeHasPhotoROISide(t, 'back'));
+  photoOnlyBackCanvas.classList.toggle('idp-hidden', !showBack);
+  photoOnlyWrap.classList.toggle('single-side', !showBack);
+}
 
 function setEditScope(scope) {
   if (scope !== 'photo' && scope !== 'whole') return;
@@ -2261,6 +2286,8 @@ function setEditScope(scope) {
   var cards = batchCardsContainer.querySelector('.idp-cards');
   if (cards) cards.classList.toggle('idp-hidden', scope === 'photo');
   photoOnlyWrap.classList.toggle('idp-hidden', scope !== 'photo');
+  refreshPhotoOnlyLayout();
+  refreshRoundedCornersUI();
   applyFilters();
   savePrefs();
 }
@@ -2271,13 +2298,15 @@ btnScopePhoto.addEventListener('click', function(){ setEditScope('photo'); });
    current card type has a photo ROI configured. Called after every
    PDF load (single + batch) and after batch type detection completes. */
 function refreshScopeAvailability() {
-  var t = (batchCards[0] && batchCards[0].type) || detectedType;
+  var t = getCurrentCardType();
   var hasROI = cardTypeHasPhotoROI(t);
   btnScopePhoto.disabled = !hasROI;
   btnScopePhoto.title = hasROI ? '' : 'Photo region detect nahi hua — Whole Card mode use karo.';
   /* If user was in photo scope but new card has no ROI, gracefully
      fall back to whole-card editing. */
   if (!hasROI && editScope === 'photo') setEditScope('whole');
+  refreshPhotoOnlyLayout();
+  refreshRoundedCornersUI();
 }
 
 /* §AC.29 — Photo Only preview painter. Renders just the ROI of the
@@ -2321,6 +2350,7 @@ function paintPhotoOnly(canvas, srcCanvas, cardType, side) {
   ctx.filter = 'none';
 }
 
+
 function repaintPhotoOnly() {
   var srcF = null, srcB = null, type = null;
   if (batchCards.length > 0) {
@@ -2332,6 +2362,7 @@ function repaintPhotoOnly() {
     srcB = originalBack;
     type = detectedType;
   }
+  refreshPhotoOnlyLayout();
   paintPhotoOnly(photoOnlyFrontCanvas, srcF, type, 'front');
   paintPhotoOnly(photoOnlyBackCanvas,  srcB, type, 'back');
 }
@@ -2346,12 +2377,7 @@ function repaintPhotoOnly() {
 
 chkRounded.addEventListener('change', () => {
   roundedCorners = chkRounded.checked;
-  cardFrontCanvas.classList.toggle('rounded', roundedCorners);
-  cardBackCanvas.classList.toggle('rounded', roundedCorners);
-  /* Update batch canvases too */
-  batchCardsContainer.querySelectorAll('canvas[data-batch-idx]').forEach(function(c) {
-    c.classList.toggle('rounded', roundedCorners);
-  });
+  refreshRoundedCornersUI();
   applyFilters();
   savePrefs();
 });
