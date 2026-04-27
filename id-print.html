@@ -1216,26 +1216,15 @@ async function processPdfBatch(arrayBuffer, password, fileName) {
 
     var crop = CROP[type];
     if (type === 'aadhaar') {
-      var startY = Math.floor(renderCanvas.height * 0.60);
-      var endY = Math.floor(renderCanvas.height * 0.72);
-      var startX = Math.floor(renderCanvas.width * 0.15);
-      var scanWidth = Math.floor(renderCanvas.width * 0.20);
-      var imgData = ctx.getImageData(startX, startY, scanWidth, endY - startY).data;
-      var foundY = null;
-      for (var py = 0; py < endY - startY; py++) {
-        var darkCount = 0;
-        for (var px = 0; px < scanWidth; px++) {
-          var idx = (py * scanWidth + px) * 4;
-          if (imgData[idx] < 100 && imgData[idx+1] < 100 && imgData[idx+2] < 100) darkCount++;
-        }
-        if (darkCount > scanWidth * 0.8) {
-          foundY = (startY + py) / renderCanvas.height;
-          break;
-        }
-      }
-      if (foundY !== null) {
+      var dobAnchor = textContent.items.find(i => {
+        var lower = i.str.toLowerCase();
+        return lower.includes('dob:') || lower.includes('dob :') || lower.includes('year of birth');
+      });
+      if (dobAnchor) {
+        var unscaledHeight = page.getViewport({ scale: 1.0 }).height;
+        var dobFractionalY = 1 - (dobAnchor.transform[5] / unscaledHeight);
         crop = JSON.parse(JSON.stringify(crop));
-        var newY = foundY + (2 / renderCanvas.height);
+        var newY = dobFractionalY - 0.0734;
         crop.front[1] = newY;
         crop.back[1] = newY;
       }
@@ -1309,26 +1298,15 @@ async function processPdf(pdf) {
 
     var crop = CROP[detectedType];
     if (detectedType === 'aadhaar') {
-      var startY = Math.floor(renderCanvas.height * 0.60);
-      var endY = Math.floor(renderCanvas.height * 0.72);
-      var startX = Math.floor(renderCanvas.width * 0.15);
-      var scanWidth = Math.floor(renderCanvas.width * 0.20);
-      var imgData = ctx.getImageData(startX, startY, scanWidth, endY - startY).data;
-      var foundY = null;
-      for (var py = 0; py < endY - startY; py++) {
-        var darkCount = 0;
-        for (var px = 0; px < scanWidth; px++) {
-          var idx = (py * scanWidth + px) * 4;
-          if (imgData[idx] < 100 && imgData[idx+1] < 100 && imgData[idx+2] < 100) darkCount++;
-        }
-        if (darkCount > scanWidth * 0.8) {
-          foundY = (startY + py) / renderCanvas.height;
-          break;
-        }
-      }
-      if (foundY !== null) {
+      var dobAnchor = textContent.items.find(i => {
+        var lower = i.str.toLowerCase();
+        return lower.includes('dob:') || lower.includes('dob :') || lower.includes('year of birth');
+      });
+      if (dobAnchor) {
+        var unscaledHeight = page.getViewport({ scale: 1.0 }).height;
+        var dobFractionalY = 1 - (dobAnchor.transform[5] / unscaledHeight);
         crop = JSON.parse(JSON.stringify(crop));
-        var newY = foundY + (2 / renderCanvas.height);
+        var newY = dobFractionalY - 0.0734;
         crop.front[1] = newY;
         crop.back[1] = newY;
       }
