@@ -695,6 +695,12 @@ Highlights:
   extended with `editScope` / `photoBright` / `photoContrast`
   / `photoSat`. Sheet builders ZERO-change.
 - §AC.29.11 SHIPPED — PR #289 ROI calibration. Aadhaar and PAN ROIs tightened to exclude the photo's native gray studio-backdrop frame.
+- §AC.33 IN PROGRESS — PAN issuer-variant crop fallback. Current
+  `CROP.pan` is measured from the Protean/NSDL repo sample. A small
+  runtime fallback is being added for UTIITSL-style markers using the
+  already-documented §AC.16 rollback values (`y: 0.7500`, `h: 0.2050`
+  for both front + back). This is PAN full-card crop logic, not photo
+  ROI logic.
 
 Test PDFs repo mein saved hain:
 test-pdfs/pan-test.pdf (password: 05071999)

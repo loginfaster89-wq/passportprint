@@ -3063,6 +3063,50 @@ a 2-line `CROP` table change, easy to amend.
 
 ---
 
+## §AC.33 PAN issuer-variant crop fallback — IN PROGRESS
+
+### AC.33.1 Trigger
+
+After the Aadhaar variant fix was verified working, the user asked:
+
+> "aap ye same kaam pancard par bhi apply kardo"
+
+### AC.33.2 Existing known risk
+
+§AC.16 already documents that the current PAN crop is measured from the
+repo sample `test-pdfs/pan-test.pdf` (Protean eGov / NSDL layout), and
+the rollback note explicitly warns that a different issuer such as
+**UTIITSL** may need a slightly looser crop.
+
+That documented loose fallback is:
+
+- keep `x / w` unchanged
+- loosen only `y / h` to:
+  - `y: 0.7500`
+  - `h: 0.2050`
+
+### AC.33.3 Fix approach
+
+Add a small runtime PAN crop branch, analogous in spirit to the Aadhaar
+variant handling:
+
+- If page text contains issuer markers such as:
+  - `utiitsl`
+  - `uti infrastructure`
+  - `uti infrastructure technology and services limited`
+- then clone `CROP.pan` and apply the documented loose fallback:
+  - front/back `y = 0.7500`
+  - front/back `h = 0.2050`
+
+The default Protean/NSDL PAN crop remains unchanged.
+
+### AC.33.4 Limitation
+
+No separate real UTIITSL PAN sample PDF is currently saved in the repo,
+so this is a documented-heuristic fallback grounded in §AC.16's
+rollback note, not a fresh pixel-measured calibration. As soon as the
+user shares an actual UTIITSL PAN sample, verify and tighten if needed.
+
 ## §AC.17 ID Card Print — Print preview cards too small on A4
 
 **Status:** SHIPPED — PR #265.
