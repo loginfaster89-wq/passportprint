@@ -559,18 +559,13 @@ unlock, auto-detect, front+back preview, CR80 output, A4 sheet).
   handler all deleted. Preview now always renders front-LEFT /
   back-RIGHT. Step 2 sidebar reduced to: Rounded Corners +
   Photo Adjust panel. See `issues.md §AC.28`.
-- **§AC.29 RESEARCH (NOT YET CODED) — Photo Only edit mode.**
-  User wants a `[Whole Card] [Photo Only]` toggle inside the
-  Photo Adjust panel. In Photo Only mode the preview shows ONLY
-  the cropped ID photo (rectangular crop, white padding around)
-  and the existing 3 sliders edit just that region; in Whole Card
-  mode filters apply to the rest of the card and the photo region
-  is masked out so it keeps its independent filter stack. Auto
-  ROI per detected card type — NO draggable box, NO new deps,
-  NO face detection. Hardcoded `CARD_PHOTO_ROI` table (fractional
-  CR80 coords). Sheet builders remain ZERO-change. Full plan,
-  ROI table, implementation outline, and open questions are in
-  `issues.md §AC.29`. **NEXT SESSION = ship §AC.29 code PR.**
+- **§AC.29 SHIPPED — Photo Only edit mode.**
+  `[Whole Card] [Photo Only]` toggle inside the
+  Photo Adjust panel. Dual filter stacks (`cardFilters` + `photoFilters`),
+  `applyMaskedFilters()` composite renderer, `paintPhotoOnly()` cropped
+  preview. Hardcoded `CARD_PHOTO_ROI` table (fractional CR80 coords)
+  tightened for Aadhaar and PAN (PR #289). Sheet builders remain ZERO-change.
+  Full details in `issues.md §AC.29`.
 - **Image-saving discipline (project rule).** Every reference image
   the user attaches goes into `.agents/references/<descriptive-name>.png`
   AND gets cited in the relevant `issues.md` section so future
