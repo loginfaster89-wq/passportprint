@@ -721,14 +721,11 @@ function buildSingleSheet() {
   var gap = 0;
   var pairW = cardW * 2 + gap;
   var startX = Math.round((A4_W - pairW) / 2);
-  /* §AC.20 — Place cards FLUSH to the top edge of the A4 sheet (no
-     top margin at all). §AC.15 used startY = 30 (~2.5 mm gap @ 300 DPI)
-     but the user wanted the cards "SABSE UPER" — at the very top — so
-     they can fold the rest of the sheet underneath cleanly. The §AC.15
-     4 px black top-edge line is still drawn at this y, so it ends up
-     at exactly y=0 on the printed page (matches the natural printed
-     border on the other three sides of the e-Aadhaar / e-PAN crop). */
-  var startY = 0;
+  /* §AC.25 — Small top margin (~2.5 mm @ 300 DPI) so the cards don't
+     sit flush at the very top edge of the paper. §AC.20 set startY = 0
+     per user request, but real-phone print preview showed it was too
+     tight — the user asked to move cards down slightly. */
+  var startY = 30;
 
   var r = roundedCorners ? CARD_RADIUS : 0;
 
@@ -774,10 +771,9 @@ function buildSingleSheet() {
     }
   }
 
-  ctx.fillStyle = '#aaa';
-  ctx.font = '16px sans-serif';
-  ctx.textAlign = 'center';
-  ctx.fillText('CR80 \u00b7 85.6 \u00d7 54 mm \u00b7 300 DPI \u2014 Studio Print', A4_W / 2, startY + cardH + 70);
+  /* §AC.25 — footer info text ("CR80 · 85.6 × 54 mm · 300 DPI —
+     Studio Print") removed per user request — it was visible in the
+     printed output below the cards. */
 }
 
 function buildMultiCardSheet() {
@@ -866,11 +862,7 @@ function buildMultiCardSheet() {
     drawCornerMarks(ctx, marginX + cardW + pairGap, y, cardW, cardH, markLen);
   }
 
-  var pairLabel = fillSame ? '5 pairs' : rows + (rows > 1 ? ' cards' : ' card');
-  ctx.fillStyle = '#aaa';
-  ctx.font = '16px sans-serif';
-  ctx.textAlign = 'center';
-  ctx.fillText('CR80 \u00b7 85.6 \u00d7 54 mm \u00b7 ' + pairLabel + ' \u00b7 300 DPI \u2014 Studio Print', A4_W / 2, marginY + totalH + 50);
+  /* §AC.25 — footer info text removed (same as buildSingleSheet). */
 }
 
 function buildDragonSheet() {
@@ -940,9 +932,7 @@ function buildDragonSheet() {
   ctx.fillText('Front', marginX + cardW / 2, marginY - 12);
   ctx.fillText('Back', marginX + cardW / 2, marginY + cardH + gap - 12);
 
-  ctx.fillStyle = '#aaa';
-  ctx.font = '14px sans-serif';
-  ctx.fillText('CR80 \u00b7 4\u00d76 Dragon Sheet \u00b7 300 DPI \u2014 Studio Print', DRAGON_W / 2, marginY + totalH + 40);
+  /* §AC.25 — footer info text removed (same as buildSingleSheet). */
 }
 
 function buildPVCTraySheet() {
@@ -1010,10 +1000,7 @@ function buildPVCTraySheet() {
   ctx.strokeRect(4, 4, PVC_W - 8, PVC_H - 8);
   ctx.setLineDash([]);
 
-  /* Footer */
-  ctx.fillStyle = '#aaa';
-  ctx.font = '14px sans-serif';
-  ctx.fillText('PVC Tray \u00b7 Epson L805/L8050 \u00b7 120\u00d7120 mm \u00b7 300 DPI \u2014 Studio Print', PVC_W / 2, bottomY + cardH + 28);
+  /* §AC.25 — footer info text removed (same as buildSingleSheet). */
 }
 
 function drawCornerMarks(ctx, x, y, w, h, len) {
