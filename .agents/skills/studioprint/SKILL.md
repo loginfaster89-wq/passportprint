@@ -520,8 +520,8 @@ issues.md — full audit + ID Card Print arc
    §AC.18 SHIPPED: phone PNG download via toBlob+Blob URL (PR #269) —
    §AC.19 SHIPPED: print preview pinned 210mm × 297mm, 1 sheet (PR #270) —
    §AC.20 SHIPPED: 1-Pair cards flush to top + center top object-position (PR #271) —
-   §AC.21 SHIPPED, AWAITING TEST: !important + position:absolute on print canvas (PR #272) —
-   §AC.22 OPEN, CONDITIONAL: render canvas → PNG <img> for print as fallback if §AC.21 still wrong)
+   §AC.21 SHIPPED: !important + position:absolute on print canvas (PR #272 — superseded by §AC.22) —
+   §AC.22 SHIPPED, AWAITING TEST: render canvas → PNG <img> for print (PR #274))
 
 Reference images in .agents/references/ and `attached_assets/` — open
 the latest user-attached `aadhaar-a4-sheet_*.png`, the matching
@@ -529,20 +529,22 @@ the latest user-attached `aadhaar-a4-sheet_*.png`, the matching
 reference), and `ac21-print-still-broken.png` (§AC.21 reference)
 before starting any new layout work.
 
-Last shipped: PR #272 (fix: §AC.21 force print canvas to absolute
-top-left with !important on every rule — guards against mobile
-@media (max-width: 640px) leaking max-height: 50vh into @media print
-on Chromium-based print engines).
+Last shipped: PR #274 (fix: §AC.22 — print path now rasterises the
+A4 canvas to a PNG via `canvas.toBlob`, swaps the bytes onto a
+hidden `<img id="printImg">` sibling, and prints the image
+instead of the canvas. Print CSS rules from §AC.21 carry over
+verbatim, just re-pointed at `#printImg`. The canvas itself is
+forced `display: none !important` in `@media print`. Reason:
+browser print engines mis-handle 2480 × 3508 canvas bitmaps —
+they render `<img>` reliably at the requested print size).
 
-**CONDITIONAL OPEN: §AC.22** — IF, after Cloudflare deploys PR #272
-and the user re-tests on real phone hardware, the print preview
-**still** shows cards small / offset, fall back to rendering the
-canvas to a PNG `<img>` for print (browser print engines render
-`<img>` reliably at requested print size with no canvas-bitmap
-DPI quirks). Full implementation sketch + repro + constraints in
-`issues.md §AC.21.5`–`§AC.21.7`. **Confirm the bug still
-reproduces with PR #272 before doing any work** — §AC.21 may
-already be the final fix.
+**§AC.22 STATUS: SHIPPED, AWAITING TEST.** No open §AC item.
+After Cloudflare Pages redeploys PR #274, ask the user to re-test
+print preview on phone. Expectation: cards fill A4, flush to top,
+1 sheet — same as desktop. If the print is finally correct,
+§AC.22 closes GREEN. If a new symptom appears, open §AC.23 with
+a fresh phone screenshot. Otherwise pick from the standing
+candidates list at the bottom of this file.
 
 Shipped summary (don't redo) — see SKILL.md §9 for the full PR list.
 Highlights:
@@ -650,106 +652,40 @@ test-pdfs/pan-test.pdf (password: 05071999)
 test-pdfs/aadhaar-test.pdf (password: SUNI1986)
 
 ═══════════════════════════════════════════════════════════════
-TASK (NEXT SESSION) — §AC.22 print img-fallback (CONDITIONAL)
+TASK (NEXT SESSION) — none open
 ═══════════════════════════════════════════════════════════════
 
-§AC.11–§AC.21 are all SHIPPED (PRs #251–#272). **§AC.22 is
-CONDITIONAL — only do this work if the user confirms PR #272
-(§AC.21) did NOT fix the print preview.**
+§AC.11–§AC.22 are all SHIPPED (PRs #251–#274). §AC.22 (PR #274)
+is the latest fix and is AWAITING TEST on real phone hardware.
+**No new code work until the user confirms §AC.22 on phone.**
 
-**Step 0 — verify PR #272 is actually deployed and tested first:**
-1. `curl -s https://studioprint.pages.dev/id-print | grep -o "min-width:210mm"`
-   → should return at least one match (§AC.21 added min-width to
-   the print canvas rule).
-2. Ask the user to open the live site on real phone hardware,
-   hard-refresh (force-quit and reopen the browser tab, or use a
-   different browser), upload `test-pdfs/aadhaar-test.pdf` (pw
-   `SUNI1986`), tap 🖨 Print, and **send a screenshot of the
-   actual print preview dialog** (not the on-screen Step 3
-   preview — they are easy to confuse, see §AC.21.1).
+**On the next session, first do this:**
+1. Ask the user to open `https://studioprint.pages.dev/id-print`
+   on their phone (force-quit the browser first to bust the
+   service-worker / Cloudflare cache), upload
+   `test-pdfs/aadhaar-test.pdf` (pw `SUNI1986`), tap 🖨 Print,
+   and screenshot the print preview dialog.
+2. Save the screenshot under
+   `.agents/references/ac22-phone-result-<YYYYMMDD>.png` and
+   quote it in `issues.md §AC.22.1`.
 
-**If PR #272 fixed the print → §AC.22 is not needed.** Ship the
-docs catch-up PR marking §AC.18–§AC.21 SHIPPED + verified, remove
-this TASK block, and pick from the standing candidates list below.
+**Then branch on the result:**
+- **If print is correct (cards fill A4, flush to top, 1 sheet)
+  → §AC.22 closes GREEN.** Update `issues.md §AC.22.1` to
+  CONFIRMED, update this SKILL.md status block, and pick from
+  the standing candidates list below.
+- **If a NEW symptom appears** (e.g. image too slow to render,
+  print fires twice, image quality degraded vs canvas) → open
+  §AC.23 with the fresh phone screenshot, hypothesise root
+  cause, and ship a minimum-diff fix.
+- **If the OLD symptom persists** (cards still small / whitespace
+  / 2 sheets even with the `<img>` swap) → very unlikely given
+  the canvas-bitmap diagnosis, but if so, open §AC.23 and look
+  at the page-level `@page { size: A4; margin: 0; }` rule plus
+  the user's print-dialog "Scale" / "Fit to page" setting (some
+  Chromium mobile dialogs default to ~94% scale).
 
-**If the print preview is still wrong → ship §AC.22:**
-
-**Bug (one-liner):** Print preview shows the canvas at less than
-full A4 size — cards are small, surrounded by whitespace,
-sometimes spans 2 sheets. On-screen Step 3 preview looks correct.
-Persists even after `!important` + `position: absolute` on the
-print canvas (PR #272), suggesting the browser print engine itself
-is mishandling the high-resolution canvas bitmap (2480 × 3508).
-
-**User reference image:** `.agents/references/ac21-print-still-broken.png`
-(this is the on-screen view the user sent; ask the user for the
-actual print preview screenshot before starting).
-
-**Fix path (~30 lines, one PR):** Render canvas → PNG `<img>` for
-print. Browser print engines render `<img>` reliably at requested
-print size with no canvas-bitmap DPI quirks. Full implementation
-sketch in `issues.md §AC.21.5`. TL;DR:
-
-1. Add a hidden `<img id="printImg">` next to the `<canvas>` inside
-   `.idp-a4-wrap`.
-2. In `btnPrint` handler, before `window.print()`:
-   ```js
-   a4Canvas.toBlob(blob => {
-     const url = URL.createObjectURL(blob);
-     const printImg = document.getElementById('printImg');
-     printImg.onload = () => { window.print(); URL.revokeObjectURL(url); };
-     printImg.src = url;
-   }, 'image/png');
-   ```
-3. Print CSS:
-   ```css
-   @media print {
-     .idp-a4-wrap canvas { display: none !important; }
-     .idp-a4-wrap #printImg {
-       display: block !important;
-       position: absolute !important;
-       top: 0 !important; left: 0 !important;
-       width: 210mm !important; height: 297mm !important;
-       object-fit: contain !important;
-       object-position: center top !important;
-     }
-   }
-   ```
-4. Screen CSS: `.idp-a4-wrap #printImg { display: none; }`.
-
-**Reproduction (do this FIRST, BEFORE any code change):**
-1. Open `https://studioprint.pages.dev/id-print` on the user's
-   real phone (the bug is phone-specific).
-2. Upload `test-pdfs/aadhaar-test.pdf` (pw `SUNI1986`) AND
-   `test-pdfs/pan-test.pdf` (pw `05071999`).
-3. Confirm Step 2 + Step 3 previews look correct on-screen.
-4. Tap 🖨 Print → screenshot the print dialog. If it shows
-   cards full-size, top-flush, single sheet → PR #272 already
-   fixed it; **stop and ship docs catch-up only**.
-5. If still wrong, screenshot for the brief and proceed.
-
-**Constraints (hard):**
-- **Minimum diff.** Just add the `<img>` element, the `toBlob`
-  branch in `btnPrint`, and the two CSS rules. Don't touch the JS
-  sheet builders. Leave §AC.18–§AC.21 fixes intact.
-- **No new dependencies.**
-- **One PR.** Branch `devin/<unix_ts>-ac22-print-img-fallback`.
-- **Verify on real phone before shipping.**
-- Both `id-print.html` and `dist/id-print.html` in the PR
-  (rebuild via `node build.js` after `npm install`).
-- CSS tokens locked. No `.github/workflows/*.yml` changes.
-- PR via `/tmp/mkpr.mjs` REST API (local git writes blocked).
-
-**Likely files / lines:**
-- `id-print.html` ~line 380–420 — print CSS block (§AC.21).
-- `id-print.html` ~line 2150–2200 — `btnPrint` handler.
-- `id-print.html` — `.idp-a4-wrap` markup (search for the
-  wrapper element; add the sibling `<img id="printImg">`).
-
-**Standalone copy-paste prompt:**
-`.agents/prompts/ac22-next-session.md`.
-
-**After §AC.22 ships (or §AC.21 is confirmed sufficient), the standing candidates remain:**
+**Standing candidates list (no priority — pick whichever the user wants):**
 
 A. **Audit multi-card / Dragon / PVC layouts for the same
    perforation-strip artefact.** The crop changes in §AC.14

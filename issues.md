@@ -3384,12 +3384,16 @@ html, body, .idp-app, .idp-preview, .idp-a4-wrap, and especially
 
 ### AC.21.4 Verification status
 
-**SHIPPED but NOT YET CONFIRMED by user.** User asked to defer
-verification + any further fix to next session
-("NEXT CHAT MAIN SOLVE KRENGE"). Expectation: after Cloudflare
-Pages redeploys PR #272, the print preview should show cards
-filling the full A4 page, flush to the top edge, horizontally
-centered, on exactly 1 sheet.
+**SUPERSEDED by §AC.22 (PR #274).** PR #272's `!important` +
+`position: absolute` print CSS was insufficient on the user's
+phone — print preview still showed cards small / surrounded by
+whitespace / sometimes 2 sheets. Root cause turned out to be
+exactly the §AC.21.5 hypothesis: the browser print engine
+mis-handles a 2480 × 3508 px `<canvas>` bitmap. PR #274 ships
+the canvas → PNG `<img>` swap. PR #272's CSS rules on the
+ancestors (html, body, .idp-app, .idp-preview, .idp-a4-wrap)
+are still in force; only the canvas-specific rules were
+re-pointed at `#printImg`.
 
 ### AC.21.5 If §AC.21 fix is insufficient — fallback for §AC.22
 
@@ -3460,3 +3464,74 @@ Blob-based PNG generation, so this approach is safe.
 - `id-print.html` ~line 2150–2200 — `btnPrint` handler.
 - `id-print.html` `.idp-a4-wrap` markup (search for the wrapper
   element to add the sibling `<img>`).
+
+## §AC.22 Print preview canvas → PNG <img> swap (SHIPPED — PR #274, AWAITING TEST)
+
+**Status:** SHIPPED. Conditional plan in §AC.21.5 was triggered
+because PR #272 alone did not fix the phone print preview.
+
+**What changed (PR #274, minimum diff to `id-print.html` only):**
+
+1. Markup: added a sibling `<img id="printImg" alt="">` next to
+   `<canvas id="a4Canvas">` inside `.idp-a4-wrap` (hidden on
+   screen, only shown in print).
+
+2. Screen CSS: `.idp-a4-wrap #printImg { display: none; }` so the
+   image element is invisible during normal preview / authoring
+   (the canvas remains the live editing surface).
+
+3. Print CSS (`@media print` block): the canvas-specific rules
+   from §AC.21 (`!important` + `position: absolute` etc) were
+   re-pointed from `.idp-a4-wrap canvas` to `.idp-a4-wrap
+   #printImg`. The canvas itself is forced to
+   `display: none !important` in print mode. Same 210mm × 297mm
+   sizing, same `object-fit: contain` + `object-position:
+   center top`, same ancestor rules from PR #272.
+
+4. `btnPrint` handler: before calling `window.print()`, rasterise
+   the canvas via `canvas.toBlob(blob => ..., 'image/png')`, set
+   the resulting Blob URL on `printImg.src`, wait for `onload`,
+   then call `window.print()` and revoke the URL after print
+   dialog closes. Synchronous fallback path uses `toDataURL` if
+   `toBlob` is unavailable, so the print button still works on
+   ancient browsers (matches the PR #269 pattern for PNG
+   download).
+
+**Why the canvas-bitmap approach failed and `<img>` works:** A
+2480 × 3508 px `<canvas>` is rendered by the browser print
+engine using its internal canvas-to-print pipeline, which on
+Chromium-based mobile browsers (and Safari/iOS) frequently
+resamples the bitmap at the print engine's chosen DPI rather
+than honouring the canvas's native resolution — the result is a
+small image floating on a mostly white sheet, sometimes split
+across two pages. `<img>` with an explicit `width: 210mm;
+height: 297mm; object-fit: contain` is rendered by the same
+pipeline that handles regular page images, which is reliable
+across every browser we care about (mobile Chrome, mobile
+Safari, desktop Chrome, desktop Firefox).
+
+**No new dependencies, no JS sheet-builder changes, no CSS
+token changes, no `.github/workflows/*.yml` changes. Reference:
+.agents/references/ac21-print-still-broken.png.**
+
+### AC.22.1 Verification status
+
+**SHIPPED but NOT YET CONFIRMED on real phone hardware.** Once
+Cloudflare Pages redeploys PR #274, expectation is: print
+preview on phone shows cards filling the full A4 page, flush to
+the top edge, horizontally centered, on exactly 1 sheet — same
+as desktop preview (which was already correct in PR #270).
+Capture a fresh phone screenshot on confirmation and either
+mark §AC.22 GREEN or open §AC.23 with the residual symptom.
+
+### AC.22.2 Rollback
+
+If the `<img>` rasterisation introduces a new symptom (e.g.
+slow print prep on huge sheets), the rollback is:
+- Remove the `printImg.onload`/`toBlob` block from `btnPrint`.
+- Revert print CSS to point `.idp-a4-wrap canvas` rules from
+  PR #272.
+- Drop the `<img id="printImg">` element + the screen-CSS
+  `display: none` line.
+That restores PR #272 behaviour exactly. Both `id-print.html`
+and `dist/id-print.html` need to ship together (build step).

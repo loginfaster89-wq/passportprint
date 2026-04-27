@@ -499,22 +499,31 @@ unlock, auto-detect, front+back preview, CR80 output, A4 sheet).
     page padding. Pure print-CSS fix, no JS / sheet-builder
     changes. Dragon (1205×1795) and PVC (1417×1417) keep
     natural aspect ratio (no distortion).
-- **§AC.18 KNOWN BUG — phone PNG download / Print breaks the
-  front card.** OPEN, NOT YET FIXED. User reported right after
-  §AC.17 deployed: on **phone only**, the PNG export and the
-  Print flow produce broken output — front card looks wrong,
-  border doesn't render, ID info text disappears. Desktop is
-  fine. User explicitly asked to defer the fix to the next
-  session and to capture this as the next-session brief.
-  Full diagnosis hooks + rank-ordered hypotheses + repro steps
-  in `issues.md §AC.18`. **This is the next session's primary
-  task.**
+- **§AC.18 SHIPPED (PR #269) — phone PNG download / Print fixed
+  via `canvas.toBlob` + `URL.createObjectURL`** (replaces the
+  iOS Safari `toDataURL` size cap that was blanking the front
+  card). See `issues.md §AC.18`.
+- **§AC.19 SHIPPED (PR #270) — print preview pinned to 210mm ×
+  297mm, exactly 1 sheet** (`@media print` block locks the A4
+  wrap dimensions, kills page padding). See `issues.md §AC.19`.
+- **§AC.20 SHIPPED (PR #271) — 1-Pair cards flush to top of A4
+  in print preview** (`object-position: center top` on the
+  print canvas). See `issues.md §AC.20`.
+- **§AC.21 SHIPPED (PR #272) — `!important` + `position:
+  absolute` on every print rule** to defeat mobile `@media
+  (max-width: 640px)` leaking `max-height: 50vh` into print
+  mode on Chromium-based engines. Insufficient on real phone —
+  superseded by §AC.22. See `issues.md §AC.21`.
+- **§AC.22 SHIPPED (PR #274) — print path now rasterises the
+  canvas to a PNG `<img>` and prints the image instead of the
+  canvas.** Browser print engines reliably render `<img>` at
+  the requested print size; high-res `<canvas>` bitmaps were
+  being resampled by the print engine, which is why §AC.21's
+  CSS-only fix didn't land on phone. AWAITING TEST on real
+  phone hardware. See `issues.md §AC.22`.
 - **NEXT — pick from candidates** (see SKILL.md §"TASK NEXT
-  SESSION" for the full list; **§AC.18 is the priority**):
-  0. **§AC.18 — fix phone PNG download / Print broken front
-     card.** Top hypothesis: `toDataURL` size limit on iOS
-     Safari → switch to `canvas.toBlob` + `URL.createObjectURL`.
-     Verify on real phone first. See `issues.md §AC.18`.
+  SESSION" for the full list; no current priority — wait for
+  user to confirm §AC.22 on phone, then pick from below):
   A. Audit multi-card / Dragon / PVC layouts for the same
      perforation-strip artefact + flush-top treatment, now that
      PAN also rides on the same `buildSingleSheet` path.
