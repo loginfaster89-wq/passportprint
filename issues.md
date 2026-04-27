@@ -1,4 +1,4 @@
-# Studio Print — Full-site audit (2026-04-23)
+﻿# Studio Print — Full-site audit (2026-04-23)
 
 Audit of https://studioprint.pages.dev/ from an end-user perspective across
 three viewports, informed by the test plan
@@ -3063,45 +3063,7 @@ a 2-line `CROP` table change, easy to amend.
 
 ---
 
-## §AC.32 Aadhaar full-card crop fix — issued-details letter-size variant
-
-**Status:** SHIPPED — code on `main`; helper/docs context synced after PR #295.
-
-**Root cause:** this was **not** a `CARD_PHOTO_ROI` problem. The failing real
-eAadhaar PDF used a letter-size `612x792` UIDAI template whose text included
-`Details as on` / `Aadhaar no. issued`. Its lower PVC-card row sits deeper than
-the repo sample `test-pdfs/aadhaar-test.pdf` (`595x842`), so the older
-full-card crop leaked upper-letter fragments and clipped the bottom edge of the
-real cards.
-
-**Shipped fix (`id-print.html` + `dist/id-print.html`):**
-
-- Keep the tighter default Aadhaar crop already on `main` for the repo sample /
-  standard flow:
-  - front: `[0.0520, 0.6821, 0.4471, 0.1995]`
-  - back:  `[0.4991, 0.6821, 0.4465, 0.1995]`
-- Add a second Aadhaar runtime branch when extracted text contains either:
-  - `details as on`
-  - `aadhaar no. issued`
-- That issued-details branch uses the deeper crop measured against the real
-  letter-size template:
-  - front: `[0.075, 0.719, 0.423, 0.207]`
-  - back:  `[0.509, 0.719, 0.423, 0.207]`
-
-**Verification (re-confirmed 2026-04-27):**
-
-- `test-pdfs/aadhaar-test.pdf` stays on the default Aadhaar branch.
-- Real user PDF
-  `EAadhaar_2725015377495820260407112933_25042026193335.pdf`
-  (pw `ANUK2004`) triggers the issued-details branch.
-- With bundled Node tooling available in this continuation session,
-  `node build.js` ran clean before this docs sync was prepared.
-
----
-
-## §AC.33 PAN issuer-variant crop fallback (SHIPPED — PR #296)
-
-**Status:** SHIPPED — PR #296.
+## §AC.33 PAN issuer-variant crop fallback — IN PROGRESS
 
 ### AC.33.1 Trigger
 
@@ -3123,9 +3085,9 @@ That documented loose fallback is:
   - `y: 0.7500`
   - `h: 0.2050`
 
-### AC.33.3 Shipped behavior
+### AC.33.3 Fix approach
 
-A small runtime PAN crop branch was added, analogous in spirit to the Aadhaar
+Add a small runtime PAN crop branch, analogous in spirit to the Aadhaar
 variant handling:
 
 - If page text contains issuer markers such as:
@@ -3138,21 +3100,88 @@ variant handling:
 
 The default Protean/NSDL PAN crop remains unchanged.
 
-### AC.33.4 Verification (re-confirmed 2026-04-27)
-
-- `test-pdfs/pan-test.pdf` (pw `05071999`) stays on the default Protean/NSDL
-  branch.
-- The built `dist/id-print.html` on `main` contains the same UTI issuer-marker
-  logic as source `id-print.html`.
-- With bundled Node tooling available in this continuation session,
-  `node build.js` ran clean against the same source now on `main`.
-
-### AC.33.5 Limitation
+### AC.33.4 Limitation
 
 No separate real UTIITSL PAN sample PDF is currently saved in the repo,
 so this is a documented-heuristic fallback grounded in §AC.16's
 rollback note, not a fresh pixel-measured calibration. As soon as the
 user shares an actual UTIITSL PAN sample, verify and tighten if needed.
+
+## §AC.34 PAN sample crop strip + Photo Only source-space fix
+
+**Status:** IN REVIEW.
+
+**User report (2026-04-27, Hinglish):**
+
+> "pan card pdf upload karne par cut problems hai or only phot mode main
+> bhi shi nhi dikh rha hai ise bhi same to same research karke shi kre
+> jaise aadhar card pdf ka shi kiya tha"
+
+### AC.34.1 Reproduced findings
+
+Research against `test-pdfs/pan-test.pdf` (pw `05071999`) surfaced two
+separate PAN issues:
+
+1. **Default full-card crop still sat too high.** The §AC.16 crop was a
+   major fix versus the old full-width Letter crop, but the shipped
+   values still leaked the `----- Cut -----` strip above the real PAN
+   card pair.
+2. **Photo Only preview cropped in the wrong coordinate space.**
+   `paintPhotoOnly()` used `CARD_PHOTO_ROI` pixels computed for the
+   normalized CR80 canvas (`1011×638`), but applied those numbers
+   directly to `originalFront` / `originalBack`, which still retain the
+   raw crop dimensions from `cropRegion()`. For PAN the raw front crop is
+   `1075×685`, so the source-space mismatch shifted the crop and made the
+   preview look wrong.
+
+### AC.34.2 Measurement
+
+Rendered `test-pdfs/pan-test.pdf` at 300 DPI and probed the front/back
+raw crops:
+
+- current PAN raw crop size ≈ `1075×685`
+- sustained non-white card body starts ~`57 px` below the current crop top
+- that maps to a page-space top shift of ~`0.0162`
+
+To preserve the bottom edge while removing the upper cut strip:
+
+- old default PAN crop: `y: 0.7567`, `h: 0.1952`
+- new default PAN crop: `y: 0.7729`, `h: 0.1753`
+
+Photo Only ROI was then re-tuned against the tightened PAN front crop so
+the preview stays inside the actual photo block instead of leaking the
+header.
+
+### AC.34.3 Implementation
+
+Files touched:
+
+- `id-print.html`
+- `dist/id-print.html` (after rebuild)
+
+Changes:
+
+1. Tighten `CROP.pan.front/back` on `y/h` only:
+   - front: `[0.0685, 0.7567, 0.4335, 0.1952]` →
+     `[0.0685, 0.7729, 0.4335, 0.1753]`
+   - back: `[0.5141, 0.7567, 0.4314, 0.1952]` →
+     `[0.5141, 0.7729, 0.4314, 0.1753]`
+2. Retune `CARD_PHOTO_ROI.pan.front` to the tightened crop:
+   - `[0.108, 0.220, 0.170, 0.300]` →
+     `[0.090, 0.225, 0.175, 0.320]`
+3. Fix `paintPhotoOnly()` to compute ROI in `srcCanvas.width/height`
+   space instead of always using `CR80_W/CR80_H`.
+
+### AC.34.4 Verification
+
+- Rebuilt locally with bundled Node via `node build.js`.
+- Confirmed the generated `dist/id-print.html` contains the same PAN crop
+  + Photo Only logic as source.
+- Visual research artifacts saved outside the repo for this session:
+  - `pan-photo-only-source-mismatch.png`
+  - `pan-photo-only-roi-candidates.png`
+  - `pan-photo-only-face-candidates.png`
+  - `pan-tight-crop-roi-candidates.png`
 
 ## §AC.17 ID Card Print — Print preview cards too small on A4
 

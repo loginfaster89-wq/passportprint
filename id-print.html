@@ -818,13 +818,14 @@ const CROP = {
        address, hologram). The previous crop [0.05, 0.08, 0.90, 0.42]
        was wrong: it grabbed the upper Letter as "front" and the lower
        card-row as "back", producing one giant Letter half + one tiny
-       card-row half on the printed sheet. Coords below are measured
-       from test-pdfs/pan-test.pdf at 300 DPI (page = 2480×3509 px) and
-       hug the dashed outer border of each card. Aspect ≈ 1.57, close
-       to CR80 (1.585). The §AC.15 flush-top + black-top-line treatment
-       in buildSingleSheet then applies to PAN cards automatically. */
-    front: [0.0685, 0.7567, 0.4335, 0.1952],
-    back:  [0.5141, 0.7567, 0.4314, 0.1952]
+       card-row half on the printed sheet. §AC.34 retuned the shipped
+       sample crop one step tighter on y/h only: the old 0.7567/0.1952
+       bounds still leaked the "----- Cut -----" strip above the real
+       PAN card pair. New top = 0.7729, new h = 0.1753, bottom edge
+       preserved. The §AC.15 flush-top + black-top-line treatment in
+       buildSingleSheet then applies to PAN cards automatically. */
+    front: [0.0685, 0.7729, 0.4335, 0.1753],
+    back:  [0.5141, 0.7729, 0.4314, 0.1753]
   },
   voter: {
     front:     [0.035, 0.05, 0.93, 0.45],
@@ -927,11 +928,12 @@ const CARD_PHOTO_ROI = {
      captured the full photo box including gray border; new values
      target just the facial portrait (face + hair + shoulders). */
   aadhaar:    { front: [0.096, 0.230, 0.200, 0.385], back: null },
-  /* §AC.29.11 — PAN ROI calibrated to exclude the photo's native
-     gray studio-backdrop frame. Previous [0.085, 0.220, 0.190, 0.430]
-     captured the full photo box including gray border; new values
-     target just the facial portrait. */
-  pan:        { front: [0.108, 0.220, 0.170, 0.300], back: null },
+  /* §AC.34 — PAN Photo Only retuned after the default crop tightened.
+     The prior ROI started too high on the CR80 card, so Photo Only
+     preview leaked the "INCOME TAX DEPARTMENT" header instead of the
+     actual PAN photo area. New ROI stays inside the front-side photo
+     block after the top cut-strip is removed. */
+  pan:        { front: [0.090, 0.225, 0.175, 0.320], back: null },
   /* Remaining 4 types kept at the spec §AC.29.5 estimates — tighten
      when sample PDFs land per the issues.md note. */
   voter:      { front: [0.04, 0.20, 0.25, 0.55], back: null },
@@ -2288,7 +2290,10 @@ function paintPhotoOnly(canvas, srcCanvas, cardType, side) {
   var W = canvas.width, H = canvas.height;
   ctx.fillStyle = '#ffffff';
   ctx.fillRect(0, 0, W, H);
-  var roi = srcCanvas ? getPhotoROIPixels(cardType, side, CR80_W, CR80_H) : null;
+  /* Use ROI in the source canvas' own pixel space. The previous CR80-sized
+     lookup shifted PAN Photo Only crops because originalFront/originalBack
+     keep their raw crop dimensions until drawFiltered() scales them. */
+  var roi = srcCanvas ? getPhotoROIPixels(cardType, side, srcCanvas.width, srcCanvas.height) : null;
   if (!roi) {
     ctx.fillStyle = '#888';
     ctx.font = '20px "DM Mono", monospace';
