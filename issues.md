@@ -3535,3 +3535,181 @@ slow print prep on huge sheets), the rollback is:
   `display: none` line.
 That restores PR #272 behaviour exactly. Both `id-print.html`
 and `dist/id-print.html` need to ship together (build step).
+
+## §AC.23 Print preview — paper-agnostic sizing + hide cookie banner (SHIPPED — PR #276, partially superseded by §AC.24)
+
+**Status:** SHIPPED. The cookie-banner part is GREEN; the
+paper-agnostic sizing part introduced a regression that §AC.24
+fixed (see below).
+
+**User report after §AC.22 (PR #274) deployed and the user
+re-tested print on phone:**
+
+1. Cards still appeared horizontally off-center (shifted to the
+   right) on the print preview, with extra whitespace on the
+   left edge of the page.
+2. The cookie consent banner ("We only use essential cookies
+   for login") rendered as a black bar at the bottom of the
+   print preview.
+
+Reference image:
+`.agents/references/ac23-print-cookie-and-offcenter.png`. The
+user's phone print dialog showed `Paper size: Letter` at the
+top — a key clue.
+
+**Root cause (off-center):** The user's mobile print dialog
+defaulted to **Letter** paper (216 × 279mm), not A4. Mobile
+Chrome / many phone print dialogs ignore `@page { size: A4
+portrait }` and respect only the user's paper selection.
+PR #274's CSS forced `.idp-a4-wrap` and `#printImg` to a fixed
+**210mm × 297mm**, which on a wider, shorter Letter page meant:
+- Width 210mm < 216mm page width → image flush-left, ~6mm
+  whitespace on the right (perceived as "shifted right" because
+  the printer also added its own default left-margin on top).
+- Height 297mm > 279mm page height → forced the print engine
+  to scale the image down, centering it weirdly.
+
+**Root cause (cookie banner):** `assets/cookie.js` injects a
+`<div class="sp-cookie">` into `<body>` on first visit. The
+`@media print` hide-list covered every other UI chrome class
+(`.legal-header`, `.idp-hero`, `.idp-steps`, etc.) but not
+`.sp-cookie`, so the banner stayed visible in print.
+
+**Fix shipped in PR #276 (CSS-only, inside the existing
+`@media print` block in `id-print.html`):**
+
+1. Added `.sp-cookie` to the `display: none !important` list
+   alongside the other chrome classes.
+2. Switched `html`, `body`, `.idp-app`, `.idp-preview`,
+   `.idp-a4-wrap`, and `.idp-a4-wrap #printImg` from
+   `210mm × 297mm` to `width: 100%; height: 100%`. Dropped the
+   `max-width` / `min-width` / `max-height` / `min-height`
+   constraints (set to `none` / `0`).
+3. Kept `object-fit: contain` + `object-position: center top`
+   on `#printImg` so cards stay centered + flush at top.
+4. Kept `@page { size: A4 portrait; margin: 0 !important }`
+   for browsers that DO honour it (desktop Chrome / Firefox).
+
+**Result on phone:** cookie banner correctly hidden ✓.
+Paper-agnostic sizing introduced §AC.24's blank-page bug ✗
+(see next section).
+
+### AC.23.1 Why the 100% chain failed
+
+`height: 100%` propagates only when the parent has a definite
+(non-`auto`) height. On desktop Chrome / Firefox in print mode,
+`<html>` gets a definite page-sized height, so the chain
+resolves correctly:
+`html(100%) → body(100%) → .idp-app(100%) → .idp-preview(100%)
+→ .idp-a4-wrap(100%) → #printImg(100%)`.
+
+On mobile Chrome / Android print engines, `<html>` does NOT get
+a definite height in print mode — its computed height is `auto`
+(== content height of body, which is also `auto` because all
+visible UI is `display: none`). The cascade resolves each
+`100%` of `auto` to `0`, so the image renders 0 px tall →
+completely blank A4 page.
+
+This was caught by the user's next phone test (screenshot:
+`.agents/references/ac24-print-blank-a4.png`, paper explicitly
+set to "ISO A4" this time, page completely blank).
+
+## §AC.24 Print preview blank — anchor #printImg to viewport via position:fixed + 100vw/100vh (SHIPPED — PR #277, AWAITING TEST)
+
+**Status:** SHIPPED. AWAITING USER CONFIRMATION on real phone
+hardware.
+
+**Bug:** After PR #276 (§AC.23) deployed and the user re-tested
+print on phone with **"ISO A4" paper explicitly selected**, the
+print preview rendered a **completely blank A4 page** (1/1, no
+cards visible). Reference:
+`.agents/references/ac24-print-blank-a4.png`.
+
+**Root cause:** §AC.23's `height: 100%` chain collapsed to 0 on
+mobile Chrome (mobile print engines don't always give `<html>`
+a definite height in print mode — see §AC.23.1 above for the
+full cascade).
+
+**Fix (CSS-only, ~3 lines of meaningful change in
+`id-print.html`):**
+
+```css
+.idp-a4-wrap #printImg {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  /* …unchanged: object-fit: contain, object-position: center top,
+     margins, page-break-*, transform: none */
+  z-index: 9999 !important;
+}
+```
+
+**Why this works on every browser / paper size:**
+- `position: fixed` in print mode anchors to the **page
+  viewport**, not to any ancestor's computed box.
+- `vw` / `vh` always resolve against the viewport, regardless
+  of whether the percentage-height chain on ancestors is
+  broken.
+- `object-fit: contain` + `object-position: center top` keep
+  the cards horizontally centered and flush at the top edge,
+  regardless of paper choice (A4 / Letter / Legal).
+- `z-index: 9999` is defensive — ensures nothing layered
+  above the image (e.g. a future stylesheet override
+  re-showing the cookie banner) can occlude it.
+
+**What's NOT changed:**
+- The `100%` rules on `html`, `body`, `.idp-app`,
+  `.idp-preview`, `.idp-a4-wrap` from §AC.23 stay in place.
+  They're harmless now that the image is viewport-anchored.
+- The `.sp-cookie` hide rule from §AC.23 stays.
+- `@page { size: A4 portrait; margin: 0 }` stays.
+- The `btnPrint` JS handler (canvas → toBlob → printImg.src
+  → window.print()) is unchanged.
+- All sheet-builder JS unchanged.
+
+### AC.24.1 Verification status
+
+**SHIPPED but NOT YET CONFIRMED on real phone hardware.** Once
+Cloudflare Pages redeploys PR #277, expectation: print preview
+on phone shows cards horizontally centered + flush at the top
+edge of the page; **no** cookie banner anywhere on the page;
+image visible at full size on **both** A4 and Letter paper
+selections. User to force-quit + reopen the browser before
+re-testing (busts service-worker / CDN cache).
+
+### AC.24.2 If still wrong
+
+If the page is still blank after PR #277, the most likely cause
+is `position: fixed` being stripped by a legacy Android print
+engine (some treat fixed-position elements as no-paint in
+print). Diagnostic ladder:
+1. Ask the user to also try Chrome's "Save as PDF" option in
+   the print dialog (uses the desktop-style print pipeline). If
+   the PDF is correct but the actual printer-driver path isn't,
+   `position: fixed` is the suspect.
+2. Open §AC.25 and fall back to drawing the image as a
+   pre-sized inline `<img>` inside `.idp-a4-wrap` with explicit
+   `width: 21cm; height: 29.7cm` (centimetre units — some older
+   engines parse `cm` more reliably than `mm`) and
+   `position: static`, with the wrapper centered via
+   `margin: 0 auto`.
+
+If a NEW symptom appears (e.g. image too small, scaled weirdly,
+print fires twice, image quality degraded vs canvas), open
+§AC.25 with the fresh phone screenshot and hypothesise from
+there.
+
+### AC.24.3 Rollback
+
+If the `position: fixed` change introduces a new symptom,
+the rollback is:
+- Revert `.idp-a4-wrap #printImg` rule block to the §AC.23
+  version (`position: absolute; width: 100%; height: 100%`).
+- Note in `issues.md §AC.25` that the §AC.23 100% chain works
+  on this user's phone but not in general — needs a different
+  approach.
+
+That preserves the cookie-banner hide and paper-agnostic intent
+without the viewport-anchor change.

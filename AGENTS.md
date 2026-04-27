@@ -518,12 +518,29 @@ unlock, auto-detect, front+back preview, CR80 output, A4 sheet).
   canvas to a PNG `<img>` and prints the image instead of the
   canvas.** Browser print engines reliably render `<img>` at
   the requested print size; high-res `<canvas>` bitmaps were
-  being resampled by the print engine, which is why §AC.21's
-  CSS-only fix didn't land on phone. AWAITING TEST on real
-  phone hardware. See `issues.md §AC.22`.
+  being resampled by the print engine. Got cards to top of
+  page on phone but they appeared right-shifted on Letter
+  paper + the cookie banner was visible. See `issues.md §AC.22`.
+- **§AC.23 SHIPPED (PR #276) — paper-agnostic 100% sizing +
+  hide cookie banner in print.** Switched html / body /
+  .idp-app / .idp-preview / .idp-a4-wrap / #printImg from fixed
+  210mm × 297mm to width:100% / height:100% so the print works
+  on any paper size (A4 / Letter / Legal). Also added
+  `.sp-cookie` to the @media print display:none list. Cookie
+  banner fix worked; the 100% sizing introduced §AC.24's
+  blank-page bug on phone. See `issues.md §AC.23`.
+- **§AC.24 SHIPPED (PR #277) — `#printImg` anchored to the
+  page viewport via `position: fixed` + `100vw` / `100vh`.**
+  §AC.23's `height: 100%` chain collapsed to 0 on mobile
+  Chrome (mobile print engines don't always give `<html>` a
+  definite height in print mode), causing a completely blank
+  A4 page. `position: fixed` + viewport units bypass the
+  ancestor chain entirely so the image always fills the
+  page. AWAITING TEST on real phone hardware. See
+  `issues.md §AC.24`.
 - **NEXT — pick from candidates** (see SKILL.md §"TASK NEXT
   SESSION" for the full list; no current priority — wait for
-  user to confirm §AC.22 on phone, then pick from below):
+  user to confirm §AC.24 on phone, then pick from below):
   A. Audit multi-card / Dragon / PVC layouts for the same
      perforation-strip artefact + flush-top treatment, now that
      PAN also rides on the same `buildSingleSheet` path.
