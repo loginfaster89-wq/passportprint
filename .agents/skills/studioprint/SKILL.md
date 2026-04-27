@@ -695,12 +695,19 @@ Highlights:
   extended with `editScope` / `photoBright` / `photoContrast`
   / `photoSat`. Sheet builders ZERO-change.
 - §AC.29.11 SHIPPED — PR #289 ROI calibration. Aadhaar and PAN ROIs tightened to exclude the photo's native gray studio-backdrop frame.
-- §AC.33 IN PROGRESS — PAN issuer-variant crop fallback. Current
-  `CROP.pan` is measured from the Protean/NSDL repo sample. A small
-  runtime fallback is being added for UTIITSL-style markers using the
+- §AC.32 SHIPPED — Aadhaar full-card crop fix for the 2026 UIDAI
+  issued-details letter-size variant. This was not a `CARD_PHOTO_ROI`
+  issue. Default Aadhaar crop stays at
+  `[0.0520, 0.6821, 0.4471, 0.1995]` / `[0.4991, 0.6821, 0.4465, 0.1995]`;
+  when extracted text contains `details as on` or `aadhaar no. issued`, use
+  the deeper variant crop
+  `[0.075, 0.719, 0.423, 0.207]` / `[0.509, 0.719, 0.423, 0.207]`.
+- §AC.33 SHIPPED — PAN issuer-variant crop fallback (PR #296). Current
+  `CROP.pan` is still measured from the Protean/NSDL repo sample, but a
+  runtime fallback now exists for UTIITSL-style markers using the
   already-documented §AC.16 rollback values (`y: 0.7500`, `h: 0.2050`
   for both front + back). This is PAN full-card crop logic, not photo
-  ROI logic.
+  ROI logic, and remains heuristic until a real UTIITSL sample is available.
 
 Test PDFs repo mein saved hain:
 test-pdfs/pan-test.pdf (password: 05071999)
@@ -710,9 +717,10 @@ test-pdfs/aadhaar-test.pdf (password: SUNI1986)
 TASK (NEXT SESSION) — Choose from Candidates
 ═══════════════════════════════════════════════════════════════
 
-§AC.11–§AC.29 are all SHIPPED (PRs #251–#289). §AC.24 (PR #277)
+§AC.11–§AC.33 are now all merged on `main`. §AC.24 (PR #277)
 CONFIRMED WORKING on real phone. §AC.29 v1 (PR #285) + alpha fixes
-(PR #286) + ROI calibration (PR #289) are all merged.
+(PR #286) + ROI calibration (PR #289) + Aadhaar/PAN crop-variant work
+(PRs #295/#296) are all merged.
 
 **On the next session:** Ask the user what they want to tackle next
 from the standing candidates list (A through G). Do not proceed

@@ -3063,7 +3063,45 @@ a 2-line `CROP` table change, easy to amend.
 
 ---
 
-## §AC.33 PAN issuer-variant crop fallback — IN PROGRESS
+## §AC.32 Aadhaar full-card crop fix — issued-details letter-size variant
+
+**Status:** SHIPPED — code on `main`; helper/docs context synced after PR #295.
+
+**Root cause:** this was **not** a `CARD_PHOTO_ROI` problem. The failing real
+eAadhaar PDF used a letter-size `612x792` UIDAI template whose text included
+`Details as on` / `Aadhaar no. issued`. Its lower PVC-card row sits deeper than
+the repo sample `test-pdfs/aadhaar-test.pdf` (`595x842`), so the older
+full-card crop leaked upper-letter fragments and clipped the bottom edge of the
+real cards.
+
+**Shipped fix (`id-print.html` + `dist/id-print.html`):**
+
+- Keep the tighter default Aadhaar crop already on `main` for the repo sample /
+  standard flow:
+  - front: `[0.0520, 0.6821, 0.4471, 0.1995]`
+  - back:  `[0.4991, 0.6821, 0.4465, 0.1995]`
+- Add a second Aadhaar runtime branch when extracted text contains either:
+  - `details as on`
+  - `aadhaar no. issued`
+- That issued-details branch uses the deeper crop measured against the real
+  letter-size template:
+  - front: `[0.075, 0.719, 0.423, 0.207]`
+  - back:  `[0.509, 0.719, 0.423, 0.207]`
+
+**Verification (re-confirmed 2026-04-27):**
+
+- `test-pdfs/aadhaar-test.pdf` stays on the default Aadhaar branch.
+- Real user PDF
+  `EAadhaar_2725015377495820260407112933_25042026193335.pdf`
+  (pw `ANUK2004`) triggers the issued-details branch.
+- With bundled Node tooling available in this continuation session,
+  `node build.js` ran clean before this docs sync was prepared.
+
+---
+
+## §AC.33 PAN issuer-variant crop fallback (SHIPPED — PR #296)
+
+**Status:** SHIPPED — PR #296.
 
 ### AC.33.1 Trigger
 
@@ -3085,9 +3123,9 @@ That documented loose fallback is:
   - `y: 0.7500`
   - `h: 0.2050`
 
-### AC.33.3 Fix approach
+### AC.33.3 Shipped behavior
 
-Add a small runtime PAN crop branch, analogous in spirit to the Aadhaar
+A small runtime PAN crop branch was added, analogous in spirit to the Aadhaar
 variant handling:
 
 - If page text contains issuer markers such as:
@@ -3100,7 +3138,16 @@ variant handling:
 
 The default Protean/NSDL PAN crop remains unchanged.
 
-### AC.33.4 Limitation
+### AC.33.4 Verification (re-confirmed 2026-04-27)
+
+- `test-pdfs/pan-test.pdf` (pw `05071999`) stays on the default Protean/NSDL
+  branch.
+- The built `dist/id-print.html` on `main` contains the same UTI issuer-marker
+  logic as source `id-print.html`.
+- With bundled Node tooling available in this continuation session,
+  `node build.js` ran clean against the same source now on `main`.
+
+### AC.33.5 Limitation
 
 No separate real UTIITSL PAN sample PDF is currently saved in the repo,
 so this is a documented-heuristic fallback grounded in §AC.16's
