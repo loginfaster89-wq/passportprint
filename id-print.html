@@ -1215,6 +1215,20 @@ async function processPdfBatch(arrayBuffer, password, fileName) {
     await page.render({ canvasContext: ctx, viewport: viewport }).promise;
 
     var crop = CROP[type];
+    if (type === 'aadhaar') {
+      var dobAnchor = textContent.items.find(i => {
+        var lower = i.str.toLowerCase();
+        return lower.includes('dob:') || lower.includes('dob :') || lower.includes('year of birth');
+      });
+      if (dobAnchor) {
+        var unscaledHeight = page.getViewport({ scale: 1.0 }).height;
+        var dobFractionalY = 1 - (dobAnchor.transform[5] / unscaledHeight);
+        crop = JSON.parse(JSON.stringify(crop));
+        var newY = dobFractionalY - 0.0734;
+        crop.front[1] = newY;
+        crop.back[1] = newY;
+      }
+    }
     var front, back;
 
     if (pdf.numPages >= 2 && crop.frontPage) {
@@ -1283,6 +1297,20 @@ async function processPdf(pdf) {
     await page.render({ canvasContext: ctx, viewport: viewport }).promise;
 
     var crop = CROP[detectedType];
+    if (detectedType === 'aadhaar') {
+      var dobAnchor = textContent.items.find(i => {
+        var lower = i.str.toLowerCase();
+        return lower.includes('dob:') || lower.includes('dob :') || lower.includes('year of birth');
+      });
+      if (dobAnchor) {
+        var unscaledHeight = page.getViewport({ scale: 1.0 }).height;
+        var dobFractionalY = 1 - (dobAnchor.transform[5] / unscaledHeight);
+        crop = JSON.parse(JSON.stringify(crop));
+        var newY = dobFractionalY - 0.0734;
+        crop.front[1] = newY;
+        crop.back[1] = newY;
+      }
+    }
 
     if (pdf.numPages >= 2 && crop.frontPage) {
       frontImageData = cropRegion(renderCanvas, crop.frontPage);
