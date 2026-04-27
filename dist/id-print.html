@@ -1464,13 +1464,38 @@ btnBack.addEventListener('click', () => {
 btnBackPreview.addEventListener('click', () => showStep(2));
 
 btnDownload.addEventListener('click', () => {
-  var link = document.createElement('a');
   var suffix = currentLayout === 'dragon' ? '-dragon-sheet.png' : currentLayout === 'pvc' ? '-pvc-tray.png' : '-a4-sheet.png';
   var cards = getActiveCards();
   var prefix = cards.length > 1 ? 'batch-' + cards.length + '-cards' : (detectedType || 'id-card');
-  link.download = prefix + suffix;
-  link.href = a4Canvas.toDataURL('image/png');
-  link.click();
+  var filename = prefix + suffix;
+  /* §AC.18: use canvas.toBlob (not toDataURL) — iOS Safari historically
+     caps toDataURL output at ~5 MB / 4096² px, and an A4 @ 300 DPI sheet
+     (2480×3508 = 8.7 MP) silently returns a truncated / empty data URI
+     on phone, breaking the front card render. toBlob + URL.createObjectURL
+     is not subject to the same cap. Falls back to toDataURL only on very
+     old browsers that lack toBlob entirely. */
+  if (typeof a4Canvas.toBlob === 'function') {
+    a4Canvas.toBlob(function (blob) {
+      if (!blob) {
+        var fallback = document.createElement('a');
+        fallback.download = filename;
+        fallback.href = a4Canvas.toDataURL('image/png');
+        fallback.click();
+        return;
+      }
+      var url = URL.createObjectURL(blob);
+      var link = document.createElement('a');
+      link.download = filename;
+      link.href = url;
+      link.click();
+      setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+    }, 'image/png');
+  } else {
+    var legacyLink = document.createElement('a');
+    legacyLink.download = filename;
+    legacyLink.href = a4Canvas.toDataURL('image/png');
+    legacyLink.click();
+  }
 });
 
 btnPrint.addEventListener('click', () => window.print());
