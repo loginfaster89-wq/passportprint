@@ -805,8 +805,8 @@ const CROP = {
        (~5mm at A4) to crop out the dashed perforation strip that sits
        just above each card in the e-Aadhaar PDF. New aspect now matches
        CR80 (≈1.585:1). Bottom edge unchanged. */
-    front: [0.0520, 0.630, 0.4471, 0.255],
-    back:  [0.4991, 0.630, 0.4465, 0.255]
+    front: [0.0520, 0.6821, 0.4471, 0.1995],
+    back:  [0.4991, 0.6821, 0.4465, 0.1995]
   },
   pan: {
     /* §AC.16 — e-PAN PDFs (Protean eGov / NSDL layout) ship the same
@@ -1215,6 +1215,7 @@ async function processPdfBatch(arrayBuffer, password, fileName) {
     await page.render({ canvasContext: ctx, viewport: viewport }).promise;
 
     var crop = CROP[type];
+    var isIssuedDetailsAadhaar = fullText.includes('details as on') || fullText.includes('aadhaar no. issued');
     if (type === 'aadhaar' && fullText.includes('citizenship')) {
       // New Aadhaar format is taller to fit the red citizenship box.
       crop = JSON.parse(JSON.stringify(crop));
@@ -1224,6 +1225,12 @@ async function processPdfBatch(arrayBuffer, password, fileName) {
       crop.front[3] = newH;
       crop.back[1] = newY;
       crop.back[3] = newH;
+    } else if (type === 'aadhaar' && isIssuedDetailsAadhaar) {
+      // 2026 UIDAI letter-size variant: lower PVC row sits deeper and the
+      // old crop leaks upper-letter fragments while clipping the bottom edge.
+      crop = JSON.parse(JSON.stringify(crop));
+      crop.front = [0.075, 0.719, 0.423, 0.207];
+      crop.back = [0.509, 0.719, 0.423, 0.207];
     }
     var front, back;
 
@@ -1293,6 +1300,7 @@ async function processPdf(pdf) {
     await page.render({ canvasContext: ctx, viewport: viewport }).promise;
 
     var crop = CROP[detectedType];
+    var isIssuedDetailsAadhaar = fullText.includes('details as on') || fullText.includes('aadhaar no. issued');
     if (detectedType === 'aadhaar' && fullText.includes('citizenship')) {
       // New Aadhaar format is taller to fit the red citizenship box.
       crop = JSON.parse(JSON.stringify(crop));
@@ -1302,6 +1310,12 @@ async function processPdf(pdf) {
       crop.front[3] = newH;
       crop.back[1] = newY;
       crop.back[3] = newH;
+    } else if (detectedType === 'aadhaar' && isIssuedDetailsAadhaar) {
+      // 2026 UIDAI letter-size variant: lower PVC row sits deeper and the
+      // old crop leaks upper-letter fragments while clipping the bottom edge.
+      crop = JSON.parse(JSON.stringify(crop));
+      crop.front = [0.075, 0.719, 0.423, 0.207];
+      crop.back = [0.509, 0.719, 0.423, 0.207];
     }
 
     if (pdf.numPages >= 2 && crop.frontPage) {
