@@ -453,6 +453,31 @@ async function processPdfBatch(arrayBuffer, password, fileName) {
     await page.render({ canvasContext: ctx, viewport: viewport }).promise;
 
     var crop = CROP[type];
+    if (type === 'aadhaar') {
+      var startY = Math.floor(renderCanvas.height * 0.60);
+      var endY = Math.floor(renderCanvas.height * 0.72);
+      var startX = Math.floor(renderCanvas.width * 0.15);
+      var scanWidth = Math.floor(renderCanvas.width * 0.20);
+      var imgData = ctx.getImageData(startX, startY, scanWidth, endY - startY).data;
+      var foundY = null;
+      for (var py = 0; py < endY - startY; py++) {
+        var darkCount = 0;
+        for (var px = 0; px < scanWidth; px++) {
+          var idx = (py * scanWidth + px) * 4;
+          if (imgData[idx] < 100 && imgData[idx+1] < 100 && imgData[idx+2] < 100) darkCount++;
+        }
+        if (darkCount > scanWidth * 0.8) {
+          foundY = (startY + py) / renderCanvas.height;
+          break;
+        }
+      }
+      if (foundY !== null) {
+        crop = JSON.parse(JSON.stringify(crop));
+        var newY = foundY + (2 / renderCanvas.height);
+        crop.front[1] = newY;
+        crop.back[1] = newY;
+      }
+    }
     var front, back;
 
     if (pdf.numPages >= 2 && crop.frontPage) {
@@ -521,6 +546,31 @@ async function processPdf(pdf) {
     await page.render({ canvasContext: ctx, viewport: viewport }).promise;
 
     var crop = CROP[detectedType];
+    if (detectedType === 'aadhaar') {
+      var startY = Math.floor(renderCanvas.height * 0.60);
+      var endY = Math.floor(renderCanvas.height * 0.72);
+      var startX = Math.floor(renderCanvas.width * 0.15);
+      var scanWidth = Math.floor(renderCanvas.width * 0.20);
+      var imgData = ctx.getImageData(startX, startY, scanWidth, endY - startY).data;
+      var foundY = null;
+      for (var py = 0; py < endY - startY; py++) {
+        var darkCount = 0;
+        for (var px = 0; px < scanWidth; px++) {
+          var idx = (py * scanWidth + px) * 4;
+          if (imgData[idx] < 100 && imgData[idx+1] < 100 && imgData[idx+2] < 100) darkCount++;
+        }
+        if (darkCount > scanWidth * 0.8) {
+          foundY = (startY + py) / renderCanvas.height;
+          break;
+        }
+      }
+      if (foundY !== null) {
+        crop = JSON.parse(JSON.stringify(crop));
+        var newY = foundY + (2 / renderCanvas.height);
+        crop.front[1] = newY;
+        crop.back[1] = newY;
+      }
+    }
 
     if (pdf.numPages >= 2 && crop.frontPage) {
       frontImageData = cropRegion(renderCanvas, crop.frontPage);
