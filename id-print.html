@@ -331,23 +331,8 @@ input.idp-range::-moz-range-thumb{
 }
 .idp-card-wrap canvas.rounded{border-radius:3.6%;}
 
-/* §AC.12 Swap sides toggle — small icon-button below pairCanvas. */
-.idp-swap-row{
-  display:flex;justify-content:center;margin:10px 0 0;
-}
-.idp-swap-btn{
-  display:inline-flex;align-items:center;gap:6px;
-  padding:6px 12px;font-family:'DM Mono',monospace;font-size:11px;
-  letter-spacing:.04em;color:var(--muted);
-  background:var(--surface);border:1px solid var(--border);border-radius:6px;
-  cursor:pointer;transition:border-color .15s,color .15s,background .15s;
-}
-.idp-swap-btn:hover{border-color:var(--accent);color:var(--accent);}
-.idp-swap-btn.is-active{
-  border-color:var(--accent);color:var(--accent);
-  background:rgba(240,165,0,.08);
-}
-.idp-swap-icon{font-size:14px;line-height:1;}
+/* §AC.28 — Swap sides toggle (§AC.12 / .idp-swap-row + .idp-swap-btn +
+   .idp-swap-icon) removed per user request. */
 
 /* Hidden util */
 .idp-hidden{display:none !important;}
@@ -380,7 +365,7 @@ input.idp-range::-moz-range-thumb{
   .legal-header,.legal-footer,.idp-hero,.idp-steps,.idp-upload,
   .idp-password,.idp-actions,.idp-info,.idp-detect,.idp-error,
   .idp-loading,.idp-btn,.idp-editor,.idp-option,.idp-layout-toggle,
-  .idp-swap-row,.sp-cookie,
+  .sp-cookie,
   #sheetTitle,#sheetDesc,nav,footer,header{display:none !important;}
   /* §AC.23 — paper-agnostic sizing. Mobile Chrome / many phone print
      dialogs let the user pick paper size (Letter, A4, etc.) and
@@ -580,17 +565,8 @@ input.idp-range::-moz-range-thumb{
           <canvas id="pairCanvas" class="idp-preview-canvas-pair" width="2022" height="638"></canvas>
         </div>
       </div>
-      <!-- §AC.12 Swap sides toggle (preview-only — sheet builders untouched).
-           Default: front-LEFT / back-RIGHT. Click to flip. State persists in
-           idp:prefs:v1 under `swapSides`. -->
-      <div class="idp-swap-row">
-        <button type="button" id="btnSwapSides" class="idp-swap-btn"
-                title="Front/Back ki side swap karo"
-                aria-label="Swap Front and Back sides">
-          <span class="idp-swap-icon" aria-hidden="true">&#8646;</span>
-          <span class="idp-swap-label">Swap sides</span>
-        </button>
-      </div>
+      <!-- §AC.28 — Swap sides toggle (§AC.12) removed per user request.
+           Preview always renders front-LEFT / back-RIGHT. -->
       <!-- Options -->
       <label class="idp-option">
         <input type="checkbox" id="chkRounded">
@@ -879,7 +855,7 @@ let roundedCorners = false;
    1-Pair Fold & Laminate sheet no longer draws any fold-here line or
    corner ticks (handled inside buildSingleSheet). */
 const cutMarks = true;
-let swapSides = false; /* §AC.12 — preview-only flip; sheet builders untouched */
+/* §AC.28 — `swapSides` state removed (Swap sides toggle deleted). */
 const CARD_RADIUS = 36;
 
 /* Legacy single-card state (used when only 1 PDF) */
@@ -1768,7 +1744,7 @@ const btnResetEdit = $('#btnResetEdit');
 const btnAutoEnhance = $('#btnAutoEnhance');
 const chkRounded = $('#chkRounded');
 /* §AC.13 — chkCutMarks ref removed (Cut Marks toggle deleted from UI). */
-const btnSwapSides = $('#btnSwapSides'); /* §AC.12 */
+/* §AC.28 — btnSwapSides ref removed (Swap sides button deleted). */
 /* §AC.27 — panelPosition / movePad / moveStep / moveReadout /
    positionSideRadios refs removed (Position panel deleted). */
 
@@ -1815,10 +1791,8 @@ function drawCardClipped(ctx, src, x, y, w, h, radius) {
    look after cutting. If a side is missing (e.g. some PAN PDFs render
    only the front), that half stays as the light-grey placeholder. */
 function compositePair(canvas, frontReady, backReady) {
-  /* §AC.12 — when swapSides is on, draw back-LEFT / front-RIGHT instead of
-     the default front-LEFT / back-RIGHT. Per-half rounded clip paths follow
-     the swapped order automatically since they're tied to dx position. */
-  if (swapSides) { var __t = frontReady; frontReady = backReady; backReady = __t; }
+  /* §AC.28 — Swap sides toggle removed; preview always renders
+     front-LEFT / back-RIGHT (the default). */
   canvas.width = CR80_W * 2;
   canvas.height = CR80_H;
   var ctx = canvas.getContext('2d');
@@ -1928,7 +1902,7 @@ function savePrefs() {
     var prefs = {
       rounded: chkRounded.checked,
       /* §AC.13 — `cutMarks` field dropped (toggle removed from UI). */
-      swapSides: swapSides,
+      /* §AC.28 — `swapSides` field dropped (Swap sides toggle removed). */
       bright: parseInt(slBright.value, 10),
       contrast: parseInt(slContrast.value, 10),
       sat: parseInt(slSat.value, 10)
@@ -1949,11 +1923,8 @@ function loadPrefs() {
     }
     /* §AC.13 — `cutMarks` field no longer read (toggle removed from UI).
        Stale values from old prefs blobs are simply ignored. */
-    if (typeof p.swapSides === 'boolean') {
-      swapSides = p.swapSides;
-      btnSwapSides.classList.toggle('is-active', swapSides);
-      btnSwapSides.setAttribute('aria-pressed', swapSides ? 'true' : 'false');
-    }
+    /* §AC.28 — `swapSides` no longer read from prefs (toggle removed).
+       Stale values from old prefs blobs are ignored. */
     if (typeof p.bright === 'number') { slBright.value = p.bright; valBright.textContent = p.bright + '%'; }
     if (typeof p.contrast === 'number') { slContrast.value = p.contrast; valContrast.textContent = p.contrast + '%'; }
     if (typeof p.sat === 'number') { slSat.value = p.sat; valSat.textContent = p.sat + '%'; }
@@ -2035,18 +2006,8 @@ chkRounded.addEventListener('change', () => {
 
 /* §AC.13 — chkCutMarks listener removed (option deleted from UI). */
 
-/* §AC.12 — Swap sides toggle. Preview-only flip; sheet builders untouched.
-   Works in both single-PDF mode (re-runs applyFilters → repaints pairCanvas)
-   and batch mode (re-runs applyBatchFilters → repaints every per-card pair
-   canvas). State persists in idp:prefs:v1 under `swapSides`. */
-btnSwapSides.addEventListener('click', function() {
-  swapSides = !swapSides;
-  btnSwapSides.classList.toggle('is-active', swapSides);
-  btnSwapSides.setAttribute('aria-pressed', swapSides ? 'true' : 'false');
-  if (batchCards.length > 1) applyBatchFilters();
-  else applyFilters();
-  savePrefs();
-});
+/* §AC.28 — Swap sides toggle (§AC.12 / btnSwapSides) click handler
+   removed. Preview now always renders front-LEFT / back-RIGHT. */
 
 /* ── Layout toggle ── */
 document.querySelectorAll('.idp-layout-opt').forEach(function(btn) {
