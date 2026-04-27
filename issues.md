@@ -3257,3 +3257,206 @@ session should test each on actual phone hardware (Android Chrome
   .then(page => page.render(...))`).
 - `id-print.html` print CSS block ~line 350–386 (§AC.17) — verify
   it still works as intended on mobile after any changes.
+
+---
+
+## §AC.19 Print preview rendered cards at ~30% width across 2 sheets (SHIPPED — PR #270)
+
+### AC.19.1 Field report (post §AC.18 / PR #269)
+
+User screenshot of phone print dialog: cards render in the **upper-left
+quadrant only**, occupying ~30% of page width, with two pages output
+instead of one. Direct quote:
+> "PRINT KARTA HUN TOH WO WHI ERROR HAI MAINE AAPKO IMAGE DI HAI
+>  DEKHLO PHELE TOH ID BHUT NECHE PLACE HAI SHEET PAR USSE UPER KRO
+>  OR RIGHT MAIN 2 SHEETS OF PAPER KYON SHOW HO RHA HAI"
+
+### AC.19.2 Root cause
+
+The §AC.17 (PR #265) print CSS only set `width: 100%` on the canvas
+without constraining its **parent**. The canvas's intrinsic size
+(2480 × 3508 CSS px) made the parent expand far beyond A4 width, so
+the browser scaled the entire page down to fit horizontally → cards
+shrunk to ~30% width AND the height overflowed onto a second page.
+
+### AC.19.3 Fix
+
+Inside `@media print`:
+- Pin **html, body, .idp-app, .idp-preview, .idp-a4-wrap, canvas** all
+  to `width: 210mm; height: 297mm`.
+- `body { overflow: hidden }` to prevent any leftover content from
+  paginating onto a second sheet.
+- Canvas: `object-fit: contain` so the bitmap scales into the box
+  preserving aspect (matches A4 portrait perfectly for 1-Pair /
+  Multi-Card; letterboxes Dragon / PVC into top-left).
+- `page-break-inside: avoid; page-break-after: avoid` on canvas.
+
+### AC.19.4 Compatibility
+
+Verified live print preview: 1 sheet, cards full-width, no overflow.
+
+---
+
+## §AC.20 1-Pair cards still had ~2.5 mm gap above (SHIPPED — PR #271)
+
+### AC.20.1 Field report
+
+After §AC.19 the print preview was correctly 1 sheet at full width,
+but the user wanted the cards pushed **flush to the top edge** of
+the A4 (not the §AC.15 30 px = 2.5 mm gap). Direct quote:
+> "ABHI BHI ID AAPNE SHI PLACE NHI KI HAI OR AB TOH YE CENTER MAIN
+>  BHI NHI HAI ISE CENTER MAIN OR SABSE UPER LE JAAO"
+
+### AC.20.2 Fix
+
+- `buildSingleSheet`: `var startY = 30` → `var startY = 0`. Cards
+  now render with their top edge at canvas y = 0, which under the
+  §AC.19 print CSS lands at A4 page y = 0 exactly. The §AC.15 4 px
+  black top-edge line is still drawn at this y → it ends up at the
+  very top of the printed page.
+- Print CSS (.idp-a4-wrap canvas):
+  - Added `object-position: center top` — for layouts whose bitmap
+    aspect doesn't match A4 (Dragon 1205×1795, PVC 1417×1417), any
+    letterboxing now happens at the bottom only, keeping the bitmap
+    pinned to top-center.
+  - Added `margin: 0 auto` — defensive horizontal centering even if
+    a future ancestor change drops the explicit width: 210mm.
+
+### AC.20.3 Verification
+
+Live deploy confirmed via curl:
+`curl -s https://studioprint.pages.dev/id-print | grep -o "startY[^,;]*\|object-fit:contain\|object-position[^;]*\|width:210mm"`
+shows `startY = 0`, `object-fit:contain`, `object-position:center top`,
+multiple `width:210mm` instances.
+
+---
+
+## §AC.21 Print preview STILL shows old layout despite §AC.19+§AC.20 deployed (SHIPPED — PR #272, AWAITING TEST)
+
+### AC.21.1 Field report
+
+After PR #271 deployed, on-screen Step 3 preview correctly shows
+cards at the top of the canvas (so the new bitmap with `startY = 0`
+IS rendering). But the user reports the **actual print preview**
+still shows the old layout (cards small, with whitespace above and
+around them). User confirmed cleared phone browser cache too:
+> "MAINE PHONE MAIN BHI BROWSER DAAT DELETE KARKE BHI CHECK KAR
+>  LIYA HAI WHI PROBLEM HAI ABHI BHI"
+
+User's reference: `.agents/references/ac21-print-still-broken.png`
+(this is the on-screen Step 3 view — they sent it to show "see, on
+screen the cards ARE at the top now, but PRINT is still wrong").
+
+### AC.21.2 Root cause hypothesis (the basis for PR #272)
+
+The print CSS rules for `.idp-a4-wrap canvas` did **not** use
+`!important`. The desktop / responsive CSS at lines 228–240 sets
+`max-width: min(100%, 460px)`, `max-height: 55vh`, with the mobile
+@media (max-width: 640px) override of `max-width: 100%; max-height:
+50vh`. Same selector, same specificity as the print rules.
+
+Although the print rules come **later** in source order (and should
+win the cascade by the standard "last-match wins for equal
+specificity" rule), several Chromium-based print engines
+(Microsoft Print to PDF, mobile Chrome print, Android WebView
+print) appear to evaluate `@media (max-width: 640px)` *inside*
+`@media print` (the print viewport on a phone is typically <640px)
+and let the responsive `max-height: 50vh` rule apply alongside the
+print rules. With `max-height: 50vh` of a print viewport, the
+canvas computes to less than the full A4 height → exactly the
+reported symptom (cards small + whitespace).
+
+### AC.21.3 Fix (PR #272)
+
+Inside `@media print`, add `!important` to **every** rule on
+html, body, .idp-app, .idp-preview, .idp-a4-wrap, and especially
+.idp-a4-wrap canvas. Plus:
+
+- `position: absolute; top: 0; left: 0` on the canvas, with
+  `position: relative` on every ancestor (.idp-a4-wrap,
+  .idp-preview, .idp-app, html/body). Pins the canvas to the very
+  top-left corner of the A4 page.
+- `min-width: 210mm; min-height: 297mm` on the canvas → physically
+  cannot shrink below full A4 even if some inherited rule with
+  `min-width: 0` tries to.
+- `transform: none !important` defensively — in case any animation
+  rule leaks into print mode.
+
+### AC.21.4 Verification status
+
+**SHIPPED but NOT YET CONFIRMED by user.** User asked to defer
+verification + any further fix to next session
+("NEXT CHAT MAIN SOLVE KRENGE"). Expectation: after Cloudflare
+Pages redeploys PR #272, the print preview should show cards
+filling the full A4 page, flush to the top edge, horizontally
+centered, on exactly 1 sheet.
+
+### AC.21.5 If §AC.21 fix is insufficient — fallback for §AC.22
+
+If, despite the `!important` + position: absolute fix from PR #272,
+the print preview is *still* wrong, the canvas approach itself is
+the problem. Browsers' print engines have known bugs printing
+`<canvas>` elements at high resolution (the bitmap is sometimes
+resampled at the print-engine's chosen DPI rather than honoured at
+the canvas's native 2480 × 3508). The robust fallback:
+
+**Convert the canvas to a PNG `<img>` for print.**
+
+Implementation sketch (one PR, ~30 lines):
+1. Add a hidden `<img id="printImg">` element next to the canvas
+   inside `.idp-a4-wrap`.
+2. In the `btnPrint` handler, before calling `window.print()`, do:
+   ```js
+   a4Canvas.toBlob(blob => {
+     const url = URL.createObjectURL(blob);
+     const printImg = document.getElementById('printImg');
+     printImg.onload = () => {
+       window.print();
+       URL.revokeObjectURL(url);
+     };
+     printImg.src = url;
+   }, 'image/png');
+   ```
+3. In print CSS:
+   ```css
+   @media print {
+     .idp-a4-wrap canvas { display: none !important; }
+     .idp-a4-wrap #printImg {
+       display: block !important;
+       position: absolute !important;
+       top: 0 !important; left: 0 !important;
+       width: 210mm !important; height: 297mm !important;
+       object-fit: contain !important;
+       object-position: center top !important;
+     }
+   }
+   ```
+4. In on-screen / preview CSS:
+   ```css
+   .idp-a4-wrap #printImg { display: none; }
+   ```
+
+Why this works: browser print engines render `<img>` reliably at
+the requested print size with no DPI / canvas-bitmap quirks. Same
+PNG bytes are downloadable via Save Image. PR #269 (`toBlob`)
+already proved the iOS Safari size cap is no longer an issue for
+Blob-based PNG generation, so this approach is safe.
+
+### AC.21.6 Constraints for §AC.22
+
+- Test on **real phone hardware** before shipping (the issue is
+  phone-specific).
+- Minimum diff. Don't touch the JS sheet builders.
+- One PR. Ship the `<img>` fallback as a single logical change.
+- Both `id-print.html` and `dist/id-print.html` in the PR
+  (rebuild via `node build.js` after `npm install`).
+- CSS tokens locked. No `.github/workflows/*.yml` changes.
+- Branch `devin/<unix_ts>-ac22-print-img-fallback`.
+- Ship via `/tmp/mkpr.mjs` REST API (local git writes blocked).
+
+### AC.21.7 Files / lines likely involved
+
+- `id-print.html` ~line 380–420 — print CSS block (§AC.21).
+- `id-print.html` ~line 2150–2200 — `btnPrint` handler.
+- `id-print.html` `.idp-a4-wrap` markup (search for the wrapper
+  element to add the sibling `<img>`).
