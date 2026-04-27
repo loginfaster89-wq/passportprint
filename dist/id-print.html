@@ -1109,6 +1109,18 @@ function applyMaskedFilters(destCanvas, srcCanvas, w, h, cardType, side, applyRo
     ctx.beginPath();
     ctx.rect(roi.x, roi.y, roi.w, roi.h);
     ctx.clip();
+    /* §AC.29 fix — clear + re-fill the photo region before the second
+       paint. PDF-rendered cards often have non-1.0 alpha in dark photo
+       pixels; with default source-over compositing, drawing the same
+       image twice would alpha-compound and darken the photo plus etch
+       a visible seam at the clip boundary (regression observed on
+       Aadhaar in QA). clearRect → white fillRect ensures the second
+       drawImage lands on a clean, opaque surface — pixel-identical to
+       a single paint when both filter stacks are no-op (default), and
+       correct when photoFilters diverges. */
+    ctx.clearRect(roi.x, roi.y, roi.w, roi.h);
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(roi.x, roi.y, roi.w, roi.h);
     ctx.filter = getFilterString('photo');
     ctx.drawImage(srcCanvas, 0, 0, w, h);
     ctx.filter = 'none';
