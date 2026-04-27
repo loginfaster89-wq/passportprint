@@ -676,7 +676,7 @@ const POUCH_H_MM = 95;
 //    PDFs often lack "aadhaar"/"uid" in text layer but always have
 //    these 3. Verified 2026-04-26: 4 keyword hits on test PDF.)
 // PAN: "permanent account number", "income tax", "pan",
-//      "department", "nsdl", "utiitsl"
+//      "department", "nsdl"
 // Voter: "election commission", "epic", "voter", "electoral",
 //        "electors photo identity", "polling station",
 //        "assembly constituency", "parliamentary constituency"
@@ -3056,57 +3056,6 @@ Aspect of each card ≈ 1.57 (CR80 = 1.585).
 - [x] `npm run build` clean. Both `id-print.html` and
       `dist/id-print.html` in this PR.
 
-**Rollback note:** if a different e-PAN issuer (UTIITSL, etc.) ships a
-different layout and the crop misses, the simple rollback is to loosen
-slightly: `y: 0.7500, h: 0.2050` for both front + back. The commit is
-a 2-line `CROP` table change, easy to amend.
-
----
-
-## §AC.33 PAN issuer-variant crop fallback — IN PROGRESS
-
-### AC.33.1 Trigger
-
-After the Aadhaar variant fix was verified working, the user asked:
-
-> "aap ye same kaam pancard par bhi apply kardo"
-
-### AC.33.2 Existing known risk
-
-§AC.16 already documents that the current PAN crop is measured from the
-repo sample `test-pdfs/pan-test.pdf` (Protean eGov / NSDL layout), and
-the rollback note explicitly warns that a different issuer such as
-**UTIITSL** may need a slightly looser crop.
-
-That documented loose fallback is:
-
-- keep `x / w` unchanged
-- loosen only `y / h` to:
-  - `y: 0.7500`
-  - `h: 0.2050`
-
-### AC.33.3 Fix approach
-
-Add a small runtime PAN crop branch, analogous in spirit to the Aadhaar
-variant handling:
-
-- If page text contains issuer markers such as:
-  - `utiitsl`
-  - `uti infrastructure`
-  - `uti infrastructure technology and services limited`
-- then clone `CROP.pan` and apply the documented loose fallback:
-  - front/back `y = 0.7500`
-  - front/back `h = 0.2050`
-
-The default Protean/NSDL PAN crop remains unchanged.
-
-### AC.33.4 Limitation
-
-No separate real UTIITSL PAN sample PDF is currently saved in the repo,
-so this is a documented-heuristic fallback grounded in §AC.16's
-rollback note, not a fresh pixel-measured calibration. As soon as the
-user shares an actual UTIITSL PAN sample, verify and tighten if needed.
-
 ## §AC.34 PAN sample crop strip + Photo Only source-space fix
 
 **Status:** IN REVIEW.
@@ -3149,8 +3098,9 @@ To preserve the bottom edge while removing the upper cut strip:
 - new default PAN crop: `y: 0.7729`, `h: 0.1753`
 
 Photo Only ROI was then re-tuned against the tightened PAN front crop so
-the preview stays inside the actual photo block instead of leaking the
-header.
+the preview stays inside the actual **photo rectangle** instead of
+leaking the header. Per §AC.29, this remains a rectangular photo-box
+crop, **not** a face-only crop.
 
 ### AC.34.3 Implementation
 
@@ -3168,7 +3118,7 @@ Changes:
      `[0.5141, 0.7729, 0.4314, 0.1753]`
 2. Retune `CARD_PHOTO_ROI.pan.front` to the tightened crop:
    - `[0.108, 0.220, 0.170, 0.300]` →
-     `[0.090, 0.225, 0.175, 0.320]`
+     `[0.050, 0.230, 0.225, 0.335]`
 3. Fix `paintPhotoOnly()` to compute ROI in `srcCanvas.width/height`
    space instead of always using `CR80_W/CR80_H`.
 
@@ -4366,3 +4316,58 @@ Reference Screenshots saved in `.agents/references/`:
 ### Issue 2 — Other 4 card types still un-QA'd
 
 Voter / Ayushman / Jan Aadhaar / eShram ROIs remain the estimates from §AC.29.5. Tracked as §AC.31 — stays gated on operator supplying sample PDFs.
+
+## §AC.35 PAN Photo Only UI polish + local file crash fix
+
+**Status:** SHIPPED locally, pending PR.
+
+### AC.35.1 User report
+
+After the PAN crop + Photo Only work started behaving correctly, the
+user reported two UI issues:
+
+1. In `Photo Only` mode the left photo renders, but the right side still
+   shows an empty white box with "No photo on this side".
+2. `Rounded Corners` should not be shown while `Photo Only` is active,
+   and should stay hidden for PAN cards because the PAN artwork already
+   has rounded corners baked into the source image.
+
+The user also reported that `file:///C:/tmp/passportprint/id-print.html`
+stopped loading.
+
+### AC.35.2 Root cause
+
+- The Photo Only preview always rendered two canvases side by side, even
+  when the current card type had no back-side photo ROI.
+- The `Rounded Corners` option was only treated as a generic global
+  toggle; it did not respect edit scope or card type.
+- Two Aadhaar variant branches had a missing closing brace, which caused
+  the module script to die with:
+  `SyntaxError: Unexpected token 'catch'`.
+
+### AC.35.3 Fix
+
+Files touched:
+
+- `id-print.html`
+- `dist/id-print.html`
+
+Changes:
+
+- Hide the Photo Only back canvas whenever the current card has no
+  back-side photo ROI; the remaining front canvas stays centered.
+- Hide `Rounded Corners` whenever:
+  - `Photo Only` scope is active, or
+  - detected card type is `pan`.
+- Suppress the effective rounded-corner render path for PAN even if the
+  saved preference remains checked in localStorage.
+- Restore the two missing `}` braces in the Aadhaar variant paths so the
+  `file://` page loads again.
+
+### AC.35.4 Verification
+
+- Local headless Chrome load of
+  `file:///C:/tmp/passportprint/id-print.html` now succeeds.
+- The previous `Unexpected token 'catch'` page error is gone.
+- Remaining console noise on `file://` is only font CORS warnings, which
+  affect typography but not functionality.
