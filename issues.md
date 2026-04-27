@@ -3764,3 +3764,424 @@ If the 30 px top margin is too much or too little:
   60 ≈ 5 mm, 15 ≈ 1.3 mm at 300 DPI.
 - Multi-card/Dragon/PVC layouts are unaffected (they use
   centered `marginY` calculated from total content height).
+
+## §AC.26 Default A4 sheet layout — Multi-Card → Fold & Laminate (SHIPPED — PR #281)
+
+**Status:** SHIPPED.
+
+**User report:** Step 3 (sheet layout picker) was defaulting to the
+"Multi-Card 5-pair" option. User prefers "Fold & Laminate (1-Pair)" as
+the default since most home users only need one card pair per sheet
+and the Fold & Laminate layout matches their actual paper-size /
+lamination-pouch workflow.
+
+**Fix (PR #281, commit `fdb4617`):** In `id-print.html` Step 3 layout
+picker block, swapped the `.idp-layout-opt.active` class from the
+Multi-Card button to the Fold & Laminate button, and updated the
+default `currentLayout = 'single'` (was `'multi'`). All four
+sheet-builder code paths (single / multi / dragon / pvc) untouched —
+only the default selection flipped.
+
+### AC.26.1 Verification status
+
+SHIPPED. Default landing on Step 3 now highlights Fold & Laminate;
+Multi-Card / Dragon / PVC remain selectable.
+
+### AC.26.2 Rollback
+
+Revert the `active` class swap and restore `currentLayout = 'multi'`
+in the layout-picker init block.
+
+## §AC.27 Remove Step 2 Position panel (Move pad + Zoom slider) — SHIPPED — PR #282
+
+**Status:** SHIPPED.
+
+**User report:** The "Position" panel in the Step 2 sidebar (shipped
+across §W / PR #229 for per-side Move pad and §X / PR #230 for
+per-side Zoom slider) was confusing — users were not reaching for it
+and accidental clicks on the Move arrows shifted cards off-frame.
+User asked to remove the entire Position panel. Rounded Corners,
+Swap Sides, and Photo Adjust panels stay.
+
+**Fix (PR #282, commit `945b4bc`):**
+
+Removed from `id-print.html`:
+- CSS `.idp-move*` block (move-pad styling).
+- HTML `#panelPosition` div with side radios + Move pad + Zoom
+  slider + readouts.
+- JS const refs: `panelPosition`, `movePad`, `moveStep`,
+  `moveReadout`, `positionSideRadios`, `zoomPad`, `slZoom`,
+  `zoomReadout`.
+- JS helpers: `currentPositionSide`, `refreshMoveReadout`,
+  `refreshZoomReadout`, `nudge`.
+- All move / zoom event listeners (arrow buttons, keyboard nudges,
+  zoom slider input).
+- `offset` / `scale` field initialisation from card init in both
+  `fetchPdfCard` and `processPdf`.
+- `panelPosition` toggle line in `renderPanels`.
+- `btnBack` reset block for `offset` / `scale`.
+- `offset` / `scale` resets inside `btnResetEdit`.
+
+**Retained:** `getOffset()` / `getScale()` helpers — they default to
+`{dx:0, dy:0}` / `1.0` so `drawFiltered()` continues to work
+unchanged for sheet builders. This means the per-side offset / zoom
+values that used to be live-editable are now permanently zero, but
+the rest of the rendering pipeline does not need a single line
+changed.
+
+### AC.27.1 Verification status
+
+SHIPPED. Step 2 sidebar now shows: Rounded Corners, Swap Sides
+(removed in §AC.28 — see below), Photo Adjust. No Position panel.
+
+### AC.27.2 Rollback
+
+Restore the removed CSS / HTML / JS blocks. The retained
+`getOffset()` / `getScale()` helpers will pick up the live values
+again with no further change.
+
+## §AC.28 Remove Swap Sides toggle — SHIPPED — PR #283
+
+**Status:** SHIPPED.
+
+**User report:** After §AC.27 removed the Position panel, user asked
+to also remove the Swap Sides icon-button (§AC.12 / PR #258 / PR
+#259) below the Front & Back Preview pair canvas. They never used
+it, and the preview should always render front-LEFT / back-RIGHT
+(the documented default — matches the 1-Pair Fold & Laminate sheet
+output).
+
+**Fix (PR #283):**
+
+Removed from `id-print.html`:
+- CSS `.idp-swap-row` / `.idp-swap-btn` / `.idp-swap-icon` block.
+- HTML `<div.idp-swap-row>` with `#btnSwapSides` button.
+- `@media print` selector entry `.idp-swap-row`.
+- JS state `let swapSides = false`.
+- JS const ref `btnSwapSides`.
+- `compositePair()` swap branch (front/back are no longer flipped).
+- `savePrefs()` field `swapSides`.
+- `loadPrefs()` reader for `p.swapSides` (stale values silently
+  ignored — no migration step needed since prefs are per-browser
+  localStorage and unknown fields are normal).
+- `btnSwapSides` click handler.
+
+Sheet builders (1-Pair Fold & Laminate / Multi-Card / Dragon / PVC)
+were never touched by this toggle — no change to their output.
+
+### AC.28.1 Verification status
+
+SHIPPED. Step 2 sidebar now shows only: Rounded Corners +
+Photo Adjust. Preview always renders front-LEFT / back-RIGHT.
+
+### AC.28.2 Rollback
+
+Restore the removed CSS / HTML / JS blocks listed above. State key
+`swapSides` will start being persisted again in `idp:prefs:v1` —
+old prefs blobs (where the field was dropped) will read as `false`
+which matches the historical default.
+
+### AC.28.3 Updated Step 2 sidebar after §AC.27 + §AC.28
+
+Final composition:
+- Rounded Corners (checkbox)
+- Photo Adjust panel (Brightness / Contrast / Saturation sliders +
+  preset buttons + Reset)
+
+This is the cleanest the Step 2 sidebar has been since §M Phase 1.
+
+## §AC.29 Photo Only edit mode — RESEARCH (NOT YET IMPLEMENTED)
+
+**Status:** RESEARCH ONLY. Coding PR will follow in next session.
+
+### AC.29.1 User request (verbatim, Hinglish)
+
+> "PHOTO ADJUST WALI EDIT KO IS TARAH BNAANA HAI KI VO USER KI ID
+> PAR MOJUD PHOTO PAR HI APPLY HO POORE CARD PAR NHI"
+>
+> Then, after clarification:
+>
+> "MUJE ISE AUTO AKRNA HAI KOI BOX WGERA WALA KAAM NHI KARNA HI.
+> JAB USER Photo Only WALE OPTION APR CLICK KREN TOH SAAMNE USERKI
+> PHOTO AA JAYE JO ID MAIN HAI FIR USER USS PHOTO KI EDIT KAR SKE
+> OR JAB Whole Card PAR SWITCH KRE TOH FIR PURA CARD PAR WORK HOGA
+> SIRF JHA PAR ID MAIN PHOTO HAI USERKI USPAR KOI EDIT KAAM NHI
+> KREGI."
+>
+> Visual reference attached (an earlier Devin prototype):
+> `attached_assets/Screenshot_(279)_1777278037084.png` —
+> shows `[Full Document] [Photo Only]` toggle inside an "Edit
+> before printing" panel, with Photo Only mode displaying the
+> cropped ID photo (a woman's bust portrait) centered with white
+> padding around it, and Brightness / Contrast / Saturation /
+> Warmth / Shadows sliders below.
+>
+> User clarification on sliders: "BAKI NECHE JO EDJUST KARNE WALI
+> SETTINGS HAI WO AB JAISI HAI WAISI RHENE DO" — keep the current
+> 3 sliders (Brightness / Contrast / Saturation), do NOT add Warmth
+> or Shadows. Only the screenshot's TOGGLE + PREVIEW behaviour
+> matters.
+
+### AC.29.2 Required behaviour
+
+1. New toggle `[Whole Card] [Photo Only]` added to the existing
+   Photo Adjust panel (`#panelEdit`) in Step 2. Default: `Whole Card`.
+
+2. **Photo Only mode**:
+   - Hide the existing landscape pair canvas (`#pairCanvas`).
+   - Show a new preview surface that displays ONLY the cropped
+     photo region of the ID (rectangular crop, NOT face-only —
+     i.e. the photo rectangle that physically sits on the card,
+     including the small white margin around the head and
+     shoulders). Centered horizontally, white padding around it
+     (matching the screenshot reference).
+   - The 3 existing sliders (Brightness / Contrast / Saturation)
+     edit ONLY the photo region. Live preview.
+   - Per-side: front photo vs back photo (most cards have a
+     photo on front only — see AC.29.4).
+
+3. **Whole Card mode**:
+   - Behave like today (landscape pair canvas, 3 sliders) BUT the
+     filters now apply to the whole card MINUS the photo region.
+     I.e. photo region keeps whatever Photo-Only-mode filters were
+     last set on it (or the original pixels if user never opened
+     Photo Only).
+   - Photo region is masked out via canvas clip path during the
+     whole-card filter pass, then the photo (with its own filters)
+     is composited back on top.
+
+4. **Persistence**: `idp:prefs:v1` extended to store BOTH filter
+   stacks separately:
+   ```
+   {
+     rounded: boolean,
+     bright: int, contrast: int, sat: int,         // whole-card
+     photoBright: int, photoContrast: int, photoSat: int,
+     editScope: 'whole' | 'photo'
+   }
+   ```
+   Old blobs without the photo* keys default to 100 (no-op).
+
+5. **Auto-detection**: photo ROI per (cardType, side) is HARDCODED
+   in a new constant `CARD_PHOTO_ROI` (fractional CR80 coords —
+   see AC.29.5). No box drawing, no face detection, no new deps.
+   Card type is already auto-detected (`detectedType`) from the
+   PDF text via `detectCardType(fullText)`.
+
+6. **Unknown card type / side without photo ROI**:
+   - Photo Only toggle is DISABLED (greyed out) with tooltip
+     "Photo region detect nahi hua — Whole Card mode use karo."
+   - `editScope` forced to `'whole'`.
+   - For partial cases (front has ROI but back doesn't), show a
+     centered placeholder text "No photo on this side" in the
+     Photo Only preview's back half.
+
+### AC.29.3 Existing infrastructure that helps
+
+1. **Card type already auto-detected.** `detectedType` is one of
+   `aadhaar | pan | voter | ayushman | janaadhaar | eshram |
+   unknown`. Set in `processPdf` and per-card in `fetchPdfCard`.
+
+2. **`drawFilteredToCanvas(canvas, srcCanvas, w, h, cardType, side)`
+   already takes cardType + side.** This is where the new
+   masked-filter logic plugs in.
+
+3. **`cropRegion(srcCanvas, [x, y, w, h])` helper exists.** Same
+   fractional-coord convention will be used for `CARD_PHOTO_ROI`.
+
+4. **`compositePair(canvas, frontReady, backReady)`** runs after
+   `drawFilteredToCanvas` produces the per-side ready canvases.
+   Sheet builders (1-Pair / Multi-Card / Dragon / PVC) all consume
+   `frontReady` / `backReady`. ZERO sheet-builder change needed —
+   the merged "card filter outside ROI + photo filter inside ROI"
+   will already be baked into the ready canvas.
+
+5. **Preview canvas swap pattern** is precedented (`#pairCanvas`
+   vs no-card placeholder). New `#photoOnlyCanvas` follows the
+   same `display:none` toggle approach.
+
+### AC.29.4 Photo region present per side (research summary)
+
+Measured from `.agents/references/aadhaar-clean-pvc-layout.png`,
+`.agents/references/pan-clean-pvc-layout.png`, and standard
+public layouts of the other 4 ID types:
+
+| Card type    | Front photo? | Back photo? | Notes                                        |
+|--------------|--------------|-------------|----------------------------------------------|
+| Aadhaar      | YES          | NO          | Photo top-left, Aadhaar number bottom        |
+| PAN          | YES          | NO          | Photo top-left, signature box bottom-left    |
+| Voter ID     | YES          | NO          | Photo left, name/address right               |
+| Ayushman     | YES          | NO          | Photo left, PMJAY ID right                   |
+| Jan Aadhaar  | YES          | NO          | Photo left, family info right                |
+| eShram       | YES          | NO          | Photo left, name/UAN right                   |
+
+**Implication:** `CARD_PHOTO_ROI[type].back` will be `null` for all
+6 types in the v1 implementation. Photo Only mode is effectively
+a front-side-only feature for now. Back-side preview in Photo Only
+mode shows the "No photo on this side" placeholder. (If a future
+card type ships with a back-side photo, just add a `back` ROI to
+the table — no other code change.)
+
+### AC.29.5 Proposed `CARD_PHOTO_ROI` table (starting values — to be tightened in coding PR against test PDFs)
+
+Fractional coords inside the post-crop CR80 card canvas
+(1011 × 638 px). Origin top-left. Format: `[x, y, w, h]`.
+
+```js
+const CARD_PHOTO_ROI = {
+  aadhaar: {
+    // Photo box on front (top-left bust portrait, including small
+    // white margin around the head). Measured from
+    // .agents/references/aadhaar-clean-pvc-layout.png:
+    // ~x=4%, y=22%, w=22%, h=50% of the front half.
+    front: [0.04, 0.22, 0.22, 0.50],
+    back:  null
+  },
+  pan: {
+    // Photo box on front of e-PAN. Measured from
+    // .agents/references/pan-clean-pvc-layout.png:
+    // ~x=4%, y=22%, w=18%, h=40% of the front half.
+    front: [0.04, 0.22, 0.18, 0.40],
+    back:  null
+  },
+  voter: {
+    // No reference image yet — starting estimate based on standard
+    // e-EPIC layout (photo larger than Aadhaar/PAN, occupies left
+    // ~quarter of the card top to bottom).
+    front: [0.04, 0.20, 0.25, 0.55],
+    back:  null
+  },
+  ayushman: {
+    // No reference yet — photo on left, smaller than Voter.
+    front: [0.04, 0.20, 0.22, 0.55],
+    back:  null
+  },
+  janaadhaar: {
+    // No reference yet.
+    front: [0.04, 0.20, 0.22, 0.55],
+    back:  null
+  },
+  eshram: {
+    // No reference yet — eShram card photo upper-left.
+    front: [0.04, 0.18, 0.22, 0.55],
+    back:  null
+  }
+};
+```
+
+**These are STARTING values.** During the coding PR they MUST be
+tightened against real test PDFs — the only two on-repo samples
+are `test-pdfs/aadhaar-test.pdf` and `test-pdfs/pan-test.pdf`.
+For the other 4 types we ship the estimates and add a TODO note
+asking the user to send a sample PDF when one is available.
+Acceptable error budget: ±3% on each axis (the photo box has a
+white margin that absorbs small inaccuracies — filters applied
+slightly outside the photo just hit white pixels which are
+imperceptible).
+
+### AC.29.6 Implementation outline (coding PR — next session)
+
+Files: `id-print.html` only (source). Then `node build.js` →
+`dist/id-print.html` in same PR.
+
+1. **CSS**: add `.idp-scope-toggle` (segmented button row, reuse
+   existing `.idp-option` token palette — no new colors). Add
+   `.idp-photo-only-canvas` (white background, photo centered with
+   ~10% padding on each side). NO new CSS variables, NO new fonts.
+
+2. **HTML** (inside `#panelEdit`, above the existing slider rows):
+   ```html
+   <div class="idp-scope-toggle" role="tablist" aria-label="Edit scope">
+     <button type="button" id="btnScopeWhole" class="idp-scope-btn is-active"
+             role="tab" aria-selected="true">Whole Card</button>
+     <button type="button" id="btnScopePhoto" class="idp-scope-btn"
+             role="tab" aria-selected="false">Photo Only</button>
+   </div>
+   <canvas id="photoOnlyFrontCanvas" class="idp-photo-only-canvas idp-hidden"></canvas>
+   <canvas id="photoOnlyBackCanvas" class="idp-photo-only-canvas idp-hidden"></canvas>
+   ```
+   (Note: `pairCanvas` stays in DOM — toggle visibility via
+   `.idp-hidden`.)
+
+3. **JS state**:
+   ```js
+   let editScope = 'whole';
+   let cardFilters = { bright: 100, contrast: 100, sat: 100 };
+   let photoFilters = { bright: 100, contrast: 100, sat: 100 };
+   ```
+   The 3 existing sliders bind to whichever filter set matches
+   the current `editScope`.
+
+4. **`getFilterString(scope)`** → returns the CSS filter string
+   for the requested scope (default `editScope`).
+
+5. **`drawFilteredWithPhotoMask(canvas, srcCanvas, type, side)`**
+   — the new render function:
+   - Draw whole `srcCanvas` to `canvas` with `cardFilters` filter.
+   - If `CARD_PHOTO_ROI[type]?.[side]` exists:
+     a. Compute pixel-space ROI: `[rx, ry, rw, rh]` from fractional
+        coords scaled to canvas dimensions.
+     b. `ctx.save(); ctx.beginPath(); ctx.rect(rx, ry, rw, rh);
+        ctx.clip();`
+     c. Re-draw the same source region with `photoFilters` filter
+        (so the photo box gets a fresh, independent filter pass).
+     d. `ctx.restore();`
+   - Replaces `drawFilteredToCanvas` for the front/back ready
+     canvases when `editScope === 'photo'` was ever touched
+     (otherwise the existing un-masked path stays — minimum diff).
+
+6. **`paintPhotoOnly(canvas, srcCanvas, roi)`** — paints the
+   cropped photo on the white-bg `idp-photo-only-canvas`
+   (centered, padded). Used by Photo Only mode preview.
+
+7. **Toggle handler**: switching `editScope` → re-bind sliders to
+   the right state object, set slider DOM values, swap canvas
+   visibility, call `applyFilters()` to re-paint everything.
+
+8. **`savePrefs` / `loadPrefs`** updated for the new schema fields.
+   Old prefs without photo* keys read defaults.
+
+9. **`applyBatchFilters`** updated to use the same masked render
+   when `editScope` has ever been set or `photoFilters` differ
+   from defaults. Otherwise unchanged.
+
+### AC.29.7 What stays untouched (sacred zones — RULE 1)
+
+- Sheet builders (`buildSingleSheet`, `buildMultiCardSheet`,
+  `buildDragonSheet`, `buildPVCTraySheet`) — they consume the
+  ready canvases. ZERO change.
+- `CROP` table (per-type page-area crops). ZERO change.
+- `detectCardType` / keyword arrays. ZERO change.
+- `roundedCorners` / `cutMarks` / print-CSS. ZERO change.
+- §AC.27 / §AC.28 removals. ZERO regression.
+
+### AC.29.8 Open questions for next session (low-stakes — proceed with sensible defaults if user is silent)
+
+1. Toggle wording: `[Whole Card] [Photo Only]` (current plan) vs
+   `[Full Card] [Photo Only]` vs `[Full Document] [Photo Only]`
+   (the screenshot's wording). User showed the screenshot but
+   said "neeche wali settings ab jaisi waisi rehne do" — they
+   only locked in the SLIDERS, not the toggle wording. Default:
+   `Whole Card`.
+
+2. Photo Only preview backdrop: pure white (matches screenshot)
+   vs the surface token `var(--surface)`. Default: white (the
+   user reference is white).
+
+3. ROI tightening: do we ship v1 with the 6-card estimate table
+   in AC.29.5 (with a "estimates — please send sample PDF" note
+   for the 4 unmeasured types) or wait for user to send sample
+   PDFs first? Default: ship v1 with estimates, iterate.
+
+4. "Auto-enhance face only" preset (suggested at end of last
+   chat): NOT included in v1 scope. Track as §AC.30 candidate.
+
+### AC.29.9 PR plan (next session)
+
+- ONE code PR for §AC.29 (per Rule #12).
+- Branch: `devin/<unix_ts>-ac29-photo-only-edit`.
+- Files: `id-print.html` + `dist/id-print.html`.
+- After merge, this `issues.md §AC.29` section gets updated to
+  SHIPPED with the PR number, plus an `AC.29.10 Verification
+  status` block following the §AC.27 / §AC.28 pattern.
+

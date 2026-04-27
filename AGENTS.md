@@ -541,22 +541,36 @@ unlock, auto-detect, front+back preview, CR80 output, A4 sheet).
   printed output. Fix: `startY` → 30, footer `fillText` removed
   from all 4 builders. AWAITING TEST on real phone.
   See `issues.md §AC.25`.
-- **NEXT — pick from candidates** (see SKILL.md §"TASK NEXT
-  SESSION" for the full list; no current priority — wait for
-  user to confirm §AC.25 on phone, then pick from below):
-  A. Audit multi-card / Dragon / PVC layouts for the same
-     perforation-strip artefact + flush-top treatment, now that
-     PAN also rides on the same `buildSingleSheet` path.
-  B. Phase 4 P3 Master Settings (DPI / padding per printer,
-     persist in localStorage).
-  C. Phase 4 P3 PrePrinted Card mode (back-only sheets).
-  D. Phase 4 P4 Printer presets (Epson L805 etc), BigQR toggle,
-     other-card overlays.
-  E. "Print Tip" hint card on the 1-Pair preview noting the
-     bottom half of the sheet is reusable.
-  Pick whichever the user prioritises. Default to (A) if they
-  notice the same dashed line on the multi-card / Dragon / PVC
-  outputs after PR #260 deploys.
+- **§AC.26 SHIPPED (PR #281) — default A4 sheet layout flipped
+  from Multi-Card to Fold & Laminate.** Step 3 layout picker now
+  highlights the 1-Pair Fold & Laminate option on first paint;
+  `currentLayout` initialised to `'single'` instead of `'multi'`.
+  All 4 sheet-builder code paths untouched. See `issues.md §AC.26`.
+- **§AC.27 SHIPPED (PR #282) — Step 2 Position panel removed.**
+  Per-side Move pad (§W / PR #229) + per-side Zoom slider (§X /
+  PR #230) deleted along with their CSS / DOM refs / event
+  handlers / panel toggle / reset blocks. `getOffset()` /
+  `getScale()` helpers kept — they default to `{dx:0,dy:0}` /
+  `1.0` so `drawFiltered` and all sheet builders work unchanged.
+  See `issues.md §AC.27`.
+- **§AC.28 SHIPPED (PR #283) — Swap Sides toggle removed.**
+  `.idp-swap-row` / `.idp-swap-btn` CSS + `#btnSwapSides` HTML +
+  `swapSides` state / prefs key / compositePair branch / click
+  handler all deleted. Preview now always renders front-LEFT /
+  back-RIGHT. Step 2 sidebar reduced to: Rounded Corners +
+  Photo Adjust panel. See `issues.md §AC.28`.
+- **§AC.29 RESEARCH (NOT YET CODED) — Photo Only edit mode.**
+  User wants a `[Whole Card] [Photo Only]` toggle inside the
+  Photo Adjust panel. In Photo Only mode the preview shows ONLY
+  the cropped ID photo (rectangular crop, white padding around)
+  and the existing 3 sliders edit just that region; in Whole Card
+  mode filters apply to the rest of the card and the photo region
+  is masked out so it keeps its independent filter stack. Auto
+  ROI per detected card type — NO draggable box, NO new deps,
+  NO face detection. Hardcoded `CARD_PHOTO_ROI` table (fractional
+  CR80 coords). Sheet builders remain ZERO-change. Full plan,
+  ROI table, implementation outline, and open questions are in
+  `issues.md §AC.29`. **NEXT SESSION = ship §AC.29 code PR.**
 - **Image-saving discipline (project rule).** Every reference image
   the user attaches goes into `.agents/references/<descriptive-name>.png`
   AND gets cited in the relevant `issues.md` section so future

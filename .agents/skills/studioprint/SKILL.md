@@ -665,67 +665,122 @@ Highlights:
   from clipping the canvas right edge. No JS / sheet-builder
   changes. Dragon (1205×1795) and PVC (1417×1417) keep their
   natural aspect ratio (no distortion).
+- §AC.18–§AC.25 SHIPPED (PRs #269–#279). See AGENTS.md +
+  `issues.md` for detailed entries. §AC.24 (PR #277) CONFIRMED
+  WORKING on real phone; §AC.25 (PR #279) AWAITING TEST.
+- §AC.26 SHIPPED — PR #281 Default A4 sheet layout flipped from
+  Multi-Card to Fold & Laminate. Step 3 picker `.idp-layout-opt`
+  active class moved; `currentLayout` initialised to `'single'`
+  instead of `'multi'`. All 4 sheet builders untouched.
+- §AC.27 SHIPPED — PR #282 Step 2 Position panel removed
+  (per-side Move pad §W / PR #229 + per-side Zoom slider §X /
+  PR #230). All CSS / DOM refs / event handlers / panel-toggle
+  line / `btnBack` reset block / `btnResetEdit` offset+scale
+  resets deleted. `getOffset()` / `getScale()` helpers RETAINED
+  — they now always return `{dx:0,dy:0}` / `1.0` so
+  `drawFiltered` and all sheet builders work unchanged.
+- §AC.28 SHIPPED — PR #283 Swap Sides toggle (§AC.12 / PR #258 /
+  PR #259) removed. `.idp-swap-row` / `.idp-swap-btn` /
+  `.idp-swap-icon` CSS deleted, `<div.idp-swap-row>` +
+  `#btnSwapSides` HTML deleted, `swapSides` state +
+  `compositePair` swap branch + `savePrefs.swapSides` field +
+  `loadPrefs` reader for `p.swapSides` + click handler all
+  deleted. Sheet builders ZERO change. Step 2 sidebar after
+  §AC.27 + §AC.28 = Rounded Corners + Photo Adjust panel only.
+- §AC.29 RESEARCH (NOT YET CODED) — Photo Only edit mode.
+  `[Whole Card] [Photo Only]` toggle inside Photo Adjust panel.
+  Photo Only mode = preview shows only the cropped ID photo
+  (rectangular crop, white padding, 3 sliders edit JUST that
+  region). Whole Card mode = filters apply to card EXCEPT photo
+  region (photo region keeps its own filter stack baked in).
+  Auto ROI per `detectedType` via hardcoded `CARD_PHOTO_ROI`
+  table (fractional CR80 coords). NO box drawing, NO new deps,
+  NO face detection. Sheet builders remain ZERO-change because
+  the merged result is baked into `frontReady` / `backReady`
+  before sheet builders consume them. Full plan in
+  `issues.md §AC.29`. **THIS IS THE TASK FOR THE NEXT SESSION
+  — see updated TASK block below.**
 
 Test PDFs repo mein saved hain:
 test-pdfs/pan-test.pdf (password: 05071999)
 test-pdfs/aadhaar-test.pdf (password: SUNI1986)
 
 ═══════════════════════════════════════════════════════════════
-TASK (NEXT SESSION) — §AC.25 awaiting phone test
+TASK (NEXT SESSION) — §AC.29 Photo Only edit mode (CODE PR)
 ═══════════════════════════════════════════════════════════════
 
-§AC.11–§AC.25 are all SHIPPED (PRs #251–#279). §AC.24 (PR #277)
-CONFIRMED WORKING on real phone. §AC.25 (PR #279) is the latest
-fix and is AWAITING TEST on real phone hardware.
+§AC.11–§AC.28 are all SHIPPED (PRs #251–#283). §AC.24 (PR #277)
+CONFIRMED WORKING on real phone. §AC.29 is RESEARCH-ONLY and is
+the next coding task — full plan, ROI table, implementation
+outline, and open questions live in `issues.md §AC.29`.
 
-**On the next session, first do this:**
-1. Ask the user to open `https://studioprint.pages.dev/id-print`
-   on their phone (force-quit the browser first to bust the
-   service-worker / Cloudflare cache), upload
-   `test-pdfs/aadhaar-test.pdf` (pw `SUNI1986`), tap 🖨 Print,
-   and screenshot the print preview dialog.
-2. Save the screenshot under
-   `.agents/references/ac25-phone-result-<YYYYMMDD>.png` and
-   quote it in `issues.md §AC.25.1`.
+**On the next session, do exactly this — do NOT re-research:**
 
-**Then branch on the result:**
-- **If print is correct (cards have small top margin, no info
-  text below cards, horizontally centered, no cookie banner,
-  on BOTH A4 and Letter)** → §AC.25 closes GREEN. Update
-  `issues.md §AC.25.1` to CONFIRMED, update this SKILL.md
-  status block, and pick from the standing candidates list below.
-- **If the top margin is wrong** (too much / too little) →
-  adjust `startY` in `buildSingleSheet()`: 30 ≈ 2.5 mm,
-  60 ≈ 5 mm, 15 ≈ 1.3 mm at 300 DPI. Open as §AC.26.
-- **If a NEW symptom appears** → open §AC.26 with a fresh
-  phone screenshot, hypothesise root cause, and ship a
-  minimum-diff fix.
+1. Read `issues.md §AC.29` end-to-end (§AC.29.1 through §AC.29.9).
+   That section is the spec. Anything missing → ask the user
+   ONCE in Hinglish, then proceed with sensible defaults.
 
-**Standing candidates list (no priority — pick whichever the user wants):**
+2. Open ONE code PR for §AC.29 implementing the plan in
+   `issues.md §AC.29.6`. Branch:
+   `devin/<unix_ts>-ac29-photo-only-edit`. Files: `id-print.html`
+   + `dist/id-print.html`. Per Rule #12 — one PR per logical task.
 
-A. **Audit multi-card / Dragon / PVC layouts for the same
-   perforation-strip artefact.** The crop changes in §AC.14
-   (Aadhaar) and §AC.16 (PAN) are global (CROP entries are shared),
-   so those layouts should already benefit. Verify visually and
-   tighten the *top placement* of the first row in
-   `buildMultiCardSheet` to match the §AC.13 / §AC.14 / §AC.15
-   "flush at top, less waste, black top-line" treatment if the user
-   wants symmetry across all four layouts.
+3. The 4 open questions in `issues.md §AC.29.8` have sensible
+   defaults already documented — apply them unless the user
+   speaks up:
+   - Toggle wording: `Whole Card` / `Photo Only`.
+   - Photo Only backdrop: pure white.
+   - ROI v1: ship the 6-card estimate table from §AC.29.5,
+     iterate.
+   - Auto-enhance face preset: NOT in v1 (track as §AC.30).
 
-B. **Phase 4 P3 Master Settings.** DPI / padding / margins per
-   printer, persisted in localStorage (extend `idp:prefs:v1` or new
-   `idp:printer:v1`).
+4. Hard "do not touch" zones (`issues.md §AC.29.7`):
+   - Sheet builders (`buildSingleSheet`, `buildMultiCardSheet`,
+     `buildDragonSheet`, `buildPVCTraySheet`) — ZERO change.
+   - `CROP` table — ZERO change.
+   - `detectCardType` / keyword arrays — ZERO change.
+   - `roundedCorners` / print CSS — ZERO change.
+   - §AC.27 / §AC.28 removals — ZERO regression (do not
+     accidentally re-introduce Position panel or Swap Sides).
 
-C. **Phase 4 P3 PrePrinted Card mode** (back-only sheets — for users
-   who buy pre-printed Aadhaar/PAN card stock and only need the
-   back side printed).
+5. After ship, open `issues.md §AC.29.10` (new sub-section) with
+   verification status + reference screenshot saved at
+   `.agents/references/ac29-photo-only-result-<YYYYMMDD>.png`.
 
-D. **Phase 4 P4 Printer presets** (Epson L805 etc), BigQR toggle,
-   other-card overlays (Voter / Ayushman / Jan Aadhaar — fresh
-   design from scratch since the PAN overlays were deleted in
-   PR #252).
+**Standing candidates list (only after §AC.29 ships — pick whichever the user wants):**
 
-E. **"Print Tip" hint card** on the 1-Pair preview saying
+A. **§AC.30 (suggested) — "Auto-enhance face only" preset.**
+   One-click preset inside Photo Only mode (bright +10,
+   contrast +15, sat +5 — common skin-tone polish).
+
+B. **§AC.31 (suggested) — Tighten `CARD_PHOTO_ROI` for the 4
+   unmeasured types** (Voter / Ayushman / Jan Aadhaar / eShram)
+   once the user supplies sample PDFs.
+
+C. **Audit multi-card / Dragon / PVC layouts for the same
+   perforation-strip artefact** (carry-over from pre-§AC.29
+   list). The crop changes in §AC.14 (Aadhaar) and §AC.16 (PAN)
+   are global (CROP entries are shared), so those layouts should
+   already benefit. Verify visually and tighten the *top
+   placement* of the first row in `buildMultiCardSheet` to match
+   the §AC.13 / §AC.14 / §AC.15 "flush at top, less waste,
+   black top-line" treatment if the user wants symmetry across
+   all four layouts.
+
+D. **Phase 4 P3 Master Settings.** DPI / padding / margins per
+   printer, persisted in localStorage (extend `idp:prefs:v1` or
+   new `idp:printer:v1`).
+
+E. **Phase 4 P3 PrePrinted Card mode** (back-only sheets — for
+   users who buy pre-printed Aadhaar/PAN card stock and only
+   need the back side printed).
+
+F. **Phase 4 P4 Printer presets** (Epson L805 etc), BigQR
+   toggle, other-card overlays (Voter / Ayushman / Jan Aadhaar
+   — fresh design from scratch since the PAN overlays were
+   deleted in PR #252).
+
+G. **"Print Tip" hint card** on the 1-Pair preview saying
    "Bottom half is reusable — feed sheet again for second pair."
    (Suggested at the end of PR #260; user has not committed.)
 
@@ -751,10 +806,16 @@ Hard rules (do NOT skip — see AGENTS.md):
    committed to repo, cited by its `attached_assets/` filename) AND
    gets quoted in the relevant `issues.md` section.
 
-State of `idp:prefs:v1` schema (post-§AC.13):
-  `{ rounded: boolean, swapSides: boolean,
+State of `idp:prefs:v1` schema (post-§AC.28):
+  `{ rounded: boolean,
      bright: int, contrast: int, sat: int }`
-  — `cutMarks` was REMOVED; stale values from old blobs are ignored.
+  — `cutMarks` REMOVED in §AC.13 (PR #259).
+  — `swapSides` REMOVED in §AC.28 (PR #283).
+  — Stale values for both keys from old blobs are silently ignored
+    (no migration code — `loadPrefs` only reads known fields).
+  — §AC.29 will EXTEND this schema with `editScope: 'whole'|'photo'`,
+    `photoBright: int`, `photoContrast: int`, `photoSat: int`.
+    Old blobs without those keys default to `'whole'` + 100/100/100.
 
 State of `CROP.aadhaar` (post-§AC.14):
   front: [0.0520, 0.6821, 0.4471, 0.1995]
