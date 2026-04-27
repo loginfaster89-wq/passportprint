@@ -521,7 +521,9 @@ issues.md — full audit + ID Card Print arc
    §AC.19 SHIPPED: print preview pinned 210mm × 297mm, 1 sheet (PR #270) —
    §AC.20 SHIPPED: 1-Pair cards flush to top + center top object-position (PR #271) —
    §AC.21 SHIPPED: !important + position:absolute on print canvas (PR #272 — superseded by §AC.22) —
-   §AC.22 SHIPPED, AWAITING TEST: render canvas → PNG <img> for print (PR #274))
+   §AC.22 SHIPPED: render canvas → PNG <img> for print (PR #274) —
+   §AC.23 SHIPPED: paper-agnostic 100% sizing + .sp-cookie hide in print (PR #276 — partially superseded by §AC.24) —
+   §AC.24 SHIPPED, AWAITING TEST: #printImg anchored to viewport via position:fixed + 100vw/100vh (PR #277))
 
 Reference images in .agents/references/ and `attached_assets/` — open
 the latest user-attached `aadhaar-a4-sheet_*.png`, the matching
@@ -529,22 +531,37 @@ the latest user-attached `aadhaar-a4-sheet_*.png`, the matching
 reference), and `ac21-print-still-broken.png` (§AC.21 reference)
 before starting any new layout work.
 
-Last shipped: PR #274 (fix: §AC.22 — print path now rasterises the
-A4 canvas to a PNG via `canvas.toBlob`, swaps the bytes onto a
-hidden `<img id="printImg">` sibling, and prints the image
-instead of the canvas. Print CSS rules from §AC.21 carry over
-verbatim, just re-pointed at `#printImg`. The canvas itself is
-forced `display: none !important` in `@media print`. Reason:
-browser print engines mis-handle 2480 × 3508 canvas bitmaps —
-they render `<img>` reliably at the requested print size).
+Last shipped: PR #277 (fix: §AC.24 — anchor `#printImg` to the
+page viewport via `position: fixed` + `100vw` / `100vh`. §AC.23's
+`height: 100%` chain collapsed to 0 on mobile Chrome / Android
+print engines because they don't always give `<html>` a definite
+height in print mode, leaving a blank A4 page. `position: fixed`
++ viewport units bypass the ancestor chain so the image always
+fills the page regardless of paper size or chain breakage).
 
-**§AC.22 STATUS: SHIPPED, AWAITING TEST.** No open §AC item.
-After Cloudflare Pages redeploys PR #274, ask the user to re-test
-print preview on phone. Expectation: cards fill A4, flush to top,
-1 sheet — same as desktop. If the print is finally correct,
-§AC.22 closes GREEN. If a new symptom appears, open §AC.23 with
-a fresh phone screenshot. Otherwise pick from the standing
-candidates list at the bottom of this file.
+Recent print-fix arc on phone (each one fixed the previous one's
+residual symptom — read end-to-end before any further print work):
+1. PR #274 (§AC.22): canvas → PNG `<img>` swap. Got cards to top
+   of page on phone but they appeared right-shifted on **Letter**
+   paper + the cookie banner ("We only use essential cookies for
+   login") was visible at the bottom.
+2. PR #276 (§AC.23): switched fixed `210mm × 297mm` sizing to
+   `100%` so it'd work on any paper, plus added `.sp-cookie` to
+   the @media print hide list. Cookie hide worked. The 100%
+   sizing made the page completely blank on phone (mobile
+   Chrome's broken `html` height in print mode).
+3. PR #277 (§AC.24): `#printImg` now `position: fixed` +
+   `100vw`/`100vh`. Bypasses the broken percentage-height chain.
+
+**§AC.24 STATUS: SHIPPED, AWAITING TEST.** No open §AC item.
+After Cloudflare Pages redeploys PR #277, ask the user to re-test
+print preview on phone (force-quit + reopen the browser to bust
+the service-worker / CDN cache). Expectation: cards fill the
+page, horizontally centered, flush at top edge, no cookie banner,
+on **both** A4 and Letter paper selections. If the print is
+finally correct, §AC.24 closes GREEN. If a NEW symptom appears,
+open §AC.25 with a fresh phone screenshot. Otherwise pick from
+the standing candidates list at the bottom of this file.
 
 Shipped summary (don't redo) — see SKILL.md §9 for the full PR list.
 Highlights:
@@ -655,9 +672,18 @@ test-pdfs/aadhaar-test.pdf (password: SUNI1986)
 TASK (NEXT SESSION) — none open
 ═══════════════════════════════════════════════════════════════
 
-§AC.11–§AC.22 are all SHIPPED (PRs #251–#274). §AC.22 (PR #274)
+§AC.11–§AC.24 are all SHIPPED (PRs #251–#277). §AC.24 (PR #277)
 is the latest fix and is AWAITING TEST on real phone hardware.
-**No new code work until the user confirms §AC.22 on phone.**
+**No new code work until the user confirms §AC.24 on phone.**
+
+The §AC.22 → §AC.23 → §AC.24 sequence is a chain of phone-print
+fixes: §AC.22 swapped canvas → PNG `<img>`, §AC.23 made the
+sizing paper-agnostic + hid the cookie banner, §AC.24 fixed
+§AC.23's blank-page regression by anchoring the image to the
+page viewport via `position: fixed` + `100vw` / `100vh`. Read
+all three issues.md sections (§AC.22, §AC.23, §AC.24) plus the
+"Last shipped" / "Recent print-fix arc" block above before
+touching any print CSS.
 
 **On the next session, first do this:**
 1. Ask the user to open `https://studioprint.pages.dev/id-print`
@@ -666,24 +692,32 @@ is the latest fix and is AWAITING TEST on real phone hardware.
    `test-pdfs/aadhaar-test.pdf` (pw `SUNI1986`), tap 🖨 Print,
    and screenshot the print preview dialog.
 2. Save the screenshot under
-   `.agents/references/ac22-phone-result-<YYYYMMDD>.png` and
-   quote it in `issues.md §AC.22.1`.
+   `.agents/references/ac24-phone-result-<YYYYMMDD>.png` and
+   quote it in `issues.md §AC.24.1`.
 
 **Then branch on the result:**
-- **If print is correct (cards fill A4, flush to top, 1 sheet)
-  → §AC.22 closes GREEN.** Update `issues.md §AC.22.1` to
-  CONFIRMED, update this SKILL.md status block, and pick from
-  the standing candidates list below.
-- **If a NEW symptom appears** (e.g. image too slow to render,
-  print fires twice, image quality degraded vs canvas) → open
-  §AC.23 with the fresh phone screenshot, hypothesise root
+- **If print is correct (cards fill the page, horizontally
+  centered, flush at top, no cookie banner, on BOTH A4 and
+  Letter)** → §AC.24 closes GREEN. Update `issues.md §AC.24.1`
+  to CONFIRMED, update this SKILL.md status block, and pick
+  from the standing candidates list below.
+- **If a NEW symptom appears** (e.g. image too small, scaled
+  weirdly, print fires twice, image quality degraded) → open
+  §AC.25 with the fresh phone screenshot, hypothesise root
   cause, and ship a minimum-diff fix.
-- **If the OLD symptom persists** (cards still small / whitespace
-  / 2 sheets even with the `<img>` swap) → very unlikely given
-  the canvas-bitmap diagnosis, but if so, open §AC.23 and look
-  at the page-level `@page { size: A4; margin: 0; }` rule plus
-  the user's print-dialog "Scale" / "Fit to page" setting (some
-  Chromium mobile dialogs default to ~94% scale).
+- **If the page is STILL blank** → check whether
+  `position: fixed` is being stripped by the print engine on
+  the user's phone (some legacy Android print engines treat
+  fixed-position elements as no-paint in print). Diagnostic:
+  ask the user to also try **Chrome's "Save as PDF"** option
+  in the print dialog, which uses the desktop-style print
+  pipeline; if that works but the actual printer driver path
+  doesn't, fall back to drawing the canvas content as a
+  pre-sized inline `<img>` inside `.idp-a4-wrap` with explicit
+  `width: 21cm; height: 29.7cm` (centimetre units, not
+  millimetres — some older engines parse `cm` more reliably
+  than `mm`) and `position: static`, with the wrapper
+  centered via `margin: 0 auto`. Open as §AC.25.
 
 **Standing candidates list (no priority — pick whichever the user wants):**
 
