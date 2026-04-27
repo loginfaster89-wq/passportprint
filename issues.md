@@ -4185,3 +4185,94 @@ Files: `id-print.html` only (source). Then `node build.js` →
   SHIPPED with the PR number, plus an `AC.29.10 Verification
   status` block following the §AC.27 / §AC.28 pattern.
 
+## §AC.29.10 SHIPPED — PR #285 + PR #286
+
+- **PR #285** (commit `90d5d43c`, merged into main `e80c6012` on
+  2026-04-27) shipped §AC.29 v1: `[Whole Card] [Photo Only]`
+  toggle in Photo Adjust panel, dual filter stacks
+  (`cardFilters` + `photoFilters`), `applyMaskedFilters()`
+  composite renderer, `paintPhotoOnly()` cropped preview, ROI
+  table from §AC.29.5, prefs schema extended with `editScope`
+  / `photoBright` / `photoContrast` / `photoSat`. Sheet builders
+  zero-change. §AC.27 / §AC.28 removals not regressed.
+
+- **PR #286** (follow-up fix; merged after QA on PR #285)
+  shipped two fixes that landed AFTER #285 was already merged:
+  (a) alpha-compounding fix in `applyMaskedFilters` —
+  `clearRect` + opaque `fillRect('#fff')` inside the ROI clip
+  before the second `drawImage`, so the photo region is a
+  single composite instead of two stacked composites (which
+  were darkening the photo and etching a faint rectangular
+  seam at the ROI boundary in Whole Card mode); (b) Aadhaar
+  ROI shifted from `[0.04, 0.22, 0.22, 0.50]` →
+  `[0.085, 0.215, 0.225, 0.530]` and PAN from
+  `[0.04, 0.22, 0.18, 0.40]` → `[0.085, 0.220, 0.190, 0.430]`
+  to fix a 4.5 % left-side offset that was capturing white
+  card-bg on the LEFT and clipping the photo's RIGHT edge.
+
+## §AC.29.11 Verification — REMAINING WORK (next session)
+
+QA on the production deploy after PR #286 (operator method:
+enter Photo Only mode and pull the brightness slider down to
+~50 % as a *diagnostic probe* — only the photo ROI dims, so
+the ROI's exact boundary becomes visible against the
+unchanged card background) revealed:
+
+### Issue 1 — Aadhaar ROI still loose (captures photo's native gray frame)
+
+Reference screenshot: `attached_assets/image_1777283736892.png`
+(Photo Only mode, Aadhaar test PDF, brightness 51 % contrast
+89 % sat 100 %). The cropped preview shows the woman's face
+correctly centred, BUT a clearly visible gray rectangular
+border surrounds the actual portrait — that's the photo's
+own gray studio backdrop as printed on the Aadhaar card. My
+PR #286 ROI `[0.085, 0.215, 0.225, 0.530]` captures the full
+photo box (face + native gray frame). Operator wants the ROI
+to capture *just the facial portrait*, excluding the gray
+border, so that Photo Only edits target the face directly.
+
+The brightness-probe technique also exposes that the ROI's
+top edge sits a few px above where the gray frame starts,
+i.e. the top is slightly loose too.
+
+**Remediation plan (next session):**
+
+1. Open `test-pdfs/aadhaar-test.pdf` (password `SUNI1986`) in
+   the dev build with `?debug=roi` (a tiny one-shot dev flag
+   to be added that draws a 1 px magenta `strokeRect` at the
+   ROI on the front canvas — gated by URL param, no UI, no
+   prefs, removed before merge). Take a screenshot.
+2. Measure the actual face/portrait pixel box in the
+   rendered card canvas (`frontReady` ImageData) using either:
+   - the `?debug=roi` magenta box visually, OR
+   - a one-shot console snippet that samples luminance and
+     reports the bounding box of the dark face region.
+3. Update `CARD_PHOTO_ROI.aadhaar` to the measured fractional
+   coords (expected to be tighter on all 4 sides — likely
+   somewhere in the neighbourhood of `[0.105, 0.250, 0.180,
+   0.450]`, but **measure, don't estimate**).
+4. Repeat for `test-pdfs/pan-test.pdf` (password `05071999`).
+5. Remove the `?debug=roi` flag before commit.
+6. Re-run the brightness-probe QA: in Photo Only mode at
+   brightness 50 %, ONLY the face should dim — no gray frame
+   leakage.
+
+### Issue 2 — Other 4 card types still un-QA'd
+
+Voter / Ayushman / Jan Aadhaar / eShram ROIs remain the
+estimates from §AC.29.5. Tracked as §AC.31 — stays gated on
+operator supplying sample PDFs.
+
+### Hard rules (carry forward from §AC.29.7)
+
+- Sheet builders, `CROP` table, `detectCardType`,
+  `roundedCorners`, print CSS, §AC.27 / §AC.28 removals —
+  ZERO change.
+- Photo Adjust panel UI, dual filter stacks, prefs schema
+  (`editScope` / `photoBright` / `photoContrast` /
+  `photoSat`), `applyMaskedFilters`, `paintPhotoOnly` —
+  unchanged. ONLY the `CARD_PHOTO_ROI` table values change.
+- `?debug=roi` flag is dev-only, MUST be removed before commit.
+- ONE PR for the ROI calibration, branch
+  `devin/<unix_ts>-ac29-roi-calibrate`. Files: `id-print.html`
+  + `dist/id-print.html`.

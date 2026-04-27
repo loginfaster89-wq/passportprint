@@ -687,65 +687,97 @@ Highlights:
   `loadPrefs` reader for `p.swapSides` + click handler all
   deleted. Sheet builders ZERO change. Step 2 sidebar after
   §AC.27 + §AC.28 = Rounded Corners + Photo Adjust panel only.
-- §AC.29 RESEARCH (NOT YET CODED) — Photo Only edit mode.
-  `[Whole Card] [Photo Only]` toggle inside Photo Adjust panel.
-  Photo Only mode = preview shows only the cropped ID photo
-  (rectangular crop, white padding, 3 sliders edit JUST that
-  region). Whole Card mode = filters apply to card EXCEPT photo
-  region (photo region keeps its own filter stack baked in).
-  Auto ROI per `detectedType` via hardcoded `CARD_PHOTO_ROI`
-  table (fractional CR80 coords). NO box drawing, NO new deps,
-  NO face detection. Sheet builders remain ZERO-change because
-  the merged result is baked into `frontReady` / `backReady`
-  before sheet builders consume them. Full plan in
-  `issues.md §AC.29`. **THIS IS THE TASK FOR THE NEXT SESSION
-  — see updated TASK block below.**
+- §AC.29 SHIPPED — PR #285 (v1) + PR #286 (alpha-compounding
+  fix + Aadhaar/PAN ROI shift `x: 0.04 → 0.085`). `[Whole Card]
+  [Photo Only]` toggle inside Photo Adjust panel, dual filter
+  stacks (`cardFilters` + `photoFilters`), `applyMaskedFilters`
+  composite, `paintPhotoOnly` cropped preview, prefs schema
+  extended with `editScope` / `photoBright` / `photoContrast`
+  / `photoSat`. Sheet builders ZERO-change.
+- §AC.29.11 OPEN — ROI calibration. Aadhaar (and likely PAN)
+  ROI is still slightly loose: it captures the photo's native
+  gray studio-backdrop frame, not just the facial portrait.
+  Operator surfaced this via brightness-probe technique
+  (Photo Only → brightness ~50 % → only the ROI dims, so the
+  exact boundary becomes visible). Reference screenshot:
+  `attached_assets/image_1777283736892.png`. Fix plan lives
+  in `issues.md §AC.29.11`. **THIS IS THE TASK FOR THE NEXT
+  SESSION — see updated TASK block below.**
 
 Test PDFs repo mein saved hain:
 test-pdfs/pan-test.pdf (password: 05071999)
 test-pdfs/aadhaar-test.pdf (password: SUNI1986)
 
 ═══════════════════════════════════════════════════════════════
-TASK (NEXT SESSION) — §AC.29 Photo Only edit mode (CODE PR)
+TASK (NEXT SESSION) — §AC.29.11 ROI calibration (CODE PR)
 ═══════════════════════════════════════════════════════════════
 
-§AC.11–§AC.28 are all SHIPPED (PRs #251–#283). §AC.24 (PR #277)
-CONFIRMED WORKING on real phone. §AC.29 is RESEARCH-ONLY and is
-the next coding task — full plan, ROI table, implementation
-outline, and open questions live in `issues.md §AC.29`.
+§AC.11–§AC.29 are all SHIPPED (PRs #251–#286). §AC.24 (PR #277)
+CONFIRMED WORKING on real phone. §AC.29 v1 (PR #285) + alpha +
+ROI fixes (PR #286) are merged and the Photo Only / Whole Card
+toggle works on prod (`studioprint.pages.dev/id-print`). The
+ONE remaining defect is documented in `issues.md §AC.29.11` —
+Aadhaar ROI (and likely PAN ROI) still captures the photo's
+native gray studio-backdrop frame around the face. Operator
+exposed this via the brightness-probe technique (enter Photo
+Only → drop brightness to ~50 % → only ROI dims, so its exact
+boundary becomes visible). Reference screenshot:
+`attached_assets/image_1777283736892.png`.
 
 **On the next session, do exactly this — do NOT re-research:**
 
-1. Read `issues.md §AC.29` end-to-end (§AC.29.1 through §AC.29.9).
-   That section is the spec. Anything missing → ask the user
-   ONCE in Hinglish, then proceed with sensible defaults.
+1. Read `issues.md §AC.29.10` (shipped status) and `§AC.29.11`
+   (remaining work + remediation plan) end-to-end. Anything
+   missing → ask the user ONCE in Hinglish, then proceed.
 
-2. Open ONE code PR for §AC.29 implementing the plan in
-   `issues.md §AC.29.6`. Branch:
-   `devin/<unix_ts>-ac29-photo-only-edit`. Files: `id-print.html`
+2. Open ONE code PR for §AC.29.11. Branch:
+   `devin/<unix_ts>-ac29-roi-calibrate`. Files: `id-print.html`
    + `dist/id-print.html`. Per Rule #12 — one PR per logical task.
 
-3. The 4 open questions in `issues.md §AC.29.8` have sensible
-   defaults already documented — apply them unless the user
-   speaks up:
-   - Toggle wording: `Whole Card` / `Photo Only`.
-   - Photo Only backdrop: pure white.
-   - ROI v1: ship the 6-card estimate table from §AC.29.5,
-     iterate.
-   - Auto-enhance face preset: NOT in v1 (track as §AC.30).
+3. Calibration procedure (mandatory — measure, do NOT estimate):
 
-4. Hard "do not touch" zones (`issues.md §AC.29.7`):
-   - Sheet builders (`buildSingleSheet`, `buildMultiCardSheet`,
-     `buildDragonSheet`, `buildPVCTraySheet`) — ZERO change.
-   - `CROP` table — ZERO change.
-   - `detectCardType` / keyword arrays — ZERO change.
-   - `roundedCorners` / print CSS — ZERO change.
-   - §AC.27 / §AC.28 removals — ZERO regression (do not
-     accidentally re-introduce Position panel or Swap Sides).
+   a. Add a one-shot dev flag `?debug=roi` that, when present,
+      draws a 1 px magenta `strokeRect` at the current
+      `CARD_PHOTO_ROI[detectedType]` on `frontReady` /
+      `backReady` after `applyMaskedFilters`. No UI button, no
+      prefs persistence — pure URL-param gate. Removed before
+      commit.
+   b. Render `test-pdfs/aadhaar-test.pdf` (password
+      `SUNI1986`), screenshot the magenta box, measure where
+      the actual face/portrait pixel box sits relative to the
+      card, compute new fractional `[x, y, w, h]`. Likely
+      tighter on all 4 sides than the current
+      `[0.085, 0.215, 0.225, 0.530]`.
+   c. Repeat for `test-pdfs/pan-test.pdf` (password
+      `05071999`).
+   d. Update `CARD_PHOTO_ROI.aadhaar` and `.pan` with the
+      measured values. Voter / Ayushman / Jan Aadhaar /
+      eShram remain estimates (tracked as §AC.31).
+   e. REMOVE the `?debug=roi` block before commit.
+   f. Re-run brightness-probe QA: at brightness 50 % in Photo
+      Only mode, ONLY the face dims — no gray frame, no
+      card-bg leakage.
 
-5. After ship, open `issues.md §AC.29.10` (new sub-section) with
-   verification status + reference screenshot saved at
-   `.agents/references/ac29-photo-only-result-<YYYYMMDD>.png`.
+4. Hard "do not touch" zones (carry-forward from §AC.29.7):
+   - Sheet builders, `CROP` table, `detectCardType`,
+     `roundedCorners`, print CSS, §AC.27 / §AC.28 removals —
+     ZERO change.
+   - Photo Adjust UI, dual filter stacks, prefs schema,
+     `applyMaskedFilters`, `paintPhotoOnly` — ZERO change.
+     Only the `CARD_PHOTO_ROI.aadhaar` and `.pan` fractional
+     values move.
+
+5. After ship, append `issues.md §AC.29.12 Verification` with
+   the new ROI numbers + before/after screenshots saved at
+   `.agents/references/ac29-roi-calibrate-<YYYYMMDD>-{before,
+   after}.png`.
+
+6. Deployment caveat — the site is on Cloudflare Pages with a
+   service worker (`sw.js`) that caches `id-print.html`. After
+   merge, remind the user to hard-refresh
+   (`Ctrl+Shift+R` on desktop, "clear site data" or close +
+   reopen tab on mobile) before re-testing, otherwise they'll
+   keep seeing the cached pre-fix HTML and report "no change".
 
 **Standing candidates list (only after §AC.29 ships — pick whichever the user wants):**
 
