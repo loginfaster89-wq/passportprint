@@ -1,4 +1,4 @@
-/* Shared styles for legal / policy pages */
+﻿/* Shared styles for legal / policy pages */
 :root {
   --bg: #0d0d0d;
   --surface: #161616;
@@ -107,11 +107,11 @@ main.legal-main .callout strong{color:var(--accent);}
 .contact-grid span{color:var(--muted);font-size:13px;}
 .contact-grid strong{color:var(--text);font-size:14px;word-break:break-all;}
 
-/* ─────────────────────────────────────────────────────────
-   Contact form (P10) — inline form that builds a prefilled
+/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+   Contact form (P10) â€” inline form that builds a prefilled
    mailto: link on submit. No backend; email stays obfuscated
    in markup via data-u / data-d (same scheme as footer.js).
-   ─────────────────────────────────────────────────────── */
+   â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .contact-form{
   background:var(--surface);border:1px solid var(--border);
   border-radius:12px;padding:20px 22px 22px;margin:18px 0 24px;
@@ -215,12 +215,12 @@ footer.legal-footer .links{margin-bottom:6px;}
 footer.legal-footer .links a{color:var(--muted);margin:0 8px;}
 footer.legal-footer .links a:hover{color:var(--accent);}
 
-/* ─────────────────────────────────────────────────────────
+/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
    Rich multi-column footer (Product / Resources / Company /
    Legal + brand + newsletter + locale). Used on every shared-
    header page except passport-photo.html, which keeps the
    legacy single-row markup above.
-   ─────────────────────────────────────────────────────── */
+   â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 footer.legal-footer:has(.footer-main){
   padding:36px clamp(18px,4vw,40px) 18px;
   text-align:left;line-height:1.6;
@@ -285,15 +285,6 @@ footer.legal-footer:has(.footer-main){
 .footer-copy{flex:1;min-width:200px;}
 .devin-credit{color:var(--muted);text-decoration:none;transition:color .15s;}
 .devin-credit:hover{color:var(--accent);text-decoration:none;}
-.footer-meta{display:flex;align-items:center;gap:14px;}
-.footer-social{
-  display:inline-flex;align-items:center;justify-content:center;
-  width:32px;height:32px;border-radius:8px;color:var(--muted);
-  border:1px solid var(--border);background:var(--surface2);
-  transition:color .15s,border-color .15s,background .15s;
-}
-.footer-social:hover{color:var(--accent);border-color:var(--accent);background:var(--accent-dim);text-decoration:none;}
-.footer-social svg{width:16px;height:16px;display:block;}
 
 
 @media (max-width:900px){
@@ -309,13 +300,12 @@ footer.legal-footer:has(.footer-main){
   .footer-col h4{margin:0 0 8px;font-size:11px;}
   .footer-col a{font-size:12px;padding-block:4px;}
   .footer-bottom{flex-direction:column;align-items:center;text-align:center;gap:8px;}
-  .footer-meta{flex-wrap:wrap;justify-content:center;}
 }
 @media (max-width:380px){
   .footer-cols{grid-template-columns:1fr;}
 }
 @media (prefers-reduced-motion:reduce){
-  .footer-news,.footer-news button,.footer-col a,.footer-social{transition:none;}
+  .footer-news,.footer-news button,.footer-col a{transition:none;}
 }
 
 @media (max-width:640px){
@@ -341,9 +331,9 @@ footer.legal-footer:has(.footer-main){
   main.legal-main h2{font-size:15px;}
 }
 
-/* ─────────────────────────────────────────────────────────
+/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
    Navigation: Features dropdown + mobile hamburger
-   ─────────────────────────────────────────────────────── */
+   â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .legal-header{position:sticky;}
 .nav-toggle{
   display:none;background:transparent;border:1px solid var(--border);
@@ -448,10 +438,10 @@ footer.legal-footer:has(.footer-main){
   .nav-toggle{padding:7px 10px;font-size:18px;}
 }
 
-/* ─────────────────────────────────────────────────────────
+/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
    Keyboard focus rings (site-wide)
    Visible only for keyboard users; suppressed for mouse clicks.
-   ─────────────────────────────────────────────────────── */
+   â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 :focus{outline:none;}
 :focus-visible{
   outline:2px solid var(--accent);
@@ -469,7 +459,7 @@ select:focus-visible{
   outline-offset:2px;
 }
 
-/* ── Cookie banner (P26) ── */
+/* â”€â”€ Cookie banner (P26) â”€â”€ */
 .sp-cookie{
   position:fixed;bottom:0;left:0;right:0;z-index:9999;
   background:var(--surface);border-top:1px solid var(--border);
@@ -487,3 +477,5 @@ select:focus-visible{
   transition:background .15s;
 }
 .sp-cookie-ok:hover{background:#ffb627;}
+
+
