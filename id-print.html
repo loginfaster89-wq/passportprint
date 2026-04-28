@@ -103,6 +103,13 @@
   text-align:center;margin-top:12px;
   font-family:'DM Mono',monospace;font-size:12px;color:var(--muted);
 }
+.idp-plan-note{
+  margin-top:14px;text-align:center;
+  font-size:11px;line-height:1.6;color:var(--muted);
+  font-family:'DM Mono',monospace;
+}
+.idp-plan-note a{color:var(--accent);text-decoration:none;}
+.idp-plan-note a:hover{color:#ffc03a;}
 
 /* Password step */
 .idp-password{
@@ -188,6 +195,17 @@
   padding:4px 10px;border-radius:999px;
   background:var(--surface2);border:1px solid var(--border);
 }
+.idp-plan-banner{
+  margin:0 0 14px;padding:10px 12px;border-radius:10px;
+  border:1px solid var(--border);background:var(--surface2);
+  color:var(--muted);font-size:11px;line-height:1.6;
+  font-family:'DM Mono',monospace;text-align:left;
+}
+.idp-plan-banner strong{color:var(--text);}
+.idp-plan-banner a{color:var(--accent);text-decoration:none;}
+.idp-plan-banner a:hover{color:#ffc03a;}
+.idp-plan-banner.hit{border-color:rgba(239,68,68,.35);background:rgba(239,68,68,.08);color:#fca5a5;}
+.idp-plan-banner.ok{border-color:rgba(240,165,0,.25);background:rgba(240,165,0,.08);}
 
 /* Actions */
 .idp-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:20px;}
@@ -205,21 +223,6 @@
 .idp-btn-ghost{background:var(--surface);color:var(--text);border-color:var(--border);}
 .idp-btn-ghost:hover{border-color:var(--accent);color:var(--accent);}
 
-/* Layout toggle */
-.idp-layout-toggle{
-  display:flex;gap:0;margin:0 auto 18px;max-width:560px;
-  border:1px solid var(--border);border-radius:10px;overflow:hidden;
-  font-family:'DM Mono',monospace;font-size:12px;
-}
-.idp-layout-opt{
-  flex:1;padding:9px 6px;text-align:center;cursor:pointer;
-  background:var(--surface);color:var(--muted);border:none;
-  transition:background .15s,color .15s;
-}
-.idp-layout-opt+.idp-layout-opt{border-left:1px solid var(--border);}
-.idp-layout-opt.active{background:rgba(240,165,0,.1);color:var(--accent);font-weight:600;}
-.idp-layout-opt:hover:not(.active){color:var(--text);}
-
 /* A4 result — §AC.14 tighter responsive cap: §AC.13 still left the
    sheet preview too tall (the empty bottom half of a 1-Pair sheet
    pushed the canvas to ~78vh). Cap canvas at 55vh on desktop and
@@ -234,6 +237,8 @@
   border:1px solid var(--border);border-radius:8px;
   background:#fff;
 }
+.idp-a4-wrap #a4Canvas{display:none;}
+.idp-a4-wrap #sheetPreviewCanvas{display:block;}
 /* §AC.22 — hidden on screen; only used as the print bitmap. The
    canvas above is what the user sees in Step 3. The btnPrint
    handler swaps the canvas bitmap into this <img> via toBlob +
@@ -278,15 +283,13 @@
   justify-content:space-between;
 }
 .idp-editor-title button,
-.idp-editor-actions button,
-.idp-quick-presets button{
+.idp-editor-actions button{
   background:none;border:1px solid var(--border);border-radius:6px;
   color:var(--muted);font-family:'DM Mono',monospace;font-size:11px;
   padding:3px 10px;cursor:pointer;transition:color .15s,border-color .15s;
 }
 .idp-editor-title button:hover,
-.idp-editor-actions button:hover,
-.idp-quick-presets button:hover{color:var(--accent);border-color:var(--accent);}
+.idp-editor-actions button:hover{color:var(--accent);border-color:var(--accent);}
 .idp-sliders{display:flex;flex-wrap:wrap;gap:14px 24px;}
 .idp-slider-group{flex:1 1 140px;min-width:120px;}
 .idp-slider-label{
@@ -358,7 +361,10 @@ input.idp-range::-moz-range-thumb{
   display:flex;gap:8px;justify-content:center;align-items:stretch;
 }
 .idp-photo-only-wrap.single-side .idp-photo-only-canvas{
-  flex:0 1 420px;max-width:420px;
+  flex:0 0 auto;
+  width:auto;
+  max-width:none;
+  height:240px;
 }
 .idp-photo-only-canvas{
   flex:1 1 0;max-width:50%;background:#ffffff;
@@ -395,7 +401,7 @@ input.idp-range::-moz-range-thumb{
 @media print{
   .legal-header,.legal-footer,.idp-hero,.idp-steps,.idp-upload,
   .idp-password,.idp-actions,.idp-info,.idp-detect,.idp-error,
-  .idp-loading,.idp-btn,.idp-editor,.idp-option,.idp-layout-toggle,
+  .idp-loading,.idp-btn,.idp-editor,.idp-option,
   .sp-cookie,
   #sheetTitle,#sheetDesc,nav,footer,header{display:none !important;}
   /* §AC.23 — paper-agnostic sizing. Mobile Chrome / many phone print
@@ -479,8 +485,6 @@ input.idp-range::-moz-range-thumb{
   .idp-step-line{width:12px;}
   .idp-sliders{gap:10px 16px;}
   .idp-slider-group{flex:1 1 100%;}
-  .idp-layout-toggle{font-size:11px;max-width:100%;}
-  .idp-layout-opt{padding:8px 4px;}
 }
 /* §AC.27 — Position panel (per-side Move + Zoom) removed per user request.
    Rounded Corners + Photo Adjust retained. */
@@ -551,6 +555,7 @@ input.idp-range::-moz-range-thumb{
       <p>Upload one or multiple PDFs — eAadhaar · ePAN · e-EPIC · Ayushman · Jan Aadhaar · eShram · Password-protected supported</p>
       <input type="file" id="pdfInput" accept=".pdf,application/pdf" multiple>
     </div>
+    <div class="idp-plan-note">Free plan: 2 sheets/day after login. Weekly / Monthly: unlimited ID sheets. <a href="#plans">See plans</a></div>
     <div class="idp-queue idp-hidden" id="fileQueue"></div>
     <div class="idp-batch-count idp-hidden" id="batchCount"></div>
     <div class="idp-queue-actions idp-hidden" id="queueActions">
@@ -611,10 +616,9 @@ input.idp-range::-moz-range-thumb{
         <input type="checkbox" id="chkRounded">
         Rounded Corners
       </label>
-      <!-- §AC.13 — Cut Marks toggle removed per user feedback. The 1-Pair
-           sheet no longer draws the dashed fold-here line / corner ticks.
-           Multi-card / Dragon / PVC layouts keep their built-in cut guides
-           (driven by the constant `cutMarks=true`). -->
+      <!-- §AC.13 — Cut Marks toggle removed per user feedback. The print
+           sheet stays clean: no dashed fold-here line, no corner ticks,
+           no extra guide controls in the UI. -->
 
       <!-- §AC.27 — Panel B (Position: per-side Move + Zoom) removed.
            Rounded Corners + Photo Adjust retained. -->
@@ -631,11 +635,6 @@ input.idp-range::-moz-range-thumb{
                   role="tab" aria-selected="true">Whole Card</button>
           <button type="button" id="btnScopePhoto" class="idp-scope-btn"
                   role="tab" aria-selected="false">Photo Only</button>
-        </div>
-        <div class="idp-quick-presets" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;">
-          <button type="button" id="presetOriginal">Original</button>
-          <button type="button" id="presetAadhaar">Aadhaar</button>
-          <button type="button" id="presetPan">PAN</button>
         </div>
         <div class="idp-sliders">
           <div class="idp-slider-group">
@@ -667,7 +666,6 @@ input.idp-range::-moz-range-thumb{
         <button class="idp-btn idp-btn-ghost" id="btnBack">← New PDF</button>
         <button class="idp-btn idp-btn-primary" id="btnSheet">Generate A4 Sheet →</button>
       </div>
-      <div class="idp-batch-count idp-hidden" id="batchSheetInfo"></div>
     </div>
   </div>
 
@@ -676,13 +674,9 @@ input.idp-range::-moz-range-thumb{
     <div class="idp-preview">
       <h3 id="sheetTitle">A4 Sheet — Fold &amp; Laminate Layout</h3>
       <p id="sheetDesc" style="color:var(--muted);font-size:12px;margin-bottom:16px;">Print → cut around cards → fold in half → laminate in 65×95mm pouch</p>
-      <div class="idp-layout-toggle">
-        <button type="button" class="idp-layout-opt active" data-layout="single">1 Pair · Fold &amp; Laminate</button>
-        <button type="button" class="idp-layout-opt" data-layout="multi">5 Pairs · Multi-Card</button>
-        <button type="button" class="idp-layout-opt" data-layout="dragon">2 Cards · Dragon Sheet</button>
-        <button type="button" class="idp-layout-opt" data-layout="pvc">PVC Tray · Epson</button>
-      </div>
+      <div id="idpPlanBanner" class="idp-plan-banner ok"></div>
       <div class="idp-a4-wrap">
+        <canvas id="sheetPreviewCanvas" width="2480" height="1200" aria-hidden="true"></canvas>
         <canvas id="a4Canvas" width="2480" height="3508"></canvas>
         <!-- §AC.22 — print-only PNG. Hidden on screen via
              .idp-a4-wrap #printImg{display:none}; the btnPrint
@@ -776,10 +770,6 @@ const CR80_W = 1011;
 const CR80_H = 638;
 const A4_W = 2480;
 const A4_H = 3508;
-const DRAGON_W = 1205;
-const DRAGON_H = 1795;
-const PVC_W = 1417;
-const PVC_H = 1417;
 const RENDER_SCALE = 4;
 
 const AADHAAR_KEYWORDS = ['aadhaar','uid','uidai','unique identification','government of india','vid','enrolment','download date','issue date'];
@@ -891,10 +881,12 @@ cardFrontCanvas.width = CR80_W; cardFrontCanvas.height = CR80_H;
 const cardBackCanvas = document.createElement('canvas');
 cardBackCanvas.width = CR80_W; cardBackCanvas.height = CR80_H;
 const pairCanvas = $('#pairCanvas');
+const sheetPreviewCanvas = $('#sheetPreviewCanvas');
 const a4Canvas = $('#a4Canvas');
 const detectBadge = $('#detectBadge');
 const sheetTitle = $('#sheetTitle');
 const sheetDesc = $('#sheetDesc');
+const idpPlanBanner = $('#idpPlanBanner');
 const fileQueue = $('#fileQueue');
 const batchCount = $('#batchCount');
 const queueActions = $('#queueActions');
@@ -902,15 +894,8 @@ const btnAddMore = $('#btnAddMore');
 const btnProcessAll = $('#btnProcessAll');
 const batchCardsContainer = $('#batchCardsContainer');
 const previewTitle = $('#previewTitle');
-const batchSheetInfo = $('#batchSheetInfo');
 
-let currentLayout = 'single';
 let roundedCorners = false;
-/* §AC.13 — Cut Marks UI option removed. Multi-card / Dragon / PVC sheet
-   builders still draw their cut guides driven by this constant. The
-   1-Pair Fold & Laminate sheet no longer draws any fold-here line or
-   corner ticks (handled inside buildSingleSheet). */
-const cutMarks = true;
 /* §AC.28 — `swapSides` state removed (Swap sides toggle deleted). */
 const CARD_RADIUS = 36;
 
@@ -968,7 +953,147 @@ var batchFiles = [];        /* {file, name, arrayBuffer, status, password, error
 var batchCards = [];         /* {type, front, back, originalFront, originalBack, fileName} */
 var pendingPasswordIdx = -1; /* index in batchFiles needing password */
 
+const IDP_BACKEND_URL = 'https://passportprint-studio.onrender.com';
+const IDP_AUTH_TOKEN_KEY = 'pps_token_v1';
+const IDP_PLAN_LIMITS = {
+  free: { id: 'free', name: 'Free', dailySheets: 2, maxBatchPdfs: 999 },
+  weekly: { id: 'weekly', name: 'Weekly', dailySheets: 0, maxBatchPdfs: 999 },
+  monthly: { id: 'monthly', name: 'Monthly', dailySheets: 0, maxBatchPdfs: 999 }
+};
+
 function isBatchMode() { return batchFiles.length > 1 || (batchFiles.length === 1 && batchCards.length > 1); }
+
+function idpCurrentUser() {
+  try { return typeof window.currentUser === 'function' ? window.currentUser() : null; }
+  catch (_) { return null; }
+}
+function idpEffectivePlan() {
+  var user = idpCurrentUser();
+  if (!user) return 'free';
+  var plan = user.plan || 'free';
+  var exp = user.planExpiresAt || 0;
+  if (plan !== 'free' && exp && Date.now() > exp) return 'free';
+  return plan;
+}
+function idpPlanLimits() {
+  return IDP_PLAN_LIMITS[idpEffectivePlan()] || IDP_PLAN_LIMITS.free;
+}
+function idpTodayKey() {
+  var d = new Date();
+  return 'pps_daily_sheets_' + d.getFullYear() + '-' +
+    String(d.getMonth() + 1).padStart(2, '0') + '-' +
+    String(d.getDate()).padStart(2, '0');
+}
+function idpGetTodaySheets() {
+  try { return +(localStorage.getItem(idpTodayKey()) || '0'); }
+  catch (_) { return 0; }
+}
+function idpSetTodaySheets(n) {
+  try { localStorage.setItem(idpTodayKey(), String(Math.max(0, n))); }
+  catch (_) {}
+}
+function idpRemainingFreeSheets() {
+  var lim = idpPlanLimits();
+  if (!lim.dailySheets) return Infinity;
+  return Math.max(0, lim.dailySheets - idpGetTodaySheets());
+}
+function idpOpenPlansWithMessage(msg) {
+  showError(msg);
+  if (typeof window.openPlans === 'function') {
+    setTimeout(function () { try { window.openPlans(); } catch (_) {} }, 350);
+  }
+}
+function idpOpenAuthWithMessage(msg) {
+  showError(msg);
+  if (typeof window.openAuth === 'function') {
+    setTimeout(function () { try { window.openAuth('login'); } catch (_) {} }, 350);
+  }
+}
+async function idpApi(path, options) {
+  var opts = options || {};
+  var headers = Object.assign({ 'Accept': 'application/json' }, opts.headers || {});
+  var token = null;
+  try { token = localStorage.getItem(IDP_AUTH_TOKEN_KEY); } catch (_) {}
+  if (token) headers['Authorization'] = 'Bearer ' + token;
+  if (opts.body && !headers['Content-Type']) headers['Content-Type'] = 'application/json';
+  var res = await fetch(IDP_BACKEND_URL + path, {
+    method: opts.method || 'GET',
+    headers: headers,
+    body: opts.body ? JSON.stringify(opts.body) : undefined
+  });
+  var data = null;
+  try { data = await res.json(); } catch (_) {}
+  if (!res.ok) {
+    var err = new Error((data && (data.error || data.message)) || ('HTTP ' + res.status));
+    err.status = res.status;
+    if (data && typeof data.used === 'number') err.used = data.used;
+    throw err;
+  }
+  return data || {};
+}
+async function idpConsumeSheetOrBlock() {
+  var lim = idpPlanLimits();
+  var token = null;
+  try { token = localStorage.getItem(IDP_AUTH_TOKEN_KEY); } catch (_) {}
+  if (!token || !idpCurrentUser()) {
+    idpOpenAuthWithMessage('Please sign up or log in to download / print ID sheets.');
+    return false;
+  }
+  if (!lim.dailySheets) return true;
+  try {
+    var data = await idpApi('/api/consume-sheet', { method: 'POST' });
+    if (typeof data.used === 'number') idpSetTodaySheets(data.used);
+    refreshIdpPlanBanner();
+    return true;
+  } catch (err) {
+    if (err && typeof err.used === 'number') idpSetTodaySheets(err.used);
+    if (err && err.status === 401) {
+      try { localStorage.removeItem(IDP_AUTH_TOKEN_KEY); } catch (_) {}
+      refreshIdpPlanBanner();
+      idpOpenAuthWithMessage('Your session expired. Please log in again to continue.');
+      return false;
+    }
+    if (err && err.status === 403) {
+      refreshIdpPlanBanner();
+      idpOpenPlansWithMessage('Daily free limit (2 sheets) reached. Upgrade for unlimited ID sheets.');
+      return false;
+    }
+    if (idpGetTodaySheets() >= lim.dailySheets) {
+      refreshIdpPlanBanner();
+      idpOpenPlansWithMessage('Daily free limit (2 sheets) reached. Upgrade for unlimited ID sheets.');
+      return false;
+    }
+    idpSetTodaySheets(idpGetTodaySheets() + 1);
+    refreshIdpPlanBanner();
+    return true;
+  }
+}
+function refreshIdpPlanBanner() {
+  if (!idpPlanBanner) return;
+  var planId = idpEffectivePlan();
+  var lim = idpPlanLimits();
+  var user = idpCurrentUser();
+  idpPlanBanner.className = 'idp-plan-banner ok';
+  if (!user) {
+    idpPlanBanner.innerHTML = 'Free plan: <strong>2 sheets/day</strong> after login. Weekly / Monthly unlock unlimited ID sheets. <a href="#" onclick="openAuth(\'signup\');return false;">Sign up to download</a> · <a href="#plans">See plans</a>';
+    return;
+  }
+  if (planId === 'free') {
+    var left = idpRemainingFreeSheets();
+    if (left > 0) {
+      idpPlanBanner.innerHTML = 'Free plan: <strong>' + left + '/' + lim.dailySheets + '</strong> sheet' + (left === 1 ? '' : 's') + ' left today. Weekly / Monthly unlock unlimited ID sheets. <a href="#plans">Go unlimited</a>';
+    } else {
+      idpPlanBanner.className = 'idp-plan-banner hit';
+      idpPlanBanner.innerHTML = 'Daily free limit (' + lim.dailySheets + ' sheets) reached. <a href="#plans">Upgrade</a> for unlimited ID sheets.';
+    }
+    return;
+  }
+  if (planId === 'weekly') {
+    idpPlanBanner.innerHTML = 'Weekly plan active: <strong>unlimited ID sheets</strong>. Monthly is the best-value option if this is a daily counter workflow. <a href="#plans">Change plan</a>';
+    return;
+  }
+  idpPlanBanner.innerHTML = 'Monthly plan active: <strong>unlimited ID sheets</strong> + best-value billing for regular counter work.';
+}
 
 /* ── Step management ── */
 function showStep(n) {
@@ -986,6 +1111,7 @@ function showStep(n) {
   if (n === 1) stepUpload.classList.remove('idp-hidden');
   if (n === 2) stepPreview.classList.remove('idp-hidden');
   if (n === 3) stepSheet.classList.remove('idp-hidden');
+  refreshIdpPlanBanner();
 }
 
 function showError(msg) {
@@ -1024,6 +1150,7 @@ dropZone.addEventListener('drop', (e) => {
 function addFilesToQueue(files) {
   var validFiles = files.filter(f => f.type === 'application/pdf' || f.name.toLowerCase().endsWith('.pdf'));
   if (validFiles.length === 0) { showError('Please upload PDF files only.'); return; }
+  if (batchFiles.length === 0) resetPhotoAdjustState();
 
   validFiles.forEach(function(f) {
     batchFiles.push({ file: f, name: f.name, arrayBuffer: null, status: 'queued', password: null, error: null });
@@ -1102,6 +1229,7 @@ btnAddMore.addEventListener('click', function() {
 /* Process All button */
 btnProcessAll.addEventListener('click', async function() {
   idpError.classList.remove('show');
+
   showLoading(true);
   batchCards = [];
 
@@ -1349,7 +1477,6 @@ async function processPdf(pdf) {
     originalFront = frontImageData;
     originalBack = backImageData;
     batchCards = [{ type: detectedType, front: frontImageData, back: backImageData, originalFront: frontImageData, originalBack: backImageData, fileName: batchFiles.length > 0 ? batchFiles[0].name : 'PDF' }];
-    resetEditorSliders();
     loadPrefs();
     /* §AC.29 — Enable / disable Photo Only based on detected card type. */
     refreshScopeAvailability();
@@ -1360,7 +1487,6 @@ async function processPdf(pdf) {
     /* §AC.27 — Position panel removed; nothing to toggle here. */
 
     previewTitle.textContent = 'Front & Back Preview';
-    batchSheetInfo.classList.add('idp-hidden');
 
     showLoading(false);
     showStep(2);
@@ -1383,7 +1509,7 @@ function showBatchPreview() {
 
   previewTitle.textContent = batchCards.length + ' Cards — Front & Back Preview';
 
-  /* Restore persisted Cleanup + slider preferences before rendering */
+  /* Restore the current tab's in-memory editor state before rendering. */
   loadPrefs();
   /* §AC.29 — Photo Only availability depends on first card's type. */
   refreshScopeAvailability();
@@ -1440,11 +1566,6 @@ function showBatchPreview() {
     originalFront = batchCards[0].originalFront;
     originalBack = batchCards[0].originalBack;
   }
-
-  var sheetsNeeded = Math.ceil(batchCards.length / 5);
-  batchSheetInfo.classList.remove('idp-hidden');
-  batchSheetInfo.textContent = batchCards.length + ' card' + (batchCards.length > 1 ? 's' : '') +
-    ' \u2192 ' + sheetsNeeded + ' A4 sheet' + (sheetsNeeded > 1 ? 's' : '') + ' (multi-card layout)';
 
   showStep(2);
 }
@@ -1524,10 +1645,23 @@ function drawToCanvas(canvas, srcCanvas, w, h) {
 
 /* ── A4 Sheet generation ── */
 function buildSheet() {
-  if (currentLayout === 'multi') buildMultiCardSheet();
-  else if (currentLayout === 'dragon') buildDragonSheet();
-  else if (currentLayout === 'pvc') buildPVCTraySheet();
-  else buildSingleSheet();
+  buildSingleSheet();
+  refreshSheetPreview();
+}
+
+function refreshSheetPreview() {
+  if (!sheetPreviewCanvas || !a4Canvas) return;
+  var srcX = 0, srcY = 0, srcW = a4Canvas.width, srcH = a4Canvas.height;
+  /* Preview-only crop: 1-pair A4 layout leaves a large blank lower area
+     by design for printing, but on screen that wastes space. Keep the
+     real A4 canvas intact for download/print and only crop the visible
+     preview to the upper content band. */
+  srcH = Math.min(a4Canvas.height, 980);
+  sheetPreviewCanvas.width = srcW;
+  sheetPreviewCanvas.height = srcH;
+  var pctx = sheetPreviewCanvas.getContext('2d');
+  pctx.clearRect(0, 0, srcW, srcH);
+  pctx.drawImage(a4Canvas, srcX, srcY, srcW, srcH, 0, 0, srcW, srcH);
 }
 
 function getActiveCards() {
@@ -1569,8 +1703,7 @@ function buildSingleSheet() {
   }
 
   if (card && card.back) {
-    /* Draw back card NOT mirrored — matches multi-card / dragon /
-       PVC layouts. User cuts both halves apart and stacks them
+    /* Draw back card NOT mirrored. User cuts both halves apart and stacks them
        back-to-back for lamination, so no horizontal flip is
        needed. (Was previously scale(-1, 1) for the legacy
        fold-over-paper workflow.) */
@@ -2102,62 +2235,15 @@ function resetEditorSliders() {
   slSat.value = 100; valSat.textContent = '100%';
 }
 
-/* ── Persisted preferences (Rounded Corners, Cut Marks, slider preset) ──
-   Stored in localStorage so a returning operator doesn't re-tick the
-   same toggles and re-pick the same preset on every PDF.
-   §AC.29 — schema extended with `editScope` + per-scope filter triplets
-   (`bright/contrast/sat` = card scope, `photoBright/photoContrast/photoSat`
-   = photo scope). Old blobs that only carry `bright/contrast/sat` still
-   load: those values populate cardFilters and photoFilters defaults to
-   100/100/100. */
-const PREFS_KEY = 'idp:prefs:v1';
-function savePrefs() {
-  try {
-    var prefs = {
-      rounded: chkRounded.checked,
-      /* §AC.13 — `cutMarks` field dropped (toggle removed from UI). */
-      /* §AC.28 — `swapSides` field dropped (Swap sides toggle removed). */
-      /* §AC.29 — Card-scope filters (back-compat field names). */
-      bright: cardFilters.bright,
-      contrast: cardFilters.contrast,
-      sat: cardFilters.sat,
-      /* §AC.29 — Photo-scope filters + active scope. */
-      photoBright: photoFilters.bright,
-      photoContrast: photoFilters.contrast,
-      photoSat: photoFilters.sat,
-      editScope: editScope
-    };
-    localStorage.setItem(PREFS_KEY, JSON.stringify(prefs));
-  } catch (e) { /* quota / private mode — silent */ }
-}
+/* ── Session-only editor state ──────────────────────────────────────────
+   Photo Adjust values now live only in memory for the current tab /
+   current upload session. They survive normal editing inside the same
+   PDF, but reset to defaults when the user starts a new PDF or refreshes
+   the tab. */
+function savePrefs() { /* session-only: globals already hold the live state */ }
 function loadPrefs() {
-  try {
-    var raw = localStorage.getItem(PREFS_KEY);
-    if (!raw) return;
-    var p = JSON.parse(raw);
-    if (typeof p.rounded === 'boolean') {
-      chkRounded.checked = p.rounded;
-      roundedCorners = p.rounded;
-    }
-    /* §AC.13 — `cutMarks` field no longer read (toggle removed from UI).
-       Stale values from old prefs blobs are simply ignored. */
-    /* §AC.28 — `swapSides` no longer read from prefs (toggle removed).
-       Stale values from old prefs blobs are ignored. */
-    /* §AC.29 — Hydrate per-scope filter stacks. */
-    if (typeof p.bright === 'number') cardFilters.bright = p.bright;
-    if (typeof p.contrast === 'number') cardFilters.contrast = p.contrast;
-    if (typeof p.sat === 'number') cardFilters.sat = p.sat;
-    if (typeof p.photoBright === 'number') photoFilters.bright = p.photoBright;
-    if (typeof p.photoContrast === 'number') photoFilters.contrast = p.photoContrast;
-    if (typeof p.photoSat === 'number') photoFilters.sat = p.photoSat;
-    /* Active scope from prefs — but refreshScopeAvailability() called
-       after PDF load may force-revert to 'whole' if current card has
-       no ROI for any side. */
-    if (p.editScope === 'photo' || p.editScope === 'whole') editScope = p.editScope;
-    /* Sync slider DOM to whichever scope is active. */
-    syncSlidersFromState();
-    refreshRoundedCornersUI();
-  } catch (e) { /* corrupt JSON — silent */ }
+  syncSlidersFromState();
+  refreshRoundedCornersUI();
 }
 
 /* §AC.29 — Bidirectional state ↔ slider DOM sync. */
@@ -2172,6 +2258,13 @@ function syncSlidersToState() {
   dest.bright = parseInt(slBright.value, 10);
   dest.contrast = parseInt(slContrast.value, 10);
   dest.sat = parseInt(slSat.value, 10);
+}
+
+function resetPhotoAdjustState() {
+  editScope = 'whole';
+  cardFilters.bright = 100; cardFilters.contrast = 100; cardFilters.sat = 100;
+  photoFilters.bright = 100; photoFilters.contrast = 100; photoFilters.sat = 100;
+  syncSlidersFromState();
 }
 
 /* ── Auto Enhance (§Y) — luminance histogram → bright/contrast/sat ──
@@ -2224,20 +2317,6 @@ btnResetEdit.addEventListener('click', () => {
   savePrefs();
 });
 
-/* Quick presets — one-click slider combos.
-   §AC.29 — Presets write into the currently active scope. */
-function applyPreset(b, c, s) {
-  slBright.value = b; valBright.textContent = b + '%';
-  slContrast.value = c; valContrast.textContent = c + '%';
-  slSat.value = s; valSat.textContent = s + '%';
-  syncSlidersToState();
-  applyFilters();
-  savePrefs();
-}
-$('#presetOriginal').addEventListener('click', function(){ applyPreset(100, 100, 100); });
-$('#presetAadhaar').addEventListener('click', function(){ applyPreset(105, 130, 100); });
-$('#presetPan').addEventListener('click',     function(){ applyPreset(115, 115, 110); });
-
 /* ── §AC.29 — Edit-scope toggle (Whole Card / Photo Only) ───────────
    Switching scope is purely a UI rebind: each scope owns its own
    filter stack, render pipeline always composes both, so no source
@@ -2273,6 +2352,19 @@ function refreshPhotoOnlyLayout() {
   var showBack = !!(srcB && cardTypeHasPhotoROISide(t, 'back'));
   photoOnlyBackCanvas.classList.toggle('idp-hidden', !showBack);
   photoOnlyWrap.classList.toggle('single-side', !showBack);
+}
+
+function resetEditorUIState() {
+  editScope = 'whole';
+  btnScopeWhole.classList.add('is-active');
+  btnScopeWhole.setAttribute('aria-selected', 'true');
+  btnScopePhoto.classList.remove('is-active');
+  btnScopePhoto.setAttribute('aria-selected', 'false');
+  var cards = batchCardsContainer.querySelector('.idp-cards');
+  if (cards) cards.classList.remove('idp-hidden');
+  photoOnlyWrap.classList.add('idp-hidden');
+  refreshPhotoOnlyLayout();
+  refreshRoundedCornersUI();
 }
 
 function setEditScope(scope) {
@@ -2318,20 +2410,33 @@ function refreshScopeAvailability() {
   refreshRoundedCornersUI();
 }
 
+function setPhotoOnlyCanvasSize(canvas, roi) {
+  var targetH = 360;
+  var targetW = 360;
+  if (roi) {
+    var aspect = roi.w / Math.max(roi.h, 1);
+    targetW = Math.round(targetH * aspect);
+    targetW = Math.max(210, Math.min(360, targetW));
+  }
+  if (canvas.width !== targetW) canvas.width = targetW;
+  if (canvas.height !== targetH) canvas.height = targetH;
+}
+
 /* §AC.29 — Photo Only preview painter. Renders just the ROI of the
    source canvas onto a white-padded surface. Called from applyFilters
    for both sides; null-ROI sides show the centered placeholder text
    per spec §AC.29 ("No photo on this side"). */
 function paintPhotoOnly(canvas, srcCanvas, cardType, side) {
   if (!canvas) return;
-  var ctx = canvas.getContext('2d');
-  var W = canvas.width, H = canvas.height;
-  ctx.fillStyle = '#ffffff';
-  ctx.fillRect(0, 0, W, H);
   /* Use ROI in the source canvas' own pixel space. The previous CR80-sized
      lookup shifted PAN Photo Only crops because originalFront/originalBack
      keep their raw crop dimensions until drawFiltered() scales them. */
   var roi = srcCanvas ? getPhotoROIPixels(cardType, side, srcCanvas.width, srcCanvas.height) : null;
+  setPhotoOnlyCanvasSize(canvas, roi);
+  var ctx = canvas.getContext('2d');
+  var W = canvas.width, H = canvas.height;
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, W, H);
   if (!roi) {
     ctx.fillStyle = '#888';
     ctx.font = '20px "DM Mono", monospace';
@@ -2340,9 +2445,9 @@ function paintPhotoOnly(canvas, srcCanvas, cardType, side) {
     ctx.fillText(srcCanvas ? 'No photo on this side' : '—', W / 2, H / 2);
     return;
   }
-  /* Fit the ROI inside the canvas with 10% padding on all sides,
-     preserving aspect ratio. */
-  var pad = 0.10;
+  /* Keep the frame very tight so Photo Only mostly shows the ID photo
+     itself, with only a small white breathing room around it. */
+  var pad = 0.04;
   var availW = W * (1 - 2 * pad);
   var availH = H * (1 - 2 * pad);
   var srcAspect = roi.w / roi.h;
@@ -2396,40 +2501,10 @@ chkRounded.addEventListener('change', () => {
 /* §AC.28 — Swap sides toggle (§AC.12 / btnSwapSides) click handler
    removed. Preview now always renders front-LEFT / back-RIGHT. */
 
-/* ── Layout toggle ── */
-document.querySelectorAll('.idp-layout-opt').forEach(function(btn) {
-  btn.addEventListener('click', function() {
-    document.querySelectorAll('.idp-layout-opt').forEach(function(b) { b.classList.remove('active'); });
-    btn.classList.add('active');
-    currentLayout = btn.dataset.layout;
-    updateSheetMeta();
-    buildSheet();
-  });
-});
 
 function updateSheetMeta() {
-  var cards = getActiveCards();
-  if (currentLayout === 'multi') {
-    if (cards.length > 5) {
-      sheetTitle.textContent = 'A4 Sheet \u2014 ' + Math.min(cards.length, 5) + ' Cards (Sheet 1 of ' + Math.ceil(cards.length / 5) + ')';
-      sheetDesc.textContent = 'Print \u2192 cut along dashed lines \u2192 laminate each card. Download all sheets below.';
-    } else if (cards.length > 1) {
-      sheetTitle.textContent = 'A4 Sheet \u2014 ' + cards.length + ' Cards';
-      sheetDesc.textContent = 'Print \u2192 cut along dashed lines \u2192 laminate each card separately.';
-    } else {
-      sheetTitle.textContent = 'A4 Sheet \u2014 5 Card Pairs';
-      sheetDesc.textContent = 'Print \u2192 cut along dashed lines \u2192 laminate each card separately. Saves paper.';
-    }
-  } else if (currentLayout === 'dragon') {
-    sheetTitle.textContent = 'Dragon Sheet \u2014 4\u00d76 (2 Cards)';
-    sheetDesc.textContent = 'Print on 4\u00d76 photo paper \u2192 cut along guides \u2192 laminate each card.';
-  } else if (currentLayout === 'pvc') {
-    sheetTitle.textContent = 'PVC Tray \u2014 Epson L805/L8050';
-    sheetDesc.textContent = 'Load blank PVC cards in tray \u2192 print using CD/DVD mode \u2192 direct card print, no cutting needed.';
-  } else {
-    sheetTitle.textContent = 'A4 Sheet \u2014 Fold & Laminate Layout';
-    sheetDesc.textContent = 'Print \u2192 cut around cards \u2192 fold in half \u2192 laminate in 65\u00d795mm pouch';
-  }
+  sheetTitle.textContent = 'A4 Sheet \u2014 Fold & Laminate Layout';
+  sheetDesc.textContent = 'Print \u2192 cut around cards \u2192 fold in half \u2192 laminate in 65\u00d795mm pouch';
 }
 
 /* ── Button handlers ── */
@@ -2444,7 +2519,7 @@ btnBack.addEventListener('click', () => {
   detectedType = null;
   /* §AC.27 — Position panel removed; no panelPosition / moveReadout /
      slZoom / zoomReadout state to reset on back-to-step-1. */
-  resetEditorSliders();
+  resetPhotoAdjustState();
   frontImageData = null;
   backImageData = null;
   originalFront = null;
@@ -2456,7 +2531,7 @@ btnBack.addEventListener('click', () => {
   fileQueue.classList.add('idp-hidden');
   queueActions.classList.add('idp-hidden');
   batchCount.classList.add('idp-hidden');
-  batchSheetInfo.classList.add('idp-hidden');
+  resetEditorUIState();
   /* Restore original preview HTML */
   batchCardsContainer.innerHTML = '<div class="idp-cards">' +
     '<div class="idp-card-wrap"><span>Front</span><canvas id="cardFront" width="1011" height="638"></canvas></div>' +
@@ -2467,8 +2542,9 @@ btnBack.addEventListener('click', () => {
 
 btnBackPreview.addEventListener('click', () => showStep(2));
 
-btnDownload.addEventListener('click', () => {
-  var suffix = currentLayout === 'dragon' ? '-dragon-sheet.png' : currentLayout === 'pvc' ? '-pvc-tray.png' : '-a4-sheet.png';
+btnDownload.addEventListener('click', async () => {
+  if (!(await idpConsumeSheetOrBlock())) return;
+  var suffix = '-a4-sheet.png';
   var cards = getActiveCards();
   var prefix = cards.length > 1 ? 'batch-' + cards.length + '-cards' : (detectedType || 'id-card');
   var filename = prefix + suffix;
@@ -2510,7 +2586,8 @@ btnDownload.addEventListener('click', () => {
    whitespace, sometimes 2 sheets). Print CSS hides the canvas
    and shows #printImg at 210mm×297mm. Falls back to a direct
    window.print() on very old browsers that lack toBlob. */
-btnPrint.addEventListener('click', () => {
+btnPrint.addEventListener('click', async () => {
+  if (!(await idpConsumeSheetOrBlock())) return;
   var printImg = document.getElementById('printImg');
   if (!printImg || typeof a4Canvas.toBlob !== 'function') {
     window.print();
@@ -2532,6 +2609,8 @@ btnPrint.addEventListener('click', () => {
 });
 
 /* ── Init ── */
+window.addEventListener('focus', refreshIdpPlanBanner);
+window.addEventListener('storage', refreshIdpPlanBanner);
 showStep(1);
 </script>
 </body>

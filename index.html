@@ -55,6 +55,7 @@
   --accent-glow: rgba(240,165,0,0.06);
   --surface3: #272727;
 }
+a:hover{text-decoration:none;}
 
 /* Override legal-main for the homepage so it can go full-bleed */
 body.home main.home-main{
@@ -446,7 +447,9 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
 .feature-card.live:hover{
   border-color:var(--accent);transform:translateY(-3px);
   box-shadow:0 20px 40px -20px rgba(240,165,0,0.35);
+  text-decoration:none;
 }
+.feature-card.live:hover *{text-decoration:none;}
 
 .feature-card .ficon{
   width:46px;height:46px;border-radius:11px;
@@ -899,7 +902,7 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
       "name": "Is Studio Print really free?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes — the free tier gives you 2 A4 sheets per day with Indian passport presets, no signup wall, and 300 DPI print-ready output. Upgrade to Weekly (₹59) or Monthly (₹149) only if you need unlimited sheets or all country presets."
+        "text": "Yes — the free tier gives you 2 A4 sheets per day after login. Passport Photo includes 300 DPI print-ready output, and ID Card Print uses the same free limit before paid plans unlock unlimited sheets. Upgrade to Weekly (₹59) or Monthly (₹149) if you need unlimited output or all passport country presets."
       }
     },
     {
@@ -1026,7 +1029,7 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
         <a class="btn btn-ghost" href="about.html">Our story</a>
       </div>
       <div class="hero-trust" aria-label="Trust indicators">
-        <span class="pill"><span class="tick">✓</span> Free tier, no signup wall</span>
+        <span class="pill"><span class="tick">✓</span> Free tier, 2 sheets/day</span>
         <span class="pill"><span class="tick">✓</span> On-device AI</span>
         <span class="pill"><span class="tick">✓</span> 300 DPI A4</span>
       </div>
@@ -1112,7 +1115,7 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
       <div class="section-head">
         <span class="section-tag">Features</span>
         <h2>One tab. Every print job you run.</h2>
-        <p>Runs entirely in your browser — no signup wall, no uploads, no Photoshop.</p>
+        <p>Runs entirely in your browser — no uploads, no Photoshop, no desktop install.</p>
       </div>
 
       <div class="features-grid">
@@ -1126,7 +1129,7 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
         <a href="id-print.html" class="feature-card live">
           <div class="ficon" aria-hidden="true"><svg class="ix" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-idcard"/></svg></div>
           <h3>ID Card Print <span class="tag live">Live</span></h3>
-          <p>Upload Aadhaar, PAN, Voter ID, Ayushman, Jan Aadhaar or eShram PDF — auto-detect, auto-crop, CR80 output. A4 multi-card, Dragon sheet, PVC tray print. Batch processing, photo editing. 100% on-device.</p>
+          <p>Upload Aadhaar, PAN, Voter ID, Ayushman, Jan Aadhaar or eShram PDF — auto-detect, auto-crop, CR80 output, Photo Adjust controls, and a fold-and-laminate A4 sheet. 100% on-device.</p>
           <span class="fcta">Open tool <span class="arrow" aria-hidden="true">→</span></span>
         </a>
 
@@ -1148,8 +1151,8 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
           <div class="aicon" aria-hidden="true"><svg class="ix" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-idcard"/></svg></div>
           <h3>Print shops &amp; photo studios</h3>
           <ul>
-            <li>Skip Photoshop — passport, Aadhaar, PAN, visa sheets in minutes</li>
-            <li>Unlimited HD exports and all country presets at <strong>₹149/month</strong></li>
+            <li>Skip Photoshop — passport photos and Aadhaar/PAN/Voter sheets in minutes</li>
+            <li>Unlimited Studio Print sheets at <strong>₹59/week</strong> or <strong>₹149/month</strong></li>
             <li>Works on the shop PC, a tablet or the operator's phone</li>
             <li>Customer photos never leave the browser — private by default</li>
           </ul>
@@ -1161,7 +1164,7 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
           <ul>
             <li>Make a passport photo from a selfie — no studio trip</li>
             <li>Download a 300 DPI A4 sheet, print at any ₹10 shop</li>
-            <li>Free tier: 2 sheets a day, no signup wall</li>
+            <li>Free tier: 2 sheets a day after login</li>
             <li>Safe for kids' and students' photos — nothing uploaded</li>
           </ul>
         </div>
@@ -1185,11 +1188,11 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
         </li>
         <li class="stat-card">
           <span class="stat-num">2 <span class="stat-unit">sheets</span></span>
-          <span class="stat-label">Free every day — no credit card, no signup wall before your first print.</span>
+          <span class="stat-label">Free every day — 2 A4 sheets after login, no credit card needed.</span>
         </li>
         <li class="stat-card">
           <span class="stat-num">₹149<span class="stat-unit">/30 days</span></span>
-          <span class="stat-label">Unlimited A4 passport sheets on the monthly pass. Weekly pass is ₹59.</span>
+          <span class="stat-label">Unlimited Studio Print sheets on the monthly pass. Weekly pass is ₹59.</span>
         </li>
         <li class="stat-card">
           <span class="stat-num">300 <span class="stat-unit">DPI</span></span>
@@ -1227,7 +1230,7 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
         <div class="why-card">
           <div class="wicon" aria-hidden="true"><svg class="ix" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-zap"/></svg></div>
           <h4>Free, then fair</h4>
-          <p>Start free, no signup wall. Unlock unlimited HD exports and all presets at <strong>₹59/week</strong> or <strong>₹149/month</strong>.</p>
+          <p>Start free with 2 A4 sheets per day after login. Weekly <strong>₹59</strong> and Monthly <strong>₹149</strong> unlock unlimited passport-photo and ID-card output.</p>
         </div>
       </div>
     </div>
@@ -1272,7 +1275,7 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
       <div class="section-head">
         <span class="section-tag">Pricing</span>
         <h2>Free to try. Fair to upgrade.</h2>
-        <p>Start for free with no signup wall. Upgrade only when you're running a counter or printing dozens of sheets a week. One-time purchase — no auto-renewal.</p>
+        <p>Start free with 2 A4 sheets per day after login. Upgrade only when you're running a counter or printing dozens of sheets a week. One-time purchase — no auto-renewal.</p>
       </div>
 
       <!-- P12 — Plan cards (redesigned) -->
@@ -1283,13 +1286,13 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
           <div class="plan-price-wrap">
             <span class="plan-amount">₹0</span>
           </div>
-          <p class="plan-tagline">No signup required</p>
+          <p class="plan-tagline">Best for trying the tools</p>
           <ul class="plan-features">
             <li>2 A4 sheets per day</li>
-            <li>Standard photo layout</li>
+            <li>Passport Photo + ID Card Print</li>
             <li>300 DPI print quality</li>
-            <li>India size presets</li>
-            <li class="feat-no">Batch processing</li>
+            <li>India passport preset</li>
+            <li class="feat-no">Unlimited sheets</li>
             <li class="feat-no">Priority support</li>
           </ul>
           <a class="plan-cta" href="passport-photo.html" data-action="start-free">Start free</a>
@@ -1305,10 +1308,10 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
           <p class="plan-tagline">For regular print jobs</p>
           <ul class="plan-features">
             <li>Unlimited A4 sheets</li>
-            <li>Unlimited photos per sheet</li>
-            <li>600 DPI print quality</li>
-            <li>All country presets</li>
-            <li class="feat-no">Batch processing</li>
+            <li>Passport Photo + ID Card Print</li>
+            <li>600 DPI passport export</li>
+            <li>All passport country presets</li>
+            <li>Unlimited ID downloads / prints</li>
             <li class="feat-no">Priority support</li>
           </ul>
           <a class="plan-cta" href="#pricing" data-plan="weekly">Buy Weekly</a>
@@ -1322,13 +1325,13 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
             <span class="plan-amount">₹149</span>
             <span class="plan-period">/30 days</span>
           </div>
-          <p class="plan-tagline">Everything, unlimited</p>
+          <p class="plan-tagline">Best value for daily counters</p>
           <ul class="plan-features">
             <li>Unlimited A4 sheets</li>
-            <li>Unlimited photos per sheet</li>
-            <li>600 DPI print quality</li>
-            <li>All country presets</li>
-            <li>Batch processing</li>
+            <li>Passport Photo + ID Card Print</li>
+            <li>600 DPI passport export</li>
+            <li>All passport country presets</li>
+            <li>Unlimited ID downloads / prints</li>
             <li>Priority support</li>
           </ul>
           <a class="plan-cta plan-cta-accent" href="#pricing" data-plan="monthly">Buy Monthly</a>
@@ -1353,7 +1356,7 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
         <details class="faq-item" id="faq-free-tier">
           <summary>Is Studio Print really free?</summary>
           <div class="faq-body">
-            <p>Yes — the free tier gives you 2 A4 sheets per day with Indian passport presets, no signup wall, and 300 DPI print-ready output. Upgrade to Weekly (₹59) or Monthly (₹149) only if you need unlimited sheets or all country presets.</p>
+            <p>Yes — the free tier gives you 2 A4 sheets per day after login. Passport Photo includes 300 DPI print-ready output, and ID Card Print uses the same free limit before paid plans unlock unlimited sheets. Upgrade to Weekly (₹59) or Monthly (₹149) if you need unlimited output or all passport country presets.</p>
           </div>
         </details>
 
