@@ -842,8 +842,14 @@ const CROP = {
     backPage:  [0.035, 0.05, 0.93, 0.90]
   },
   janaadhaar: {
-    front:     [0.035, 0.06, 0.93, 0.46],
-    back:      [0.035, 0.55, 0.93, 0.40],
+    /* §AC.36 — Jan Aadhaar single-page PDFs place the printable PVC
+       pair on the lower row, but the earlier lower-row crop still ran
+       too tall and captured the serial/date text sitting below each
+       card. Re-measured against 9999-2IN1-00074_ecard.pdf by tracing
+       the actual lower card artwork image bounds on page 1, so CR80
+       output now hugs the front/back card pair itself. */
+    front:     [0.0499, 0.5428, 0.4428, 0.1875],
+    back:      [0.5038, 0.5428, 0.4448, 0.1875],
     frontPage: [0.035, 0.05, 0.93, 0.90],
     backPage:  [0.035, 0.05, 0.93, 0.90]
   },
@@ -936,11 +942,14 @@ const CARD_PHOTO_ROI = {
      actual PAN photo area. This ROI keeps the full rectangular photo
      box (with its small white margin) — not a face-only crop. */
   pan:        { front: [0.041, 0.253, 0.179, 0.296], back: null },
-  /* Remaining 4 types kept at the spec §AC.29.5 estimates — tighten
-     when sample PDFs land per the issues.md note. */
+  /* Jan Aadhaar now measured from a real sample PDF (§AC.36). The
+     previous estimate started too far left/high and Photo Only cut the
+     portrait in half. Keep the full photo rectangle, not a face-only
+     crop. Remaining 3 types stay on the §AC.29.5 estimates until more
+     sample PDFs land. */
   voter:      { front: [0.04, 0.20, 0.25, 0.55], back: null },
   ayushman:   { front: [0.04, 0.20, 0.22, 0.55], back: null },
-  janaadhaar: { front: [0.04, 0.20, 0.22, 0.55], back: null },
+  janaadhaar: { front: [0.068, 0.342, 0.171, 0.380], back: null },
   eshram:     { front: [0.04, 0.18, 0.22, 0.55], back: null }
 };
 

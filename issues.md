@@ -4313,13 +4313,21 @@ Reference Screenshots saved in `.agents/references/`:
 - `ac29-roi-calibrate-20260427-after-aadhaar.png`
 - `ac29-roi-calibrate-20260427-after-pan.png`
 
-### Issue 2 — Other 4 card types still un-QA'd
+### Issue 2 — Remaining non-Aadhaar/PAN card samples still un-QA'd
 
-Voter / Ayushman / Jan Aadhaar / eShram ROIs remain the estimates from §AC.29.5. Tracked as §AC.31 — stays gated on operator supplying sample PDFs.
+Voter / Ayushman / eShram ROIs remain the estimates from §AC.29.5. Tracked as §AC.31 — stays gated on operator supplying sample PDFs.
+
+Jan Aadhaar now has one real sample PDF (`9999-2IN1-00074_ecard.pdf`, password `SONI0101`) confirming two separate issues: the original single-page crop was pointed at the upper letter section, and the later lower-row patch still ran too tall, capturing the serial/date line below the printable cards. The measured single-page crop should hug the actual lower card artwork image bounds:
+
+- front: `[0.0499, 0.5428, 0.4428, 0.1875]`
+- back:  `[0.5038, 0.5428, 0.4448, 0.1875]`
+- `CARD_PHOTO_ROI.janaadhaar.front`: `[0.068, 0.342, 0.171, 0.380]` so `Photo Only` isolates the full portrait rectangle instead of clipping the face from the left.
+
+Multi-page `frontPage` / `backPage` values remain unchanged.
 
 ## §AC.35 PAN Photo Only UI polish + local file crash fix
 
-**Status:** SHIPPED locally, pending PR.
+**Status:** SHIPPED — PR #299 merged.
 
 ### AC.35.1 User report
 
@@ -4371,3 +4379,48 @@ Changes:
 - The previous `Unexpected token 'catch'` page error is gone.
 - Remaining console noise on `file://` is only font CORS warnings, which
   affect typography but not functionality.
+
+## §AC.36 Jan Aadhaar crop + Photo Only ROI re-measure
+
+**Status:** SHIPPED locally — code patch applied, pending PR.
+
+### AC.36.1 User report
+
+The owner asked that Jan Aadhaar be handled with the same research depth
+as Aadhaar and PAN because the prior pass did not feel trustworthy.
+
+### AC.36.2 Research method
+
+- Reused the real operator sample PDF:
+  `9999-2IN1-00074_ecard.pdf` (password `SONI0101`)
+- Re-read the page-map/contact-sheet evidence already generated in the
+  local working folder.
+- Recomputed the exact lower card and photo placements from the PDF's
+  embedded image transforms instead of relying on the older heuristic
+  lower-row crop.
+
+### AC.36.3 Findings
+
+1. The current Jan Aadhaar lower-row crop was in the correct general
+   area, but it still ran too tall and included the serial/date text
+   printed below the actual front/back cards.
+2. The current `CARD_PHOTO_ROI.janaadhaar.front` started too far left and
+   too high, so `Photo Only` cut the portrait from the left side instead
+   of isolating the full rectangular photo.
+
+### AC.36.4 Measured values
+
+- `CROP.janaadhaar.front = [0.0499, 0.5428, 0.4428, 0.1875]`
+- `CROP.janaadhaar.back  = [0.5038, 0.5428, 0.4448, 0.1875]`
+- `CARD_PHOTO_ROI.janaadhaar.front = [0.068, 0.342, 0.171, 0.380]`
+
+### AC.36.5 Evidence files
+
+- `janaadhaar-page-render.png`
+- `janaadhaar-page-map-overlay.png`
+- `janaadhaar-current-crop-overlay.png`
+- `janaadhaar-proposed-crop-overlay.png`
+- `janaadhaar-front-roi-overlay.png`
+- `janaadhaar-front-bg-exact.png`
+- `janaadhaar-back-bg-exact.png`
+- `janaadhaar-front-current-with-exact-boxes.png`
