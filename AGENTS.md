@@ -567,6 +567,11 @@ unlock, auto-detect, front+back preview, CR80 output, A4 sheet).
   tightened for Aadhaar and PAN (PR #289). Sheet builders remain ZERO-change.
   Full details in `issues.md §AC.29`.
 - **§AC.35 SHIPPED locally — PAN Photo Only UI polish + local file crash fix.**
+- **§AC.36 SHIPPED locally — Jan Aadhaar re-measured from real sample PDF.**
+  Single-page crop now hugs the lower printable card pair instead of
+  leaking the serial/date text below the cards, and
+  `CARD_PHOTO_ROI.janaadhaar.front` now matches the full portrait box
+  instead of clipping the face from the left.
   In `Photo Only`, hide the empty back-side box whenever the detected
   card has no back photo ROI. Hide the `Rounded Corners` option in
   `Photo Only`, and also hide/suppress it for PAN cards because the PAN

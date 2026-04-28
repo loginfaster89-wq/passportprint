@@ -702,6 +702,12 @@ Highlights:
   effectively disabled for PAN cards. The Aadhaar variant branches must
   keep their closing braces intact; otherwise `id-print.html` crashes on
   load with `Unexpected token 'catch'`.
+- §AC.36 SHIPPED locally — Jan Aadhaar re-measured from the real sample
+  `9999-2IN1-00074_ecard.pdf` (`SONI0101`). The earlier lower-row crop
+  still included the serial/date line below the cards, so the shipped
+  values now hug the actual lower card artwork image bounds. The Jan
+  Aadhaar `Photo Only` ROI also moved to the exact portrait rectangle so
+  it no longer clips the face from the left.
 
 Test PDFs repo mein saved hain:
 test-pdfs/pan-test.pdf (password: 05071999)
