@@ -151,6 +151,7 @@ main.legal-main .callout strong{color:var(--accent);}
   color:var(--muted);
 }
 .contact-form input[type=text],
+.contact-form input:not([type]),
 .contact-form input[type=email],
 .contact-form select,
 .contact-form textarea{
@@ -199,7 +200,8 @@ main.legal-main .callout strong{color:var(--accent);}
   background-color:var(--surface2)!important;
   transition:background-color 99999s ease-in-out 0s;
 }
-.contact-form input[type=text]{
+.contact-form input[type=text],
+.contact-form input:not([type]){
   box-shadow:0 0 0 1000px var(--surface2) inset;
   background-image:none!important;
 }
