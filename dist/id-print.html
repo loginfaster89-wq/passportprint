@@ -1551,6 +1551,67 @@ slSat.addEventListener('input', onSliderInput);
 slBright.addEventListener('change', onSliderInput);
 slContrast.addEventListener('change', onSliderInput);
 slSat.addEventListener('change', onSliderInput);
+
+/* §AC.37b/4 — iPad Chrome (WebKit) ne native <input type=range> ke touch
+   drag ko reliably nahi handle kiya, even with touch-action:none (PR #303).
+   Pointer Events fallback: hum khud pointerdown/move/up handle karte hain
+   aur clientX → value compute karke synthetic 'input' event dispatch karte
+   hain, jo existing onSliderInput handler ko trigger karta hai. Yeh desktop
+   mouse, iPhone touch, iPad WebKit, Android sab pe uniformly chalta hai.
+   Bonus: track-tap-to-jump (tap anywhere on track moves thumb there). */
+(function attachIdpRangePointerFallback() {
+  if (typeof window === 'undefined' || !('PointerEvent' in window)) return;
+  function valueFromPointer(slider, clientX) {
+    var rect = slider.getBoundingClientRect();
+    if (rect.width <= 0) return null;
+    var min = parseFloat(slider.min); if (isNaN(min)) min = 0;
+    var max = parseFloat(slider.max); if (isNaN(max)) max = 100;
+    var step = parseFloat(slider.step); if (isNaN(step) || step <= 0) step = 1;
+    var ratio = (clientX - rect.left) / rect.width;
+    if (ratio < 0) ratio = 0;
+    if (ratio > 1) ratio = 1;
+    var v = min + ratio * (max - min);
+    v = Math.round(v / step) * step;
+    if (v < min) v = min;
+    if (v > max) v = max;
+    return v;
+  }
+  function attach(slider) {
+    if (!slider) return;
+    var dragging = false;
+    function update(clientX) {
+      var v = valueFromPointer(slider, clientX);
+      if (v === null) return;
+      var s = String(v);
+      if (s !== slider.value) {
+        slider.value = s;
+        slider.dispatchEvent(new Event('input', { bubbles: true }));
+      }
+    }
+    slider.addEventListener('pointerdown', function(e) {
+      dragging = true;
+      try { slider.setPointerCapture(e.pointerId); } catch (_) {}
+      try { slider.focus({ preventScroll: true }); } catch (_) {}
+      update(e.clientX);
+      e.preventDefault();
+    });
+    slider.addEventListener('pointermove', function(e) {
+      if (!dragging) return;
+      update(e.clientX);
+    });
+    function end(e) {
+      if (!dragging) return;
+      dragging = false;
+      try { slider.releasePointerCapture(e.pointerId); } catch (_) {}
+      slider.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+    slider.addEventListener('pointerup', end);
+    slider.addEventListener('pointercancel', end);
+  }
+  attach(slBright);
+  attach(slContrast);
+  attach(slSat);
+})();
 btnAutoEnhance.addEventListener('click', autoEnhance);
 btnResetEdit.addEventListener('click', () => {
   /* §AC.27 — Position panel removed; Reset only resets Photo Adjust sliders.
