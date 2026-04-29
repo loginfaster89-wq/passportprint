@@ -158,6 +158,7 @@ main.legal-main .callout strong{color:var(--accent);}
   border:1px solid var(--border);border-radius:8px;
   padding:10px 12px;font-family:'DM Mono',ui-monospace,monospace;
   font-size:13px;line-height:1.5;
+  color-scheme:dark;
   appearance:none;-webkit-appearance:none;
   transition:border-color .15s,background .15s;
 }
@@ -200,6 +201,7 @@ main.legal-main .callout strong{color:var(--accent);}
 }
 .contact-form input[type=text]{
   box-shadow:0 0 0 1000px var(--surface2) inset;
+  background-image:none!important;
 }
 .contact-form textarea{min-height:120px;resize:vertical;}
 .contact-form select{
@@ -513,5 +515,4 @@ select:focus-visible{
   transition:background .15s;
 }
 .sp-cookie-ok:hover{background:#ffb627;}
-
 

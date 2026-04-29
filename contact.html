@@ -84,7 +84,7 @@
 
   <p>We’re a small team and we answer every email. Whether it’s a bug, a refund, a feature request or just feedback — please get in touch.</p>
 
-  <form class="contact-form" id="contactForm" data-u="loginfaster89" data-d="gmail.com" aria-labelledby="cfHead" novalidate>
+  <form class="contact-form" id="contactForm" data-u="loginfaster89" data-d="gmail.com" aria-labelledby="cfHead" novalidate autocomplete="off">
     <div class="cf-head">
       <h2 id="cfHead">Send us a message</h2>
       <span class="cf-sla" aria-label="Replies within 1 to 2 working days">Replies within 1–2 working days</span>
@@ -94,7 +94,7 @@
     <div class="cf-grid2">
       <div class="cf-row">
         <label for="cfName">Your name</label>
-        <input type="text" id="cfName" name="name" autocomplete="name" placeholder="Your name" required>
+        <input type="text" id="cfName" name="sender_name" autocomplete="off" autocapitalize="words" autocorrect="off" spellcheck="false" placeholder="Your name" required>
       </div>
       <div class="cf-row">
         <label for="cfEmail">Your email</label>
@@ -222,4 +222,3 @@
 <script src="assets/cookie.js" defer></script>
 </body>
 </html>
-
