@@ -4594,3 +4594,29 @@ Both follow-up PRs ship `id-print.html` / `assets/legal.css` source
 **and** the `dist/` regenerated outputs in the same commit so
 Cloudflare Pages doesn't depend on the GH Actions build step
 producing a different result.
+
+---
+
+## §AC.37.4 — iPad Chrome slider follow-up after PR #303 deploy (2026-04-29)
+
+**Status:** PR #303 (`touch-action:pan-y` → `touch-action:none`) merged as commit `53cc78f` and verified live (`curl https://studioprint.pages.dev/id-print | grep -oE 'touch-action:[a-z-]+'` returns `touch-action:none`; response headers show `cache-control: no-cache, no-store, must-revalidate`). Owner reports on iPad Chrome that, even after a Chrome iOS update + browsing-data clear, the Brightness / Contrast / Saturation sliders still don't respond to touch drag. Phone (iPhone Chrome) and PC continue to work, so this is iPad-WebKit-specific.
+
+**Why CSS-only fix wasn't enough.** iPad Chrome on iOS uses Apple's WebKit engine (mandated). When a `<input type=range>` is rendered in iPad WebKit, especially in tablet-sized viewports, the native thumb-drag gesture handler appears to drop intermediate touch movements even with `touch-action:none` set. Multiple reports across web (Apple WebKit bug tracker, MDN comments, StackOverflow 2022–2025) confirm the same pattern: tap-down highlights the thumb, but no `input` events fire on drag, so JS handlers never see the value change. The browser does still fire pointer / touch events on the slider element — the problem is purely in WebKit's internal range-thumb handling.
+
+**Tier-2 fix (this PR — devin/1777439477-ac37b2-ipad-slider-pointer-fallback).** Stop relying on native range thumb-drag entirely; implement a Pointer Events fallback that:
+
+1. On `pointerdown` anywhere on the slider element (track or thumb), `setPointerCapture` the pointer to the slider so subsequent moves always route here, compute the value from `(clientX - rect.left) / rect.width` mapped to `[min, max]` with proper `step` rounding, set `slider.value = computed`, and dispatch a synthetic `input` event so existing `onSliderInput` handler fires.
+2. On `pointermove` while dragging, repeat the value calculation and dispatch `input`.
+3. On `pointerup` / `pointercancel`, release capture and dispatch `change`.
+4. `e.preventDefault()` on `pointerdown` to suppress flaky native handling on every platform; the synthetic events keep the existing JS contract intact (`onSliderInput` continues to drive `applyFilters()` + `savePrefs()`).
+
+Pointer Events are well-supported on iPad WebKit (since iOS 13) and fire reliably on `<input type=range>` even when the native drag handler doesn't, because they're a separate browser subsystem. Bonus: tap anywhere on the track now jumps the thumb there (better UX than native iOS range, which doesn't support track-tap-to-jump). Vertical page scrolling is unaffected — `touch-action:none` only applies to the slider track itself, and `e.preventDefault()` only fires when a pointer comes down on the slider.
+
+**Why one combined fix covers desktop too.** The handler runs on every platform that supports `PointerEvent` (all modern browsers since 2019). Desktop mouse, iPhone touch, iPad WebKit, Android Chrome — all uniformly route through the new code path. No special-casing for iPad. Native range keyboard handling (arrow keys when focused) is untouched because keyboard events don't trigger pointer handlers.
+
+**If still broken after deploy.** Three escalation paths in order:
+
+1. **Hit-area expansion** — `::-webkit-slider-thumb` width/height bumped to ~28 px while keeping the visible 14 px accent dot via inset `box-shadow` (the touch target gets bigger but the visual stays the same).
+2. **Wrap and listen on a parent div** — sometimes WebKit doesn't fire pointer events on the input itself but does fire them on the wrapping label / div; would relocate the handlers up one level.
+3. **Replace `<input type=range>` with a custom div-based slider** — last resort; loses native keyboard accessibility, would need ARIA `role="slider"` + key handlers.
+
