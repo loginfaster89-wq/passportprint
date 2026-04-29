@@ -1254,6 +1254,80 @@ function getFilterString(scope) {
   return 'brightness(' + s.bright + '%) contrast(' + s.contrast + '%) saturate(' + s.sat + '%)';
 }
 
+/* §AC.37c — iPad Safari / iOS WebKit < iOS 18 doesn't support
+   CanvasRenderingContext2D.filter (it's silently a no-op: setting
+   ctx.filter = 'brightness(150%)' doesn't error but doesn't apply).
+   Result: brightness/contrast/saturation slider changes don't show up
+   in the preview canvas on iPad Chrome. Detect support once at load
+   and fall back to a per-pixel ImageData transform when unavailable. */
+var SUPPORTS_CTX_FILTER = (function() {
+  try {
+    var c = document.createElement('canvas').getContext('2d');
+    if (!c || typeof c.filter === 'undefined') return false;
+    c.filter = 'brightness(50%)';
+    return c.filter === 'brightness(50%)';
+  } catch (_) { return false; }
+})();
+
+/* CSS-spec-equivalent ImageData transform for brightness → contrast →
+   saturate (applied in this order to match the order produced by
+   getFilterString). saturate uses the SVG feColorMatrix luminance
+   coefficients (W3C Filter Effects spec). Skips the loop entirely when
+   all three values are 100 (identity). */
+function applyFiltersToImageData(ctx, dx, dy, dw, dh, src) {
+  if (!src || (src.bright === 100 && src.contrast === 100 && src.sat === 100)) return;
+  if (dw <= 0 || dh <= 0) return;
+  var img;
+  try { img = ctx.getImageData(dx, dy, dw, dh); }
+  catch (_) { return; /* tainted canvas — bail silently */ }
+  var d = img.data;
+  var bM = src.bright   / 100;
+  var cM = src.contrast / 100;
+  var s  = src.sat      / 100;
+  var sr1 = 0.213 + 0.787 * s, sg1 = 0.715 - 0.715 * s, sb1 = 0.072 - 0.072 * s;
+  var sr2 = 0.213 - 0.213 * s, sg2 = 0.715 + 0.285 * s, sb2 = 0.072 - 0.072 * s;
+  var sr3 = 0.213 - 0.213 * s, sg3 = 0.715 - 0.715 * s, sb3 = 0.072 + 0.928 * s;
+  for (var i = 0; i < d.length; i += 4) {
+    var r = d[i], g = d[i + 1], b = d[i + 2];
+    r *= bM; g *= bM; b *= bM;
+    r = (r - 128) * cM + 128;
+    g = (g - 128) * cM + 128;
+    b = (b - 128) * cM + 128;
+    var nr = sr1 * r + sg1 * g + sb1 * b;
+    var ng = sr2 * r + sg2 * g + sb2 * b;
+    var nb = sr3 * r + sg3 * g + sb3 * b;
+    d[i] = nr; d[i + 1] = ng; d[i + 2] = nb;
+  }
+  ctx.putImageData(img, dx, dy);
+}
+
+/* Wrappers that pick ctx.filter (GPU, fast) when supported, else fall
+   back to applyFiltersToImageData on the post-draw destination region. */
+function drawWithFilter(ctx, srcCanvas, dx, dy, dw, dh, scope) {
+  var f = (scope === 'photo') ? photoFilters : cardFilters;
+  var noOp = (f.bright === 100 && f.contrast === 100 && f.sat === 100);
+  if (SUPPORTS_CTX_FILTER) {
+    if (!noOp) ctx.filter = getFilterString(scope);
+    ctx.drawImage(srcCanvas, dx, dy, dw, dh);
+    if (!noOp) ctx.filter = 'none';
+  } else {
+    ctx.drawImage(srcCanvas, dx, dy, dw, dh);
+    if (!noOp) applyFiltersToImageData(ctx, dx, dy, dw, dh, f);
+  }
+}
+function drawWithFilterCrop(ctx, srcCanvas, sx, sy, sw, sh, dx, dy, dw, dh, scope) {
+  var f = (scope === 'photo') ? photoFilters : cardFilters;
+  var noOp = (f.bright === 100 && f.contrast === 100 && f.sat === 100);
+  if (SUPPORTS_CTX_FILTER) {
+    if (!noOp) ctx.filter = getFilterString(scope);
+    ctx.drawImage(srcCanvas, sx, sy, sw, sh, dx, dy, dw, dh);
+    if (!noOp) ctx.filter = 'none';
+  } else {
+    ctx.drawImage(srcCanvas, sx, sy, sw, sh, dx, dy, dw, dh);
+    if (!noOp) applyFiltersToImageData(ctx, dx, dy, dw, dh, f);
+  }
+}
+
 /* §AC.29 — Convert fractional ROI from CARD_PHOTO_ROI into pixel coords
    for a canvas of width × height. Returns null if no ROI is configured
    for (cardType, side). Fractional coords are CR80-relative; the same
@@ -1316,9 +1390,7 @@ function applyMaskedFilters(destCanvas, srcCanvas, w, h, cardType, side, applyRo
     roundedRectPath(ctx, 0, 0, w, h, CARD_RADIUS);
     ctx.clip();
   }
-  ctx.filter = getFilterString('whole');
-  ctx.drawImage(srcCanvas, 0, 0, w, h);
-  ctx.filter = 'none';
+  drawWithFilter(ctx, srcCanvas, 0, 0, w, h, 'whole');
   var roi = getPhotoROIPixels(cardType, side, w, h);
   if (roi) {
     ctx.save();
@@ -1337,9 +1409,7 @@ function applyMaskedFilters(destCanvas, srcCanvas, w, h, cardType, side, applyRo
     ctx.clearRect(roi.x, roi.y, roi.w, roi.h);
     ctx.fillStyle = '#fff';
     ctx.fillRect(roi.x, roi.y, roi.w, roi.h);
-    ctx.filter = getFilterString('photo');
-    ctx.drawImage(srcCanvas, 0, 0, w, h);
-    ctx.filter = 'none';
+    drawWithFilter(ctx, srcCanvas, 0, 0, w, h, 'photo');
     ctx.restore();
   }
 }
@@ -1765,9 +1835,7 @@ function paintPhotoOnly(canvas, srcCanvas, cardType, side) {
   }
   var dx = (W - dispW) / 2;
   var dy = (H - dispH) / 2;
-  ctx.filter = getFilterString('photo');
-  ctx.drawImage(srcCanvas, roi.x, roi.y, roi.w, roi.h, dx, dy, dispW, dispH);
-  ctx.filter = 'none';
+  drawWithFilterCrop(ctx, srcCanvas, roi.x, roi.y, roi.w, roi.h, dx, dy, dispW, dispH, 'photo');
 }
 
 

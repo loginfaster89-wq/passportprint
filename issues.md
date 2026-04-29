@@ -4620,3 +4620,64 @@ Pointer Events are well-supported on iPad WebKit (since iOS 13) and fire reliabl
 2. **Wrap and listen on a parent div** — sometimes WebKit doesn't fire pointer events on the input itself but does fire them on the wrapping label / div; would relocate the handlers up one level.
 3. **Replace `<input type=range>` with a custom div-based slider** — last resort; loses native keyboard accessibility, would need ARIA `role="slider"` + key handlers.
 
+
+---
+
+## §AC.37.5 — Real iPad-Chrome root cause: `ctx.filter` unsupported (2026-04-29)
+
+**Symptom after PRs #303 + #304 merged + deployed:** owner reports on iPad Chrome that sliders now move and the % readout next to each label updates correctly (e.g. "Brightness 100%" → "Brightness 150%"), confirming PR #304 pointer-event fallback is firing `onSliderInput()` end-to-end. **But the image preview canvas itself doesn't change** — the rendered card stays at default brightness/contrast/saturation regardless of slider position. iPhone and PC continue to render the filter correctly.
+
+**Root cause.** `applyMaskedFilters` (and `paintPhotoOnly`) apply image filters via `CanvasRenderingContext2D.filter`:
+
+```js
+ctx.filter = getFilterString('whole');   // 'brightness(150%) contrast(110%) saturate(120%)'
+ctx.drawImage(srcCanvas, 0, 0, w, h);
+ctx.filter = 'none';
+```
+
+`CanvasRenderingContext2D.filter` is a **late addition to the Canvas 2D spec**. Chrome desktop has supported it since v52 (2016); Firefox and Safari macOS have shipped it for years. **iOS WebKit (which iPad Chrome and iPad Safari both use, mandated by Apple) only added support in iOS 18 (Sept 2024).** On iOS 17 and below, the `filter` property exists on the context object but assigning to it is a silent no-op — `ctx.drawImage` paints the source canvas raw, with no brightness/contrast/saturation transform. That perfectly matches the symptom.
+
+It also explains the device split owner observed:
+
+- **PC** — Chrome / Firefox / Safari all support `ctx.filter`. Works.
+- **iPhone** — likely on iOS 18+ (newer phones get OS upgrades faster). Works.
+- **iPad Chrome** — likely on iPadOS 17 or below (iPads often lag OS upgrades). `ctx.filter` silently dropped → preview unchanged.
+
+This is **not** a regression from any recent PR — `ctx.filter` has been the rendering pipeline since the original `applyMaskedFilters` was written. The bug was always present on older iPads; it only became visible to the owner now because PRs #303 + #304 fixed the *upstream* slider drag, exposing the *downstream* canvas-filter gap.
+
+**Fix (this PR — `devin/<ts>-ac37c-ipad-canvas-filter-fallback`).**
+
+1. Detect support once at script load:
+
+   ```js
+   var SUPPORTS_CTX_FILTER = (function () {
+     try {
+       var c = document.createElement('canvas').getContext('2d');
+       if (!c || typeof c.filter === 'undefined') return false;
+       c.filter = 'brightness(50%)';
+       return c.filter === 'brightness(50%)';
+     } catch (_) { return false; }
+   })();
+   ```
+
+   On iOS 17 and below, `c.filter = 'brightness(50%)'` either no-ops (property remains `'none'`) or throws — both cases return `false`.
+
+2. Add `applyFiltersToImageData(ctx, dx, dy, dw, dh, src)` that walks each pixel of the destination region's `ImageData` and applies brightness → contrast → saturate in the same order as the CSS filter string. Coefficients match the W3C Filter Effects spec for `<feColorMatrix saturate>` (the canonical luminance-preserving formula). Skips entirely when all three values are 100 (identity, zero cost).
+
+3. Add two thin wrappers — `drawWithFilter(ctx, src, dx, dy, dw, dh, scope)` for 5-arg `drawImage` calls and `drawWithFilterCrop(ctx, src, sx, sy, sw, sh, dx, dy, dw, dh, scope)` for 9-arg cropped paints — that pick the GPU-accelerated `ctx.filter` path on supporting browsers and the per-pixel fallback otherwise. All 3 existing `ctx.filter = …; drawImage; ctx.filter = 'none';` triplets in `applyMaskedFilters` (whole-card + clipped photo region) and `paintPhotoOnly` (cropped photo-only canvas) collapse into a single helper call each.
+
+**Why this approach.**
+
+- Zero behaviour change on browsers that support `ctx.filter` — the helpers simply inline the existing 3-line pattern, so PCs and modern iPhones see literally the same code path. No regression risk on the working majority.
+- Per-pixel fallback only runs when `SUPPORTS_CTX_FILTER === false`, which is essentially the iPad-on-old-iOS minority.
+- ~640k pixels × ~12 multiplications per pixel = a few hundred ms per `applyFilters` call on a 2018 iPad Pro. Slow-ish for live drag but fully correct, and the existing pointer handler already fires `applyFilters` synchronously per `pointermove` (no rAF throttle), so behaviour matches the CSS-filter path.
+- Tainted-canvas guard (`try { ctx.getImageData(...) } catch (_) { return; }`) prevents a hard crash on cross-origin canvases. All current sources are same-origin (PDF.js + user uploads), but the guard is defensive.
+- Identity short-circuit (`bright === 100 && contrast === 100 && sat === 100`) means default state pays zero cost on the fallback path — only non-default slider values trigger the per-pixel loop.
+
+**If still broken.** The most likely follow-up issue would be perceived lag during drag on older iPads — the per-pixel loop on every `pointermove` may stutter. Mitigation tier:
+
+1. Throttle `applyFilters` to `requestAnimationFrame` so drag triggers ≤60 redraws/sec instead of ≤120.
+2. During drag, render to a smaller proxy canvas (CR80_W/4 × CR80_H/4) and upscale; on `pointerup` re-render full-resolution.
+3. Move the per-pixel loop to a Web Worker via `OffscreenCanvas` (not all iPad Chrome versions support OffscreenCanvas yet — feature-detect first).
+
+Refs: `issues.md §AC.37`, §AC.37b, §AC.37.3, §AC.37.4, §AC.37.5 (this entry).
