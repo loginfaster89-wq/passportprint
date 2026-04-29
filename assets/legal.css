@@ -154,7 +154,7 @@ main.legal-main .callout strong{color:var(--accent);}
 .contact-form input[type=email],
 .contact-form select,
 .contact-form textarea{
-  width:100%;background:var(--surface2);color:var(--text);
+  width:100%;background:var(--surface2);background-color:var(--surface2)!important;color:var(--text);
   border:1px solid var(--border);border-radius:8px;
   padding:10px 12px;font-family:'DM Mono',ui-monospace,monospace;
   font-size:13px;line-height:1.5;
@@ -181,6 +181,25 @@ main.legal-main .callout strong{color:var(--accent);}
 .contact-form input:-webkit-autofill:focus,
 .contact-form textarea:-webkit-autofill:focus{
   border-color:var(--accent);
+}
+.contact-form input:-webkit-autofill,
+.contact-form input:-webkit-autofill:hover,
+.contact-form input:-webkit-autofill:focus,
+.contact-form select:-webkit-autofill,
+.contact-form select:-webkit-autofill:hover,
+.contact-form select:-webkit-autofill:focus,
+.contact-form textarea:-webkit-autofill,
+.contact-form textarea:-webkit-autofill:hover,
+.contact-form textarea:-webkit-autofill:focus{
+  -webkit-text-fill-color:var(--text)!important;
+  caret-color:var(--text)!important;
+  -webkit-box-shadow:0 0 0 1000px var(--surface2) inset!important;
+  box-shadow:0 0 0 1000px var(--surface2) inset!important;
+  background-color:var(--surface2)!important;
+  transition:background-color 99999s ease-in-out 0s;
+}
+.contact-form input[type=text]{
+  box-shadow:0 0 0 1000px var(--surface2) inset;
 }
 .contact-form textarea{min-height:120px;resize:vertical;}
 .contact-form select{
