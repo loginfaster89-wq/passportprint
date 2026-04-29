@@ -4424,3 +4424,173 @@ as Aadhaar and PAN because the prior pass did not feel trustworthy.
 - `janaadhaar-front-bg-exact.png`
 - `janaadhaar-back-bg-exact.png`
 - `janaadhaar-front-current-with-exact-boxes.png`
+
+## §AC.37 Live regressions — contact name field + iPad Chrome Adjust controls
+
+**Status:** OPEN — split into §AC.37a (contact) and §AC.37b (iPad slider).
+**Reported by:** project owner, after PR `9dc541f` (`fix(ui): stabilize
+contact name field and improve iPad adjust controls`) was already live
+and cache-busted.
+
+### AC.37.1 User report
+
+The owner re-tested the live site at `https://studioprint.pages.dev/`
+after PR `9dc541f` was deployed and the service-worker cache version
+was bumped, and reported two regressions still present:
+
+1. **`/contact` — first `Your name` field still looks wrong.** The
+   field renders with the wrong background / autofill colouring even
+   though the dark-theme + autofill kill rules from `9dc541f` are live
+   in `assets/legal.css`. Cache-bust + hard refresh did NOT fix it,
+   so this is not a stale-asset problem.
+2. **`/id-print` — `Adjust` panel sliders still do not work on iPad
+   Chrome.** Owner explicitly says iPad Chrome is broken; iPad Safari
+   is unverified. The label was already renamed `Photo Adjust` →
+   `Adjust`, `touch-action: pan-y` was added on `input.idp-range`,
+   `min-height: 24px` was set on the input box, and a `change` listener
+   was added alongside the existing `input` listener — none of those
+   shipped fixes are enough.
+
+### AC.37.2 Investigation — root cause for §AC.37a
+
+Diff probe of the live HTML vs the source confirms a build-pipeline
+mismatch that the previous fix did not anticipate.
+
+**Source `contact.html` after PR `9dc541f`:**
+
+```html
+<input type="text" id="cfName" name="sender_name" autocomplete="off"
+       autocapitalize="words" autocorrect="off" spellcheck="false"
+       placeholder="Your name" required>
+```
+
+**Live `https://studioprint.pages.dev/contact` HTML (curl, fresh body
+10128 bytes):**
+
+```html
+<input id="cfName" name="sender_name" autocomplete="off"
+       autocapitalize="words" autocorrect="off" spellcheck="false"
+       placeholder="Your name" required>
+```
+
+`type="text"` is **missing on the live HTML.** `build.js` runs
+`html-minifier-terser` with `removeRedundantAttributes: true`, which
+strips `type="text"` because `text` is the implicit default for
+`<input>`. The minifier behaviour is per-spec correct and applies to
+every input that omits an explicit non-default type.
+
+The CSS rules that style the contact form select on the literal
+attribute:
+
+```css
+/* assets/legal.css */
+.contact-form input[type=text],
+.contact-form input[type=email],
+.contact-form select,
+.contact-form textarea{
+  background:var(--surface2);color:var(--text);
+  border:1px solid var(--border);border-radius:8px;
+  padding:10px 12px;font-family:'DM Mono',ui-monospace,monospace;
+  font-size:13px;line-height:1.5;
+  color-scheme:dark;          /* added in 9dc541f */
+  appearance:none;-webkit-appearance:none;
+  transition:border-color .15s,background .15s;
+}
+
+.contact-form input[type=text]{
+  box-shadow:0 0 0 1000px var(--surface2) inset;
+  background-image:none!important;   /* added in 9dc541f */
+}
+```
+
+Both selectors use the literal `[type=text]` attribute selector. With
+the attribute stripped on live, the cfName input matches **none** of
+the dark-theme styling, **none** of the autofill kill, and **none** of
+`color-scheme:dark`. The Email field is unaffected because
+`type="email"` is not a default and survives the minifier — exactly
+matching the owner's observation that only the FIRST (Name) field
+"looks wrong".
+
+This is a real, repro-able defect of the previous fix, not a cache
+artefact.
+
+### AC.37.3 Investigation — hypotheses for §AC.37b
+
+The only `touch-action` declaration in the entire codebase is the
+single rule on `input.idp-range`. No parent `touch-action`, no global
+touchstart / touchmove / pointer event interceptor anywhere on
+`id-print.html` or in shared `assets/*.js` (verified with `grep -nE`
+on the full repo). So the iPad failure must be inside the slider's
+own rule block.
+
+Current shipped state (`id-print.html`):
+
+```css
+input.idp-range{
+  -webkit-appearance:none;appearance:none;width:100%;height:4px;
+  min-height:24px;
+  background:var(--border);border-radius:4px;outline:none;cursor:pointer;
+  touch-action:pan-y;-webkit-tap-highlight-color:transparent;
+}
+input.idp-range::-webkit-slider-thumb{
+  -webkit-appearance:none;appearance:none;width:14px;height:14px;
+  background:var(--accent);border-radius:50%;cursor:pointer;
+  box-shadow:0 0 6px rgba(240,165,0,.4);
+}
+```
+
+JS already has both `input` and `change` listeners on each of the
+3 sliders.
+
+Ranked hypotheses (most → least likely):
+
+1. **`touch-action: pan-y` is the wrong axis for a horizontal range
+   slider.** `pan-y` tells the browser "vertical pan is allowed; treat
+   horizontal touches as something else (mostly: do nothing /
+   prevent)." On iOS WebKit (which iPad Chrome uses under the hood
+   because Apple forces all iOS browsers onto WKWebView), this
+   suppresses the horizontal drag that a range slider needs.
+   `touch-action: none` (or `manipulation`) is the canonical value
+   for a native horizontal range. **High confidence — fixing this
+   alone is likely sufficient.**
+
+2. **Thumb hit-area too small (14×14 px).** iOS WebKit needs the
+   touch to land directly on the thumb circle for a drag to be
+   recognised; track-tap-to-jump is not native. 14 px is well below
+   the ~40 px Apple HIG recommendation, so even when (1) is fixed,
+   missed thumb taps will still feel "broken". Mitigation: keep the
+   visible accent dot small but expand the hit-area via a transparent
+   wider thumb (or an oversized invisible pseudo-element).
+
+3. **No track-tap fallback.** When the user taps the bar (not the
+   thumb) and nothing happens, they perceive the control as dead.
+   A small `pointerdown` handler that maps the tap x-coordinate to
+   a value would close that perception gap. Strictly enhancement,
+   not a fix for the reported breakage.
+
+### AC.37.4 PR plan
+
+Per AGENTS.md Rule #12 (one PR per logical task) + Rule #13
+(Research → Docs → Code), this section is the docs PR. The two
+follow-up code PRs:
+
+- **§AC.37a code PR** — `assets/legal.css` selector hardening so the
+  contact-form rules match `<input>` regardless of whether the
+  minifier preserves `type="text"`. Smallest possible diff: extend
+  the two `[type=text]` selectors to also include `input:not([type])`.
+  Then `npm run build` to regenerate `dist/assets/legal.css` and
+  `dist/contact.html`. Source `contact.html` left untouched (already
+  has `type="text"` for clarity).
+
+- **§AC.37b code PR** — `id-print.html` slider CSS fix targeting
+  hypothesis 1 first (smallest diff). Change `touch-action: pan-y` →
+  `touch-action: none` on `input.idp-range`. If owner confirms iPad
+  Chrome still misbehaves after that ships, follow up with a second
+  PR for hypothesis 2 (larger thumb hit-area). Repro attempt in this
+  session uses mobile-WebKit emulation against the local `dist/`
+  build before pushing.
+
+Both follow-up PRs ship `id-print.html` / `assets/legal.css` source
+**and** the `dist/` regenerated outputs in the same commit so
+Cloudflare Pages doesn't depend on the GH Actions build step
+producing a different result.
