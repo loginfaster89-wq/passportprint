@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
 <meta name="theme-color" content="#0d0d0d">
 <title>Privacy Policy — Studio Print</title>
 <meta name="description" content="Privacy Policy for Studio Print — how we collect, use, store and protect your data.">
@@ -36,18 +36,7 @@
   ]
 }
 </script>
-<link rel="preconnect" href="https://passportprint-studio.onrender.com">
 <link rel="stylesheet" href="assets/legal.css">
-<link rel="stylesheet" href="assets/auth.css">
-<link rel="stylesheet" href="assets/pricing.css">
-<!-- Razorpay Checkout preconnects + SDK so the shared pricing modal (assets/pricing.js) can open checkout inline. -->
-<link rel="preconnect" href="https://checkout.razorpay.com" crossorigin>
-<link rel="preconnect" href="https://checkout-static-next.razorpay.com" crossorigin>
-<link rel="preconnect" href="https://api.razorpay.com" crossorigin>
-<link rel="preconnect" href="https://cdn.razorpay.com" crossorigin>
-<script src="https://checkout.razorpay.com/v1/checkout.js" async></script>
-<!-- Google Identity Services — powers the "Continue with Google" button in the shared auth modal. -->
-<script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
 
@@ -227,11 +216,9 @@
 </footer>
 
 <script src="assets/nav.js" defer></script>
-<script src="assets/auth.js" defer></script>
-<script src="assets/pricing.js" defer></script>
+<script src="assets/deferred-ui.js" defer></script>
 <script src="assets/pwa.js" defer></script>
 <script src="assets/footer.js" defer></script>
 <script src="assets/cookie.js" defer></script>
 </body>
 </html>
-

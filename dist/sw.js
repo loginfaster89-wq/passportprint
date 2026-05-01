@@ -15,8 +15,8 @@
  * the activate step can evict the old cache.
  */
 
-const CACHE_VERSION = 'studioprint-v11';
-const RUNTIME_CACHE = 'studioprint-runtime-v11';
+const CACHE_VERSION = 'studioprint-v13';
+const RUNTIME_CACHE = 'studioprint-runtime-v13';
 
 // Minimum shell we want available offline after the first visit. The SW also
 // opportunistically caches other same-origin GETs it sees at runtime, so this
@@ -36,6 +36,8 @@ const PRECACHE_URLS = [
   '/assets/auth.css',
   '/assets/nav.js',
   '/assets/auth.js',
+  '/assets/deferred-ui.js',
+  '/assets/footer.js',
   '/assets/sliders.js',
   '/assets/reveal.js',
   '/assets/pwa.js',

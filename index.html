@@ -25,30 +25,11 @@
 <link rel="alternate icon" type="image/png" href="assets/favicon-32.png">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <link rel="manifest" href="assets/manifest.webmanifest">
-<!-- Warm-up backend so the first API call on /passport-photo doesn't pay
-     the full Render cold-start latency. -->
-<link rel="preconnect" href="https://passportprint-studio.onrender.com">
 <link rel="dns-prefetch" href="https://passportprint-studio.onrender.com">
-<!-- Razorpay Checkout preconnects + SDK so the homepage pricing CTAs can open
-     the checkout inline without jumping to passport-photo.html first. Mirrors
-     passport-photo.html head to avoid the intermittent build/undefined 403. -->
-<link rel="preconnect" href="https://checkout.razorpay.com" crossorigin>
-<link rel="preconnect" href="https://checkout-static-next.razorpay.com" crossorigin>
-<link rel="preconnect" href="https://api.razorpay.com" crossorigin>
-<link rel="preconnect" href="https://cdn.razorpay.com" crossorigin>
 <link rel="preload" href="assets/fonts/syne-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/dm-mono-400-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/fonts.css">
 <link rel="stylesheet" href="assets/legal.css">
-<link rel="stylesheet" href="assets/auth.css">
-<link rel="stylesheet" href="assets/pricing.css">
-<!-- Google Identity Services — powers the "Continue with Google" button in the shared auth modal. -->
-<script src="https://accounts.google.com/gsi/client" async defer></script>
-<!-- Razorpay Checkout SDK — declaratively loaded (not via createElement) so
-     the SDK's build-hash manifest resolves correctly. Same pattern as
-     passport-photo.html. Enables the shared Choose-your-Plan modal
-     (assets/pricing.js) to open Razorpay checkout directly. -->
-<script src="https://checkout.razorpay.com/v1/checkout.js" async></script>
 <style>
 /* ───── Homepage-specific styles ───── */
 :root{
@@ -375,6 +356,14 @@ section.section{
   border-bottom:1px solid var(--border);
 }
 section.section .wrap{max-width:1140px;margin:0 auto;}
+@supports (content-visibility:auto){
+  section.section,
+  .cta-band,
+  footer.legal-footer{
+    content-visibility:auto;
+    contain-intrinsic-size:1px 760px;
+  }
+}
 .section-head{
   display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;
   margin-bottom:clamp(28px,4vw,48px);
@@ -780,6 +769,26 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
 }
 
 /* Compact device-aware tweaks */
+@media (min-width:761px) and (max-width:1024px){
+  section.section{padding:56px 24px;}
+  .hero{padding-inline:24px;}
+  .hero-inner{max-width:760px;}
+  .hero-preview{max-width:760px;}
+  .hero-preview-grid,.hero-preview-demo{grid-template-columns:1fr;}
+  .features-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .stats-grid,.why-grid,.steps-grid,.audience-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .plan-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    max-width:920px;
+    margin-left:auto;
+    margin-right:auto;
+  }
+  .plan-card.plan-featured{
+    grid-column:1 / -1;
+    max-width:560px;
+    justify-self:center;
+  }
+}
 @media (max-width:760px){
   .hero{padding-top:48px;}
   .hero-preview-grid,.hero-preview-demo{grid-template-columns:1fr;}
@@ -788,11 +797,38 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
   .feature-card{padding:20px;min-height:0;}
   .step-card{padding:22px 18px 18px;}
 }
+@media (max-width:560px){
+  .hero{padding-inline:16px;padding-bottom:44px;}
+  .hero h1{
+    font-size:clamp(24px,8.8vw,34px);
+    max-width:9.5ch;
+    letter-spacing:-0.5px;
+    overflow-wrap:normal;
+    word-break:normal;
+    hyphens:none;
+    text-wrap:balance;
+  }
+  .hero p.lead{font-size:13px;max-width:30ch;}
+  .hero-actions{width:100%;flex-direction:column;align-items:center;}
+  .btn{width:min(100%,240px);justify-content:center;}
+  .hero-trust{max-width:320px;margin-left:auto;margin-right:auto;}
+  .section-head h2{
+    font-size:clamp(16px,6.8vw,22px);
+    max-width:8.5ch;
+    overflow-wrap:normal;
+    word-break:normal;
+    hyphens:none;
+    text-wrap:balance;
+    margin-inline:auto;
+  }
+  .section-head p{font-size:12px;max-width:30ch;margin-inline:auto;}
+}
 @media (max-width:480px){
   .hero h1{letter-spacing:-0.6px;}
   .hero-trust{font-size:10.5px;gap:8px 6px;}
   .hero-trust .pill{padding:3px 8px;}
   .btn{padding:11px 18px;font-size:13.5px;}
+  .section-head h2{font-size:clamp(22px,8vw,34px);max-width:12ch;}
   .hero-preview{margin-top:30px;border-radius:12px;padding:10px;}
   .hero-preview-grid,.hero-preview-demo{padding:10px;gap:10px;}
   .hpv-row{font-size:10.5px;padding:9px 10px;}
@@ -801,13 +837,13 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
   .step-card h4{font-size:15px;}
 }
 @media (max-width:420px){
-  .hero h1{font-size:clamp(28px,8.6vw,64px);max-width:none;}
+  .hero h1{font-size:clamp(22px,8.4vw,30px);max-width:9ch;}
 }
 @media (max-width:340px){
   .hero h1{font-size:30px;}
   .hero p.lead{font-size:13px;}
-  .btn{width:100%;justify-content:center;}
-  .hero-actions{flex-direction:column;width:100%;}
+  .btn{width:100%;max-width:none;}
+  .hero-actions{width:100%;}
 }
 @media (max-width:480px){
   .audience-card{padding:22px 18px;}
@@ -1529,31 +1565,29 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
 </footer>
 
 <script src="assets/nav.js" defer></script>
-<script src="assets/auth.js" defer></script>
-<script src="assets/pricing.js" defer></script>
-<script src="assets/sliders.js" defer></script>
+<script src="assets/deferred-ui.js" defer></script>
 <script src="assets/reveal.js" defer></script>
-<script src="assets/pwa.js" defer></script>
-<script src="assets/footer.js" defer></script>
-<script src="assets/cookie.js" defer></script>
 <script>
-// Warm up the Render-hosted backend so the first real call on /passport-photo
-// doesn't pay the full free-tier cold-start latency (up to ~30–50s after
-// idle). Fire-and-forget on the homepage — errors are ignored.
-(function () {
-  try {
-    var url = 'https://passportprint-studio.onrender.com/health';
-    var run = function () {
-      try {
-        fetch(url, { method: 'GET', mode: 'cors', cache: 'no-store', credentials: 'omit', keepalive: true }).catch(function(){});
-      } catch (_) {}
-    };
-    if ('requestIdleCallback' in window) {
-      window.requestIdleCallback(run, { timeout: 2000 });
-    } else {
-      setTimeout(run, 800);
-    }
-  } catch (_) {}
+(function(){
+  var loaded = false;
+  var files = ['assets/sliders.js','assets/pwa.js','assets/footer.js','assets/cookie.js'];
+  function loadScript(src){
+    var s = document.createElement('script');
+    s.src = src;
+    s.defer = true;
+    document.head.appendChild(s);
+  }
+  function run(){
+    if (loaded) return;
+    loaded = true;
+    for (var i = 0; i < files.length; i++) loadScript(files[i]);
+  }
+  function schedule(){
+    if ('requestIdleCallback' in window) requestIdleCallback(run, { timeout: 1200 });
+    else setTimeout(run, 700);
+  }
+  if (document.readyState === 'complete') schedule();
+  else window.addEventListener('load', schedule, { once: true });
 })();
 </script>
 <script>
