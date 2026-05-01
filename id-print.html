@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
 <meta name="theme-color" content="#0d0d0d">
 <title>ID Card Print — Studio Print</title>
-<meta name="description" content="Studio Print's ID-card workflow auto-detects Aadhaar, PAN, Voter ID, Ayushman, Jan Aadhaar, and eShram PDFs into CR80-ready, fold-and-laminate A4 sheets.">
+<meta name="description" content="Studio Print's ID-card workflow auto-detects Aadhaar, PAN, ABHA, e-EPIC, Ayushman, Jan Aadhaar, and eShram PDFs into CR80-ready, fold-and-laminate A4 sheets.">
 <meta property="og:title" content="ID Card Print — Studio Print">
-<meta property="og:description" content="Studio Print's ID-card workflow auto-detects Aadhaar, PAN, Voter ID, Ayushman, Jan Aadhaar, and eShram PDFs into CR80-ready A4 print sheets.">
+<meta property="og:description" content="Studio Print's ID-card workflow auto-detects Aadhaar, PAN, ABHA, e-EPIC, Ayushman, Jan Aadhaar, and eShram PDFs into CR80-ready A4 print sheets.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://studioprint.pages.dev/id-print.html">
 <meta property="og:image" content="https://studioprint.pages.dev/assets/og-image.png">
@@ -30,14 +30,6 @@
 <link rel="stylesheet" href="assets/legal.css">
 <link rel="stylesheet" href="assets/auth.css">
 <link rel="stylesheet" href="assets/pricing.css">
-<link rel="preconnect" href="https://checkout.razorpay.com" crossorigin>
-<link rel="preconnect" href="https://checkout-static-next.razorpay.com" crossorigin>
-<link rel="preconnect" href="https://api.razorpay.com" crossorigin>
-<link rel="preconnect" href="https://cdn.razorpay.com" crossorigin>
-<script src="https://checkout.razorpay.com/v1/checkout.js" async></script>
-<script src="https://accounts.google.com/gsi/client" async defer></script>
-<!-- pdf.js from CDN -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.min.mjs" type="module" crossorigin></script>
 <style>
 /* ── ID Print page styles ── */
 .idp-app{max-width:960px;margin:0 auto;padding:32px 20px 60px;}
@@ -137,7 +129,7 @@
 }
 .idp-detect.aadhaar{color:#f0a500;background:rgba(240,165,0,.08);border:1px solid rgba(240,165,0,.3);}
 .idp-detect.pan{color:#4ade80;background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.3);}
-.idp-detect.voter{color:#60a5fa;background:rgba(96,165,250,.08);border:1px solid rgba(96,165,250,.3);}
+.idp-detect.abha,.idp-detect.epic,.idp-detect.voter{color:#60a5fa;background:rgba(96,165,250,.08);border:1px solid rgba(96,165,250,.3);}
 .idp-detect.ayushman{color:#f472b6;background:rgba(244,114,182,.08);border:1px solid rgba(244,114,182,.3);}
 .idp-detect.janaadhaar{color:#fb923c;background:rgba(251,146,60,.08);border:1px solid rgba(251,146,60,.3);}
 .idp-detect.eshram{color:#34d399;background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.3);}
@@ -301,7 +293,7 @@
 input.idp-range{
   -webkit-appearance:none;appearance:none;width:100%;height:4px;min-height:24px;
   background:var(--border);border-radius:4px;outline:none;cursor:pointer;
-  touch-action:none;-webkit-tap-highlight-color:transparent;
+  touch-action:pan-y;-webkit-tap-highlight-color:transparent;
 }
 input.idp-range::-webkit-slider-thumb{
   -webkit-appearance:none;appearance:none;width:14px;height:14px;
@@ -533,7 +525,7 @@ input.idp-range::-moz-range-thumb{
   <!-- Hero -->
   <div class="idp-hero">
     <h1>ID Card <em>Print</em></h1>
-    <p>Upload your eAadhaar, ePAN, e-EPIC (Voter ID), Ayushman (PMJAY), Jan Aadhaar or eShram PDF — auto-crop, CR80 size, fold-and-laminate A4 layout. Everything stays in your browser.</p>
+    <p>Upload your eAadhaar, ePAN, ABHA, e-EPIC (Voter ID), Ayushman (PMJAY), Jan Aadhaar or eShram PDF — auto-crop, CR80 size, fold-and-laminate A4 layout. Everything stays in your browser.</p>
   </div>
 
   <!-- Steps -->
@@ -553,7 +545,7 @@ input.idp-range::-moz-range-thumb{
     <div class="idp-upload" id="dropZone">
       <span class="idp-upload-icon" aria-hidden="true">📄</span>
       <h3>Drop your PDFs here</h3>
-      <p>Upload one or multiple PDFs — eAadhaar · ePAN · e-EPIC · Ayushman · Jan Aadhaar · eShram · Password-protected supported</p>
+      <p>Upload one or multiple PDFs — eAadhaar · ePAN · ABHA · e-EPIC · Ayushman · Jan Aadhaar · eShram · Password-protected supported</p>
       <input type="file" id="pdfInput" accept=".pdf,application/pdf" multiple>
     </div>
     <div class="idp-plan-note">Free plan: 2 sheets/day after login. Weekly / Monthly: unlimited ID sheets. <a href="#plans">See plans</a></div>
@@ -577,7 +569,7 @@ input.idp-range::-moz-range-thumb{
       <p style="margin-top:12px;font-size:11px;color:var(--muted2);">
         Aadhaar: first 4 letters of name (CAPS) + birth year<br>
         PAN: date of birth in DDMMYYYY<br>
-        Voter ID / Ayushman / Jan Aadhaar / eShram: usually not password-protected
+        Voter ID / ABHA / Ayushman / Jan Aadhaar / eShram: usually not password-protected
       </p>
     </div>
   </div>
@@ -701,7 +693,7 @@ input.idp-range::-moz-range-thumb{
   <div class="footer-main">
     <div class="footer-brand">
       <a href="index.html" class="footer-logo">Studio <em>Print</em></a>
-      <p class="footer-tagline">Every print job. One browser tab. On-device AI for passport photos, Aadhaar/PAN/Voter ID/Ayushman/Jan Aadhaar/eShram sheets and 300&nbsp;DPI A4 layouts — built in India.</p>
+      <p class="footer-tagline">Every print job. One browser tab. On-device AI for passport photos, Aadhaar/PAN/ABHA/e-EPIC/Ayushman/Jan Aadhaar/eShram sheets and 300&nbsp;DPI A4 layouts — built in India.</p>
       <form class="footer-news" data-u="loginfaster89" data-d="gmail.com" aria-label="Subscribe to product updates">
         <input type="email" name="email" placeholder="you@example.com" required autocomplete="email" aria-label="Your email">
         <button type="submit">Subscribe</button>
@@ -758,13 +750,21 @@ input.idp-range::-moz-range-thumb{
 
 <script type="module">
 /* ── ID Card Print — Phase 1 MVP + Phase 3 Batch Processing ──
-   Client-side Aadhaar/PAN/Voter ID/Ayushman/Jan Aadhaar/eShram PDF
+   Client-side Aadhaar/PAN/ABHA/e-EPIC/Ayushman/Jan Aadhaar/eShram PDF
    → CR80 card crop → A4 fold-and-laminate sheet.
    Supports batch: multiple PDFs uploaded at once, all cards on one sheet.
    Uses pdf.js (CDN) for PDF rendering + text extraction. */
 
-const pdfjsLib = await import('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.min.mjs');
-pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.worker.min.mjs';
+let pdfjsLibPromise = null;
+async function getPdfJsLib(){
+  if(!pdfjsLibPromise){
+    pdfjsLibPromise = import('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.min.mjs').then((mod) => {
+      mod.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.worker.min.mjs';
+      return mod;
+    });
+  }
+  return pdfjsLibPromise;
+}
 
 /* ── Constants ── */
 const CR80_W = 1011;
@@ -775,6 +775,8 @@ const RENDER_SCALE = 4;
 
 const AADHAAR_KEYWORDS = ['aadhaar','uid','uidai','unique identification','government of india','vid','enrolment','download date','issue date'];
 const PAN_KEYWORDS = ['permanent account number','income tax','pan','department','nsdl'];
+const ABHA_KEYWORDS = ['@abdm','abha','health account','digital health mission','abha number','abha address'];
+const EPIC_KEYWORDS = ['e-epic','epic no.','scan by vha/blo app','e-electors photo identity','electoral registration officer'];
 const VOTER_KEYWORDS = ['election commission','epic','voter','electoral','electors photo identity','polling station','assembly constituency','parliamentary constituency'];
 const AYUSHMAN_KEYWORDS = ['ayushman','pmjay','pradhan mantri jan arogya','national health authority','nha','health card','beneficiary','jan arogya','health id','ayushman bharat'];
 const JANAADHAAR_KEYWORDS = ['jan aadhaar','janaadhaar','rajasthan','family id','jan aadhar','planning department','rajasthan jan aadhaar authority','janaadhar'];
@@ -820,6 +822,22 @@ const CROP = {
     front: [0.1149, 0.7724, 0.3949, 0.1767],
     back:  [0.5179, 0.7724, 0.3946, 0.1762]
   },
+  abha: {
+    /* ABHA PDFs place front and back as two full-width bordered panels stacked
+       vertically on page 1. Measured from ABHA-Card-91-5154-0487-4619.pdf
+       after rendering with pdf.js, so both the identity side and the lower
+       instruction / helpline side are cropped as printable cards. */
+    front: [0.0215, 0.0174, 0.9570, 0.4740],
+    back:  [0.0215, 0.5087, 0.9570, 0.4740]
+  },
+  epic: {
+    /* Real e-EPIC PDFs place the printable front/back pair side-by-side
+       in the upper band of page 1. Measured from e-EPIC_WEZ2391001.pdf
+       using the embedded card-template image bounds so the crop hugs the
+       actual CR80 card artwork instead of the long disclaimer block. */
+    front: [0.0546, 0.1128, 0.4118, 0.1829],
+    back:  [0.5496, 0.1128, 0.4118, 0.1829]
+  },
   voter: {
     front:     [0.035, 0.05, 0.93, 0.45],
     back:      [0.035, 0.53, 0.93, 0.42],
@@ -845,16 +863,22 @@ const CROP = {
     backPage:  [0.035, 0.05, 0.93, 0.90]
   },
   eshram: {
-    front:     [0.035, 0.06, 0.93, 0.46],
-    back:      [0.035, 0.55, 0.93, 0.40],
+    /* Real UAN/eShram downloads can be a single image-only PDF page where one
+       embedded PNG contains both cards. Earlier crops were too tall, so the
+       CR80 preview captured the next panel / page whitespace and looked
+       stretched. Re-measured from uan-card (24).pdf and uan-card (26).pdf by
+       tracing the embedded image bounds and then splitting the actual front /
+       back halves inside that image. */
+    front:     [0.1889, 0.0721, 0.4850, 0.2302],
+    back:      [0.1889, 0.3030, 0.4850, 0.2350],
     frontPage: [0.035, 0.05, 0.93, 0.90],
     backPage:  [0.035, 0.05, 0.93, 0.90]
   }
 };
 
-const TYPE_LABELS = { aadhaar: 'Aadhaar Card', pan: 'PAN Card', voter: 'Voter ID', ayushman: 'Ayushman Card', janaadhaar: 'Jan Aadhaar', eshram: 'eShram Card' };
+const TYPE_LABELS = { aadhaar: 'Aadhaar Card', pan: 'PAN Card', abha: 'ABHA Card', epic: 'e-EPIC', voter: 'Voter ID', ayushman: 'Ayushman Card', janaadhaar: 'Jan Aadhaar', eshram: 'eShram Card' };
 
-const TYPE_ICONS = { aadhaar: '\ud83c\udd94', pan: '\ud83d\udcb3', voter: '\ud83d\uddf3\ufe0f', ayushman: '\ud83c\udfe5', janaadhaar: '\ud83d\udc68\u200d\ud83d\udc69\u200d\ud83d\udc67\u200d\ud83d\udc66', eshram: '\ud83d\udc77' };
+const TYPE_ICONS = { aadhaar: '\ud83c\udd94', pan: '\ud83d\udcb3', abha: '\ud83c\udfe5', epic: '\ud83d\uddf3\ufe0f', voter: '\ud83d\uddf3\ufe0f', ayushman: '\ud83c\udfe5', janaadhaar: '\ud83d\udc68\u200d\ud83d\udc69\u200d\ud83d\udc67\u200d\udc66', eshram: '\ud83d\udc77' };
 
 /* ── DOM refs ── */
 const $ = (s) => document.querySelector(s);
@@ -928,15 +952,21 @@ const CARD_PHOTO_ROI = {
      actual PAN photo area. This ROI keeps the full rectangular photo
      box (with its small white margin) — not a face-only crop. */
   pan:        { front: [0.041, 0.253, 0.179, 0.296], back: null },
-  /* Jan Aadhaar now measured from a real sample PDF (§AC.36). The
-     previous estimate started too far left/high and Photo Only cut the
-     portrait in half. Keep the full photo rectangle, not a face-only
-     crop. Remaining 3 types stay on the §AC.29.5 estimates until more
-     sample PDFs land. */
+  /* ABHA front photo now comes from the exact placed PDF image object
+     (/Im4 in ABHA-Card-91-5154-0487-4619.pdf), converted into CR80-local
+     fractions. This keeps the full printed photo box, not a face-only
+     crop and not the extra white strip above the box. */
+  abha:       { front: [0.048956, 0.309627, 0.148959, 0.303327], back: null },
+  epic:       { front: [0.04, 0.38, 0.24, 0.52], back: null },
   voter:      { front: [0.04, 0.20, 0.25, 0.55], back: null },
   ayushman:   { front: [0.04, 0.20, 0.22, 0.55], back: null },
   janaadhaar: { front: [0.068, 0.342, 0.171, 0.380], back: null },
-  eshram:     { front: [0.04, 0.18, 0.22, 0.55], back: null }
+  /* eShram/UAN photo is not a separate PDF object in these samples; it is
+     embedded inside the front-card PNG. This ROI is traced to the full
+     printed photo frame inside uan-card (24).pdf / uan-card (26).pdf so
+     Photo Only matches the actual card photo box rather than a tight
+     face-only crop. */
+  eshram:     { front: [0.03895, 0.30616, 0.17640, 0.32790], back: null }
 };
 
 /* §AC.29 — Independent filter stacks for each edit scope. `editScope`
@@ -1290,6 +1320,7 @@ async function tryOpenPdf(password) {
   showLoading(true);
   idpError.classList.remove('show');
   try {
+    var pdfjsLib = await getPdfJsLib();
     var loadingTask = pdfjsLib.getDocument({
       data: pdfArrayBuffer.slice(0),
       password: password || undefined
@@ -1336,6 +1367,7 @@ pdfPasswordInput.addEventListener('keydown', (e) => {
 /* ── Batch PDF processing (returns result object, no DOM side effects) ── */
 async function processPdfBatch(arrayBuffer, password, fileName) {
   try {
+    var pdfjsLib = await getPdfJsLib();
     var loadingTask = pdfjsLib.getDocument({
       data: arrayBuffer.slice(0),
       password: password || undefined
@@ -1346,7 +1378,7 @@ async function processPdfBatch(arrayBuffer, password, fileName) {
     var textContent = await page.getTextContent();
     var fullText = textContent.items.map(i => i.str).join(' ').toLowerCase();
 
-    var type = detectCardType(fullText);
+    var type = detectCardType(fullText, fileName || '');
     if (!type) return { error: 'Unknown card type' };
 
     var viewport = page.getViewport({ scale: RENDER_SCALE });
@@ -1385,10 +1417,10 @@ async function processPdfBatch(arrayBuffer, password, fileName) {
       rc2.height = vp2.height;
       var c2 = rc2.getContext('2d');
       await page2.render({ canvasContext: c2, viewport: vp2 }).promise;
-      back = cropRegion(rc2, crop.backPage);
+      back = crop.backPage ? cropRegion(rc2, crop.backPage) : null;
     } else {
       front = cropRegion(renderCanvas, crop.front);
-      back = cropRegion(renderCanvas, crop.back);
+      back = crop.back ? cropRegion(renderCanvas, crop.back) : null;
     }
 
     return {
@@ -1402,19 +1434,27 @@ async function processPdfBatch(arrayBuffer, password, fileName) {
   }
 }
 
-function detectCardType(fullText) {
+function detectCardType(fullText, fileName) {
+  var lowerFileName = (fileName || '').toLowerCase();
+  var abhaHits = ABHA_KEYWORDS.filter(k => fullText.includes(k)).length;
   var ayushmanHits = AYUSHMAN_KEYWORDS.filter(k => fullText.includes(k)).length;
   var janaadhaarHits = JANAADHAAR_KEYWORDS.filter(k => fullText.includes(k)).length;
   var eshramHits = ESHRAM_KEYWORDS.filter(k => fullText.includes(k)).length;
   var aadhaarHits = AADHAAR_KEYWORDS.filter(k => fullText.includes(k)).length;
   var panHits = PAN_KEYWORDS.filter(k => fullText.includes(k)).length;
+  var epicHits = EPIC_KEYWORDS.filter(k => fullText.includes(k)).length;
   var voterHits = VOTER_KEYWORDS.filter(k => fullText.includes(k)).length;
 
+  if (fullText.includes('@abdm') || lowerFileName.includes('abha') || abhaHits >= 2) return 'abha';
   if (ayushmanHits >= 2) return 'ayushman';
   if (janaadhaarHits >= 2) return 'janaadhaar';
+  /* Some downloaded eShram/UAN PDFs are flattened to a single image, so
+     text extraction is empty and filename is the only reliable signal. */
+  if (lowerFileName.includes('uan-card') || lowerFileName.includes('eshram')) return 'eshram';
   if (eshramHits >= 2) return 'eshram';
   if (aadhaarHits >= 2) return 'aadhaar';
   if (panHits >= 2) return 'pan';
+  if (epicHits >= 2) return 'epic';
   if (voterHits >= 2) return 'voter';
   return null;
 }
@@ -1426,11 +1466,11 @@ async function processPdf(pdf) {
     var textContent = await page.getTextContent();
     var fullText = textContent.items.map(i => i.str).join(' ').toLowerCase();
 
-    detectedType = detectCardType(fullText);
+    detectedType = detectCardType(fullText, batchFiles.length > 0 ? batchFiles[0].name : '');
     if (!detectedType) {
       showLoading(false);
       showStep(1);
-      showError('Could not detect card type. Supported: eAadhaar, ePAN, e-EPIC (Voter ID), Ayushman (PMJAY), Jan Aadhaar, eShram.');
+      showError('Could not detect card type. Supported: eAadhaar, ePAN, ABHA, e-EPIC (Voter ID), Ayushman (PMJAY), Jan Aadhaar, eShram.');
       return;
     }
 
@@ -1469,10 +1509,10 @@ async function processPdf(pdf) {
       rc2.height = vp2.height;
       var c2 = rc2.getContext('2d');
       await page2.render({ canvasContext: c2, viewport: vp2 }).promise;
-      backImageData = cropRegion(rc2, crop.backPage);
+      backImageData = crop.backPage ? cropRegion(rc2, crop.backPage) : null;
     } else {
       frontImageData = cropRegion(renderCanvas, crop.front);
-      backImageData = cropRegion(renderCanvas, crop.back);
+      backImageData = crop.back ? cropRegion(renderCanvas, crop.back) : null;
     }
 
     originalFront = frontImageData;
@@ -1487,7 +1527,7 @@ async function processPdf(pdf) {
       TYPE_ICONS[detectedType] + ' ' + TYPE_LABELS[detectedType] + ' Detected</div>';
     /* §AC.27 — Position panel removed; nothing to toggle here. */
 
-    previewTitle.textContent = 'Front & Back Preview';
+    previewTitle.textContent = backImageData ? 'Front & Back Preview' : 'Card Preview';
 
     showLoading(false);
     showStep(2);
@@ -1508,7 +1548,8 @@ function showBatchPreview() {
   });
   detectBadge.innerHTML = badgeHtml;
 
-  previewTitle.textContent = batchCards.length + ' Cards — Front & Back Preview';
+  var hasBackForAll = batchCards.every(function(card) { return !!card.back; });
+  previewTitle.textContent = batchCards.length + ' Card' + (batchCards.length === 1 ? '' : 's') + (hasBackForAll ? ' — Front & Back Preview' : ' Preview');
 
   /* Restore the current tab's in-memory editor state before rendering. */
   loadPrefs();
@@ -1667,7 +1708,7 @@ function refreshSheetPreview() {
 
 function getActiveCards() {
   if (batchCards.length > 0) return batchCards;
-  if (frontImageData && backImageData) return [{ type: detectedType, front: frontImageData, back: backImageData }];
+  if (frontImageData) return [{ type: detectedType, front: frontImageData, back: backImageData }];
   return [];
 }
 
@@ -2013,80 +2054,6 @@ function getFilterString(scope) {
   return 'brightness(' + s.bright + '%) contrast(' + s.contrast + '%) saturate(' + s.sat + '%)';
 }
 
-/* §AC.37c — iPad Safari / iOS WebKit < iOS 18 doesn't support
-   CanvasRenderingContext2D.filter (it's silently a no-op: setting
-   ctx.filter = 'brightness(150%)' doesn't error but doesn't apply).
-   Result: brightness/contrast/saturation slider changes don't show up
-   in the preview canvas on iPad Chrome. Detect support once at load
-   and fall back to a per-pixel ImageData transform when unavailable. */
-var SUPPORTS_CTX_FILTER = (function() {
-  try {
-    var c = document.createElement('canvas').getContext('2d');
-    if (!c || typeof c.filter === 'undefined') return false;
-    c.filter = 'brightness(50%)';
-    return c.filter === 'brightness(50%)';
-  } catch (_) { return false; }
-})();
-
-/* CSS-spec-equivalent ImageData transform for brightness → contrast →
-   saturate (applied in this order to match the order produced by
-   getFilterString). saturate uses the SVG feColorMatrix luminance
-   coefficients (W3C Filter Effects spec). Skips the loop entirely when
-   all three values are 100 (identity). */
-function applyFiltersToImageData(ctx, dx, dy, dw, dh, src) {
-  if (!src || (src.bright === 100 && src.contrast === 100 && src.sat === 100)) return;
-  if (dw <= 0 || dh <= 0) return;
-  var img;
-  try { img = ctx.getImageData(dx, dy, dw, dh); }
-  catch (_) { return; /* tainted canvas — bail silently */ }
-  var d = img.data;
-  var bM = src.bright   / 100;
-  var cM = src.contrast / 100;
-  var s  = src.sat      / 100;
-  var sr1 = 0.213 + 0.787 * s, sg1 = 0.715 - 0.715 * s, sb1 = 0.072 - 0.072 * s;
-  var sr2 = 0.213 - 0.213 * s, sg2 = 0.715 + 0.285 * s, sb2 = 0.072 - 0.072 * s;
-  var sr3 = 0.213 - 0.213 * s, sg3 = 0.715 - 0.715 * s, sb3 = 0.072 + 0.928 * s;
-  for (var i = 0; i < d.length; i += 4) {
-    var r = d[i], g = d[i + 1], b = d[i + 2];
-    r *= bM; g *= bM; b *= bM;
-    r = (r - 128) * cM + 128;
-    g = (g - 128) * cM + 128;
-    b = (b - 128) * cM + 128;
-    var nr = sr1 * r + sg1 * g + sb1 * b;
-    var ng = sr2 * r + sg2 * g + sb2 * b;
-    var nb = sr3 * r + sg3 * g + sb3 * b;
-    d[i] = nr; d[i + 1] = ng; d[i + 2] = nb;
-  }
-  ctx.putImageData(img, dx, dy);
-}
-
-/* Wrappers that pick ctx.filter (GPU, fast) when supported, else fall
-   back to applyFiltersToImageData on the post-draw destination region. */
-function drawWithFilter(ctx, srcCanvas, dx, dy, dw, dh, scope) {
-  var f = (scope === 'photo') ? photoFilters : cardFilters;
-  var noOp = (f.bright === 100 && f.contrast === 100 && f.sat === 100);
-  if (SUPPORTS_CTX_FILTER) {
-    if (!noOp) ctx.filter = getFilterString(scope);
-    ctx.drawImage(srcCanvas, dx, dy, dw, dh);
-    if (!noOp) ctx.filter = 'none';
-  } else {
-    ctx.drawImage(srcCanvas, dx, dy, dw, dh);
-    if (!noOp) applyFiltersToImageData(ctx, dx, dy, dw, dh, f);
-  }
-}
-function drawWithFilterCrop(ctx, srcCanvas, sx, sy, sw, sh, dx, dy, dw, dh, scope) {
-  var f = (scope === 'photo') ? photoFilters : cardFilters;
-  var noOp = (f.bright === 100 && f.contrast === 100 && f.sat === 100);
-  if (SUPPORTS_CTX_FILTER) {
-    if (!noOp) ctx.filter = getFilterString(scope);
-    ctx.drawImage(srcCanvas, sx, sy, sw, sh, dx, dy, dw, dh);
-    if (!noOp) ctx.filter = 'none';
-  } else {
-    ctx.drawImage(srcCanvas, sx, sy, sw, sh, dx, dy, dw, dh);
-    if (!noOp) applyFiltersToImageData(ctx, dx, dy, dw, dh, f);
-  }
-}
-
 /* §AC.29 — Convert fractional ROI from CARD_PHOTO_ROI into pixel coords
    for a canvas of width × height. Returns null if no ROI is configured
    for (cardType, side). Fractional coords are CR80-relative; the same
@@ -2149,7 +2116,9 @@ function applyMaskedFilters(destCanvas, srcCanvas, w, h, cardType, side, applyRo
     roundedRectPath(ctx, 0, 0, w, h, CARD_RADIUS);
     ctx.clip();
   }
-  drawWithFilter(ctx, srcCanvas, 0, 0, w, h, 'whole');
+  ctx.filter = getFilterString('whole');
+  ctx.drawImage(srcCanvas, 0, 0, w, h);
+  ctx.filter = 'none';
   var roi = getPhotoROIPixels(cardType, side, w, h);
   if (roi) {
     ctx.save();
@@ -2168,7 +2137,9 @@ function applyMaskedFilters(destCanvas, srcCanvas, w, h, cardType, side, applyRo
     ctx.clearRect(roi.x, roi.y, roi.w, roi.h);
     ctx.fillStyle = '#fff';
     ctx.fillRect(roi.x, roi.y, roi.w, roi.h);
-    drawWithFilter(ctx, srcCanvas, 0, 0, w, h, 'photo');
+    ctx.filter = getFilterString('photo');
+    ctx.drawImage(srcCanvas, 0, 0, w, h);
+    ctx.filter = 'none';
     ctx.restore();
   }
 }
@@ -2380,67 +2351,6 @@ slSat.addEventListener('input', onSliderInput);
 slBright.addEventListener('change', onSliderInput);
 slContrast.addEventListener('change', onSliderInput);
 slSat.addEventListener('change', onSliderInput);
-
-/* §AC.37b/4 — iPad Chrome (WebKit) ne native <input type=range> ke touch
-   drag ko reliably nahi handle kiya, even with touch-action:none (PR #303).
-   Pointer Events fallback: hum khud pointerdown/move/up handle karte hain
-   aur clientX → value compute karke synthetic 'input' event dispatch karte
-   hain, jo existing onSliderInput handler ko trigger karta hai. Yeh desktop
-   mouse, iPhone touch, iPad WebKit, Android sab pe uniformly chalta hai.
-   Bonus: track-tap-to-jump (tap anywhere on track moves thumb there). */
-(function attachIdpRangePointerFallback() {
-  if (typeof window === 'undefined' || !('PointerEvent' in window)) return;
-  function valueFromPointer(slider, clientX) {
-    var rect = slider.getBoundingClientRect();
-    if (rect.width <= 0) return null;
-    var min = parseFloat(slider.min); if (isNaN(min)) min = 0;
-    var max = parseFloat(slider.max); if (isNaN(max)) max = 100;
-    var step = parseFloat(slider.step); if (isNaN(step) || step <= 0) step = 1;
-    var ratio = (clientX - rect.left) / rect.width;
-    if (ratio < 0) ratio = 0;
-    if (ratio > 1) ratio = 1;
-    var v = min + ratio * (max - min);
-    v = Math.round(v / step) * step;
-    if (v < min) v = min;
-    if (v > max) v = max;
-    return v;
-  }
-  function attach(slider) {
-    if (!slider) return;
-    var dragging = false;
-    function update(clientX) {
-      var v = valueFromPointer(slider, clientX);
-      if (v === null) return;
-      var s = String(v);
-      if (s !== slider.value) {
-        slider.value = s;
-        slider.dispatchEvent(new Event('input', { bubbles: true }));
-      }
-    }
-    slider.addEventListener('pointerdown', function(e) {
-      dragging = true;
-      try { slider.setPointerCapture(e.pointerId); } catch (_) {}
-      try { slider.focus({ preventScroll: true }); } catch (_) {}
-      update(e.clientX);
-      e.preventDefault();
-    });
-    slider.addEventListener('pointermove', function(e) {
-      if (!dragging) return;
-      update(e.clientX);
-    });
-    function end(e) {
-      if (!dragging) return;
-      dragging = false;
-      try { slider.releasePointerCapture(e.pointerId); } catch (_) {}
-      slider.dispatchEvent(new Event('change', { bubbles: true }));
-    }
-    slider.addEventListener('pointerup', end);
-    slider.addEventListener('pointercancel', end);
-  }
-  attach(slBright);
-  attach(slContrast);
-  attach(slSat);
-})();
 btnAutoEnhance.addEventListener('click', autoEnhance);
 btnResetEdit.addEventListener('click', () => {
   /* §AC.27 — Position panel removed; Reset only resets Photo Adjust sliders.
@@ -2594,7 +2504,9 @@ function paintPhotoOnly(canvas, srcCanvas, cardType, side) {
   }
   var dx = (W - dispW) / 2;
   var dy = (H - dispH) / 2;
-  drawWithFilterCrop(ctx, srcCanvas, roi.x, roi.y, roi.w, roi.h, dx, dy, dispW, dispH, 'photo');
+  ctx.filter = getFilterString('photo');
+  ctx.drawImage(srcCanvas, roi.x, roi.y, roi.w, roi.h, dx, dy, dispW, dispH);
+  ctx.filter = 'none';
 }
 
 
