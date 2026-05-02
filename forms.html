@@ -556,6 +556,8 @@ body.forms-page .legal-main.forms-main{
   gap:10px;
 }
 .forms-preview-actions a,.forms-preview-actions button{
+  box-sizing:border-box;
+  min-width:126px;
   min-height:40px;
   padding:0 16px;
   border-radius:11px;
@@ -564,14 +566,27 @@ body.forms-page .legal-main.forms-main{
   color:#fff;
   font-family:'DM Mono',monospace;
   font-size:12px;
+  font-weight:700;
+  line-height:1;
   text-decoration:none;
   cursor:pointer;
+  appearance:none;
+  white-space:nowrap;
+}
+.forms-preview-actions a{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
 }
 .forms-preview-actions .primary{
   background:var(--accent);
   border-color:var(--accent);
   color:#111;
   font-weight:700;
+}
+.forms-preview-actions a:hover,.forms-preview-actions button:hover{
+  border-color:rgba(240,165,0,.48);
+  transform:translateY(-1px);
 }
 .forms-print-modal .forms-preview-dialog{
   width:min(1080px,100%);
@@ -591,6 +606,14 @@ body.forms-page .legal-main.forms-main{
 @media(max-width:560px){
   .forms-search-row,.form-actions,.forms-grid{grid-template-columns:1fr}
   .forms-hero h1{max-width:9ch}
+  .forms-preview-actions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+  }
+  .forms-preview-actions a,.forms-preview-actions button{
+    min-width:0;
+    width:100%;
+  }
   .form-card{
     grid-template-columns:128px minmax(0,1fr);
     gap:10px;
@@ -760,12 +783,13 @@ body.forms-page .legal-main.forms-main{
   function tokenHit(text,q){return norm(text).split(/[^a-z0-9]+/).some(function(w){return w===q||w.indexOf(q)===0})}
   function ok(f,q){if(active!=='All'&&f.category!==active)return false;if(!q)return true;var direct=[f.title,f.category,f.department,f.tags.join(' ')].join(' ');if(tokenHit(direct,q))return true;if(q.indexOf(' ')>-1)return norm([direct,f.description].join(' ')).indexOf(q)>-1;return false}
   function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(ch){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]})}
-  function preview(f,i){if(f.preview){return '<div class="form-preview-stage"><button type="button" class="form-preview actual-preview" data-preview="'+i+'" aria-label="Preview '+esc(f.title)+'"><img src="'+esc(f.preview)+'" alt="First page preview of '+esc(f.title)+'" loading="lazy"><span class="preview-badge">'+esc(f.pages||'PDF')+'</span></button></div>'}var fs=(f.fields||['Applicant','Address','Mobile','Signature']).slice(0,5);return '<div class="form-preview" aria-hidden="true"><div class="preview-paper"><div class="preview-head"><span>'+esc(f.department)+'</span><b>'+esc(f.format)+'</b></div><div class="preview-title">'+esc(f.title)+'</div><div class="preview-lines"><span class="preview-line"></span><span class="preview-line"></span><span class="preview-line"></span></div><div class="preview-fields">'+fs.map(function(x){return '<div class="preview-field"><span>'+esc(x)+'</span><span></span></div>'}).join('')+'</div><div class="preview-footer"><span class="preview-qr"></span><span class="preview-stamp">portal</span></div></div></div>'}
-  function card(f,i){return '<article class="form-card">'+preview(f,i)+'<div class="form-body"><div class="form-card-top"><span class="form-cat">'+esc(f.category)+'</span><span class="form-format">'+esc(f.pages||'PDF')+'</span></div><h2>'+esc(f.title)+'</h2><p>'+esc(f.description||'')+'</p><div class="form-meta"><span>'+esc(f.department)+'</span><span>PDF</span></div><div class="form-actions"><button type="button" class="primary" data-print="'+i+'">Print</button><a href="'+esc(f.url)+'" download>Download</a></div></div></article>'}
-  function openPreview(f){currentPreview=f;modalTitle.textContent=f.title;modalMeta.textContent=[f.department,f.pages||'PDF'].filter(Boolean).join(' · ');modalImage.src=f.preview||'';modalImage.alt='Preview of '+f.title;modalDownload.href=f.url;modalDownload.setAttribute('download','');modal.classList.add('is-open');modal.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';modalPrint.focus()}
+  function routeUrl(v){v=String(v||'');if(!v||/^(https?:|data:|blob:|\/)/i.test(v))return v;if(location.protocol==='file:')return v;return '/'+v.replace(/^\.?\//,'')}
+  function preview(f,i){if(f.preview){return '<div class="form-preview-stage"><button type="button" class="form-preview actual-preview" data-preview="'+i+'" aria-label="Preview '+esc(f.title)+'"><img src="'+esc(routeUrl(f.preview))+'" alt="First page preview of '+esc(f.title)+'" loading="lazy"><span class="preview-badge">'+esc(f.pages||'PDF')+'</span></button></div>'}var fs=(f.fields||['Applicant','Address','Mobile','Signature']).slice(0,5);return '<div class="form-preview" aria-hidden="true"><div class="preview-paper"><div class="preview-head"><span>'+esc(f.department)+'</span><b>'+esc(f.format)+'</b></div><div class="preview-title">'+esc(f.title)+'</div><div class="preview-lines"><span class="preview-line"></span><span class="preview-line"></span><span class="preview-line"></span></div><div class="preview-fields">'+fs.map(function(x){return '<div class="preview-field"><span>'+esc(x)+'</span><span></span></div>'}).join('')+'</div><div class="preview-footer"><span class="preview-qr"></span><span class="preview-stamp">portal</span></div></div></div>'}
+  function card(f,i){return '<article class="form-card">'+preview(f,i)+'<div class="form-body"><div class="form-card-top"><span class="form-cat">'+esc(f.category)+'</span><span class="form-format">'+esc(f.pages||'PDF')+'</span></div><h2>'+esc(f.title)+'</h2><p>'+esc(f.description||'')+'</p><div class="form-meta"><span>'+esc(f.department)+'</span><span>PDF</span></div><div class="form-actions"><button type="button" class="primary" data-print="'+i+'">Print</button><a href="'+esc(routeUrl(f.url))+'" download>Download</a></div></div></article>'}
+  function openPreview(f){currentPreview=f;modalTitle.textContent=f.title;modalMeta.textContent=[f.department,f.pages||'PDF'].filter(Boolean).join(' · ');modalImage.src=routeUrl(f.preview)||'';modalImage.alt='Preview of '+f.title;modalDownload.href=routeUrl(f.url);modalDownload.setAttribute('download','');modal.classList.add('is-open');modal.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';modalPrint.focus()}
   function closePreview(){modal.classList.remove('is-open');modal.setAttribute('aria-hidden','true');document.body.style.overflow='';currentPreview=null}
   function triggerPrint(){if(!printViewer.src)return;try{printViewer.contentWindow.focus();printViewer.contentWindow.print();show('Print dialog khul raha hai...')}catch(err){show('PDF same page par khul gaya. Viewer ke print icon se print karo.')}}
-  function printForm(f){if(!f)return;if(modal.classList.contains('is-open'))closePreview();currentPrint=f;printTitle.textContent=f.title;printMeta.textContent=[f.department,f.pages||'PDF'].filter(Boolean).join(' · ');printDownload.href=f.url;printDownload.setAttribute('download','');printModal.classList.add('is-open');printModal.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';printViewer.onload=null;printViewer.src='about:blank';setTimeout(function(){printViewer.onload=function(){setTimeout(triggerPrint,500)};printViewer.src=f.url},40);printAgain.focus()}
+  function printForm(f){if(!f)return;if(modal.classList.contains('is-open'))closePreview();currentPrint=f;printTitle.textContent=f.title;printMeta.textContent=[f.department,f.pages||'PDF'].filter(Boolean).join(' · ');printDownload.href=routeUrl(f.url);printDownload.setAttribute('download','');printModal.classList.add('is-open');printModal.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';printViewer.onload=null;printViewer.src='about:blank';setTimeout(function(){printViewer.onload=function(){setTimeout(triggerPrint,500)};printViewer.src=routeUrl(f.url)},40);printAgain.focus()}
   function closePrint(){printModal.classList.remove('is-open');printModal.setAttribute('aria-hidden','true');printViewer.onload=null;printViewer.src='about:blank';document.body.style.overflow='';currentPrint=null}
   function renderFilters(){filters.innerHTML=cats().map(function(c){return '<button type="button" class="forms-filter '+(c===active?'active':'')+'" data-cat="'+c+'">'+c+'</button>'}).join('')}
   function render(){var q=norm(search.value).trim();var list=forms.filter(function(f){return ok(f,q)});var limited=!q&&active==='All';var shown=limited?list.slice(0,8):list;count.textContent=limited?shown.length+' of '+list.length+' forms':list.length+(list.length===1?' form':' forms');total.textContent=forms.length;grid.innerHTML=shown.length?shown.map(function(f){return card(f,forms.indexOf(f))}).join(''):'<div class="no-results">Form nahi mila. Aadhaar, PAN, voter, ration ya EPFO search karo.</div>'}
