@@ -1,7 +1,8 @@
-# Studio Print — https://studioprint.pages.dev/
+# Studio Print - https://studioprint.pages.dev/
 User-agent: *
 Allow: /
 Disallow: /_headers
 Disallow: /_redirects
+Disallow: /id-print-regression.html
 
 Sitemap: https://studioprint.pages.dev/sitemap.xml
