@@ -1,4 +1,4 @@
-/* Studio Print service worker — P31.
+﻿/* Studio Print service worker — P31.
  *
  * Strategy
  *   - Navigation (HTML) requests: network-first, fall back to cache, then to
@@ -15,8 +15,9 @@
  * the activate step can evict the old cache.
  */
 
-const CACHE_VERSION = 'studioprint-v31';
-const RUNTIME_CACHE = 'studioprint-runtime-v31';
+const CACHE_VERSION = 'studioprint-v32';
+const RUNTIME_CACHE = 'studioprint-runtime-v32';
+const ID_PRINT_REFRESH_VERSION = 'id-print-v32';
 
 // Minimum shell we want available offline after the first visit. The SW also
 // opportunistically caches other same-origin GETs it sees at runtime, so this
@@ -80,6 +81,20 @@ self.addEventListener('activate', (event) => {
           .map((name) => caches.delete(name))
       )
     ).then(() => self.clients.claim())
+      .then(() => self.clients.matchAll({ type: 'window', includeUncontrolled: true }))
+      .then((clientList) =>
+        Promise.all(clientList.map((client) => {
+          try {
+            const url = new URL(client.url);
+            const isIdPrint = url.pathname === '/id-print' || url.pathname === '/id-print.html';
+            if (!isIdPrint || url.searchParams.get('sw-refresh') === ID_PRINT_REFRESH_VERSION) return null;
+            url.searchParams.set('sw-refresh', ID_PRINT_REFRESH_VERSION);
+            return client.navigate(url.href);
+          } catch (_) {
+            return null;
+          }
+        }))
+      )
   );
 });
 
@@ -106,14 +121,8 @@ function isHtmlRequest(request) {
 async function networkFirstHtml(request) {
   try {
     const network = await fetch(request);
-    if (network && network.ok) {
-      const cache = await caches.open(RUNTIME_CACHE);
-      cache.put(request, network.clone()).catch(() => {});
-    }
     return network;
   } catch (_) {
-    const cached = await caches.match(request);
-    if (cached) return cached;
     const offline = await caches.match('/offline.html');
     if (offline) return offline;
     return new Response('Offline', { status: 503, statusText: 'Offline' });
@@ -148,3 +157,4 @@ self.addEventListener('fetch', (event) => {
   // Same-origin assets: stale-while-revalidate.
   event.respondWith(staleWhileRevalidate(request));
 });
+
