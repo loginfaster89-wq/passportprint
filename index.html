@@ -1,23 +1,23 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
 <meta name="theme-color" content="#0d0d0d">
-<title>Studio Print — Browser Print Workspace for Passport Photos, ID Cards &amp; A4 Workflows</title>
-<meta name="description" content="Studio Print is the on-device AI print workspace for passport photos, ID cards, PDF-to-print jobs, and 300 DPI A4 layouts — built for modern print counters, students, and home users.">
-<meta property="og:title" content="Studio Print — Browser Print Workspace">
-<meta property="og:description" content="A modern browser-based print workspace for passport photos, ID cards, and fast A4 workflows — on-device AI, shared plans, and nothing uploaded.">
+<title>Studio Print â€” Browser Print Workspace for Passport Photos, ID Cards, Forms &amp; A4 Workflows</title>
+<meta name="description" content="Studio Print is the on-device AI print workspace for passport photos, ID cards, searchable document forms, PDF-to-print jobs, and 300 DPI A4 layouts â€” built for modern print counters, students, and home users.">
+<meta property="og:title" content="Studio Print â€” Browser Print Workspace">
+<meta property="og:description" content="A modern browser-based print workspace for passport photos, ID cards, searchable forms, and fast A4 workflows â€” on-device AI, shared plans, and nothing uploaded.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://studioprint.pages.dev/">
 <meta property="og:image" content="https://studioprint.pages.dev/assets/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:type" content="image/png">
-<meta property="og:image:alt" content="Studio Print — browser-based print workspace for passport photos, ID cards, and A4 print workflows.">
+<meta property="og:image:alt" content="Studio Print â€” browser-based print workspace for passport photos, ID cards, and A4 print workflows.">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Studio Print — Browser Print Workspace">
-<meta name="twitter:description" content="On-device AI for passport photos, ID-card PDFs, and 300 DPI A4 print workflows — all in your browser, nothing uploaded.">
+<meta name="twitter:title" content="Studio Print â€” Browser Print Workspace">
+<meta name="twitter:description" content="On-device AI for passport photos, ID-card PDFs, searchable forms, and 300 DPI A4 print workflows â€” all in your browser, nothing uploaded.">
 <meta name="twitter:image" content="https://studioprint.pages.dev/assets/og-image.png">
 <meta name="robots" content="max-image-preview:large">
 <link rel="canonical" href="https://studioprint.pages.dev/">
@@ -26,12 +26,12 @@
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <link rel="manifest" href="assets/manifest.webmanifest">
 <link rel="dns-prefetch" href="https://passportprint-studio.onrender.com">
-<link rel="preload" href="assets/fonts/syne-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="assets/fonts/dm-mono-400-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/syne-latin.woff2" as="font" type="font/woff2">
+<link rel="preload" href="assets/fonts/dm-mono-400-latin.woff2" as="font" type="font/woff2">
 <link rel="stylesheet" href="assets/fonts.css">
 <link rel="stylesheet" href="assets/legal.css">
 <style>
-/* ───── Homepage-specific styles ───── */
+/* â”€â”€â”€â”€â”€ Homepage-specific styles â”€â”€â”€â”€â”€ */
 :root{
   --accent-glow: rgba(240,165,0,0.06);
   --surface3: #272727;
@@ -44,7 +44,7 @@ body.home main.home-main{
   display:flex;flex-direction:column;
 }
 
-/* ── HERO ── */
+/* â”€â”€ HERO â”€â”€ */
 .hero{
   position:relative;overflow:hidden;
   padding:clamp(48px,8vw,96px) clamp(20px,4vw,40px) clamp(40px,7vw,80px);
@@ -133,8 +133,8 @@ body.home main.home-main{
 }
 .hero-trust:first-of-type{margin-top:18px;}
 
-/* P2 — floating A4 mockup in the hero. Two sheets, absolutely positioned
-   on either side, rotated symmetrically. Decorative only — hidden on
+/* P2 â€” floating A4 mockup in the hero. Two sheets, absolutely positioned
+   on either side, rotated symmetrically. Decorative only â€” hidden on
    narrow viewports where the hero text needs the full width. */
 .hero-sheets{
   position:absolute;inset:0;pointer-events:none;z-index:1;
@@ -278,9 +278,9 @@ body.home main.home-main{
 .hpv-bar .track{height:6px;border-radius:999px;background:var(--surface3);overflow:hidden;}
 .hpv-bar .fill{height:100%;width:72%;background:linear-gradient(90deg,var(--accent),#ffd17a);border-radius:999px;}
 
-/* P19 — animated tool-demo strip inside `.hero-preview`.
-   Pure CSS/SVG, no video asset. Three-phase loop (≈9s) that walks
-   through: upload → background removed → A4 sheet. Pauses under
+/* P19 â€” animated tool-demo strip inside `.hero-preview`.
+   Pure CSS/SVG, no video asset. Three-phase loop (â‰ˆ9s) that walks
+   through: upload â†’ background removed â†’ A4 sheet. Pauses under
    `prefers-reduced-motion`. */
 .hero-preview-demo{
   display:grid;grid-template-columns:1.2fr 1fr;gap:14px;padding:14px;
@@ -350,7 +350,7 @@ body.home main.home-main{
   .hero-preview-demo .hpv-bar .fill{width:72%;}
 }
 
-/* ── SECTION SHELL ── */
+/* â”€â”€ SECTION SHELL â”€â”€ */
 section.section{
   padding:clamp(56px,8vw,96px) clamp(20px,4vw,40px);
   border-bottom:1px solid var(--border);
@@ -381,7 +381,7 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
   color:var(--muted);font-size:clamp(13px,1.6vw,15px);line-height:1.7;max-width:62ch;
 }
 
-/* ── P30: DENSITY BREAK ── */
+/* â”€â”€ P30: DENSITY BREAK â”€â”€ */
 .density-break{
   background:
     radial-gradient(ellipse 50% 60% at 50% 100%, rgba(240,165,0,0.05), transparent 70%),
@@ -420,7 +420,7 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
   .hero-preview{display:none;}
 }
 
-/* ── FEATURES ── */
+/* â”€â”€ FEATURES â”€â”€ */
 .features-grid{
   display:grid;gap:18px;
   grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
@@ -465,8 +465,8 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
 .feature-card .fcta .arrow{transition:transform .2s;}
 .feature-card.live:hover .fcta .arrow{transform:translateX(3px);}
 
-/* ── STATS / SOCIAL PROOF (P8) ──
-   No fabricated testimonials / trusted-by logos — each stat maps to a
+/* â”€â”€ STATS / SOCIAL PROOF (P8) â”€â”€
+   No fabricated testimonials / trusted-by logos â€” each stat maps to a
    verifiable product claim already documented in the meta description,
    FAQ, pricing, and hero trust pills. Uses existing tokens only. */
 .stats-grid{
@@ -495,7 +495,7 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
   color:var(--muted);
 }
 
-/* ── WHY GRID ── */
+/* â”€â”€ WHY GRID â”€â”€ */
 .why-grid{
   display:grid;gap:14px;
   grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
@@ -521,7 +521,7 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
 }
 .why-card p{color:var(--muted);font-size:13px;line-height:1.65;}
 
-/* ── HOW IT WORKS ── */
+/* â”€â”€ HOW IT WORKS â”€â”€ */
 .steps-grid{
   display:grid;gap:14px;
   grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
@@ -543,7 +543,7 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
 .step-card p{color:var(--muted);font-size:13px;line-height:1.65;}
 .step-card .sicon{font-size:22px;color:var(--accent);}
 
-/* ── CTA BAND ── */
+/* â”€â”€ CTA BAND â”€â”€ */
 .cta-band{
   text-align:center;padding:clamp(48px,7vw,88px) clamp(20px,4vw,40px);
   background:
@@ -558,7 +558,7 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
 }
 .cta-band p{color:var(--muted);font-size:15px;margin-bottom:22px;max-width:52ch;margin-left:auto;margin-right:auto;}
 
-/* ── AUDIENCE (Who it's for) ── */
+/* â”€â”€ AUDIENCE (Who it's for) â”€â”€ */
 .audience-grid{
   display:grid;gap:18px;
   grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
@@ -591,16 +591,16 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
   padding-left:22px;position:relative;
 }
 .audience-card ul li::before{
-  content:"→";position:absolute;left:0;color:var(--accent);font-weight:700;
+  content:"â†’";position:absolute;left:0;color:var(--accent);font-weight:700;
 }
 
-/* ── PRICING ── */
+/* â”€â”€ PRICING â”€â”€ */
 .pricing-note{
   text-align:center;margin-top:22px;font-size:13px;color:var(--muted2);
   font-family:'DM Mono',monospace;letter-spacing:0.02em;
 }
 
-/* ── PLAN CARDS (redesigned P12) ── */
+/* â”€â”€ PLAN CARDS (redesigned P12) â”€â”€ */
 .plan-grid{
   display:grid;grid-template-columns:repeat(3,1fr);gap:22px;
   margin-top:40px;align-items:start;
@@ -654,11 +654,11 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
 }
 .plan-features li:last-child{border-bottom:none;}
 .plan-features li::before{
-  content:'✓';color:var(--accent);font-weight:700;font-size:18px;
+  content:'âœ“';color:var(--accent);font-weight:700;font-size:18px;
   flex-shrink:0;width:22px;text-align:center;
 }
 .plan-features li.feat-no{color:var(--muted2);}
-.plan-features li.feat-no::before{content:'—';color:var(--muted2);font-weight:400;}
+.plan-features li.feat-no::before{content:'â€”';color:var(--muted2);font-weight:400;}
 .plan-cta{
   display:block;text-align:center;padding:16px 24px;border-radius:10px;
   font-family:'DM Mono',monospace;font-size:17px;font-weight:600;
@@ -715,7 +715,7 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
   }
 }
 
-/* ── FAQ ── */
+/* â”€â”€ FAQ â”€â”€ */
 .faq-list{
   display:flex;flex-direction:column;gap:10px;
   max-width:820px;margin:0 auto;
@@ -736,7 +736,7 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
   content:"+";color:var(--accent);font-size:22px;font-weight:400;line-height:1;
   width:22px;text-align:center;
 }
-.faq-item[open] summary::after{content:"−";}
+.faq-item[open] summary::after{content:"âˆ’";}
 .faq-item .faq-body{
   padding:0 20px 18px;color:var(--muted);
   font-size:13.5px;line-height:1.7;
@@ -749,7 +749,7 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
 .faq-item .faq-body p{margin:0 0 8px;}
 .faq-item .faq-body p:last-child{margin-bottom:0;}
 
-/* ── FEATURES: highlight live card on tablet + desktop ── */
+/* â”€â”€ FEATURES: highlight live card on tablet + desktop â”€â”€ */
 @media (min-width:761px) and (max-width:899px){
   .features-grid{grid-template-columns:repeat(2,1fr);}
   .feature-card.primary{grid-column:1 / -1;}
@@ -759,7 +759,7 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
   .feature-card.primary{grid-column:span 2;min-height:230px;}
 }
 
-/* R7: iPad-portrait (768 px) — hero-preview to single column so the
+/* R7: iPad-portrait (768 px) â€” hero-preview to single column so the
    tool-demo tiles aren't cramped between the 820 px sheet-hide and
    760 px phone breakpoints. */
 @media (min-width:761px) and (max-width:768px){
@@ -852,10 +852,819 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
 }
 
 
-/* ── CARD SLIDERS ── */
+/* â”€â”€ CARD SLIDERS â”€â”€ */
+
+/* Homepage showcase refresh */
+.hero.hero-story{
+  padding:clamp(40px,5vw,72px) clamp(20px,4vw,40px) clamp(48px,6vw,80px);
+  text-align:left;
+}
+.hero.hero-story::after{
+  inset:8% 4% auto auto;
+  width:min(42vw,560px);
+  height:58%;
+  background:radial-gradient(ellipse 58% 62% at 50% 50%, rgba(240,165,0,0.20), transparent 72%);
+  filter:blur(34px);
+  opacity:.9;
+}
+.hero.hero-story .hero-inner{
+  max-width:1240px;
+  display:grid;
+  grid-template-columns:minmax(0,0.88fr) minmax(0,1.12fr);
+  gap:clamp(28px,4vw,56px);
+  align-items:center;
+}
+.hero.hero-story .hero-copy{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  text-align:left;
+  gap:20px;
+  max-width:640px;
+}
+.hero-topline{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:10px;
+}
+.hero-timing{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:5px 12px;
+  border-radius:999px;
+  border:1px solid rgba(240,165,0,0.24);
+  background:rgba(255,255,255,0.03);
+  color:#fff;
+  font-family:'DM Mono',monospace;
+  font-size:10px;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+}
+.hero.hero-story h1{
+  font-size:clamp(38px,4.9vw,62px);
+  line-height:1.01;
+  max-width:11.6ch;
+  margin:0;
+}
+.hero.hero-story .lead{
+  max-width:53ch;
+  font-size:15px;
+}
+.hero-signal{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:2px;
+}
+.hero-signal .pill{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 12px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,0.08);
+  background:rgba(255,255,255,0.03);
+  color:var(--muted);
+  font-size:11px;
+}
+.hero-note{
+  color:var(--muted2);
+  font-size:12px;
+  line-height:1.6;
+}
+.hero-signal .pill .tick{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:var(--accent);
+  box-shadow:0 0 0 4px rgba(240,165,0,0.12);
+  flex:none;
+}
+.hero-stage{
+  position:relative;
+  min-height:620px;
+}
+.hero-stage::before{
+  content:"";
+  position:absolute;
+  inset:8% 2% 10% 12%;
+  border-radius:42px;
+  background:
+    linear-gradient(115deg, transparent 0 38%, rgba(240,165,0,0.10) 46%, transparent 54% 100%);
+  filter:blur(18px);
+  opacity:.65;
+  transform:skewX(-12deg);
+  animation:stage-scan 7s ease-in-out infinite;
+  pointer-events:none;
+}
+.stage-stack{
+  position:relative;
+  width:100%;
+  height:100%;
+  min-height:620px;
+}
+.stage-card{
+  position:absolute;
+  overflow:hidden;
+  border-radius:30px;
+  background:linear-gradient(180deg, rgba(24,24,24,0.98), rgba(16,16,16,0.98));
+  border:1px solid rgba(255,255,255,0.08);
+  box-shadow:0 30px 80px -34px rgba(0,0,0,0.82);
+}
+.stage-card.primary{
+  left:0;
+  top:0;
+  width:min(100%,720px);
+  animation:stage-float-a 8s ease-in-out infinite;
+}
+.stage-card.secondary{
+  right:0;
+  bottom:18px;
+  width:min(56%,410px);
+  z-index:2;
+  animation:stage-float-b 8s ease-in-out infinite;
+}
+.stage-card-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:14px 16px 12px;
+  border-bottom:1px solid rgba(255,255,255,0.08);
+}
+.stage-label{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  min-width:0;
+}
+.stage-dot{
+  width:9px;
+  height:9px;
+  border-radius:50%;
+  background:var(--accent);
+  box-shadow:0 0 0 5px rgba(240,165,0,0.12);
+  flex:none;
+}
+.stage-label strong{
+  display:block;
+  color:#fff;
+  font-size:14px;
+}
+.stage-label small{
+  display:block;
+  color:var(--muted2);
+  font-size:11px;
+  margin-top:2px;
+}
+.stage-tag{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:4px 8px;
+  border-radius:999px;
+  border:1px solid rgba(240,165,0,0.24);
+  background:var(--accent-dim);
+  color:var(--accent);
+  font-family:'DM Mono',monospace;
+  font-size:9px;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  flex:none;
+}
+.stage-screen{
+  position:relative;
+  overflow:hidden;
+  background:#0a0a0a;
+}
+.stage-card.primary .stage-screen{aspect-ratio:16 / 10.2;}
+.stage-card.secondary .stage-screen{aspect-ratio:9 / 10.5;}
+.stage-screen img{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center top;
+}
+.stage-screen::after{
+  content:"";
+  position:absolute;
+  inset:auto 0 0 0;
+  height:28%;
+  background:linear-gradient(180deg, transparent, rgba(10,10,10,0.30));
+  pointer-events:none;
+}
+.stage-metrics{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  padding:14px 16px 16px;
+}
+.stage-metrics span{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:6px 10px;
+  border-radius:999px;
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.08);
+  color:var(--muted);
+  font-size:11px;
+}
+.stage-route{
+  position:absolute;
+  left:3%;
+  right:3%;
+  bottom:-8px;
+  z-index:5;
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:10px;
+  padding:10px;
+  border-radius:22px;
+  border:1px solid rgba(255,255,255,0.08);
+  background:rgba(12,12,12,0.76);
+  -webkit-backdrop-filter:saturate(150%) blur(14px);
+  backdrop-filter:saturate(150%) blur(14px);
+  box-shadow:0 22px 56px -32px rgba(0,0,0,0.82);
+  overflow:hidden;
+}
+.stage-route::before{
+  content:"";
+  position:absolute;
+  left:20px;
+  right:20px;
+  top:50%;
+  height:1px;
+  transform:translateY(-50%);
+  background:linear-gradient(90deg, rgba(240,165,0,0.15), rgba(240,165,0,0.55), rgba(240,165,0,0.15));
+  opacity:.75;
+}
+.stage-route::after{
+  content:"";
+  position:absolute;
+  top:50%;
+  left:-22%;
+  width:26%;
+  height:2px;
+  transform:translateY(-50%);
+  background:linear-gradient(90deg, transparent, var(--accent), transparent);
+  box-shadow:0 0 18px rgba(240,165,0,0.9);
+  animation:route-beam 5.4s ease-in-out infinite;
+}
+.route-node{
+  position:relative;
+  z-index:1;
+  min-height:64px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:4px;
+  padding:12px 12px 12px 42px;
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,0.08);
+  background:linear-gradient(180deg, rgba(255,255,255,0.055), rgba(255,255,255,0.02));
+}
+.route-node::before{
+  content:attr(data-step);
+  position:absolute;
+  left:12px;
+  top:50%;
+  transform:translateY(-50%);
+  width:20px;
+  height:20px;
+  border-radius:999px;
+  display:grid;
+  place-items:center;
+  background:var(--accent);
+  color:#0d0d0d;
+  font-family:'DM Mono',monospace;
+  font-size:10px;
+  font-weight:700;
+  box-shadow:0 0 0 5px rgba(240,165,0,0.12);
+}
+.route-node strong{
+  color:#fff;
+  font-size:12px;
+}
+.route-node small{
+  color:var(--muted);
+  font-size:10px;
+  line-height:1.35;
+}
+@keyframes stage-scan{
+  0%,100%{opacity:.35;transform:translateX(-8%) skewX(-12deg);}
+  50%{opacity:.85;transform:translateX(8%) skewX(-12deg);}
+}
+@keyframes stage-float-a{
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(-8px);}
+}
+@keyframes stage-float-b{
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(8px);}
+}
+@keyframes route-beam{
+  0%{left:-22%;opacity:0;}
+  12%,78%{opacity:1;}
+  100%{left:96%;opacity:0;}
+}
+.showcase-shell{
+  display:grid;
+  gap:32px;
+}
+.showcase-panel{
+  display:grid;
+  grid-template-columns:minmax(0,0.86fr) minmax(0,1.14fr);
+  gap:clamp(20px,3vw,40px);
+  align-items:center;
+  padding:clamp(24px,3vw,38px);
+  border-radius:32px;
+  border:1px solid var(--border);
+  background:linear-gradient(180deg, rgba(24,24,24,0.96), rgba(17,17,17,0.96));
+  box-shadow:0 26px 68px -36px rgba(0,0,0,0.8);
+}
+.showcase-panel.reverse .showcase-copy{order:2;}
+.showcase-panel.reverse .showcase-media{order:1;}
+.showcase-copy{
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+.tool-pill{
+  display:inline-flex;
+  align-items:center;
+  width:max-content;
+  gap:8px;
+  padding:6px 12px;
+  border-radius:999px;
+  background:var(--accent-dim);
+  border:1px solid rgba(240,165,0,0.28);
+  color:var(--accent);
+  font-family:'DM Mono',monospace;
+  font-size:10px;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+}
+.showcase-copy h2{
+  margin:0;
+  font-family:'Syne',sans-serif;
+  font-weight:800;
+  font-size:clamp(28px,3.4vw,46px);
+  line-height:1.04;
+  color:#fff;
+  letter-spacing:-0.8px;
+  max-width:11ch;
+}
+.showcase-copy p{
+  margin:0;
+  color:var(--muted);
+  line-height:1.68;
+  max-width:58ch;
+}
+.showcase-points{
+  list-style:none;
+  padding:0;
+  margin:0;
+  display:grid;
+  gap:10px;
+}
+.showcase-points li{
+  position:relative;
+  padding-left:18px;
+  color:var(--text);
+}
+.showcase-points li::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:.62em;
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:var(--accent);
+  box-shadow:0 0 0 4px rgba(240,165,0,0.10);
+}
+.showcase-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  margin-top:4px;
+}
+.showcase-media{
+  display:grid;
+  gap:14px;
+}
+.media-window{
+  overflow:hidden;
+  border-radius:22px;
+  border:1px solid rgba(255,255,255,0.08);
+  background:#080808;
+  box-shadow:0 22px 52px -28px rgba(0,0,0,0.82);
+}
+.media-window-bar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:12px 14px;
+  border-bottom:1px solid rgba(255,255,255,0.08);
+  background:rgba(255,255,255,0.02);
+}
+.media-window-bar strong{
+  color:#fff;
+  font-size:13px;
+}
+.media-window-bar span{
+  color:var(--muted2);
+  font-size:11px;
+}
+.media-window-chrome{
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+.media-window-chrome i{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:rgba(255,255,255,0.22);
+  display:block;
+}
+.media-frame{
+  overflow:hidden;
+  background:#080808;
+}
+.media-frame img{
+  display:block;
+  width:100%;
+  aspect-ratio:16 / 10;
+  object-fit:cover;
+  object-position:center top;
+}
+.forms-preview{
+  min-height:300px;
+  padding:18px;
+  background:
+    radial-gradient(circle at top right, rgba(240,165,0,0.10), transparent 38%),
+    #080808;
+  display:grid;
+  gap:12px;
+}
+.forms-preview-search{
+  height:46px;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,0.10);
+  background:rgba(255,255,255,0.045);
+  color:#fff;
+  display:flex;
+  align-items:center;
+  padding:0 14px;
+  font-family:'DM Mono',monospace;
+  font-size:12px;
+}
+.forms-preview-row{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:12px;
+  align-items:center;
+  padding:14px;
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,0.08);
+  background:rgba(255,255,255,0.035);
+}
+.forms-preview-row strong{
+  display:block;
+  color:#fff;
+  font-size:13px;
+}
+.forms-preview-row span{
+  display:block;
+  margin-top:4px;
+  color:var(--muted);
+  font-size:11px;
+}
+.forms-preview-row em{
+  font-style:normal;
+  border-radius:999px;
+  background:var(--accent);
+  color:#111;
+  padding:6px 9px;
+  font-size:10px;
+  font-weight:700;
+}
+.media-caps{
+  display:grid;
+  grid-template-columns:repeat(3, minmax(0,1fr));
+  gap:10px;
+}
+.media-caps span{
+  padding:12px 12px;
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,0.08);
+  background:rgba(255,255,255,0.03);
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.45;
+}
+.platform-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:16px;
+}
+.platform-card{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+  padding:24px;
+  border-radius:24px;
+  border:1px solid rgba(255,255,255,0.08);
+  background:linear-gradient(180deg, rgba(24,24,24,0.96), rgba(16,16,16,0.96));
+  box-shadow:0 22px 56px -34px rgba(0,0,0,0.82);
+}
+.platform-card-wide{
+  grid-column:span 3;
+  padding:28px;
+}
+.platform-kicker{
+  display:inline-flex;
+  align-items:center;
+  width:max-content;
+  padding:6px 10px;
+  border-radius:999px;
+  background:var(--accent-dim);
+  border:1px solid rgba(240,165,0,0.26);
+  color:var(--accent);
+  font-family:'DM Mono',monospace;
+  font-size:10px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+.platform-card h3{
+  margin:0;
+  font-family:'Syne',sans-serif;
+  font-size:clamp(22px,2.4vw,34px);
+  line-height:1.08;
+  letter-spacing:-0.5px;
+  color:#fff;
+  max-width:16ch;
+}
+.platform-card p{
+  margin:0;
+  color:var(--muted);
+  line-height:1.7;
+  max-width:62ch;
+}
+.platform-chips{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+}
+.platform-chips span{
+  padding:8px 12px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,0.08);
+  background:rgba(255,255,255,0.03);
+  color:var(--muted);
+  font-size:12px;
+}
+.audience-story{
+  display:grid;
+  gap:26px;
+}
+.audience-grid-story{
+  max-width:none;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+}
+.mini-stats{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:14px;
+}
+.mini-stat{
+  padding:18px 18px 16px;
+  border-radius:20px;
+  border:1px solid rgba(255,255,255,0.08);
+  background:rgba(255,255,255,0.03);
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.mini-stat strong{
+  color:#fff;
+  font-family:'Syne',sans-serif;
+  font-size:22px;
+  letter-spacing:-0.3px;
+}
+.mini-stat span{
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.55;
+}
+.matrix-shell{
+  margin-top:18px;
+  padding:22px;
+  border-radius:28px;
+  border:1px solid rgba(255,255,255,0.08);
+  background:linear-gradient(180deg, rgba(22,22,22,0.96), rgba(15,15,15,0.96));
+}
+.matrix-head{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:space-between;
+  gap:10px 16px;
+  margin-bottom:14px;
+}
+.matrix-head strong{
+  color:#fff;
+  font-family:'Syne',sans-serif;
+  font-size:22px;
+}
+.matrix-head span{
+  color:var(--muted);
+  font-size:13px;
+  max-width:42ch;
+}
+.matrix-table{
+  display:grid;
+  gap:8px;
+}
+.matrix-row{
+  display:grid;
+  grid-template-columns:minmax(160px,1.5fr) repeat(3,minmax(0,1fr));
+  gap:10px;
+  align-items:center;
+  padding:15px 16px;
+  border-radius:18px;
+  border:1px solid rgba(255,255,255,0.06);
+  background:rgba(255,255,255,0.025);
+}
+.matrix-row span{
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.45;
+}
+.matrix-row span:first-child{
+  color:#fff;
+}
+.matrix-row-head{
+  background:rgba(240,165,0,0.08);
+  border-color:rgba(240,165,0,0.18);
+}
+.matrix-row-head span{
+  color:var(--accent);
+  font-family:'DM Mono',monospace;
+  font-size:11px;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+.home-cta-band{
+  margin-top:26px;
+  padding:18px 20px;
+  border-radius:22px;
+  border:1px solid rgba(255,255,255,0.08);
+  background:linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.02));
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+  flex-wrap:wrap;
+}
+.home-cta-band p{
+  margin:0;
+  color:var(--muted);
+  max-width:56ch;
+}
+.home-cta-band .hero-actions{
+  margin-top:0;
+}
+@media (max-width:1100px){
+  .hero.hero-story .hero-inner{
+    grid-template-columns:1fr;
+  }
+  .hero.hero-story .hero-copy{
+    max-width:680px;
+    margin:0 auto;
+    align-items:center;
+    text-align:center;
+  }
+  .hero-stage{
+    min-height:600px;
+    max-width:860px;
+    width:100%;
+    margin:0 auto;
+  }
+  .stage-stack{min-height:600px;}
+  .showcase-panel,
+  .showcase-panel.reverse{
+    grid-template-columns:1fr;
+  }
+  .showcase-panel.reverse .showcase-copy,
+  .showcase-panel.reverse .showcase-media{
+    order:initial;
+  }
+  .platform-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  .platform-card-wide{
+    grid-column:span 2;
+  }
+  .mini-stats{
+    grid-template-columns:1fr;
+  }
+}
+@media (max-width:760px){
+  .hero.hero-story{
+    padding-top:48px;
+    padding-bottom:52px;
+  }
+  .hero.hero-story .hero-copy{
+    align-items:flex-start;
+    text-align:left;
+  }
+  .hero.hero-story h1{
+    font-size:clamp(28px,9vw,42px);
+    max-width:9.6ch;
+  }
+  .hero.hero-story .lead{
+    font-size:13px;
+    max-width:34ch;
+  }
+  .hero.hero-story .hero-actions{
+    width:100%;
+    flex-direction:column;
+    align-items:stretch;
+  }
+  .hero.hero-story .hero-actions .btn{
+    justify-content:center;
+  }
+  .hero-stage{
+    min-height:0;
+  }
+  .stage-stack{
+    min-height:0;
+    display:grid;
+    gap:16px;
+  }
+  .stage-card,
+  .stage-card.primary,
+  .stage-card.secondary{
+    position:relative;
+    inset:auto;
+    width:100%;
+  }
+  .stage-card.secondary{right:auto;bottom:auto;}
+  .stage-route{
+    position:relative;
+    left:auto;
+    right:auto;
+    bottom:auto;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  .stage-route::before,
+  .stage-route::after{
+    display:none;
+  }
+  .route-node{
+    min-height:60px;
+  }
+  .stage-card.primary .stage-screen,
+  .stage-card.secondary .stage-screen{
+    aspect-ratio:16 / 10.5;
+  }
+  .platform-grid,
+  .audience-grid-story,
+  .mini-stats{
+    grid-template-columns:1fr;
+  }
+  .platform-card-wide{
+    grid-column:auto;
+  }
+  .matrix-shell{
+    padding:14px;
+    overflow-x:auto;
+  }
+  .matrix-table{min-width:640px;}
+  .matrix-row{
+    grid-template-columns:1.2fr repeat(3,minmax(0,1fr));
+    padding:12px 12px;
+  }
+  .matrix-row span{
+    font-size:12px;
+  }
+  .media-caps{
+    grid-template-columns:1fr;
+  }
+  .home-cta-band{
+    padding:16px;
+  }
+}
+
 /* Any homepage card grid becomes a horizontal scroll-snap slider when JS
    adds the `is-slider` class: either because the viewport is narrow
-   (≤760px) or because the grid's last row is an orphan (fewer cards than
+   (â‰¤760px) or because the grid's last row is an orphan (fewer cards than
    the first row). A <div class="slider-dots"></div> is injected after
    each grid by a tiny script (see end of file). */
 .slider-dots{display:none;}
@@ -924,7 +1733,7 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
   border-radius:4px;
 }
 
-/* Respect reduced-motion preference — disable card lifts, button press,
+/* Respect reduced-motion preference â€” disable card lifts, button press,
    and decorative transitions for users who opt out. */
 @media (prefers-reduced-motion: reduce){
   .btn,.btn .arrow,
@@ -938,12 +1747,18 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
   .btn:hover .arrow,.feature-card.live:hover .fcta .arrow{
     transform:none;
   }
+  .hero-stage::before,
+  .stage-card.primary,
+  .stage-card.secondary,
+  .stage-route::after{
+    animation:none;
+  }
   .faq-item[open] .faq-body{animation:none;}
 }
 
 
 
-/* Scroll-reveal — sections fade + slide up on first enter. Driven by
+/* Scroll-reveal â€” sections fade + slide up on first enter. Driven by
    assets/reveal.js via an IntersectionObserver. Reduced-motion falls
    back to an instant show in the script itself. */
 .reveal{opacity:0;transform:translateY(14px);transition:opacity .45s ease, transform .45s ease;will-change:opacity,transform;}
@@ -962,7 +1777,7 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
       "name": "Is Studio Print really free?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes — the free tier gives you 2 A4 sheets per day after login. Passport Photo includes 300 DPI print-ready output, and ID Card Print uses the same free limit before paid plans unlock unlimited sheets. Upgrade to Weekly (₹59) or Monthly (₹149) if you need unlimited output or all passport country presets."
+        "text": "Yes â€” the free tier gives you 2 A4 sheets per day after login. Passport Photo includes 300 DPI print-ready output, ID Card Print uses the same free limit before paid plans unlock unlimited sheets, and Forms Hub provides searchable official form links. Upgrade to Weekly (â‚¹59) or Monthly (â‚¹149) if you need unlimited output or all passport country presets."
       }
     },
     {
@@ -978,7 +1793,7 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
       "name": "Which passport photo sizes and countries are supported?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "India (3.5×4.5 cm and 5×5 cm), US Visa (2×2 inch), UK, Schengen, UAE, Australia, Canada and more. All country presets are unlocked on the paid plan; the free tier includes the Indian passport preset."
+        "text": "India (3.5Ã—4.5 cm and 5Ã—5 cm), US Visa (2Ã—2 inch), UK, Schengen, UAE, Australia, Canada and more. All country presets are unlocked on the paid plan; the free tier includes the Indian passport preset."
       }
     },
     {
@@ -986,7 +1801,7 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
       "name": "Do I need Photoshop or any other software?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "No. Everything runs in a normal web browser on a laptop, phone or tablet. You don't need Photoshop, Illustrator, or any desktop app — just upload a photo and download the print-ready sheet."
+        "text": "No. Everything runs in a normal web browser on a laptop, phone or tablet. You don't need Photoshop, Illustrator, or any desktop app â€” just upload a photo and download the print-ready sheet."
       }
     },
     {
@@ -994,7 +1809,7 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
       "name": "Does Studio Print work on mobile?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes. The tool is designed mobile-first and works on any modern browser — Chrome, Edge, Safari, Firefox — on Android, iPhone, iPad, or a desktop. 4G connection and 2 GB RAM are enough."
+        "text": "Yes. The tool is designed mobile-first and works on any modern browser â€” Chrome, Edge, Safari, Firefox â€” on Android, iPhone, iPad, or a desktop. 4G connection and 2 GB RAM are enough."
       }
     },
     {
@@ -1007,10 +1822,10 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
     },
     {
       "@type": "Question",
-      "name": "I run a print shop or kiosk — can I use this at my counter?",
+      "name": "I run a print shop or kiosk â€” can I use this at my counter?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes, that is exactly what Studio Print was built for. The Monthly ₹149 plan is designed for counters that process many sheets a day. No install, no Photoshop licence — just open the browser on your shop PC or tablet."
+        "text": "Yes, that is exactly what Studio Print was built for. The Monthly â‚¹149 plan is designed for counters that process many sheets a day. No install, no Photoshop licence â€” just open the browser on your shop PC or tablet."
       }
     }
   ]
@@ -1020,8 +1835,8 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
 <body class="home">
 
 <!-- Icon sprite (Lucide-style, 24x24, stroke-based). Referenced via
-     <svg class="ix"><use href="#i-…"/></svg> so every icon inherits the
-     container's colour and renders identically across platforms —
+     <svg class="ix"><use href="#i-â€¦"/></svg> so every icon inherits the
+     container's colour and renders identically across platforms â€”
      replacing emoji glyphs that were rendering inconsistently on
      Android/old Windows/Linux. No new fonts, no new dependencies. -->
 <svg width="0" height="0" style="position:absolute;overflow:hidden" aria-hidden="true" focusable="false">
@@ -1047,16 +1862,21 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
   <nav id="primaryNav">
     <a href="index.html" class="active">Home</a>
     <div class="has-dropdown">
-      <button class="nav-dd-btn" aria-haspopup="true" aria-expanded="false">Features <span class="caret" aria-hidden="true">▾</span></button>
+      <button class="nav-dd-btn" aria-haspopup="true" aria-expanded="false">Features <span class="caret" aria-hidden="true">&#9662;</span></button>
       <div class="dropdown-panel" role="menu">
         <a href="passport-photo.html" role="menuitem">
           <span class="dd-icon" aria-hidden="true"><svg class="ix" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-camera"/></svg></span>
-          <span class="dd-meta"><strong>Passport Photo</strong><small>AI portrait workflow · A4 export</small></span>
+          <span class="dd-meta"><strong>Passport Photo</strong><small>AI portrait workflow &middot; A4 export</small></span>
           <span class="dd-tag live">Live</span>
         </a>
         <a href="id-print.html" role="menuitem">
           <span class="dd-icon" aria-hidden="true"><svg class="ix" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-idcard"/></svg></span>
-          <span class="dd-meta"><strong>ID Card Print</strong><small>PDF auto-detect · CR80 · A4 print</small></span>
+          <span class="dd-meta"><strong>ID Card Print</strong><small>PDF auto-detect &middot; CR80 &middot; A4 print</small></span>
+          <span class="dd-tag live">Live</span>
+        </a>
+        <a href="forms.html" role="menuitem">
+          <span class="dd-icon" aria-hidden="true"><svg class="ix" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-search"/></svg></span>
+          <span class="dd-meta"><strong>Forms Hub</strong><small>Search forms &middot; print/download</small></span>
           <span class="dd-tag live">Live</span>
         </a>
       </div>
@@ -1064,106 +1884,100 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
     <a href="#pricing">Pricing</a>
     <a href="#faq">FAQ</a>
   </nav>
-  <button type="button" class="nav-login" id="hdrAuthBtn" title="Login / Signup"><span class="hdr-lbl">Login</span></button>
-  <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="primaryNav">☰</button>
+  <div class="header-actions">
+    <button type="button" class="nav-login" id="hdrAuthBtn" title="Login / Signup"><span class="hdr-lbl">Login</span></button>
+    <a class="nav-cta" href="id-print.html">Open app</a>
+  </div>
+  <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="primaryNav">&#9776;</button>
 </header>
 
 <main class="home-main">
 
   <!-- HERO -->
-  <section class="hero">
-    <div class="hero-sheets" aria-hidden="true">
-      <div class="hero-sheet left">
-        <span class="ph"></span><span class="ph"></span><span class="ph"></span><span class="ph"></span><span class="ph"></span>
-      </div>
-      <div class="hero-sheet right">
-        <span class="ph"></span><span class="ph"></span><span class="ph"></span><span class="ph"></span><span class="ph"></span>
-      </div>
-    </div>
+  <section class="hero hero-story">
     <div class="hero-inner">
-      <span class="hero-eyebrow"><span class="dot"></span>On-device AI · Multi-tool workspace</span>
-      <h1>The browser workspace for<br><em>modern print jobs.</em></h1>
-      <p class="lead">Studio Print turns selfies, scans, and government PDFs into ready-to-print output — passport photos, ID-card sheets, and fast 300 DPI A4 workflows inside one shared browser workspace.</p>
-      <div class="hero-actions">
-        <a class="btn btn-primary" href="#features">See all tools <span class="arrow" aria-hidden="true">→</span></a>
-        <a class="btn btn-ghost" href="about.html">Our story</a>
-      </div>
-      <div class="hero-trust" aria-label="Trust indicators">
-        <span class="pill"><span class="tick">✓</span> Shared plans across tools</span>
-        <span class="pill"><span class="tick">✓</span> On-device AI</span>
-        <span class="pill"><span class="tick">✓</span> 300 DPI A4</span>
-      </div>
-      <div class="hero-trust" aria-label="Trust indicators">
-        <span class="pill"><span class="tick">✓</span> Nothing uploaded</span>
-        <span class="pill"><span class="tick">✓</span> Phone, tablet, desktop</span>
-      </div>
-    </div>
-
-    <div class="hero-preview" aria-hidden="true">
-      <div class="hero-preview-bar">
-        <span class="plive" aria-hidden="true"></span>
-        <span class="ptitle">studio print · live workspace</span>
-        <span class="ptag-live">Live in browser</span>
-      </div>
-
-      <div class="hero-preview-demo" role="img" aria-label="Demo: photo uploaded, background removed, arranged on an A4 sheet.">
-        <div class="hpv-tile canvas">
-          <div class="silhouette"></div>
-          <div class="crop-frame"></div>
-          <div class="sheet">
-            <span></span><span></span><span></span><span></span><span></span>
-          </div>
+      <div class="hero-copy">
+        <div class="hero-topline">
+          <span class="hero-eyebrow"><span class="dot"></span>Three live print workflows</span>
+          <span class="hero-timing">Built for real counters</span>
         </div>
-        <div class="hpv-side">
-          <div class="hpv-bar">
-            <span class="lab">Background removal</span>
-            <div class="track"><div class="fill"></div></div>
-          </div>
-          <div class="hpv-row">
-            <strong>Workflow</strong>
-            <span>Passport photo · ID print · A4</span>
-          </div>
-          <div class="hpv-row">
-            <strong>Output</strong>
-            <span>300 DPI · cut guides · print-ready</span>
-          </div>
-          <div class="hpv-row">
-            <span class="state">Running on-device</span>
-            <span class="swatch" aria-hidden="true"></span>
-          </div>
+        <h1>The browser print OS for <em>photos, ID PDFs, forms, and A4 sheets.</em></h1>
+        <p class="lead">Upload a photo, open a government PDF, or search a document form. Studio Print cleans, detects, crops, helps you find official forms, and exports print-ready A4 output without Photoshop or a heavy desktop app.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="id-print.html">Open ID Card Print <span class="arrow" aria-hidden="true">-&gt;</span></a>
+          <a class="btn btn-ghost" href="passport-photo.html">Open Passport Photo</a>
         </div>
+        <div class="hero-signal">
+          <span class="pill"><span class="tick"></span> Passport photos</span>
+          <span class="pill"><span class="tick"></span> Government ID PDFs</span>
+          <span class="pill"><span class="tick"></span> Searchable forms</span>
+          <span class="pill"><span class="tick"></span> 300 DPI A4 output</span>
+          <span class="pill"><span class="tick"></span> On-device processing</span>
+        </div>
+        <p class="hero-note">A product-first print workspace: real tools, real previews, and a visual path from upload to final sheet.</p>
       </div>
 
+      <div class="hero-stage" aria-label="Studio Print live product previews">
+        <div class="stage-stack">
+          <article class="stage-card primary">
+            <div class="stage-card-header">
+              <div class="stage-label">
+                <span class="stage-dot"></span>
+                <div>
+                  <strong>ID Card Print</strong>
+                  <small>PDF detect -> crop -> A4 sheet</small>
+                </div>
+              </div>
+              <span class="stage-tag">Live workflow</span>
+            </div>
+            <div class="stage-screen">
+              <img src="assets/home-id-demo.webp" alt="ID Card Print preview showing a Jan Aadhaar card detected and arranged for output." fetchpriority="high">
+            </div>
+            <div class="stage-metrics">
+              <span>Auto detect</span>
+              <span>Card preview</span>
+              <span>Fold & laminate A4</span>
+            </div>
+          </article>
 
-    </div>
-  </section>
-
-  <!-- P30: DENSITY BREAK — workflow showcase between hero and features.
-       Breaks the repeating "header + card-grid" rhythm with a horizontal
-       timeline layout. No card grid, surface2 bg for visual contrast. -->
-  <section class="section density-break reveal">
-    <div class="wrap">
-      <div class="section-head">
-        <span class="section-tag">The workflow</span>
-        <h2>Drop in a file. Get back a production-ready sheet.</h2>
-      </div>
-      <div class="db-timeline">
-        <div class="db-step">
-          <span class="db-num">1</span>
-          <h4>Drop a file</h4>
-          <p>Photo, selfie, or government PDF — all handled locally, nothing uploaded.</p>
+          <article class="stage-card secondary">
+            <div class="stage-card-header">
+              <div class="stage-label">
+                <span class="stage-dot"></span>
+                <div>
+                  <strong>Passport Photo</strong>
+                  <small>Selfie -> background remove -> print</small>
+                </div>
+              </div>
+              <span class="stage-tag">Live workflow</span>
+            </div>
+            <div class="stage-screen">
+              <img src="assets/home-passport-demo.webp" alt="Passport Photo workflow showing upload, country size choices, and 300 DPI print setup." loading="lazy">
+            </div>
+            <div class="stage-metrics">
+              <span>AI background removal</span>
+              <span>Country presets</span>
+              <span>300 DPI output</span>
+            </div>
+          </article>
         </div>
-        <div class="db-line" aria-hidden="true"></div>
-        <div class="db-step">
-          <span class="db-num">2</span>
-          <h4>AI takes over</h4>
-          <p>Background removal, ID-card extraction, smart crops, and layout prep — all on-device, in seconds.</p>
-        </div>
-        <div class="db-line" aria-hidden="true"></div>
-        <div class="db-step">
-          <span class="db-num">3</span>
-          <h4>Download &amp; print</h4>
-          <p>300 DPI A4 sheet with cut guides — feed it to any printer, done.</p>
+        <div class="stage-route" aria-label="Studio Print workflow route">
+          <div class="route-node" data-step="1">
+            <strong>Upload</strong>
+            <small>Photo, PDF, or form search starts the workflow</small>
+          </div>
+          <div class="route-node" data-step="2">
+            <strong>AI / Detect</strong>
+            <small>Background remove or card layout detection</small>
+          </div>
+          <div class="route-node" data-step="3">
+            <strong>Adjust</strong>
+            <small>Clean crop, photo tuning, preview checks</small>
+          </div>
+          <div class="route-node" data-step="4">
+            <strong>A4 Output</strong>
+            <small>Print-ready sheet for local counters</small>
+          </div>
         </div>
       </div>
     </div>
@@ -1174,25 +1988,112 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
     <div class="wrap">
       <div class="section-head">
         <span class="section-tag">Live tools</span>
-        <h2>Two workflows live now. One print stack underneath.</h2>
-        <p>Studio Print is growing into a browser-native print platform, with shared plans, shared privacy, and purpose-built workflows instead of generic editors.</p>
+        <h2>See each workflow before you even click.</h2>
+        <p>Studio Print is a focused print workspace: one path for passport photos, one path for ID-card PDFs, and one searchable forms hub for routine document work.</p>
       </div>
 
-      <div class="features-grid">
-        <a href="passport-photo.html" class="feature-card live primary">
-          <div class="ficon" aria-hidden="true"><svg class="ix" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-camera"/></svg></div>
-          <h3>Passport Photo <span class="tag live">Live</span></h3>
-          <p>Turn a selfie into a compliant passport-photo sheet with AI background removal, country presets, and a 300 DPI A4 export that is ready for shop counters and home printers.</p>
-          <span class="fcta">Open tool <span class="arrow" aria-hidden="true">→</span></span>
-        </a>
+      <div class="showcase-shell">
+        <article class="showcase-panel">
+          <div class="showcase-copy">
+            <span class="tool-pill">Passport Photo</span>
+            <h2>Turn a selfie into a passport-photo sheet.</h2>
+            <p>Upload a normal photo, remove the background, choose the country size, and export a 300 DPI A4 sheet that a shop can print immediately.</p>
+            <ul class="showcase-points">
+              <li>Works from a selfie, WhatsApp image, or camera photo</li>
+              <li>Indian passport plus multiple country presets</li>
+              <li>Built for fast counters and home users alike</li>
+            </ul>
+            <div class="showcase-actions">
+              <a class="btn btn-primary" href="passport-photo.html">Open Passport Photo <span class="arrow" aria-hidden="true">-></span></a>
+            </div>
+          </div>
+          <div class="showcase-media">
+            <div class="media-window">
+              <div class="media-window-bar">
+                <div class="media-window-chrome" aria-hidden="true"><i></i><i></i><i></i></div>
+                <strong>Passport Photo demo</strong>
+                <span>Portrait to A4</span>
+              </div>
+              <div class="media-frame">
+                <img src="assets/home-passport-demo.webp" alt="Passport Photo interface showing upload, AI background removal, and country size selection.">
+              </div>
+            </div>
+            <div class="media-caps">
+              <span>Upload selfie or photo</span>
+              <span>Remove background and crop</span>
+              <span>Download 300 DPI A4 sheet</span>
+            </div>
+          </div>
+        </article>
 
-        <a href="id-print.html" class="feature-card live">
-          <div class="ficon" aria-hidden="true"><svg class="ix" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-idcard"/></svg></div>
-          <h3>ID Card Print <span class="tag live">Live</span></h3>
-          <p>Drop in Aadhaar, PAN, Voter ID, Ayushman, Jan Aadhaar, or eShram PDFs and get auto-detected, auto-cropped card output with Photo Adjust controls and fold-and-laminate A4 sheets.</p>
-          <span class="fcta">Open tool <span class="arrow" aria-hidden="true">→</span></span>
-        </a>
+        <article class="showcase-panel reverse">
+          <div class="showcase-copy">
+            <span class="tool-pill">ID Card Print</span>
+            <h2>Convert government PDFs into clean card sheets.</h2>
+            <p>Drop Aadhaar, PAN, Voter ID, Ayushman, Jan Aadhaar, or eShram PDFs and Studio Print prepares a card-ready layout without opening Photoshop.</p>
+            <ul class="showcase-points">
+              <li>Auto-detects supported document layouts from PDF</li>
+              <li>Quick adjust controls before final output</li>
+              <li>Made for fold-and-laminate A4 print jobs</li>
+            </ul>
+            <div class="showcase-actions">
+              <a class="btn btn-primary" href="id-print.html">Open ID Card Print <span class="arrow" aria-hidden="true">-></span></a>
+            </div>
+          </div>
+          <div class="showcase-media">
+            <div class="media-window">
+              <div class="media-window-bar">
+                <div class="media-window-chrome" aria-hidden="true"><i></i><i></i><i></i></div>
+                <strong>ID Card Print demo</strong>
+                <span>PDF to A4</span>
+              </div>
+              <div class="media-frame">
+                <img src="assets/home-id-demo.webp" alt="ID Card Print preview showing a detected Jan Aadhaar card arranged inside the interface.">
+              </div>
+            </div>
+            <div class="media-caps">
+              <span>Upload Aadhaar, PAN, or other supported PDF</span>
+              <span>Auto-detect and preview front/back</span>
+              <span>Export a print-ready A4 sheet</span>
+            </div>
+          </div>
+        </article>
 
+        <article class="showcase-panel">
+          <div class="showcase-copy">
+            <span class="tool-pill">Forms Hub</span>
+            <h2>Find the form before the customer waits.</h2>
+            <p>Search common Indian document forms from one page, open the official PDF or portal, and print from the browser instead of digging through bookmarks.</p>
+            <ul class="showcase-points">
+              <li>Starts with official sources for Aadhaar, PAN, voter, passport, and EPFO</li>
+              <li>Built for eMitra, cyber cafe, CSC, and home users</li>
+              <li>Designed to expand state-wise for income, caste, domicile, ration, pension, and labour forms</li>
+            </ul>
+            <div class="showcase-actions">
+              <a class="btn btn-primary" href="forms.html">Open Forms Hub <span class="arrow" aria-hidden="true">-></span></a>
+            </div>
+          </div>
+          <div class="showcase-media">
+            <div class="media-window">
+              <div class="media-window-bar">
+                <div class="media-window-chrome" aria-hidden="true"><i></i><i></i><i></i></div>
+                <strong>Forms Hub demo</strong>
+                <span>Search to print</span>
+              </div>
+              <div class="forms-preview" aria-hidden="true">
+                <div class="forms-preview-search">Search Aadhaar, PAN, voter, passport...</div>
+                <div class="forms-preview-row"><div><strong>Aadhaar Enrolment / Update</strong><span>UIDAI official PDF</span></div><em>Open</em></div>
+                <div class="forms-preview-row"><div><strong>PAN Form 49A</strong><span>Income Tax Department</span></div><em>Print</em></div>
+                <div class="forms-preview-row"><div><strong>Voter Form 8</strong><span>Correction / address change</span></div><em>PDF</em></div>
+              </div>
+            </div>
+            <div class="media-caps">
+              <span>Search by name or department</span>
+              <span>Open official PDF or portal</span>
+              <span>Print from the browser PDF viewer</span>
+            </div>
+          </div>
+        </article>
       </div>
     </div>
   </section>
@@ -1201,162 +2102,73 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
     <div class="wrap">
       <div class="section-head">
         <span class="section-tag">Platform</span>
-        <h2>Built like a print operating system, not a one-page utility.</h2>
-        <p>Every Studio Print workflow shares the same core stack: on-device AI, reusable plans, consistent exports, and counter-friendly controls designed for fast real-world jobs.</p>
+        <h2>One print stack under every workflow.</h2>
+        <p>Studio Print is being built as a browser-native print workspace, so every new feature can plug into the same plans, privacy model, export quality, and operator-friendly controls.</p>
       </div>
-      <div class="why-grid">
-        <div class="why-card">
-          <div class="wicon" aria-hidden="true"><svg class="ix" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-bot"/></svg></div>
-          <h4>Shared AI pipeline</h4>
-          <p>Background removal, smart crops, PDF extraction, and print prep all run through one browser-native pipeline instead of separate disconnected tools.</p>
-        </div>
-        <div class="why-card">
-          <div class="wicon" aria-hidden="true"><svg class="ix" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-idcard"/></svg></div>
-          <h4>Workflow-specific surfaces</h4>
-          <p>Each tool is tuned for a job type — passport photos, ID cards, and upcoming utility print workflows — so operators move faster with less manual cleanup.</p>
-        </div>
-        <div class="why-card">
-          <div class="wicon" aria-hidden="true"><svg class="ix" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-lock"/></svg></div>
-          <h4>Privacy by default</h4>
-          <p>The heavy lifting stays on your device. Shared plans and auth exist for convenience, but customer files themselves do not need to leave the browser.</p>
-        </div>
-        <div class="why-card">
-          <div class="wicon" aria-hidden="true"><svg class="ix" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-zap"/></svg></div>
-          <h4>Shipping forward</h4>
-          <p>Live tools already cover passport and ID-card work, while the same platform is being extended toward certificate edits, background workflows, and more print-counter tasks.</p>
-        </div>
+      <div class="platform-grid">
+        <article class="platform-card platform-card-wide">
+          <span class="platform-kicker">Shared core</span>
+          <h3>On-device processing, reusable plans, clean A4 exports.</h3>
+          <p>The point is not to make one clever tool. The point is to keep adding print workflows on top of the same dependable system.</p>
+          <div class="platform-chips">
+            <span>On-device AI</span>
+            <span>300 DPI output</span>
+            <span>Shared plans</span>
+            <span>Fast print counters</span>
+          </div>
+        </article>
+        <article class="platform-card">
+          <span class="platform-kicker">Privacy</span>
+          <h3>Customer files stay in the browser.</h3>
+          <p>Photos and PDFs are processed locally, and Forms Hub sends users to official sources instead of rehosting sensitive government documents.</p>
+        </article>
+        <article class="platform-card">
+          <span class="platform-kicker">Speed</span>
+          <h3>Made for jobs that should take minutes.</h3>
+          <p>Passport photos and ID-card sheets move through focused surfaces instead of giant editors with too many side quests.</p>
+        </article>
+        <article class="platform-card">
+          <span class="platform-kicker">Scale</span>
+          <h3>Ready for the next features you add later.</h3>
+          <p>The homepage and pricing now point to a multi-tool workspace, so new print workflows can slot in without the site feeling rebuilt from zero.</p>
+        </article>
       </div>
     </div>
   </section>
 
-  <!-- AUDIENCE / WHO IT'S FOR -->
   <section class="section reveal" id="audience">
-    <div class="wrap">
+    <div class="wrap audience-story">
       <div class="section-head">
         <span class="section-tag">Who it's for</span>
         <h2>Built for counters, kiosks, and one-off jobs alike.</h2>
-        <p>Whether you run a print desk all day or just need one clean output at home, Studio Print keeps the workflow fast, modern, and easy to repeat.</p>
+        <p>Whether you process customer jobs all day or just need one clean sheet at home, the product is designed to feel fast, direct, and repeatable.</p>
       </div>
-
-      <div class="audience-grid">
-        <div class="audience-card">
+      <div class="audience-grid audience-grid-story">
+        <article class="audience-card">
           <div class="aicon" aria-hidden="true"><svg class="ix" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-idcard"/></svg></div>
-          <h3>Print shops &amp; photo studios</h3>
+          <h3>Print shops & photo studios</h3>
           <ul>
-            <li>Skip Photoshop — passport photos and Aadhaar/PAN/Voter sheets in minutes</li>
-            <li>Unlimited Studio Print sheets at <strong>₹59/week</strong> or <strong>₹149/month</strong></li>
-            <li>Works on the shop PC, a tablet or the operator's phone</li>
-            <li>Customer photos never leave the browser — private by default</li>
+            <li>Skip Photoshop for passport photos and ID-card sheets</li>
+            <li>Use the same browser tab on PC, tablet, or phone</li>
+            <li>Paid plans unlock unlimited routine output</li>
+            <li>Cleaner repeat workflow for real customer counters</li>
           </ul>
-        </div>
-
-        <div class="audience-card">
+        </article>
+        <article class="audience-card">
           <div class="aicon" aria-hidden="true"><svg class="ix" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-home"/></svg></div>
-          <h3>Home users, students &amp; parents</h3>
+          <h3>Home users, students & parents</h3>
           <ul>
-            <li>Make a passport photo from a selfie — no studio trip</li>
-            <li>Download a 300 DPI A4 sheet, print at any ₹10 shop</li>
-            <li>Free tier: 2 sheets a day after login</li>
-            <li>Safe for kids' and students' photos — nothing uploaded</li>
+            <li>Make a passport photo from a selfie without a studio trip</li>
+            <li>Turn supported PDFs into ready-to-print A4 sheets</li>
+            <li>Free daily usage for occasional jobs</li>
+            <li>No app install, no heavy desktop software</li>
           </ul>
-        </div>
+        </article>
       </div>
-    </div>
-  </section>
-
-  <!-- STATS / SOCIAL PROOF (P8) -->
-  <section class="section stats-section reveal" id="stats">
-    <div class="wrap">
-      <div class="section-head">
-        <span class="section-tag">By the numbers</span>
-        <h2>The product, stated like infrastructure.</h2>
-        <p>No inflated vanity numbers. Just the product truths that matter when a workflow has to feel dependable at a real counter.</p>
-      </div>
-
-      <ul class="stats-grid">
-        <li class="stat-card">
-          <span class="stat-num">0</span>
-          <span class="stat-label">Photos ever uploaded to our servers. Background removal runs on your device.</span>
-        </li>
-        <li class="stat-card">
-          <span class="stat-num">2 <span class="stat-unit">sheets</span></span>
-          <span class="stat-label">Free every day — 2 A4 sheets after login, no credit card needed.</span>
-        </li>
-        <li class="stat-card">
-          <span class="stat-num">₹149<span class="stat-unit">/30 days</span></span>
-          <span class="stat-label">Unlimited Studio Print sheets on the monthly pass. Weekly pass is ₹59.</span>
-        </li>
-        <li class="stat-card">
-          <span class="stat-num">300 <span class="stat-unit">DPI</span></span>
-          <span class="stat-label">Print-ready A4 output with cut lines — works at any ₹10 local print shop.</span>
-        </li>
-      </ul>
-    </div>
-  </section>
-
-  <!-- WHY -->
-  <section class="section reveal" id="why">
-    <div class="wrap">
-      <div class="section-head">
-        <span class="section-tag">Why Studio Print</span>
-        <h2>Why it feels faster than old print software.</h2>
-        <p>Studio Print is built to remove the slow, repetitive parts of print-counter work — without replacing them with a cluttered editor or a heavy desktop install.</p>
-      </div>
-
-      <div class="why-grid">
-        <div class="why-card">
-          <div class="wicon" aria-hidden="true"><svg class="ix" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-timer"/></svg></div>
-          <h4>Minutes, not hours</h4>
-          <p>No more fighting Photoshop for an Aadhaar cut-out. Upload, crop, arrange on A4, print — all in a few taps.</p>
-        </div>
-        <div class="why-card">
-          <div class="wicon" aria-hidden="true"><svg class="ix" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-lock"/></svg></div>
-          <h4>100% on your device</h4>
-          <p>Customer photos and documents never leave the browser. AI, cropping, and sheet rendering all run locally.</p>
-        </div>
-        <div class="why-card">
-          <div class="wicon" aria-hidden="true"><svg class="ix" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-printer"/></svg></div>
-          <h4>Print-shop ready</h4>
-          <p>Every tool exports a 300 DPI A4 sheet with clean cutting lines so any local printer can cut it in one pass.</p>
-        </div>
-        <div class="why-card">
-          <div class="wicon" aria-hidden="true"><svg class="ix" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-zap"/></svg></div>
-          <h4>Free, then fair</h4>
-          <p>Start free with 2 A4 sheets per day after login. Weekly <strong>₹59</strong> and Monthly <strong>₹149</strong> unlock unlimited passport-photo and ID-card output.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- HOW IT WORKS -->
-  <section class="section reveal" id="how">
-    <div class="wrap">
-      <div class="section-head">
-        <span class="section-tag">How it works</span>
-        <h2>From a photo or scan to a printable A4 — in four steps.</h2>
-      </div>
-
-      <div class="steps-grid">
-        <div class="step-card">
-          <div class="sicon" aria-hidden="true"><svg class="ix" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-upload"/></svg></div>
-          <h4>Upload</h4>
-          <p>Selfie, phone snap, or a password-protected government PDF. JPG, PNG, PDF or HEIC.</p>
-        </div>
-        <div class="step-card">
-          <div class="sicon" aria-hidden="true"><svg class="ix" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-bot"/></svg></div>
-          <h4>Auto-process</h4>
-          <p>On-device AI handles background removal, card extraction, alignment and cropping — no server round-trips.</p>
-        </div>
-        <div class="step-card">
-          <div class="sicon" aria-hidden="true"><svg class="ix" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-search"/></svg></div>
-          <h4>Adjust &amp; arrange</h4>
-          <p>Tweak size, position or background. Arrange multiple copies on the same A4 sheet to save paper.</p>
-        </div>
-        <div class="step-card">
-          <div class="sicon" aria-hidden="true"><svg class="ix" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-printer"/></svg></div>
-          <h4>Export &amp; print</h4>
-          <p>Download a 300 DPI A4 sheet with cut lines. Feed it to any local printer — done.</p>
-        </div>
+      <div class="mini-stats">
+        <div class="mini-stat"><strong>0 uploads required</strong><span>Processing stays on your device.</span></div>
+        <div class="mini-stat"><strong>2 sheets free daily</strong><span>Enough for casual use after login.</span></div>
+        <div class="mini-stat"><strong>&#8377;149 monthly</strong><span>Built for regular print counters.</span></div>
       </div>
     </div>
   </section>
@@ -1366,22 +2178,71 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
     <div class="wrap">
       <div class="section-head">
         <span class="section-tag">Pricing</span>
-        <h2>Simple pricing for a growing print workspace.</h2>
-        <p>Use the live tools for free up to 2 A4 sheets per day after login. Upgrade only when Studio Print becomes part of your regular workflow. One-time purchase — no auto-renewal.</p>
+        <h2>Simple plans for a growing print workspace.</h2>
+        <p>Use the live tools for free up to 2 A4 sheets per day after login. Upgrade when Studio Print becomes part of your regular workflow, and keep the same access model as new tools are added later.</p>
       </div>
 
-      <!-- P12 — Plan cards (redesigned) -->
+      <div class="matrix-shell">
+        <div class="matrix-head">
+          <strong>Feature access</strong>
+          <span>What your plan unlocks today, and what future tools can follow.</span>
+        </div>
+        <div class="matrix-table" role="table" aria-label="Plan access matrix">
+          <div class="matrix-row matrix-row-head" role="row">
+            <span role="columnheader">Capability</span>
+            <span role="columnheader">Free</span>
+            <span role="columnheader">Weekly</span>
+            <span role="columnheader">Monthly</span>
+          </div>
+          <div class="matrix-row" role="row">
+            <span role="rowheader">Passport Photo</span>
+            <span>Yes</span>
+            <span>Unlimited</span>
+            <span>Unlimited</span>
+          </div>
+          <div class="matrix-row" role="row">
+            <span role="rowheader">ID Card Print</span>
+            <span>Yes</span>
+            <span>Unlimited</span>
+            <span>Unlimited</span>
+          </div>
+          <div class="matrix-row" role="row">
+            <span role="rowheader">Forms Hub</span>
+            <span>Search + official links</span>
+            <span>Search + official links</span>
+            <span>Search + official links</span>
+          </div>
+          <div class="matrix-row" role="row">
+            <span role="rowheader">Daily A4 sheets</span>
+            <span>2 / day</span>
+            <span>No limit</span>
+            <span>No limit</span>
+          </div>
+          <div class="matrix-row" role="row">
+            <span role="rowheader">Passport country presets</span>
+            <span>India only</span>
+            <span>All presets</span>
+            <span>All presets</span>
+          </div>
+          <div class="matrix-row" role="row">
+            <span role="rowheader">Future workflow expansion</span>
+            <span>Limited</span>
+            <span>Included</span>
+            <span>Included</span>
+          </div>
+        </div>
+      </div>
+
       <div class="plan-grid">
-        <!-- Free -->
         <div class="plan-card">
           <h3 class="plan-name">Free</h3>
           <div class="plan-price-wrap">
-            <span class="plan-amount">₹0</span>
+            <span class="plan-amount">&#8377;0</span>
           </div>
           <p class="plan-tagline">Best for trying the tools</p>
           <ul class="plan-features">
             <li>2 A4 sheets per day</li>
-            <li>Passport Photo + ID Card Print</li>
+            <li>Passport Photo + ID Card Print + Forms Hub</li>
             <li>300 DPI print quality</li>
             <li>India passport preset</li>
             <li class="feat-no">Unlimited sheets</li>
@@ -1390,17 +2251,16 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
           <a class="plan-cta" href="passport-photo.html" data-action="start-free">Start free</a>
         </div>
 
-        <!-- Weekly -->
         <div class="plan-card">
           <h3 class="plan-name">Weekly</h3>
           <div class="plan-price-wrap">
-            <span class="plan-amount">₹59</span>
+            <span class="plan-amount">&#8377;59</span>
             <span class="plan-period">/7 days</span>
           </div>
           <p class="plan-tagline">For regular print jobs</p>
           <ul class="plan-features">
             <li>Unlimited A4 sheets</li>
-            <li>Passport Photo + ID Card Print</li>
+            <li>Passport Photo + ID Card Print + Forms Hub</li>
             <li>600 DPI passport export</li>
             <li>All passport country presets</li>
             <li>Unlimited ID downloads / prints</li>
@@ -1409,18 +2269,17 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
           <a class="plan-cta" href="#pricing" data-plan="weekly">Buy Weekly</a>
         </div>
 
-        <!-- Monthly — Best value -->
         <div class="plan-card plan-featured">
           <span class="plan-badge">Best value</span>
           <h3 class="plan-name">Monthly</h3>
           <div class="plan-price-wrap">
-            <span class="plan-amount">₹149</span>
+            <span class="plan-amount">&#8377;149</span>
             <span class="plan-period">/30 days</span>
           </div>
           <p class="plan-tagline">Best value for daily counters</p>
           <ul class="plan-features">
             <li>Unlimited A4 sheets</li>
-            <li>Passport Photo + ID Card Print</li>
+            <li>Passport Photo + ID Card Print + Forms Hub</li>
             <li>600 DPI passport export</li>
             <li>All passport country presets</li>
             <li>Unlimited ID downloads / prints</li>
@@ -1431,7 +2290,15 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
       </div>
 
       <p class="plan-no-renewal">No auto-renewal on any plan</p>
-      <p class="pricing-note">Payments securely processed via Razorpay · UPI, cards, net-banking · <a href="refund.html" style="color:var(--accent);">Refund policy</a></p>
+      <div class="home-cta-band">
+        <p>Plans unlock the live print tools today, while Forms Hub stays easy to search for everyone and can expand state by state.</p>
+        <div class="hero-actions" style="justify-content:flex-start;">
+          <a class="btn btn-primary" href="id-print.html">Try ID Card Print <span class="arrow" aria-hidden="true">-&gt;</span></a>
+          <a class="btn btn-ghost" href="passport-photo.html">Try Passport Photo</a>
+          <a class="btn btn-ghost" href="forms.html">Search Forms</a>
+        </div>
+      </div>
+      <p class="pricing-note">Payments securely processed via Razorpay &middot; UPI, cards, net-banking &middot; <a href="refund.html" style="color:var(--accent);">Refund policy</a></p>
     </div>
   </section>
 
@@ -1448,7 +2315,7 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
         <details class="faq-item" id="faq-free-tier">
           <summary>Is Studio Print really free?</summary>
           <div class="faq-body">
-            <p>Yes — the free tier gives you 2 A4 sheets per day after login. Passport Photo includes 300 DPI print-ready output, and ID Card Print uses the same free limit before paid plans unlock unlimited sheets. Upgrade to Weekly (₹59) or Monthly (₹149) if you need unlimited output or all passport country presets.</p>
+        <p>Yes â€” the free tier gives you 2 A4 sheets per day after login. Passport Photo includes 300 DPI print-ready output, ID Card Print uses the same free limit before paid plans unlock unlimited sheets, and Forms Hub provides searchable official form links. Upgrade to Weekly (â‚¹59) or Monthly (â‚¹149) if you need unlimited output or all passport country presets.</p>
           </div>
         </details>
 
@@ -1462,14 +2329,14 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
         <details class="faq-item" id="faq-countries">
           <summary>Which passport photo sizes and countries are supported?</summary>
           <div class="faq-body">
-            <p>India (3.5×4.5 cm and 5×5 cm), US Visa (2×2 inch), UK, Schengen, UAE, Australia, Canada and more. All country presets are unlocked on the paid plan; the free tier includes the Indian passport preset.</p>
+            <p>India (3.5Ã—4.5 cm and 5Ã—5 cm), US Visa (2Ã—2 inch), UK, Schengen, UAE, Australia, Canada and more. All country presets are unlocked on the paid plan; the free tier includes the Indian passport preset.</p>
           </div>
         </details>
 
         <details class="faq-item" id="faq-no-software">
           <summary>Do I need Photoshop or any other software?</summary>
           <div class="faq-body">
-            <p>No. Everything runs in a normal web browser on a laptop, phone or tablet. You don't need Photoshop, Illustrator, or any desktop app — just upload a photo and download the print-ready sheet.</p>
+            <p>No. Everything runs in a normal web browser on a laptop, phone or tablet. You don't need Photoshop, Illustrator, or any desktop app â€” just upload a photo and download the print-ready sheet.</p>
           </div>
         </details>
 
@@ -1478,7 +2345,7 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
         <details class="faq-item" id="faq-mobile">
           <summary>Does Studio Print work on mobile?</summary>
           <div class="faq-body">
-            <p>Yes. The tool is designed mobile-first and works on any modern browser — Chrome, Edge, Safari, Firefox — on Android, iPhone, iPad, or a desktop. 4G connection and 2 GB RAM are enough.</p>
+            <p>Yes. The tool is designed mobile-first and works on any modern browser â€” Chrome, Edge, Safari, Firefox â€” on Android, iPhone, iPad, or a desktop. 4G connection and 2 GB RAM are enough.</p>
           </div>
         </details>
 
@@ -1490,9 +2357,9 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
         </details>
 
         <details class="faq-item" id="faq-print-shop">
-          <summary>I run a print shop or kiosk — can I use this at my counter?</summary>
+          <summary>I run a print shop or kiosk â€” can I use this at my counter?</summary>
           <div class="faq-body">
-            <p>Yes, that is exactly what Studio Print was built for. The Monthly ₹149 plan is designed for counters that process many sheets a day. No install, no Photoshop licence — just open the browser on your shop PC or tablet.</p>
+            <p>Yes, that is exactly what Studio Print was built for. The Monthly â‚¹149 plan is designed for counters that process many sheets a day. No install, no Photoshop licence â€” just open the browser on your shop PC or tablet.</p>
           </div>
         </details>
       </div>
@@ -1504,7 +2371,7 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
     <h2>Open the studio. Pick the workflow. Print.</h2>
     <p>Passport Photo and ID Card Print are already live, and the same platform is expanding into the rest of the counter stack through 2026.</p>
     <div class="hero-actions" style="justify-content:center;">
-      <a class="btn btn-primary" href="#features">Explore the tools <span class="arrow" aria-hidden="true">→</span></a>
+      <a class="btn btn-primary" href="#features">Explore the tools <span class="arrow" aria-hidden="true">â†’</span></a>
       <a class="btn btn-ghost" href="about.html">Read the story</a>
     </div>
   </section>
@@ -1515,12 +2382,13 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
   <div class="footer-main">
     <div class="footer-brand">
       <a href="index.html" class="footer-logo">Studio <em>Print</em></a>
-      <p class="footer-tagline">A browser-native print workspace for passport photos, ID-card sheets, PDF-to-print jobs, and 300&nbsp;DPI A4 output — built in India.</p>
-      <form class="footer-news" data-u="loginfaster89" data-d="gmail.com" aria-label="Subscribe to product updates">
-        <input type="email" name="email" placeholder="you@example.com" required autocomplete="email" aria-label="Your email">
-        <button type="submit">Subscribe</button>
-      </form>
-      <div class="footer-news-hint">Occasional build notes. No spam, unsubscribe anytime.</div>
+      <p class="footer-tagline">A browser-native print workspace for passport photos, ID-card sheets, document forms, PDF-to-print jobs, and 300&nbsp;DPI A4 output - built in India.</p>
+      <div class="footer-buttons" aria-label="Primary tools">
+        <a class="footer-cta footer-cta-primary" href="id-print.html">Open ID Card Print</a>
+        <a class="footer-cta" href="passport-photo.html">Open Passport Photo</a>
+        <a class="footer-cta" href="forms.html">Open Forms Hub</a>
+</div>
+      <div class="footer-news-hint">Three live workflows today. More print tasks can land on the same platform next.</div>
     </div>
     <nav class="footer-cols" aria-label="Footer">
       <div class="footer-col">
@@ -1528,6 +2396,7 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
         <ul>
           <li><a href="passport-photo.html">Passport Photo</a></li>
           <li><a href="id-print.html">ID Card Print</a></li>
+          <li><a href="forms.html">Forms Hub</a></li>
           <li><a href="index.html#features">All Features</a></li>
           <li><a href="index.html#pricing">Pricing</a></li>
         </ul>
@@ -1559,7 +2428,7 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
     </nav>
   </div>
   <div class="footer-bottom">
-    <div class="footer-copy">© 2026 Studio Print. All rights reserved. · Built with <a href="https://devin.ai" target="_blank" rel="noopener" class="devin-credit">Devin AI</a></div>
+    <div class="footer-copy">Â© 2026 Studio Print. All rights reserved. Â· Built with <a href="https://devin.ai" target="_blank" rel="noopener" class="devin-credit">Devin AI</a></div>
 
   </div>
 </footer>
@@ -1619,3 +2488,7 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
 </script>
 </body>
 </html>
+
+
+
+
