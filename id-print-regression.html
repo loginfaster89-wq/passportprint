@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>ID Print Regression QA - Studio Print</title>
+  <link rel="stylesheet" href="assets/fonts.css">
+  <style>
+    :root{--bg:#0d0d0d;--surface:#171717;--surface2:#222;--border:#333;--text:#f5f5f5;--muted:#aaa;--accent:#f0a500;--ok:#34d399;--warn:#fbbf24;--bad:#ef4444}
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--text);font-family:Syne,system-ui,sans-serif}
+    main{max-width:1180px;margin:0 auto;padding:32px 18px 60px}
+    h1{margin:0 0 8px;font-size:clamp(24px,5vw,42px);letter-spacing:-.04em}
+    p{color:var(--muted);line-height:1.6}
+    .panel{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:20px;margin:18px 0}
+    .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+    input[type=file],input[type=password]{background:var(--surface2);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:11px 12px}
+    input[type=file]{min-width:min(100%,360px)}
+    button{border:0;border-radius:10px;padding:12px 18px;background:var(--accent);color:#111;font-family:"DM Mono",monospace;font-weight:700;cursor:pointer}
+    button.secondary{background:var(--surface2);color:var(--text);border:1px solid var(--border)}
+    button:disabled{opacity:.5;cursor:not-allowed}
+    .note{font-family:"DM Mono",monospace;font-size:12px;color:var(--muted)}
+    .status{font-family:"DM Mono",monospace;font-size:12px;margin-top:12px;color:var(--muted)}
+    .grid{display:grid;gap:16px}
+    .card{background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:14px}
+    .meta{display:flex;gap:8px;flex-wrap:wrap;align-items:center;font-family:"DM Mono",monospace;font-size:11px;color:var(--muted);margin-bottom:10px}
+    .pill{border:1px solid var(--border);border-radius:999px;padding:4px 8px;background:#1b1b1b}
+    .pill.ok{color:var(--ok);border-color:rgba(52,211,153,.35)}
+    .pill.warn{color:var(--warn);border-color:rgba(251,191,36,.35)}
+    .pill.bad{color:var(--bad);border-color:rgba(239,68,68,.35)}
+    canvas.preview{width:100%;height:auto;display:block;background:#eaeaea;border-radius:8px;border:1px solid var(--border)}
+    table{width:100%;border-collapse:collapse;font-family:"DM Mono",monospace;font-size:11px;margin-top:14px}
+    th,td{border-bottom:1px solid var(--border);padding:8px;text-align:left;vertical-align:top}
+    th{color:var(--muted)}
+    .hidden{display:none}
+  </style>
+</head>
+<body>
+<main>
+  <h1>ID Print Regression QA</h1>
+  <p>This private QA page checks PDF templates, crop confidence, front/back preview, and template selection. Files stay in this browser. Do not upload customer PDFs to any public repo.</p>
+
+  <section class="panel">
+    <div class="row">
+      <input id="pdfInput" type="file" accept=".pdf,application/pdf" multiple>
+      <input id="pdfPassword" type="password" placeholder="Optional PDF password">
+      <button id="runBtn">Run QA</button>
+      <button id="downloadSheetBtn" class="secondary" disabled>Download sheet</button>
+      <button id="downloadJsonBtn" class="secondary" disabled>Download JSON</button>
+    </div>
+    <div class="status" id="status">Ready.</div>
+    <p class="note">Supported checks: Aadhaar, PAN, ABHA, e-EPIC, Voter, Ayushman, Jan Aadhaar, eShram, RC, ration. This is a QA harness, not a customer-facing tool.</p>
+  </section>
+
+  <section class="panel hidden" id="summaryPanel">
+    <h2>Summary</h2>
+    <table>
+      <thead><tr><th>File</th><th>Type</th><th>Template</th><th>Score</th><th>Issues</th></tr></thead>
+      <tbody id="summaryBody"></tbody>
+    </table>
+  </section>
+
+  <section class="grid" id="results"></section>
+  <canvas id="sheetCanvas" class="hidden"></canvas>
+</main>
+
+<script type="module">
+let pdfjsLibPromise=null;
+async function getPdfJsLib(){
+  return pdfjsLibPromise||(pdfjsLibPromise=import("https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.min.mjs").then(function(pdfjsLib){
+    pdfjsLib.GlobalWorkerOptions.workerSrc="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.worker.min.mjs";
+    return pdfjsLib;
+  }));
+}
+
+const CARD={w:1011,h:638,gap:20};
+const KEYWORDS={
+  aadhaar:["aadhaar","uid","uidai","unique identification","government of india","vid","enrolment","download date","issue date"],
+  pan:["permanent account number","income tax","pan","department","nsdl"],
+  abha:["@abdm","abha","health account","digital health mission","abha number","abha address"],
+  epic:["e-epic","epic no.","scan by vha/blo app","e-electors photo identity","electoral registration officer"],
+  voter:["election commission","epic","voter","electoral","electors photo identity","polling station","assembly constituency","parliamentary constituency"],
+  ayushman:["ayushman","pmjay","pradhan mantri jan arogya","national health authority","nha","health card","beneficiary","jan arogya","health id","ayushman bharat"],
+  janaadhaar:["jan aadhaar","janaadhaar","rajasthan","family id","jan aadhar","planning department","rajasthan jan aadhaar authority","janaadhar"],
+  eshram:["eshram","e-shram","unorganised worker","unorganized worker","ministry of labour","uan","universal account number","shram card","labour and employment"],
+  rc:["vehicle registration certificate","registration certificate","regn no","regn. number","vehicle class","form 23a","chassis no","registration authority"],
+  ration:["ration card","parivar ration card","family ration card","software developed by nic","gas agency","consumer number","hindustan petroleum","indane","bharat petroleum"]
+};
+const TEMPLATE_REGISTRY_V2={version:"2.1.0",types:{
+  aadhaar:[
+    {id:"aadhaar-details",whenAny:["details as on","aadhaar no. issued"],front:[.075,.719,.423,.207],back:[.509,.719,.423,.207]},
+    {id:"aadhaar-citizenship",whenAny:["citizenship"],front:[.052,.672,.4471,.22],back:[.4991,.672,.4465,.22]},
+    {id:"aadhaar-standard",front:[.052,.6821,.4471,.1995],back:[.4991,.6821,.4465,.1995]}
+  ],
+  pan:[{id:"pan-standard",front:[.1149,.7724,.3949,.1767],back:[.5179,.7724,.3946,.1762]}],
+  abha:[{id:"abha-standard",front:[.0215,.0174,.957,.474],back:[.0215,.5087,.957,.474]}],
+  epic:[{id:"epic-single-page",front:[.0546,.1128,.4118,.1829],back:[.5496,.1128,.4118,.1829]}],
+  voter:[{id:"voter-two-page",frontPage:[.035,.05,.93,.9],backPage:[.035,.05,.93,.9]},{id:"voter-single-page",front:[.035,.05,.93,.45],back:[.035,.53,.93,.42]}],
+  ayushman:[{id:"ayushman-two-page",frontPage:[.035,.05,.93,.9],backPage:[.035,.05,.93,.9]},{id:"ayushman-single-page",front:[.035,.06,.93,.46],back:[.035,.55,.93,.4]}],
+  janaadhaar:[{id:"janaadhaar-card-row",front:[.0499,.5428,.4428,.1875],back:[.5038,.5428,.4448,.1875]},{id:"janaadhaar-two-page",frontPage:[.035,.05,.93,.9],backPage:[.035,.05,.93,.9]}],
+  eshram:[{id:"eshram-dynamic",dynamic:"eshram"},{id:"eshram-fixed",front:[.1889,.0721,.485,.2302],back:[.1889,.303,.485,.235]}],
+  rc:[{id:"rc-two-page-card",frontPage:[0,0,.4258,.1882],backPage:[0,0,.4258,.1882]}],
+  ration:[{id:"ration-original",front:[0,0,1,1],singlePage:true}]
+}};
+
+const $=function(sel){return document.querySelector(sel)};
+const pdfInput=$("#pdfInput"), pdfPassword=$("#pdfPassword"), runBtn=$("#runBtn"), statusEl=$("#status"), resultsEl=$("#results"), summaryPanel=$("#summaryPanel"), summaryBody=$("#summaryBody"), sheetCanvas=$("#sheetCanvas"), downloadSheetBtn=$("#downloadSheetBtn"), downloadJsonBtn=$("#downloadJsonBtn");
+let qaResults=[];
+
+function scoreKeywords(text,type){return KEYWORDS[type].filter(function(k){return text.includes(k)}).length}
+function detectCardType(text,fileName){
+  const name=(fileName||"").toLowerCase();
+  if(text.includes("@abdm")||name.includes("abha")||scoreKeywords(text,"abha")>=2)return"abha";
+  if(scoreKeywords(text,"ayushman")>=2)return"ayushman";
+  if(scoreKeywords(text,"janaadhaar")>=2)return"janaadhaar";
+  if(name.includes("uan-card")||name.includes("eshram")||scoreKeywords(text,"eshram")>=2)return"eshram";
+  if(/(^|[^a-z])rc([^a-z]|$)/.test(name)||scoreKeywords(text,"rc")>=2)return"rc";
+  if(name.includes("ration")||scoreKeywords(text,"ration")>=2)return"ration";
+  if(scoreKeywords(text,"aadhaar")>=2)return"aadhaar";
+  if(scoreKeywords(text,"pan")>=2)return"pan";
+  if(scoreKeywords(text,"epic")>=2)return"epic";
+  if(scoreKeywords(text,"voter")>=2)return"voter";
+  return null;
+}
+async function renderPage(pdf,pageNo){
+  const page=await pdf.getPage(pageNo);
+  const viewport=page.getViewport({scale:4});
+  const canvas=document.createElement("canvas");
+  canvas.width=viewport.width; canvas.height=viewport.height;
+  await page.render({canvasContext:canvas.getContext("2d"),viewport}).promise;
+  const text=(await page.getTextContent()).items.map(function(item){return item.str}).join(" ").toLowerCase();
+  return {page,canvas,text};
+}
+function cropRegion(source,frac){
+  const x=Math.round(frac[0]*source.width), y=Math.round(frac[1]*source.height);
+  const w=Math.min(Math.round(frac[2]*source.width),source.width-x), h=Math.min(Math.round(frac[3]*source.height),source.height-y);
+  const canvas=document.createElement("canvas");
+  canvas.width=Math.max(1,w); canvas.height=Math.max(1,h);
+  canvas.getContext("2d").drawImage(source,x,y,w,h,0,0,w,h);
+  return canvas;
+}
+function cropRegionAbs(source,box){
+  const x=Math.max(0,Math.round(box.x)), y=Math.max(0,Math.round(box.y));
+  const w=Math.min(Math.max(1,Math.round(box.w)),source.width-x), h=Math.min(Math.max(1,Math.round(box.h)),source.height-y);
+  const canvas=document.createElement("canvas");
+  canvas.width=w; canvas.height=h;
+  canvas.getContext("2d").drawImage(source,x,y,w,h,0,0,w,h);
+  return canvas;
+}
+function cropEshramCards(pageCanvas){
+  try{
+    const W=pageCanvas.width,H=pageCanvas.height,data=pageCanvas.getContext("2d").getImageData(0,0,W,H).data,step=Math.max(3,Math.round(Math.min(W,H)/320)),ratio=CARD.w/CARD.h;
+    function findBox(region){
+      const x0=region?Math.max(0,Math.round(region.x)):0, y0=region?Math.max(0,Math.round(region.y)):0;
+      const x1=region?Math.min(W,Math.round(region.x+region.w)):W, y1=region?Math.min(H,Math.round(region.y+region.h)):H;
+      let left=W,top=H,right=-1,bottom=-1,count=0;
+      for(let y=y0;y<y1;y+=step)for(let x=x0;x<x1;x+=step){
+        const i=4*(y*W+x),lum=.299*data[i]+.587*data[i+1]+.114*data[i+2];
+        if(data[i+3]>0&&lum<248){count++; if(x<left)left=x; if(y<top)top=y; if(x>right)right=x; if(y>bottom)bottom=y;}
+      }
+      if(count<20)return null;
+      const pad=Math.max(2,2*step);
+      left=Math.max(0,left-pad); top=Math.max(0,top-pad); right=Math.min(W,right+pad); bottom=Math.min(H,bottom+pad);
+      return {x:left,y:top,w:right-left,h:bottom-top};
+    }
+    function normalize(box){
+      let {x,y,w,h}=box, cx=x+w/2, cy=y+h/2;
+      if(w/h>ratio)w=h*ratio; else h=w/ratio;
+      const inset=Math.max(6,Math.round(Math.min(w,h)*.036));
+      x=Math.round(cx-w/2)+inset; y=Math.round(cy-h/2)+inset; w=Math.round(w)-2*inset; h=Math.round(h)-2*inset;
+      x=Math.max(0,x); y=Math.max(0,y); w=Math.min(w,W-x); h=Math.min(h,H-y);
+      return {x,y,w:Math.max(1,w),h:Math.max(1,h)};
+    }
+    const all=findBox(null); if(!all)return {front:null,back:null};
+    let frontBox,backBox;
+    if(all.w/all.h<1.25){
+      const mid=all.y+all.h/2;
+      frontBox=findBox({x:all.x,y:all.y,w:all.w,h:mid-all.y});
+      backBox=findBox({x:all.x,y:mid,w:all.w,h:all.y+all.h-mid});
+    }else if(all.w/all.h>2.15){
+      const mid=all.x+all.w/2;
+      frontBox=findBox({x:all.x,y:all.y,w:mid-all.x,h:all.h});
+      backBox=findBox({x:mid,y:all.y,w:all.x+all.w-mid,h:all.h});
+    }
+    return frontBox&&backBox?{front:cropRegionAbs(pageCanvas,normalize(frontBox)),back:cropRegionAbs(pageCanvas,normalize(backBox))}:{front:null,back:null};
+  }catch(err){return {front:null,back:null}}
+}
+function resizeToCard(src,type){
+  if(type==="ration")return src;
+  const canvas=document.createElement("canvas");
+  canvas.width=CARD.w; canvas.height=CARD.h;
+  const ctx=canvas.getContext("2d");
+  ctx.fillStyle="#fff"; ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.drawImage(src,0,0,canvas.width,canvas.height);
+  return canvas;
+}
+function confidence(canvas,type,side){
+  if(!canvas)return {score:0,issues:[side+" missing"]};
+  const W=canvas.width,H=canvas.height,data=canvas.getContext("2d").getImageData(0,0,W,H).data,step=Math.max(2,Math.round(Math.min(W,H)/160));
+  let ink=0,total=0,left=0,right=0,top=0,bottom=0;
+  for(let y=0;y<H;y+=step)for(let x=0;x<W;x+=step){
+    const i=4*(y*W+x),lum=.299*data[i]+.587*data[i+1]+.114*data[i+2],dark=lum<245;
+    if(dark){ink++; if(x<Math.max(6,.03*W))left++; if(x>W-Math.max(6,.03*W))right++; if(y<Math.max(6,.03*H))top++; if(y>H-Math.max(6,.03*H))bottom++;}
+    total++;
+  }
+  const ratio=W/Math.max(1,H),target=CARD.w/CARD.h,dev=Math.abs(ratio-target)/target,inkRatio=ink/Math.max(1,total),issues=[];
+  if(inkRatio<.03)issues.push(side+" mostly blank");
+  if(dev>.09&&type!=="ration")issues.push(side+" unusual ratio");
+  if(type==="eshram"&&(left<2||right<2||top<2||bottom<2))issues.push(side+" possible outer padding");
+  let score=Math.max(0,1-2.2*dev);
+  if(inkRatio<.03)score*=.25;
+  score=Math.max(0,Math.min(1,score-.18*issues.length));
+  return {score,issues,inkRatio,edgeInk:{left,right,top,bottom},ratio};
+}
+function candidateTemplates(type,text){
+  const list=(TEMPLATE_REGISTRY_V2.types[type]||[]).filter(function(t){
+    return !t.whenAny||t.whenAny.some(function(k){return text.includes(k)});
+  });
+  return list.length?list:[{id:type+"-legacy"}];
+}
+async function cropByTemplate(pdf,type,text,pageCanvas,template){
+  let front=null,back=null;
+  if(template.dynamic==="eshram"){
+    const c=cropEshramCards(pageCanvas);
+    front=c.front; back=c.back;
+  }else if(pdf.numPages>=2&&template.frontPage){
+    front=cropRegion(pageCanvas,template.frontPage);
+    const p2=await renderPage(pdf,2);
+    back=template.backPage?cropRegion(p2.canvas,template.backPage):null;
+  }else{
+    front=template.front?cropRegion(pageCanvas,template.front):null;
+    back=template.back?cropRegion(pageCanvas,template.back):null;
+  }
+  if(!front&&type==="eshram"){
+    const fallback=TEMPLATE_REGISTRY_V2.types.eshram[1];
+    front=cropRegion(pageCanvas,fallback.front); back=cropRegion(pageCanvas,fallback.back); template=fallback;
+  }
+  front=resizeToCard(front,type);
+  back=back?resizeToCard(back,type):null;
+  const frontConf=confidence(front,type,"front"), backConf=back?confidence(back,type,"back"):null;
+  const issues=[].concat(frontConf.issues,backConf?backConf.issues:[]);
+  const score=Math.min(frontConf.score,backConf?backConf.score:frontConf.score);
+  return {front,back,templateId:template.id,score,issues,frontConf,backConf};
+}
+async function processFile(file,password){
+  const pdfjsLib=await getPdfJsLib();
+  const data=await file.arrayBuffer();
+  const loadingTask=pdfjsLib.getDocument({data:data.slice(0),password:password||undefined});
+  const pdf=await loadingTask.promise;
+  const p1=await renderPage(pdf,1);
+  const type=detectCardType(p1.text,file.name);
+  if(!type)throw new Error("Unknown card type");
+  const candidates=candidateTemplates(type,p1.text);
+  let best=null;
+  for(const candidate of candidates){
+    const result=await cropByTemplate(pdf,type,p1.text,p1.canvas,candidate);
+    if(!best||result.score>best.score)best=result;
+  }
+  return {file:file.name,type,templateId:best.templateId,score:best.score,issues:best.issues,front:best.front,back:best.back,frontConf:best.frontConf,backConf:best.backConf};
+}
+function drawPreview(result){
+  const canvas=document.createElement("canvas");
+  if(result.type==="ration"){
+    canvas.width=900; canvas.height=Math.round(900*result.front.height/result.front.width);
+    canvas.getContext("2d").drawImage(result.front,0,0,canvas.width,canvas.height);
+    return canvas;
+  }
+  canvas.width=CARD.w*2+CARD.gap; canvas.height=CARD.h;
+  const ctx=canvas.getContext("2d");
+  ctx.fillStyle="#eaeaea"; ctx.fillRect(0,0,canvas.width,canvas.height);
+  result.front&&ctx.drawImage(result.front,0,0,CARD.w,CARD.h);
+  result.back&&ctx.drawImage(result.back,CARD.w+CARD.gap,0,CARD.w,CARD.h);
+  return canvas;
+}
+function renderResult(result,index){
+  const card=document.createElement("article");
+  card.className="card";
+  const scoreClass=result.score>=.72?"ok":result.score>=.55?"warn":"bad";
+  card.innerHTML='<div class="meta"><span class="pill">'+(index+1)+'. '+escapeHtml(result.file)+'</span><span class="pill">'+result.type+'</span><span class="pill">'+result.templateId+'</span><span class="pill '+scoreClass+'">score '+Math.round(result.score*100)+'%</span><span class="pill '+(result.issues.length?"warn":"ok")+'">'+(result.issues.length?escapeHtml(result.issues.join("; ")):"clean")+'</span></div>';
+  const preview=drawPreview(result);
+  preview.className="preview";
+  card.appendChild(preview);
+  resultsEl.appendChild(card);
+}
+function escapeHtml(str){return String(str).replace(/[&<>"']/g,function(ch){return({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"})[ch]})}
+function renderSummary(){
+  summaryPanel.classList.toggle("hidden",qaResults.length===0);
+  summaryBody.innerHTML=qaResults.map(function(r){
+    return "<tr><td>"+escapeHtml(r.file)+"</td><td>"+r.type+"</td><td>"+r.templateId+"</td><td>"+Math.round(r.score*100)+"%</td><td>"+escapeHtml(r.issues.join("; ")||"clean")+"</td></tr>";
+  }).join("");
+}
+function buildSheet(){
+  if(!qaResults.length)return;
+  const width=1200,rowH=420;
+  sheetCanvas.width=width; sheetCanvas.height=qaResults.length*rowH+80;
+  const ctx=sheetCanvas.getContext("2d");
+  ctx.fillStyle="#fff"; ctx.fillRect(0,0,sheetCanvas.width,sheetCanvas.height);
+  ctx.fillStyle="#111"; ctx.font="22px sans-serif"; ctx.fillText("Studio Print ID Regression QA",24,38);
+  ctx.font="13px monospace";
+  qaResults.forEach(function(r,i){
+    const y=70+i*rowH;
+    ctx.fillStyle="#111"; ctx.fillText((i+1)+". "+r.file+" | "+r.type+" | "+r.templateId+" | "+Math.round(r.score*100)+"% | "+(r.issues.join("; ")||"clean"),24,y);
+    const preview=drawPreview(r);
+    const maxW=1150,maxH=360,scale=Math.min(maxW/preview.width,maxH/preview.height);
+    ctx.drawImage(preview,24,y+18,preview.width*scale,preview.height*scale);
+  });
+}
+function downloadCanvas(){
+  buildSheet();
+  const a=document.createElement("a");
+  a.download="id-print-regression-sheet.png";
+  a.href=sheetCanvas.toDataURL("image/png");
+  a.click();
+}
+function downloadJson(){
+  const payload=qaResults.map(function(r){return {file:r.file,type:r.type,templateId:r.templateId,score:r.score,issues:r.issues,frontConf:r.frontConf,backConf:r.backConf}});
+  const blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json"});
+  const a=document.createElement("a");
+  a.download="id-print-regression-report.json";
+  a.href=URL.createObjectURL(blob);
+  a.click();
+  setTimeout(function(){URL.revokeObjectURL(a.href)},1000);
+}
+async function runQa(){
+  const files=Array.from(pdfInput.files||[]);
+  if(!files.length){statusEl.textContent="Select PDF files first.";return}
+  runBtn.disabled=true; downloadSheetBtn.disabled=true; downloadJsonBtn.disabled=true;
+  qaResults=[]; resultsEl.innerHTML=""; summaryBody.innerHTML=""; renderSummary();
+  const password=pdfPassword.value.trim();
+  for(let i=0;i<files.length;i++){
+    const file=files[i];
+    statusEl.textContent="Processing "+(i+1)+"/"+files.length+": "+file.name;
+    try{
+      const result=await processFile(file,password);
+      qaResults.push(result);
+      renderResult(result,i);
+      renderSummary();
+    }catch(err){
+      qaResults.push({file:file.name,type:"error",templateId:"-",score:0,issues:[err.message||String(err)],front:null,back:null});
+      renderSummary();
+    }
+  }
+  statusEl.textContent="Done. "+qaResults.length+" file(s) checked.";
+  downloadSheetBtn.disabled=!qaResults.some(function(r){return r.front});
+  downloadJsonBtn.disabled=false;
+  runBtn.disabled=false;
+}
+runBtn.addEventListener("click",runQa);
+downloadSheetBtn.addEventListener("click",downloadCanvas);
+downloadJsonBtn.addEventListener("click",downloadJson);
+</script>
+</body>
+</html>
