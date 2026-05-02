@@ -1,1 +1,3135 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0d0d0d"><title>ID Card Print — Studio Print</title><meta name="description" content="Studio Print's ID-card workflow auto-detects Aadhaar, PAN, ABHA, e-EPIC, Ayushman, Jan Aadhaar, and eShram PDFs into CR80-ready, fold-and-laminate A4 sheets."><meta property="og:title" content="ID Card Print — Studio Print"><meta property="og:description" content="Studio Print's ID-card workflow auto-detects Aadhaar, PAN, ABHA, e-EPIC, Ayushman, Jan Aadhaar, and eShram PDFs into CR80-ready A4 print sheets."><meta property="og:type" content="website"><meta property="og:url" content="https://studioprint.pages.dev/id-print.html"><meta property="og:image" content="https://studioprint.pages.dev/assets/og-image.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:type" content="image/png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://studioprint.pages.dev/assets/og-image.png"><meta name="robots" content="max-image-preview:large"><link rel="canonical" href="https://studioprint.pages.dev/id-print.html"><link rel="icon" type="image/svg+xml" href="assets/logo.svg"><link rel="alternate icon" type="image/png" href="assets/favicon-32.png"><link rel="apple-touch-icon" href="assets/apple-touch-icon.png"><link rel="manifest" href="assets/manifest.webmanifest"><link rel="preconnect" href="https://passportprint-studio.onrender.com"><link rel="dns-prefetch" href="https://passportprint-studio.onrender.com"><link rel="preload" href="assets/fonts/syne-latin.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="assets/fonts/dm-mono-400-latin.woff2" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="assets/fonts.css"><link rel="stylesheet" href="assets/legal.css"><link rel="stylesheet" href="assets/auth.css"><link rel="stylesheet" href="assets/pricing.css"><style>.idp-app{max-width:960px;margin:0 auto;padding:32px 20px 60px}.idp-hero{text-align:center;margin-bottom:32px}.idp-hero h1{font-family:Syne,sans-serif;font-weight:800;font-size:clamp(24px,5vw,38px);line-height:1.15;letter-spacing:-.5px;color:#fff;margin-bottom:8px}.idp-hero h1 em{font-style:normal;color:var(--accent);background:linear-gradient(90deg,var(--accent),#ffd17a);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}.idp-hero p{color:var(--muted);font-size:14px;line-height:1.6;max-width:560px;margin:0 auto}.idp-steps{display:flex;align-items:center;justify-content:center;gap:0;margin-bottom:28px;font-family:'DM Mono',monospace;font-size:12px}.idp-step{display:flex;align-items:center;gap:6px;padding:6px 14px;color:var(--muted);border-radius:999px;border:1px solid transparent;transition:all .2s}.idp-step.active{color:var(--accent);border-color:rgba(240,165,0,.35);background:rgba(240,165,0,.06)}.idp-step.done{color:var(--success)}.idp-step-line{width:24px;height:1px;background:var(--border)}.idp-upload{border:2px dashed var(--border);border-radius:16px;padding:48px 24px;text-align:center;cursor:pointer;transition:border-color .2s,background .2s;background:var(--surface);position:relative}.idp-upload.drag-over,.idp-upload:hover{border-color:var(--accent);background:rgba(240,165,0,.03)}.idp-upload-icon{font-size:40px;margin-bottom:12px;display:block}.idp-upload h3{font-family:Syne,sans-serif;font-size:18px;color:#fff;margin-bottom:6px}.idp-upload p{color:var(--muted);font-size:13px}.idp-upload input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer}.idp-queue{margin-top:16px}.idp-queue-item{display:flex;align-items:center;gap:10px;padding:10px 14px;margin-bottom:8px;border-radius:10px;background:var(--surface);border:1px solid var(--border);font-family:'DM Mono',monospace;font-size:12px;color:var(--text)}.idp-queue-item .qi-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.idp-queue-item .qi-status{font-size:11px;color:var(--muted)}.idp-queue-item .qi-status.ok{color:var(--success)}.idp-queue-item .qi-status.err{color:#ef4444}.idp-queue-item .qi-remove{background:0 0;border:none;color:var(--muted);cursor:pointer;font-size:16px;padding:0 4px;line-height:1;transition:color .15s}.idp-queue-item .qi-remove:hover{color:#ef4444}.idp-queue-actions{display:flex;gap:10px;justify-content:center;margin-top:16px}.idp-batch-count{text-align:center;margin-top:12px;font-family:'DM Mono',monospace;font-size:12px;color:var(--muted)}.idp-plan-note{margin-top:14px;text-align:center;font-size:11px;line-height:1.6;color:var(--muted);font-family:'DM Mono',monospace}.idp-plan-note a{color:var(--accent);text-decoration:none}.idp-plan-note a:hover{color:#ffc03a}.idp-password{max-width:420px;margin:0 auto;text-align:center;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:32px 24px}.idp-password h3{font-family:Syne,sans-serif;font-size:18px;color:#fff;margin-bottom:6px}.idp-password p{color:var(--muted);font-size:13px;margin-bottom:16px}.idp-password input{width:100%;max-width:280px;padding:10px 14px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:#fff;font-family:'DM Mono',monospace;font-size:14px;text-align:center;margin-bottom:12px}.idp-password input:focus{outline:0;border-color:var(--accent)}.idp-password .idp-btn{margin:0 auto}.idp-detect{display:inline-flex;align-items:center;gap:8px;padding:8px 16px;border-radius:999px;font-family:'DM Mono',monospace;font-size:13px;font-weight:500;margin-bottom:20px}.idp-detect.aadhaar{color:#f0a500;background:rgba(240,165,0,.08);border:1px solid rgba(240,165,0,.3)}.idp-detect.pan{color:#4ade80;background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.3)}.idp-detect.abha,.idp-detect.epic,.idp-detect.voter{color:#60a5fa;background:rgba(96,165,250,.08);border:1px solid rgba(96,165,250,.3)}.idp-detect.ayushman{color:#f472b6;background:rgba(244,114,182,.08);border:1px solid rgba(244,114,182,.3)}.idp-detect.janaadhaar{color:#fb923c;background:rgba(251,146,60,.08);border:1px solid rgba(251,146,60,.3)}.idp-detect.eshram{color:#34d399;background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.3)}.idp-detect.rc{color:#a78bfa;background:rgba(167,139,250,.08);border:1px solid rgba(167,139,250,.3)}.idp-detect.ration{color:#22c55e;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.3)}.idp-swap-notice{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 14px;margin:0 0 16px;border-radius:10px;font-family:'DM Mono',monospace;font-size:12px;line-height:1.4;color:#fbbf24;background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.3)}.idp-swap-notice button{flex:0 0 auto;padding:5px 12px;border-radius:6px;font-family:'DM Mono',monospace;font-size:12px;font-weight:500;cursor:pointer;color:#fbbf24;background:0 0;border:1px solid rgba(251,191,36,.5);transition:background .15s}.idp-swap-notice button:hover{background:rgba(251,191,36,.12)}.idp-preview{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px;text-align:center}.idp-preview h3{font-family:Syne,sans-serif;font-size:16px;color:#fff;margin-bottom:16px}.idp-cards{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin-bottom:20px}.idp-card-wrap{text-align:center}.idp-card-wrap span{display:block;font-size:12px;color:var(--muted);margin-bottom:6px;font-family:'DM Mono',monospace}.idp-card-wrap canvas{border:1px solid var(--border);border-radius:8px;max-width:100%;height:auto;background:#111}.idp-preview-canvas-pair{display:block;width:100%;max-width:760px;height:auto;margin:0 auto;aspect-ratio:2022/638;border:1px solid var(--border);border-radius:8px;background:#111}.idp-info{display:flex;flex-wrap:wrap;gap:8px 16px;justify-content:center;margin:16px 0;font-size:11px;color:var(--muted);font-family:'DM Mono',monospace}.idp-info .pill{padding:4px 10px;border-radius:999px;background:var(--surface2);border:1px solid var(--border)}.idp-plan-banner{margin:0 0 14px;padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);color:var(--muted);font-size:11px;line-height:1.6;font-family:'DM Mono',monospace;text-align:left}.idp-plan-banner strong{color:var(--text)}.idp-plan-banner a{color:var(--accent);text-decoration:none}.idp-plan-banner a:hover{color:#ffc03a}.idp-plan-banner.hit{border-color:rgba(239,68,68,.35);background:rgba(239,68,68,.08);color:#fca5a5}.idp-plan-banner.ok{border-color:rgba(240,165,0,.25);background:rgba(240,165,0,.08)}.idp-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:20px}.idp-btn{display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border-radius:10px;font-family:'DM Mono',monospace;font-weight:500;font-size:13px;cursor:pointer;border:1px solid transparent;transition:transform .15s,background .15s;text-decoration:none;white-space:nowrap}.idp-btn:active{transform:scale(.97)}.idp-btn-primary{background:var(--accent);color:#0d0d0d;box-shadow:0 6px 20px -8px rgba(240,165,0,.5)}.idp-btn-primary:hover{background:#ffb627}.idp-btn-ghost{background:var(--surface);color:var(--text);border-color:var(--border)}.idp-btn-ghost:hover{border-color:var(--accent);color:var(--accent)}.idp-a4-wrap{margin:14px auto;text-align:center}.idp-a4-wrap canvas{display:block;margin:0 auto;max-width:min(100%,460px);max-height:55vh;width:auto;height:auto;border:1px solid var(--border);border-radius:8px;background:#fff}.idp-a4-wrap #a4Canvas{display:none}.idp-a4-wrap #sheetPreviewCanvas{display:block}.idp-a4-wrap #printImg{display:none}@media (max-width:640px){.idp-a4-wrap{margin:10px auto}.idp-a4-wrap canvas{max-height:50vh;max-width:100%}}.idp-error{color:#ef4444;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.3);border-radius:10px;padding:12px 16px;font-size:13px;margin:12px 0;text-align:center;display:none}.idp-error.show{display:block}.idp-loading{display:none;align-items:center;justify-content:center;gap:10px;padding:20px;color:var(--muted);font-size:13px}.idp-loading.show{display:flex}.idp-spinner{width:20px;height:20px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .6s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}.idp-editor{margin:20px 0 4px;padding:16px 20px;border-radius:12px;background:var(--surface2);border:1px solid var(--border)}.idp-editor-title{font-family:Syne,sans-serif;font-size:13px;font-weight:600;color:var(--text);margin-bottom:12px;display:flex;align-items:center;justify-content:space-between}.idp-editor-actions button,.idp-editor-title button{background:0 0;border:1px solid var(--border);border-radius:6px;color:var(--muted);font-family:'DM Mono',monospace;font-size:11px;padding:3px 10px;cursor:pointer;transition:color .15s,border-color .15s}.idp-editor-actions button:hover,.idp-editor-title button:hover{color:var(--accent);border-color:var(--accent)}.idp-sliders{display:flex;flex-wrap:wrap;gap:14px 24px}.idp-slider-group{flex:1 1 140px;min-width:120px}.idp-slider-label{display:flex;justify-content:space-between;align-items:center;font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);margin-bottom:4px}.idp-slider-label span{color:var(--accent);font-weight:500;min-width:32px;text-align:right}input.idp-range{-webkit-appearance:none;appearance:none;width:100%;height:4px;min-height:24px;background:var(--border);border-radius:4px;outline:0;cursor:pointer;touch-action:pan-y;-webkit-tap-highlight-color:transparent}input.idp-range::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:14px;height:14px;background:var(--accent);border-radius:50%;cursor:pointer;box-shadow:0 0 6px rgba(240,165,0,.4)}input.idp-range::-moz-range-thumb{width:14px;height:14px;background:var(--accent);border:none;border-radius:50%;cursor:pointer;box-shadow:0 0 6px rgba(240,165,0,.4)}.idp-option{display:flex;align-items:center;gap:8px;margin:14px 0 0;font-family:'DM Mono',monospace;font-size:12px;color:var(--muted);cursor:pointer;user-select:none}.idp-option input[type=checkbox]{-webkit-appearance:none;appearance:none;width:16px;height:16px;border:1.5px solid var(--border);border-radius:4px;background:var(--surface);cursor:pointer;position:relative;flex-shrink:0;transition:border-color .15s,background .15s}.idp-option input[type=checkbox]:checked{background:var(--accent);border-color:var(--accent)}.idp-option input[type=checkbox]:checked::after{content:'';position:absolute;left:4.5px;top:1.5px;width:4px;height:8px;border:solid #0d0d0d;border-width:0 2px 2px 0;transform:rotate(45deg)}.idp-card-wrap canvas.rounded{border-radius:3.6%}.idp-scope-toggle{display:flex;gap:0;margin-bottom:14px;border:1px solid var(--border);border-radius:8px;overflow:hidden;background:var(--surface)}.idp-scope-btn{flex:1 1 0;padding:8px 10px;border:none;background:0 0;color:var(--muted);font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.5px;text-transform:uppercase;cursor:pointer;transition:background .15s,color .15s}.idp-scope-btn+.idp-scope-btn{border-left:1px solid var(--border)}.idp-scope-btn:hover:not([disabled]):not(.is-active){color:var(--text)}.idp-scope-btn.is-active{background:rgba(240,165,0,.12);color:var(--accent);font-weight:600}.idp-scope-btn[disabled]{opacity:.4;cursor:not-allowed}.idp-photo-only-wrap{display:flex;gap:8px;justify-content:center;align-items:stretch}.idp-photo-only-wrap.single-side .idp-photo-only-canvas{flex:0 0 auto;width:auto;max-width:none;height:240px}.idp-photo-only-canvas{flex:1 1 0;max-width:50%;background:#fff;border:1px solid var(--border);border-radius:8px;display:block;width:100%;height:auto}.idp-hidden{display:none!important}@media print{#sheetDesc,#sheetTitle,.idp-actions,.idp-btn,.idp-detect,.idp-editor,.idp-error,.idp-hero,.idp-info,.idp-loading,.idp-option,.idp-password,.idp-steps,.idp-upload,.legal-footer,.legal-header,.sp-cookie,footer,header,nav{display:none!important}body,html{margin:0!important;padding:0!important;background:#fff!important;width:100%!important;height:100%!important;overflow:hidden!important;position:relative!important}.idp-app{padding:0!important;max-width:none!important;width:100%!important;height:100%!important;margin:0!important;position:relative!important}.idp-preview{border:none!important;padding:0!important;background:0 0!important;width:100%!important;height:100%!important;position:relative!important}.idp-a4-wrap{width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;margin:0!important;padding:0!important;position:relative!important}.idp-a4-wrap canvas{display:none!important}.idp-a4-wrap #a4Canvas{display:block!important;position:fixed!important;top:0!important;left:0!important;width:100vw!important;height:100vh!important;max-width:none!important;max-height:none!important;min-width:0!important;min-height:0!important;object-fit:contain!important;object-position:center top!important;margin:0!important;padding:0!important;border:none!important;border-radius:0!important;background:#fff!important;page-break-inside:avoid!important;page-break-after:avoid!important;transform:none!important;z-index:9999!important}.idp-a4-wrap #printImg{display:none!important}@page{size:A4 portrait;margin:0!important}}@media (max-width:640px){.idp-app{padding:20px 14px 40px}.idp-upload{padding:32px 16px}.idp-cards{flex-direction:column;align-items:center}.idp-steps{font-size:10px;gap:0}.idp-step{padding:4px 8px}.idp-step-line{width:12px}.idp-sliders{gap:10px 16px}.idp-slider-group{flex:1 1 100%}}</style></head><body><svg width="0" height="0" style="position:absolute;overflow:hidden" aria-hidden="true" focusable="false"><defs><symbol id="i-camera" viewBox="0 0 24 24"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3Z"/><circle cx="12" cy="13" r="3"/></symbol><symbol id="i-idcard" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><circle cx="8" cy="11" r="2"/><path d="M5 17a3 3 0 0 1 6 0"/><path d="M14 9h5"/><path d="M14 13h4"/></symbol></defs></svg><header class="legal-header"><a href="index.html" class="logo">Studio <em>Print</em></a><nav id="primaryNav"><a href="index.html">Home</a><div class="has-dropdown"><button class="nav-dd-btn" aria-haspopup="true" aria-expanded="false">Features <span class="caret" aria-hidden="true">▾</span></button><div class="dropdown-panel" role="menu"><a href="passport-photo.html" role="menuitem"><span class="dd-icon" aria-hidden="true"><svg class="ix" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-camera"/></svg></span><span class="dd-meta"><strong>Passport Photo</strong><small>AI portrait workflow · A4 export</small></span> <span class="dd-tag live">Live</span> </a><a href="id-print.html" role="menuitem"><span class="dd-icon" aria-hidden="true"><svg class="ix" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-idcard"/></svg></span><span class="dd-meta"><strong>ID Card Print</strong><small>PDF auto-detect · CR80 · A4 print</small></span> <span class="dd-tag live">Live</span></a></div></div><a href="index.html#pricing">Pricing</a> <a href="index.html#faq">FAQ</a></nav><button type="button" class="nav-login" id="hdrAuthBtn" title="Login / Signup"><span class="hdr-lbl">Login</span></button> <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="primaryNav">☰</button></header><main class="legal-main"><div class="idp-app"><div class="idp-hero"><h1>ID Card <em>Print</em></h1><p>Upload your eAadhaar, ePAN, ABHA, e-EPIC (Voter ID), Ayushman (PMJAY), Jan Aadhaar, eShram, RC or ration card PDF — auto-crop, CR80 size, fold-and-laminate A4 layout. Everything stays in your browser.</p></div><div class="idp-steps"><div class="idp-step active" data-step="1">① Upload</div><div class="idp-step-line"></div><div class="idp-step" data-step="2">② Preview</div><div class="idp-step-line"></div><div class="idp-step" data-step="3">③ Print</div></div><div class="idp-error" id="idpError"></div><div id="stepUpload"><div class="idp-upload" id="dropZone"><span class="idp-upload-icon" aria-hidden="true">📄</span><h3>Drop your PDFs here</h3><p>Upload one or multiple PDFs — eAadhaar · ePAN · ABHA · e-EPIC · Ayushman · Jan Aadhaar · eShram · Password-protected supported</p><input type="file" id="pdfInput" accept=".pdf,application/pdf" multiple="multiple"></div><div class="idp-plan-note">Free plan: 2 sheets/day after login. Weekly / Monthly: unlimited ID sheets. <a href="#plans">See plans</a></div><div class="idp-queue idp-hidden" id="fileQueue"></div><div class="idp-batch-count idp-hidden" id="batchCount"></div><div class="idp-queue-actions idp-hidden" id="queueActions"><button class="idp-btn idp-btn-ghost" id="btnAddMore">+ Add More PDFs</button> <button class="idp-btn idp-btn-primary" id="btnProcessAll">Process All →</button></div></div><div id="stepPassword" class="idp-hidden"><div class="idp-password"><h3>🔒 PDF is password-protected</h3><p>Enter the password to unlock</p><input type="password" id="pdfPassword" placeholder="Enter PDF password" autocomplete="off"><div style="margin-top:4px"><button class="idp-btn idp-btn-primary" id="btnUnlock">Unlock PDF</button></div><p style="margin-top:12px;font-size:11px;color:var(--muted2)">Aadhaar: first 4 letters of name (CAPS) + birth year<br>PAN: date of birth in DDMMYYYY<br>Voter ID / ABHA / Ayushman / Jan Aadhaar / eShram: usually not password-protected</p></div></div><div class="idp-loading" id="idpLoading"><div class="idp-spinner"></div><span>Processing PDF…</span></div><div id="stepPreview" class="idp-hidden"><div class="idp-preview"><div id="detectBadge"></div><h3 id="previewTitle">Front &amp; Back Preview</h3><div id="batchCardsContainer"><div class="idp-cards"><canvas id="pairCanvas" class="idp-preview-canvas-pair" width="2022" height="638"></canvas></div><div id="photoOnlyWrap" class="idp-photo-only-wrap idp-hidden"><canvas id="photoOnlyFrontCanvas" class="idp-photo-only-canvas" width="600" height="600"></canvas><canvas id="photoOnlyBackCanvas" class="idp-photo-only-canvas" width="600" height="600"></canvas></div></div><label id="roundedOption" class="idp-option"><input type="checkbox" id="chkRounded"> Rounded Corners</label><div class="idp-editor"><div class="idp-editor-title">Adjust</div><div class="idp-scope-toggle" role="tablist" aria-label="Edit scope"><button type="button" id="btnScopeWhole" class="idp-scope-btn is-active" role="tab" aria-selected="true">Whole Card</button> <button type="button" id="btnScopePhoto" class="idp-scope-btn" role="tab" aria-selected="false">Photo Only</button></div><div class="idp-sliders"><div class="idp-slider-group"><label class="idp-slider-label">Brightness <span id="valBright">100%</span></label> <input type="range" class="idp-range" id="slBright" min="30" max="200" value="100"></div><div class="idp-slider-group"><label class="idp-slider-label">Contrast <span id="valContrast">100%</span></label> <input type="range" class="idp-range" id="slContrast" min="30" max="200" value="100"></div><div class="idp-slider-group"><label class="idp-slider-label">Saturation <span id="valSat">100%</span></label> <input type="range" class="idp-range" id="slSat" min="0" max="200" value="100"></div></div><div class="idp-editor-actions" style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px"><button type="button" id="btnAutoEnhance">Auto</button> <button type="button" id="btnResetEdit">Reset</button></div></div><div class="idp-info"><span id="pillFormat">CR80 - 85.6 x 54 mm</span><span id="pillPixels">1011 x 638 px</span><span id="pillDpi">300 DPI</span><span id="pillWorkflow">Fold & laminate ready</span></div><div class="idp-actions"><button class="idp-btn idp-btn-ghost" id="btnBack">← New PDF</button> <button class="idp-btn idp-btn-primary" id="btnSheet">Generate A4 Sheet →</button></div></div></div><div id="stepSheet" class="idp-hidden"><div class="idp-preview"><h3 id="sheetTitle">A4 Sheet — Fold &amp; Laminate Layout</h3><p id="sheetDesc" style="color:var(--muted);font-size:12px;margin-bottom:16px">Print → cut around cards → fold through center gap → laminate in 65×95mm pouch</p><div id="idpPlanBanner" class="idp-plan-banner ok"></div><div class="idp-a4-wrap"><canvas id="sheetPreviewCanvas" width="2480" height="1200" aria-hidden="true"></canvas><canvas id="a4Canvas" width="2480" height="3508"></canvas><img id="printImg" alt=""></div><div class="idp-actions"><button class="idp-btn idp-btn-ghost" id="btnBackPreview">← Back to Preview</button> <button class="idp-btn idp-btn-ghost" id="btnDownload">⬇ Download PNG</button> <button class="idp-btn idp-btn-primary" id="btnPrint">🖨 Print</button></div></div></div></div></main><footer class="legal-footer"><div class="footer-main"><div class="footer-brand"><a href="index.html" class="footer-logo">Studio <em>Print</em></a><p class="footer-tagline">Every print job. One browser tab. On-device AI for passport photos, Aadhaar/PAN/ABHA/e-EPIC/Ayushman/Jan Aadhaar/eShram sheets and 300&nbsp;DPI A4 layouts — built in India.</p><form class="footer-news" data-u="loginfaster89" data-d="gmail.com" aria-label="Subscribe to product updates"><input type="email" name="email" placeholder="you@example.com" required autocomplete="email" aria-label="Your email"> <button type="submit">Subscribe</button></form><div class="footer-news-hint">Occasional build notes. No spam, unsubscribe anytime.</div></div><nav class="footer-cols" aria-label="Footer"><div class="footer-col"><h4>Product</h4><ul><li><a href="passport-photo.html">Passport Photo</a></li><li><a href="id-print.html">ID Card Print</a></li><li><a href="index.html#features">All Features</a></li><li><a href="index.html#pricing">Pricing</a></li></ul></div><div class="footer-col"><h4>Resources</h4><ul><li><a href="index.html#how">How it works</a></li><li><a href="index.html#faq">FAQ</a></li><li><a href="sitemap.xml">Sitemap</a></li></ul></div><div class="footer-col"><h4>Company</h4><ul><li><a href="about.html">About</a></li><li><a href="contact.html">Contact</a></li></ul></div><div class="footer-col"><h4>Legal</h4><ul><li><a href="privacy.html">Privacy</a></li><li><a href="terms.html">Terms</a></li><li><a href="refund.html">Refund</a></li><li><a href="shipping.html">Delivery</a></li></ul></div></nav></div><div class="footer-bottom"><div class="footer-copy">© 2026 Studio Print. All rights reserved. · Built with <a href="https://devin.ai" target="_blank" rel="noopener" class="devin-credit">Devin AI</a></div></div></footer><script src="assets/nav.js" defer="defer"></script><script src="assets/auth.js" defer="defer"></script><script src="assets/pricing.js" defer="defer"></script><script src="assets/pwa.js" defer="defer"></script><script src="assets/footer.js" defer="defer"></script><script src="assets/cookie.js" defer="defer"></script><script type="module">let pdfjsLibPromise=null;async function getPdfJsLib(){return pdfjsLibPromise||(pdfjsLibPromise=import("https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.min.mjs").then(e=>(e.GlobalWorkerOptions.workerSrc="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.worker.min.mjs",e))),pdfjsLibPromise}const CR80_W=1011,CR80_H=638,A4_W=2480,A4_H=3508,RENDER_SCALE=4,AADHAAR_KEYWORDS=["aadhaar","uid","uidai","unique identification","government of india","vid","enrolment","download date","issue date"],PAN_KEYWORDS=["permanent account number","income tax","pan","department","nsdl"],ABHA_KEYWORDS=["@abdm","abha","health account","digital health mission","abha number","abha address"],EPIC_KEYWORDS=["e-epic","epic no.","scan by vha/blo app","e-electors photo identity","electoral registration officer"],VOTER_KEYWORDS=["election commission","epic","voter","electoral","electors photo identity","polling station","assembly constituency","parliamentary constituency"],AYUSHMAN_KEYWORDS=["ayushman","pmjay","pradhan mantri jan arogya","national health authority","nha","health card","beneficiary","jan arogya","health id","ayushman bharat"],JANAADHAAR_KEYWORDS=["jan aadhaar","janaadhaar","rajasthan","family id","jan aadhar","planning department","rajasthan jan aadhaar authority","janaadhar"],ESHRAM_KEYWORDS=["eshram","e-shram","unorganised worker","unorganized worker","ministry of labour","uan","universal account number","shram card","labour and employment"],RC_KEYWORDS=["vehicle registration certificate","registration certificate","regn no","regn. number","vehicle class","form 23a","chassis no","registration authority"],RATION_KEYWORDS=["ration card","parivar ration card","family ration card","software developed by nic","gas agency","consumer number","hindustan petroleum","indane","bharat petroleum"],CARD_OUTPUT_SPECS={default:{w:1011,h:638,previewGap:20,sheetGap:20,startY:30,formatLabel:"CR80 - 85.6 x 54 mm",pixelLabel:"1011 x 638 px",workflowLabel:"20px fold gap ready",sheetTitle:"A4 Sheet - Fold & Laminate Layout",sheetDesc:"Print -> cut around cards -> fold through center gap -> laminate in 65x95mm pouch",allowRounded:!0},ration:{w:2550,h:1594,previewGap:0,sheetGap:0,startY:0,formatLabel:"Ration card - 8.5 x 5.31 in",pixelLabel:"2550 x 1594 px",workflowLabel:"Original eMitra PDF size",sheetTitle:"Ration Card - Original Size Print",sheetDesc:"Print on custom 8.5 x 5.31 inch page / exact-size setting; not A4.",allowRounded:!1,singlePage:!0,printPageSize:"8.5in 5.314in"}},CROP={aadhaar:{front:[.052,.6821,.4471,.1995],back:[.4991,.6821,.4465,.1995]},pan:{front:[.1149,.7724,.3949,.1767],back:[.5179,.7724,.3946,.1762]},abha:{front:[.0215,.0174,.957,.474],back:[.0215,.5087,.957,.474]},epic:{front:[.0546,.1128,.4118,.1829],back:[.5496,.1128,.4118,.1829]},voter:{front:[.035,.05,.93,.45],back:[.035,.53,.93,.42],frontPage:[.035,.05,.93,.9],backPage:[.035,.05,.93,.9]},ayushman:{front:[.035,.06,.93,.46],back:[.035,.55,.93,.4],frontPage:[.035,.05,.93,.9],backPage:[.035,.05,.93,.9]},janaadhaar:{front:[.0499,.5428,.4428,.1875],back:[.5038,.5428,.4448,.1875],frontPage:[.035,.05,.93,.9],backPage:[.035,.05,.93,.9]},eshram:{front:[.1889,.0721,.485,.2302],back:[.1889,.303,.485,.235],frontPage:[.035,.05,.93,.9],backPage:[.035,.05,.93,.9]},rc:{frontPage:[0,0,.4258,.1882],backPage:[0,0,.4258,.1882]},ration:{front:[0,0,1,1],back:null}},TYPE_LABELS={aadhaar:"Aadhaar Card",pan:"PAN Card",abha:"ABHA Card",epic:"e-EPIC",voter:"Voter ID",ayushman:"Ayushman Card",janaadhaar:"Jan Aadhaar",eshram:"eShram Card",rc:"RC Card",ration:"Ration Card"},TYPE_ICONS={aadhaar:"🆔",pan:"💳",abha:"🏥",epic:"🗳️",voter:"🗳️",ayushman:"🏥",janaadhaar:"👨‍👩‍👧‍\udc66",eshram:"👷",rc:"🚗",ration:"🧾"},$=e=>document.querySelector(e),stepUpload=$("#stepUpload"),stepPassword=$("#stepPassword"),stepPreview=$("#stepPreview"),stepSheet=$("#stepSheet"),idpError=$("#idpError"),idpLoading=$("#idpLoading"),pdfInput=$("#pdfInput"),dropZone=$("#dropZone"),pdfPasswordInput=$("#pdfPassword"),btnUnlock=$("#btnUnlock"),btnBack=$("#btnBack"),btnSheet=$("#btnSheet"),btnBackPreview=$("#btnBackPreview"),btnDownload=$("#btnDownload"),btnPrint=$("#btnPrint"),cardFrontCanvas=document.createElement("canvas");cardFrontCanvas.width=1011,cardFrontCanvas.height=638;const cardBackCanvas=document.createElement("canvas");cardBackCanvas.width=1011,cardBackCanvas.height=638;const pairCanvas=$("#pairCanvas"),sheetPreviewCanvas=$("#sheetPreviewCanvas"),a4Canvas=$("#a4Canvas"),detectBadge=$("#detectBadge"),pillFormat=$("#pillFormat"),pillPixels=$("#pillPixels"),pillDpi=$("#pillDpi"),pillWorkflow=$("#pillWorkflow"),sheetTitle=$("#sheetTitle"),sheetDesc=$("#sheetDesc"),idpPlanBanner=$("#idpPlanBanner"),fileQueue=$("#fileQueue"),batchCount=$("#batchCount"),queueActions=$("#queueActions"),btnAddMore=$("#btnAddMore"),btnProcessAll=$("#btnProcessAll"),batchCardsContainer=$("#batchCardsContainer"),previewTitle=$("#previewTitle");let roundedCorners=!1;const CARD_RADIUS=36;let pdfArrayBuffer=null,detectedType=null,frontImageData=null,backImageData=null,originalFront=null,originalBack=null;const CARD_PHOTO_ROI={aadhaar:{front:[.096,.23,.2,.385],back:null},pan:{front:[.041,.253,.179,.296],back:null},abha:{front:[.048956,.309627,.148959,.303327],back:null},epic:{front:[.04,.38,.24,.52],back:null},voter:{front:[.04,.2,.25,.55],back:null},ayushman:{front:[.04,.2,.22,.55],back:null},janaadhaar:{front:[.068,.342,.171,.38],back:null},eshram:{front:[.043,.24,.198,.37],back:null},ration:{front:[.8268,.0418,.1392,.2528],back:null}};let editScope="whole",cardFilters={bright:100,contrast:100,sat:100},photoFilters={bright:100,contrast:100,sat:100};var batchFiles=[],batchCards=[],pendingPasswordIdx=-1;function getCardOutputSpec(e){return"ration"===e?CARD_OUTPUT_SPECS.ration:CARD_OUTPUT_SPECS.default}function getCardCanvasSize(e){var t=getCardOutputSpec(e);return{w:t.w,h:t.h}}function configurePairCanvas(e,t){if(e){var a=getCardOutputSpec(t),n=a.singlePage?a.w:2*a.w+a.previewGap,r=a.h;e.width=n,e.height=r,e.style.aspectRatio=n+" / "+r}}function refreshCardMetaPills(e){var t=getCardOutputSpec(e);pillFormat&&(pillFormat.textContent=t.formatLabel),pillPixels&&(pillPixels.textContent=t.pixelLabel),pillWorkflow&&(pillWorkflow.textContent=t.workflowLabel)}function cardNeedsSyntheticTopBorder(e){return"aadhaar"===e||"pan"===e}const IDP_BACKEND_URL="https://passportprint-studio.onrender.com",IDP_AUTH_TOKEN_KEY="pps_token_v1",IDP_PLAN_LIMITS={free:{id:"free",name:"Free",dailySheets:2,maxBatchPdfs:999},weekly:{id:"weekly",name:"Weekly",dailySheets:0,maxBatchPdfs:999},monthly:{id:"monthly",name:"Monthly",dailySheets:0,maxBatchPdfs:999}};function isBatchMode(){return batchFiles.length>1||1===batchFiles.length&&batchCards.length>1}function idpCurrentUser(){try{return"function"==typeof window.currentUser?window.currentUser():null}catch(e){return null}}function idpEffectivePlan(){var e=idpCurrentUser();if(!e)return"free";var t=e.plan||"free",a=e.planExpiresAt||0;return"free"!==t&&a&&Date.now()>a?"free":t}function idpPlanLimits(){return IDP_PLAN_LIMITS[idpEffectivePlan()]||IDP_PLAN_LIMITS.free}function idpTodayKey(){var e=new Date;return"pps_daily_sheets_"+e.getFullYear()+"-"+String(e.getMonth()+1).padStart(2,"0")+"-"+String(e.getDate()).padStart(2,"0")}function idpGetTodaySheets(){try{return+(localStorage.getItem(idpTodayKey())||"0")}catch(e){return 0}}function idpSetTodaySheets(e){try{localStorage.setItem(idpTodayKey(),String(Math.max(0,e)))}catch(e){}}function idpRemainingFreeSheets(){var e=idpPlanLimits();return e.dailySheets?Math.max(0,e.dailySheets-idpGetTodaySheets()):1/0}function idpOpenPlansWithMessage(e){showError(e),"function"==typeof window.openPlans&&setTimeout(function(){try{window.openPlans()}catch(e){}},350)}function idpOpenAuthWithMessage(e){showError(e),"function"==typeof window.openAuth&&setTimeout(function(){try{window.openAuth("login")}catch(e){}},350)}async function idpApi(e,t){var a=t||{},n=Object.assign({Accept:"application/json"},a.headers||{}),r=null;try{r=localStorage.getItem("pps_token_v1")}catch(e){}r&&(n.Authorization="Bearer "+r),a.body&&!n["Content-Type"]&&(n["Content-Type"]="application/json");var o=await fetch(IDP_BACKEND_URL+e,{method:a.method||"GET",headers:n,body:a.body?JSON.stringify(a.body):void 0}),i=null;try{i=await o.json()}catch(e){}if(!o.ok){var s=new Error(i&&(i.error||i.message)||"HTTP "+o.status);throw s.status=o.status,i&&"number"==typeof i.used&&(s.used=i.used),s}return i||{}}async function idpConsumeSheetOrBlock(){var e=idpPlanLimits(),t=null;try{t=localStorage.getItem("pps_token_v1")}catch(e){}if(!t||!idpCurrentUser())return idpOpenAuthWithMessage("Please sign up or log in to download / print ID sheets."),!1;if(!e.dailySheets)return!0;if(idpGetTodaySheets()>=e.dailySheets)return refreshIdpPlanBanner(),idpOpenPlansWithMessage("Daily free limit (2 sheets) reached. Upgrade for unlimited ID sheets."),!1;idpSetTodaySheets(idpGetTodaySheets()+1),refreshIdpPlanBanner(),idpApi("/api/consume-sheet",{method:"POST"}).then(function(e){"number"==typeof e.used&&idpSetTodaySheets(e.used),refreshIdpPlanBanner()}).catch(function(e){e&&"number"==typeof e.used&&idpSetTodaySheets(e.used),e&&401===e.status&&(localStorage.removeItem("pps_token_v1"),refreshIdpPlanBanner()),e&&403===e.status&&refreshIdpPlanBanner()});return!0}function refreshIdpPlanBanner(){if(idpPlanBanner){var e=idpEffectivePlan(),t=idpPlanLimits(),a=idpCurrentUser();if(idpPlanBanner.className="idp-plan-banner ok",a)if("free"!==e)idpPlanBanner.innerHTML="weekly"!==e?"Monthly plan active: <strong>unlimited ID sheets</strong> + best-value billing for regular counter work.":'Weekly plan active: <strong>unlimited ID sheets</strong>. Monthly is the best-value option if this is a daily counter workflow. <a href="#plans">Change plan</a>';else{var n=idpRemainingFreeSheets();n>0?idpPlanBanner.innerHTML="Free plan: <strong>"+n+"/"+t.dailySheets+"</strong> sheet"+(1===n?"":"s")+' left today. Weekly / Monthly unlock unlimited ID sheets. <a href="#plans">Go unlimited</a>':(idpPlanBanner.className="idp-plan-banner hit",idpPlanBanner.innerHTML="Daily free limit ("+t.dailySheets+' sheets) reached. <a href="#plans">Upgrade</a> for unlimited ID sheets.')}else idpPlanBanner.innerHTML='Free plan: <strong>2 sheets/day</strong> after login. Weekly / Monthly unlock unlimited ID sheets. <a href="#" onclick="openAuth(\'signup\');return false;">Sign up to download</a> · <a href="#plans">See plans</a>'}}function showStep(e){[stepUpload,stepPassword,stepPreview,stepSheet].forEach(e=>e.classList.add("idp-hidden")),idpError.classList.remove("show"),idpLoading.classList.remove("show"),document.querySelectorAll(".idp-step").forEach(t=>{t.classList.remove("active","done");var a=parseInt(t.dataset.step);a<e&&t.classList.add("done"),a===e&&t.classList.add("active")}),1===e&&stepUpload.classList.remove("idp-hidden"),2===e&&stepPreview.classList.remove("idp-hidden"),3===e&&stepSheet.classList.remove("idp-hidden"),refreshIdpPlanBanner()}function showError(e){idpError.textContent=e,idpError.classList.add("show")}function showLoading(e){idpLoading.classList.toggle("show",e)}function showPasswordStep(){stepUpload.classList.add("idp-hidden"),stepPassword.classList.remove("idp-hidden"),pdfPasswordInput.value="",pdfPasswordInput.focus()}function addFilesToQueue(e){var t=e.filter(e=>"application/pdf"===e.type||e.name.toLowerCase().endsWith(".pdf"));0!==t.length?(0===batchFiles.length&&resetPhotoAdjustState(),t.forEach(function(e){batchFiles.push({file:e,name:e.name,arrayBuffer:null,status:"queued",password:null,error:null})}),1!==batchFiles.length||1!==t.length?(renderQueue(),pdfInput.value=""):handleSingleFile(batchFiles[0])):showError("Please upload PDF files only.")}async function handleSingleFile(e){e.arrayBuffer=await e.file.arrayBuffer(),pdfArrayBuffer=e.arrayBuffer,tryOpenPdf(null)}function renderQueue(){fileQueue.classList.remove("idp-hidden"),queueActions.classList.remove("idp-hidden"),batchCount.classList.remove("idp-hidden"),fileQueue.innerHTML="",batchFiles.forEach(function(e,t){var a=document.createElement("div");a.className="idp-queue-item";var n="done"===e.status?"ok":"error"===e.status?"err":"",r="queued"===e.status?"Pending":"done"===e.status?"Ready":"error"===e.status?e.error||"Error":"Processing…";a.innerHTML='<span class="qi-name">'+escHtml(e.name)+'</span><span class="qi-status '+n+'">'+r+'</span><button type="button" class="qi-remove" data-idx="'+t+'" title="Remove">×</button>',fileQueue.appendChild(a)}),batchCount.textContent=batchFiles.length+" PDF"+(batchFiles.length>1?"s":"")+" in queue",fileQueue.querySelectorAll(".qi-remove").forEach(function(e){e.addEventListener("click",function(){var t=parseInt(e.dataset.idx);batchFiles.splice(t,1),0===batchFiles.length?(fileQueue.classList.add("idp-hidden"),queueActions.classList.add("idp-hidden"),batchCount.classList.add("idp-hidden")):renderQueue()})})}function escHtml(e){var t=document.createElement("div");return t.textContent=e,t.innerHTML}function showPasswordStepBatch(e){stepUpload.classList.add("idp-hidden"),stepPassword.classList.remove("idp-hidden"),stepPassword.querySelector("h3").textContent="🔒 "+e+" is password-protected",pdfPasswordInput.value="",pdfPasswordInput.focus()}async function tryOpenPdf(e){showLoading(!0),idpError.classList.remove("show");try{var t=(await getPdfJsLib()).getDocument({data:pdfArrayBuffer.slice(0),password:e||void 0}),a=await t.promise;await processPdf(a)}catch(e){showLoading(!1),"PasswordException"===e.name?1===e.code?showPasswordStep():2===e.code&&(showPasswordStep(),showError("Wrong password. Try again.")):showError("Could not read PDF: "+(e.message||e))}}async function processPdfBatch(e,t,a){try{var n=(await getPdfJsLib()).getDocument({data:e.slice(0),password:t||void 0}),r=await n.promise,o=await r.getPage(1),i=(await o.getTextContent()).items.map(e=>e.str).join(" ").toLowerCase(),s=detectCardType(i,a||"");if(!s)return{error:"Unknown card type"};var d=o.getViewport({scale:4}),l=document.createElement("canvas");l.width=d.width,l.height=d.height;var c=l.getContext("2d");await o.render({canvasContext:c,viewport:d}).promise;var h,p,u=CROP[s],f=i.includes("details as on")||i.includes("aadhaar no. issued");if("aadhaar"===s&&i.includes("citizenship")?((u=JSON.parse(JSON.stringify(u))).front[1]=.672,u.front[3]=.22,u.back[1]=.672,u.back[3]=.22):"aadhaar"===s&&f&&((u=JSON.parse(JSON.stringify(u))).front=[.075,.719,.423,.207],u.back=[.509,.719,.423,.207]),"eshram"===s){var E=cropEshramCards(l);h=E.front||cropRegion(l,u.front),p=E.back||u.back&&cropRegion(l,u.back)}else if(r.numPages>=2&&u.frontPage){h=cropRegion(l,u.frontPage);var g=await r.getPage(2),v=g.getViewport({scale:4}),m=document.createElement("canvas");m.width=v.width,m.height=v.height;var C=m.getContext("2d");await g.render({canvasContext:C,viewport:v}).promise,p=u.backPage?cropRegion(m,u.backPage):null}else h=cropRegion(l,u.front),p=u.back?cropRegion(l,u.back):null;return{card:{type:s,front:h,back:p,originalFront:h,originalBack:p,fileName:a}}}catch(e){return"PasswordException"!==e.name||1!==e.code&&2!==e.code?{error:e.message||"Failed"}:{needsPassword:!0}}}function detectCardType(e,t){var a=(t||"").toLowerCase(),n=ABHA_KEYWORDS.filter(t=>e.includes(t)).length,r=AYUSHMAN_KEYWORDS.filter(t=>e.includes(t)).length,o=JANAADHAAR_KEYWORDS.filter(t=>e.includes(t)).length,i=ESHRAM_KEYWORDS.filter(t=>e.includes(t)).length,s=AADHAAR_KEYWORDS.filter(t=>e.includes(t)).length,d=PAN_KEYWORDS.filter(t=>e.includes(t)).length,l=EPIC_KEYWORDS.filter(t=>e.includes(t)).length,c=VOTER_KEYWORDS.filter(t=>e.includes(t)).length,h=RC_KEYWORDS.filter(t=>e.includes(t)).length,p=RATION_KEYWORDS.filter(t=>e.includes(t)).length;return e.includes("@abdm")||a.includes("abha")||n>=2?"abha":r>=2?"ayushman":o>=2?"janaadhaar":a.includes("uan-card")||a.includes("eshram")||i>=2?"eshram":/(^|[^a-z])rc([^a-z]|$)/.test(a)||h>=2?"rc":a.includes("ration")||p>=2?"ration":s>=2?"aadhaar":d>=2?"pan":l>=2?"epic":c>=2?"voter":null}async function processPdf(e){try{var t=await e.getPage(1),a=(await t.getTextContent()).items.map(e=>e.str).join(" ").toLowerCase();if(detectedType=detectCardType(a,batchFiles.length>0?batchFiles[0].name:""),!detectedType)return showLoading(!1),showStep(1),void showError("Could not detect card type. Supported: eAadhaar, ePAN, ABHA, e-EPIC (Voter ID), Ayushman (PMJAY), Jan Aadhaar, eShram, RC, ration card.");var n=t.getViewport({scale:4}),r=document.createElement("canvas");r.width=n.width,r.height=n.height;var o=r.getContext("2d");await t.render({canvasContext:o,viewport:n}).promise;var i=CROP[detectedType],s=a.includes("details as on")||a.includes("aadhaar no. issued");if("aadhaar"===detectedType&&a.includes("citizenship")?((i=JSON.parse(JSON.stringify(i))).front[1]=.672,i.front[3]=.22,i.back[1]=.672,i.back[3]=.22):"aadhaar"===detectedType&&s&&((i=JSON.parse(JSON.stringify(i))).front=[.075,.719,.423,.207],i.back=[.509,.719,.423,.207]),"eshram"===detectedType){var E=cropEshramCards(r);frontImageData=E.front||cropRegion(r,i.front),backImageData=E.back||i.back&&cropRegion(r,i.back)}else if(e.numPages>=2&&i.frontPage){frontImageData=cropRegion(r,i.frontPage);var d=await e.getPage(2),l=d.getViewport({scale:4}),c=document.createElement("canvas");c.width=l.width,c.height=l.height;var h=c.getContext("2d");await d.render({canvasContext:h,viewport:l}).promise,backImageData=i.backPage?cropRegion(c,i.backPage):null}else frontImageData=cropRegion(r,i.front),backImageData=i.back?cropRegion(r,i.back):null;originalFront=frontImageData,originalBack=backImageData,batchCards=[{type:detectedType,front:frontImageData,back:backImageData,originalFront:frontImageData,originalBack:backImageData,fileName:batchFiles.length>0?batchFiles[0].name:"PDF"}],loadPrefs(),refreshScopeAvailability(),applyFilters(),detectBadge.innerHTML='<div class="idp-detect '+detectedType+'">'+TYPE_ICONS[detectedType]+" "+TYPE_LABELS[detectedType]+" Detected</div>",previewTitle.textContent=backImageData?"Front & Back Preview":"Card Preview",showLoading(!1),showStep(2)}catch(e){showLoading(!1),showStep(1),showError("Error processing PDF: "+(e.message||e))}}function showBatchPreview(){var e="";batchCards.forEach(function(t){e+='<div class="idp-detect '+t.type+'" style="margin:0 4px 8px;">'+TYPE_ICONS[t.type]+" "+TYPE_LABELS[t.type]+"</div>"}),detectBadge.innerHTML=e;var t=batchCards.every(function(e){return!!e.back});previewTitle.textContent=batchCards.length+" Card"+(1===batchCards.length?"":"s")+(t?" - Front & Back Preview":" Preview"),loadPrefs(),refreshScopeAvailability(),batchCardsContainer.innerHTML="",batchCards.forEach(function(e,t){var a=document.createElement("div");a.style.marginBottom="20px";var n=document.createElement("div");n.style.cssText="font-family:DM Mono,monospace;font-size:11px;color:var(--muted);margin-bottom:6px;text-align:center;",n.textContent=t+1+". "+TYPE_LABELS[e.type]+" — "+e.fileName,a.appendChild(n);var r=document.createElement("div");r.className="idp-cards";var o=document.createElement("canvas");o.className="idp-preview-canvas-pair",o.dataset.batchIdx=t,configurePairCanvas(o,e.type),r.appendChild(o),a.appendChild(r),batchCardsContainer.appendChild(a);var i=null,s=null,d=getCardCanvasSize(e.type);e.originalFront&&((i=document.createElement("canvas")).width=d.w,i.height=d.h,drawFilteredToCanvas(i,e.originalFront,d.w,d.h,e.type,"front")),e.originalBack&&((s=document.createElement("canvas")).width=d.w,s.height=d.h,drawFilteredToCanvas(s,e.originalBack,d.w,d.h,e.type,"back")),compositePair(o,i,s,e.type)}),applyBatchFilters(),batchCards.length>0&&(detectedType=batchCards[0].type,frontImageData=batchCards[0].front,backImageData=batchCards[0].back,originalFront=batchCards[0].originalFront,originalBack=batchCards[0].originalBack,refreshCardMetaPills(detectedType)),showStep(2)}function drawFilteredToCanvas(e,t,a,n,r,o){applyMaskedFilters(e,t,a,n,r,o,!0)}function applyBatchFilters(){batchCards.forEach(function(e){var t=getCardCanvasSize(e.type);if(e.originalFront){var a=document.createElement("canvas");applyMaskedFilters(a,e.originalFront,t.w,t.h,e.type,"front",!1),e.front=a}if(e.originalBack){var n=document.createElement("canvas");applyMaskedFilters(n,e.originalBack,t.w,t.h,e.type,"back",!1),e.back=n}}),batchCardsContainer.querySelectorAll("canvas[data-batch-idx]").forEach(function(e){var t=parseInt(e.dataset.batchIdx);if(t<batchCards.length){var a=batchCards[t],n=null,r=null,o=getCardCanvasSize(a.type);a.originalFront&&((n=document.createElement("canvas")).width=o.w,n.height=o.h,drawFilteredToCanvas(n,a.originalFront,o.w,o.h,a.type,"front")),a.originalBack&&((r=document.createElement("canvas")).width=o.w,r.height=o.h,drawFilteredToCanvas(r,a.originalBack,o.w,o.h,a.type,"back")),compositePair(e,n,r,a.type)}})}function cropRegion(e,t){var a=Math.round(t[0]*e.width),n=Math.round(t[1]*e.height),r=Math.round(t[2]*e.width),o=Math.round(t[3]*e.height);r=Math.min(r,e.width-a),o=Math.min(o,e.height-n);var i=document.createElement("canvas");return i.width=r,i.height=o,i.getContext("2d").drawImage(e,a,n,r,o,0,0,r,o),i}function cropRegionAbs(e,t){var a=Math.max(0,Math.round(t.x)),n=Math.max(0,Math.round(t.y)),r=Math.max(1,Math.round(t.w)),o=Math.max(1,Math.round(t.h));a=Math.min(a,e.width-1),n=Math.min(n,e.height-1),r=Math.min(r,e.width-a),o=Math.min(o,e.height-n);var i=document.createElement("canvas");return i.width=r,i.height=o,i.getContext("2d").drawImage(e,a,n,r,o,0,0,r,o),i}function cropEshramCards(e){try{var t=e.width,a=e.height,n=e.getContext("2d").getImageData(0,0,t,a).data,r=Math.max(4,Math.round(Math.min(t,a)/260)),o=1011/638;function i(e){var o=e?Math.max(0,Math.round(e.x)):0,i=e?Math.max(0,Math.round(e.y)):0,s=e?Math.min(t,Math.round(e.x+e.w)):t,d=e?Math.min(a,Math.round(e.y+e.h)):a,l=t,c=a,h=-1,p=-1,u=0;for(var f=i;f<d;f+=r)for(var g=o;g<s;g+=r){var v=4*(f*t+g),m=n[v],C=n[v+1],b=n[v+2],w=n[v+3];w>0&&(m<245||C<245||b<245)&&(u++,g<l&&(l=g),f<c&&(c=f),g>h&&(h=g),f>p&&(p=f))}if(u<20)return null;var I=2*r;return l=Math.max(0,l-I),c=Math.max(0,c-I),h=Math.min(t,h+I),p=Math.min(a,p+I),{x:l,y:c,w:h-l,h:p-c}}function s(e){var n=e.x,r=e.y,i=e.w,s=e.h,d=n+i/2,l=r+s/2;i/s>o?i=s*o:s=i/o;var c=Math.max(3,Math.round(Math.min(i,s)*.012));return n=Math.round(d-i/2)+c,r=Math.round(l-s/2)+Math.round(.5*c),i=Math.round(i)-2*c,s=Math.round(s)-c,n<0&&(n=0),r<0&&(r=0),n+i>t&&(i=t-n),r+s>a&&(s=a-r),{x:n,y:r,w:Math.min(i,t-n),h:Math.min(s,a-r)}}var d=i(null);if(!d||d.w<100||d.h<100)return{front:cropRegion(e,CROP.eshram.front),back:cropRegion(e,CROP.eshram.back)};var l=d.w/d.h,c,h;if(l<1.25){var p=d.y+d.h/2;c=i({x:d.x,y:d.y,w:d.w,h:p-d.y}),h=i({x:d.x,y:p,w:d.w,h:d.y+d.h-p})}else if(l>2.15){var u=d.x+d.w/2;c=i({x:d.x,y:d.y,w:u-d.x,h:d.h}),h=i({x:u,y:d.y,w:d.x+d.w-u,h:d.h})}else return{front:cropRegion(e,CROP.eshram.front),back:cropRegion(e,CROP.eshram.back)};return c&&h?{front:cropRegionAbs(e,s(c)),back:cropRegionAbs(e,s(h))}:{front:cropRegion(e,CROP.eshram.front),back:cropRegion(e,CROP.eshram.back)}}catch(e){return{front:null,back:null}}}function drawToCanvas(e,t,a,n){e.width=a,e.height=n;var r=e.getContext("2d");r.fillStyle="#fff",r.fillRect(0,0,a,n),r.drawImage(t,0,0,a,n)}function buildSheet(){syncPrintPageStyle(),buildSingleSheet(),refreshSheetPreview()}function refreshSheetPreview(){if(sheetPreviewCanvas&&a4Canvas){var e=a4Canvas.width,t=a4Canvas.height,a=getCardOutputSpec(getCurrentCardType());t=Math.min(a4Canvas.height,Math.max(980,a.h+a.startY+120)),sheetPreviewCanvas.width=e,sheetPreviewCanvas.height=t;var n=sheetPreviewCanvas.getContext("2d");n.clearRect(0,0,e,t),n.drawImage(a4Canvas,0,0,e,t,0,0,e,t)}}function getActiveCards(){return batchCards.length>0?batchCards:frontImageData?[{type:detectedType,front:frontImageData,back:backImageData}]:[]}function buildSingleSheet(){var e=getActiveCards(),t=e.length>0?e[0]:null,a=t?t.type:detectedType,n=getCardOutputSpec(a),r=a4Canvas.getContext("2d");if(n.singlePage){a4Canvas.width=n.w,a4Canvas.height=n.h,r.fillStyle="#ffffff",r.fillRect(0,0,n.w,n.h),t&&t.front&&r.drawImage(t.front,0,0,n.w,n.h);return}a4Canvas.width=2480,a4Canvas.height=3508,r.fillStyle="#ffffff",r.fillRect(0,0,2480,3508);var o=n.w,i=n.h,s=n.sheetGap,d=2*o+s,l=Math.round((2480-d)/2),c=n.startY,h=useRoundedCorners()?36:0;if(t&&t.front&&(h>0?drawCardClipped(r,t.front,l,c,o,i,h):r.drawImage(t.front,l,c,o,i)),t&&t.back){var p=l+o+s;h>0?drawCardClipped(r,t.back,p,c,o,i,h):r.drawImage(t.back,p,c,o,i)}if(t&&cardNeedsSyntheticTopBorder(a)&&(r.fillStyle="#000",t.front&&(h>0?r.fillRect(l+h,c,o-2*h,4):r.fillRect(l,c,o,4)),t.back)){var u=l+o+s;h>0?r.fillRect(u+h,c,o-2*h,4):r.fillRect(u,c,o,4)}}function buildMultiCardSheet(){var e=getActiveCards(),t=Math.min(e.length>0?e.length:5,5),a=e.length<=1;a&&(t=5);var n=a4Canvas.getContext("2d");a4Canvas.width=2480,a4Canvas.height=3508,n.fillStyle="#ffffff",n.fillRect(0,0,2480,3508);var r=1011,o=638,i=o*t+20*(t-1),s=Math.round(219),d=Math.round((3508-i)/2);n.fillStyle="#999",n.font="18px sans-serif",n.textAlign="center",n.fillText("Front",s+505.5,d-16),n.fillText("Back",s+r+20+505.5,d-16);for(var l=useRoundedCorners()?36:0,c=0;c<t;c++){var h=d+658*c,p=a?e[0]:e[c];p&&(p.front&&(l>0?drawCardClipped(n,p.front,s,h,r,o,l):n.drawImage(p.front,s,h,r,o)),p.back&&(l>0?drawCardClipped(n,p.back,s+r+20,h,r,o,l):n.drawImage(p.back,s+r+20,h,r,o)))}for(n.setLineDash([8,6]),n.strokeStyle="#000",n.lineWidth=1.5,c=0;c<=t;c++)h=0===c?d:c===t?d+t*o+20*(t-1):d+c*o+20*(c-1)+10,n.beginPath(),n.moveTo(s-24,h),n.lineTo(s+2042+24,h),n.stroke();for([s,s+r+10,s+2042].forEach(function(e){n.beginPath(),n.moveTo(e,d-24),n.lineTo(e,d+i+24),n.stroke()}),n.setLineDash([]),n.strokeStyle="#000",n.lineWidth=2,c=0;c<t;c++)drawCornerMarks(n,s,h=d+658*c,r,o,30),drawCornerMarks(n,s+r+20,h,r,o,30)}function buildDragonSheet(){var e=getActiveCards(),t=e.length>0?e[0]:null,a=a4Canvas.getContext("2d");a4Canvas.width=DRAGON_W,a4Canvas.height=DRAGON_H,a.fillStyle="#ffffff",a.fillRect(0,0,DRAGON_W,DRAGON_H);var n=1011,r=638,o=1296,i=Math.round((DRAGON_W-n)/2),s=Math.round((DRAGON_H-o)/2),d=useRoundedCorners()?36:0;if(t&&t.front&&(d>0?drawCardClipped(a,t.front,i,s,n,r,d):a.drawImage(t.front,i,s,n,r)),t&&t.back){var l=s+r+20;d>0?drawCardClipped(a,t.back,i,l,n,r,d):a.drawImage(t.back,i,l,n,r)}a.setLineDash([8,6]),a.strokeStyle="#000",a.lineWidth=1.5,[s,s+r+10,s+o].forEach(function(e){a.beginPath(),a.moveTo(i-20,e),a.lineTo(i+n+20,e),a.stroke()}),[i,i+n].forEach(function(e){a.beginPath(),a.moveTo(e,s-20),a.lineTo(e,s+o+20),a.stroke()}),a.setLineDash([]),a.strokeStyle="#000",a.lineWidth=2,drawCornerMarks(a,i,s,n,r,30),drawCornerMarks(a,i,s+r+20,n,r,30),a.fillStyle="#999",a.font="16px sans-serif",a.textAlign="center",a.fillText("Front",i+505.5,s-12),a.fillText("Back",i+505.5,s+r+20-12)}function buildPVCTraySheet(){var e=getActiveCards(),t=e.length>0?e[0]:null,a=a4Canvas.getContext("2d");a4Canvas.width=PVC_W,a4Canvas.height=PVC_H,a.fillStyle="#ffffff",a.fillRect(0,0,PVC_W,PVC_H);var n=1011,r=638,o=Math.round((PVC_W-n)/2),i=744,s=useRoundedCorners()?36:0;t&&t.front&&(s>0?drawCardClipped(a,t.front,o,35,n,r,s):a.drawImage(t.front,o,35,n,r)),t&&t.back&&(s>0?drawCardClipped(a,t.back,o,i,n,r,s):a.drawImage(t.back,o,i,n,r)),a.setLineDash([6,4]),a.strokeStyle="#bbb",a.lineWidth=1,s>0?(roundedRectPath(a,o,35,n,r,s),a.stroke(),roundedRectPath(a,o,i,n,r,s),a.stroke()):(a.strokeRect(o,35,n,r),a.strokeRect(o,i,n,r)),a.setLineDash([]),a.strokeStyle="#999",a.lineWidth=1.5,drawCornerMarks(a,o,35,n,r,20),drawCornerMarks(a,o,i,n,r,20),a.fillStyle="#999",a.font="16px sans-serif",a.textAlign="center",a.fillText("Front",o+505.5,25),a.fillText("Back",o+505.5,734),a.strokeStyle="#ddd",a.lineWidth=2,a.setLineDash([12,6]),a.strokeRect(4,4,PVC_W-8,PVC_H-8),a.setLineDash([])}function drawCornerMarks(e,t,a,n,r,o){[[t,a],[t+n,a],[t,a+r],[t+n,a+r]].forEach(function(n){var r=n[0],i=n[1],s=r===t?1:-1,d=i===a?1:-1;e.beginPath(),e.moveTo(r-s*o,i),e.lineTo(r,i),e.lineTo(r,i-d*o),e.stroke()})}pdfInput.addEventListener("change",e=>{e.target.files&&e.target.files.length>0&&addFilesToQueue(Array.from(e.target.files))}),dropZone.addEventListener("dragover",e=>{e.preventDefault(),dropZone.classList.add("drag-over")}),dropZone.addEventListener("dragleave",()=>dropZone.classList.remove("drag-over")),dropZone.addEventListener("drop",e=>{e.preventDefault(),dropZone.classList.remove("drag-over"),e.dataTransfer.files&&e.dataTransfer.files.length>0&&addFilesToQueue(Array.from(e.dataTransfer.files))}),btnAddMore.addEventListener("click",function(){var e=document.createElement("input");e.type="file",e.accept=".pdf,application/pdf",e.multiple=!0,e.addEventListener("change",function(){e.files&&e.files.length>0&&addFilesToQueue(Array.from(e.files))}),e.click()}),btnProcessAll.addEventListener("click",async function(){idpError.classList.remove("show"),showLoading(!0),batchCards=[];for(var e=0;e<batchFiles.length;e++){var t=batchFiles[e];t.status="processing",renderQueue();try{t.arrayBuffer||(t.arrayBuffer=await t.file.arrayBuffer());var a=await processPdfBatch(t.arrayBuffer,t.password,t.name);if(a.needsPassword)return t.status="error",t.error="Needs password",pendingPasswordIdx=e,showLoading(!1),renderQueue(),void showPasswordStepBatch(t.name);a.error?(t.status="error",t.error=a.error):(t.status="done",batchCards.push(a.card))}catch(e){t.status="error",t.error=e.message||"Failed"}renderQueue()}showLoading(!1),0!==batchCards.length?showBatchPreview():showError("No cards could be processed from the uploaded PDFs.")}),btnUnlock.addEventListener("click",()=>{var e=pdfPasswordInput.value.trim();if(e){if(stepPassword.classList.add("idp-hidden"),pendingPasswordIdx>=0)return batchFiles[pendingPasswordIdx].password=e,batchFiles[pendingPasswordIdx].status="queued",pendingPasswordIdx=-1,stepUpload.classList.remove("idp-hidden"),void btnProcessAll.click();tryOpenPdf(e)}else showError("Enter the password.")}),pdfPasswordInput.addEventListener("keydown",e=>{"Enter"===e.key&&btnUnlock.click()});const slBright=$("#slBright"),slContrast=$("#slContrast"),slSat=$("#slSat"),valBright=$("#valBright"),valContrast=$("#valContrast"),valSat=$("#valSat"),btnResetEdit=$("#btnResetEdit"),btnAutoEnhance=$("#btnAutoEnhance"),chkRounded=$("#chkRounded");function getFilterString(e){var t="photo"===e?photoFilters:cardFilters;return 100==t.bright&&100==t.contrast&&100==t.sat?"none":"brightness("+t.bright+"%) contrast("+t.contrast+"%) saturate("+t.sat+"%)"}function getPhotoROIPixels(e,t,a,n,r){if("eshram"===e&&"front"===t&&r){var o=detectEshramPhotoROIPixels(r,a,n);if(o)return o}var i=e&&CARD_PHOTO_ROI[e],s=i&&i[t];return s?getROIPixelsFromFrac(s,a,n):null}function detectEshramPhotoROIPixels(e,t,a){try{var n=document.createElement("canvas");n.width=t,n.height=a;var r=n.getContext("2d");r.fillStyle="#fff",r.fillRect(0,0,t,a),r.drawImage(e,0,0,t,a);for(var o=r.getImageData(0,0,t,a).data,i=Math.round(.025*t),s=Math.round(.24*a),d=Math.round(.24*t),l=Math.round(.62*a),c=t,h=a,p=-1,u=-1,f=0,g=s;g<l;g+=2)for(var v=i;v<d;v+=2){var m=4*(g*t+v),C=o[m],b=o[m+1],w=o[m+2],I=.299*C+.587*b+.114*w;I<215&&(f++,v<c&&(c=v),g<h&&(h=g),v>p&&(p=v),g>u&&(u=g))}if(f<300||p<=c||u<=h)return null;var R=4;return c=Math.max(0,c-R),h=Math.max(0,h-R),p=Math.min(t,p+R),u=Math.min(a,u+R),{x:c,y:h,w:p-c,h:u-h}}catch(e){return null}}function getROIPixelsFromFrac(e,t,a){return e?{x:Math.round(e[0]*t),y:Math.round(e[1]*a),w:Math.round(e[2]*t),h:Math.round(e[3]*a)}:null}function cardTypeHasPhotoROI(e){var t=e&&CARD_PHOTO_ROI[e];return!(!t||!t.front&&!t.back)}function cardTypeHasPhotoROISide(e,t){var a=e&&CARD_PHOTO_ROI[e];return!(!a||!a[t])}function getCurrentCardType(){return batchCards[0]&&batchCards[0].type||detectedType}function roundedCornersAllowed(){return"photo"!==editScope&&"pan"!==getCurrentCardType()&&!1!==getCardOutputSpec(getCurrentCardType()).allowRounded}function useRoundedCorners(){return roundedCorners&&roundedCornersAllowed()}function applyMaskedFilters(e,t,a,n,r,o,i){e.width=a,e.height=n;var s=e.getContext("2d");s.fillStyle="#fff",s.fillRect(0,0,a,n),i&&useRoundedCorners()&&(roundedRectPath(s,0,0,a,n,36),s.clip()),s.filter=getFilterString("whole"),s.drawImage(t,0,0,a,n),s.filter="none";var d=getPhotoROIPixels(r,o,a,n,t);d&&(s.save(),s.beginPath(),s.rect(d.x,d.y,d.w,d.h),s.clip(),s.clearRect(d.x,d.y,d.w,d.h),s.fillStyle="#fff",s.fillRect(d.x,d.y,d.w,d.h),s.filter=getFilterString("photo"),s.drawImage(t,0,0,a,n),s.filter="none",s.restore())}function roundedRectPath(e,t,a,n,r,o){e.beginPath(),e.moveTo(t+o,a),e.lineTo(t+n-o,a),e.arcTo(t+n,a,t+n,a+o,o),e.lineTo(t+n,a+r-o),e.arcTo(t+n,a+r,t+n-o,a+r,o),e.lineTo(t+o,a+r),e.arcTo(t,a+r,t,a+r-o,o),e.lineTo(t,a+o),e.arcTo(t,a,t+o,a,o),e.closePath()}function drawCardClipped(e,t,a,n,r,o,i){e.save(),roundedRectPath(e,a,n,r,o,i),e.clip(),e.drawImage(t,a,n,r,o),e.restore(),e.strokeStyle="#ccc",e.lineWidth=1.5,roundedRectPath(e,a,n,r,o,i),e.stroke()}function compositePair(e,t,a,n){configurePairCanvas(e,n);var r=getCardOutputSpec(n),o=r.w,i=r.h,s=r.previewGap,d=e.getContext("2d");if(d.fillStyle="#eaeaea",d.fillRect(0,0,e.width,e.height),r.singlePage){t&&d.drawImage(t,0,0,o,i);return}if(t&&(d.save(),useRoundedCorners()&&(roundedRectPath(d,0,0,o,i,36),d.clip()),d.drawImage(t,0,0,o,i),d.restore()),a){var l=o+s;d.save(),useRoundedCorners()&&(roundedRectPath(d,l,0,o,i,36),d.clip()),d.drawImage(a,l,0,o,i),d.restore()}}function getOffset(e){return 1===batchCards.length&&batchCards[0].offset&&batchCards[0].offset[e]?batchCards[0].offset[e]:{dx:0,dy:0}}function getScale(e){return 1===batchCards.length&&batchCards[0].scale&&batchCards[0].scale[e]?batchCards[0].scale[e]:1}function drawFiltered(e,t,a,n,r,o){applyMaskedFilters(e,t,a,n,r,o,!0)}function applyFilters(){var e=getCardCanvasSize(detectedType);originalFront?(drawFiltered(cardFrontCanvas,originalFront,e.w,e.h,detectedType,"front"),frontImageData=document.createElement("canvas"),frontImageData.width=e.w,frontImageData.height=e.h,frontImageData.getContext("2d").drawImage(cardFrontCanvas,0,0)):frontImageData=null,originalBack?(drawFiltered(cardBackCanvas,originalBack,e.w,e.h,detectedType,"back"),backImageData=document.createElement("canvas"),backImageData.width=e.w,backImageData.height=e.h,backImageData.getContext("2d").drawImage(cardBackCanvas,0,0)):backImageData=null,pairCanvas&&batchCards.length<=1&&compositePair(pairCanvas,frontImageData,backImageData,detectedType),batchCards.length>1?applyBatchFilters():1===batchCards.length&&(batchCards[0].front=frontImageData,batchCards[0].back=backImageData),repaintPhotoOnly()}function resetEditorSliders(){slBright.value=100,valBright.textContent="100%",slContrast.value=100,valContrast.textContent="100%",slSat.value=100,valSat.textContent="100%"}function savePrefs(){}function loadPrefs(){syncSlidersFromState(),refreshRoundedCornersUI()}function syncSlidersFromState(){var e="photo"===editScope?photoFilters:cardFilters;slBright.value=e.bright,valBright.textContent=e.bright+"%",slContrast.value=e.contrast,valContrast.textContent=e.contrast+"%",slSat.value=e.sat,valSat.textContent=e.sat+"%"}function syncSlidersToState(){var e="photo"===editScope?photoFilters:cardFilters;e.bright=parseInt(slBright.value,10),e.contrast=parseInt(slContrast.value,10),e.sat=parseInt(slSat.value,10)}function resetPhotoAdjustState(){editScope="whole",cardFilters.bright=100,cardFilters.contrast=100,cardFilters.sat=100,photoFilters.bright=100,photoFilters.contrast=100,photoFilters.sat=100,syncSlidersFromState()}function autoEnhance(){var e=originalFront||(batchCards.length>0?batchCards[0].originalFront:null);if(e){var t=getCardCanvasSize(getCurrentCardType()),a=document.createElement("canvas");a.width=t.w,a.height=t.h;var n=a.getContext("2d");n.drawImage(e,0,0,t.w,t.h);for(var r=n.getImageData(0,0,t.w,t.h).data,o=0,i=0,s=0;s<r.length;s+=4)o+=.299*r[s]+.587*r[s+1]+.114*r[s+2],i++;var d=i>0?o/i:128,l=Math.round(128/Math.max(d,1)*100);l=Math.max(70,Math.min(160,l)),slBright.value=l,valBright.textContent=l+"%",slContrast.value=115,valContrast.textContent="115%",slSat.value=110,valSat.textContent="110%",syncSlidersToState(),applyFilters(),savePrefs()}}function onSliderInput(){valBright.textContent=slBright.value+"%",valContrast.textContent=slContrast.value+"%",valSat.textContent=slSat.value+"%",syncSlidersToState(),applyFilters(),savePrefs()}slBright.addEventListener("input",onSliderInput),slContrast.addEventListener("input",onSliderInput),slSat.addEventListener("input",onSliderInput),slBright.addEventListener("change",onSliderInput),slContrast.addEventListener("change",onSliderInput),slSat.addEventListener("change",onSliderInput),btnAutoEnhance.addEventListener("click",autoEnhance),btnResetEdit.addEventListener("click",()=>{resetEditorSliders(),syncSlidersToState(),applyFilters(),savePrefs()});const btnScopeWhole=$("#btnScopeWhole"),btnScopePhoto=$("#btnScopePhoto"),photoOnlyWrap=$("#photoOnlyWrap"),photoOnlyFrontCanvas=$("#photoOnlyFrontCanvas"),photoOnlyBackCanvas=$("#photoOnlyBackCanvas"),roundedOption=$("#roundedOption");function refreshRoundedCornersUI(){var e=roundedCornersAllowed(),t=useRoundedCorners();roundedOption&&roundedOption.classList.toggle("idp-hidden",!e),cardFrontCanvas.classList.toggle("rounded",t),cardBackCanvas.classList.toggle("rounded",t),batchCardsContainer.querySelectorAll("canvas[data-batch-idx]").forEach(function(e){e.classList.toggle("rounded",t)})}function refreshPhotoOnlyLayout(){var e=getCurrentCardType(),t=!(!(batchCards[0]&&batchCards[0].originalBack||originalBack)||!cardTypeHasPhotoROISide(e,"back"));photoOnlyBackCanvas.classList.toggle("idp-hidden",!t),photoOnlyWrap.classList.toggle("single-side",!t)}function restorePrimaryPreviewSurface(){if(batchCardsContainer&&pairCanvas&&photoOnlyWrap){batchCardsContainer.innerHTML="";var e=document.createElement("div");e.className="idp-cards",e.appendChild(pairCanvas),batchCardsContainer.appendChild(e),batchCardsContainer.appendChild(photoOnlyWrap),configurePairCanvas(pairCanvas,null),photoOnlyWrap.classList.add("idp-hidden"),photoOnlyFrontCanvas.classList.remove("idp-hidden"),photoOnlyBackCanvas.classList.remove("idp-hidden")}}function resetEditorUIState(){editScope="whole",btnScopeWhole.classList.add("is-active"),btnScopeWhole.setAttribute("aria-selected","true"),btnScopePhoto.classList.remove("is-active"),btnScopePhoto.setAttribute("aria-selected","false");var e=batchCardsContainer.querySelector(".idp-cards");e&&e.classList.remove("idp-hidden"),photoOnlyWrap.classList.add("idp-hidden"),refreshPhotoOnlyLayout(),refreshRoundedCornersUI()}function setEditScope(e){if("photo"===e||"whole"===e){if("photo"===e&&!cardTypeHasPhotoROI(batchCards[0]&&batchCards[0].type||detectedType))return;editScope=e,syncSlidersFromState(),btnScopeWhole.classList.toggle("is-active","whole"===e),btnScopeWhole.setAttribute("aria-selected",String("whole"===e)),btnScopePhoto.classList.toggle("is-active","photo"===e),btnScopePhoto.setAttribute("aria-selected",String("photo"===e));var t=batchCardsContainer.querySelector(".idp-cards");t&&t.classList.toggle("idp-hidden","photo"===e),photoOnlyWrap.classList.toggle("idp-hidden","photo"!==e),refreshPhotoOnlyLayout(),refreshRoundedCornersUI(),applyFilters(),savePrefs()}}function refreshScopeAvailability(){var e=cardTypeHasPhotoROI(getCurrentCardType());btnScopePhoto.disabled=!e,btnScopePhoto.title=e?"":"Photo region detect nahi hua — Whole Card mode use karo.",e||"photo"!==editScope||setEditScope("whole"),refreshPhotoOnlyLayout(),refreshRoundedCornersUI()}function setPhotoOnlyCanvasSize(e,t){var a=360;if(t){var n=t.w/Math.max(t.h,1);a=Math.round(360*n),a=Math.max(210,Math.min(360,a))}e.width!==a&&(e.width=a),360!==e.height&&(e.height=360)}function paintPhotoOnly(e,t,a,n){if(e){var r=t?getPhotoROIPixels(a,n,t.width,t.height,t):null;setPhotoOnlyCanvasSize(e,r);var o=e.getContext("2d"),i=e.width,s=e.height;if(o.fillStyle="#ffffff",o.fillRect(0,0,i,s),!r)return o.fillStyle="#888",o.font='20px "DM Mono", monospace',o.textAlign="center",o.textBaseline="middle",void o.fillText(t?"No photo on this side":"—",i/2,s/2);var d,l,c=.92*i,h=.92*s,p=r.w/r.h;c/h>p?d=(l=h)*p:l=(d=c)/p;var u=(i-d)/2,f=(s-l)/2;o.filter=getFilterString("photo"),o.drawImage(t,r.x,r.y,r.w,r.h,u,f,d,l),o.filter="none"}}function repaintPhotoOnly(){var e=null,t=null,a=null;batchCards.length>0?(e=batchCards[0].originalFront,t=batchCards[0].originalBack,a=batchCards[0].type):(e=originalFront,t=originalBack,a=detectedType),refreshPhotoOnlyLayout(),paintPhotoOnly(photoOnlyFrontCanvas,e,a,"front"),paintPhotoOnly(photoOnlyBackCanvas,t,a,"back")}function updateSheetMeta(){var e=getCardOutputSpec(getCurrentCardType());sheetTitle.textContent=e.sheetTitle,sheetDesc.textContent=e.sheetDesc}function syncPrintPageStyle(){var e=getCardOutputSpec(getCurrentCardType()),t=document.getElementById("idpDynamicPrintPage");t||(t=document.createElement("style"),t.id="idpDynamicPrintPage",document.head.appendChild(t));var a=e.printPageSize?e.printPageSize:"A4 portrait";t.textContent="@media print{@page{size:"+a+";margin:0!important}}"}btnScopeWhole.addEventListener("click",function(){setEditScope("whole")}),btnScopePhoto.addEventListener("click",function(){setEditScope("photo")}),chkRounded.addEventListener("change",()=>{roundedCorners=chkRounded.checked,refreshRoundedCornersUI(),applyFilters(),savePrefs()}),btnSheet.addEventListener("click",()=>{updateSheetMeta(),buildSheet(),showStep(3)}),btnBack.addEventListener("click",()=>{pdfArrayBuffer=null,detectedType=null,resetPhotoAdjustState(),frontImageData=null,backImageData=null,originalFront=null,originalBack=null,batchFiles=[],batchCards=[],pendingPasswordIdx=-1,pdfInput.value="",fileQueue.classList.add("idp-hidden"),queueActions.classList.add("idp-hidden"),batchCount.classList.add("idp-hidden"),refreshCardMetaPills(null),resetEditorUIState(),restorePrimaryPreviewSurface(),showStep(1)}),btnBackPreview.addEventListener("click",()=>showStep(2)),btnDownload.addEventListener("click",async()=>{if(await idpConsumeSheetOrBlock()){var e=getActiveCards(),t=(e.length>1?"batch-"+e.length+"-cards":detectedType||"id-card")+"-a4-sheet.png";if("function"==typeof a4Canvas.toBlob)a4Canvas.toBlob(function(e){if(!e){var a=document.createElement("a");return a.download=t,a.href=a4Canvas.toDataURL("image/png"),void a.click()}var n=URL.createObjectURL(e),r=document.createElement("a");r.download=t,r.href=n,r.click(),setTimeout(function(){URL.revokeObjectURL(n)},1e3)},"image/png");else{var a=document.createElement("a");a.download=t,a.href=a4Canvas.toDataURL("image/png"),a.click()}}}),btnPrint.addEventListener("click",async()=>{await idpConsumeSheetOrBlock()&&(syncPrintPageStyle(),window.print())}),window.addEventListener("focus",refreshIdpPlanBanner),window.addEventListener("storage",refreshIdpPlanBanner),showStep(1)</script></body></html>
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<meta name="theme-color" content="#0d0d0d">
+<title>ID Card Print â€” Studio Print</title>
+<meta name="description" content="Studio Print's ID-card workflow auto-detects Aadhaar, PAN, ABHA, e-EPIC, Ayushman, Jan Aadhaar, eShram, RC, and ration-card PDFs into CR80 or custom-size A4 print sheets.">
+<meta property="og:title" content="ID Card Print â€” Studio Print">
+<meta property="og:description" content="Studio Print's ID-card workflow auto-detects Aadhaar, PAN, ABHA, e-EPIC, Ayushman, Jan Aadhaar, eShram, RC, and ration-card PDFs into CR80 or custom-size A4 print sheets.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://studioprint.pages.dev/id-print.html">
+<meta property="og:image" content="https://studioprint.pages.dev/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://studioprint.pages.dev/assets/og-image.png">
+<meta name="robots" content="max-image-preview:large">
+<link rel="canonical" href="https://studioprint.pages.dev/id-print.html">
+<link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+<link rel="alternate icon" type="image/png" href="assets/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="manifest" href="assets/manifest.webmanifest">
+<link rel="preconnect" href="https://passportprint-studio.onrender.com">
+<link rel="dns-prefetch" href="https://passportprint-studio.onrender.com">
+<link rel="preload" href="assets/fonts/syne-latin.woff2" as="font" type="font/woff2">
+<link rel="preload" href="assets/fonts/dm-mono-400-latin.woff2" as="font" type="font/woff2">
+<link rel="stylesheet" href="assets/fonts.css">
+<link rel="stylesheet" href="assets/legal.css">
+<link rel="stylesheet" href="assets/auth.css">
+<link rel="stylesheet" href="assets/pricing.css">
+<style>
+/* â”€â”€ ID Print page styles â”€â”€ */
+.idp-app{max-width:960px;margin:0 auto;padding:32px 20px 60px;}
+
+.idp-hero{text-align:center;margin-bottom:32px;}
+.idp-hero h1{
+  font-family:'Syne',sans-serif;font-weight:800;
+  font-size:clamp(24px,5vw,38px);line-height:1.15;letter-spacing:-0.5px;
+  color:#fff;margin-bottom:8px;
+}
+.idp-hero h1 em{font-style:normal;color:var(--accent);
+  background:linear-gradient(90deg,var(--accent),#ffd17a);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+}
+.idp-hero p{color:var(--muted);font-size:14px;line-height:1.6;max-width:560px;margin:0 auto;}
+
+/* Steps indicator */
+.idp-steps{
+  display:flex;align-items:center;justify-content:center;gap:0;
+  margin-bottom:28px;font-family:'DM Mono',monospace;font-size:12px;
+}
+.idp-step{
+  display:flex;align-items:center;gap:6px;padding:6px 14px;
+  color:var(--muted);border-radius:999px;
+  border:1px solid transparent;transition:all .2s;
+}
+.idp-step.active{color:var(--accent);border-color:rgba(240,165,0,0.35);background:rgba(240,165,0,.06);}
+.idp-step.done{color:var(--success);}
+.idp-step-line{width:24px;height:1px;background:var(--border);}
+
+/* Upload area */
+.idp-upload{
+  border:2px dashed var(--border);border-radius:16px;
+  padding:48px 24px;text-align:center;cursor:pointer;
+  transition:border-color .2s,background .2s;
+  background:var(--surface);position:relative;
+}
+.idp-upload:hover,.idp-upload.drag-over{border-color:var(--accent);background:rgba(240,165,0,.03);}
+.idp-upload-icon{font-size:40px;margin-bottom:12px;display:block;}
+.idp-upload h3{font-family:'Syne',sans-serif;font-size:18px;color:#fff;margin-bottom:6px;}
+.idp-upload p{color:var(--muted);font-size:13px;}
+.idp-upload input[type="file"]{position:absolute;inset:0;opacity:0;cursor:pointer;}
+
+/* Batch file queue */
+.idp-queue{margin-top:16px;}
+.idp-queue-item{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 14px;margin-bottom:8px;border-radius:10px;
+  background:var(--surface);border:1px solid var(--border);
+  font-family:'DM Mono',monospace;font-size:12px;color:var(--text);
+}
+.idp-queue-item .qi-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.idp-queue-item .qi-status{font-size:11px;color:var(--muted);}
+.idp-queue-item .qi-status.ok{color:var(--success);}
+.idp-queue-item .qi-status.err{color:#ef4444;}
+.idp-queue-item .qi-remove{
+  background:none;border:none;color:var(--muted);cursor:pointer;
+  font-size:16px;padding:0 4px;line-height:1;transition:color .15s;
+}
+.idp-queue-item .qi-remove:hover{color:#ef4444;}
+.idp-queue-actions{display:flex;gap:10px;justify-content:center;margin-top:16px;}
+.idp-batch-count{
+  text-align:center;margin-top:12px;
+  font-family:'DM Mono',monospace;font-size:12px;color:var(--muted);
+}
+.idp-plan-note{
+  margin-top:14px;text-align:center;
+  font-size:11px;line-height:1.6;color:var(--muted);
+  font-family:'DM Mono',monospace;
+}
+.idp-plan-note a{color:var(--accent);text-decoration:none;}
+.idp-plan-note a:hover{color:#ffc03a;}
+
+/* Password step */
+.idp-password{
+  max-width:420px;margin:0 auto;text-align:center;
+  background:var(--surface);border:1px solid var(--border);border-radius:16px;
+  padding:32px 24px;
+}
+.idp-password h3{font-family:'Syne',sans-serif;font-size:18px;color:#fff;margin-bottom:6px;}
+.idp-password p{color:var(--muted);font-size:13px;margin-bottom:16px;}
+.idp-password input{
+  width:100%;max-width:280px;padding:10px 14px;
+  background:var(--bg);border:1px solid var(--border);border-radius:8px;
+  color:#fff;font-family:'DM Mono',monospace;font-size:14px;
+  text-align:center;margin-bottom:12px;
+}
+.idp-password input:focus{outline:none;border-color:var(--accent);}
+.idp-password .idp-btn{margin:0 auto;}
+
+/* Detection badge */
+.idp-detect{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:8px 16px;border-radius:999px;
+  font-family:'DM Mono',monospace;font-size:13px;font-weight:500;
+  margin-bottom:20px;
+}
+.idp-detect.aadhaar{color:#f0a500;background:rgba(240,165,0,.08);border:1px solid rgba(240,165,0,.3);}
+.idp-detect.pan{color:#4ade80;background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.3);}
+.idp-detect.abha,.idp-detect.epic,.idp-detect.voter{color:#60a5fa;background:rgba(96,165,250,.08);border:1px solid rgba(96,165,250,.3);}
+.idp-detect.ayushman{color:#f472b6;background:rgba(244,114,182,.08);border:1px solid rgba(244,114,182,.3);}
+.idp-detect.janaadhaar{color:#fb923c;background:rgba(251,146,60,.08);border:1px solid rgba(251,146,60,.3);}
+.idp-detect.eshram{color:#34d399;background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.3);}
+
+/* Auto-swap notice â€” shown after orientation auto-detect fires */
+.idp-swap-notice{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:10px 14px;margin:0 0 16px;border-radius:10px;
+  font-family:'DM Mono',monospace;font-size:12px;line-height:1.4;
+  color:#fbbf24;background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.3);
+}
+.idp-swap-notice button{
+  flex:0 0 auto;padding:5px 12px;border-radius:6px;
+  font-family:'DM Mono',monospace;font-size:12px;font-weight:500;cursor:pointer;
+  color:#fbbf24;background:transparent;border:1px solid rgba(251,191,36,.5);
+  transition:background .15s;
+}
+.idp-swap-notice button:hover{background:rgba(251,191,36,.12);}
+
+/* Preview area */
+.idp-preview{
+  background:var(--surface);border:1px solid var(--border);border-radius:16px;
+  padding:24px;text-align:center;
+}
+.idp-preview h3{font-family:'Syne',sans-serif;font-size:16px;color:#fff;margin-bottom:16px;}
+.idp-cards{
+  display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin-bottom:20px;
+}
+.idp-card-wrap{text-align:center;}
+.idp-card-wrap span{display:block;font-size:12px;color:var(--muted);margin-bottom:6px;font-family:'DM Mono',monospace;}
+.idp-card-wrap canvas{
+  border:1px solid var(--border);border-radius:8px;
+  max-width:100%;height:auto;
+  background:#111;
+}
+/* Unified landscape Front+Back preview (Â§AC.11) â€” one canvas, front LEFT
+   half, back RIGHT half. CSS aspect-ratio matches the internal 2022Ã—638
+   so the box is always landscape regardless of available width. Rounded
+   corners on each half are drawn into the canvas (per-half clip path),
+   so this CSS keeps a single subtle outer chrome only. */
+.idp-preview-canvas-pair{
+  display:block;width:100%;max-width:760px;height:auto;
+  margin:0 auto;
+  aspect-ratio:2022/638;
+  border:1px solid var(--border);border-radius:8px;
+  background:#111;
+}
+
+/* Info strip */
+.idp-info{
+  display:flex;flex-wrap:wrap;gap:8px 16px;justify-content:center;
+  margin:16px 0;font-size:11px;color:var(--muted);font-family:'DM Mono',monospace;
+}
+.idp-info .pill{
+  padding:4px 10px;border-radius:999px;
+  background:var(--surface2);border:1px solid var(--border);
+}
+.idp-plan-banner{
+  margin:0 0 14px;padding:10px 12px;border-radius:10px;
+  border:1px solid var(--border);background:var(--surface2);
+  color:var(--muted);font-size:11px;line-height:1.6;
+  font-family:'DM Mono',monospace;text-align:left;
+}
+.idp-plan-banner strong{color:var(--text);}
+.idp-plan-banner a{color:var(--accent);text-decoration:none;}
+.idp-plan-banner a:hover{color:#ffc03a;}
+.idp-plan-banner.hit{border-color:rgba(239,68,68,.35);background:rgba(239,68,68,.08);color:#fca5a5;}
+.idp-plan-banner.ok{border-color:rgba(240,165,0,.25);background:rgba(240,165,0,.08);}
+
+/* Actions */
+.idp-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:20px;}
+.idp-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:11px 20px;border-radius:10px;
+  font-family:'DM Mono',monospace;font-weight:500;font-size:13px;
+  cursor:pointer;border:1px solid transparent;
+  transition:transform .15s,background .15s;
+  text-decoration:none;white-space:nowrap;
+}
+.idp-btn:active{transform:scale(.97);}
+.idp-btn-primary{background:var(--accent);color:#0d0d0d;box-shadow:0 6px 20px -8px rgba(240,165,0,.5);}
+.idp-btn-primary:hover{background:#ffb627;}
+.idp-btn-ghost{background:var(--surface);color:var(--text);border-color:var(--border);}
+.idp-btn-ghost:hover{border-color:var(--accent);color:var(--accent);}
+
+/* A4 result â€” Â§AC.14 tighter responsive cap: Â§AC.13 still left the
+   sheet preview too tall (the empty bottom half of a 1-Pair sheet
+   pushed the canvas to ~78vh). Cap canvas at 55vh on desktop and
+   50vh on phones so the preview fits comfortably without scrolling
+   while keeping aspect ratio. */
+.idp-a4-wrap{margin:14px auto;text-align:center;}
+.idp-a4-wrap canvas{
+  display:block;margin:0 auto;
+  max-width:min(100%,460px);
+  max-height:55vh;
+  width:auto;height:auto;
+  border:1px solid var(--border);border-radius:8px;
+  background:#fff;
+}
+.idp-a4-wrap #a4Canvas{display:none;}
+.idp-a4-wrap #sheetPreviewCanvas{display:block;}
+/* Â§AC.22 â€” hidden on screen; only used as the print bitmap. The
+   canvas above is what the user sees in Step 3. The btnPrint
+   handler swaps the canvas bitmap into this <img> via toBlob +
+   URL.createObjectURL just before window.print(). See @media
+   print block for the print-time swap rules. */
+.idp-a4-wrap #printImg{display:none;}
+@media (max-width:640px){
+  .idp-a4-wrap{margin:10px auto;}
+  .idp-a4-wrap canvas{max-height:50vh;max-width:100%;}
+}
+
+/* Error */
+.idp-error{
+  color:#ef4444;background:rgba(239,68,68,.08);
+  border:1px solid rgba(239,68,68,.3);border-radius:10px;
+  padding:12px 16px;font-size:13px;margin:12px 0;
+  text-align:center;display:none;
+}
+.idp-error.show{display:block;}
+
+/* Loading */
+.idp-loading{
+  display:none;align-items:center;justify-content:center;gap:10px;
+  padding:20px;color:var(--muted);font-size:13px;
+}
+.idp-loading.show{display:flex;}
+.idp-spinner{
+  width:20px;height:20px;border:2px solid var(--border);
+  border-top-color:var(--accent);border-radius:50%;
+  animation:spin .6s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* Photo editor controls */
+.idp-editor{
+  margin:20px 0 4px;padding:16px 20px;border-radius:12px;
+  background:var(--surface2);border:1px solid var(--border);
+}
+.idp-editor-title{
+  font-family:'Syne',sans-serif;font-size:13px;font-weight:600;
+  color:var(--text);margin-bottom:12px;display:flex;align-items:center;
+  justify-content:space-between;
+}
+.idp-editor-title button,
+.idp-editor-actions button{
+  background:none;border:1px solid var(--border);border-radius:6px;
+  color:var(--muted);font-family:'DM Mono',monospace;font-size:11px;
+  padding:3px 10px;cursor:pointer;transition:color .15s,border-color .15s;
+}
+.idp-editor-title button:hover,
+.idp-editor-actions button:hover{color:var(--accent);border-color:var(--accent);}
+.idp-sliders{display:flex;flex-wrap:wrap;gap:14px 24px;}
+.idp-slider-group{flex:1 1 140px;min-width:120px;}
+.idp-slider-label{
+  display:flex;justify-content:space-between;align-items:center;
+  font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);
+  margin-bottom:4px;
+}
+.idp-slider-label span{color:var(--accent);font-weight:500;min-width:32px;text-align:right;}
+input.idp-range{
+  -webkit-appearance:none;appearance:none;width:100%;height:4px;min-height:24px;
+  background:var(--border);border-radius:4px;outline:none;cursor:pointer;
+  touch-action:pan-y;-webkit-tap-highlight-color:transparent;
+}
+input.idp-range::-webkit-slider-thumb{
+  -webkit-appearance:none;appearance:none;width:14px;height:14px;
+  background:var(--accent);border-radius:50%;cursor:pointer;
+  box-shadow:0 0 6px rgba(240,165,0,.4);
+}
+input.idp-range::-moz-range-thumb{
+  width:14px;height:14px;background:var(--accent);border:none;
+  border-radius:50%;cursor:pointer;box-shadow:0 0 6px rgba(240,165,0,.4);
+}
+
+/* Rounded corners toggle */
+.idp-option{
+  display:flex;align-items:center;gap:8px;
+  margin:14px 0 0;font-family:'DM Mono',monospace;font-size:12px;
+  color:var(--muted);cursor:pointer;user-select:none;
+}
+.idp-option input[type="checkbox"]{
+  -webkit-appearance:none;appearance:none;width:16px;height:16px;
+  border:1.5px solid var(--border);border-radius:4px;background:var(--surface);
+  cursor:pointer;position:relative;flex-shrink:0;
+  transition:border-color .15s,background .15s;
+}
+.idp-option input[type="checkbox"]:checked{
+  background:var(--accent);border-color:var(--accent);
+}
+.idp-option input[type="checkbox"]:checked::after{
+  content:'';position:absolute;left:4.5px;top:1.5px;
+  width:4px;height:8px;border:solid #0d0d0d;border-width:0 2px 2px 0;
+  transform:rotate(45deg);
+}
+.idp-card-wrap canvas.rounded{border-radius:3.6%;}
+
+/* Â§AC.28 â€” Swap sides toggle (Â§AC.12 / .idp-swap-row + .idp-swap-btn +
+   .idp-swap-icon) removed per user request. */
+
+/* Â§AC.29 â€” Edit-scope segmented toggle (Whole Card / Photo Only) inside
+   the Photo Adjust panel. Reuses existing tokens â€” no new colors. */
+.idp-scope-toggle{
+  display:flex;gap:0;margin-bottom:14px;
+  border:1px solid var(--border);border-radius:8px;overflow:hidden;
+  background:var(--surface);
+}
+.idp-scope-btn{
+  flex:1 1 0;padding:8px 10px;border:none;background:transparent;
+  color:var(--muted);font-family:'DM Mono',monospace;font-size:11px;
+  letter-spacing:.5px;text-transform:uppercase;cursor:pointer;
+  transition:background .15s,color .15s;
+}
+.idp-scope-btn + .idp-scope-btn{border-left:1px solid var(--border);}
+.idp-scope-btn:hover:not([disabled]):not(.is-active){color:var(--text);}
+.idp-scope-btn.is-active{background:rgba(240,165,0,.12);color:var(--accent);font-weight:600;}
+.idp-scope-btn[disabled]{opacity:.4;cursor:not-allowed;}
+
+/* Â§AC.29 â€” Photo Only preview surface (white backdrop, photo centered
+   with padding, mirrors landscape pair canvas dimensions). */
+.idp-photo-only-wrap{
+  display:flex;gap:8px;justify-content:center;align-items:stretch;
+}
+.idp-photo-only-wrap.single-side .idp-photo-only-canvas{
+  flex:0 0 auto;
+  width:auto;
+  max-width:none;
+  height:240px;
+}
+.idp-photo-only-canvas{
+  flex:1 1 0;max-width:50%;background:#ffffff;
+  border:1px solid var(--border);border-radius:8px;
+  display:block;width:100%;height:auto;
+}
+/* Hidden util */
+.idp-hidden{display:none !important;}
+
+/* Print styles
+   Â§AC.17 (PR #265) reset the desktop preview caps inside @media print
+   and set `width:100%; height:auto`. That helped the on-screen Print
+   *preview* but the *actual* printed output was still wrong: cards
+   came out at ~25â€“30 % of A4 width and a second blank page was
+   produced. Root cause: with `width:100%` the canvas computes its
+   layout from the parent container, but the parent container has no
+   width constraint of its own, so it expands to fit the canvas's
+   intrinsic CSS pixel size (2480Ã—3508 px = 25.83Ã—36.54 in) â€” which
+   is bigger than A4. The browser then scales the whole printed page
+   down to fit, shrinking the cards, AND spills a few subpixel rows
+   onto a second page.
+
+   Â§AC.19 â€” pin the printed canvas to exact A4 dimensions in mm so the
+   browser stops doing the "fit-to-page" guess. `object-fit: contain`
+   preserves the natural aspect of the canvas bitmap (so 1-Pair /
+   Multi-card at 2480Ã—3508 fills exactly, while Dragon 1205Ã—1795 and
+   PVC 1417Ã—1417 letterbox cleanly without distortion). `body { width:
+   210mm; height: 297mm; overflow: hidden }` clamps the page area so
+   no stray subpixel can spill onto a second sheet, and
+   `page-break-inside / -after: avoid` on the canvas tells the print
+   engine not to split it. Combined with `@page { size: A4 portrait;
+   margin: 0 }` this produces exactly ONE A4 page with the cards at
+   their correct CR80 size at the top. */
+@media print{
+  .legal-header,.legal-footer,.idp-hero,.idp-steps,.idp-upload,
+  .idp-password,.idp-actions,.idp-info,.idp-detect,.idp-error,
+  .idp-loading,.idp-btn,.idp-editor,.idp-option,
+  .sp-cookie,
+  #sheetTitle,#sheetDesc,nav,footer,header{display:none !important;}
+  /* Â§AC.23 â€” paper-agnostic sizing. Mobile Chrome / many phone print
+     dialogs let the user pick paper size (Letter, A4, etc.) and
+     IGNORE @page{size:A4 portrait}. With our previous 210mm Ã— 297mm
+     fixed sizing the image was flush left on a Letter (216 Ã— 279mm)
+     page â†’ cards looked off-center, plus printer default margins
+     leaked in. Switch to 100% so the wrapper + image fill whatever
+     paper the print engine chose, and let object-fit:contain +
+     object-position:center top hold the cards centered horizontally
+     and flush at the top edge regardless of paper choice. */
+  html,body{
+    margin:0 !important;padding:0 !important;background:#fff !important;
+    width:100% !important;height:100% !important;
+    overflow:hidden !important;
+    position:relative !important;
+  }
+  .idp-app{padding:0 !important;max-width:none !important;width:100% !important;height:100% !important;margin:0 !important;position:relative !important;}
+  .idp-preview{border:none !important;padding:0 !important;background:none !important;width:100% !important;height:100% !important;position:relative !important;}
+  .idp-a4-wrap{
+    width:100% !important;height:100% !important;
+    max-width:none !important;max-height:none !important;
+    margin:0 !important;padding:0 !important;
+    position:relative !important;
+  }
+  /* Â§AC.21 â€” force canvas to absolute top-left of its wrapper with
+     !important on every rule. Some browsers / print engines were
+     ignoring the previous non-!important rules and falling back to
+     the desktop canvas styles (max-width:460px, max-height:55vh)
+     even inside @media print, leaving cards small and offset. The
+     position:absolute + top:0 + left:0 pins the canvas to the very
+     top-left corner of the A4 page so no browser default print
+     margin or wrapper padding can push it down. */
+  /* Â§AC.22 â€” hide the live <canvas> in print and render the
+     pre-rasterised PNG <img> instead. Browser print engines
+     reliably honour <img> width/height in mm units, but several
+     mobile / Chromium print engines mis-handle a 2480Ã—3508 px
+     <canvas> bitmap (resampling at the print engine's chosen
+     DPI, ignoring CSS sizing). The btnPrint handler converts
+     the canvas to a Blob URL and assigns it to #printImg
+     before calling window.print(). */
+  .idp-a4-wrap canvas{display:none !important;}
+  /* Â§AC.24 â€” anchor #printImg to the page viewport via position:fixed
+     + 100vw/100vh instead of position:absolute + 100%. Â§AC.23 used
+     percentage sizing on a chain (html â†’ body â†’ idp-app â†’ idp-preview
+     â†’ idp-a4-wrap â†’ #printImg), which works on desktop Chrome but
+     COLLAPSES on mobile Chrome / Android print engines: those engines
+     don't always give <html> a definite height in print mode, so
+     height:100% cascaded to 0 down the chain and the image rendered
+     0 px tall â†’ completely blank A4 page. position:fixed anchors
+     directly to the page viewport (vw/vh always resolve), so the
+     image fills the page regardless of any broken percentage-height
+     chain on its ancestors. */
+  .idp-a4-wrap #printImg{
+    display:block !important;
+    position:fixed !important;
+    top:0 !important;left:0 !important;
+    width:100vw !important;height:100vh !important;
+    max-width:none !important;max-height:none !important;
+    min-width:0 !important;min-height:0 !important;
+    object-fit:contain !important;
+    object-position:center top !important;
+    margin:0 !important;padding:0 !important;
+    border:none !important;border-radius:0 !important;
+    background:#fff !important;
+    page-break-inside:avoid !important;
+    page-break-after:avoid !important;
+    transform:none !important;
+    z-index:9999 !important;
+  }
+  @page{size:A4 portrait;margin:0 !important;}
+}
+
+/* Responsive */
+@media (max-width:640px){
+  .idp-app{padding:20px 14px 40px;}
+  .idp-upload{padding:32px 16px;}
+  .idp-cards{flex-direction:column;align-items:center;}
+  .idp-steps{font-size:10px;gap:0;}
+  .idp-step{padding:4px 8px;}
+  .idp-step-line{width:12px;}
+  .idp-sliders{gap:10px 16px;}
+  .idp-slider-group{flex:1 1 100%;}
+}
+/* Â§AC.27 â€” Position panel (per-side Move + Zoom) removed per user request.
+   Rounded Corners + Photo Adjust retained. */
+
+/* Full redesign pass - ID workflow surface */
+.idp-workflow{
+  background:
+    radial-gradient(circle at top, rgba(240,165,0,0.12), transparent 26%),
+    linear-gradient(180deg, #0d0d0d, #090909 44%, #080808);
+}
+.idp-main{
+  max-width:1240px;
+  padding:24px 22px 64px;
+}
+.idp-main.legal-main{
+  width:100%;
+}
+.idp-app{
+  max-width:none;
+  padding:0;
+}
+.idp-hero{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  margin:0 0 14px;
+  padding:12px 18px;
+  min-height:66px;
+  border-radius:24px;
+  border:1px solid rgba(255,255,255,0.06);
+  background:
+    radial-gradient(circle at 12% 0%, rgba(240,165,0,0.12), transparent 34%),
+    linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.015));
+  box-shadow:0 28px 70px -42px rgba(0,0,0,0.86);
+  text-align:left;
+}
+.idp-hero-copy{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+  min-width:0;
+}
+.idp-kicker{
+  display:inline-flex;
+  width:max-content;
+  align-items:center;
+  padding:6px 11px;
+  border-radius:999px;
+  background:var(--accent-dim);
+  border:1px solid rgba(240,165,0,0.22);
+  color:var(--accent);
+  font-family:'DM Mono',monospace;
+  font-size:10px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+.idp-hero h1{
+  margin:0;
+  font-size:clamp(18px,2vw,24px);
+  line-height:1.1;
+  letter-spacing:-0.2px;
+  max-width:none;
+}
+.idp-hero p{
+  margin:0;
+  max-width:78ch;
+  font-size:12px;
+  line-height:1.45;
+}
+main.idp-main .idp-hero h1{
+  font-size:clamp(18px,2vw,24px);
+  line-height:1.1;
+  letter-spacing:-0.2px;
+  max-width:none;
+  margin:0;
+}
+main.idp-main .idp-hero p{
+  max-width:78ch;
+  font-size:12px;
+  line-height:1.45;
+  margin:0;
+}
+.idp-hero-chips{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+  align-items:flex-end;
+  gap:10px;
+}
+.idp-hero-chips span{
+  display:inline-flex;
+  align-items:center;
+  padding:9px 13px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,0.08);
+  background:rgba(255,255,255,0.03);
+  color:var(--text);
+  font-size:11px;
+  font-family:'DM Mono',monospace;
+}
+.idp-workflow-guide{
+  display:none;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:14px;
+  margin:0 0 18px;
+}
+.idp-guide-card{
+  padding:18px 18px 16px;
+  border-radius:22px;
+  border:1px solid rgba(255,255,255,0.06);
+  background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.015));
+  box-shadow:0 20px 52px -34px rgba(0,0,0,0.78);
+}
+.idp-guide-step{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:30px;
+  height:30px;
+  border-radius:999px;
+  background:var(--accent-dim);
+  border:1px solid rgba(240,165,0,0.18);
+  color:var(--accent);
+  font-size:11px;
+  margin-bottom:12px;
+}
+.idp-guide-card h3{
+  margin:0 0 8px;
+  font-family:'Syne',sans-serif;
+  font-size:18px;
+  line-height:1.08;
+  color:#fff;
+}
+.idp-guide-card p{
+  margin:0;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.7;
+}
+.idp-steps{
+  justify-content:flex-start;
+  margin:0 0 24px;
+  padding:0 6px;
+}
+.idp-step{
+  padding:8px 16px;
+  border:1px solid rgba(255,255,255,0.05);
+  background:rgba(255,255,255,0.02);
+}
+.idp-step-line{
+  width:26px;
+  background:rgba(255,255,255,0.10);
+}
+#stepUpload,
+#stepPreview,
+#stepSheet{
+  max-width:1100px;
+  margin:0 auto;
+}
+.idp-upload,
+.idp-preview{
+  border-radius:28px;
+  border:1px solid rgba(255,255,255,0.06);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.015));
+  box-shadow:0 28px 70px -42px rgba(0,0,0,0.9);
+}
+.idp-upload{
+  padding:60px 28px;
+  overflow:hidden;
+}
+.idp-upload::before{
+  content:"";
+  position:absolute;
+  inset:auto auto -40px -30px;
+  width:180px;
+  height:180px;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(240,165,0,0.12), transparent 68%);
+  pointer-events:none;
+}
+.idp-upload-icon{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:72px;
+  height:72px;
+  margin:0 auto 16px;
+  border-radius:22px;
+  background:rgba(240,165,0,0.10);
+  border:1px solid rgba(240,165,0,0.20);
+  font-size:30px;
+}
+.idp-upload h3{
+  font-family:'Syne',sans-serif;
+  font-size:30px;
+  line-height:1.06;
+  letter-spacing:-0.4px;
+  margin-bottom:10px;
+}
+.idp-upload p{
+  max-width:62ch;
+  margin:0 auto;
+  font-size:13px;
+  line-height:1.8;
+}
+.idp-plan-note,
+.idp-batch-count{
+  margin-top:16px;
+  font-size:11px;
+}
+.idp-preview{
+  padding:28px;
+}
+.idp-preview h3{
+  font-size:17px;
+  margin-bottom:18px;
+}
+.idp-editor{
+  margin-top:24px;
+  padding:18px 20px;
+  border-radius:20px;
+  border-color:rgba(255,255,255,0.06);
+  background:rgba(255,255,255,0.035);
+}
+.idp-editor-title{
+  font-size:12px;
+  letter-spacing:.10em;
+  text-transform:uppercase;
+  color:#d8d8d8;
+}
+.idp-scope-toggle{
+  border-radius:999px;
+  background:rgba(0,0,0,0.18);
+}
+.idp-scope-btn{
+  min-height:42px;
+}
+.idp-actions{
+  justify-content:space-between;
+  gap:14px;
+  margin-top:22px;
+}
+.idp-actions .idp-btn{
+  min-height:44px;
+  padding:0 20px;
+  border-radius:999px;
+}
+.idp-btn-ghost{
+  background:rgba(255,255,255,0.03);
+  border-color:rgba(255,255,255,0.08);
+}
+.idp-btn-primary{
+  box-shadow:0 16px 30px -18px rgba(240,165,0,.72);
+}
+.idp-a4-wrap canvas{
+  border-radius:20px;
+  box-shadow:0 18px 52px -30px rgba(0,0,0,0.84);
+}
+@media (max-width:980px){
+  .idp-hero{
+    grid-template-columns:1fr;
+    padding:20px 20px 16px;
+  }
+  .idp-workflow-guide{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  .idp-hero-chips{
+    justify-content:flex-start;
+  }
+  .header-actions{margin-left:auto;}
+  .nav-cta{display:none;}
+}
+@media (max-width:720px){
+  .idp-main{
+    padding:16px 14px 40px;
+  }
+  .idp-hero h1{
+    max-width:none;
+  }
+  .idp-upload{
+    padding:34px 18px;
+  }
+  .idp-upload h3{
+    font-size:22px;
+  }
+  .idp-preview{
+    padding:20px 16px;
+  }
+  .idp-workflow-guide{
+    grid-template-columns:1fr;
+  }
+  .idp-actions{
+    justify-content:center;
+  }
+}
+@media (max-width:640px){
+  .idp-hero{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:12px;
+    padding:16px 14px 14px;
+    margin-bottom:18px;
+  }
+  .idp-hero h1{
+    max-width:none;
+    font-size:clamp(24px,9vw,34px);
+  }
+  .idp-hero p{
+    font-size:12px;
+    line-height:1.68;
+  }
+  .idp-hero-chips{
+    justify-content:flex-start;
+    gap:8px;
+  }
+  .idp-hero-chips span{
+    font-size:10px;
+    padding:7px 10px;
+  }
+  .idp-guide-card h3{
+    font-size:17px;
+  }
+  .idp-steps{
+    justify-content:center;
+    padding:0;
+  }
+  .idp-step{
+    padding:7px 10px;
+  }
+  .idp-upload p{
+    font-size:12px;
+    line-height:1.7;
+  }
+}
+</style>
+</head>
+<body class="idp-workflow">
+
+<!-- SVG icon sprite (subset needed for this page) -->
+<svg width="0" height="0" style="position:absolute;overflow:hidden" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="i-camera" viewBox="0 0 24 24"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3Z"/><circle cx="12" cy="13" r="3"/></symbol>
+    <symbol id="i-idcard" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><circle cx="8" cy="11" r="2"/><path d="M5 17a3 3 0 0 1 6 0"/><path d="M14 9h5"/><path d="M14 13h4"/></symbol>
+    <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><path d="M8 13h8"/><path d="M8 17h6"/></symbol>
+  </defs>
+</svg>
+
+<header class="legal-header">
+  <a href="index.html" class="logo">Studio <em>Print</em></a>
+  <nav id="primaryNav">
+    <a href="index.html">Home</a>
+    <div class="has-dropdown">
+      <button class="nav-dd-btn" aria-haspopup="true" aria-expanded="false">Features <span class="caret" aria-hidden="true">â–¾</span></button>
+      <div class="dropdown-panel" role="menu">
+        <a href="passport-photo.html" role="menuitem">
+          <span class="dd-icon" aria-hidden="true"><svg class="ix" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-camera"/></svg></span>
+          <span class="dd-meta"><strong>Passport Photo</strong><small>AI portrait workflow Â· A4 export</small></span>
+          <span class="dd-tag live">Live</span>
+        </a>
+        <a href="id-print.html" role="menuitem">
+          <span class="dd-icon" aria-hidden="true"><svg class="ix" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-idcard"/></svg></span>
+          <span class="dd-meta"><strong>ID Card Print</strong><small>PDF auto-detect · CR80 + custom sizes · A4 print</small></span>
+          <span class="dd-tag live">Live</span>
+        </a>
+        <a href="forms.html" role="menuitem">
+          <span class="dd-icon" aria-hidden="true"><svg class="ix" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-file"/></svg></span>
+          <span class="dd-meta"><strong>Forms Hub</strong><small>Search forms Â· print/download</small></span>
+          <span class="dd-tag live">Live</span>
+        </a>
+      </div>
+    </div>
+    <a href="index.html#pricing">Pricing</a>
+    <a href="index.html#faq">FAQ</a>
+  </nav>
+  <div class="header-actions">
+  <button type="button" class="nav-login" id="hdrAuthBtn" title="Login / Signup"><span class="hdr-lbl">Login</span></button>
+  <a class="nav-cta" href="passport-photo.html">Open Passport Photo</a>
+</div>
+  <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="primaryNav">&#9776;</button>
+</header>
+
+<main class="legal-main idp-main">
+<div class="idp-app">
+
+  <!-- Hero -->
+  <div class="idp-hero">
+    <div class="idp-hero-copy">
+      <span class="idp-kicker">ID Card Print Workflow</span>
+      <h1>PDF -> card preview -> A4 print sheet.</h1>
+      <p>Drop Aadhaar, PAN, Voter ID, ABHA, Ayushman, Jan Aadhaar, eShram, RC, or ration-card PDFs. The workspace detects the layout, prepares the printable pair or panels, and keeps editing plus print export on the same screen.</p>
+    </div>
+    <div class="idp-hero-chips" aria-label="ID Card Print workflow highlights">
+      <span>Auto-detect layouts</span>
+      <span>Front + back preview</span>
+      <span>CR80 + custom sizes</span>
+      <span>A4 cut-ready export</span>
+    </div>
+  </div>
+
+  <!-- Steps -->
+  <div class="idp-steps">
+    <div class="idp-step active" data-step="1">â‘  Upload</div>
+    <div class="idp-step-line"></div>
+    <div class="idp-step" data-step="2">â‘¡ Preview</div>
+    <div class="idp-step-line"></div>
+    <div class="idp-step" data-step="3">â‘¢ Print</div>
+  </div>
+
+  <!-- Error display -->
+  <div class="idp-error" id="idpError"></div>
+
+  <!-- Step 1: Upload -->
+  <div id="stepUpload">
+    <div class="idp-upload" id="dropZone">
+      <span class="idp-upload-icon" aria-hidden="true">ðŸ“„</span>
+      <h3>Drop your PDFs here</h3>
+      <p>Upload one or multiple PDFs â€” eAadhaar Â· ePAN Â· ABHA Â· e-EPIC Â· Ayushman Â· Jan Aadhaar Â· eShram Â· Password-protected supported</p>
+      <input type="file" id="pdfInput" accept=".pdf,application/pdf" multiple>
+    </div>
+    <div class="idp-plan-note">Free plan: 2 sheets/day after login. Weekly / Monthly: unlimited ID sheets. <a href="#plans">See plans</a></div>
+    <div class="idp-queue idp-hidden" id="fileQueue"></div>
+    <div class="idp-batch-count idp-hidden" id="batchCount"></div>
+    <div class="idp-queue-actions idp-hidden" id="queueActions">
+      <button class="idp-btn idp-btn-ghost" id="btnAddMore">+ Add More PDFs</button>
+      <button class="idp-btn idp-btn-primary" id="btnProcessAll">Process All â†’</button>
+    </div>
+  </div>
+
+  <!-- Password step (hidden by default) -->
+  <div id="stepPassword" class="idp-hidden">
+    <div class="idp-password">
+      <h3>ðŸ”’ PDF is password-protected</h3>
+      <p>Enter the password to unlock</p>
+      <input type="password" id="pdfPassword" placeholder="Enter PDF password" autocomplete="off">
+      <div style="margin-top:4px;">
+        <button class="idp-btn idp-btn-primary" id="btnUnlock">Unlock PDF</button>
+      </div>
+      <p style="margin-top:12px;font-size:11px;color:var(--muted2);">
+        Aadhaar: first 4 letters of name (CAPS) + birth year<br>
+        PAN: date of birth in DDMMYYYY<br>
+        Voter ID / ABHA / Ayushman / Jan Aadhaar / eShram: usually not password-protected
+      </p>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div class="idp-loading" id="idpLoading">
+    <div class="idp-spinner"></div>
+    <span>Processing PDFâ€¦</span>
+  </div>
+
+  <!-- Step 2: Preview -->
+  <div id="stepPreview" class="idp-hidden">
+    <div class="idp-preview">
+      <div id="detectBadge"></div>
+      <h3 id="previewTitle">Front &amp; Back Preview</h3>
+      <div id="batchCardsContainer">
+        <div class="idp-cards">
+          <!-- Â§AC.11 unified landscape preview: ONE canvas (no labels),
+               internal 2022Ã—638 (= CR80_W * 2 Ã— CR80_H). Front card is
+               drawn into the LEFT half, back card into the RIGHT half,
+               edge-to-edge â€” mirrors the 1-pair sheet output. -->
+          <canvas id="pairCanvas" class="idp-preview-canvas-pair" width="2022" height="638"></canvas>
+        </div>
+        <!-- Â§AC.29 Photo Only preview surface â€” hidden by default; shown
+             when user toggles to Photo Only scope. Front + back side-by-side
+             on white backdrop. Back canvas shows "No photo on this side"
+             placeholder when ROI is null for that side. -->
+        <div id="photoOnlyWrap" class="idp-photo-only-wrap idp-hidden">
+          <canvas id="photoOnlyFrontCanvas" class="idp-photo-only-canvas" width="600" height="600"></canvas>
+          <canvas id="photoOnlyBackCanvas" class="idp-photo-only-canvas" width="600" height="600"></canvas>
+        </div>
+      </div>
+      <!-- Â§AC.28 â€” Swap sides toggle (Â§AC.12) removed per user request.
+           Preview always renders front-LEFT / back-RIGHT. -->
+      <!-- Options -->
+      <label id="roundedOption" class="idp-option">
+        <input type="checkbox" id="chkRounded">
+        Rounded Corners
+      </label>
+      <!-- Â§AC.13 â€” Cut Marks toggle removed per user feedback. The print
+           sheet stays clean: no dashed fold-here line, no corner ticks,
+           no extra guide controls in the UI. -->
+
+      <!-- Â§AC.27 â€” Panel B (Position: per-side Move + Zoom) removed.
+           Rounded Corners + Photo Adjust retained. -->
+
+      <!-- Panel C: Adjust -->
+      <div class="idp-editor">
+        <div class="idp-editor-title">Adjust</div>
+        <!-- Â§AC.29 â€” Edit-scope segmented toggle. Whole Card edits the
+             card minus the photo region; Photo Only edits just the
+             auto-detected photo rectangle. Each scope keeps its own
+             independent slider state (cardFilters / photoFilters). -->
+        <div class="idp-scope-toggle" role="tablist" aria-label="Edit scope">
+          <button type="button" id="btnScopeWhole" class="idp-scope-btn is-active"
+                  role="tab" aria-selected="true">Whole Card</button>
+          <button type="button" id="btnScopePhoto" class="idp-scope-btn"
+                  role="tab" aria-selected="false">Photo Only</button>
+        </div>
+        <div class="idp-sliders">
+          <div class="idp-slider-group">
+            <label class="idp-slider-label">Brightness <span id="valBright">100%</span></label>
+            <input type="range" class="idp-range" id="slBright" min="30" max="200" value="100">
+          </div>
+          <div class="idp-slider-group">
+            <label class="idp-slider-label">Contrast <span id="valContrast">100%</span></label>
+            <input type="range" class="idp-range" id="slContrast" min="30" max="200" value="100">
+          </div>
+          <div class="idp-slider-group">
+            <label class="idp-slider-label">Saturation <span id="valSat">100%</span></label>
+            <input type="range" class="idp-range" id="slSat" min="0" max="200" value="100">
+          </div>
+        </div>
+        <div class="idp-editor-actions" style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px;">
+          <button type="button" id="btnAutoEnhance">Auto</button>
+          <button type="button" id="btnResetEdit">Reset</button>
+        </div>
+      </div>
+
+      <div class="idp-info">
+        <span class="pill" id="pillFormat">CR80 · 85.6 × 54 mm</span>
+        <span class="pill" id="pillPixels">1011 × 638 px</span>
+        <span class="pill">300 DPI</span>
+        <span class="pill" id="pillWorkflow">Fold &amp; laminate ready</span>
+      </div>
+      <div class="idp-actions">
+        <button class="idp-btn idp-btn-ghost" id="btnBack">â† New PDF</button>
+        <button class="idp-btn idp-btn-primary" id="btnSheet">Generate A4 Sheet â†’</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 3: A4 Sheet + Download/Print -->
+  <div id="stepSheet" class="idp-hidden">
+    <div class="idp-preview">
+      <h3 id="sheetTitle">A4 Sheet â€” Fold &amp; Laminate Layout</h3>
+      <p id="sheetDesc" style="color:var(--muted);font-size:12px;margin-bottom:16px;">Print â†’ cut around cards â†’ fold in half â†’ laminate in 65Ã—95mm pouch</p>
+      <div id="idpPlanBanner" class="idp-plan-banner ok"></div>
+      <div class="idp-a4-wrap">
+        <canvas id="sheetPreviewCanvas" width="2480" height="1200" aria-hidden="true"></canvas>
+        <canvas id="a4Canvas" width="2480" height="3508"></canvas>
+        <!-- Â§AC.22 â€” print-only PNG. Hidden on screen via
+             .idp-a4-wrap #printImg{display:none}; the btnPrint
+             handler rasterises a4Canvas to a Blob URL and assigns
+             it here just before window.print(). Print CSS hides
+             the canvas and shows this <img> at 210mmÃ—297mm. -->
+        <img id="printImg" alt="" />
+      </div>
+      <div class="idp-actions">
+        <button class="idp-btn idp-btn-ghost" id="btnBackPreview">â† Back to Preview</button>
+        <button class="idp-btn idp-btn-ghost" id="btnDownload">â¬‡ Download PNG</button>
+        <button class="idp-btn idp-btn-primary" id="btnPrint">ðŸ–¨ Print</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+</main>
+
+<footer class="legal-footer">
+  <div class="footer-main">
+    <div class="footer-brand">
+      <a href="index.html" class="footer-logo">Studio <em>Print</em></a>
+      <p class="footer-tagline">A browser-native print workspace for passport photos, ID-card sheets, document forms, PDF-to-print jobs, and 300&nbsp;DPI A4 output - built in India.</p>
+      <div class="footer-buttons" aria-label="Primary tools">
+        <a class="footer-cta footer-cta-primary" href="id-print.html">Open ID Card Print</a>
+        <a class="footer-cta" href="passport-photo.html">Open Passport Photo</a>
+        <a class="footer-cta" href="forms.html">Open Forms Hub</a>
+      </div>
+      <div class="footer-news-hint">Three live workflows today. More print tasks can land on the same platform next.</div>
+    </div>
+    <nav class="footer-cols" aria-label="Footer">
+      <div class="footer-col">
+        <h4>Product</h4>
+        <ul>
+          <li><a href="passport-photo.html">Passport Photo</a></li>
+          <li><a href="id-print.html">ID Card Print</a></li>
+          <li><a href="forms.html">Forms Hub</a></li>
+          
+          
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <ul>
+          <li><a href="index.html#how">How it works</a></li>
+          <li><a href="index.html#faq">FAQ</a></li>
+          <li><a href="sitemap.xml">Sitemap</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="privacy.html">Privacy</a></li>
+          <li><a href="terms.html">Terms</a></li>
+          <li><a href="refund.html">Refund</a></li>
+          <li><a href="shipping.html">Delivery</a></li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">Copyright 2026 Studio Print. All rights reserved.</div>
+  </div>
+</footer>
+
+<script src="assets/nav.js" defer></script>
+<script src="assets/auth.js" defer></script>
+<script src="assets/pricing.js" defer></script>
+<script src="assets/pwa.js" defer></script>
+<script src="assets/footer.js" defer></script>
+<script src="assets/cookie.js" defer></script>
+
+<script type="module">
+/* â”€â”€ ID Card Print â€” Phase 1 MVP + Phase 3 Batch Processing â”€â”€
+   Client-side Aadhaar/PAN/ABHA/e-EPIC/Ayushman/Jan Aadhaar/eShram PDF
+   â†’ CR80 card crop â†’ A4 fold-and-laminate sheet.
+   Supports batch: multiple PDFs uploaded at once, all cards on one sheet.
+   Uses pdf.js (CDN) for PDF rendering + text extraction. */
+
+let pdfjsLibPromise = null;
+async function getPdfJsLib(){
+  if(!pdfjsLibPromise){
+    pdfjsLibPromise = import('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.min.mjs').then((mod) => {
+      mod.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.worker.min.mjs';
+      return mod;
+    });
+  }
+  return pdfjsLibPromise;
+}
+
+/* â”€â”€ Constants â”€â”€ */
+const CR80_W = 1011;
+const CR80_H = 638;
+const A4_W = 2480;
+const A4_H = 3508;
+const RENDER_SCALE = 4;
+const RATION_W = 787;
+const RATION_H = 1011;
+
+const AADHAAR_KEYWORDS = ['aadhaar','uid','uidai','unique identification','government of india','vid','enrolment','download date','issue date'];
+const PAN_KEYWORDS = ['permanent account number','income tax','pan','department','nsdl'];
+const ABHA_KEYWORDS = ['@abdm','abha','health account','digital health mission','abha number','abha address'];
+const EPIC_KEYWORDS = ['e-epic','epic no.','scan by vha/blo app','e-electors photo identity','electoral registration officer'];
+const VOTER_KEYWORDS = ['election commission','epic','voter','electoral','electors photo identity','polling station','assembly constituency','parliamentary constituency'];
+const AYUSHMAN_KEYWORDS = ['ayushman','pmjay','pradhan mantri jan arogya','national health authority','nha','health card','beneficiary','jan arogya','health id','ayushman bharat'];
+const JANAADHAAR_KEYWORDS = ['jan aadhaar','janaadhaar','rajasthan','family id','jan aadhar','planning department','rajasthan jan aadhaar authority','janaadhar'];
+const ESHRAM_KEYWORDS = ['eshram','e-shram','unorganised worker','unorganized worker','ministry of labour','uan','universal account number','shram card','labour and employment'];
+const RC_KEYWORDS = ['vehicle registration certificate','registration certificate','regn no','regn. number','vehicle class','form 23a','chassis no','registration authority'];
+const RATION_KEYWORDS = ['ration card','parivar ration card','family ration card','software developed by nic','gas agency','consumer number','hindustan petroleum','indane','bharat petroleum'];
+
+const CARD_OUTPUT_SPECS = {
+  default: {
+    w: CR80_W,
+    h: CR80_H,
+    previewGap: 0,
+    sheetGap: 0,
+    startY: 30,
+    formatLabel: 'CR80 · 85.6 × 54 mm',
+    pixelLabel: '1011 × 638 px',
+    workflowLabel: 'Fold & laminate ready',
+    sheetTitle: 'A4 Sheet — Fold & Laminate Layout',
+    sheetDesc: 'Print → cut around cards → fold in half → laminate in 65×95mm pouch',
+    allowRounded: true
+  },
+  ration: {
+    w: RATION_W,
+    h: RATION_H,
+    previewGap: 24,
+    sheetGap: 32,
+    startY: 48,
+    formatLabel: 'Custom portrait · ration panel',
+    pixelLabel: '787 × 1011 px',
+    workflowLabel: 'Cut both panels separately',
+    sheetTitle: 'A4 Sheet — Ration Card Panels',
+    sheetDesc: 'Print at 100% → cut the front and member-list panels separately',
+    allowRounded: false
+  }
+};
+
+const CROP = {
+  aadhaar: {
+    /* eAadhaar PDFs (UIDAI 2024+ layout) ship two stacked rows on
+       page 1: the upper row is the formal Aadhaar Letter (front-left
+       enrolment letter + back-right info notice), and the lower row
+       is the actual plastic-card mock-ups (front-left = photo card,
+       back-right = address + QR card). PR #243 incorrectly cropped
+       the upper row, capturing the Letter + Notice instead of the
+       cards. Verified against test-pdfs/aadhaar-test.pdf and the
+       reference image .agents/references/aadhaar-clean-pvc-layout.png.
+       PR #248 tightened crop to hug the actual outer black border of the
+       cards (measured from test-pdfs/aadhaar-test.pdf): old crop left
+       ~85px white margin around content; new crop is edge-to-edge so
+       Fold & Laminate prints cards touching with no whitespace gap.
+       Â§AC.14: bumped y down by 0.0164 and reduced h by the same amount
+       (~5mm at A4) to crop out the dashed perforation strip that sits
+       just above each card in the e-Aadhaar PDF. New aspect now matches
+       CR80 (â‰ˆ1.585:1). Bottom edge unchanged. */
+    front: [0.0520, 0.6821, 0.4471, 0.1995],
+    back:  [0.4991, 0.6821, 0.4465, 0.1995]
+  },
+  pan: {
+    /* Â§AC.16 â€” e-PAN PDFs (Protean eGov / NSDL layout) ship the same
+       two-row structure as e-Aadhaar: the upper row is the formal
+       e-Permanent Account Number Letter (full-width, with QR + photo +
+       signature + body text), and the lower row â€” below the dashed
+       "----- Cut -----" indicator â€” is the actual plastic-card pair:
+       front-LEFT (photo, name, DOB, sign, QR) and back-RIGHT (return
+       address, hologram). The previous crop [0.05, 0.08, 0.90, 0.42]
+       was wrong: it grabbed the upper Letter as "front" and the lower
+       card-row as "back", producing one giant Letter half + one tiny
+       card-row half on the printed sheet. Â§AC.34 retuned the shipped
+       sample crop one step tighter on y/h only: the old 0.7567/0.1952
+       bounds still leaked the "----- Cut -----" strip above the real
+       PAN card pair. New top = 0.7729, new h = 0.1753, bottom edge
+       preserved. The Â§AC.15 flush-top + black-top-line treatment in
+       buildSingleSheet then applies to PAN cards automatically. */
+    front: [0.1149, 0.7724, 0.3949, 0.1767],
+    back:  [0.5179, 0.7724, 0.3946, 0.1762]
+  },
+  abha: {
+    /* ABHA PDFs place front and back as two full-width bordered panels stacked
+       vertically on page 1. Measured from ABHA-Card-91-5154-0487-4619.pdf
+       after rendering with pdf.js, so both the identity side and the lower
+       instruction / helpline side are cropped as printable cards. */
+    front: [0.0215, 0.0174, 0.9570, 0.4740],
+    back:  [0.0215, 0.5087, 0.9570, 0.4740]
+  },
+  epic: {
+    /* Real e-EPIC PDFs place the printable front/back pair side-by-side
+       in the upper band of page 1. Measured from e-EPIC_WEZ2391001.pdf
+       using the embedded card-template image bounds so the crop hugs the
+       actual CR80 card artwork instead of the long disclaimer block. */
+    front: [0.0546, 0.1128, 0.4118, 0.1829],
+    back:  [0.5496, 0.1128, 0.4118, 0.1829]
+  },
+  voter: {
+    front:     [0.035, 0.05, 0.93, 0.45],
+    back:      [0.035, 0.53, 0.93, 0.42],
+    frontPage: [0.035, 0.05, 0.93, 0.90],
+    backPage:  [0.035, 0.05, 0.93, 0.90]
+  },
+  ayushman: {
+    front:     [0.035, 0.06, 0.93, 0.46],
+    back:      [0.035, 0.55, 0.93, 0.40],
+    frontPage: [0.035, 0.05, 0.93, 0.90],
+    backPage:  [0.035, 0.05, 0.93, 0.90]
+  },
+  janaadhaar: {
+    /* Â§AC.36 â€” Jan Aadhaar single-page PDFs place the printable PVC
+       pair on the lower row, but the earlier lower-row crop still ran
+       too tall and captured the serial/date text sitting below each
+       card. Re-measured against 9999-2IN1-00074_ecard.pdf by tracing
+       the actual lower card artwork image bounds on page 1, so CR80
+       output now hugs the front/back card pair itself. */
+    front:     [0.0499, 0.5428, 0.4428, 0.1875],
+    back:      [0.5038, 0.5428, 0.4448, 0.1875],
+    frontPage: [0.035, 0.05, 0.93, 0.90],
+    backPage:  [0.035, 0.05, 0.93, 0.90]
+  },
+  eshram: {
+    /* Real UAN/eShram downloads can be a single image-only PDF page where one
+       embedded PNG contains both cards. Earlier crops were too tall, so the
+       CR80 preview captured the next panel / page whitespace and looked
+       stretched. Re-measured from uan-card (24).pdf and uan-card (26).pdf by
+       tracing the embedded image bounds and then splitting the actual front /
+       back halves inside that image. */
+    front:     [0.1889, 0.0721, 0.4850, 0.2302],
+    back:      [0.1889, 0.3030, 0.4850, 0.2350],
+    frontPage: [0.035, 0.05, 0.93, 0.90],
+    backPage:  [0.035, 0.05, 0.93, 0.90]
+  },
+  rc: {
+    /* RC.pdf renders the smart-card artwork only in the upper-left corner of
+       each A4 page. These bounds are traced from the placed page-level image
+       objects on page 1 and page 2, so the smart-card front/back crop stays
+       tight instead of including the surrounding blank page. */
+    frontPage: [0.0000, 0.0000, 0.4258, 0.1882],
+    backPage:  [0.0000, 0.0000, 0.4258, 0.1882]
+  },
+  ration: {
+    /* The supplied Rajasthan ration PDF is a single landscape page with two
+       bordered portrait panels: right panel = front (photo + holder details),
+       left panel = member-list back. Bounds measured from the rendered page
+       border lines in 108500700425 (1).pdf. */
+    front: [0.5255, 0.0418, 0.4405, 0.9059],
+    back:  [0.0261, 0.0418, 0.4412, 0.9059]
+  }
+};
+
+const TYPE_LABELS = { aadhaar: 'Aadhaar Card', pan: 'PAN Card', abha: 'ABHA Card', epic: 'e-EPIC', voter: 'Voter ID', ayushman: 'Ayushman Card', janaadhaar: 'Jan Aadhaar', eshram: 'eShram Card', rc: 'RC Card', ration: 'Ration Card' };
+
+const TYPE_ICONS = { aadhaar: '\ud83c\udd94', pan: '\ud83d\udcb3', abha: '\ud83c\udfe5', epic: '\ud83d\uddf3\ufe0f', voter: '\ud83d\uddf3\ufe0f', ayushman: '\ud83c\udfe5', janaadhaar: '\ud83d\udc68\u200d\ud83d\udc69\u200d\ud83d\udc67\u200d\udc66', eshram: '\ud83d\udc77', rc: '\ud83d\ude97', ration: '\ud83e\uddfe' };
+
+/* â”€â”€ DOM refs â”€â”€ */
+const $ = (s) => document.querySelector(s);
+const stepUpload = $('#stepUpload');
+const stepPassword = $('#stepPassword');
+const stepPreview = $('#stepPreview');
+const stepSheet = $('#stepSheet');
+const idpError = $('#idpError');
+const idpLoading = $('#idpLoading');
+const pdfInput = $('#pdfInput');
+const dropZone = $('#dropZone');
+const pdfPasswordInput = $('#pdfPassword');
+const btnUnlock = $('#btnUnlock');
+const btnBack = $('#btnBack');
+const btnSheet = $('#btnSheet');
+const btnBackPreview = $('#btnBackPreview');
+const btnDownload = $('#btnDownload');
+const btnPrint = $('#btnPrint');
+/* Â§AC.11 â€” cardFrontCanvas / cardBackCanvas are now offscreen working
+   canvases (the DOM only has #pairCanvas). drawFiltered() still writes
+   filtered+offset+zoom output to these per-side canvases, then
+   applyFilters() composites both halves into pairCanvas. */
+const cardFrontCanvas = document.createElement('canvas');
+cardFrontCanvas.width = CR80_W; cardFrontCanvas.height = CR80_H;
+const cardBackCanvas = document.createElement('canvas');
+cardBackCanvas.width = CR80_W; cardBackCanvas.height = CR80_H;
+const pairCanvas = $('#pairCanvas');
+const sheetPreviewCanvas = $('#sheetPreviewCanvas');
+const a4Canvas = $('#a4Canvas');
+const detectBadge = $('#detectBadge');
+const sheetTitle = $('#sheetTitle');
+const sheetDesc = $('#sheetDesc');
+const pillFormat = $('#pillFormat');
+const pillPixels = $('#pillPixels');
+const pillWorkflow = $('#pillWorkflow');
+const idpPlanBanner = $('#idpPlanBanner');
+const fileQueue = $('#fileQueue');
+const batchCount = $('#batchCount');
+const queueActions = $('#queueActions');
+const btnAddMore = $('#btnAddMore');
+const btnProcessAll = $('#btnProcessAll');
+const batchCardsContainer = $('#batchCardsContainer');
+const previewTitle = $('#previewTitle');
+
+let roundedCorners = false;
+/* Â§AC.28 â€” `swapSides` state removed (Swap sides toggle deleted). */
+const CARD_RADIUS = 36;
+
+/* Legacy single-card state (used when only 1 PDF) */
+let pdfArrayBuffer = null;
+let detectedType = null;
+let frontImageData = null;
+let backImageData = null;
+let originalFront = null;
+let originalBack = null;
+
+/* Â§AC.29 â€” Photo-region ROI table per (cardType, side). Fractional coords
+   inside the post-crop CR80 card canvas (1011Ã—638). Origin top-left.
+   Format: [x, y, w, h]. Front-side photo is universal across the 6 ID
+   types we support; back-side photos do not exist on any of them in v1
+   (see issues.md Â§AC.29.4). When a future card type ships with a back
+   photo, just add a `back` ROI here â€” no other code change. Estimates
+   for Voter/Ayushman/JanAadhaar/eShram per issues.md Â§AC.29.5; tighten
+   when sample PDFs land. */
+const CARD_PHOTO_ROI = {
+  /* Â§AC.29.11 â€” Aadhaar ROI calibrated to exclude the photo's native
+     gray studio-backdrop frame. Previous [0.085, 0.215, 0.225, 0.530]
+     captured the full photo box including gray border; new values
+     target just the facial portrait (face + hair + shoulders). */
+  aadhaar:    { front: [0.096, 0.230, 0.200, 0.385], back: null },
+  /* Â§AC.34 â€” PAN Photo Only retuned after the default crop tightened.
+     The prior ROI started too high on the CR80 card, so Photo Only
+     preview leaked the "INCOME TAX DEPARTMENT" header instead of the
+     actual PAN photo area. This ROI keeps the full rectangular photo
+     box (with its small white margin) â€” not a face-only crop. */
+  pan:        { front: [0.041, 0.253, 0.179, 0.296], back: null },
+  /* ABHA front photo now comes from the exact placed PDF image object
+     (/Im4 in ABHA-Card-91-5154-0487-4619.pdf), converted into CR80-local
+     fractions. This keeps the full printed photo box, not a face-only
+     crop and not the extra white strip above the box. */
+  abha:       { front: [0.048956, 0.309627, 0.148959, 0.303327], back: null },
+  epic:       { front: [0.04, 0.38, 0.24, 0.52], back: null },
+  voter:      { front: [0.04, 0.20, 0.25, 0.55], back: null },
+  ayushman:   { front: [0.04, 0.20, 0.22, 0.55], back: null },
+  janaadhaar: { front: [0.068, 0.342, 0.171, 0.380], back: null },
+  /* eShram/UAN photo is not a separate PDF object in these samples; it is
+     embedded inside the front-card PNG. This ROI is traced to the full
+     printed photo frame inside uan-card (24).pdf / uan-card (26).pdf so
+     Photo Only matches the actual card photo box rather than a tight
+     face-only crop. */
+  eshram:     { front: [0.03895, 0.30616, 0.17640, 0.32790], back: null },
+  /* In the supplied ration sample the portrait is a placed image anchored to
+     the top-right of the front panel. These fractions are local to the
+     cropped front panel, so Photo Only can still isolate the holder photo. */
+  ration:     { front: [0.6840, 0.0000, 0.3160, 0.2790], back: null }
+};
+
+/* Â§AC.29 â€” Independent filter stacks for each edit scope. `editScope`
+   decides which stack the 3 sliders are bound to. Render pipeline always
+   applies cardFilters to whole canvas, then masks the photo ROI and
+   re-paints it with photoFilters â€” so the two stacks compose into one
+   final card image regardless of which scope the user is currently
+   touching. Defaults of 100/100/100 = no-op. */
+let editScope = 'whole';
+let cardFilters  = { bright: 100, contrast: 100, sat: 100 };
+let photoFilters = { bright: 100, contrast: 100, sat: 100 };
+
+/* â”€â”€ Batch state â”€â”€ */
+var batchFiles = [];        /* {file, name, arrayBuffer, status, password, error} */
+var batchCards = [];         /* {type, front, back, originalFront, originalBack, fileName} */
+var pendingPasswordIdx = -1; /* index in batchFiles needing password */
+
+function getCardOutputSpec(cardType) {
+  return cardType === 'ration' ? CARD_OUTPUT_SPECS.ration : CARD_OUTPUT_SPECS.default;
+}
+
+function getCardCanvasSize(cardType) {
+  var spec = getCardOutputSpec(cardType);
+  return { w: spec.w, h: spec.h };
+}
+
+function configurePairCanvas(canvas, cardType) {
+  if (!canvas) return;
+  var spec = getCardOutputSpec(cardType);
+  var pairW = spec.w * 2 + spec.previewGap;
+  var pairH = spec.h;
+  canvas.width = pairW;
+  canvas.height = pairH;
+  canvas.style.aspectRatio = pairW + ' / ' + pairH;
+}
+
+function refreshCardMetaPills(cardType) {
+  var spec = getCardOutputSpec(cardType);
+  if (pillFormat) pillFormat.textContent = spec.formatLabel;
+  if (pillPixels) pillPixels.textContent = spec.pixelLabel;
+  if (pillWorkflow) pillWorkflow.textContent = spec.workflowLabel;
+}
+
+function cardNeedsSyntheticTopBorder(cardType) {
+  return cardType === 'aadhaar' || cardType === 'pan';
+}
+
+const IDP_BACKEND_URL = 'https://passportprint-studio.onrender.com';
+const IDP_AUTH_TOKEN_KEY = 'pps_token_v1';
+const IDP_PLAN_LIMITS = {
+  free: { id: 'free', name: 'Free', dailySheets: 2, maxBatchPdfs: 999 },
+  weekly: { id: 'weekly', name: 'Weekly', dailySheets: 0, maxBatchPdfs: 999 },
+  monthly: { id: 'monthly', name: 'Monthly', dailySheets: 0, maxBatchPdfs: 999 }
+};
+
+function isBatchMode() { return batchFiles.length > 1 || (batchFiles.length === 1 && batchCards.length > 1); }
+
+function idpCurrentUser() {
+  try { return typeof window.currentUser === 'function' ? window.currentUser() : null; }
+  catch (_) { return null; }
+}
+function idpEffectivePlan() {
+  var user = idpCurrentUser();
+  if (!user) return 'free';
+  var plan = user.plan || 'free';
+  var exp = user.planExpiresAt || 0;
+  if (plan !== 'free' && exp && Date.now() > exp) return 'free';
+  return plan;
+}
+function idpPlanLimits() {
+  return IDP_PLAN_LIMITS[idpEffectivePlan()] || IDP_PLAN_LIMITS.free;
+}
+function idpTodayKey() {
+  var d = new Date();
+  return 'pps_daily_sheets_' + d.getFullYear() + '-' +
+    String(d.getMonth() + 1).padStart(2, '0') + '-' +
+    String(d.getDate()).padStart(2, '0');
+}
+function idpGetTodaySheets() {
+  try { return +(localStorage.getItem(idpTodayKey()) || '0'); }
+  catch (_) { return 0; }
+}
+function idpSetTodaySheets(n) {
+  try { localStorage.setItem(idpTodayKey(), String(Math.max(0, n))); }
+  catch (_) {}
+}
+function idpRemainingFreeSheets() {
+  var lim = idpPlanLimits();
+  if (!lim.dailySheets) return Infinity;
+  return Math.max(0, lim.dailySheets - idpGetTodaySheets());
+}
+function idpOpenPlansWithMessage(msg) {
+  showError(msg);
+  if (typeof window.openPlans === 'function') {
+    setTimeout(function () { try { window.openPlans(); } catch (_) {} }, 350);
+  }
+}
+function idpOpenAuthWithMessage(msg) {
+  showError(msg);
+  if (typeof window.openAuth === 'function') {
+    setTimeout(function () { try { window.openAuth('login'); } catch (_) {} }, 350);
+  }
+}
+async function idpApi(path, options) {
+  var opts = options || {};
+  var headers = Object.assign({ 'Accept': 'application/json' }, opts.headers || {});
+  var token = null;
+  try { token = localStorage.getItem(IDP_AUTH_TOKEN_KEY); } catch (_) {}
+  if (token) headers['Authorization'] = 'Bearer ' + token;
+  if (opts.body && !headers['Content-Type']) headers['Content-Type'] = 'application/json';
+  var res = await fetch(IDP_BACKEND_URL + path, {
+    method: opts.method || 'GET',
+    headers: headers,
+    body: opts.body ? JSON.stringify(opts.body) : undefined
+  });
+  var data = null;
+  try { data = await res.json(); } catch (_) {}
+  if (!res.ok) {
+    var err = new Error((data && (data.error || data.message)) || ('HTTP ' + res.status));
+    err.status = res.status;
+    if (data && typeof data.used === 'number') err.used = data.used;
+    throw err;
+  }
+  return data || {};
+}
+async function idpConsumeSheetOrBlock() {
+  var lim = idpPlanLimits();
+  var token = null;
+  try { token = localStorage.getItem(IDP_AUTH_TOKEN_KEY); } catch (_) {}
+  if (!token || !idpCurrentUser()) {
+    idpOpenAuthWithMessage('Please sign up or log in to download / print ID sheets.');
+    return false;
+  }
+  if (!lim.dailySheets) return true;
+  try {
+    var data = await idpApi('/api/consume-sheet', { method: 'POST' });
+    if (typeof data.used === 'number') idpSetTodaySheets(data.used);
+    refreshIdpPlanBanner();
+    return true;
+  } catch (err) {
+    if (err && typeof err.used === 'number') idpSetTodaySheets(err.used);
+    if (err && err.status === 401) {
+      try { localStorage.removeItem(IDP_AUTH_TOKEN_KEY); } catch (_) {}
+      refreshIdpPlanBanner();
+      idpOpenAuthWithMessage('Your session expired. Please log in again to continue.');
+      return false;
+    }
+    if (err && err.status === 403) {
+      refreshIdpPlanBanner();
+      idpOpenPlansWithMessage('Daily free limit (2 sheets) reached. Upgrade for unlimited ID sheets.');
+      return false;
+    }
+    if (idpGetTodaySheets() >= lim.dailySheets) {
+      refreshIdpPlanBanner();
+      idpOpenPlansWithMessage('Daily free limit (2 sheets) reached. Upgrade for unlimited ID sheets.');
+      return false;
+    }
+    idpSetTodaySheets(idpGetTodaySheets() + 1);
+    refreshIdpPlanBanner();
+    return true;
+  }
+}
+function refreshIdpPlanBanner() {
+  if (!idpPlanBanner) return;
+  var planId = idpEffectivePlan();
+  var lim = idpPlanLimits();
+  var user = idpCurrentUser();
+  idpPlanBanner.className = 'idp-plan-banner ok';
+  if (!user) {
+    idpPlanBanner.innerHTML = 'Free plan: <strong>2 sheets/day</strong> after login. Weekly / Monthly unlock unlimited ID sheets. <a href="#" onclick="openAuth(\'signup\');return false;">Sign up to download</a> Â· <a href="#plans">See plans</a>';
+    return;
+  }
+  if (planId === 'free') {
+    var left = idpRemainingFreeSheets();
+    if (left > 0) {
+      idpPlanBanner.innerHTML = 'Free plan: <strong>' + left + '/' + lim.dailySheets + '</strong> sheet' + (left === 1 ? '' : 's') + ' left today. Weekly / Monthly unlock unlimited ID sheets. <a href="#plans">Go unlimited</a>';
+    } else {
+      idpPlanBanner.className = 'idp-plan-banner hit';
+      idpPlanBanner.innerHTML = 'Daily free limit (' + lim.dailySheets + ' sheets) reached. <a href="#plans">Upgrade</a> for unlimited ID sheets.';
+    }
+    return;
+  }
+  if (planId === 'weekly') {
+    idpPlanBanner.innerHTML = 'Weekly plan active: <strong>unlimited ID sheets</strong>. Monthly is the best-value option if this is a daily counter workflow. <a href="#plans">Change plan</a>';
+    return;
+  }
+  idpPlanBanner.innerHTML = 'Monthly plan active: <strong>unlimited ID sheets</strong> + best-value billing for regular counter work.';
+}
+
+/* â”€â”€ Step management â”€â”€ */
+function showStep(n) {
+  [stepUpload, stepPassword, stepPreview, stepSheet].forEach(el => el.classList.add('idp-hidden'));
+  idpError.classList.remove('show');
+  idpLoading.classList.remove('show');
+
+  document.querySelectorAll('.idp-step').forEach(s => {
+    s.classList.remove('active','done');
+    var sn = parseInt(s.dataset.step);
+    if (sn < n) s.classList.add('done');
+    if (sn === n) s.classList.add('active');
+  });
+
+  if (n === 1) stepUpload.classList.remove('idp-hidden');
+  if (n === 2) stepPreview.classList.remove('idp-hidden');
+  if (n === 3) stepSheet.classList.remove('idp-hidden');
+  refreshIdpPlanBanner();
+}
+
+function showError(msg) {
+  idpError.textContent = msg;
+  idpError.classList.add('show');
+}
+
+function showLoading(show) {
+  idpLoading.classList.toggle('show', show);
+}
+
+function showPasswordStep() {
+  stepUpload.classList.add('idp-hidden');
+  stepPassword.classList.remove('idp-hidden');
+  pdfPasswordInput.value = '';
+  pdfPasswordInput.focus();
+}
+
+/* â”€â”€ File handling â”€â”€ */
+pdfInput.addEventListener('change', (e) => {
+  if (e.target.files && e.target.files.length > 0) {
+    addFilesToQueue(Array.from(e.target.files));
+  }
+});
+
+dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+dropZone.addEventListener('drop', (e) => {
+  e.preventDefault();
+  dropZone.classList.remove('drag-over');
+  if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+    addFilesToQueue(Array.from(e.dataTransfer.files));
+  }
+});
+
+function addFilesToQueue(files) {
+  var validFiles = files.filter(f => f.type === 'application/pdf' || f.name.toLowerCase().endsWith('.pdf'));
+  if (validFiles.length === 0) { showError('Please upload PDF files only.'); return; }
+  if (batchFiles.length === 0) resetPhotoAdjustState();
+
+  validFiles.forEach(function(f) {
+    batchFiles.push({ file: f, name: f.name, arrayBuffer: null, status: 'queued', password: null, error: null });
+  });
+
+  /* Single file, no queue needed â€” direct legacy path */
+  if (batchFiles.length === 1 && validFiles.length === 1) {
+    handleSingleFile(batchFiles[0]);
+    return;
+  }
+
+  renderQueue();
+  pdfInput.value = '';
+}
+
+async function handleSingleFile(entry) {
+  entry.arrayBuffer = await entry.file.arrayBuffer();
+  pdfArrayBuffer = entry.arrayBuffer;
+  tryOpenPdf(null);
+}
+
+/* â”€â”€ Queue UI â”€â”€ */
+function renderQueue() {
+  fileQueue.classList.remove('idp-hidden');
+  queueActions.classList.remove('idp-hidden');
+  batchCount.classList.remove('idp-hidden');
+
+  fileQueue.innerHTML = '';
+  batchFiles.forEach(function(entry, idx) {
+    var div = document.createElement('div');
+    div.className = 'idp-queue-item';
+    var statusClass = entry.status === 'done' ? 'ok' : (entry.status === 'error' ? 'err' : '');
+    var statusText = entry.status === 'queued' ? 'Pending' : (entry.status === 'done' ? 'Ready' : (entry.status === 'error' ? (entry.error || 'Error') : 'Processingâ€¦'));
+    div.innerHTML = '<span class="qi-name">' + escHtml(entry.name) + '</span>' +
+      '<span class="qi-status ' + statusClass + '">' + statusText + '</span>' +
+      '<button type="button" class="qi-remove" data-idx="' + idx + '" title="Remove">\u00d7</button>';
+    fileQueue.appendChild(div);
+  });
+
+  batchCount.textContent = batchFiles.length + ' PDF' + (batchFiles.length > 1 ? 's' : '') + ' in queue';
+
+  /* Remove handlers */
+  fileQueue.querySelectorAll('.qi-remove').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var i = parseInt(btn.dataset.idx);
+      batchFiles.splice(i, 1);
+      if (batchFiles.length === 0) {
+        fileQueue.classList.add('idp-hidden');
+        queueActions.classList.add('idp-hidden');
+        batchCount.classList.add('idp-hidden');
+      } else {
+        renderQueue();
+      }
+    });
+  });
+}
+
+function escHtml(s) {
+  var d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+/* Add More button */
+btnAddMore.addEventListener('click', function() {
+  var inp = document.createElement('input');
+  inp.type = 'file';
+  inp.accept = '.pdf,application/pdf';
+  inp.multiple = true;
+  inp.addEventListener('change', function() {
+    if (inp.files && inp.files.length > 0) addFilesToQueue(Array.from(inp.files));
+  });
+  inp.click();
+});
+
+/* Process All button */
+btnProcessAll.addEventListener('click', async function() {
+  idpError.classList.remove('show');
+
+  showLoading(true);
+  batchCards = [];
+
+  for (var i = 0; i < batchFiles.length; i++) {
+    var entry = batchFiles[i];
+    entry.status = 'processing';
+    renderQueue();
+
+    try {
+      if (!entry.arrayBuffer) entry.arrayBuffer = await entry.file.arrayBuffer();
+      var result = await processPdfBatch(entry.arrayBuffer, entry.password, entry.name);
+
+      if (result.needsPassword) {
+        entry.status = 'error';
+        entry.error = 'Needs password';
+        pendingPasswordIdx = i;
+        showLoading(false);
+        renderQueue();
+        showPasswordStepBatch(entry.name);
+        return;
+      }
+
+      if (result.error) {
+        entry.status = 'error';
+        entry.error = result.error;
+      } else {
+        entry.status = 'done';
+        batchCards.push(result.card);
+      }
+    } catch (err) {
+      entry.status = 'error';
+      entry.error = err.message || 'Failed';
+    }
+    renderQueue();
+  }
+
+  showLoading(false);
+
+  if (batchCards.length === 0) {
+    showError('No cards could be processed from the uploaded PDFs.');
+    return;
+  }
+
+  showBatchPreview();
+});
+
+function showPasswordStepBatch(fileName) {
+  stepUpload.classList.add('idp-hidden');
+  stepPassword.classList.remove('idp-hidden');
+  stepPassword.querySelector('h3').textContent = '\ud83d\udd12 ' + fileName + ' is password-protected';
+  pdfPasswordInput.value = '';
+  pdfPasswordInput.focus();
+}
+
+/* â”€â”€ PDF processing (single file â€” legacy path) â”€â”€ */
+async function tryOpenPdf(password) {
+  showLoading(true);
+  idpError.classList.remove('show');
+  try {
+    var pdfjsLib = await getPdfJsLib();
+    var loadingTask = pdfjsLib.getDocument({
+      data: pdfArrayBuffer.slice(0),
+      password: password || undefined
+    });
+    var pdf = await loadingTask.promise;
+    await processPdf(pdf);
+  } catch (err) {
+    showLoading(false);
+    if (err.name === 'PasswordException') {
+      if (err.code === 1) {
+        showPasswordStep();
+      } else if (err.code === 2) {
+        showPasswordStep();
+        showError('Wrong password. Try again.');
+      }
+    } else {
+      showError('Could not read PDF: ' + (err.message || err));
+    }
+  }
+}
+
+btnUnlock.addEventListener('click', () => {
+  var pw = pdfPasswordInput.value.trim();
+  if (!pw) { showError('Enter the password.'); return; }
+  stepPassword.classList.add('idp-hidden');
+
+  if (pendingPasswordIdx >= 0) {
+    /* Batch mode: save password and resume processing */
+    batchFiles[pendingPasswordIdx].password = pw;
+    batchFiles[pendingPasswordIdx].status = 'queued';
+    pendingPasswordIdx = -1;
+    stepUpload.classList.remove('idp-hidden');
+    btnProcessAll.click();
+    return;
+  }
+
+  tryOpenPdf(pw);
+});
+
+pdfPasswordInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') btnUnlock.click();
+});
+
+/* â”€â”€ Batch PDF processing (returns result object, no DOM side effects) â”€â”€ */
+async function processPdfBatch(arrayBuffer, password, fileName) {
+  try {
+    var pdfjsLib = await getPdfJsLib();
+    var loadingTask = pdfjsLib.getDocument({
+      data: arrayBuffer.slice(0),
+      password: password || undefined
+    });
+    var pdf = await loadingTask.promise;
+    var page = await pdf.getPage(1);
+
+    var textContent = await page.getTextContent();
+    var fullText = textContent.items.map(i => i.str).join(' ').toLowerCase();
+
+    var type = detectCardType(fullText, fileName || '');
+    if (!type) return { error: 'Unknown card type' };
+
+    var viewport = page.getViewport({ scale: RENDER_SCALE });
+    var renderCanvas = document.createElement('canvas');
+    renderCanvas.width = viewport.width;
+    renderCanvas.height = viewport.height;
+    var ctx = renderCanvas.getContext('2d');
+    await page.render({ canvasContext: ctx, viewport: viewport }).promise;
+
+    var crop = CROP[type];
+    var isIssuedDetailsAadhaar = fullText.includes('details as on') || fullText.includes('aadhaar no. issued');
+    if (type === 'aadhaar' && fullText.includes('citizenship')) {
+      // New Aadhaar format is taller to fit the red citizenship box.
+      crop = JSON.parse(JSON.stringify(crop));
+      var newY = 0.672;
+      var newH = 0.220;
+      crop.front[1] = newY;
+      crop.front[3] = newH;
+      crop.back[1] = newY;
+      crop.back[3] = newH;
+    } else if (type === 'aadhaar' && isIssuedDetailsAadhaar) {
+      // 2026 UIDAI letter-size variant: lower PVC row sits deeper and the
+      // old crop leaks upper-letter fragments while clipping the bottom edge.
+      crop = JSON.parse(JSON.stringify(crop));
+      crop.front = [0.075, 0.719, 0.423, 0.207];
+      crop.back = [0.509, 0.719, 0.423, 0.207];
+    }
+    var front, back;
+
+    if (pdf.numPages >= 2 && crop.frontPage) {
+      front = cropRegion(renderCanvas, crop.frontPage);
+      var page2 = await pdf.getPage(2);
+      var vp2 = page2.getViewport({ scale: RENDER_SCALE });
+      var rc2 = document.createElement('canvas');
+      rc2.width = vp2.width;
+      rc2.height = vp2.height;
+      var c2 = rc2.getContext('2d');
+      await page2.render({ canvasContext: c2, viewport: vp2 }).promise;
+      back = crop.backPage ? cropRegion(rc2, crop.backPage) : null;
+    } else {
+      front = cropRegion(renderCanvas, crop.front);
+      back = crop.back ? cropRegion(renderCanvas, crop.back) : null;
+    }
+
+    return {
+      card: { type: type, front: front, back: back, originalFront: front, originalBack: back, fileName: fileName }
+    };
+  } catch (err) {
+    if (err.name === 'PasswordException') {
+      if (err.code === 1 || err.code === 2) return { needsPassword: true };
+    }
+    return { error: err.message || 'Failed' };
+  }
+}
+
+function detectCardType(fullText, fileName) {
+  var lowerFileName = (fileName || '').toLowerCase();
+  var abhaHits = ABHA_KEYWORDS.filter(k => fullText.includes(k)).length;
+  var ayushmanHits = AYUSHMAN_KEYWORDS.filter(k => fullText.includes(k)).length;
+  var janaadhaarHits = JANAADHAAR_KEYWORDS.filter(k => fullText.includes(k)).length;
+  var eshramHits = ESHRAM_KEYWORDS.filter(k => fullText.includes(k)).length;
+  var aadhaarHits = AADHAAR_KEYWORDS.filter(k => fullText.includes(k)).length;
+  var panHits = PAN_KEYWORDS.filter(k => fullText.includes(k)).length;
+  var epicHits = EPIC_KEYWORDS.filter(k => fullText.includes(k)).length;
+  var voterHits = VOTER_KEYWORDS.filter(k => fullText.includes(k)).length;
+  var rcHits = RC_KEYWORDS.filter(k => fullText.includes(k)).length;
+  var rationHits = RATION_KEYWORDS.filter(k => fullText.includes(k)).length;
+
+  if (fullText.includes('@abdm') || lowerFileName.includes('abha') || abhaHits >= 2) return 'abha';
+  if (ayushmanHits >= 2) return 'ayushman';
+  if (janaadhaarHits >= 2) return 'janaadhaar';
+  /* Some downloaded eShram/UAN PDFs are flattened to a single image, so
+     text extraction is empty and filename is the only reliable signal. */
+  if (lowerFileName.includes('uan-card') || lowerFileName.includes('eshram')) return 'eshram';
+  if (eshramHits >= 2) return 'eshram';
+  if (/(^|[^a-z])rc([^a-z]|$)/.test(lowerFileName) || rcHits >= 2) return 'rc';
+  if (lowerFileName.includes('ration') || rationHits >= 2) return 'ration';
+  if (aadhaarHits >= 2) return 'aadhaar';
+  if (panHits >= 2) return 'pan';
+  if (epicHits >= 2) return 'epic';
+  if (voterHits >= 2) return 'voter';
+  return null;
+}
+
+/* â”€â”€ Single PDF processing (legacy path) â”€â”€ */
+async function processPdf(pdf) {
+  try {
+    var page = await pdf.getPage(1);
+    var textContent = await page.getTextContent();
+    var fullText = textContent.items.map(i => i.str).join(' ').toLowerCase();
+
+    detectedType = detectCardType(fullText, batchFiles.length > 0 ? batchFiles[0].name : '');
+    if (!detectedType) {
+      showLoading(false);
+      showStep(1);
+      showError('Could not detect card type. Supported: eAadhaar, ePAN, ABHA, e-EPIC (Voter ID), Ayushman (PMJAY), Jan Aadhaar, eShram, RC, and ration card.');
+      return;
+    }
+
+    var viewport = page.getViewport({ scale: RENDER_SCALE });
+    var renderCanvas = document.createElement('canvas');
+    renderCanvas.width = viewport.width;
+    renderCanvas.height = viewport.height;
+    var ctx = renderCanvas.getContext('2d');
+    await page.render({ canvasContext: ctx, viewport: viewport }).promise;
+
+    var crop = CROP[detectedType];
+    var isIssuedDetailsAadhaar = fullText.includes('details as on') || fullText.includes('aadhaar no. issued');
+    if (detectedType === 'aadhaar' && fullText.includes('citizenship')) {
+      // New Aadhaar format is taller to fit the red citizenship box.
+      crop = JSON.parse(JSON.stringify(crop));
+      var newY = 0.672;
+      var newH = 0.220;
+      crop.front[1] = newY;
+      crop.front[3] = newH;
+      crop.back[1] = newY;
+      crop.back[3] = newH;
+    } else if (detectedType === 'aadhaar' && isIssuedDetailsAadhaar) {
+      // 2026 UIDAI letter-size variant: lower PVC row sits deeper and the
+      // old crop leaks upper-letter fragments while clipping the bottom edge.
+      crop = JSON.parse(JSON.stringify(crop));
+      crop.front = [0.075, 0.719, 0.423, 0.207];
+      crop.back = [0.509, 0.719, 0.423, 0.207];
+    }
+
+    if (pdf.numPages >= 2 && crop.frontPage) {
+      frontImageData = cropRegion(renderCanvas, crop.frontPage);
+      var page2 = await pdf.getPage(2);
+      var vp2 = page2.getViewport({ scale: RENDER_SCALE });
+      var rc2 = document.createElement('canvas');
+      rc2.width = vp2.width;
+      rc2.height = vp2.height;
+      var c2 = rc2.getContext('2d');
+      await page2.render({ canvasContext: c2, viewport: vp2 }).promise;
+      backImageData = crop.backPage ? cropRegion(rc2, crop.backPage) : null;
+    } else {
+      frontImageData = cropRegion(renderCanvas, crop.front);
+      backImageData = crop.back ? cropRegion(renderCanvas, crop.back) : null;
+    }
+
+    originalFront = frontImageData;
+    originalBack = backImageData;
+    batchCards = [{ type: detectedType, front: frontImageData, back: backImageData, originalFront: frontImageData, originalBack: backImageData, fileName: batchFiles.length > 0 ? batchFiles[0].name : 'PDF' }];
+    loadPrefs();
+    /* Â§AC.29 â€” Enable / disable Photo Only based on detected card type. */
+    refreshScopeAvailability();
+    refreshCardMetaPills(detectedType);
+    applyFilters();
+
+    detectBadge.innerHTML = '<div class="idp-detect ' + detectedType + '">' +
+      TYPE_ICONS[detectedType] + ' ' + TYPE_LABELS[detectedType] + ' Detected</div>';
+    /* Â§AC.27 â€” Position panel removed; nothing to toggle here. */
+
+    previewTitle.textContent = backImageData ? 'Front & Back Preview' : 'Card Preview';
+
+    showLoading(false);
+    showStep(2);
+  } catch (err) {
+    showLoading(false);
+    showStep(1);
+    showError('Error processing PDF: ' + (err.message || err));
+  }
+}
+
+/* â”€â”€ Batch preview â”€â”€ */
+function showBatchPreview() {
+  /* Build badge list */
+  var badgeHtml = '';
+  batchCards.forEach(function(card) {
+    badgeHtml += '<div class="idp-detect ' + card.type + '" style="margin:0 4px 8px;">' +
+      TYPE_ICONS[card.type] + ' ' + TYPE_LABELS[card.type] + '</div>';
+  });
+  detectBadge.innerHTML = badgeHtml;
+
+  var hasBackForAll = batchCards.every(function(card) { return !!card.back; });
+  previewTitle.textContent = batchCards.length + ' Card' + (batchCards.length === 1 ? '' : 's') + (hasBackForAll ? ' â€” Front & Back Preview' : ' Preview');
+
+  /* Restore the current tab's in-memory editor state before rendering. */
+  loadPrefs();
+  /* Â§AC.29 â€” Photo Only availability depends on first card's type. */
+  refreshScopeAvailability();
+
+  /* Build card previews â€” Â§AC.11 unified landscape pair canvas per card,
+     no Front/Back labels. */
+  batchCardsContainer.innerHTML = '';
+  batchCards.forEach(function(card, idx) {
+    var section = document.createElement('div');
+    section.style.marginBottom = '20px';
+
+    var label = document.createElement('div');
+    label.style.cssText = 'font-family:DM Mono,monospace;font-size:11px;color:var(--muted);margin-bottom:6px;text-align:center;';
+    label.textContent = (idx + 1) + '. ' + TYPE_LABELS[card.type] + ' \u2014 ' + card.fileName;
+    section.appendChild(label);
+
+    var cardsDiv = document.createElement('div');
+    cardsDiv.className = 'idp-cards';
+
+    var pair = document.createElement('canvas');
+    pair.className = 'idp-preview-canvas-pair';
+    pair.dataset.batchIdx = idx;
+    configurePairCanvas(pair, card.type);
+    cardsDiv.appendChild(pair);
+
+    section.appendChild(cardsDiv);
+    batchCardsContainer.appendChild(section);
+
+    /* Build per-side filtered working canvases, then composite into the
+       pair canvas (front LEFT half, back RIGHT half). */
+    var tmpF = null, tmpB = null;
+    var cardSize = getCardCanvasSize(card.type);
+    if (card.originalFront) {
+      tmpF = document.createElement('canvas');
+      tmpF.width = cardSize.w; tmpF.height = cardSize.h;
+      drawFilteredToCanvas(tmpF, card.originalFront, cardSize.w, cardSize.h, card.type, 'front');
+    }
+    if (card.originalBack) {
+      tmpB = document.createElement('canvas');
+      tmpB.width = cardSize.w; tmpB.height = cardSize.h;
+      drawFilteredToCanvas(tmpB, card.originalBack, cardSize.w, cardSize.h, card.type, 'back');
+    }
+    compositePair(pair, tmpF, tmpB, card.type);
+  });
+
+  /* Update filtered data for sheet generation */
+  applyBatchFilters();
+
+  /* Set legacy vars to first card for compatibility */
+  if (batchCards.length > 0) {
+    detectedType = batchCards[0].type;
+    frontImageData = batchCards[0].front;
+    backImageData = batchCards[0].back;
+    originalFront = batchCards[0].originalFront;
+    originalBack = batchCards[0].originalBack;
+    refreshCardMetaPills(detectedType);
+  }
+
+  showStep(2);
+}
+
+/* Â§AC.29 â€” drawFilteredToCanvas now delegates to applyMaskedFilters so
+   the photo region (when ROI is configured for cardType+side) gets its
+   own independent filter pass. Same signature; sheet-builder consumers
+   are unchanged because the merged result is baked into the ready
+   canvas before they ever see it. */
+function drawFilteredToCanvas(canvas, srcCanvas, w, h, cardType, side) {
+  applyMaskedFilters(canvas, srcCanvas, w, h, cardType, side, true);
+}
+
+/* Â§AC.29 â€” applyBatchFilters first loop now produces card.front /
+   card.back via applyMaskedFilters (no rounding here â€” sheet builders
+   apply their own rounded-corner clipping). Preview-update loop is
+   unchanged: it already routes through drawFilteredToCanvas. */
+function applyBatchFilters() {
+  batchCards.forEach(function(card) {
+    var cardSize = getCardCanvasSize(card.type);
+    if (card.originalFront) {
+      var tmpF = document.createElement('canvas');
+      applyMaskedFilters(tmpF, card.originalFront, cardSize.w, cardSize.h, card.type, 'front', false);
+      card.front = tmpF;
+    }
+    if (card.originalBack) {
+      var tmpB = document.createElement('canvas');
+      applyMaskedFilters(tmpB, card.originalBack, cardSize.w, cardSize.h, card.type, 'back', false);
+      card.back = tmpB;
+    }
+  });
+
+  /* Refresh preview canvases â€” Â§AC.11 unified pair (front LEFT, back RIGHT). */
+  batchCardsContainer.querySelectorAll('canvas[data-batch-idx]').forEach(function(c) {
+    var idx = parseInt(c.dataset.batchIdx);
+    if (idx < batchCards.length) {
+      var card = batchCards[idx];
+      var tmpF = null, tmpB = null;
+      var cardSize = getCardCanvasSize(card.type);
+      if (card.originalFront) {
+        tmpF = document.createElement('canvas');
+        tmpF.width = cardSize.w; tmpF.height = cardSize.h;
+        drawFilteredToCanvas(tmpF, card.originalFront, cardSize.w, cardSize.h, card.type, 'front');
+      }
+      if (card.originalBack) {
+        tmpB = document.createElement('canvas');
+        tmpB.width = cardSize.w; tmpB.height = cardSize.h;
+        drawFilteredToCanvas(tmpB, card.originalBack, cardSize.w, cardSize.h, card.type, 'back');
+      }
+      compositePair(c, tmpF, tmpB, card.type);
+    }
+  });
+}
+
+/* â”€â”€ Canvas helpers â”€â”€ */
+function cropRegion(sourceCanvas, frac) {
+  var sx = Math.round(frac[0] * sourceCanvas.width);
+  var sy = Math.round(frac[1] * sourceCanvas.height);
+  var sw = Math.round(frac[2] * sourceCanvas.width);
+  var sh = Math.round(frac[3] * sourceCanvas.height);
+  sw = Math.min(sw, sourceCanvas.width - sx);
+  sh = Math.min(sh, sourceCanvas.height - sy);
+  var tmp = document.createElement('canvas');
+  tmp.width = sw;
+  tmp.height = sh;
+  var ctx = tmp.getContext('2d');
+  ctx.drawImage(sourceCanvas, sx, sy, sw, sh, 0, 0, sw, sh);
+  return tmp;
+}
+
+function drawToCanvas(canvas, srcCanvas, w, h) {
+  canvas.width = w;
+  canvas.height = h;
+  var ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#fff';
+  ctx.fillRect(0, 0, w, h);
+  ctx.drawImage(srcCanvas, 0, 0, w, h);
+}
+
+/* â”€â”€ A4 Sheet generation â”€â”€ */
+function buildSheet() {
+  buildSingleSheet();
+  refreshSheetPreview();
+}
+
+function refreshSheetPreview() {
+  if (!sheetPreviewCanvas || !a4Canvas) return;
+  var srcX = 0, srcY = 0, srcW = a4Canvas.width, srcH = a4Canvas.height;
+  /* Preview-only crop: 1-pair A4 layout leaves a large blank lower area
+     by design for printing, but on screen that wastes space. Keep the
+     real A4 canvas intact for download/print and only crop the visible
+     preview to the upper content band. */
+  var previewType = getCurrentCardType();
+  var previewSpec = getCardOutputSpec(previewType);
+  srcH = Math.min(a4Canvas.height, Math.max(980, previewSpec.h + previewSpec.startY + 120));
+  sheetPreviewCanvas.width = srcW;
+  sheetPreviewCanvas.height = srcH;
+  var pctx = sheetPreviewCanvas.getContext('2d');
+  pctx.clearRect(0, 0, srcW, srcH);
+  pctx.drawImage(a4Canvas, srcX, srcY, srcW, srcH, 0, 0, srcW, srcH);
+}
+
+function getActiveCards() {
+  if (batchCards.length > 0) return batchCards;
+  if (frontImageData) return [{ type: detectedType, front: frontImageData, back: backImageData }];
+  return [];
+}
+
+function buildSingleSheet() {
+  var cards = getActiveCards();
+  var card = cards.length > 0 ? cards[0] : null;
+  var activeType = card ? card.type : detectedType;
+  var spec = getCardOutputSpec(activeType);
+
+  var ctx = a4Canvas.getContext('2d');
+  a4Canvas.width = A4_W;
+  a4Canvas.height = A4_H;
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, A4_W, A4_H);
+
+  var cardW = spec.w;
+  var cardH = spec.h;
+  /* gap = 0 so the front + back cards sit edge-to-edge on the printed
+     A4. CROP.aadhaar is now tight to the outer black border (PR #248)
+     so the two halves touch with no white whitespace between them,
+     matching the user's snipping-tool reference. */
+  var gap = spec.sheetGap;
+  var pairW = cardW * 2 + gap;
+  var startX = Math.round((A4_W - pairW) / 2);
+  /* Â§AC.25 â€” Small top margin (~2.5 mm @ 300 DPI) so the cards don't
+     sit flush at the very top edge of the paper. Â§AC.20 set startY = 0
+     per user request, but real-phone print preview showed it was too
+     tight â€” the user asked to move cards down slightly. */
+  var startY = spec.startY;
+
+  var r = useRoundedCorners() ? CARD_RADIUS : 0;
+
+  if (card && card.front) {
+    if (r > 0) drawCardClipped(ctx, card.front, startX, startY, cardW, cardH, r);
+    else ctx.drawImage(card.front, startX, startY, cardW, cardH);
+  }
+
+  if (card && card.back) {
+    /* Draw back card NOT mirrored. User cuts both halves apart and stacks them
+       back-to-back for lamination, so no horizontal flip is
+       needed. (Was previously scale(-1, 1) for the legacy
+       fold-over-paper workflow.) */
+    var backX = startX + cardW + gap;
+    if (r > 0) drawCardClipped(ctx, card.back, backX, startY, cardW, cardH, r);
+    else ctx.drawImage(card.back, backX, startY, cardW, cardH);
+  }
+
+  /* Â§AC.13 â€” Cut Marks block removed for the 1-Pair layout: no dashed
+     fold-here line, no "â† fold here â†’" caption, no corner ticks, no
+     seam ticks. Sheet stays clean white around the card pair. */
+
+  /* Â§AC.15 â€” Add a solid black line along the TOP edge of each card to
+     replace the dashed perforation strip cropped out in Â§AC.14. The
+     left / right / bottom edges already carry the natural black border
+     printed on the e-Aadhaar card; the top edge lost its border when
+     the perforation strip was removed, so this line restores symmetry
+     with the other three sides. ~4px line â‰ˆ matches the printed border
+     thickness at 300 DPI. When rounded corners are enabled the line is
+     inset by `r` so it does not stick out past the rounded curve. */
+  if (card && cardNeedsSyntheticTopBorder(activeType)) {
+    ctx.fillStyle = '#000';
+    var topLineH = 4;
+    if (card.front) {
+      if (r > 0) ctx.fillRect(startX + r, startY, cardW - 2 * r, topLineH);
+      else ctx.fillRect(startX, startY, cardW, topLineH);
+    }
+    if (card.back) {
+      var backXLine = startX + cardW + gap;
+      if (r > 0) ctx.fillRect(backXLine + r, startY, cardW - 2 * r, topLineH);
+      else ctx.fillRect(backXLine, startY, cardW, topLineH);
+    }
+  }
+
+  /* Â§AC.25 â€” footer info text ("CR80 Â· 85.6 Ã— 54 mm Â· 300 DPI â€”
+     Studio Print") removed per user request â€” it was visible in the
+     printed output below the cards. */
+}
+
+function buildMultiCardSheet() {
+  var cards = getActiveCards();
+  var rows = Math.min(cards.length > 0 ? cards.length : 5, 5);
+
+  /* If single card mode (1 card), fill all 5 rows with same card */
+  var fillSame = cards.length <= 1;
+  if (fillSame) rows = 5;
+
+  var ctx = a4Canvas.getContext('2d');
+  a4Canvas.width = A4_W;
+  a4Canvas.height = A4_H;
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, A4_W, A4_H);
+
+  var cardW = CR80_W;
+  var cardH = CR80_H;
+  var pairGap = 20;
+  var rowGap = 20;
+  var pairW = cardW * 2 + pairGap;
+  var totalH = cardH * rows + rowGap * (rows - 1);
+  var marginX = Math.round((A4_W - pairW) / 2);
+  var marginY = Math.round((A4_H - totalH) / 2);
+
+  ctx.fillStyle = '#999';
+  ctx.font = '18px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('Front', marginX + cardW / 2, marginY - 16);
+  ctx.fillText('Back', marginX + cardW + pairGap + cardW / 2, marginY - 16);
+
+  var radius = useRoundedCorners() ? CARD_RADIUS : 0;
+
+  for (var r = 0; r < rows; r++) {
+    var y = marginY + r * (cardH + rowGap);
+    var card = fillSame ? cards[0] : cards[r];
+    if (!card) continue;
+
+    if (card.front) {
+      if (radius > 0) drawCardClipped(ctx, card.front, marginX, y, cardW, cardH, radius);
+      else ctx.drawImage(card.front, marginX, y, cardW, cardH);
+    }
+
+    if (card.back) {
+      if (radius > 0) drawCardClipped(ctx, card.back, marginX + cardW + pairGap, y, cardW, cardH, radius);
+      else ctx.drawImage(card.back, marginX + cardW + pairGap, y, cardW, cardH);
+    }
+  }
+
+  /* Cut marks */
+  ctx.setLineDash([8, 6]);
+  ctx.strokeStyle = '#000';
+  ctx.lineWidth = 1.5;
+
+  var extH = 24;
+  var extW = 24;
+
+  for (var r = 0; r <= rows; r++) {
+    var y;
+    if (r === 0) y = marginY;
+    else if (r === rows) y = marginY + rows * cardH + (rows - 1) * rowGap;
+    else y = marginY + r * cardH + (r - 1) * rowGap + rowGap / 2;
+
+    ctx.beginPath();
+    ctx.moveTo(marginX - extW, y);
+    ctx.lineTo(marginX + pairW + extW, y);
+    ctx.stroke();
+  }
+
+  var vLines = [marginX, marginX + cardW + pairGap / 2, marginX + pairW];
+  vLines.forEach(function(x) {
+    ctx.beginPath();
+    ctx.moveTo(x, marginY - extH);
+    ctx.lineTo(x, marginY + totalH + extH);
+    ctx.stroke();
+  });
+
+  ctx.setLineDash([]);
+
+  ctx.strokeStyle = '#000';
+  ctx.lineWidth = 2;
+  var markLen = 30;
+  for (var r = 0; r < rows; r++) {
+    var y = marginY + r * (cardH + rowGap);
+    drawCornerMarks(ctx, marginX, y, cardW, cardH, markLen);
+    drawCornerMarks(ctx, marginX + cardW + pairGap, y, cardW, cardH, markLen);
+  }
+
+  /* Â§AC.25 â€” footer info text removed (same as buildSingleSheet). */
+}
+
+function buildDragonSheet() {
+  var cards = getActiveCards();
+  var card = cards.length > 0 ? cards[0] : null;
+
+  var ctx = a4Canvas.getContext('2d');
+  a4Canvas.width = DRAGON_W;
+  a4Canvas.height = DRAGON_H;
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, DRAGON_W, DRAGON_H);
+
+  var cardW = CR80_W;
+  var cardH = CR80_H;
+  var gap = 20;
+  var totalH = cardH * 2 + gap;
+  var marginX = Math.round((DRAGON_W - cardW) / 2);
+  var marginY = Math.round((DRAGON_H - totalH) / 2);
+
+  var radius = useRoundedCorners() ? CARD_RADIUS : 0;
+
+  if (card && card.front) {
+    if (radius > 0) drawCardClipped(ctx, card.front, marginX, marginY, cardW, cardH, radius);
+    else ctx.drawImage(card.front, marginX, marginY, cardW, cardH);
+  }
+
+  if (card && card.back) {
+    var y2 = marginY + cardH + gap;
+    if (radius > 0) drawCardClipped(ctx, card.back, marginX, y2, cardW, cardH, radius);
+    else ctx.drawImage(card.back, marginX, y2, cardW, cardH);
+  }
+
+  ctx.setLineDash([8, 6]);
+  ctx.strokeStyle = '#000';
+  ctx.lineWidth = 1.5;
+
+  var extH = 20;
+  var extW = 20;
+
+  var hLines = [marginY, marginY + cardH + gap / 2, marginY + totalH];
+  hLines.forEach(function(y) {
+    ctx.beginPath();
+    ctx.moveTo(marginX - extW, y);
+    ctx.lineTo(marginX + cardW + extW, y);
+    ctx.stroke();
+  });
+
+  var vLines = [marginX, marginX + cardW];
+  vLines.forEach(function(x) {
+    ctx.beginPath();
+    ctx.moveTo(x, marginY - extH);
+    ctx.lineTo(x, marginY + totalH + extH);
+    ctx.stroke();
+  });
+
+  ctx.setLineDash([]);
+
+  ctx.strokeStyle = '#000';
+  ctx.lineWidth = 2;
+  var markLen = 30;
+  drawCornerMarks(ctx, marginX, marginY, cardW, cardH, markLen);
+  drawCornerMarks(ctx, marginX, marginY + cardH + gap, cardW, cardH, markLen);
+
+  ctx.fillStyle = '#999';
+  ctx.font = '16px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('Front', marginX + cardW / 2, marginY - 12);
+  ctx.fillText('Back', marginX + cardW / 2, marginY + cardH + gap - 12);
+
+  /* Â§AC.25 â€” footer info text removed (same as buildSingleSheet). */
+}
+
+function buildPVCTraySheet() {
+  var cards = getActiveCards();
+  var card = cards.length > 0 ? cards[0] : null;
+
+  var ctx = a4Canvas.getContext('2d');
+  a4Canvas.width = PVC_W;
+  a4Canvas.height = PVC_H;
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, PVC_W, PVC_H);
+
+  var cardW = CR80_W;
+  var cardH = CR80_H;
+  var marginX = Math.round((PVC_W - cardW) / 2);
+  var topY = 35;
+  var gap = 71;
+  var bottomY = topY + cardH + gap;
+
+  var radius = useRoundedCorners() ? CARD_RADIUS : 0;
+
+  if (card && card.front) {
+    if (radius > 0) drawCardClipped(ctx, card.front, marginX, topY, cardW, cardH, radius);
+    else ctx.drawImage(card.front, marginX, topY, cardW, cardH);
+  }
+
+  if (card && card.back) {
+    if (radius > 0) drawCardClipped(ctx, card.back, marginX, bottomY, cardW, cardH, radius);
+    else ctx.drawImage(card.back, marginX, bottomY, cardW, cardH);
+  }
+
+  /* Card slot outlines */
+  ctx.setLineDash([6, 4]);
+  ctx.strokeStyle = '#bbb';
+  ctx.lineWidth = 1;
+  if (radius > 0) {
+    roundedRectPath(ctx, marginX, topY, cardW, cardH, radius);
+    ctx.stroke();
+    roundedRectPath(ctx, marginX, bottomY, cardW, cardH, radius);
+    ctx.stroke();
+  } else {
+    ctx.strokeRect(marginX, topY, cardW, cardH);
+    ctx.strokeRect(marginX, bottomY, cardW, cardH);
+  }
+  ctx.setLineDash([]);
+
+  /* Corner marks */
+  ctx.strokeStyle = '#999';
+  ctx.lineWidth = 1.5;
+  var markLen = 20;
+  drawCornerMarks(ctx, marginX, topY, cardW, cardH, markLen);
+  drawCornerMarks(ctx, marginX, bottomY, cardW, cardH, markLen);
+
+  /* Labels */
+  ctx.fillStyle = '#999';
+  ctx.font = '16px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('Front', marginX + cardW / 2, topY - 10);
+  ctx.fillText('Back', marginX + cardW / 2, bottomY - 10);
+
+  /* Tray border */
+  ctx.strokeStyle = '#ddd';
+  ctx.lineWidth = 2;
+  ctx.setLineDash([12, 6]);
+  ctx.strokeRect(4, 4, PVC_W - 8, PVC_H - 8);
+  ctx.setLineDash([]);
+
+  /* Â§AC.25 â€” footer info text removed (same as buildSingleSheet). */
+}
+
+function drawCornerMarks(ctx, x, y, w, h, len) {
+  var corners = [
+    [x, y], [x + w, y], [x, y + h], [x + w, y + h]
+  ];
+  corners.forEach(function(c) {
+    var cx = c[0], cy = c[1];
+    var dx = (cx === x) ? 1 : -1;
+    var dy = (cy === y) ? 1 : -1;
+    ctx.beginPath();
+    ctx.moveTo(cx - dx * len, cy);
+    ctx.lineTo(cx, cy);
+    ctx.lineTo(cx, cy - dy * len);
+    ctx.stroke();
+  });
+}
+
+/* â”€â”€ Photo editor â”€â”€ */
+const slBright = $('#slBright');
+const slContrast = $('#slContrast');
+const slSat = $('#slSat');
+const valBright = $('#valBright');
+const valContrast = $('#valContrast');
+const valSat = $('#valSat');
+const btnResetEdit = $('#btnResetEdit');
+const btnAutoEnhance = $('#btnAutoEnhance');
+const chkRounded = $('#chkRounded');
+/* Â§AC.13 â€” chkCutMarks ref removed (Cut Marks toggle deleted from UI). */
+/* Â§AC.28 â€” btnSwapSides ref removed (Swap sides button deleted). */
+/* Â§AC.27 â€” panelPosition / movePad / moveStep / moveReadout /
+   positionSideRadios refs removed (Position panel deleted). */
+
+/* Â§AC.29 â€” getFilterString now reads from the requested scope's filter
+   stack (cardFilters / photoFilters) instead of the slider DOM. The
+   sliders bind to whichever stack is active via onSliderInput. Default
+   scope is 'whole' so legacy callers (none remaining post-Â§AC.29 â€” the
+   render path now reads each scope explicitly) get unchanged behaviour. */
+function getFilterString(scope) {
+  var s = (scope === 'photo') ? photoFilters : cardFilters;
+  if (s.bright == 100 && s.contrast == 100 && s.sat == 100) return 'none';
+  return 'brightness(' + s.bright + '%) contrast(' + s.contrast + '%) saturate(' + s.sat + '%)';
+}
+
+/* Â§AC.29 â€” Convert fractional ROI from CARD_PHOTO_ROI into pixel coords
+   for a canvas of width Ã— height. Returns null if no ROI is configured
+   for (cardType, side). Fractional coords are CR80-relative; the same
+   table works for any output dimension. */
+function getPhotoROIPixels(cardType, side, w, h) {
+  var entry = cardType && CARD_PHOTO_ROI[cardType];
+  var roi = entry && entry[side];
+  if (!roi) return null;
+  return getROIPixelsFromFrac(roi, w, h);
+}
+
+function getROIPixelsFromFrac(roi, w, h) {
+  if (!roi) return null;
+  return {
+    x: Math.round(roi[0] * w),
+    y: Math.round(roi[1] * h),
+    w: Math.round(roi[2] * w),
+    h: Math.round(roi[3] * h)
+  };
+}
+
+/* Â§AC.29 â€” Has-ROI helper: does this card type have ANY photo region
+   (front or back)? Used to enable / disable the Photo Only toggle. */
+function cardTypeHasPhotoROI(cardType) {
+  var entry = cardType && CARD_PHOTO_ROI[cardType];
+  return !!(entry && (entry.front || entry.back));
+}
+
+function cardTypeHasPhotoROISide(cardType, side) {
+  var entry = cardType && CARD_PHOTO_ROI[cardType];
+  return !!(entry && entry[side]);
+}
+
+function getCurrentCardType() {
+  return (batchCards[0] && batchCards[0].type) || detectedType;
+}
+
+function roundedCornersAllowed() {
+  return editScope !== 'photo' && getCurrentCardType() !== 'pan' && getCardOutputSpec(getCurrentCardType()).allowRounded !== false;
+}
+
+function useRoundedCorners() {
+  return roundedCorners && roundedCornersAllowed();
+}
+
+/* Â§AC.29 â€” Composite render: paint whole card with cardFilters, then
+   clip to the photo ROI and re-paint that region with photoFilters. The
+   two filter stacks combine in the final canvas regardless of which
+   scope the user last touched. Used by every render path that produces
+   the per-side ready canvases (single-PDF preview, batch preview, sheet
+   builders' input canvases). When no ROI exists for (cardType, side),
+   only the cardFilters pass runs â€” equivalent to pre-Â§AC.29 behaviour. */
+function applyMaskedFilters(destCanvas, srcCanvas, w, h, cardType, side, applyRound) {
+  destCanvas.width = w;
+  destCanvas.height = h;
+  var ctx = destCanvas.getContext('2d');
+  ctx.fillStyle = '#fff';
+  ctx.fillRect(0, 0, w, h);
+  if (applyRound && useRoundedCorners()) {
+    roundedRectPath(ctx, 0, 0, w, h, CARD_RADIUS);
+    ctx.clip();
+  }
+  ctx.filter = getFilterString('whole');
+  ctx.drawImage(srcCanvas, 0, 0, w, h);
+  ctx.filter = 'none';
+  var roi = getPhotoROIPixels(cardType, side, w, h);
+  if (roi) {
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(roi.x, roi.y, roi.w, roi.h);
+    ctx.clip();
+    /* Â§AC.29 fix â€” clear + re-fill the photo region before the second
+       paint. PDF-rendered cards often have non-1.0 alpha in dark photo
+       pixels; with default source-over compositing, drawing the same
+       image twice would alpha-compound and darken the photo plus etch
+       a visible seam at the clip boundary (regression observed on
+       Aadhaar in QA). clearRect â†’ white fillRect ensures the second
+       drawImage lands on a clean, opaque surface â€” pixel-identical to
+       a single paint when both filter stacks are no-op (default), and
+       correct when photoFilters diverges. */
+    ctx.clearRect(roi.x, roi.y, roi.w, roi.h);
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(roi.x, roi.y, roi.w, roi.h);
+    ctx.filter = getFilterString('photo');
+    ctx.drawImage(srcCanvas, 0, 0, w, h);
+    ctx.filter = 'none';
+    ctx.restore();
+  }
+}
+
+function roundedRectPath(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w - r, y);
+  ctx.arcTo(x + w, y, x + w, y + r, r);
+  ctx.lineTo(x + w, y + h - r);
+  ctx.arcTo(x + w, y + h, x + w - r, y + h, r);
+  ctx.lineTo(x + r, y + h);
+  ctx.arcTo(x, y + h, x, y + h - r, r);
+  ctx.lineTo(x, y + r);
+  ctx.arcTo(x, y, x + r, y, r);
+  ctx.closePath();
+}
+
+function drawCardClipped(ctx, src, x, y, w, h, radius) {
+  ctx.save();
+  roundedRectPath(ctx, x, y, w, h, radius);
+  ctx.clip();
+  ctx.drawImage(src, x, y, w, h);
+  ctx.restore();
+  ctx.strokeStyle = '#ccc';
+  ctx.lineWidth = 1.5;
+  roundedRectPath(ctx, x, y, w, h, radius);
+  ctx.stroke();
+}
+
+/* Â§AC.11 â€” composite a fully-rendered front+back card pair into ONE
+   landscape canvas (front LEFT, back RIGHT, edge-to-edge). frontReady /
+   backReady are CR80_W Ã— CR80_H canvases that already have filter +
+   offset + zoom baked in by drawFiltered() / drawFilteredToCanvas().
+   Rounded corners (when enabled) are clipped per-half so each card keeps
+   its own rounded rectangle silhouette â€” matching how the cards actually
+   look after cutting. If a side is missing (e.g. some PAN PDFs render
+   only the front), that half stays as the light-grey placeholder. */
+function compositePair(canvas, frontReady, backReady, cardType) {
+  /* Â§AC.28 â€” Swap sides toggle removed; preview always renders
+     front-LEFT / back-RIGHT (the default). */
+  configurePairCanvas(canvas, cardType);
+  var spec = getCardOutputSpec(cardType);
+  var cardW = spec.w;
+  var cardH = spec.h;
+  var gap = spec.previewGap;
+  var ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#eaeaea';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  if (frontReady) {
+    ctx.save();
+    if (useRoundedCorners()) {
+      roundedRectPath(ctx, 0, 0, cardW, cardH, CARD_RADIUS);
+      ctx.clip();
+    }
+    ctx.drawImage(frontReady, 0, 0, cardW, cardH);
+    ctx.restore();
+  }
+  if (backReady) {
+    var backX = cardW + gap;
+    ctx.save();
+    if (useRoundedCorners()) {
+      roundedRectPath(ctx, backX, 0, cardW, cardH, CARD_RADIUS);
+      ctx.clip();
+    }
+    ctx.drawImage(backReady, backX, 0, cardW, cardH);
+    ctx.restore();
+  }
+}
+
+function getOffset(side) {
+  if (batchCards.length === 1 && batchCards[0].offset && batchCards[0].offset[side]) {
+    return batchCards[0].offset[side];
+  }
+  return { dx: 0, dy: 0 };
+}
+
+function getScale(side) {
+  if (batchCards.length === 1 && batchCards[0].scale && batchCards[0].scale[side]) {
+    return batchCards[0].scale[side];
+  }
+  return 1.0;
+}
+
+/* Â§AC.29 â€” drawFiltered now delegates to applyMaskedFilters (with
+   rounding) so the photo region gets its own filter pass. Per Â§AC.27
+   getOffset / getScale always return 0 / 1 (Position panel removed),
+   so the prior offset+scale code path is functionally a no-op and is
+   not preserved here â€” re-introducing it would require recomputing the
+   ROI in source-image space, which is out of scope for v1. */
+function drawFiltered(destCanvas, srcCanvas, w, h, cardType, side) {
+  applyMaskedFilters(destCanvas, srcCanvas, w, h, cardType, side, true);
+}
+
+function applyFilters() {
+  var cardSize = getCardCanvasSize(detectedType);
+  if (originalFront) {
+    drawFiltered(cardFrontCanvas, originalFront, cardSize.w, cardSize.h, detectedType, 'front');
+    frontImageData = document.createElement('canvas');
+    frontImageData.width = cardSize.w;
+    frontImageData.height = cardSize.h;
+    frontImageData.getContext('2d').drawImage(cardFrontCanvas, 0, 0);
+  } else {
+    frontImageData = null;
+  }
+  if (originalBack) {
+    drawFiltered(cardBackCanvas, originalBack, cardSize.w, cardSize.h, detectedType, 'back');
+    backImageData = document.createElement('canvas');
+    backImageData.width = cardSize.w;
+    backImageData.height = cardSize.h;
+    backImageData.getContext('2d').drawImage(cardBackCanvas, 0, 0);
+  } else {
+    backImageData = null;
+  }
+
+  /* Â§AC.11 â€” single landscape preview (back LEFT, front RIGHT). The
+     static #pairCanvas is only used in single-PDF mode; batch mode
+     rebuilds its own per-card pair canvases via showBatchPreview() /
+     applyBatchFilters(). */
+  if (pairCanvas && batchCards.length <= 1) {
+    compositePair(pairCanvas, frontImageData, backImageData, detectedType);
+  }
+
+  /* Also update batch cards if in batch mode */
+  if (batchCards.length > 1) applyBatchFilters();
+  else if (batchCards.length === 1) {
+    batchCards[0].front = frontImageData;
+    batchCards[0].back = backImageData;
+  }
+
+  /* Â§AC.29 â€” Always refresh the Photo Only preview canvases too. They
+     are display:none unless editScope === 'photo', so the work is cheap
+     when the user hasn't entered Photo Only mode (skip if hidden). */
+  repaintPhotoOnly();
+}
+
+function resetEditorSliders() {
+  slBright.value = 100; valBright.textContent = '100%';
+  slContrast.value = 100; valContrast.textContent = '100%';
+  slSat.value = 100; valSat.textContent = '100%';
+}
+
+/* â”€â”€ Session-only editor state â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+   Photo Adjust values now live only in memory for the current tab /
+   current upload session. They survive normal editing inside the same
+   PDF, but reset to defaults when the user starts a new PDF or refreshes
+   the tab. */
+function savePrefs() { /* session-only: globals already hold the live state */ }
+function loadPrefs() {
+  syncSlidersFromState();
+  refreshRoundedCornersUI();
+}
+
+/* Â§AC.29 â€” Bidirectional state â†” slider DOM sync. */
+function syncSlidersFromState() {
+  var src = (editScope === 'photo') ? photoFilters : cardFilters;
+  slBright.value = src.bright;     valBright.textContent = src.bright + '%';
+  slContrast.value = src.contrast; valContrast.textContent = src.contrast + '%';
+  slSat.value = src.sat;           valSat.textContent = src.sat + '%';
+}
+function syncSlidersToState() {
+  var dest = (editScope === 'photo') ? photoFilters : cardFilters;
+  dest.bright = parseInt(slBright.value, 10);
+  dest.contrast = parseInt(slContrast.value, 10);
+  dest.sat = parseInt(slSat.value, 10);
+}
+
+function resetPhotoAdjustState() {
+  editScope = 'whole';
+  cardFilters.bright = 100; cardFilters.contrast = 100; cardFilters.sat = 100;
+  photoFilters.bright = 100; photoFilters.contrast = 100; photoFilters.sat = 100;
+  syncSlidersFromState();
+}
+
+/* â”€â”€ Auto Enhance (Â§Y) â€” luminance histogram â†’ bright/contrast/sat â”€â”€
+   Â§AC.29 â€” Auto-enhance writes into the *currently active* scope (so
+   the operator can quickly tune the photo region in isolation). */
+function autoEnhance() {
+  var src = originalFront || (batchCards.length > 0 ? batchCards[0].originalFront : null);
+  if (!src) return;
+  var cardSize = getCardCanvasSize(getCurrentCardType());
+  var tmpC = document.createElement('canvas');
+  tmpC.width = cardSize.w; tmpC.height = cardSize.h;
+  var tCtx = tmpC.getContext('2d');
+  tCtx.drawImage(src, 0, 0, cardSize.w, cardSize.h);
+  var data = tCtx.getImageData(0, 0, cardSize.w, cardSize.h).data;
+  var sum = 0, count = 0;
+  for (var i = 0; i < data.length; i += 4) {
+    sum += 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
+    count++;
+  }
+  var avg = count > 0 ? sum / count : 128;
+  var bright = Math.round((128 / Math.max(avg, 1)) * 100);
+  bright = Math.max(70, Math.min(160, bright));
+  slBright.value = bright;   valBright.textContent = bright + '%';
+  slContrast.value = 115;    valContrast.textContent = '115%';
+  slSat.value = 110;         valSat.textContent = '110%';
+  syncSlidersToState();
+  applyFilters();
+  savePrefs();
+}
+
+function onSliderInput() {
+  valBright.textContent = slBright.value + '%';
+  valContrast.textContent = slContrast.value + '%';
+  valSat.textContent = slSat.value + '%';
+  syncSlidersToState();
+  applyFilters();
+  savePrefs();
+}
+
+slBright.addEventListener('input', onSliderInput);
+slContrast.addEventListener('input', onSliderInput);
+slSat.addEventListener('input', onSliderInput);
+slBright.addEventListener('change', onSliderInput);
+slContrast.addEventListener('change', onSliderInput);
+slSat.addEventListener('change', onSliderInput);
+btnAutoEnhance.addEventListener('click', autoEnhance);
+btnResetEdit.addEventListener('click', () => {
+  /* Â§AC.27 â€” Position panel removed; Reset only resets Photo Adjust sliders.
+     Â§AC.29 â€” Reset only the *currently active* scope; the other scope's
+     filters stay as the operator left them. */
+  resetEditorSliders();
+  syncSlidersToState();
+  applyFilters();
+  savePrefs();
+});
+
+/* â”€â”€ Â§AC.29 â€” Edit-scope toggle (Whole Card / Photo Only) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+   Switching scope is purely a UI rebind: each scope owns its own
+   filter stack, render pipeline always composes both, so no source
+   image manipulation is needed. We only:
+     1. Update editScope state
+     2. Repoint sliders to the new scope's stack
+     3. Toggle button is-active classes + aria-selected
+     4. Swap visibility of the pair canvas vs. the photo-only wrap
+     5. Repaint everything (cheap â€” same source canvases, just CSS
+        filter strings change)
+     6. Persist via savePrefs */
+const btnScopeWhole     = $('#btnScopeWhole');
+const btnScopePhoto     = $('#btnScopePhoto');
+const photoOnlyWrap     = $('#photoOnlyWrap');
+const photoOnlyFrontCanvas = $('#photoOnlyFrontCanvas');
+const photoOnlyBackCanvas  = $('#photoOnlyBackCanvas');
+const roundedOption = $('#roundedOption');
+
+function refreshRoundedCornersUI() {
+  var allowed = roundedCornersAllowed();
+  var effective = useRoundedCorners();
+  if (roundedOption) roundedOption.classList.toggle('idp-hidden', !allowed);
+  cardFrontCanvas.classList.toggle('rounded', effective);
+  cardBackCanvas.classList.toggle('rounded', effective);
+  batchCardsContainer.querySelectorAll('canvas[data-batch-idx]').forEach(function(c) {
+    c.classList.toggle('rounded', effective);
+  });
+}
+
+function refreshPhotoOnlyLayout() {
+  var t = getCurrentCardType();
+  var srcB = (batchCards[0] && batchCards[0].originalBack) || originalBack;
+  var showBack = !!(srcB && cardTypeHasPhotoROISide(t, 'back'));
+  photoOnlyBackCanvas.classList.toggle('idp-hidden', !showBack);
+  photoOnlyWrap.classList.toggle('single-side', !showBack);
+}
+
+function restorePrimaryPreviewSurface() {
+  if (!batchCardsContainer || !pairCanvas || !photoOnlyWrap) return;
+  batchCardsContainer.innerHTML = '';
+  var cards = document.createElement('div');
+  cards.className = 'idp-cards';
+  cards.appendChild(pairCanvas);
+  batchCardsContainer.appendChild(cards);
+  batchCardsContainer.appendChild(photoOnlyWrap);
+  configurePairCanvas(pairCanvas, null);
+  photoOnlyWrap.classList.add('idp-hidden');
+  photoOnlyFrontCanvas.classList.remove('idp-hidden');
+  photoOnlyBackCanvas.classList.remove('idp-hidden');
+}
+
+function resetEditorUIState() {
+  editScope = 'whole';
+  btnScopeWhole.classList.add('is-active');
+  btnScopeWhole.setAttribute('aria-selected', 'true');
+  btnScopePhoto.classList.remove('is-active');
+  btnScopePhoto.setAttribute('aria-selected', 'false');
+  var cards = batchCardsContainer.querySelector('.idp-cards');
+  if (cards) cards.classList.remove('idp-hidden');
+  photoOnlyWrap.classList.add('idp-hidden');
+  refreshPhotoOnlyLayout();
+  refreshRoundedCornersUI();
+}
+
+function setEditScope(scope) {
+  if (scope !== 'photo' && scope !== 'whole') return;
+  /* Guard: never enter photo scope if current card has no ROI. */
+  if (scope === 'photo') {
+    var t = (batchCards[0] && batchCards[0].type) || detectedType;
+    if (!cardTypeHasPhotoROI(t)) return;
+  }
+  editScope = scope;
+  syncSlidersFromState();
+  btnScopeWhole.classList.toggle('is-active', scope === 'whole');
+  btnScopeWhole.setAttribute('aria-selected', String(scope === 'whole'));
+  btnScopePhoto.classList.toggle('is-active', scope === 'photo');
+  btnScopePhoto.setAttribute('aria-selected', String(scope === 'photo'));
+  /* Swap previews: in photo scope, hide the standard pair preview and
+     show the cropped photo-only surface. The underlying card render
+     pipeline is unchanged either way â€” the operator just sees the
+     region they're currently editing. */
+  var cards = batchCardsContainer.querySelector('.idp-cards');
+  if (cards) cards.classList.toggle('idp-hidden', scope === 'photo');
+  photoOnlyWrap.classList.toggle('idp-hidden', scope !== 'photo');
+  refreshPhotoOnlyLayout();
+  refreshRoundedCornersUI();
+  applyFilters();
+  savePrefs();
+}
+btnScopeWhole.addEventListener('click', function(){ setEditScope('whole'); });
+btnScopePhoto.addEventListener('click', function(){ setEditScope('photo'); });
+
+/* Â§AC.29 â€” Enable / disable Photo Only button based on whether the
+   current card type has a photo ROI configured. Called after every
+   PDF load (single + batch) and after batch type detection completes. */
+function refreshScopeAvailability() {
+  var t = getCurrentCardType();
+  var hasROI = cardTypeHasPhotoROI(t);
+  btnScopePhoto.disabled = !hasROI;
+  btnScopePhoto.title = hasROI ? '' : 'Photo region detect nahi hua â€” Whole Card mode use karo.';
+  /* If user was in photo scope but new card has no ROI, gracefully
+     fall back to whole-card editing. */
+  if (!hasROI && editScope === 'photo') setEditScope('whole');
+  refreshPhotoOnlyLayout();
+  refreshRoundedCornersUI();
+}
+
+function setPhotoOnlyCanvasSize(canvas, roi) {
+  var targetH = 360;
+  var targetW = 360;
+  if (roi) {
+    var aspect = roi.w / Math.max(roi.h, 1);
+    targetW = Math.round(targetH * aspect);
+    targetW = Math.max(210, Math.min(360, targetW));
+  }
+  if (canvas.width !== targetW) canvas.width = targetW;
+  if (canvas.height !== targetH) canvas.height = targetH;
+}
+
+/* Â§AC.29 â€” Photo Only preview painter. Renders just the ROI of the
+   source canvas onto a white-padded surface. Called from applyFilters
+   for both sides; null-ROI sides show the centered placeholder text
+   per spec Â§AC.29 ("No photo on this side"). */
+function paintPhotoOnly(canvas, srcCanvas, cardType, side) {
+  if (!canvas) return;
+  /* Use ROI in the source canvas' own pixel space. The previous CR80-sized
+     lookup shifted PAN Photo Only crops because originalFront/originalBack
+     keep their raw crop dimensions until drawFiltered() scales them. */
+  var roi = srcCanvas ? getPhotoROIPixels(cardType, side, srcCanvas.width, srcCanvas.height) : null;
+  setPhotoOnlyCanvasSize(canvas, roi);
+  var ctx = canvas.getContext('2d');
+  var W = canvas.width, H = canvas.height;
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, W, H);
+  if (!roi) {
+    ctx.fillStyle = '#888';
+    ctx.font = '20px "DM Mono", monospace';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(srcCanvas ? 'No photo on this side' : 'â€”', W / 2, H / 2);
+    return;
+  }
+  /* Keep the frame very tight so Photo Only mostly shows the ID photo
+     itself, with only a small white breathing room around it. */
+  var pad = 0.04;
+  var availW = W * (1 - 2 * pad);
+  var availH = H * (1 - 2 * pad);
+  var srcAspect = roi.w / roi.h;
+  var dispW, dispH;
+  if (availW / availH > srcAspect) {
+    dispH = availH; dispW = dispH * srcAspect;
+  } else {
+    dispW = availW; dispH = dispW / srcAspect;
+  }
+  var dx = (W - dispW) / 2;
+  var dy = (H - dispH) / 2;
+  ctx.filter = getFilterString('photo');
+  ctx.drawImage(srcCanvas, roi.x, roi.y, roi.w, roi.h, dx, dy, dispW, dispH);
+  ctx.filter = 'none';
+}
+
+
+function repaintPhotoOnly() {
+  var srcF = null, srcB = null, type = null;
+  if (batchCards.length > 0) {
+    srcF = batchCards[0].originalFront;
+    srcB = batchCards[0].originalBack;
+    type = batchCards[0].type;
+  } else {
+    srcF = originalFront;
+    srcB = originalBack;
+    type = detectedType;
+  }
+  refreshPhotoOnlyLayout();
+  paintPhotoOnly(photoOnlyFrontCanvas, srcF, type, 'front');
+  paintPhotoOnly(photoOnlyBackCanvas,  srcB, type, 'back');
+}
+
+/* Â§AC.27 â€” Position panel removed: per-side Move (Â§W / PR #229) and
+   per-side Zoom (Â§X / PR #230) controls + helpers (currentPositionSide,
+   refreshMoveReadout, refreshZoomReadout, nudge, slZoom / zoomReadout
+   listeners, Front/Back radio change handler) all deleted. The
+   getOffset() / getScale() helpers above safely default to {dx:0,dy:0}
+   and 1.0 when card.offset / card.scale are absent, so drawFiltered()
+   keeps working unchanged for both single-card and batch modes. */
+
+chkRounded.addEventListener('change', () => {
+  roundedCorners = chkRounded.checked;
+  refreshRoundedCornersUI();
+  applyFilters();
+  savePrefs();
+});
+
+/* Â§AC.13 â€” chkCutMarks listener removed (option deleted from UI). */
+
+/* Â§AC.28 â€” Swap sides toggle (Â§AC.12 / btnSwapSides) click handler
+   removed. Preview now always renders front-LEFT / back-RIGHT. */
+
+
+function updateSheetMeta() {
+  var spec = getCardOutputSpec(getCurrentCardType());
+  sheetTitle.textContent = spec.sheetTitle;
+  sheetDesc.textContent = spec.sheetDesc;
+}
+
+/* â”€â”€ Button handlers â”€â”€ */
+btnSheet.addEventListener('click', () => {
+  updateSheetMeta();
+  buildSheet();
+  showStep(3);
+});
+
+btnBack.addEventListener('click', () => {
+  pdfArrayBuffer = null;
+  detectedType = null;
+  /* Â§AC.27 â€” Position panel removed; no panelPosition / moveReadout /
+     slZoom / zoomReadout state to reset on back-to-step-1. */
+  resetPhotoAdjustState();
+  frontImageData = null;
+  backImageData = null;
+  originalFront = null;
+  originalBack = null;
+  batchFiles = [];
+  batchCards = [];
+  pendingPasswordIdx = -1;
+  pdfInput.value = '';
+  fileQueue.classList.add('idp-hidden');
+  queueActions.classList.add('idp-hidden');
+  batchCount.classList.add('idp-hidden');
+  refreshCardMetaPills(null);
+  resetEditorUIState();
+  restorePrimaryPreviewSurface();
+  showStep(1);
+});
+
+btnBackPreview.addEventListener('click', () => showStep(2));
+
+btnDownload.addEventListener('click', async () => {
+  if (!(await idpConsumeSheetOrBlock())) return;
+  var suffix = '-a4-sheet.png';
+  var cards = getActiveCards();
+  var prefix = cards.length > 1 ? 'batch-' + cards.length + '-cards' : (detectedType || 'id-card');
+  var filename = prefix + suffix;
+  /* Â§AC.18: use canvas.toBlob (not toDataURL) â€” iOS Safari historically
+     caps toDataURL output at ~5 MB / 4096Â² px, and an A4 @ 300 DPI sheet
+     (2480Ã—3508 = 8.7 MP) silently returns a truncated / empty data URI
+     on phone, breaking the front card render. toBlob + URL.createObjectURL
+     is not subject to the same cap. Falls back to toDataURL only on very
+     old browsers that lack toBlob entirely. */
+  if (typeof a4Canvas.toBlob === 'function') {
+    a4Canvas.toBlob(function (blob) {
+      if (!blob) {
+        var fallback = document.createElement('a');
+        fallback.download = filename;
+        fallback.href = a4Canvas.toDataURL('image/png');
+        fallback.click();
+        return;
+      }
+      var url = URL.createObjectURL(blob);
+      var link = document.createElement('a');
+      link.download = filename;
+      link.href = url;
+      link.click();
+      setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+    }, 'image/png');
+  } else {
+    var legacyLink = document.createElement('a');
+    legacyLink.download = filename;
+    legacyLink.href = a4Canvas.toDataURL('image/png');
+    legacyLink.click();
+  }
+});
+
+/* Â§AC.22 â€” rasterise canvas to PNG <img> before printing.
+   Browser print engines reliably honour <img> at requested
+   print size, but several mobile / Chromium engines mis-handle
+   a 2480Ã—3508 px <canvas> bitmap (resampling at the print
+   engine's chosen DPI, ignoring CSS sizing â†’ cards small with
+   whitespace, sometimes 2 sheets). Print CSS hides the canvas
+   and shows #printImg at 210mmÃ—297mm. Falls back to a direct
+   window.print() on very old browsers that lack toBlob. */
+btnPrint.addEventListener('click', async () => {
+  if (!(await idpConsumeSheetOrBlock())) return;
+  var printImg = document.getElementById('printImg');
+  if (!printImg || typeof a4Canvas.toBlob !== 'function') {
+    window.print();
+    return;
+  }
+  a4Canvas.toBlob(function (blob) {
+    if (!blob) { window.print(); return; }
+    var url = URL.createObjectURL(blob);
+    printImg.onload = function () {
+      window.print();
+      setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+    };
+    printImg.onerror = function () {
+      URL.revokeObjectURL(url);
+      window.print();
+    };
+    printImg.src = url;
+  }, 'image/png');
+});
+
+/* â”€â”€ Init â”€â”€ */
+window.addEventListener('focus', refreshIdpPlanBanner);
+window.addEventListener('storage', refreshIdpPlanBanner);
+showStep(1);
+</script>
+</body>
+</html>
+
+
+
+

@@ -464,6 +464,53 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
 }
 .feature-card .fcta .arrow{transition:transform .2s;}
 .feature-card.live:hover .fcta .arrow{transform:translateX(3px);}
+.tools-carousel{
+  display:grid;
+  grid-template-columns:auto minmax(0,1fr) auto;
+  align-items:center;
+  gap:12px;
+}
+.tools-rail{
+  display:flex;
+  gap:14px;
+  overflow-x:auto;
+  overflow-y:hidden;
+  scroll-snap-type:x mandatory;
+  scrollbar-width:none;
+  padding:4px 2px 10px;
+}
+.tools-rail::-webkit-scrollbar{display:none;}
+.tools-rail > .feature-card{
+  flex:0 0 calc((100% - 28px)/3);
+  min-width:0;
+  scroll-snap-align:start;
+}
+.tools-arrow{
+  width:42px;
+  height:42px;
+  border-radius:999px;
+  border:1px solid rgba(240,165,0,.32);
+  background:var(--accent-dim);
+  color:var(--accent);
+  font-size:26px;
+  line-height:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  transition:transform .16s ease,border-color .16s ease,opacity .16s ease;
+}
+.tools-arrow:hover{transform:translateY(-1px);border-color:rgba(240,165,0,.62);}
+.tools-arrow:disabled{opacity:.35;cursor:default;transform:none;}
+@media(max-width:980px){
+  .tools-rail > .feature-card{flex-basis:min(420px,74%);}
+}
+@media(max-width:560px){
+  .tools-carousel{gap:8px;margin-inline:-8px;}
+  .tools-rail{gap:10px;padding-inline:0;}
+  .tools-rail > .feature-card{flex-basis:82%;}
+  .tools-arrow{width:36px;height:36px;font-size:22px;}
+}
 
 /* ── STATS / SOCIAL PROOF (P8) ──
    No fabricated testimonials / trusted-by logos — each stat maps to a
@@ -1143,37 +1190,6 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
     </div>
   </section>
 
-  <!-- P30: DENSITY BREAK — workflow showcase between hero and features.
-       Breaks the repeating "header + card-grid" rhythm with a horizontal
-       timeline layout. No card grid, surface2 bg for visual contrast. -->
-  <section class="section density-break reveal">
-    <div class="wrap">
-      <div class="section-head">
-        <span class="section-tag">The workflow</span>
-        <h2>Drop in a file. Get back a production-ready sheet.</h2>
-      </div>
-      <div class="db-timeline">
-        <div class="db-step">
-          <span class="db-num">1</span>
-          <h4>Drop a file</h4>
-          <p>Photo, selfie, or government PDF — all handled locally, nothing uploaded.</p>
-        </div>
-        <div class="db-line" aria-hidden="true"></div>
-        <div class="db-step">
-          <span class="db-num">2</span>
-          <h4>AI takes over</h4>
-          <p>Background removal, ID-card extraction, smart crops, and layout prep — all on-device, in seconds.</p>
-        </div>
-        <div class="db-line" aria-hidden="true"></div>
-        <div class="db-step">
-          <span class="db-num">3</span>
-          <h4>Download &amp; print</h4>
-          <p>300 DPI A4 sheet with cut guides — feed it to any printer, done.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- FEATURES -->
   <section class="section reveal" id="features">
     <div class="wrap">
@@ -1183,8 +1199,10 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
         <p>Studio Print is growing into a browser-native print platform, with shared plans, shared privacy, and purpose-built workflows instead of generic editors.</p>
       </div>
 
-      <div class="features-grid">
-        <a href="passport-photo.html" class="feature-card live primary">
+      <div class="tools-carousel" aria-label="Live Studio Print tools">
+        <button class="tools-arrow" type="button" data-tools-scroll="-1" aria-label="Previous tool">‹</button>
+        <div class="tools-rail" id="liveToolsRail">
+        <a href="passport-photo.html" class="feature-card live">
           <div class="ficon" aria-hidden="true"><svg class="ix" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-camera"/></svg></div>
           <h3>Passport Photo <span class="tag live">Live</span></h3>
           <p>Turn a selfie into a compliant passport-photo sheet with AI background removal, country presets, and a 300 DPI A4 export that is ready for shop counters and home printers.</p>
@@ -1205,6 +1223,8 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
           <span class="fcta">Open tool <span class="arrow" aria-hidden="true">→</span></span>
         </a>
 
+        </div>
+        <button class="tools-arrow" type="button" data-tools-scroll="1" aria-label="Next tool">›</button>
       </div>
     </div>
   </section>
@@ -1514,7 +1534,7 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
   <!-- CTA BAND -->
   <section class="cta-band reveal">
     <h2>Open the studio. Pick the workflow. Print.</h2>
-    <p>Passport Photo and ID Card Print are already live, and the same platform is expanding into the rest of the counter stack through 2026.</p>
+    <p>Passport Photo, ID Card Print, and Forms Hub are already live, and the same platform is expanding into the rest of the counter stack through 2026.</p>
     <div class="hero-actions" style="justify-content:center;">
       <a class="btn btn-primary" href="#features">Explore the tools <span class="arrow" aria-hidden="true">→</span></a>
       <a class="btn btn-ghost" href="about.html">Read the story</a>
@@ -1541,8 +1561,6 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
           <li><a href="passport-photo.html">Passport Photo</a></li>
           <li><a href="id-print.html">ID Card Print</a></li>
           <li><a href="forms.html">Forms Hub</a></li>
-          <li><a href="index.html#features">All Features</a></li>
-          <li><a href="index.html#pricing">Pricing</a></li>
         </ul>
       </div>
       <div class="footer-col">
@@ -1572,7 +1590,7 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
     </nav>
   </div>
   <div class="footer-bottom">
-    <div class="footer-copy">© 2026 Studio Print. All rights reserved. · Built with <a href="https://devin.ai" target="_blank" rel="noopener" class="devin-credit">Devin AI</a></div>
+    <div class="footer-copy">Copyright 2026 Studio Print. All rights reserved.</div>
 
   </div>
 </footer>
@@ -1580,6 +1598,32 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
 <script src="assets/nav.js" defer></script>
 <script src="assets/deferred-ui.js" defer></script>
 <script src="assets/reveal.js" defer></script>
+<script>
+(function(){
+  var rail=document.getElementById('liveToolsRail');
+  if(!rail)return;
+  var buttons=document.querySelectorAll('[data-tools-scroll]');
+  function step(){
+    var card=rail.querySelector('.feature-card');
+    return card?card.getBoundingClientRect().width+14:rail.clientWidth*.8;
+  }
+  function update(){
+    var max=Math.max(0,rail.scrollWidth-rail.clientWidth-2);
+    buttons.forEach(function(btn){
+      var dir=Number(btn.getAttribute('data-tools-scroll'));
+      btn.disabled=dir<0?rail.scrollLeft<=2:rail.scrollLeft>=max;
+    });
+  }
+  buttons.forEach(function(btn){
+    btn.addEventListener('click',function(){
+      rail.scrollBy({left:Number(btn.getAttribute('data-tools-scroll'))*step(),behavior:'smooth'});
+    });
+  });
+  rail.addEventListener('scroll',function(){requestAnimationFrame(update)},{passive:true});
+  window.addEventListener('resize',update);
+  update();
+})();
+</script>
 <script>
 (function(){
   var loaded = false;
