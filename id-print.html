@@ -2568,7 +2568,7 @@ function refreshScopeAvailability() {
   var t = getCurrentCardType();
   var hasROI = cardTypeHasPhotoROI(t);
   btnScopePhoto.disabled = !hasROI;
-  btnScopePhoto.title = hasROI ? '' : 'Photo region detect nahi hua — Whole Card mode use karo.';
+  btnScopePhoto.title = hasROI ? '' : 'Photo region is not available for this card. Use Whole Card mode.';
   /* If user was in photo scope but new card has no ROI, gracefully
      fall back to whole-card editing. */
   if (!hasROI && editScope === 'photo') setEditScope('whole');

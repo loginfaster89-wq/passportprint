@@ -1,4 +1,4 @@
-/* Studio Print service worker — P28.
+/* Studio Print service worker — P29.
  *
  * Strategy
  *   - Navigation (HTML) requests: network-first, fall back to cache, then to
@@ -15,8 +15,8 @@
  * the activate step can evict the old cache.
  */
 
-const CACHE_VERSION = 'studioprint-v28';
-const RUNTIME_CACHE = 'studioprint-runtime-v27';
+const CACHE_VERSION = 'studioprint-v29';
+const RUNTIME_CACHE = 'studioprint-runtime-v29';
 
 // Minimum shell we want available offline after the first visit. The SW also
 // opportunistically caches other same-origin GETs it sees at runtime, so this
@@ -50,38 +50,6 @@ const PRECACHE_URLS = [
   '/assets/icon-512.png',
   '/assets/icon-maskable-512.png',
   '/assets/forms/manifest.json',
-  '/assets/forms/ration-card-rajasthan.pdf',
-  '/assets/forms/previews/ration-card-rajasthan.png',
-  '/assets/forms/nfsa-rajasthan.pdf',
-  '/assets/forms/previews/nfsa-rajasthan.png',
-  '/assets/forms/income-certificate-format-rajasthan.pdf',
-  '/assets/forms/previews/income-certificate-format-rajasthan.png',
-  '/assets/forms/marriage-registration-rajasthan.pdf',
-  '/assets/forms/previews/marriage-registration-rajasthan.png',
-  '/assets/forms/character-certificate-rajasthan.pdf',
-  '/assets/forms/previews/character-certificate-rajasthan.png',
-  '/assets/forms/shop-act-form-1-rajasthan.pdf',
-  '/assets/forms/previews/shop-act-form-1-rajasthan.png',
-  '/assets/forms/labour-physical-verification-rajasthan.pdf',
-  '/assets/forms/previews/labour-physical-verification-rajasthan.png',
-  '/assets/forms/aadhaar-form-1.pdf',
-  '/assets/forms/previews/aadhaar-form-1.png',
-  '/assets/forms/pan-49a.pdf',
-  '/assets/forms/previews/pan-49a.png',
-  '/assets/forms/pan-49aa.pdf',
-  '/assets/forms/previews/pan-49aa.png',
-  '/assets/forms/voter-form-6.pdf',
-  '/assets/forms/previews/voter-form-6.png',
-  '/assets/forms/voter-form-6b.pdf',
-  '/assets/forms/previews/voter-form-6b.png',
-  '/assets/forms/voter-form-7.pdf',
-  '/assets/forms/previews/voter-form-7.png',
-  '/assets/forms/voter-form-8.pdf',
-  '/assets/forms/previews/voter-form-8.png',
-  '/assets/forms/epfo-composite-claim-aadhaar.pdf',
-  '/assets/forms/previews/epfo-composite-claim-aadhaar.png',
-  '/assets/forms/epfo-form-11.pdf',
-  '/assets/forms/previews/epfo-form-11.png',
 ];
 
 self.addEventListener('install', (event) => {

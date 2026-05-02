@@ -2230,11 +2230,10 @@ const LANG = {
     upi_done_q:'Has your payment completed?',
   }
 };
-LANG.hi = LANG.en;;
-
 let currentLang='en';
 
 function setLang(lang){
+  lang='en';
   currentLang=lang;
   // Update ALL lang buttons (main header + tutorial header)
   document.querySelectorAll('.lang-btn').forEach(b=>{
@@ -2263,10 +2262,7 @@ function setLang(lang){
 }
 
 function loadLang(){
-  try{
-    const saved=localStorage.getItem('pps_lang')||'en';
-    setLang(saved);
-  }catch(e){ setLang('en'); }
+  setLang('en');
 }
 
 // i18n helper — returns string for current language, with optional {placeholder} substitution
@@ -4115,12 +4111,16 @@ function drawChecker(ctx,x,y,w,h){
 function initUploadParticles(){
   const cvs = document.getElementById('uploadBgCanvas');
   if(!cvs) return;
+  if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   const ctx = cvs.getContext('2d');
-  let W, H, particles=[];
+  let W, H, particles=[], rafId=0, lastDraw=0;
 
   function resize(){
     W = cvs.offsetWidth; H = cvs.offsetHeight;
-    cvs.width = W; cvs.height = H;
+    const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+    cvs.width = Math.max(1, Math.round(W * dpr));
+    cvs.height = Math.max(1, Math.round(H * dpr));
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
 
   function mkParticle(){
@@ -4136,10 +4136,14 @@ function initUploadParticles(){
 
   function init(){
     resize();
-    particles = Array.from({length:80}, mkParticle);
+    const mobile = window.matchMedia && window.matchMedia('(max-width: 768px)').matches;
+    particles = Array.from({length: mobile ? 24 : 42}, mkParticle);
   }
 
-  function draw(){
+  function draw(now){
+    rafId = requestAnimationFrame(draw);
+    if(document.hidden || (now - lastDraw) < 66) return;
+    lastDraw = now;
     ctx.clearRect(0,0,W,H);
     // Draw particles
     particles.forEach(p=>{
@@ -4152,33 +4156,36 @@ function initUploadParticles(){
       if(p.y<0) p.y=H; if(p.y>H) p.y=0;
     });
     // Draw connecting lines
+    const maxDist = window.matchMedia && window.matchMedia('(max-width: 768px)').matches ? 90 : 110;
     for(let i=0;i<particles.length;i++){
       for(let j=i+1;j<particles.length;j++){
         const dx=particles[i].x-particles[j].x;
         const dy=particles[i].y-particles[j].y;
         const dist=Math.sqrt(dx*dx+dy*dy);
-        if(dist<120){
+        if(dist<maxDist){
           ctx.beginPath();
           ctx.moveTo(particles[i].x,particles[i].y);
           ctx.lineTo(particles[j].x,particles[j].y);
-          ctx.strokeStyle=`rgba(240,165,0,${0.12*(1-dist/120)})`;
+          ctx.strokeStyle=`rgba(240,165,0,${0.10*(1-dist/maxDist)})`;
           ctx.lineWidth=0.6;
           ctx.stroke();
         }
       }
     }
-    requestAnimationFrame(draw);
   }
 
   init();
-  draw();
-  window.addEventListener('resize', ()=>{ resize(); particles=Array.from({length:80},mkParticle); });
+  rafId = requestAnimationFrame(draw);
+  window.addEventListener('resize', ()=>{
+    cancelAnimationFrame(rafId);
+    init();
+    rafId = requestAnimationFrame(draw);
+  }, { passive:true });
 }
 initUploadParticles();
 
 // Add or_drop to LANG
 if(typeof LANG !== 'undefined'){
-  if(LANG.hi) LANG.hi.or_drop = 'or drop your photo here';
   if(LANG.en) LANG.en.or_drop = 'or drop your photo here';
 }
 
