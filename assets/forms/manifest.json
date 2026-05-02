@@ -1,0 +1,162 @@
+[
+  {
+    "slug": "ration-card-rajasthan",
+    "title": "Ration Card",
+    "category": "Rajasthan",
+    "source_url": "https://food.rajasthan.gov.in/state_D/Files/2f4f659a-8fb7-47b9-9525-d64d87755174.pdf",
+    "pages": 6,
+    "local": "assets/forms/ration-card-rajasthan.pdf",
+    "preview": "assets/forms/previews/ration-card-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "nfsa-rajasthan",
+    "title": "NFSA Form",
+    "category": "Rajasthan",
+    "source_url": "https://food.rajasthan.gov.in/Docs/NFSA_Application_Form.pdf",
+    "pages": 6,
+    "local": "assets/forms/nfsa-rajasthan.pdf",
+    "preview": "assets/forms/previews/nfsa-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "income-certificate-format-rajasthan",
+    "title": "Income Format",
+    "category": "Rajasthan",
+    "source_url": "https://scholarship.rajasthan.gov.in/images/IncomeCertiformate201718.pdf",
+    "pages": 1,
+    "local": "assets/forms/income-certificate-format-rajasthan.pdf",
+    "preview": "assets/forms/previews/income-certificate-format-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "marriage-registration-rajasthan",
+    "title": "Marriage Form",
+    "category": "Rajasthan",
+    "source_url": "https://pehchan.rajasthan.gov.in/pehchan5/Download/MarriageApplication.pdf",
+    "pages": 2,
+    "local": "assets/forms/marriage-registration-rajasthan.pdf",
+    "preview": "assets/forms/previews/marriage-registration-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "character-certificate-rajasthan",
+    "title": "Character Form",
+    "category": "Rajasthan",
+    "source_url": "https://doitc.rajasthan.gov.in/Files/DOITCWEB/writereaddata/FilesManagement/PDF/11122024175829PM01%20Character%20Certificate.pdf",
+    "pages": 1,
+    "local": "assets/forms/character-certificate-rajasthan.pdf",
+    "preview": "assets/forms/previews/character-certificate-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "shop-act-form-1-rajasthan",
+    "title": "Shop Act Form",
+    "category": "Rajasthan",
+    "source_url": "https://labour.rajasthan.gov.in/Documents/Shop_From_1.pdf",
+    "pages": 1,
+    "local": "assets/forms/shop-act-form-1-rajasthan.pdf",
+    "preview": "assets/forms/previews/shop-act-form-1-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "labour-physical-verification-rajasthan",
+    "title": "Labour Verification",
+    "category": "Rajasthan",
+    "source_url": "https://labour.rajasthan.gov.in/Documents/Physical_Verification_Document.pdf",
+    "pages": 1,
+    "local": "assets/forms/labour-physical-verification-rajasthan.pdf",
+    "preview": "assets/forms/previews/labour-physical-verification-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "aadhaar-form-1",
+    "title": "Aadhaar Form",
+    "category": "Aadhaar",
+    "source_url": "https://uidai.gov.in/images/Form_1_Eng.pdf",
+    "pages": 1,
+    "local": "assets/forms/aadhaar-form-1.pdf",
+    "preview": "assets/forms/previews/aadhaar-form-1.png",
+    "clean_source": true
+  },
+  {
+    "slug": "pan-49a",
+    "title": "PAN 49A",
+    "category": "PAN",
+    "source_url": "https://www.incometaxindia.gov.in/documents/d/guest/103120000000007917-pdf-2",
+    "pages": 2,
+    "local": "assets/forms/pan-49a.pdf",
+    "preview": "assets/forms/previews/pan-49a.png",
+    "clean_source": true
+  },
+  {
+    "slug": "pan-49aa",
+    "title": "PAN 49AA",
+    "category": "PAN",
+    "source_url": "https://www.incometaxindia.gov.in/documents/d/guest/103120000000007918-pdf-2",
+    "pages": 2,
+    "local": "assets/forms/pan-49aa.pdf",
+    "preview": "assets/forms/previews/pan-49aa.png",
+    "clean_source": true
+  },
+  {
+    "slug": "voter-form-6",
+    "title": "Voter Form 6",
+    "category": "Voter",
+    "source_url": "https://voters.eci.gov.in/formspdf/Form_6_English.pdf",
+    "pages": 2,
+    "local": "assets/forms/voter-form-6.pdf",
+    "preview": "assets/forms/previews/voter-form-6.png",
+    "clean_source": true
+  },
+  {
+    "slug": "voter-form-6b",
+    "title": "Voter Form 6B",
+    "category": "Voter",
+    "source_url": "https://voters.eci.gov.in/formspdf/Form_6B_English.pdf",
+    "pages": 1,
+    "local": "assets/forms/voter-form-6b.pdf",
+    "preview": "assets/forms/previews/voter-form-6b.png",
+    "clean_source": true
+  },
+  {
+    "slug": "voter-form-7",
+    "title": "Voter Form 7",
+    "category": "Voter",
+    "source_url": "https://voters.eci.gov.in/formspdf/Form_7_English.pdf",
+    "pages": 1,
+    "local": "assets/forms/voter-form-7.pdf",
+    "preview": "assets/forms/previews/voter-form-7.png",
+    "clean_source": true
+  },
+  {
+    "slug": "voter-form-8",
+    "title": "Voter Form 8",
+    "category": "Voter",
+    "source_url": "https://voters.eci.gov.in/formspdf/Form_8_English.pdf",
+    "pages": 2,
+    "local": "assets/forms/voter-form-8.pdf",
+    "preview": "assets/forms/previews/voter-form-8.png",
+    "clean_source": true
+  },
+  {
+    "slug": "epfo-composite-claim-aadhaar",
+    "title": "EPFO Claim Form",
+    "category": "Employment",
+    "source_url": "https://www.epfindia.gov.in/site_docs/PDFs/Downloads_PDFs/Form_CCF_aadhar.pdf",
+    "pages": 1,
+    "local": "assets/forms/epfo-composite-claim-aadhaar.pdf",
+    "preview": "assets/forms/previews/epfo-composite-claim-aadhaar.png",
+    "clean_source": true
+  },
+  {
+    "slug": "epfo-form-11",
+    "title": "EPFO Form 11",
+    "category": "Employment",
+    "source_url": "https://www.epfindia.gov.in/site_docs/PDFs/Downloads_PDFs/Form11Revised.pdf",
+    "pages": 1,
+    "local": "assets/forms/epfo-form-11.pdf",
+    "preview": "assets/forms/previews/epfo-form-11.png",
+    "clean_source": true
+  }
+]
