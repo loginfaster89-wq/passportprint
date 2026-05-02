@@ -40,6 +40,16 @@
 </head>
 <body>
 
+
+<!-- SVG icon sprite used by the shared feature dropdown. -->
+<svg width="0" height="0" style="position:absolute;overflow:hidden" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="i-camera" viewBox="0 0 24 24"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3Z"/><circle cx="12" cy="13" r="3"/></symbol>
+    <symbol id="i-idcard" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><circle cx="8" cy="11" r="2"/><path d="M5 17a3 3 0 0 1 6 0"/><path d="M14 9h5"/><path d="M14 13h4"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></symbol>
+  </defs>
+</svg>
+
 <header class="legal-header has-cta">
   <a href="index.html" class="logo">Studio <em>Print</em></a>
   <nav id="primaryNav">
@@ -48,15 +58,18 @@
       <button class="nav-dd-btn" aria-haspopup="true" aria-expanded="false">Features <span class="caret" aria-hidden="true">&#9662;</span></button>
       <div class="dropdown-panel" role="menu">
         <a href="passport-photo.html" role="menuitem">
-          <span class="dd-meta"><strong>Passport Photo</strong><small>Portrait workflow - A4 export</small></span>
+          <span class="dd-icon" aria-hidden="true"><svg class="ix" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-camera"/></svg></span>
+          <span class="dd-meta"><strong>Passport Photo</strong><small>AI portrait workflow &middot; A4 export</small></span>
           <span class="dd-tag live">Live</span>
         </a>
         <a href="id-print.html" role="menuitem">
-          <span class="dd-meta"><strong>ID Card Print</strong><small>PDF auto-detect - CR80 - A4 print</small></span>
+          <span class="dd-icon" aria-hidden="true"><svg class="ix" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-idcard"/></svg></span>
+          <span class="dd-meta"><strong>ID Card Print</strong><small>PDF auto-detect &middot; CR80 &middot; A4 print</small></span>
           <span class="dd-tag live">Live</span>
         </a>
         <a href="forms.html" role="menuitem">
-          <span class="dd-meta"><strong>Forms Hub</strong><small>Search forms - print/download</small></span>
+          <span class="dd-icon" aria-hidden="true"><svg class="ix" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-search"/></svg></span>
+          <span class="dd-meta"><strong>Forms Hub</strong><small>Search &middot; preview &middot; print forms</small></span>
           <span class="dd-tag live">Live</span>
         </a>
       </div>
