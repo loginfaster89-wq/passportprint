@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
-<title>Passport Photo Workflow â€” Studio Print</title>
-<meta property="og:title" content="Passport Photo â€” Studio Print">
+<title>Passport Photo Workflow — Studio Print</title>
+<meta property="og:title" content="Passport Photo — Studio Print">
 <meta property="og:description" content="Studio Print's passport-photo workflow: AI background removal, auto-crop, country presets, and 300 DPI A4 export in your browser.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://studioprint.pages.dev/passport-photo.html">
@@ -12,7 +12,7 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:type" content="image/png">
-<meta property="og:image:alt" content="Studio Print â€” browser-native print workspace for passport photos, ID cards, and A4 print workflows.">
+<meta property="og:image:alt" content="Studio Print — browser-native print workspace for passport photos, ID cards, and A4 print workflows.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://studioprint.pages.dev/assets/og-image.png">
 <meta name="robots" content="max-image-preview:large">
@@ -47,7 +47,7 @@ html{font-size:14px;}
 body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;height:100dvh;overflow:hidden;display:flex;flex-direction:column;}
 html{background:var(--bg);}
 
-/* â”€â”€ HEADER â”€â”€ */
+/* ── HEADER ── */
 header{background:var(--surface);border-bottom:1px solid var(--border);padding:0 16px;height:52px;display:flex;align-items:center;gap:12px;flex-shrink:0;}
 .logo{font-family:'Syne',sans-serif;font-weight:800;font-size:19px;letter-spacing:-0.5px;white-space:nowrap;}
 .logo em{color:var(--accent);font-style:normal;}
@@ -56,7 +56,7 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:0
 .badge-green{border-color:rgba(74,222,128,.3);color:var(--success);background:rgba(74,222,128,.06);}
 .badge-amber{border-color:rgba(240,165,0,.3);color:var(--accent);background:var(--accent-dim);}
 
-/* â”€â”€ LEGAL FOOTER (shared with rest of site â€” matches assets/legal.css) â”€â”€ */
+/* ── LEGAL FOOTER (shared with rest of site — matches assets/legal.css) ── */
 footer.legal-footer{
   margin-top:auto;border-top:1px solid var(--border);
   background:var(--surface);padding:14px 16px;text-align:center;
@@ -73,7 +73,7 @@ footer.legal-footer .links a:hover{color:var(--accent);}
   footer.legal-footer{padding:10px 10px;font-size:11px;}
 }
 
-/* â”€â”€ STEPS BAR â”€â”€ */
+/* ── STEPS BAR ── */
 .steps{background:var(--surface);border-bottom:1px solid var(--border);display:flex;flex-shrink:0;overflow-x:auto;position:relative;}
 .steps::-webkit-scrollbar{display:none;}
 .steps-progress{position:absolute;bottom:0;left:0;height:2px;background:var(--accent);width:0;transition:width 300ms ease;z-index:1;border-radius:0 1px 1px 0;}
@@ -81,15 +81,15 @@ footer.legal-footer .links a:hover{color:var(--accent);}
 .step.active{color:var(--accent);background:var(--accent-glow);}
 .step.done{color:var(--success);}
 .step-num{width:20px;height:20px;border-radius:50%;border:1.5px solid currentColor;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;}
-.step.done .step-num::after{content:'âœ“';}
+.step.done .step-num::after{content:'✓';}
 
-/* â”€â”€ MAIN LAYOUT â”€â”€ */
+/* ── MAIN LAYOUT ── */
 .main{display:grid;grid-template-columns:1fr var(--sidebar-w);flex:1;overflow:hidden;min-height:0;}
 
-/* â”€â”€ CANVAS AREA â”€â”€ */
+/* ── CANVAS AREA ── */
 .canvas-area{background:#080808;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;min-height:0;}
 
-/* â”€â”€ UPLOAD ZONE â”€â”€ */
+/* ── UPLOAD ZONE ── */
 .upload-zone{border:2px dashed var(--border);border-radius:14px;padding:40px 32px;text-align:center;transition:.2s;position:relative;max-width:440px;width:90%;}
 .upload-zone:hover,.upload-zone.drag-over{border-color:var(--accent);background:var(--accent-glow);}
 /* File input only covers the inner card, not the whole canvas area */
@@ -99,12 +99,12 @@ footer.legal-footer .links a:hover{color:var(--accent);}
 .upload-title{font-family:'Syne',sans-serif;font-weight:700;font-size:22px;margin-bottom:8px;}
 .upload-sub{color:var(--muted);font-size:13px;line-height:1.7;}
 
-/* â”€â”€ SIDEBAR â”€â”€ */
+/* ── SIDEBAR ── */
 .sidebar{background:var(--surface);border-left:1px solid var(--border);overflow-y:auto;display:flex;flex-direction:column;min-height:0;}
 .sb-section{padding:15px;border-bottom:1px solid var(--border);}
 .sb-title{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);margin-bottom:11px;}
 
-/* â”€â”€ BUTTONS â”€â”€ */
+/* ── BUTTONS ── */
 .btn{width:100%;padding:10px 15px;border:none;border-radius:7px;font-family:'DM Mono',monospace;font-size:13px;font-weight:500;cursor:pointer;transition:.15s;display:flex;align-items:center;justify-content:center;gap:7px;}
 .btn+.btn{margin-top:7px;}
 .btn-primary{background:var(--accent);color:#000;}
@@ -117,20 +117,20 @@ footer.legal-footer .links a:hover{color:var(--accent);}
 .btn-danger:hover:not(:disabled){background:rgba(248,113,113,.25);}
 .btn:disabled{opacity:.35;cursor:not-allowed;transform:none!important;}
 
-/* â”€â”€ PRESETS â”€â”€ */
+/* ── PRESETS ── */
 .preset-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px;}
 .preset-btn{padding:10px 6px;background:var(--surface2);border:1px solid var(--border);border-radius:7px;cursor:pointer;font-family:'DM Mono',monospace;font-size:12px;color:var(--text);text-align:center;line-height:1.5;transition:.15s;}
 .preset-btn:hover,.preset-btn.active{border-color:var(--accent);color:var(--accent);background:var(--accent-dim);}
 .preset-size{font-size:11px;color:var(--muted);}
 
-/* â”€â”€ SLIDERS â”€â”€ */
+/* ── SLIDERS ── */
 .slider-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
 .slider-label{font-size:12px;color:var(--muted);width:76px;flex-shrink:0;}
 .slider-val{font-size:12px;color:var(--accent);width:30px;text-align:right;flex-shrink:0;}
 input[type=range]{flex:1;appearance:none;height:3px;background:var(--border);border-radius:2px;outline:none;}
 input[type=range]::-webkit-slider-thumb{appearance:none;width:14px;height:14px;border-radius:50%;background:var(--accent);cursor:pointer;box-shadow:0 0 6px rgba(240,165,0,.4);}
 
-/* â”€â”€ COLOR SWATCHES â”€â”€ */
+/* ── COLOR SWATCHES ── */
 .swatches{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;}
 .swatch{width:30px;height:30px;border-radius:6px;cursor:pointer;border:2px solid transparent;transition:.15s;flex-shrink:0;}
 .swatch:hover{transform:scale(1.08);}
@@ -139,30 +139,30 @@ input[type=range]::-webkit-slider-thumb{appearance:none;width:14px;height:14px;b
 .swatch-custom{background:var(--surface3);border:1px solid var(--border)!important;display:flex;align-items:center;justify-content:center;font-size:13px;position:relative;overflow:hidden;}
 .swatch-custom input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
 
-/* â”€â”€ AI DOWNLOAD BAR (top-of-page) â”€â”€ */
+/* ── AI DOWNLOAD BAR (top-of-page) ── */
 .ai-dl-bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--accent),#ffc03a);width:0;z-index:99999;transition:width .4s ease;pointer-events:none;opacity:0;}
 .ai-dl-bar.active{opacity:1;}
 
-/* â”€â”€ PROGRESS â”€â”€ */
+/* ── PROGRESS ── */
 .progress-wrap{background:var(--surface3);border-radius:3px;height:5px;overflow:hidden;margin:8px 0;}
 .progress-bar{height:100%;background:linear-gradient(90deg,var(--accent),#ffc03a);border-radius:3px;transition:width .4s ease;width:0%;}
 .status-text{font-size:12px;color:var(--muted);text-align:center;margin-bottom:4px;}
 
-/* â”€â”€ INFO BOX â”€â”€ */
+/* ── INFO BOX ── */
 .info-box{background:var(--accent-dim);border:1px solid rgba(240,165,0,.15);border-radius:6px;padding:10px 12px;font-size:12px;color:var(--muted);line-height:1.75;}
 .info-box strong{color:var(--accent);}
 .info-box.blue{background:rgba(96,165,250,.08);border-color:rgba(96,165,250,.2);}
 .info-box.blue strong{color:var(--info);}
 
-/* â”€â”€ COUNT SELECTORS â”€â”€ */
+/* ── COUNT SELECTORS ── */
 .count-row{display:flex;gap:5px;margin-bottom:8px;flex-wrap:wrap;}
 .count-btn{flex:1;min-width:28px;padding:8px 3px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;cursor:pointer;font-family:'DM Mono',monospace;font-size:12px;color:var(--muted);text-align:center;transition:.15s;}
 .count-btn:hover,.count-btn.active{border-color:var(--accent);color:var(--accent);background:var(--accent-dim);}
 
-/* â”€â”€ CANVAS HINTS â”€â”€ */
+/* ── CANVAS HINTS ── */
 .canvas-hint{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.7);color:var(--muted);font-size:12px;padding:6px 14px;border-radius:20px;backdrop-filter:blur(8px);white-space:nowrap;pointer-events:none;}
 
-/* â”€â”€ COMPARISON SLIDER â”€â”€ */
+/* ── COMPARISON SLIDER ── */
 #comparisonWrap{
   position:relative;width:100%;height:100%;
   display:flex;align-items:center;justify-content:center;
@@ -177,7 +177,7 @@ input[type=range]::-webkit-slider-thumb{appearance:none;width:14px;height:14px;b
   overflow:hidden;
   box-shadow:0 0 40px rgba(0,0,0,.7);
   /* Stop the browser from panning/scrolling the page while the user drags
-     the comparison slider on touch devices â€” the drag gesture must stay on
+     the comparison slider on touch devices — the drag gesture must stay on
      the slider, not move the underlying photo. */
   touch-action:none;
   -ms-touch-action:none;
@@ -185,8 +185,8 @@ input[type=range]::-webkit-slider-thumb{appearance:none;width:14px;height:14px;b
 /* Both canvases are stacked at the exact same (0,0) inside the container.
    The bottom canvas (BG-removed result) fills the container; the top canvas
    (original photo) is clipped with clip-path so only the left portion up to
-   the slider shows. Using clip-path on the element itself â€” instead of
-   wrapping it in a <div> whose width we animate â€” keeps the image pinned to
+   the slider shows. Using clip-path on the element itself — instead of
+   wrapping it in a <div> whose width we animate — keeps the image pinned to
    the same pixel coordinates regardless of slider position, so the photo
    doesn't visually shift while dragging. */
 #compResultCanvas,
@@ -249,7 +249,7 @@ input[type=range]::-webkit-slider-thumb{appearance:none;width:14px;height:14px;b
 .comp-label-left{left:12px;}
 .comp-label-right{right:12px;}
 
-/* â”€â”€ REFINE EDGES (manual brush) â”€â”€ */
+/* ── REFINE EDGES (manual brush) ── */
 #refineWrap{
   position:relative;width:100%;height:100%;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
@@ -313,7 +313,7 @@ input[type=range]::-webkit-slider-thumb{appearance:none;width:14px;height:14px;b
 .refine-act-btn.danger:hover:not(:disabled){background:rgba(248,113,113,.2);}
 .refine-act-btn:disabled{opacity:.4;cursor:not-allowed;}
 .refine-back-btn,.refine-top-undo-btn{
-  /* Hidden on desktop â€” the toolbar's Back/Undo buttons already cover this.
+  /* Hidden on desktop — the toolbar's Back/Undo buttons already cover this.
      Shown only on the mobile fullscreen overlay where we want them anchored
      to the top corners so they're always reachable with a thumb. */
   display:none;
@@ -336,15 +336,15 @@ input[type=range]::-webkit-slider-thumb{appearance:none;width:14px;height:14px;b
    toolbar at the bottom.
 
    Layout (mobile):
-     â”Œâ”€[Back]â”€â”€â”€â”€â”€â”€â”€â”€hintâ”€â”€â”€â”€â”€â”€â”€â”€[Undo]â”€â”  top floating bar
-     â”‚                                    â”‚
-     â”‚            canvas                  â”‚  flex:1
-     â”‚                                    â”‚
-     â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¤
-     â”‚ [ðŸ©¹ Erase]   [â†© Restore]           â”‚  toolbar (grid)
-     â”‚ Size  â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â—â”€â”€â”€â”€â”€â”€â”€â”€ 32      â”‚
-     â”‚ [Reset]                [âœ“ Save]    â”‚
-     â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+     ┌─[Back]────────hint────────[Undo]─┐  top floating bar
+     │                                    │
+     │            canvas                  │  flex:1
+     │                                    │
+     ├────────────────────────────────────┤
+     │ [🩹 Erase]   [↩ Restore]           │  toolbar (grid)
+     │ Size  ───────────●──────── 32      │
+     │ [Reset]                [✓ Save]    │
+     └────────────────────────────────────┘
 */
 @media (max-width:768px){
   #refineWrap:not(.hidden){
@@ -371,7 +371,7 @@ input[type=range]::-webkit-slider-thumb{appearance:none;width:14px;height:14px;b
   }
   #refineWrap .refine-toolbar{
     flex:0 0 auto;width:100%;max-width:100%;
-    /* Stack three rows vertically: modes â†’ size â†’ actions.
+    /* Stack three rows vertically: modes → size → actions.
        Everything is always visible within the overlay. */
     display:flex;flex-direction:column;flex-wrap:nowrap;align-items:stretch;
     gap:8px;padding:10px;
@@ -402,7 +402,7 @@ input[type=range]::-webkit-slider-thumb{appearance:none;width:14px;height:14px;b
   /* Escape the global canvas safety rule so our JS-sized canvas isn't
      force-shrunk by the max-width/height:auto rule on all <canvas>. */
   #refineWrap #refineDisplayCanvas{max-width:none;height:auto;}
-  /* Floating Back (top-left) + Undo (top-right) â€” always visible even when
+  /* Floating Back (top-left) + Undo (top-right) — always visible even when
      the image fills most of the screen. */
   #refineWrap .refine-back-btn,
   #refineWrap .refine-top-undo-btn{
@@ -458,11 +458,11 @@ canvas{display:block;}
 .tips{font-size:12px;color:var(--muted);line-height:2.1;}
 .tips span{display:block;}
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   DESIGN UPGRADE â€” ANIMATIONS & POLISH
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+/* ════════════════════════════════════
+   DESIGN UPGRADE — ANIMATIONS & POLISH
+════════════════════════════════════ */
 
-/* â”€â”€ Canvas area dot-grid background â”€â”€ */
+/* ── Canvas area dot-grid background ── */
 .canvas-area{
   background:
     radial-gradient(circle, rgba(240,165,0,0.04) 1px, transparent 1px),
@@ -470,14 +470,14 @@ canvas{display:block;}
   background-size: 28px 28px;
 }
 
-/* â”€â”€ Step fade-in transition â”€â”€ */
+/* ── Step fade-in transition ── */
 @keyframes stepFadeIn {
   from { opacity:0; transform:translateY(8px); }
   to   { opacity:1; transform:translateY(0);   }
 }
 .step-fade { animation: stepFadeIn 0.35s cubic-bezier(0.4,0,0.2,1) both; }
 
-/* â”€â”€ Upload zone redesign â€” FULL CANVAS FILL â”€â”€ */
+/* ── Upload zone redesign — FULL CANVAS FILL ── */
 .upload-zone {
   border: none;
   border-radius: 0;
@@ -500,7 +500,7 @@ canvas{display:block;}
 
 /* Wrapper around the inner card. Needed so the tablet/mobile corner brackets
    can sit OUTSIDE the card (negative offsets) without being clipped by the
-   card's own overflow:hidden â€” which is required for the rotating gradient
+   card's own overflow:hidden — which is required for the rotating gradient
    border pseudo-elements. The wrapper auto-sizes to the card's width, so
    brackets always hug the card's actual corners across breakpoints. */
 .upload-card-wrap {
@@ -509,7 +509,7 @@ canvas{display:block;}
   max-width: 100%;
 }
 
-/* Inner card â€” centered, floating (fluid). Only this is clickable. */
+/* Inner card — centered, floating (fluid). Only this is clickable. */
 .upload-inner-card {
   position: relative;
   z-index: 3;
@@ -559,7 +559,7 @@ canvas{display:block;}
   animation: rotateBorder .8s linear infinite;
 }
 
-/* Inline error banner â€” shows near upload zone on load/decode failures */
+/* Inline error banner — shows near upload zone on load/decode failures */
 .upload-error-banner {
   display:none;
   align-items:center;
@@ -603,7 +603,7 @@ canvas{display:block;}
   line-height:1;
 }
 
-/* Corner accent brackets â€” outer canvas frame (desktop â‰¥901px) */
+/* Corner accent brackets — outer canvas frame (desktop ≥901px) */
 .corner-bracket {
   position: absolute;
   width: 32px; height: 32px;
@@ -619,7 +619,7 @@ canvas{display:block;}
 .cb-bl { bottom:18px; left:18px; border-bottom:2px solid var(--accent); border-left:2px solid var(--accent); border-radius:0 0 0 4px; }
 .cb-br { bottom:18px; right:18px; border-bottom:2px solid var(--accent); border-right:2px solid var(--accent); border-radius:0 0 4px 0; }
 
-/* Inner brackets â€” hug the upload card itself (shown only on tablet/mobile â‰¤900px) */
+/* Inner brackets — hug the upload card itself (shown only on tablet/mobile ≤900px) */
 .corner-bracket-inner {
   position: absolute;
   width: 22px; height: 22px;
@@ -638,7 +638,7 @@ canvas{display:block;}
 .cbi-bl { bottom:-10px; left:-10px; border-bottom:2px solid var(--accent); border-left:2px solid var(--accent); border-radius:0 0 0 4px; }
 .cbi-br { bottom:-10px; right:-10px; border-bottom:2px solid var(--accent); border-right:2px solid var(--accent); border-radius:0 0 4px 0; }
 
-/* R4 fix: shrink inner brackets at â‰¤420px so they don't clip the right edge */
+/* R4 fix: shrink inner brackets at ≤420px so they don't clip the right edge */
 @media(max-width:420px){
   .corner-bracket-inner { width:16px; height:16px; }
   .cbi-tl, .cbi-bl { left:-6px; }
@@ -660,7 +660,7 @@ canvas{display:block;}
   animation: none;
 }
 
-/* â”€â”€ Floating feature chips around upload card â”€â”€ */
+/* ── Floating feature chips around upload card ── */
 .float-chip {
   position: absolute;
   z-index: 4;
@@ -686,11 +686,11 @@ canvas{display:block;}
   0%,100% { transform: translateY(0px); opacity:.75; }
   50%      { transform: translateY(-6px); opacity:1; }
 }
-/* Hide floating chips on anything smaller than a wide laptop â€”
+/* Hide floating chips on anything smaller than a wide laptop —
    they overlap the upload card at mid-sized widths. */
 @media(max-width:1180px){ .float-chip { display:none; } }
 
-/* F11: reduce 1440 empty space â€” shift card up + trust strip at bottom */
+/* F11: reduce 1440 empty space — shift card up + trust strip at bottom */
 @media (min-width:1200px) {
   #step1-canvas .upload-zone { padding-bottom: 14vh; }
 }
@@ -711,7 +711,7 @@ canvas{display:block;}
 .canvas-specs .cs-dot { opacity: 0.35; }
 @media (max-width:1199px) { .canvas-specs { display: none; } }
 
-/* Hide the post-upload radiating feature lines + chips on phones â€”
+/* Hide the post-upload radiating feature lines + chips on phones —
    they look cramped and weird around vertical photos on small screens. */
 @media(max-width:768px){
   #featLinesSVG { display:none !important; }
@@ -754,11 +754,11 @@ canvas{display:block;}
   background:var(--surface2);
   white-space:nowrap;
 }
-/* Touch-friendly CTA text â€” TAP + "to upload" hidden by default,
-   shown on phones via the â‰¤640px block below. */
+/* Touch-friendly CTA text — TAP + "to upload" hidden by default,
+   shown on phones via the ≤640px block below. */
 .cta-tap, .cta-tap-sub { display:none; }
 
-/* â”€â”€ Enhanced buttons â”€â”€ */
+/* ── Enhanced buttons ── */
 .btn-primary {
   position:relative;
   overflow:hidden;
@@ -778,7 +778,7 @@ canvas{display:block;}
 }
 .btn-primary:hover::after { transform:translateX(100%); }
 
-/* â”€â”€ Skip-as-next-step highlight (used when AI BG is locked, e.g. free plan) â”€â”€ */
+/* ── Skip-as-next-step highlight (used when AI BG is locked, e.g. free plan) ── */
 .btn.skip-highlight{
   background:var(--accent)!important;
   color:#000!important;
@@ -798,7 +798,7 @@ canvas{display:block;}
   100% { box-shadow:0 0 0 0 rgba(240,165,0,0); }
 }
 
-/* â”€â”€ Progress bar shimmer â”€â”€ */
+/* ── Progress bar shimmer ── */
 .progress-bar {
   background: linear-gradient(90deg,var(--accent) 0%,#ffc03a 50%,var(--accent) 100%);
   background-size: 200% 100%;
@@ -809,7 +809,7 @@ canvas{display:block;}
   100% { background-position:-200% 0; }
 }
 
-/* â”€â”€ Feature lines (radiating from photo on upload) â”€â”€ */
+/* ── Feature lines (radiating from photo on upload) ── */
 #featLinesSVG { position:absolute;top:0;left:0;pointer-events:none;z-index:1;overflow:visible; }
 
 .feat-chip {
@@ -850,12 +850,12 @@ canvas{display:block;}
   100% { opacity:1; transform:translate(var(--cx), var(--cy)) scale(1); }
 }
 
-/* â”€â”€ Sidebar hover glow â”€â”€ */
+/* ── Sidebar hover glow ── */
 .sb-section:hover { background:rgba(240,165,0,.015); }
 .preset-btn { transition:.15s; }
 .count-btn  { transition:.15s; }
 
-/* â”€â”€ Step num pulse on active â”€â”€ */
+/* ── Step num pulse on active ── */
 .step.active .step-num {
   border-color:var(--accent);
   box-shadow: 0 0 6px rgba(240,165,0,.35), 0 0 0 3px rgba(240,165,0,.12);
@@ -866,15 +866,15 @@ canvas{display:block;}
   50%      { box-shadow:0 0 10px rgba(240,165,0,.2), 0 0 0 6px rgba(240,165,0,.04); }
 }
 
-/* â”€â”€ bgCanvas hover shadow â”€â”€ */
+/* ── bgCanvas hover shadow ── */
 #bgCanvas { border-radius:6px; box-shadow:0 8px 40px rgba(0,0,0,.6); transition:box-shadow .3s; }
 
 
-/* â”€â”€ HELP BUTTON â”€â”€ */
+/* ── HELP BUTTON ── */
 .help-btn{width:30px;height:30px;border-radius:50%;background:var(--surface2);border:1px solid var(--border);color:var(--muted);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.2s;}
 .help-btn:hover{border-color:var(--accent);color:var(--accent);}
 
-/* â”€â”€ TUTORIAL OVERLAY â”€â”€ */
+/* ── TUTORIAL OVERLAY ── */
 #tutorialPage{
   position:fixed;inset:0;z-index:999;
   background:var(--bg);
@@ -1016,19 +1016,19 @@ canvas{display:block;}
   .tut-steps-line{display:none;}
 }
 
-/* â”€â”€ MOBILE BOTTOM DRAWER â”€â”€ */
+/* ── MOBILE BOTTOM DRAWER ── */
 .mob-sb-toggle{display:none;}
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ════════════════════════════════════
    RESPONSIVE BREAKPOINTS
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+════════════════════════════════════ */
 
-/* â”€â”€ LAPTOP (â‰¤1180px) â”€â”€ */
+/* ── LAPTOP (≤1180px) ── */
 @media(max-width:1180px){
   :root{--sidebar-w:280px;}
 }
 
-/* â”€â”€ SMALL LAPTOP (â‰¤1024px) â”€â”€ */
+/* ── SMALL LAPTOP (≤1024px) ── */
 @media(max-width:1024px){
   :root{--sidebar-w:250px;}
   .badge:nth-child(n+3){display:none;}
@@ -1036,7 +1036,7 @@ canvas{display:block;}
   .upload-icon-wrap svg{width:30px;height:30px;}
 }
 
-/* â”€â”€ TABLET (â‰¤900px) â”€â”€ */
+/* ── TABLET (≤900px) ── */
 @media(max-width:900px){
   :root{--sidebar-w:240px;}
   .badges{display:none;}
@@ -1054,7 +1054,7 @@ canvas{display:block;}
   .upload-zone{padding:20px 16px;}
 }
 
-/* â”€â”€ SMALL TABLET (â‰¤768px) â”€â”€ */
+/* ── SMALL TABLET (≤768px) ── */
 @media(max-width:768px){
   header{padding:0 12px;gap:8px;}
   .logo{font-size:16px;}
@@ -1084,7 +1084,7 @@ canvas{display:block;}
   .preset-grid{grid-template-columns:repeat(3,1fr);}
 }
 
-/* â”€â”€ MOBILE (â‰¤640px) â”€â”€ */
+/* ── MOBILE (≤640px) ── */
 @media(max-width:640px){
   html{font-size:13px;}
   body{overflow:hidden;}
@@ -1120,7 +1120,7 @@ canvas{display:block;}
 
 }
 
-/* â”€â”€ SMALL MOBILE (â‰¤420px) â”€â”€ */
+/* ── SMALL MOBILE (≤420px) ── */
 @media(max-width:420px){
   header{gap:6px;}
   .logo{font-size:13px;}
@@ -1128,7 +1128,7 @@ canvas{display:block;}
   .preset-grid{grid-template-columns:repeat(2,1fr);}
 }
 
-/* â”€â”€ TINY MOBILE (â‰¤360px) â”€â”€ */
+/* ── TINY MOBILE (≤360px) ── */
 @media(max-width:360px){
   html{font-size:12px;}
   .step{padding:6px 7px;}
@@ -1136,7 +1136,7 @@ canvas{display:block;}
   .preset-grid{grid-template-columns:1fr 1fr;}
 }
 
-/* â”€â”€ DESKTOP (â‰¥1181px): larger header + steps + sidebar for comfortable desktop use â”€â”€ */
+/* ── DESKTOP (≥1181px): larger header + steps + sidebar for comfortable desktop use ── */
 @media(min-width:1181px){
   :root{--sidebar-w:360px;}
   header{height:64px;padding:0 22px;gap:16px;}
@@ -1152,7 +1152,7 @@ canvas{display:block;}
   .btn{padding:11px 16px;font-size:14px;}
 }
 
-/* â”€â”€ LARGE DESKTOP (â‰¥1440px): extra breathing room â”€â”€ */
+/* ── LARGE DESKTOP (≥1440px): extra breathing room ── */
 @media(min-width:1440px){
   :root{--sidebar-w:400px;}
   header{height:70px;padding:0 28px;}
@@ -1164,7 +1164,7 @@ canvas{display:block;}
   .badge{font-size:13px;padding:5px 13px;}
 }
 
-/* â”€â”€ HEADER AUTH / PLANS BUTTONS â”€â”€ */
+/* ── HEADER AUTH / PLANS BUTTONS ── */
 .hdr-btn{background:var(--surface2);border:1px solid var(--border);color:var(--text);
   padding:6px 11px;border-radius:6px;font-family:'DM Mono',monospace;font-size:12px;
   cursor:pointer;display:flex;align-items:center;gap:5px;transition:.15s;white-space:nowrap;}
@@ -1179,7 +1179,7 @@ canvas{display:block;}
   .hdr-btn span.hdr-lbl{display:none;}
 }
 
-/* â”€â”€ MODAL OVERLAY â”€â”€ */
+/* ── MODAL OVERLAY ── */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);
   display:none;align-items:center;justify-content:center;z-index:9999;padding:20px;animation:fadeIn .2s;}
 .modal-overlay.active{display:flex;}
@@ -1197,7 +1197,7 @@ canvas{display:block;}
 .modal-body{padding:22px;}
 .modal-footer{padding:16px 22px;border-top:1px solid var(--border);display:flex;gap:10px;justify-content:flex-end;}
 
-/* â”€â”€ AUTH MODAL â”€â”€ */
+/* ── AUTH MODAL ── */
 .auth-tabs{display:flex;gap:4px;background:var(--surface2);border-radius:8px;padding:4px;margin-bottom:18px;}
 .auth-tab{flex:1;padding:9px;text-align:center;background:transparent;border:none;color:var(--muted);font-family:'DM Mono',monospace;font-size:13px;border-radius:6px;cursor:pointer;transition:.15s;}
 .auth-tab.active{background:var(--accent);color:#000;font-weight:600;}
@@ -1208,15 +1208,15 @@ canvas{display:block;}
 .form-error{color:var(--danger);font-size:11px;margin-top:4px;min-height:14px;}
 .form-success{color:var(--success);font-size:12px;margin-top:8px;padding:8px 12px;background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.2);border-radius:6px;}
 
-/* â”€â”€ PLANS GRID â”€â”€ */
+/* ── PLANS GRID ── */
 .plans-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
 @media(max-width:720px){.plans-grid{grid-template-columns:1fr;}}
 .plan-card{background:var(--surface2);border:1.5px solid var(--border);border-radius:12px;padding:22px 18px;display:flex;flex-direction:column;position:relative;transition:.2s;}
 .plan-card:hover{transform:translateY(-4px);border-color:var(--accent);}
 .plan-card.featured{border-color:var(--accent);background:linear-gradient(180deg,rgba(240,165,0,.08),transparent 60%),var(--surface2);}
-.plan-card.featured::before{content:'â­ POPULAR';position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--accent);color:#000;padding:3px 12px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:1px;}
+.plan-card.featured::before{content:'⭐ POPULAR';position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--accent);color:#000;padding:3px 12px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:1px;}
 .plan-card.current{border-color:var(--success);}
-.plan-card.current::after{content:'âœ“ CURRENT';position:absolute;top:-10px;right:14px;background:var(--success);color:#000;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:.5px;}
+.plan-card.current::after{content:'✓ CURRENT';position:absolute;top:-10px;right:14px;background:var(--success);color:#000;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:.5px;}
 .plan-name{font-family:'Syne',sans-serif;font-weight:800;font-size:18px;margin-bottom:6px;}
 .plan-price{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;color:var(--accent);margin:8px 0 4px;}
 .plan-price .currency{font-size:18px;opacity:.8;}
@@ -1224,16 +1224,16 @@ canvas{display:block;}
 .plan-tagline{font-size:12px;color:var(--muted);margin-bottom:14px;min-height:34px;}
 .plan-features{list-style:none;padding:0;margin:0 0 18px;flex:1;}
 .plan-features li{font-size:12px;color:var(--text);padding:6px 0;padding-left:20px;position:relative;line-height:1.5;}
-.plan-features li::before{content:'âœ“';position:absolute;left:0;color:var(--success);font-weight:700;}
+.plan-features li::before{content:'✓';position:absolute;left:0;color:var(--success);font-weight:700;}
 .plan-features li.dim{color:var(--muted2);}
-.plan-features li.dim::before{content:'â€”';color:var(--muted2);}
+.plan-features li.dim::before{content:'—';color:var(--muted2);}
 .plan-btn{width:100%;padding:11px;border:none;border-radius:8px;font-family:'DM Mono',monospace;font-size:13px;font-weight:600;cursor:pointer;transition:.15s;}
 .plan-btn-free{background:var(--surface3);color:var(--muted);border:1px solid var(--border);}
 .plan-btn-primary{background:var(--accent);color:#000;}
 .plan-btn-primary:hover{background:#ffc03a;transform:translateY(-1px);}
 .plan-btn-current{background:rgba(74,222,128,.15);color:var(--success);border:1px solid rgba(74,222,128,.3);cursor:default;}
 
-/* â”€â”€ PRO LOCK / PLAN BANNER â”€â”€ */
+/* ── PRO LOCK / PLAN BANNER ── */
 .pro-locked{position:relative;opacity:.6;filter:grayscale(.35);}
 .preset-btn.pro-locked,.count-btn.pro-locked{border-style:dashed!important;}
 .preset-btn.pro-locked:hover{border-color:var(--accent)!important;color:var(--accent)!important;}
@@ -1255,9 +1255,9 @@ canvas{display:block;}
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--surface);border:1px solid var(--accent);color:var(--text);padding:14px 22px;border-radius:10px;font-size:14px;line-height:1.45;z-index:10001;box-shadow:0 8px 24px rgba(0,0,0,.5);animation:toastIn .3s;width:max-content;max-width:min(560px,calc(100vw - 24px));min-width:min(260px,calc(100vw - 24px));text-align:center;white-space:normal;}
 @keyframes toastIn{from{transform:translate(-50%,20px);opacity:0;}to{transform:translate(-50%,0);opacity:1;}}
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   EXTREME RESPONSIVE PASS â€” zero overlap / overflow on every device
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+/* ═══════════════════════════════════════════════════════════
+   EXTREME RESPONSIVE PASS — zero overlap / overflow on every device
+   ═══════════════════════════════════════════════════════════ */
 
 /* --- Global safety rails --- */
 *,*::before,*::after{box-sizing:border-box;}
@@ -1297,13 +1297,13 @@ header{flex-wrap:nowrap;}
 /* --- App footer: never wrap off-screen, collapse gracefully --- */
 .app-footer{max-width:100vw;}
 
-/* --- Tablet / small laptop (â‰¤1024px): tighten header + steps spacing --- */
+/* --- Tablet / small laptop (≤1024px): tighten header + steps spacing --- */
 @media(max-width:1024px){
   header{padding:0 14px;gap:10px;}
   .hdr-btn{padding:6px 9px;}
 }
 
-/* --- Small tablet (â‰¤768px): rework stacked layout so nothing clips --- */
+/* --- Small tablet (≤768px): rework stacked layout so nothing clips --- */
 @media(max-width:768px){
   body{overflow:hidden;}
   .main{
@@ -1326,12 +1326,12 @@ header{flex-wrap:nowrap;}
   .modal-footer{padding:12px 16px;}
 }
 
-/* --- Mobile (â‰¤640px): compact header / steps / sidebar / footer --- */
+/* --- Mobile (≤640px): compact header / steps / sidebar / footer --- */
 @media(max-width:640px){
   header{height:48px;padding:0 10px;gap:6px;}
   .logo{font-size:14px;}
   .legal-footer > div:last-child{display:none;}
-  /* Hide the step progress bar on phones â€” too cramped, visually noisy.
+  /* Hide the step progress bar on phones — too cramped, visually noisy.
      Users are guided through steps by the sidebar + canvas content itself. */
   .steps{display:none;}
   .main{grid-template-rows:minmax(220px,1fr) auto;}
@@ -1345,11 +1345,11 @@ header{flex-wrap:nowrap;}
   .upload-icon-wrap svg{width:22px;height:22px;}
   .upload-title{font-size:16px!important;margin-bottom:4px!important;}
   .upload-sub{font-size:11px!important;line-height:1.5!important;}
-  /* Hide feature pills â€” tiny at 9px, adds visual clutter in 2 rows */
+  /* Hide feature pills — tiny at 9px, adds visual clutter in 2 rows */
   .upload-feats{display:none;}
-  /* Hide corner brackets â€” visual noise on small screens */
+  /* Hide corner brackets — visual noise on small screens */
   .corner-bracket-inner{display:none !important;}
-  /* Swap CLICKâ†’TAP, hide "or drop your photo here" (no drag-drop on phones) */
+  /* Swap CLICK→TAP, hide "or drop your photo here" (no drag-drop on phones) */
   .cta-click, .cta-drop{display:none;}
   .cta-tap, .cta-tap-sub{display:inline;}
   .upload-cta-hint{margin-top:10px !important;}
@@ -1360,19 +1360,19 @@ header{flex-wrap:nowrap;}
   .modal-body{padding:14px;}
   .modal-footer{padding:10px 14px;}
   .modal-footer .btn{min-width:100%;}
-  /* Plans grid already single-column at â‰¤720px, make the cards tighter */
+  /* Plans grid already single-column at ≤720px, make the cards tighter */
   .plan-card{padding:18px 14px;}
   .plan-price{font-size:28px;}
   /* Payment methods wrap cleanly */
   .pay-method{min-width:100px;}
-  /* Comparison slider labels â€” keep inside the frame on tiny screens */
+  /* Comparison slider labels — keep inside the frame on tiny screens */
   .comp-label{font-size:9px;padding:2px 6px;}
   /* App footer becomes a tidy single-line scroll on super narrow if needed */
   .app-footer{overflow-x:auto;flex-wrap:wrap;justify-content:center;}
   .app-footer a{padding:2px 4px;}
 }
 
-/* --- Small mobile (â‰¤420px) --- */
+/* --- Small mobile (≤420px) --- */
 @media(max-width:420px){
   header{padding:0 8px;gap:5px;}
   .hdr-btn{padding:5px 7px;font-size:10px;}
@@ -1391,7 +1391,7 @@ header{flex-wrap:nowrap;}
   .app-footer a{padding:2px 3px;}
 }
 
-/* --- Landscape mobile / very short viewports (â‰¤520px height): compact mode --- */
+/* --- Landscape mobile / very short viewports (≤520px height): compact mode --- */
 @media(max-height:520px) and (max-width:900px){
   header{height:38px;}
   .logo{font-size:13px;}
@@ -1401,7 +1401,7 @@ header{flex-wrap:nowrap;}
   .app-footer{padding:3px 6px;font-size:9.5px;}
 }
 
-/* --- Tiny mobile (â‰¤340px) â€” the narrowest phones still supported --- */
+/* --- Tiny mobile (≤340px) — the narrowest phones still supported --- */
 @media(max-width:340px){
   header{gap:4px;padding:0 6px;}
   .hdr-btn{padding:4px 6px;font-size:10px;}
@@ -1414,14 +1414,14 @@ header{flex-wrap:nowrap;}
   .app-footer .copy{display:none;}
 }
 
-/* --- Ultra-wide (â‰¥1800px): keep content readable, not stretched --- */
+/* --- Ultra-wide (≥1800px): keep content readable, not stretched --- */
 @media(min-width:1800px){
   :root{--sidebar-w:420px;}
   .canvas-area{padding:24px;}
   .upload-inner-card{max-width:620px;}
 }
 
-/* --- Legal pages â€” responsive tune-up --- */
+/* --- Legal pages — responsive tune-up --- */
 @media(max-width:520px){
   .legal-header{padding:10px 14px;}
   .legal-header .logo{font-size:17px;}
@@ -1432,12 +1432,12 @@ header{flex-wrap:nowrap;}
   .contact-grid{padding:14px 16px;}
 }
 
-/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-   Shared header nav (Home Â· Features Â· Login)
+/* ─────────────────────────────────────────────────────────
+   Shared header nav (Home · Features · Login)
    Matches the markup used on index.html and legal pages so
    /passport-photo stays visually consistent with the rest
    of the site while keeping the compact 52px app header.
-   â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+   ──────────────────────────────────────────────────────── */
 .legal-header{position:relative;}
 .legal-header nav{margin-left:auto;display:flex;gap:4px;align-items:center;font-size:14px;flex-wrap:nowrap;}
 .legal-header nav > a,.legal-header nav .has-dropdown > .nav-dd-btn{
@@ -1528,7 +1528,7 @@ header{flex-wrap:nowrap;}
    responsive variants) so padding, height and logo match the
    homepage's `.legal-header`. `header.legal-header` (0,1,1)
    beats bare `header` (0,0,1) at every breakpoint, so a single
-   non-@media block is sufficient for all viewports â‰¥901px.
+   non-@media block is sufficient for all viewports ≥901px.
    Mobile (<900px) keeps the hamburger rules defined below.     */
 header.legal-header{
   padding:14px 22px;
@@ -1540,7 +1540,7 @@ header.legal-header{
 
 /* Mobile / narrow widths: collapse nav into hamburger. Open nav overlays the
    page (absolute below the sticky header) so it never pushes page content
-   downwards â€” matches assets/legal.css behavior used on every other page. */
+   downwards — matches assets/legal.css behavior used on every other page. */
 @media (max-width:900px){
   header.legal-header{min-height:52px;padding:8px 12px;}
   .legal-header .nav-toggle{display:inline-flex;margin-left:0;}
@@ -1971,9 +1971,9 @@ header.legal-header{
 {
   "@context": "https://schema.org",
   "@type": "WebApplication",
-  "name": "Studio Print â€” Passport Photo Tool",
+  "name": "Studio Print — Passport Photo Tool",
   "url": "https://studioprint.pages.dev/passport-photo.html",
-  "description": "Make print-ready passport photos in your browser. AI background removal, auto-crop, and 300 DPI A4 sheets â€” all on-device, no uploads.",
+  "description": "Make print-ready passport photos in your browser. AI background removal, auto-crop, and 300 DPI A4 sheets — all on-device, no uploads.",
   "applicationCategory": "PhotographyApplication",
   "operatingSystem": "Any (browser-based)",
   "browserRequirements": "Requires a modern browser with WebGPU or WASM support",
@@ -1982,19 +1982,19 @@ header.legal-header{
       "@type": "Offer",
       "price": "0",
       "priceCurrency": "INR",
-      "description": "Free tier â€” 2 A4 sheets per day, Indian passport preset"
+      "description": "Free tier — 2 A4 sheets per day, Indian passport preset"
     },
     {
       "@type": "Offer",
       "price": "59",
       "priceCurrency": "INR",
-      "description": "Weekly plan â€” unlimited sheets, all country presets, 7 days"
+      "description": "Weekly plan — unlimited sheets, all country presets, 7 days"
     },
     {
       "@type": "Offer",
       "price": "149",
       "priceCurrency": "INR",
-      "description": "Monthly plan â€” unlimited sheets, all country presets, 30 days"
+      "description": "Monthly plan — unlimited sheets, all country presets, 30 days"
     }
   ],
   "featureList": [
@@ -2002,7 +2002,7 @@ header.legal-header{
     "Auto-crop to passport photo dimensions",
     "300 DPI print-ready A4 sheet output",
     "India, US, UK, Schengen, UAE, Australia, Canada presets",
-    "No photo uploads â€” fully browser-based"
+    "No photo uploads — fully browser-based"
   ],
   "screenshot": "https://studioprint.pages.dev/assets/og-image.png",
   "creator": {
@@ -2022,22 +2022,22 @@ header.legal-header{
   <nav id="primaryNav">
     <a href="index.html">Home</a>
     <div class="has-dropdown">
-      <button class="nav-dd-btn" aria-haspopup="true" aria-expanded="false">Features <span class="caret" aria-hidden="true">â–¾</span></button>
+      <button class="nav-dd-btn" aria-haspopup="true" aria-expanded="false">Features <span class="caret" aria-hidden="true">▾</span></button>
       <div class="dropdown-panel" role="menu">
         <a href="passport-photo.html" class="active" role="menuitem">
-          <span class="dd-icon" aria-hidden="true">ðŸ“·</span>
-          <span class="dd-meta"><strong>Passport Photo</strong><small>AI portrait workflow Â· A4 export</small></span>
+          <span class="dd-icon" aria-hidden="true">📷</span>
+          <span class="dd-meta"><strong>Passport Photo</strong><small>AI portrait workflow · A4 export</small></span>
           <span class="dd-tag live">Live</span>
         </a>
 
         <a href="id-print.html" role="menuitem">
-          <span class="dd-icon" aria-hidden="true">ðŸ†”</span>
-          <span class="dd-meta"><strong>ID Card Print</strong><small>PDF auto-detect Â· CR80 Â· A4 print</small></span>
+          <span class="dd-icon" aria-hidden="true">🆔</span>
+          <span class="dd-meta"><strong>ID Card Print</strong><small>PDF auto-detect · CR80 · A4 print</small></span>
           <span class="dd-tag live">Live</span>
         </a>
         <a href="forms.html" role="menuitem">
           <span class="dd-icon" aria-hidden="true">PDF</span>
-          <span class="dd-meta"><strong>Forms Hub</strong><small>Search forms Â· print/download</small></span>
+          <span class="dd-meta"><strong>Forms Hub</strong><small>Search forms · print/download</small></span>
           <span class="dd-tag live">Live</span>
         </a>
       </div>
@@ -2052,7 +2052,7 @@ header.legal-header{
     <a class="nav-cta" href="id-print.html">Open ID Card Print</a>
   </div>
   <button class="help-btn" onclick="openTutorial()" title="API Key Tutorial" style="display:none;">?</button>
-  <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="primaryNav">â˜°</button>
+  <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="primaryNav">☰</button>
 </header>
 
 <section class="tool-strip pp-tool-strip">
@@ -2084,7 +2084,7 @@ header.legal-header{
   <!-- CANVAS AREA -->
   <div class="canvas-area" id="canvasArea">
 
-    <!-- Global animated background canvas (floating particles + lines) â€” shown on ALL steps -->
+    <!-- Global animated background canvas (floating particles + lines) — shown on ALL steps -->
     <canvas id="uploadBgCanvas" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:0.45;"></canvas>
 
     <!-- Step 1: Upload -->
@@ -2097,11 +2097,11 @@ header.legal-header{
         <div class="corner-bracket cb-br"></div>
 
         <!-- Floating feature chips around the card (desktop only) -->
-        <div class="float-chip" style="top:12%;left:5%;animation-delay:0s;">ðŸ¤– AI Background Removal</div>
-        <div class="float-chip" style="top:28%;right:4%;animation-delay:.7s;">ðŸ“„ 300 DPI Print-Ready</div>
-        <div class="float-chip" style="bottom:8%;left:22%;animation-delay:1.4s;">âœ‚ï¸ Smart Crop</div>
-        <div class="float-chip" style="bottom:14%;right:5%;animation-delay:2.1s;">ðŸŒ 6+ Country Sizes</div>
-        <div class="float-chip" style="top:55%;left:3%;animation-delay:.35s;">âš¡ Instant Download</div>
+        <div class="float-chip" style="top:12%;left:5%;animation-delay:0s;">🤖 AI Background Removal</div>
+        <div class="float-chip" style="top:28%;right:4%;animation-delay:.7s;">📄 300 DPI Print-Ready</div>
+        <div class="float-chip" style="bottom:8%;left:22%;animation-delay:1.4s;">✂️ Smart Crop</div>
+        <div class="float-chip" style="bottom:14%;right:5%;animation-delay:2.1s;">🌍 6+ Country Sizes</div>
+        <div class="float-chip" style="top:55%;left:3%;animation-delay:.35s;">⚡ Instant Download</div>
 
         <!-- Inner floating card (only clickable area).
              Wrapped so tablet/mobile corner brackets can sit OUTSIDE the card
@@ -2125,16 +2125,16 @@ header.legal-header{
           </div>
           <div class="upload-title" data-i18n="upload_title" style="font-size:clamp(16px, 2.6vw, 22px);margin-bottom:8px;">Drop your photo here</div>
           <div class="upload-sub" style="color:var(--muted);font-size:clamp(11px, 1.5vw, 13px);line-height:1.8;">
-            <span data-i18n="upload_sub1">WhatsApp Â· Camera Â· Any image</span><br>
-            <span style="font-size:clamp(9px, 1.3vw, 11px);color:var(--muted2);">JPG Â· PNG Â· WEBP Â· BMP</span>
+            <span data-i18n="upload_sub1">WhatsApp · Camera · Any image</span><br>
+            <span style="font-size:clamp(9px, 1.3vw, 11px);color:var(--muted2);">JPG · PNG · WEBP · BMP</span>
           </div>
           <!-- Feature pills inside card -->
           <div class="upload-feats">
-            <span class="upload-feat-pill">ðŸ¤– AI BG Removal</span>
-            <span class="upload-feat-pill">âœ‚ï¸ Smart Crop</span>
-            <span class="upload-feat-pill">ðŸ“„ 300 DPI Print</span>
-            <span class="upload-feat-pill">ðŸŒ 6+ Sizes</span>
-            <span class="upload-feat-pill">â¬‡ Instant Save</span>
+            <span class="upload-feat-pill">🤖 AI BG Removal</span>
+            <span class="upload-feat-pill">✂️ Smart Crop</span>
+            <span class="upload-feat-pill">📄 300 DPI Print</span>
+            <span class="upload-feat-pill">🌍 6+ Sizes</span>
+            <span class="upload-feat-pill">⬇ Instant Save</span>
           </div>
           <!-- CTA hint -->
           <div class="upload-cta-hint" style="margin-top:18px;font-size:12px;color:var(--muted2);">
@@ -2153,9 +2153,9 @@ header.legal-header{
 
       </div>
       <div class="canvas-specs">
-        <span>300 DPI output</span><span class="cs-dot">Â·</span>
-        <span>On-device AI</span><span class="cs-dot">Â·</span>
-        <span>No photo uploads</span><span class="cs-dot">Â·</span>
+        <span>300 DPI output</span><span class="cs-dot">·</span>
+        <span>On-device AI</span><span class="cs-dot">·</span>
+        <span>No photo uploads</span><span class="cs-dot">·</span>
         <span>6+ country sizes</span>
       </div>
     </div>
@@ -2167,29 +2167,29 @@ header.legal-header{
       <!-- Comparison Slider (shown after AI BG removal) -->
       <div id="comparisonWrap" class="hidden">
         <div class="comp-container" id="compContainer">
-          <!-- Result (bottom layer â€” bg removed) -->
+          <!-- Result (bottom layer — bg removed) -->
           <canvas id="compResultCanvas"></canvas>
           <!-- Original photo, stacked on top and clipped via clip-path -->
           <canvas id="compOrigCanvas"></canvas>
           <!-- Divider -->
           <div class="comp-divider" id="compDivider">
-            <div class="comp-handle">â—€â–¶</div>
+            <div class="comp-handle">◀▶</div>
           </div>
           <!-- Labels -->
           <div class="comp-label comp-label-left">Original</div>
-          <div class="comp-label comp-label-right">BG Removed âœ¨</div>
+          <div class="comp-label comp-label-right">BG Removed ✨</div>
         </div>
       </div>
       <!-- Manual Refine Editor (shown when user clicks "Refine Edges") -->
       <div id="refineWrap" class="hidden">
-        <!-- Floating Back (top-left) â€” shown on mobile overlay only -->
+        <!-- Floating Back (top-left) — shown on mobile overlay only -->
         <button type="button" id="refineBackBtn" class="refine-back-btn" onclick="exitRefineMode(false)" aria-label="Back" title="Back">
-          <span aria-hidden="true">â†</span>
+          <span aria-hidden="true">←</span>
           <span class="refine-back-label" data-i18n="refine_back">Back</span>
         </button>
-        <!-- Floating Undo (top-right) â€” shown on mobile overlay only -->
+        <!-- Floating Undo (top-right) — shown on mobile overlay only -->
         <button type="button" id="refineTopUndoBtn" class="refine-top-undo-btn" onclick="undoRefine()" disabled aria-label="Undo" title="Undo">
-          <span aria-hidden="true">â†¶</span>
+          <span aria-hidden="true">↶</span>
           <span class="refine-top-undo-label" data-i18n="refine_undo_short">Undo</span>
         </button>
         <div class="refine-hint" id="refineHint" data-i18n="refine_hint">Paint over leftover background to <b>erase</b>, or <b>restore</b> parts that got cut off.</div>
@@ -2199,8 +2199,8 @@ header.legal-header{
         </div>
         <div class="refine-toolbar" role="toolbar" aria-label="Refine edges tools">
           <div class="refine-modes">
-            <button type="button" class="refine-mode-btn erase active" id="refineModeErase" onclick="setRefineMode('erase')" aria-pressed="true" data-i18n="refine_erase">ðŸ©¹ Erase</button>
-            <button type="button" class="refine-mode-btn restore" id="refineModeRestore" onclick="setRefineMode('restore')" aria-pressed="false" data-i18n="refine_restore">â†© Restore</button>
+            <button type="button" class="refine-mode-btn erase active" id="refineModeErase" onclick="setRefineMode('erase')" aria-pressed="true" data-i18n="refine_erase">🩹 Erase</button>
+            <button type="button" class="refine-mode-btn restore" id="refineModeRestore" onclick="setRefineMode('restore')" aria-pressed="false" data-i18n="refine_restore">↩ Restore</button>
           </div>
           <label class="refine-size">
             <span data-i18n="refine_size">Size</span>
@@ -2208,10 +2208,10 @@ header.legal-header{
             <span id="refineBrushSizeVal" style="min-width:28px;text-align:right;color:var(--accent);">32</span>
           </label>
           <div class="refine-actions">
-            <button type="button" class="refine-act-btn" id="refineUndoBtn" onclick="undoRefine()" disabled data-i18n="refine_undo">â†¶ Undo</button>
+            <button type="button" class="refine-act-btn" id="refineUndoBtn" onclick="undoRefine()" disabled data-i18n="refine_undo">↶ Undo</button>
             <button type="button" class="refine-act-btn danger" id="refineResetBtn" onclick="resetRefine()" data-i18n="refine_reset">Reset</button>
             <button type="button" class="refine-act-btn refine-cancel-btn" onclick="exitRefineMode(false)" data-i18n="refine_cancel">Cancel</button>
-            <button type="button" class="refine-act-btn primary" id="refineSaveBtn" onclick="exitRefineMode(true)" data-i18n="refine_save" aria-label="Save">ðŸ’¾ Save</button>
+            <button type="button" class="refine-act-btn primary" id="refineSaveBtn" onclick="exitRefineMode(true)" data-i18n="refine_save" aria-label="Save">💾 Save</button>
           </div>
         </div>
       </div>
@@ -2220,7 +2220,7 @@ header.legal-header{
     <!-- Step 3: Crop -->
     <div id="step3-canvas" class="hidden" style="position:relative;display:flex;align-items:center;justify-content:center;width:100%;height:100%;z-index:1;">
       <canvas id="cropCanvas"></canvas>
-      <div class="canvas-hint" id="cropHint" data-i18n="crop_hint">Drag ðŸŸ¡ box to reposition Â· Drag corners to resize</div>
+      <div class="canvas-hint" id="cropHint" data-i18n="crop_hint">Drag 🟡 box to reposition · Drag corners to resize</div>
     </div>
 
     <!-- Step 4: Sheet -->
@@ -2233,36 +2233,36 @@ header.legal-header{
   <!-- SIDEBAR -->
   <div class="sidebar">
 
-    <!-- â”€â”€ SIDEBAR 1 â”€â”€ -->
+    <!-- ── SIDEBAR 1 ── -->
     <div id="sb1">
       <div class="sb-section">
         <div class="sb-title" data-i18n="sb1_standard">Photo Standard</div>
         <div class="preset-grid">
-          <div class="preset-btn active" data-w="35" data-h="45" onclick="selectPreset(this)">ðŸ‡®ðŸ‡³ India<br><span class="preset-size">35Ã—45 mm</span></div>
-          <div class="preset-btn" data-w="51" data-h="51" data-pro="1" onclick="selectPreset(this)">ðŸ‡ºðŸ‡¸ US Visa<br><span class="preset-size">51Ã—51 mm</span></div>
-          <div class="preset-btn" data-w="35" data-h="45" onclick="selectPreset(this)">ðŸ‡¬ðŸ‡§ UK<br><span class="preset-size">35Ã—45 mm</span></div>
-          <div class="preset-btn" data-w="35" data-h="45" onclick="selectPreset(this)">ðŸŒ Schengen<br><span class="preset-size">35Ã—45 mm</span></div>
-          <div class="preset-btn" data-w="25" data-h="35" data-pro="1" onclick="selectPreset(this)">ðŸ‡¦ðŸ‡ª UAE<br><span class="preset-size">25Ã—35 mm</span></div>
-          <div class="preset-btn" data-w="40" data-h="60" data-pro="1" onclick="selectPreset(this)">ðŸ‡¦ðŸ‡º Australia<br><span class="preset-size">40Ã—60 mm</span></div>
+          <div class="preset-btn active" data-w="35" data-h="45" onclick="selectPreset(this)">🇮🇳 India<br><span class="preset-size">35×45 mm</span></div>
+          <div class="preset-btn" data-w="51" data-h="51" data-pro="1" onclick="selectPreset(this)">🇺🇸 US Visa<br><span class="preset-size">51×51 mm</span></div>
+          <div class="preset-btn" data-w="35" data-h="45" onclick="selectPreset(this)">🇬🇧 UK<br><span class="preset-size">35×45 mm</span></div>
+          <div class="preset-btn" data-w="35" data-h="45" onclick="selectPreset(this)">🌍 Schengen<br><span class="preset-size">35×45 mm</span></div>
+          <div class="preset-btn" data-w="25" data-h="35" data-pro="1" onclick="selectPreset(this)">🇦🇪 UAE<br><span class="preset-size">25×35 mm</span></div>
+          <div class="preset-btn" data-w="40" data-h="60" data-pro="1" onclick="selectPreset(this)">🇦🇺 Australia<br><span class="preset-size">40×60 mm</span></div>
         </div>
         <div class="info-box">
-          <strong data-i18n="sb1_selected">Selected:</strong> <span id="presetLabel">35Ã—45 mm (India Passport)</span><br>
-          <strong data-i18n="sb1_output">Output size:</strong> <span id="presetPx">413Ã—531 px @ 300 DPI</span>
+          <strong data-i18n="sb1_selected">Selected:</strong> <span id="presetLabel">35×45 mm (India Passport)</span><br>
+          <strong data-i18n="sb1_output">Output size:</strong> <span id="presetPx">413×531 px @ 300 DPI</span>
         </div>
       </div>
       <div class="sb-section">
         <div class="sb-title" data-i18n="sb1_tips_title">Photo Tips</div>
         <div class="tips">
-          <span data-i18n="tip1">ðŸ“Œ Take photo in good lighting</span>
-          <span data-i18n="tip2">ðŸ“Œ Plain background is better</span>
-          <span data-i18n="tip3">ðŸ“Œ Face should be straight and clear</span>
-          <span data-i18n="tip4">ðŸ“Œ WhatsApp photos work perfectly</span>
-          <span data-i18n="tip5">ðŸ“Œ Remove glasses if possible</span>
+          <span data-i18n="tip1">📌 Take photo in good lighting</span>
+          <span data-i18n="tip2">📌 Plain background is better</span>
+          <span data-i18n="tip3">📌 Face should be straight and clear</span>
+          <span data-i18n="tip4">📌 WhatsApp photos work perfectly</span>
+          <span data-i18n="tip5">📌 Remove glasses if possible</span>
         </div>
       </div>
     </div>
 
-    <!-- â”€â”€ SIDEBAR 2 â”€â”€ -->
+    <!-- ── SIDEBAR 2 ── -->
     <div id="sb2" class="hidden">
 
       <!-- REMOVE BACKGROUND -->
@@ -2272,21 +2272,21 @@ header.legal-header{
         <div id="bgProgressWrap" class="hidden">
           <div class="status-text" id="statusText">Processing...</div>
           <div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
-          <button class="btn btn-danger" id="cancelBgBtn" onclick="cancelBgRemoval()" style="margin-top:6px;" data-i18n="btn_cancel">âœ• Cancel</button>
+          <button class="btn btn-danger" id="cancelBgBtn" onclick="cancelBgRemoval()" style="margin-top:6px;" data-i18n="btn_cancel">✕ Cancel</button>
         </div>
 
         <button class="btn btn-primary" id="removeBgBtn" onclick="startBgRemoval()" data-i18n="btn_ai_remove">
-          ðŸ¤– Remove Background
+          🤖 Remove Background
         </button>
 
-        <button class="btn btn-ghost mt6" id="skipBgBtn" onclick="skipBgRemoval()" data-i18n="btn_skip">Skip â†’ Keep Original</button>
+        <button class="btn btn-ghost mt6" id="skipBgBtn" onclick="skipBgRemoval()" data-i18n="btn_skip">Skip → Keep Original</button>
         <div class="info-box blue mt10" id="refineTip" style="display:none;">
           <strong data-i18n="refine_tip_label">Leftover background patches?</strong>
           <span data-i18n="refine_tip_body">Tap <b>Refine Edges</b> below and paint over them to erase, or restore any parts the AI cut off.</span>
         </div>
-        <button class="btn btn-secondary mt6" id="refineBgBtn" style="display:none;" onclick="enterRefineMode()" data-i18n="btn_refine_bg" title="Clean up leftover background or restore cut-off parts">âœï¸ Refine Edges</button>
-        <button class="btn btn-primary mt6" id="proceedCropBtn" style="display:none;" onclick="proceedToCrop()" data-i18n="btn_proceed">âœ“ Proceed to Crop â†’</button>
-        <button class="btn btn-ghost mt6" onclick="goStep(1)" data-i18n="btn_new_photo">â† New Photo</button>
+        <button class="btn btn-secondary mt6" id="refineBgBtn" style="display:none;" onclick="enterRefineMode()" data-i18n="btn_refine_bg" title="Clean up leftover background or restore cut-off parts">✏️ Refine Edges</button>
+        <button class="btn btn-primary mt6" id="proceedCropBtn" style="display:none;" onclick="proceedToCrop()" data-i18n="btn_proceed">✓ Proceed to Crop →</button>
+        <button class="btn btn-ghost mt6" onclick="goStep(1)" data-i18n="btn_new_photo">← New Photo</button>
       </div>
 
       <!-- BG COLOR -->
@@ -2299,21 +2299,21 @@ header.legal-header{
           <div class="swatch" style="background:#F5F5DC;" data-color="#F5F5DC" onclick="selectBgColor(this)" title="Cream"></div>
           <div class="swatch" style="background:#E0E0E0;" data-color="#E0E0E0" onclick="selectBgColor(this)" title="Grey"></div>
           <div class="swatch swatch-checker" data-color="transparent" onclick="selectBgColor(this)" title="Transparent"></div>
-          <label class="swatch swatch-custom" title="Custom">ðŸŽ¨<input type="color" id="customColor" oninput="applyCustomColor(this.value)"></label>
+          <label class="swatch swatch-custom" title="Custom">🎨<input type="color" id="customColor" oninput="applyCustomColor(this.value)"></label>
         </div>
-        <div style="font-size:10px;color:var(--muted);" data-i18n="white_standard">â­ White = India passport standard</div>
+        <div style="font-size:10px;color:var(--muted);" data-i18n="white_standard">⭐ White = India passport standard</div>
       </div>
     </div>
 
-    <!-- â”€â”€ SIDEBAR 3 â”€â”€ -->
+    <!-- ── SIDEBAR 3 ── -->
     <div id="sb3" class="hidden">
       <div class="sb-section">
         <div class="sb-title" data-i18n="sb3_crop_title">Crop Controls</div>
-        <button class="btn btn-secondary" onclick="resetCrop()" data-i18n="btn_reset_crop">â†º Reset Crop Box</button>
-        <button class="btn btn-ghost mt6" onclick="autoCenterCrop()" data-i18n="btn_autocenter">âŠ™ Auto-Center</button>
+        <button class="btn btn-secondary" onclick="resetCrop()" data-i18n="btn_reset_crop">↺ Reset Crop Box</button>
+        <button class="btn btn-ghost mt6" onclick="autoCenterCrop()" data-i18n="btn_autocenter">⊙ Auto-Center</button>
         <div class="info-box mt10">
           <strong data-i18n="crop_amber_label">Amber box</strong> <span data-i18n="crop_drag_info">drag to reposition.</span><br>
-          <strong data-i18n="crop_corners_label">Corners</strong> <span data-i18n="crop_resize_info">resize â€” aspect ratio auto-locked.</span>
+          <strong data-i18n="crop_corners_label">Corners</strong> <span data-i18n="crop_resize_info">resize — aspect ratio auto-locked.</span>
         </div>
       </div>
       <div class="sb-section">
@@ -2341,12 +2341,12 @@ header.legal-header{
         <button class="btn btn-ghost mt6" onclick="resetAdj()" data-i18n="btn_reset_adj">Reset Adjustments</button>
       </div>
       <div class="sb-section">
-        <button class="btn btn-primary" onclick="confirmCrop()" data-i18n="btn_confirm_crop">âœ“ Confirm & Make Sheet â†’</button>
-        <button class="btn btn-ghost mt6" onclick="goStep(2)" data-i18n="btn_back">â† Back</button>
+        <button class="btn btn-primary" onclick="confirmCrop()" data-i18n="btn_confirm_crop">✓ Confirm & Make Sheet →</button>
+        <button class="btn btn-ghost mt6" onclick="goStep(2)" data-i18n="btn_back">← Back</button>
       </div>
     </div>
 
-    <!-- â”€â”€ SIDEBAR 4 â”€â”€ -->
+    <!-- ── SIDEBAR 4 ── -->
     <div id="sb4" class="hidden">
       <div class="sb-section">
         <div class="sb-title" data-i18n="sb4_layout_title">Layout</div>
@@ -2363,7 +2363,7 @@ header.legal-header{
           <div class="count-btn" data-v="12" onclick="setTotal(this)">12</div>
           <div class="count-btn" data-v="16" onclick="setTotal(this)">16</div>
         </div>
-        <button class="btn btn-secondary" style="margin-top:8px;padding:8px 10px;font-size:12px;" onclick="fillA4()" data-i18n="btn_fill_a4">ðŸ“„ Fill A4 Sheet (Max Photos)</button>
+        <button class="btn btn-secondary" style="margin-top:8px;padding:8px 10px;font-size:12px;" onclick="fillA4()" data-i18n="btn_fill_a4">📄 Fill A4 Sheet (Max Photos)</button>
         <div style="font-size:10px;color:var(--muted);margin:10px 0 6px;" data-i18n="sb4_per_row">Photos per row (cols)</div>
         <div class="count-row" id="colBtns">
           <div class="count-btn" data-v="2" onclick="setCols(this)">2</div>
@@ -2372,26 +2372,26 @@ header.legal-header{
           <div class="count-btn active" data-v="5" onclick="setCols(this)">5</div>
         </div>
         <div class="info-box mt6" id="layoutInfo" style="font-size:10px;">
-          <strong>5 photos</strong> â€” 5 cols Ã— 1 rows Â· Auto-fit âœ“
+          <strong>5 photos</strong> — 5 cols × 1 rows · Auto-fit ✓
         </div>
       </div>
       <div class="sb-section">
         <div class="sb-title" data-i18n="sb4_output_title">Output Info</div>
         <div class="info-box">
-          <strong data-i18n="out_sheet">Sheet size:</strong> A4 (210Ã—297 mm)<br>
+          <strong data-i18n="out_sheet">Sheet size:</strong> A4 (210×297 mm)<br>
           <strong data-i18n="out_res">Resolution:</strong> 300 DPI (print-ready)<br>
           <strong data-i18n="out_fmt">Format:</strong> PNG (lossless quality)<br>
-          <strong data-i18n="out_photos">Photos:</strong> <span id="photoCount">5 photos Â· 5Ã—1 grid</span><br>
-          <strong data-i18n="out_cut">Cutting guides:</strong> <span data-i18n="out_included">Included âœ“</span>
+          <strong data-i18n="out_photos">Photos:</strong> <span id="photoCount">5 photos · 5×1 grid</span><br>
+          <strong data-i18n="out_cut">Cutting guides:</strong> <span data-i18n="out_included">Included ✓</span>
         </div>
       </div>
       <div class="sb-section">
         <div id="planBanner" class="plan-banner" style="display:none;"></div>
-        <button class="btn btn-primary" onclick="downloadSheet()" data-i18n="btn_download">â¬‡ Download PNG (300 DPI)</button>
-        <button class="btn btn-secondary mt6" id="hdDownloadBtn" onclick="downloadSheetHD()" style="display:none;">â¬‡ Download HD (600 DPI) âœ¨</button>
-        <button class="btn btn-secondary mt6" onclick="printSheet()" data-i18n="btn_print">ðŸ–¨ Print Directly</button>
-        <button class="btn btn-ghost mt6" onclick="goStep(3)" data-i18n="btn_back_crop">â† Back to Crop & Adjust</button>
-        <button class="btn btn-ghost mt6" onclick="goStep(1)" data-i18n="btn_new_photo">â† New Photo</button>
+        <button class="btn btn-primary" onclick="downloadSheet()" data-i18n="btn_download">⬇ Download PNG (300 DPI)</button>
+        <button class="btn btn-secondary mt6" id="hdDownloadBtn" onclick="downloadSheetHD()" style="display:none;">⬇ Download HD (600 DPI) ✨</button>
+        <button class="btn btn-secondary mt6" onclick="printSheet()" data-i18n="btn_print">🖨 Print Directly</button>
+        <button class="btn btn-ghost mt6" onclick="goStep(3)" data-i18n="btn_back_crop">← Back to Crop & Adjust</button>
+        <button class="btn btn-ghost mt6" onclick="goStep(1)" data-i18n="btn_new_photo">← New Photo</button>
       </div>
     </div>
 
@@ -2426,10 +2426,10 @@ header.legal-header{
   </div>
 </footer>
 
-<!-- â•â•â•â•â•â•â•â•â•â• TUTORIAL PAGE â•â•â•â•â•â•â•â•â•â• -->
+<!-- ══════════ TUTORIAL PAGE ══════════ -->
 <div id="tutorialPage" class="hidden">
   <div class="tut-header">
-    <button class="tut-back" onclick="closeTutorial()">â† <span data-i18n="tut_back">Go Back</span></button>
+    <button class="tut-back" onclick="closeTutorial()">← <span data-i18n="tut_back">Go Back</span></button>
     <div class="tut-title">API Key <em>Tutorial</em></div>
     <div style="margin-left:auto;display:flex;align-items:center;gap:10px;">
       <div style="font-size:10px;color:var(--muted);display:none;" class="tut-sub-text" data-i18n="tut_sub">How to get a free API key from Remove.bg</div>
@@ -2458,22 +2458,22 @@ header.legal-header{
       </div>
       <div class="tut-card-right">
         <div class="tut-card-title" data-i18n="tut1_title">Create a free account on Remove.bg</div>
-        <div class="tut-card-desc" data-i18n="tut1_desc">remove.bg is an AI tool that automatically removes backgrounds from photos. The free plan gives 50 photos every month â€” completely free.</div>
+        <div class="tut-card-desc" data-i18n="tut1_desc">remove.bg is an AI tool that automatically removes backgrounds from photos. The free plan gives 50 photos every month — completely free.</div>
         <div class="mock-screen">
           <div class="mock-bar">
             <div class="mock-dots"><div class="mock-dot" style="background:#ff5f57"></div><div class="mock-dot" style="background:#ffbd2e"></div><div class="mock-dot" style="background:#28c840"></div></div>
-            <div class="mock-url">ðŸ”’ remove.bg</div>
+            <div class="mock-url">🔒 remove.bg</div>
           </div>
           <div class="mock-body" style="text-align:center;padding:24px;">
             <div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:#fff;margin-bottom:6px;">remove<span style="color:#00d4aa">.bg</span></div>
-            <div style="font-size:10px;color:#7070a0;margin-bottom:16px;">Remove Image Background â€” 100% Automatically and Free</div>
+            <div style="font-size:10px;color:#7070a0;margin-bottom:16px;">Remove Image Background — 100% Automatically and Free</div>
             <div style="display:flex;gap:8px;justify-content:center;">
-              <div class="mock-btn mock-highlight">Sign Up Free â†’</div>
+              <div class="mock-btn mock-highlight">Sign Up Free →</div>
               <div class="mock-btn outline">Log In</div>
             </div>
           </div>
         </div>
-        <div class="tut-tip"><strong>ðŸ”— Link:</strong> <span style="color:var(--accent)">remove.bg</span> â€” search it on Google or type the URL directly. Sign up needs only an email â€” it's free.</div>
+        <div class="tut-tip"><strong>🔗 Link:</strong> <span style="color:var(--accent)">remove.bg</span> — search it on Google or type the URL directly. Sign up needs only an email — it's free.</div>
       </div>
     </div>
 
@@ -2484,21 +2484,21 @@ header.legal-header{
       </div>
       <div class="tut-card-right">
         <div class="tut-card-title" data-i18n="tut2_title">Click the "API" tab on the dashboard</div>
-        <div class="tut-card-desc" data-i18n="tut2_desc">After logging in, you'll see "API" in the top navbar â€” click on it.</div>
+        <div class="tut-card-desc" data-i18n="tut2_desc">After logging in, you'll see "API" in the top navbar — click on it.</div>
         <div class="mock-screen">
           <div class="mock-bar">
             <div class="mock-dots"><div class="mock-dot" style="background:#ff5f57"></div><div class="mock-dot" style="background:#ffbd2e"></div><div class="mock-dot" style="background:#28c840"></div></div>
-            <div class="mock-url">ðŸ”’ remove.bg/dashboard</div>
+            <div class="mock-url">🔒 remove.bg/dashboard</div>
           </div>
           <div class="mock-nav">
             <div class="mock-nav-item">Uploads</div>
             <div class="mock-nav-item">Bulk Editing</div>
-            <div class="mock-nav-item hi mock-highlight">API â† Click here</div>
+            <div class="mock-nav-item hi mock-highlight">API ← Click here</div>
             <div class="mock-nav-item">Plugins</div>
             <div class="mock-nav-item">Pricing</div>
           </div>
           <div class="mock-body">
-            <div style="font-size:11px;color:#6060a0;">My Dashboard â€” Credits & Plan</div>
+            <div style="font-size:11px;color:#6060a0;">My Dashboard — Credits & Plan</div>
           </div>
         </div>
       </div>
@@ -2511,16 +2511,16 @@ header.legal-header{
       </div>
       <div class="tut-card-right">
         <div class="tut-card-title" data-i18n="tut3_title">Click the "+ New API Key" button</div>
-        <div class="tut-card-desc" data-i18n="tut3_desc">On the API page, you'll see a "+ New API Key" button on the right side. Click it â€” a popup will open.</div>
+        <div class="tut-card-desc" data-i18n="tut3_desc">On the API page, you'll see a "+ New API Key" button on the right side. Click it — a popup will open.</div>
         <div class="mock-screen">
           <div class="mock-bar">
             <div class="mock-dots"><div class="mock-dot" style="background:#ff5f57"></div><div class="mock-dot" style="background:#ffbd2e"></div><div class="mock-dot" style="background:#28c840"></div></div>
-            <div class="mock-url">ðŸ”’ remove.bg/dashboard#api-key</div>
+            <div class="mock-url">🔒 remove.bg/dashboard#api-key</div>
           </div>
           <div class="mock-body">
             <div style="display:flex;justify-content:space-between;align-items:center;">
               <div style="font-size:12px;color:#a0a0c0;font-weight:700;">API Keys</div>
-              <div class="mock-btn mock-highlight" style="font-size:10px;">+ New API Key â† Here</div>
+              <div class="mock-btn mock-highlight" style="font-size:10px;">+ New API Key ← Here</div>
             </div>
             <div style="margin-top:12px;background:#0f0f23;border-radius:6px;padding:10px;font-size:10px;color:#4040a0;">
               No API keys yet. Create one above.
@@ -2537,11 +2537,11 @@ header.legal-header{
       </div>
       <div class="tut-card-right">
         <div class="tut-card-title" data-i18n="tut4_title">Copy your API key</div>
-        <div class="tut-card-desc" data-i18n="tut4_desc">A long key will appear like: "abc123XYZ..." â€” select it all and copy (Ctrl+C). This key is shown only once!</div>
+        <div class="tut-card-desc" data-i18n="tut4_desc">A long key will appear like: "abc123XYZ..." — select it all and copy (Ctrl+C). This key is shown only once!</div>
         <div class="mock-screen">
           <div class="mock-bar">
             <div class="mock-dots"><div class="mock-dot" style="background:#ff5f57"></div><div class="mock-dot" style="background:#ffbd2e"></div><div class="mock-dot" style="background:#28c840"></div></div>
-            <div class="mock-url">ðŸ”’ remove.bg/dashboard#api-key</div>
+            <div class="mock-url">🔒 remove.bg/dashboard#api-key</div>
           </div>
           <div class="mock-body">
             <div style="background:#0a1230;border:1px solid #2a2a5a;border-radius:10px;padding:16px;">
@@ -2549,13 +2549,13 @@ header.legal-header{
               <div style="font-size:10px;color:#7070a0;margin-bottom:6px;">API Key:</div>
               <div class="mock-key-box mock-highlight">
                 <div class="mock-key-text">DeTzhisA7969mQu<wbr>ABN7XpXbY</div>
-                <div class="mock-copy-btn">ðŸ“‹ Copy</div>
+                <div class="mock-copy-btn">📋 Copy</div>
               </div>
-              <div style="font-size:9px;color:#f87171;margin-top:8px;">âš  Do not share this key with anyone!</div>
+              <div style="font-size:9px;color:#f87171;margin-top:8px;">⚠ Do not share this key with anyone!</div>
             </div>
           </div>
         </div>
-        <div class="tut-tip"><strong>âš  Important:</strong> Copied the key? Save it somewhere â€” paste it into Notepad. You may need to look it up later.</div>
+        <div class="tut-tip"><strong>⚠ Important:</strong> Copied the key? Save it somewhere — paste it into Notepad. You may need to look it up later.</div>
       </div>
     </div>
 
@@ -2566,39 +2566,39 @@ header.legal-header{
       </div>
       <div class="tut-card-right">
         <div class="tut-card-title" data-i18n="tut5_title">Paste the API key in the tool</div>
-        <div class="tut-card-desc" data-i18n="tut5_desc">Come back to Studio Print. On Step 2 (Remove Background) you'll see an API Key field at the top â€” paste it there (Ctrl+V). It saves automatically.</div>
+        <div class="tut-card-desc" data-i18n="tut5_desc">Come back to Studio Print. On Step 2 (Remove Background) you'll see an API Key field at the top — paste it there (Ctrl+V). It saves automatically.</div>
         <div class="mock-screen" style="background:#161616;border-color:#2c2c2c;">
           <div class="mock-bar" style="background:#0d0d0d;border-color:#2c2c2c;">
             <div class="mock-dots"><div class="mock-dot" style="background:#ff5f57"></div><div class="mock-dot" style="background:#ffbd2e"></div><div class="mock-dot" style="background:#28c840"></div></div>
             <div class="mock-url" style="background:#1e1e1e;color:#555;">Studio Print</div>
           </div>
           <div class="mock-body">
-            <div style="font-size:9px;color:#777;text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px;">ðŸ”‘ Remove.bg API Key</div>
+            <div style="font-size:9px;color:#777;text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px;">🔑 Remove.bg API Key</div>
             <div class="mock-input-row">
-              <div class="mock-input mock-highlight" style="background:#1e1e1e;border-color:#f0a500;color:#4ade80;">DeTzhisA7969mQu... â† Paste here</div>
-              <div style="background:#272727;border:1px solid #2c2c2c;border-radius:5px;padding:5px 8px;font-size:12px;cursor:pointer;">ðŸ‘</div>
+              <div class="mock-input mock-highlight" style="background:#1e1e1e;border-color:#f0a500;color:#4ade80;">DeTzhisA7969mQu... ← Paste here</div>
+              <div style="background:#272727;border:1px solid #2c2c2c;border-radius:5px;padding:5px 8px;font-size:12px;cursor:pointer;">👁</div>
             </div>
-            <div style="font-size:9px;color:#4ade80;margin-top:6px;">âœ“ API Key set â€” AI removal ready!</div>
+            <div style="font-size:9px;color:#4ade80;margin-top:6px;">✓ API Key set — AI removal ready!</div>
           </div>
         </div>
-        <div class="tut-tip"><strong>âœ“ Done!</strong> Now click the "ðŸ¤– AI Remove BG" button â€” even complex backgrounds will be removed in a snap. 50 photos are free every month, then it resets.</div>
+        <div class="tut-tip"><strong>✓ Done!</strong> Now click the "🤖 AI Remove BG" button — even complex backgrounds will be removed in a snap. 50 photos are free every month, then it resets.</div>
       </div>
     </div>
 
     <!-- CTA -->
     <div class="tut-cta">
-      <div class="tut-cta-title">All set! Now <em>get started</em> ðŸŽ‰</div>
+      <div class="tut-cta-title">All set! Now <em>get started</em> 🎉</div>
       <div style="font-size:11px;color:var(--muted);margin-bottom:16px;" data-i18n="tut_cta_sub">Go back to the tool, upload a photo, and watch the AI magic</div>
-      <button class="btn btn-primary" style="width:auto;padding:10px 28px;" onclick="closeTutorial()">â† Go Back to Tool</button>
+      <button class="btn btn-primary" style="width:auto;padding:10px 28px;" onclick="closeTutorial()">← Go Back to Tool</button>
     </div>
 
   </div>
 </div>
 
 <script type="module">
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════
 // STATE
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════
 let origImg = null;          // Original HTMLImageElement
 let transparentCanvas = null; // After BG removal (transparent PNG)
 let processedCanvas = null;  // With BG color applied
@@ -2621,9 +2621,9 @@ let adjBrightness=100,adjContrast=100,adjSaturation=100,adjWarmth=0;
 // BG cancel flag
 let bgCancelled=false;
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════
 // GLOBALS
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════
 window.selectPreset=selectPreset;
 window.startBgRemoval=startBgRemoval;
 window.startOfflineBgRemoval=startOfflineBgRemoval;
@@ -2650,79 +2650,79 @@ window.setLang=setLang;
 window.triggerFeatureLines=triggerFeatureLines;
 window.hideFeatLines=hideFeatLines;
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════
 // LANGUAGE SYSTEM
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════
 const LANG = {
   en: {
-    badge_free:'âœ“ 100% Free', badge_offline:'âœ“ Offline After First Load', badge_ai:'âœ“ AI BG Removal',
+    badge_free:'✓ 100% Free', badge_offline:'✓ Offline After First Load', badge_ai:'✓ AI BG Removal',
     step1:'Upload Photo', step2:'Remove Background', step3:'Crop & Adjust', step4:'Generate A4 Sheet',
     upload_title:'Drop your photo here', upload_sub1:'WhatsApp downloads, camera photos, any image',
-    crop_hint:'Drag ðŸŸ¡ box to reposition Â· Drag corners to resize',
+    crop_hint:'Drag 🟡 box to reposition · Drag corners to resize',
     sb1_standard:'Photo Standard', sb1_selected:'Selected:', sb1_output:'Output size:',
     sb1_tips_title:'Photo Tips',
-    tip1:'ðŸ“Œ Take photo in good lighting', tip2:'ðŸ“Œ Plain background is better',
-    tip3:'ðŸ“Œ Face should be straight and clear', tip4:'ðŸ“Œ WhatsApp photos work perfectly',
-    tip5:'ðŸ“Œ Remove glasses if possible',
+    tip1:'📌 Take photo in good lighting', tip2:'📌 Plain background is better',
+    tip3:'📌 Face should be straight and clear', tip4:'📌 WhatsApp photos work perfectly',
+    tip5:'📌 Remove glasses if possible',
     api_placeholder:'Paste your API key here...',
-    api_status_empty:'Enter key â†’ AI removal will work on all backgrounds (indoor, outdoor, complex)',
+    api_status_empty:'Enter key → AI removal will work on all backgrounds (indoor, outdoor, complex)',
     api_privacy:'Key is saved only on your computer. Never sent anywhere.',
-    api_tut_btn:'How to get an API Key?', api_tut_sub:'View step-by-step tutorial â†’',
+    api_tut_btn:'How to get an API Key?', api_tut_sub:'View step-by-step tutorial →',
     sb2_remove_title:'Remove Background',
-    btn_cancel:'âœ• Cancel', btn_ai_remove:'ðŸ¤– Remove Background',
-    btn_proceed:'âœ“ Proceed to Crop â†’',
-    btn_skip:'Skip â†’ Keep Original',
-    btn_refine_bg:'âœï¸ Refine Edges',
+    btn_cancel:'✕ Cancel', btn_ai_remove:'🤖 Remove Background',
+    btn_proceed:'✓ Proceed to Crop →',
+    btn_skip:'Skip → Keep Original',
+    btn_refine_bg:'✏️ Refine Edges',
     refine_hint:'Paint over leftover background to <b>erase</b>, or <b>restore</b> parts that got cut off.',
     refine_tip_label:'Leftover background patches?',
     refine_tip_body:' Tap <b>Refine Edges</b> below and paint over them to erase, or restore any parts the AI cut off.',
-    refine_erase:'ðŸ©¹ Erase', refine_restore:'â†© Restore',
-    refine_size:'Size', refine_undo:'â†¶ Undo', refine_undo_short:'Undo', refine_reset:'Reset',
-    refine_cancel:'Cancel', refine_done:'âœ“ Done', refine_save:'ðŸ’¾ Save', refine_back:'Back',
-    sb2_bg_color:'New Background Color', white_standard:'â­ White = India passport standard',
-    sb3_crop_title:'Crop Controls', btn_reset_crop:'â†º Reset Crop Box',
-    btn_autocenter:'âŠ™ Auto-Center',
+    refine_erase:'🩹 Erase', refine_restore:'↩ Restore',
+    refine_size:'Size', refine_undo:'↶ Undo', refine_undo_short:'Undo', refine_reset:'Reset',
+    refine_cancel:'Cancel', refine_done:'✓ Done', refine_save:'💾 Save', refine_back:'Back',
+    sb2_bg_color:'New Background Color', white_standard:'⭐ White = India passport standard',
+    sb3_crop_title:'Crop Controls', btn_reset_crop:'↺ Reset Crop Box',
+    btn_autocenter:'⊙ Auto-Center',
     crop_amber_label:'Amber box', crop_drag_info:'drag to reposition.',
-    crop_corners_label:'Corners', crop_resize_info:'resize â€” aspect ratio auto-locked.',
+    crop_corners_label:'Corners', crop_resize_info:'resize — aspect ratio auto-locked.',
     sb3_adj_title:'Photo Adjustments',
     adj_brightness:'Brightness', adj_contrast:'Contrast', adj_saturation:'Saturation', adj_warmth:'Warmth',
     btn_reset_adj:'Reset Adjustments',
-    btn_confirm_crop:'âœ“ Confirm & Make Sheet â†’', btn_back:'â† Back',
+    btn_confirm_crop:'✓ Confirm & Make Sheet →', btn_back:'← Back',
     sb4_layout_title:'Layout', sb4_how_many:'How many photos?',
     sb4_per_row:'Photos per row (cols)',
-    btn_regen:'â†» Regenerate Sheet',
+    btn_regen:'↻ Regenerate Sheet',
     sb4_output_title:'Output Info',
     out_sheet:'Sheet size:', out_res:'Resolution:', out_fmt:'Format:',
-    out_photos:'Photos:', out_cut:'Cutting guides:', out_included:'Included âœ“',
-    btn_download:'â¬‡ Download PNG (300 DPI)', btn_print:'ðŸ–¨ Print Directly',
-    btn_new_photo:'â† New Photo', btn_back_crop:'â† Back to Crop & Adjust',
+    out_photos:'Photos:', out_cut:'Cutting guides:', out_included:'Included ✓',
+    btn_download:'⬇ Download PNG (300 DPI)', btn_print:'🖨 Print Directly',
+    btn_new_photo:'← New Photo', btn_back_crop:'← Back to Crop & Adjust',
     tut_back:'Go Back', tut_sub:'How to get a free API key from Remove.bg',
     tut1_title:'Create a free account on Remove.bg',
-    tut1_desc:'remove.bg is an AI tool that automatically removes backgrounds from photos. The free plan gives 50 photos every month â€” completely free.',
+    tut1_desc:'remove.bg is an AI tool that automatically removes backgrounds from photos. The free plan gives 50 photos every month — completely free.',
     tut2_title:'Click the "API" tab on the dashboard',
-    tut2_desc:'After logging in, you\'ll see "API" in the top navbar â€” click on it.',
+    tut2_desc:'After logging in, you\'ll see "API" in the top navbar — click on it.',
     tut3_title:'Click the "+ New API Key" button',
-    tut3_desc:'On the API page, you\'ll see a "+ New API Key" button on the right side. Click it â€” a popup will open.',
+    tut3_desc:'On the API page, you\'ll see a "+ New API Key" button on the right side. Click it — a popup will open.',
     tut4_title:'Copy your API key',
-    tut4_desc:'A long key will appear like: "abc123XYZ..." â€” select it all and copy (Ctrl+C). This key is shown only once!',
+    tut4_desc:'A long key will appear like: "abc123XYZ..." — select it all and copy (Ctrl+C). This key is shown only once!',
     tut5_title:'Paste the API key in the tool',
     tut5_desc:'Come back to Studio Print. On Step 2, paste the key (Ctrl+V) in the API Key field. It saves automatically.',
     tut_cta_sub:'Go back to the tool, upload a photo, and watch the AI magic',
-    tut_cta_btn:'â† Go Back to Tool',
+    tut_cta_btn:'← Go Back to Tool',
 
     /* Header / auth / account / plans */
     hdr_plans:'Plans', hdr_login:'Login',
-    auth_info_title:'â„¹ Info:',
+    auth_info_title:'ℹ Info:',
     auth_info_body:'Your account is kept secure. Passwords are stored hashed and all data is sent over HTTPS.',
     plans_note:'All payments are processed securely through Razorpay (UPI, Cards and Net Banking all supported). Your plan activates instantly once payment succeeds. Cancel anytime.',
     acc_name:'Name', acc_email:'Email', acc_plan:'Current Plan', acc_expiry:'Expires',
-    acc_upgrade:'ðŸ’Ž Upgrade / Change Plan',
+    acc_upgrade:'💎 Upgrade / Change Plan',
     acc_logout:'Logout',
-    acc_delete:'ðŸ—‘ Delete Account Permanently',
-    plan_tag_free:'Try it out â€” 2 sheets/day, no watermark, AI BG included.',
+    acc_delete:'🗑 Delete Account Permanently',
+    plan_tag_free:'Try it out — 2 sheets/day, no watermark, AI BG included.',
     plan_tag_weekly:'7 days full access, no watermark.',
     plan_tag_monthly:'Best value. 30 days, everything unlocked.',
-    plan_btn_current:'âœ“ Your Plan',
+    plan_btn_current:'✓ Your Plan',
     plan_btn_switch_free:'Switch to Free',
     plan_btn_upgrade:'Upgrade now',
     plan_price_forever:'forever',
@@ -2733,14 +2733,14 @@ const LANG = {
     auth_pwd:'Password (min 6)',
     auth_login_btn:'Login', auth_signup_btn:'Send OTP',
     auth_gmail_note:'Only official Gmail (@gmail.com) addresses are allowed. We\'ll email you a 6-digit code to verify.',
-    auth_sending_otp:'Sending codeâ€¦', auth_signing_in:'Signing inâ€¦',
-    auth_verifying:'Verifyingâ€¦', auth_verify_create:'Verify & Create Account',
+    auth_sending_otp:'Sending code…', auth_signing_in:'Signing in…',
+    auth_verifying:'Verifying…', auth_verify_create:'Verify & Create Account',
     auth_otp_intro_pre:'We sent a 6-digit verification code to',
     auth_otp_intro_post:'Check your inbox (and Spam folder) to complete signup.',
     auth_otp_label:'Verification code',
-    auth_otp_resend:'Resend Code', auth_otp_back:'â† Back',
+    auth_otp_resend:'Resend Code', auth_otp_back:'← Back',
     otp_expires_in:'Code expires in {time}',
-    otp_expired:'Code expired â€” tap Resend to get a new one.',
+    otp_expired:'Code expired — tap Resend to get a new one.',
 
     /* Auth errors + toasts */
     err_fields_required:'Please fill in all fields.',
@@ -2762,7 +2762,7 @@ const LANG = {
     toast_payment_cancel:'Payment cancelled',
     toast_need_login:'Login required',
     toast_crop_first:'Crop a photo first',
-    toast_plan_activated:'âœ“ {plan} plan activated!',
+    toast_plan_activated:'✓ {plan} plan activated!',
     toast_verification_fail:'Verification failed: ',
     toast_order_fail:'Order failed: ',
     toast_account_deleted:'Your account has been deleted',
@@ -2791,7 +2791,7 @@ function setLang(lang){
     b.classList.toggle('active', b.textContent.toLowerCase()===lang);
   });
   // Update all data-i18n text content. Values may contain simple inline
-  // markup (<b>, <em>, <br>) authored in the LANG dictionary â€” e.g. the
+  // markup (<b>, <em>, <br>) authored in the LANG dictionary — e.g. the
   // Refine Edges hint. We use innerHTML only when the value contains a
   // '<' so plain strings still go through textContent (safer + faster).
   document.querySelectorAll('[data-i18n]').forEach(el=>{
@@ -2819,7 +2819,7 @@ function loadLang(){
   }catch(e){ setLang('en'); }
 }
 
-// i18n helper â€” returns string for current language, with optional {placeholder} substitution
+// i18n helper — returns string for current language, with optional {placeholder} substitution
 function t(key, vars){
   const dict = LANG[currentLang] || LANG.en;
   let s = (dict[key] != null) ? dict[key] : (LANG.en[key] || key);
@@ -2829,9 +2829,9 @@ function t(key, vars){
   return s;
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════
 // CUSTOM CONFIRM MODAL (replaces browser's native confirm popup)
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════
 // Usage: const ok = await customConfirm({title, body, yes, no, danger:true})
 function customConfirm(opts){
   return new Promise(resolve=>{
@@ -2859,9 +2859,9 @@ function customConfirm(opts){
 }
 window.customConfirm = customConfirm;
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════
 // TUTORIAL
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════
 function openTutorial(){
   document.getElementById('tutorialPage').classList.remove('hidden');
   document.getElementById('tutorialPage').scrollTop=0;
@@ -2873,9 +2873,9 @@ function closeTutorial(){
 // Load language on startup
 setTimeout(()=>{ loadLang(); }, 100);
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════
 // UPLOAD
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════
 const fileInput=document.getElementById('fileInput');
 const uploadZone=document.getElementById('uploadZone');
 fileInput.addEventListener('change',e=>{
@@ -2892,7 +2892,7 @@ uploadZone.addEventListener('dragleave',()=>uploadZone.classList.remove('drag-ov
 uploadZone.addEventListener('drop',e=>{ e.preventDefault(); uploadZone.classList.remove('drag-over'); if(e.dataTransfer.files[0]) loadImage(e.dataTransfer.files[0]); });
 
 // Decode a file to an HTMLImageElement or ImageBitmap. Uses createImageBitmap
-// (async, off-main-thread) when available â€” keeps the UI responsive on heavy
+// (async, off-main-thread) when available — keeps the UI responsive on heavy
 // multi-MB photos from WhatsApp / DSLR that would otherwise freeze the page.
 async function decodeImageFile(file){
   if (typeof createImageBitmap === 'function') {
@@ -2911,14 +2911,14 @@ async function decodeImageFile(file){
 
 // Downscale a huge source image to a sane working size. Passport photos never
 // need more than ~3000px on the long edge (AI model internally resizes to 2048,
-// final 300 DPI output for 40Ã—60mm is 708px), so capping here prevents hangs
+// final 300 DPI output for 40×60mm is 708px), so capping here prevents hangs
 // and 100+ MB canvas allocations on mobile without any visible quality loss.
 const WORKING_MAX = 3000;
 function normalizeOrigImage(src){
   const sw = src.naturalWidth  || src.width;
   const sh = src.naturalHeight || src.height;
   const scale = Math.min(WORKING_MAX / sw, WORKING_MAX / sh, 1);
-  if (scale >= 1) return src; // small enough â€” use as-is
+  if (scale >= 1) return src; // small enough — use as-is
   const dw = Math.round(sw * scale);
   const dh = Math.round(sh * scale);
   const c = document.createElement('canvas');
@@ -2946,13 +2946,13 @@ async function loadImage(file){
     });
   } catch (err) {
     console.error('[loadImage]', err);
-    showUploadError('Image could not be loaded â€” please try a different photo.');
+    showUploadError('Image could not be loaded — please try a different photo.');
   }
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════
 // STEP NAVIGATION
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════
 function goStep(n){
   for(let i=1;i<=4;i++){
     document.getElementById('tab'+i).className='step'+(i===n?' active':i<n?' done':'');
@@ -2973,9 +2973,9 @@ function goStep(n){
   if(typeof refreshPlanUI === 'function') refreshPlanUI();
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════
 // PRESET
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════
 function selectPreset(el){
   // Plan gate: block pro country presets for free users
   if(el.classList.contains('pro-locked')){
@@ -2986,19 +2986,19 @@ function selectPreset(el){
   el.classList.add('active');
   photoW=+el.dataset.w; photoH=+el.dataset.h;
   const pw=Math.round(photoW/MM2IN*DPI), ph=Math.round(photoH/MM2IN*DPI);
-  document.getElementById('presetLabel').textContent=`${photoW}Ã—${photoH} mm`;
-  document.getElementById('presetPx').textContent=`${pw}Ã—${ph} px @ 300 DPI`;
+  document.getElementById('presetLabel').textContent=`${photoW}×${photoH} mm`;
+  document.getElementById('presetPx').textContent=`${pw}×${ph} px @ 300 DPI`;
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════
 // HI-DPI CANVAS HELPER
-// Sets a canvas's backing buffer to cssW Ã— cssH Ã— devicePixelRatio so that
+// Sets a canvas's backing buffer to cssW × cssH × devicePixelRatio so that
 // preview canvases stay crisp on mobile / Retina displays (otherwise they
-// look blurry because the browser upscales a 1Ã— buffer to a 2-3Ã— screen).
-// Returns the draw dimensions â€” callers should keep drawing at (cssW Ã— cssH).
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// look blurry because the browser upscales a 1× buffer to a 2-3× screen).
+// Returns the draw dimensions — callers should keep drawing at (cssW × cssH).
+// ═══════════════════════════════════════════════
 function setupHiDPICanvas(cvs, cssW, cssH){
-  const dpr = Math.min(window.devicePixelRatio || 1, 3); // cap at 3Ã— to avoid OOM on some phones
+  const dpr = Math.min(window.devicePixelRatio || 1, 3); // cap at 3× to avoid OOM on some phones
   cvs.width  = Math.round(cssW * dpr);
   cvs.height = Math.round(cssH * dpr);
   cvs.style.width  = cssW + 'px';
@@ -3010,9 +3010,9 @@ function setupHiDPICanvas(cvs, cssW, cssH){
   return { ctx, dpr, cssW, cssH };
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════
 // BG PREVIEW
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════
 function renderBgPreview(imgOrCanvas){
   const cvs=document.getElementById('bgCanvas');
   const wrap=document.getElementById('step2-canvas');
@@ -3020,7 +3020,7 @@ function renderBgPreview(imgOrCanvas){
   const mh=Math.max(wrap.clientHeight-40, 200);
   const sw=imgOrCanvas.naturalWidth||imgOrCanvas.width;
   const sh=imgOrCanvas.naturalHeight||imgOrCanvas.height;
-  const scale=Math.min(mw/sw,mh/sh); // no ,1 cap â€” allow upscaling small images
+  const scale=Math.min(mw/sw,mh/sh); // no ,1 cap — allow upscaling small images
   const cssW=Math.round(sw*scale);
   const cssH=Math.round(sh*scale);
   const { ctx } = setupHiDPICanvas(cvs, cssW, cssH);
@@ -3028,16 +3028,16 @@ function renderBgPreview(imgOrCanvas){
   ctx.drawImage(imgOrCanvas,0,0,cssW,cssH);
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════
 // BACKGROUND REMOVAL
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════
 // AI BACKGROUND REMOVAL
 // Engine: Transformers.js + briaai/RMBG-1.4
 // Runs 100% in browser, no API key, no server
 // First use: ~44MB download (cached forever after)
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════
 let _aiModel     = null;   // ONNX model instance
 let _aiProcessor = null;   // Image preprocessor
 let _RawImage    = null;   // RawImage class
@@ -3045,10 +3045,10 @@ let _aiLoading   = false;  // Loading lock
 
 // Load AI lib + model lazily (only on first click)
 async function ensureAiLoaded(onProgress) {
-  if (_aiModel && _aiProcessor) return; // Already cached â€” instant
+  if (_aiModel && _aiProcessor) return; // Already cached — instant
 
   if (_aiLoading) {
-    // Another tab/click is already loading â€” just wait
+    // Another tab/click is already loading — just wait
     await new Promise(resolve => {
       const check = setInterval(() => {
         if (!_aiLoading) { clearInterval(check); resolve(); }
@@ -3061,7 +3061,7 @@ async function ensureAiLoaded(onProgress) {
   try {
     onProgress('Loading AI engine...', 3);
 
-    // Dynamic import â€” no script tag needed, works from file:// and https://
+    // Dynamic import — no script tag needed, works from file:// and https://
     const tfModule = await import(
       'https://cdn.jsdelivr.net/npm/@huggingface/transformers@3/dist/transformers.min.js'
     );
@@ -3072,7 +3072,7 @@ async function ensureAiLoaded(onProgress) {
 
     onProgress('Downloading AI model (first use only)...', 8);
 
-    // Load processor (config for 1024Ã—1024 input normalization)
+    // Load processor (config for 1024×1024 input normalization)
     _aiProcessor = await AutoProcessor.from_pretrained('briaai/RMBG-1.4', {
       progress_callback: (e) => {
         if (e.status === 'progress' && e.total) {
@@ -3097,7 +3097,7 @@ async function ensureAiLoaded(onProgress) {
     // Load quantized ONNX model (~44MB instead of 175MB)
     _aiModel = await AutoModel.from_pretrained('briaai/RMBG-1.4', {
       device: 'wasm',
-      dtype: 'q8',   // quantized â€” 4Ã— smaller, near-identical quality
+      dtype: 'q8',   // quantized — 4× smaller, near-identical quality
       progress_callback: (e) => {
         if (e.status === 'progress' && e.total) {
           const pct = Math.round((e.loaded / e.total) * 100);
@@ -3121,7 +3121,7 @@ async function ensureAiLoaded(onProgress) {
   _aiLoading = false;
 }
 
-// â”€â”€ Connected-component cleanup: keeps only the largest foreground blob â”€â”€
+// ── Connected-component cleanup: keeps only the largest foreground blob ──
 // Removes floating artifacts (objects above head, background remnants, etc.)
 function cleanMaskLargestComponent(maskData, w, h) {
   const total = w * h;
@@ -3133,7 +3133,7 @@ function cleanMaskLargestComponent(maskData, w, h) {
   // BFS to find all connected components
   const label  = new Int32Array(total).fill(-1);
   const sizes  = [];
-  const queue  = new Int32Array(total); // typed array queue â€” fast
+  const queue  = new Int32Array(total); // typed array queue — fast
   let   numLbl = 0;
 
   for (let seed = 0; seed < total; seed++) {
@@ -3173,20 +3173,20 @@ function cleanMaskLargestComponent(maskData, w, h) {
   return cleaned;
 }
 
-// Main entry point â€” called by "Remove Background" button
+// Main entry point — called by "Remove Background" button
 async function startBgRemoval() {
   if (!origImg) { showToast('Please upload a photo first.'); return; }
 
   // Plan gate: AI BG is a paid feature
   if(!planLimits().aiBgAllowed){
-    showUpgradePrompt('AI Background Removal is a paid feature. Use "Skip â†’ Keep Original" or upgrade.');
+    showUpgradePrompt('AI Background Removal is a paid feature. Use "Skip → Keep Original" or upgrade.');
     return;
   }
 
   // Daily-limit gate: free users who've already used all their sheets today
   // can't download a new sheet anyway, so steer them to the upgrade modal
   // instead of running the BG removal for nothing. Only applies to logged-in
-  // free users â€” anonymous users are blocked earlier by the plan gate above
+  // free users — anonymous users are blocked earlier by the plan gate above
   // (aiBgAllowed === false for the free plan).
   if(isLoggedInForDownload() && isFreeUser() && remainingFreeSheets() <= 0){
     showUpgradePrompt(dailyLimitMessage());
@@ -3223,11 +3223,11 @@ async function startBgRemoval() {
   };
 
   try {
-    // â”€â”€ Step 1: Load library + model (cached after first time) â”€â”€
+    // ── Step 1: Load library + model (cached after first time) ──
     await ensureAiLoaded(onProgress);
     if (bgCancelled) return;
 
-    // â”€â”€ Step 2: Prepare image (max 2048px for quality) â”€â”€
+    // ── Step 2: Prepare image (max 2048px for quality) ──
     onProgress('Preparing image...', 97);
     const src  = origImg;
     const ow   = src.naturalWidth  || src.width;
@@ -3243,7 +3243,7 @@ async function startBgRemoval() {
     const imageBlob = await new Promise(r => tmpCvs.toBlob(r, 'image/jpeg', 0.95));
     if (bgCancelled) return;
 
-    // â”€â”€ Step 3: Run model inference â”€â”€
+    // ── Step 3: Run model inference ──
     onProgress('Analyzing background...', 98);
     const image = await _RawImage.fromBlob(imageBlob);
     const { pixel_values } = await _aiProcessor(image);
@@ -3252,14 +3252,14 @@ async function startBgRemoval() {
     const { output } = await _aiModel({ input: pixel_values });
     if (bgCancelled) return;
 
-    // â”€â”€ Step 4: Apply alpha mask â”€â”€
+    // ── Step 4: Apply alpha mask ──
     onProgress('Removing background...', 99);
     const mask = await _RawImage
       .fromTensor(output[0].mul(255).to('uint8'))
       .resize(pw, ph);
     let maskData = mask.data;
 
-    // â”€â”€ Step 4b: Clean up floating blobs (keep only the largest connected region) â”€â”€
+    // ── Step 4b: Clean up floating blobs (keep only the largest connected region) ──
     maskData = cleanMaskLargestComponent(maskData, pw, ph);
 
     const resultCvs = document.createElement('canvas');
@@ -3274,7 +3274,7 @@ async function startBgRemoval() {
     const resultBlob = await new Promise(r => resultCvs.toBlob(r, 'image/png'));
     if (bgCancelled) return;
 
-    // â”€â”€ Step 5: Build transparent + composite canvases â”€â”€
+    // ── Step 5: Build transparent + composite canvases ──
     const resultUrl = URL.createObjectURL(resultBlob);
     const resultImg = new Image();
     resultImg.onload = () => {
@@ -3288,7 +3288,7 @@ async function startBgRemoval() {
 
       processedCanvas = compositeWithBg(transparentCanvas, bgColor);
 
-      onProgress('âœ… Background removed successfully!', 100);
+      onProgress('✅ Background removed successfully!', 100);
 
       // Show before/after comparison slider
       showComparisonSlider(origImg, processedCanvas);
@@ -3314,7 +3314,7 @@ async function startBgRemoval() {
     if (bgCancelled) return;
     console.error('[AI BG Removal Error]', err);
     const msg = err.message || 'Unknown error';
-    statusEl.textContent = 'âš  Error: ' + msg;
+    statusEl.textContent = '⚠ Error: ' + msg;
     setBgBtnsDisabled(false);
     // Reset model so user can retry fresh
     _aiModel     = null;
@@ -3324,10 +3324,10 @@ async function startBgRemoval() {
 }
 
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════
 // FEATURE LINES ANIMATION
 // Radiating SVG lines from the photo on step 2
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════
 function hideFeatLines(){
   const svg=document.getElementById('featLinesSVG');
   if(svg) svg.style.opacity='0';
@@ -3360,11 +3360,11 @@ function triggerFeatureLines(){
 
   // 5 features: sx,sy = line start (on photo edge), tx,ty = line end (label center)
   const feats=[
-    { sx:px+pw*0.12, sy:py,          tx:W*0.06,  ty:H*0.14, icon:'ðŸ¤–', label:'AI BG Removal', color:'#f0a500', side:'left'  },
-    { sx:px+pw*0.88, sy:py,          tx:W*0.80,  ty:H*0.10, icon:'âœ‚ï¸', label:'Smart Crop',     color:'#60a5fa', side:'right' },
-    { sx:px+pw,      sy:py+ph*0.45,  tx:W*0.90,  ty:H*0.48, icon:'ðŸŒ', label:'6+ Sizes',       color:'#4ade80', side:'right' },
-    { sx:px+pw*0.72, sy:py+ph,       tx:W*0.74,  ty:H*0.88, icon:'ðŸ“„', label:'300 DPI Print',  color:'#f0a500', side:'right' },
-    { sx:px,         sy:py+ph*0.60,  tx:W*0.04,  ty:H*0.75, icon:'â¬‡',  label:'Instant Save',  color:'#60a5fa', side:'left'  },
+    { sx:px+pw*0.12, sy:py,          tx:W*0.06,  ty:H*0.14, icon:'🤖', label:'AI BG Removal', color:'#f0a500', side:'left'  },
+    { sx:px+pw*0.88, sy:py,          tx:W*0.80,  ty:H*0.10, icon:'✂️', label:'Smart Crop',     color:'#60a5fa', side:'right' },
+    { sx:px+pw,      sy:py+ph*0.45,  tx:W*0.90,  ty:H*0.48, icon:'🌍', label:'6+ Sizes',       color:'#4ade80', side:'right' },
+    { sx:px+pw*0.72, sy:py+ph,       tx:W*0.74,  ty:H*0.88, icon:'📄', label:'300 DPI Print',  color:'#f0a500', side:'right' },
+    { sx:px,         sy:py+ph*0.60,  tx:W*0.04,  ty:H*0.75, icon:'⬇',  label:'Instant Save',  color:'#60a5fa', side:'left'  },
   ];
 
   // Build SVG
@@ -3425,9 +3425,9 @@ function triggerFeatureLines(){
   wrap.insertBefore(svg, wrap.firstChild);
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════
 // COMPARISON SLIDER
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════
 function showComparisonSlider(origSrc, resultCanvas){
   const wrap   = document.getElementById('step2-canvas');
   const compW  = document.getElementById('comparisonWrap');
@@ -3443,7 +3443,7 @@ function showComparisonSlider(origSrc, resultCanvas){
   const mw = Math.max(wrap.clientWidth  - 40, 300);
   const mh = Math.max(wrap.clientHeight - 40, 300);
   const sw = resultCanvas.width, sh = resultCanvas.height;
-  const scale = Math.min(mw/sw, mh/sh); // no ,1 â€” allow upscaling
+  const scale = Math.min(mw/sw, mh/sh); // no ,1 — allow upscaling
   const dw = Math.round(sw*scale), dh = Math.round(sh*scale);
 
   // Set both canvases to same size, DPR-aware for crisp rendering on mobile
@@ -3467,14 +3467,14 @@ function showComparisonSlider(origSrc, resultCanvas){
   // Show comparison wrap
   compW.classList.remove('hidden');
 
-  // â”€â”€ Drag interaction â”€â”€
+  // ── Drag interaction ──
   let dragging = false;
 
   function setSlider(pct, w){
     const x = Math.round((pct/100) * w);
     divider.style.left = x + 'px';
     // Clip the original canvas from the right so only the left portion up
-    // to the slider is visible. The canvas itself stays pinned to (0,0) â€”
+    // to the slider is visible. The canvas itself stays pinned to (0,0) —
     // this avoids the image appearing to shift horizontally when the user
     // drags the slider on mobile.
     const rightInsetPct = Math.max(0, Math.min(100, 100 - pct));
@@ -3495,7 +3495,7 @@ function showComparisonSlider(origSrc, resultCanvas){
   window.addEventListener('mouseup',   ()  => { dragging = false; });
 
   // Non-passive touch listeners so we can call preventDefault() inside
-  // touchmove â€” otherwise the mobile browser pans/scrolls the page along
+  // touchmove — otherwise the mobile browser pans/scrolls the page along
   // with the drag, which looked like the image itself was being dragged.
   container.addEventListener('touchstart', e => {
     dragging = true;
@@ -3516,11 +3516,11 @@ function hideComparisonSlider(){
   document.getElementById('bgCanvas').style.display = 'block';
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-// REFINE EDGES â€” manual erase / restore brush editor
+// ═══════════════════════════════════════════════
+// REFINE EDGES — manual erase / restore brush editor
 // Used after AI BG removal to clean up leftover background
 // patches or to bring back accidentally-removed foreground parts.
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════
 const _refine = {
   active: false,
   mode: 'erase',        // 'erase' | 'restore'
@@ -3601,7 +3601,7 @@ function enterRefineMode(){
     availW = Math.max(rect.width  || (window.innerWidth  - 24), 240);
     availH = Math.max(rect.height || (window.innerHeight - 260), 240);
   } else {
-    // Desktop: keep original behaviour â€” fit inside the step-2 canvas area
+    // Desktop: keep original behaviour — fit inside the step-2 canvas area
     availW = Math.max(wrap.clientWidth  - 32,  260);
     availH = Math.max(wrap.clientHeight - 180, 260);
   }
@@ -3673,7 +3673,7 @@ function exitRefineMode(apply){
     processedCanvas = compositeWithBg(transparentCanvas, bgColor);
     // Re-show comparison slider with updated result
     showComparisonSlider(origImg, processedCanvas);
-    showToast('Edges refined â€” tap "Proceed to Crop" when ready.');
+    showToast('Edges refined — tap "Proceed to Crop" when ready.');
   } else {
     // Restore comparison slider as it was
     if(processedCanvas){
@@ -3997,7 +3997,7 @@ function startOfflineBgRemoval(){
       transparentCanvas.getContext('2d').drawImage(tmp,0,0);
       processedCanvas=compositeWithBg(transparentCanvas,bgColor);
       barEl.style.width='100%';
-      statusEl.textContent='âœ“ Background hat gaya! (Offline)';
+      statusEl.textContent='✓ Background hat gaya! (Offline)';
       // Show comparison slider for offline too
       showComparisonSlider(origImg, processedCanvas);
       document.getElementById('proceedCropBtn').style.display='flex';
@@ -4010,12 +4010,12 @@ function startOfflineBgRemoval(){
         setBgBtnsDisabled(false);
       }},800);
     }catch(err){
-      if(!bgCancelled){ statusEl.textContent='âš  Error: '+err.message; setBgBtnsDisabled(false); }
+      if(!bgCancelled){ statusEl.textContent='⚠ Error: '+err.message; setBgBtnsDisabled(false); }
     }
   },60);
 }
 
-// â”€â”€ Color-based flood fill BG removal (100% offline) â”€â”€
+// ── Color-based flood fill BG removal (100% offline) ──
 function removeBgFloodFill(canvas, threshold){
   const ctx=canvas.getContext('2d');
   const w=canvas.width, h=canvas.height;
@@ -4060,7 +4060,7 @@ function removeBgFloodFill(canvas, threshold){
     tryEnqueue(x,y-1); tryEnqueue(x,y+1);
   }
 
-  // 3. Apply: backgroundâ†’transparent, keep foreground
+  // 3. Apply: background→transparent, keep foreground
   const out=ctx.createImageData(w,h);
   for(let i=0;i<d.length;i+=4){
     out.data[i]=d[i]; out.data[i+1]=d[i+1]; out.data[i+2]=d[i+2];
@@ -4126,7 +4126,7 @@ function selectBgColor(el){
 }
 
 function applyCustomColor(val){
-  // Same gate as selectBgColor â€” custom colour picker is paid-only too.
+  // Same gate as selectBgColor — custom colour picker is paid-only too.
   if(isFreeUser()){
     const user = (typeof currentUser === 'function') ? currentUser() : null;
     if(!user){
@@ -4155,9 +4155,9 @@ function rebuildProcessed(){
   if(document.getElementById('cropCanvas').width>0) drawCrop();
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════
 // CROP
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════
 const cropCvs=document.getElementById('cropCanvas');
 const cropCtx=cropCvs.getContext('2d');
 
@@ -4170,8 +4170,8 @@ function initCropCanvas(){
   dispW=Math.round(src.width*scale);
   dispH=Math.round(src.height*scale);
   dispScale=scale;
-  // DPR-aware backing buffer â€” keeps cropCanvas sharp on mobile / Retina.
-  // Draw calls still use (dispW Ã— dispH) logical coords because the context
+  // DPR-aware backing buffer — keeps cropCanvas sharp on mobile / Retina.
+  // Draw calls still use (dispW × dispH) logical coords because the context
   // transform below maps them to the physical pixels.
   setupHiDPICanvas(cropCvs, dispW, dispH);
 
@@ -4240,7 +4240,7 @@ function drawCrop(){
   // Label
   cropCtx.fillStyle='#f0a500';
   cropCtx.font='bold 11px DM Mono, monospace';
-  cropCtx.fillText(`${photoW}Ã—${photoH}mm`,cropX+3,cropY-5);
+  cropCtx.fillText(`${photoW}×${photoH}mm`,cropX+3,cropY-5);
 }
 
 function getFilter(){
@@ -4304,9 +4304,9 @@ function doResize(dir,mx,my){
 function resetCrop(){ initCropCanvas(); }
 function autoCenterCrop(){ cropX=(dispW-cropW)/2; cropY=(dispH-cropH)/2; drawCrop(); }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════
 // ADJUSTMENTS
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════
 function updateAdj(input,valId){
   const v=+input.value;
   document.getElementById(valId).textContent=v;
@@ -4327,9 +4327,9 @@ function resetAdj(){
   drawCrop();
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-// CONFIRM CROP â†’ EXTRACT PHOTO
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════
+// CONFIRM CROP → EXTRACT PHOTO
+// ═══════════════════════════════════════════════
 function confirmCrop(){
   const outW=Math.round(photoW/MM2IN*DPI);
   const outH=Math.round(photoH/MM2IN*DPI);
@@ -4355,9 +4355,9 @@ function confirmCrop(){
   requestAnimationFrame(()=>buildSheet()); // then buildSheet reads correct clientWidth
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════
 // SHEET GENERATION
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════
 function setTotal(el){
   const v = +el.dataset.v;
   const pl = planLimits();
@@ -4391,7 +4391,7 @@ function buildSheet(){
 
   const a4W=Math.round(210/MM2IN*DPI); // 2480px
   const a4H=Math.round(297/MM2IN*DPI); // 3508px
-  const marginPx=Math.round(3/MM2IN*DPI);   // 3mm margin â€” bilkul upar
+  const marginPx=Math.round(3/MM2IN*DPI);   // 3mm margin — bilkul upar
   const gapMm=2.5, gapPx=Math.round(gapMm/MM2IN*DPI);
 
   // Usable width inside margins
@@ -4417,9 +4417,9 @@ function buildSheet(){
   ctx.fillStyle='#FFFFFF';
   ctx.fillRect(0,0,a4W,a4H);
 
-  // CENTERED horizontally, TOP-aligned â€” equal margins left & right
+  // CENTERED horizontally, TOP-aligned — equal margins left & right
   const gridW=sheetCols*pW+(sheetCols-1)*gapPx;
-  const sx=Math.round((a4W-gridW)/2);   // CENTER â€” equal margin both sides
+  const sx=Math.round((a4W-gridW)/2);   // CENTER — equal margin both sides
   const sy=marginPx;                     // 3mm from TOP
 
   // Draw photos (only sheetTotal count)
@@ -4434,10 +4434,10 @@ function buildSheet(){
     }
   }
 
-  // â”€â”€ STANDARD thin solid black border (cutting guide) â”€â”€
+  // ── STANDARD thin solid black border (cutting guide) ──
   ctx.strokeStyle='rgba(0,0,0,0.75)';
   ctx.lineWidth=Math.round(0.25/MM2IN*DPI); // ~0.25mm solid line
-  ctx.setLineDash([]); // SOLID â€” no dash
+  ctx.setLineDash([]); // SOLID — no dash
   count=0;
   outer2: for(let r=0;r<sheetRows;r++){
     for(let c=0;c<sheetCols;c++){
@@ -4453,7 +4453,7 @@ function buildSheet(){
   ctx.fillStyle='rgba(0,0,0,0.15)';
   ctx.font=`${Math.round(6/MM2IN*DPI)}px monospace`;
   ctx.fillText(
-    `Studio Print Â· ${sheetTotal} photos Â· ${photoW}Ã—${photoH}mm Â· 300 DPI Â· A4`,
+    `Studio Print · ${sheetTotal} photos · ${photoW}×${photoH}mm · 300 DPI · A4`,
     marginPx, a4H-Math.round(4/MM2IN*DPI)
   );
 
@@ -4464,7 +4464,7 @@ function buildSheet(){
 
   _sheetFullRes=sheet;
 
-  // Preview â€” DPR-aware so the A4 thumbnail stays crisp on mobile / Retina
+  // Preview — DPR-aware so the A4 thumbnail stays crisp on mobile / Retina
   const previewCvs=document.getElementById('sheetCanvas');
   const wrap=document.getElementById('step4-canvas');
   const mw=(wrap.clientWidth||720)-40;
@@ -4479,14 +4479,14 @@ function buildSheet(){
   const actualPwMm=(pW/DPI*MM2IN).toFixed(1);
   const actualPhMm=(pH/DPI*MM2IN).toFixed(1);
   document.getElementById('photoCount').textContent=
-    `${sheetTotal} photos Â· ${sheetCols}Ã—${sheetRows} grid`;
+    `${sheetTotal} photos · ${sheetCols}×${sheetRows} grid`;
   const infoEl=document.getElementById('layoutInfo');
   if(infoEl) infoEl.innerHTML=
-    `<strong>${sheetTotal} photos</strong> â€” ${sheetCols} cols Ã— ${sheetRows} rows<br>
-     Photo size: ${actualPwMm}Ã—${actualPhMm}mm Â· Auto-fit âœ“`;
+    `<strong>${sheetTotal} photos</strong> — ${sheetCols} cols × ${sheetRows} rows<br>
+     Photo size: ${actualPwMm}×${actualPhMm}mm · Auto-fit ✓`;
 }
 
-// â”€â”€ Watermark painter (free users only) â”€â”€
+// ── Watermark painter (free users only) ──
 function paintWatermark(ctx, W, H){
   ctx.save();
   ctx.globalAlpha = 0.18;
@@ -4496,7 +4496,7 @@ function paintWatermark(ctx, W, H){
   ctx.textBaseline = 'middle';
   ctx.translate(W/2, H/2);
   ctx.rotate(-Math.PI/6);
-  const line = 'Studio Print â€¢ FREE PREVIEW â€¢ Upgrade for HD';
+  const line = 'Studio Print • FREE PREVIEW • Upgrade for HD';
   const step = Math.round(H*0.16);
   for(let y = -H; y <= H; y += step){
     ctx.fillText(line, 0, y);
@@ -4504,7 +4504,7 @@ function paintWatermark(ctx, W, H){
   ctx.restore();
 }
 
-// Render a sheet canvas at an arbitrary DPI â€” used by both preview (300) and HD export (600).
+// Render a sheet canvas at an arbitrary DPI — used by both preview (300) and HD export (600).
 function renderSheetAtDPI(targetDPI){
   if(!croppedCanvas) return null;
   const a4W=Math.round(210/MM2IN*targetDPI);
@@ -4575,7 +4575,7 @@ function renderSheetAtDPI(targetDPI){
   ctx.fillStyle='rgba(0,0,0,0.15)';
   ctx.font=`${Math.round(6/MM2IN*targetDPI)}px monospace`;
   ctx.fillText(
-    `Studio Print Â· ${sheetTotal} photos Â· ${photoW}Ã—${photoH}mm Â· ${targetDPI} DPI Â· A4`,
+    `Studio Print · ${sheetTotal} photos · ${photoW}×${photoH}mm · ${targetDPI} DPI · A4`,
     marginPx, a4H-Math.round(4/MM2IN*targetDPI)
   );
   return sheet;
@@ -4636,9 +4636,9 @@ async function printSheet(){
 }
 window.downloadSheetHD = downloadSheetHD;
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════
 // UTILITIES
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════
 function drawChecker(ctx,x,y,w,h){
   const sz=10;
   for(let i=x;i<x+w;i+=sz){
@@ -4649,9 +4649,9 @@ function drawChecker(ctx,x,y,w,h){
   }
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════
 // UPLOAD BACKGROUND PARTICLE ANIMATION
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════
 function initUploadParticles(){
   const cvs = document.getElementById('uploadBgCanvas');
   if(!cvs) return;
@@ -4739,9 +4739,9 @@ window.addEventListener('resize',()=>{
   },150);
 });
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-// LOGO RESET (click on logo â†’ refresh page like other websites)
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════
+// LOGO RESET (click on logo → refresh page like other websites)
+// ═══════════════════════════════════════════════
 async function resetApp(){
   // If user has unsaved work, ask via our custom in-site modal (never browser confirm)
   const hasWork = origImg || processedCanvas || croppedCanvas;
@@ -4762,9 +4762,9 @@ async function resetApp(){
 }
 window.resetApp=resetApp;
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-// FILL A4 â€” auto-calc max photos that fit in A4
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════
+// FILL A4 — auto-calc max photos that fit in A4
+// ═══════════════════════════════════════════════
 function fillA4(){
   if(!croppedCanvas){
     showToast(t('toast_crop_first'));
@@ -4815,20 +4815,20 @@ function fillA4(){
     b.classList.toggle('active', +b.dataset.v===sheetCols);
   });
   buildSheet();
-  showToast(`A4 filled â€” ${sheetTotal} photos (${sheetCols}Ã—${sheetRows})`);
+  showToast(`A4 filled — ${sheetTotal} photos (${sheetCols}×${sheetRows})`);
 }
 window.fillA4=fillA4;
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════
 // AUTH + PLANS + PAYMENT
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-// â–¶ Set BACKEND_URL to your deployed Node.js backend (see backend/README.md)
+// ═══════════════════════════════════════════════
+// ▶ Set BACKEND_URL to your deployed Node.js backend (see backend/README.md)
 //   to enable real Razorpay payments with server-side signature verification.
 //   Leave as '' to run in localStorage-only mode (demo / testing).
 const BACKEND_URL = 'https://passportprint-studio.onrender.com';
 const USE_BACKEND = !!BACKEND_URL;
 // Google Sign-In (One Tap + button). Configure this to the OAuth Web Client ID
-// from Google Cloud Console â†’ APIs & Services â†’ Credentials. Authorized
+// from Google Cloud Console → APIs & Services → Credentials. Authorized
 // JavaScript origins must include this site's origin (e.g. the Netlify URL).
 // Can be overridden at runtime by setting window.GOOGLE_OAUTH_CLIENT_ID
 // before this script runs (useful for local dev / preview deploys).
@@ -4887,17 +4887,17 @@ const PLANS = {
     aiBgAllowed: true,
     hdExport: true,
     allPresets: true,
-    features: ['Everything in Weekly', 'Bulk batch processing', 'Custom background colors', 'Priority email support', 'Best value â€” saves â‚¹27/month vs weekly'],
+    features: ['Everything in Weekly', 'Bulk batch processing', 'Custom background colors', 'Priority email support', 'Best value — saves ₹27/month vs weekly'],
     dimFeatures: []
   }
 };
 
-// â”€â”€ Plan enforcement helpers â”€â”€
+// ── Plan enforcement helpers ──
 function planLimits(){ return PLANS[effectivePlan(currentUser())] || PLANS.free; }
 function isFreeUser(){ return effectivePlan(currentUser()) === 'free'; }
 
-// Pro preset flags â€” presets beyond the "basic" free set
-const PRO_PRESET_COUNTRIES = new Set(['ðŸ‡ºðŸ‡¸ US Visa','ðŸ‡¦ðŸ‡ª UAE','ðŸ‡¦ðŸ‡º Australia']);
+// Pro preset flags — presets beyond the "basic" free set
+const PRO_PRESET_COUNTRIES = new Set(['🇺🇸 US Visa','🇦🇪 UAE','🇦🇺 Australia']);
 
 function _todayKey(){
   const d=new Date();
@@ -4971,7 +4971,7 @@ async function consumeFreeSheetOrBlock(){
       return false;
     }
     if(e && e.status === 401){
-      // Auth expired â€” clear the stale token and force re-login instead
+      // Auth expired — clear the stale token and force re-login instead
       // of silently falling back to a bypassable local counter.
       try{
         localStorage.removeItem(AUTH_TOKEN_KEY);
@@ -5010,7 +5010,7 @@ function getUsers(){ try{return JSON.parse(localStorage.getItem(AUTH_STORE_KEY)|
 function saveUsers(u){ localStorage.setItem(AUTH_STORE_KEY, JSON.stringify(u)); }
 function getSession(){ try{return JSON.parse(localStorage.getItem(AUTH_SESSION_KEY)||'null');}catch(e){return null;} }
 function setSession(s){ if(s) localStorage.setItem(AUTH_SESSION_KEY, JSON.stringify(s)); else localStorage.removeItem(AUTH_SESSION_KEY); }
-// Lightweight hash (NOT cryptographically secure â€” this is a client-side demo).
+// Lightweight hash (NOT cryptographically secure — this is a client-side demo).
 // For real production auth, use a server + bcrypt/argon2.
 async function hashPwd(pwd){
   try{
@@ -5039,7 +5039,7 @@ function refreshAuthUI(){
   const user=currentUser();
   const btn=document.getElementById('hdrAuthBtn');
   if(user){
-    // Show ONLY the username â€” plan info lives in the Account modal now.
+    // Show ONLY the username — plan info lives in the Account modal now.
     const name = user.name || (user.email ? user.email.split('@')[0] : '');
     btn.innerHTML = `<span class="hdr-lbl">${escapeHtml(name)}</span>`;
     btn.onclick = openAccount;
@@ -5050,7 +5050,7 @@ function refreshAuthUI(){
   refreshPlanUI();
 }
 
-// â”€â”€ Apply plan-based UI gating (buttons, presets, badges) â”€â”€
+// ── Apply plan-based UI gating (buttons, presets, badges) ──
 function refreshPlanUI(){
   const pl = planLimits();
   const free = isFreeUser();
@@ -5080,7 +5080,7 @@ function refreshPlanUI(){
       if(!s.querySelector('.pro-lock-badge')){
         const badge = document.createElement('span');
         badge.className = 'pro-lock-badge';
-        badge.textContent = 'ðŸ”’';
+        badge.textContent = '🔒';
         s.appendChild(badge);
       }
     }else{
@@ -5101,7 +5101,7 @@ function refreshPlanUI(){
       if(!b.querySelector('.pro-lock-badge')){
         const badge = document.createElement('span');
         badge.className = 'pro-lock-badge';
-        badge.textContent = 'ðŸ”’';
+        badge.textContent = '🔒';
         b.appendChild(badge);
       }
     }else{
@@ -5115,7 +5115,7 @@ function refreshPlanUI(){
   //  - Locked if the plan does not allow AI BG at all (e.g. paid-only plans).
   //  - Locked if a free user has exhausted their daily sheet quota
   //    (no point generating a BG when they can't download the sheet).
-  //  - Otherwise active â€” free users get the same treatment as paid users.
+  //  - Otherwise active — free users get the same treatment as paid users.
   const aiBtn = document.getElementById('removeBgBtn');
   if(aiBtn){
     const atDailyLimit = free && pl.dailySheets > 0 && isLoggedInForDownload() && remainingFreeSheets() <= 0;
@@ -5123,15 +5123,15 @@ function refreshPlanUI(){
     if(locked){
       aiBtn.classList.add('pro-locked');
       aiBtn.innerHTML = atDailyLimit
-        ? 'ðŸ”’ Daily limit reached â€” Upgrade'
-        : 'ðŸ”’ AI Remove BG (Pro)';
+        ? '🔒 Daily limit reached — Upgrade'
+        : '🔒 AI Remove BG (Pro)';
     }else{
       aiBtn.classList.remove('pro-locked');
-      aiBtn.innerHTML = 'ðŸ¤– Remove Background';
+      aiBtn.innerHTML = '🤖 Remove Background';
     }
   }
 
-  // Skip â†’ Keep Original: only promote as primary CTA when AI BG isn't
+  // Skip → Keep Original: only promote as primary CTA when AI BG isn't
   // available on this plan at all. When the lock is purely due to the daily
   // quota being exhausted, skipping won't help either (they still can't
   // generate a new sheet), so we don't highlight it.
@@ -5162,7 +5162,7 @@ function refreshPlanBanner(){
   if(!isLoggedInForDownload()){
     el.style.display = 'block';
     el.className = 'plan-banner ok';
-    el.innerHTML = (`Free plan Â· <strong>${pl.dailySheets}</strong> sheet${pl.dailySheets===1?'':'s'}/day. <a href="#" onclick="openAuth('signup');return false;">Sign up to download â†’</a>`);
+    el.innerHTML = (`Free plan · <strong>${pl.dailySheets}</strong> sheet${pl.dailySheets===1?'':'s'}/day. <a href="#" onclick="openAuth('signup');return false;">Sign up to download →</a>`);
     return;
   }
   const used = getTodaySheets();
@@ -5170,7 +5170,7 @@ function refreshPlanBanner(){
   el.style.display = 'block';
   if(left > 0){
     el.className = 'plan-banner ok';
-    el.innerHTML = (`Free plan Â· <strong>${left}/${pl.dailySheets}</strong> sheet${left===1?'':'s'} left today. <a href="#" onclick="openPlans();return false;">Go unlimited â†’</a>`);
+    el.innerHTML = (`Free plan · <strong>${left}/${pl.dailySheets}</strong> sheet${left===1?'':'s'} left today. <a href="#" onclick="openPlans();return false;">Go unlimited →</a>`);
   }else{
     el.className = 'plan-banner hit';
     el.innerHTML = (`Daily free limit (${pl.dailySheets} sheets) reached. <a href="#" onclick="openPlans();return false;">Upgrade</a>`);
@@ -5180,7 +5180,7 @@ window.refreshPlanUI = refreshPlanUI;
 window.refreshPlanBanner = refreshPlanBanner;
 function escapeHtml(s){return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 
-// â”€â”€ Modal helpers â”€â”€
+// ── Modal helpers ──
 function openModal(id){ document.getElementById(id).classList.add('active'); document.body.style.overflow='hidden'; }
 function closeModal(id){ document.getElementById(id).classList.remove('active'); document.body.style.overflow=''; }
 function closeAllModals(){
@@ -5243,7 +5243,7 @@ function loadRazorpaySdk(){
   return _razorpaySdkPromise;
 }
 
-// â”€â”€ Auth (login/signup) â”€â”€
+// ── Auth (login/signup) ──
 function openAuth(tab){
   // Guard: if called from event handler (onclick=openAuth), tab will be an Event
   if(typeof tab!=='string') tab='login';
@@ -5293,12 +5293,12 @@ function setAuthBusy(formId, busy, busyText, idleText){
   if(!busy && idleText) btn.textContent = idleText;
 }
 
-// â”€â”€ Google Sign-In (One Tap + button) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Google Sign-In (One Tap + button) ────────────────────────────────────
 // Uses Google Identity Services loaded on demand. Clicking
 // "Login" opens the modal and triggers One Tap, which shows the browser's
 // native account chooser with every Gmail the user is already signed in to.
 // Selecting an account auto-fills the user's name + email on the backend
-// and logs them straight in â€” no password, no OTP. Users without backend
+// and logs them straight in — no password, no OTP. Users without backend
 // mode fall back to the localStorage email/password flow below.
 let _googleInitDone = false;
 let _googleBtnRendered = false;
@@ -5402,7 +5402,7 @@ async function doSignup(e){
     return;
   }
 
-  // â”€â”€ LocalStorage mode (no backend) â”€â”€
+  // ── LocalStorage mode (no backend) ──
   const users=getUsers();
   if(users[email]){err.textContent = 'Email already registered. Please login.';return;}
   const passhash=await hashPwd(pwd);
@@ -5507,7 +5507,7 @@ async function doLogin(e){
     return;
   }
 
-  // â”€â”€ LocalStorage mode â”€â”€
+  // ── LocalStorage mode ──
   const users=getUsers();
   const u=users[email];
   if(!u){err.textContent=t('err_no_account');return;}
@@ -5525,7 +5525,7 @@ function logout(){
   showToast(t('toast_logout'));
 }
 
-// â”€â”€ Delete account (permanent) â”€â”€
+// ── Delete account (permanent) ──
 async function deleteAccount(){
   const user = currentUser();
   if(!user) return;
@@ -5541,7 +5541,7 @@ async function deleteAccount(){
   // Backend mode: the server MUST confirm the delete before we clear the
   // local session. Silently swallowing errors here previously caused a bug
   // where the user thought their account was gone but the server still had
-  // it â€” so re-signup failed with "This Gmail is already registered".
+  // it — so re-signup failed with "This Gmail is already registered".
   if(USE_BACKEND){
     try{
       await api('/api/delete-account', {method:'POST'});
@@ -5550,14 +5550,14 @@ async function deleteAccount(){
       const status = e && e.status;
       // 401 "User not found" / "Invalid or expired token" means the server
       // has no record of this user (e.g. token expired, or the backend DB
-      // was reset). Nothing to delete server-side â€” safe to clear locally.
+      // was reset). Nothing to delete server-side — safe to clear locally.
       const alreadyGone =
         status === 401 ||
         status === 404 ||
         /user not found/i.test(msg) ||
         /invalid or expired token/i.test(msg);
       if(!alreadyGone){
-        // Real failure â€” keep the session so the user can retry. Do NOT
+        // Real failure — keep the session so the user can retry. Do NOT
         // log them out, otherwise the server-side account becomes a ghost
         // they can never log back into or re-register with.
         showToast('Could not delete account: ' + (msg || 'server error') + '. Please try again.');
@@ -5591,7 +5591,7 @@ async function restoreSession(){
     refreshAuthUI();
     refreshServerDownloadStatus();
   }catch(e){
-    // Token expired or invalid â€” clear it
+    // Token expired or invalid — clear it
     if(e.status===401){ localStorage.removeItem(AUTH_TOKEN_KEY); setSession(null); refreshAuthUI(); }
   }
 }
@@ -5599,7 +5599,7 @@ function openAccount(){
   const user=currentUser(); if(!user) return openAuth();
   const plan=effectivePlan(user);
   const p=PLANS[plan];
-  const expiry=isActivePlan(user)?new Date(user.planExpiresAt).toLocaleDateString():'â€”';
+  const expiry=isActivePlan(user)?new Date(user.planExpiresAt).toLocaleDateString():'—';
   document.getElementById('accUserName').textContent=user.name||user.email;
   document.getElementById('accUserEmail').textContent=user.email;
   document.getElementById('accPlanName').textContent=p.name;
@@ -5612,7 +5612,7 @@ window.doVerifySignupOtp=doVerifySignupOtp; window.resendSignupOtp=resendSignupO
 window.logout=logout; window.openAccount=openAccount;
 window.deleteAccount=deleteAccount;
 
-// â”€â”€ Plans modal â”€â”€
+// ── Plans modal ──
 function openPlans(){
   const user=currentUser();
   const curPlan=effectivePlan(user);
@@ -5624,8 +5624,8 @@ function openPlans(){
     const featsHtml = p.features.map(f=>`<li>${escapeHtml(f)}</li>`).join('') +
                        p.dimFeatures.map(f=>`<li class="dim">${escapeHtml(f)}</li>`).join('');
     const priceHtml = p.price===0
-      ? `<div class="plan-price"><span class="currency">â‚¹</span>0<span class="period">${t('plan_price_forever')}</span></div>`
-      : `<div class="plan-price"><span class="currency">â‚¹</span>${p.price}<span class="period">${p.period}</span></div>`;
+      ? `<div class="plan-price"><span class="currency">₹</span>0<span class="period">${t('plan_price_forever')}</span></div>`
+      : `<div class="plan-price"><span class="currency">₹</span>${p.price}<span class="period">${p.period}</span></div>`;
     const btnHtml = isCur
       ? `<button class="plan-btn plan-btn-current">${t('plan_btn_current')}</button>`
       : p.id==='free'
@@ -5658,9 +5658,9 @@ function startCheckout(planId){
   if(!user){ closeModal('plansModal'); openAuth('signup'); showToast(t('toast_signup_first')); return; }
   const p=PLANS[planId]; if(!p||p.price===0) return;
   document.getElementById('payPlanName').textContent=p.name;
-  document.getElementById('payPlanPrice').textContent='â‚¹'+p.price;
+  document.getElementById('payPlanPrice').textContent='₹'+p.price;
   document.getElementById('payPlanPeriod').textContent=p.period;
-  document.getElementById('payTotal').textContent='â‚¹'+p.price;
+  document.getElementById('payTotal').textContent='₹'+p.price;
   document.getElementById('payModal').dataset.planId=planId;
   // default method
   document.querySelectorAll('.pay-method').forEach(m=>m.classList.remove('active'));
@@ -5679,7 +5679,7 @@ async function completePayment(){
   const method=document.querySelector('.pay-method.active')?.dataset.method||'razorpay';
   const user=currentUser(); if(!user){showToast(t('toast_need_login'));return;}
 
-  // â”€â”€ BACKEND MODE: real Razorpay payment with server-side signature verification â”€â”€
+  // ── BACKEND MODE: real Razorpay payment with server-side signature verification ──
   if(USE_BACKEND && method==='razorpay'){
     try{
       await loadRazorpaySdk();
@@ -5722,14 +5722,14 @@ async function completePayment(){
     }
     return;
   }
-  // â”€â”€ Fallback: gateway not available â”€â”€
+  // ── Fallback: gateway not available ──
   showToast(t('toast_order_fail') + ('Payment gateway is not available right now.'));
 }
 window.openPlans=openPlans; window.startCheckout=startCheckout;
 window.selectPayMethod=selectPayMethod; window.completePayment=completePayment;
 window.downgradeToFree=downgradeToFree;
 
-// â”€â”€ Inline upload error banner (P21) â”€â”€
+// ── Inline upload error banner (P21) ──
 function showUploadError(msg){
   const b=document.getElementById('uploadErrorBanner');
   const m=document.getElementById('uploadErrorMsg');
@@ -5748,7 +5748,7 @@ document.addEventListener('DOMContentLoaded',function(){
   if(closeBtn) closeBtn.addEventListener('click', hideUploadError);
 });
 
-// â”€â”€ Toast â”€â”€
+// ── Toast ──
 let _toastT=null;
 function showToast(msg){
   let t=document.getElementById('__toast');
@@ -5777,7 +5777,7 @@ refreshAuthUI();
 // If backend mode, refresh user from server (in case plan changed or token expired)
 restoreSession();
 
-// Hide the Google Sign-In block entirely if it isn't configured â€” we don't
+// Hide the Google Sign-In block entirely if it isn't configured — we don't
 // want to render an empty box in the auth modal. The One Tap auto-prompt
 // on page load was removed (issues.md F2): it covered the Login button
 // and the upload card on iPad + iPhone. One Tap still appears inside the
@@ -5790,12 +5790,12 @@ restoreSession();
 })();
 </script>
 
-<!-- â•â•â•â•â•â•â•â•â•â• AUTH MODAL â•â•â•â•â•â•â•â•â•â• -->
+<!-- ══════════ AUTH MODAL ══════════ -->
 <div class="modal-overlay" id="authModal">
   <div class="modal small">
     <div class="modal-header">
       <div class="modal-title">Studio <em>Print</em></div>
-      <button class="modal-close" onclick="closeModal('authModal')">âœ•</button>
+      <button class="modal-close" onclick="closeModal('authModal')">✕</button>
     </div>
     <div class="modal-body">
       <!-- Google Sign-In: one-click account chooser that auto-fills name + email. -->
@@ -5847,7 +5847,7 @@ restoreSession();
       <form id="otpForm" onsubmit="doVerifySignupOtp(event)" style="display:none;">
         <div style="background:var(--surface,#161625);border:1px solid var(--border,#262637);border-radius:10px;padding:12px 14px;margin-bottom:12px;font-size:12px;line-height:1.6;color:var(--muted);">
           <span data-i18n="auth_otp_intro_pre">We sent a 6-digit verification code to</span>
-          <strong id="otpEmailDisplay" style="color:var(--text);display:block;margin:4px 0;word-break:break-all;">â€”</strong>
+          <strong id="otpEmailDisplay" style="color:var(--text);display:block;margin:4px 0;word-break:break-all;">—</strong>
           <span data-i18n="auth_otp_intro_post">Check your inbox (and Spam folder) to complete signup.</span>
         </div>
         <div class="form-group">
@@ -5862,42 +5862,42 @@ restoreSession();
         <button type="submit" class="btn btn-primary" style="margin-top:6px;" data-i18n="auth_verify_create">Verify &amp; Create Account</button>
         <div style="margin-top:8px;display:flex;gap:8px;">
           <button type="button" class="btn btn-ghost" style="flex:1;margin:0;" onclick="resendSignupOtp()" data-i18n="auth_otp_resend">Resend Code</button>
-          <button type="button" class="btn btn-ghost" style="flex:1;margin:0;" onclick="setAuthTab('signup')" data-i18n="auth_otp_back">â† Back</button>
+          <button type="button" class="btn btn-ghost" style="flex:1;margin:0;" onclick="setAuthTab('signup')" data-i18n="auth_otp_back">← Back</button>
         </div>
       </form>
       <div class="form-error" id="authError"></div>
       <div class="form-success" id="authSuccess" style="display:none;"></div>
       <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border);font-size:11px;color:var(--muted);line-height:1.6;">
-        <strong style="color:var(--text);" data-i18n="auth_info_title">â„¹ Info:</strong>
+        <strong style="color:var(--text);" data-i18n="auth_info_title">ℹ Info:</strong>
         <span data-i18n="auth_info_body">Your account is kept secure. Passwords are stored hashed and all data is sent over HTTPS.</span>
       </div>
     </div>
   </div>
 </div>
 
-<!-- â•â•â•â•â•â•â•â•â•â• ACCOUNT MODAL â•â•â•â•â•â•â•â•â•â• -->
+<!-- ══════════ ACCOUNT MODAL ══════════ -->
 <div class="modal-overlay" id="accountModal">
   <div class="modal small">
     <div class="modal-header">
       <div class="modal-title">My <em>Account</em></div>
-      <button class="modal-close" onclick="closeModal('accountModal')">âœ•</button>
+      <button class="modal-close" onclick="closeModal('accountModal')">✕</button>
     </div>
     <div class="modal-body">
       <div class="pay-summary">
-        <div class="pay-row"><span data-i18n="acc_name">Name</span><strong id="accUserName">â€”</strong></div>
-        <div class="pay-row"><span data-i18n="acc_email">Email</span><strong id="accUserEmail">â€”</strong></div>
+        <div class="pay-row"><span data-i18n="acc_name">Name</span><strong id="accUserName">—</strong></div>
+        <div class="pay-row"><span data-i18n="acc_email">Email</span><strong id="accUserEmail">—</strong></div>
         <div class="pay-row"><span data-i18n="acc_plan">Current Plan</span><strong id="accPlanName" style="color:var(--accent);">Free</strong></div>
-        <div class="pay-row"><span data-i18n="acc_expiry">Expires</span><strong id="accPlanExpiry">â€”</strong></div>
+        <div class="pay-row"><span data-i18n="acc_expiry">Expires</span><strong id="accPlanExpiry">—</strong></div>
       </div>
-      <button class="btn btn-primary" onclick="closeModal('accountModal');openPlans();" data-i18n="acc_upgrade">ðŸ’Ž Upgrade / Change Plan</button>
+      <button class="btn btn-primary" onclick="closeModal('accountModal');openPlans();" data-i18n="acc_upgrade">💎 Upgrade / Change Plan</button>
       <button class="btn btn-ghost" style="margin-top:8px;" onclick="logout()" data-i18n="acc_logout">Logout</button>
       <div style="margin-top:18px;padding-top:14px;border-top:1px solid var(--border);"></div>
-      <button class="btn btn-danger" style="margin-top:4px;" onclick="deleteAccount()" data-i18n="acc_delete">ðŸ—‘ Delete Account Permanently</button>
+      <button class="btn btn-danger" style="margin-top:4px;" onclick="deleteAccount()" data-i18n="acc_delete">🗑 Delete Account Permanently</button>
     </div>
   </div>
 </div>
 
-<!-- â•â•â•â•â•â•â•â•â•â• CUSTOM CONFIRM MODAL (replaces browser native confirm) â•â•â•â•â•â•â•â•â•â• -->
+<!-- ══════════ CUSTOM CONFIRM MODAL (replaces browser native confirm) ══════════ -->
 <div class="modal-overlay" id="confirmModal" role="dialog" aria-modal="true">
   <div class="modal small" style="max-width:400px;">
     <div class="modal-body" style="padding:22px 22px 18px;">
@@ -5911,50 +5911,50 @@ restoreSession();
   </div>
 </div>
 
-<!-- â•â•â•â•â•â•â•â•â•â• PLANS MODAL â•â•â•â•â•â•â•â•â•â• -->
+<!-- ══════════ PLANS MODAL ══════════ -->
 <div class="modal-overlay" id="plansModal">
   <div class="modal">
     <div class="modal-header">
       <div class="modal-title">Choose your <em>Plan</em></div>
-      <button class="modal-close" onclick="closeModal('plansModal')">âœ•</button>
+      <button class="modal-close" onclick="closeModal('plansModal')">✕</button>
     </div>
     <div class="modal-body">
       <div style="text-align:center;margin-bottom:22px;color:var(--muted);font-size:13px;line-height:1.7;" data-i18n="plans_tagline">
         Unlimited passport photos, no watermark, HD export, all country presets.<br>
-        <span style="color:var(--accent);">Cancel anytime Â· No hidden fees Â· Secure payments</span>
+        <span style="color:var(--accent);">Cancel anytime · No hidden fees · Secure payments</span>
       </div>
       <div class="plans-grid" id="plansGrid">
         <!-- Cards rendered by openPlans() -->
       </div>
       <div style="margin-top:18px;padding:14px;background:var(--accent-dim);border:1px solid rgba(240,165,0,.15);border-radius:8px;font-size:11px;color:var(--muted);line-height:1.7;">
-        <strong style="color:var(--accent);">ðŸ’¡ Note:</strong>
+        <strong style="color:var(--accent);">💡 Note:</strong>
         <span data-i18n="plans_note">All payments are processed securely through Razorpay (UPI, Cards and Net Banking all supported). Your plan activates instantly once payment succeeds. Cancel anytime.</span>
       </div>
     </div>
   </div>
 </div>
 
-<!-- â•â•â•â•â•â•â•â•â•â• PAYMENT MODAL â•â•â•â•â•â•â•â•â•â• -->
+<!-- ══════════ PAYMENT MODAL ══════════ -->
 <div class="modal-overlay" id="payModal" data-plan-id="">
   <div class="modal small">
     <div class="modal-header">
       <div class="modal-title">Complete <em>Payment</em></div>
-      <button class="modal-close" onclick="closeModal('payModal')">âœ•</button>
+      <button class="modal-close" onclick="closeModal('payModal')">✕</button>
     </div>
     <div class="modal-body">
       <div class="pay-summary">
-        <div class="pay-row"><span data-i18n="pay_plan">Plan</span><strong id="payPlanName">â€”</strong></div>
-        <div class="pay-row"><span data-i18n="pay_duration">Duration</span><strong id="payPlanPeriod">â€”</strong></div>
-        <div class="pay-row"><span data-i18n="pay_price">Price</span><strong id="payPlanPrice">â€”</strong></div>
-        <div class="pay-row total"><span data-i18n="pay_total">Total</span><span id="payTotal">â€”</span></div>
+        <div class="pay-row"><span data-i18n="pay_plan">Plan</span><strong id="payPlanName">—</strong></div>
+        <div class="pay-row"><span data-i18n="pay_duration">Duration</span><strong id="payPlanPeriod">—</strong></div>
+        <div class="pay-row"><span data-i18n="pay_price">Price</span><strong id="payPlanPrice">—</strong></div>
+        <div class="pay-row total"><span data-i18n="pay_total">Total</span><span id="payTotal">—</span></div>
       </div>
       <div class="form-label" data-i18n="pay_method">Payment Method</div>
       <div class="pay-methods">
-        <div class="pay-method active" data-method="razorpay" onclick="selectPayMethod(this)">ðŸ’³ Card / UPI / Netbanking<br><span style="font-size:10px;color:var(--muted);">Razorpay Â· GPay / PhonePe / Paytm</span></div>
+        <div class="pay-method active" data-method="razorpay" onclick="selectPayMethod(this)">💳 Card / UPI / Netbanking<br><span style="font-size:10px;color:var(--muted);">Razorpay · GPay / PhonePe / Paytm</span></div>
       </div>
-      <button class="btn btn-primary" onclick="completePayment()" data-i18n="pay_btn">ðŸ”’ Pay Securely</button>
+      <button class="btn btn-primary" onclick="completePayment()" data-i18n="pay_btn">🔒 Pay Securely</button>
       <div style="margin-top:10px;text-align:center;font-size:10px;color:var(--muted2);">
-        ðŸ”’ <span data-i18n="pay_secure">256-bit secure encryption Â· Your data is safe</span>
+        🔒 <span data-i18n="pay_secure">256-bit secure encryption · Your data is safe</span>
       </div>
     </div>
   </div>
