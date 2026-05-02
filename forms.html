@@ -198,11 +198,14 @@ body.forms-page .legal-main.forms-main{
   max-width:138px;
   max-height:154px;
   overflow:visible;
+  padding:0;
+  border:0;
   text-decoration:none;
   border-radius:10px;
   background:#fff;
   box-shadow:0 18px 34px rgba(0,0,0,.28);
   transition:transform .18s ease, box-shadow .18s ease;
+  cursor:pointer;
 }
 .form-preview.actual-preview::after{
   content:"";
@@ -468,6 +471,118 @@ body.forms-page .legal-main.forms-main{
   opacity:1;
   transform:translateX(-50%) translateY(0);
 }
+.forms-preview-modal{
+  position:fixed;
+  inset:0;
+  z-index:10000;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:clamp(14px,3vw,34px);
+}
+.forms-preview-modal.is-open{display:flex}
+.forms-preview-backdrop{
+  position:absolute;
+  inset:0;
+  border:0;
+  background:rgba(0,0,0,.78);
+  backdrop-filter:blur(10px);
+  cursor:pointer;
+}
+.forms-preview-dialog{
+  position:relative;
+  z-index:1;
+  width:min(940px,100%);
+  max-height:min(92vh,900px);
+  display:grid;
+  grid-template-rows:auto minmax(0,1fr) auto;
+  gap:12px;
+  border:1px solid var(--border);
+  border-radius:18px;
+  background:linear-gradient(180deg,var(--surface),var(--surface2));
+  box-shadow:0 30px 90px rgba(0,0,0,.55);
+  padding:14px;
+}
+.forms-preview-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+.forms-preview-title{min-width:0}
+.forms-preview-title strong{
+  display:block;
+  color:#fff;
+  font-family:Syne,sans-serif;
+  font-size:18px;
+  line-height:1.2;
+}
+.forms-preview-title span{
+  color:var(--muted);
+  font-size:12px;
+}
+.forms-preview-close{
+  width:38px;
+  height:38px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background:var(--surface3);
+  color:#fff;
+  font-size:22px;
+  cursor:pointer;
+}
+.forms-preview-imagewrap{
+  min-height:0;
+  overflow:auto;
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
+  border-radius:14px;
+  background:#0b0b0b;
+  padding:14px;
+}
+.forms-preview-imagewrap img{
+  max-width:100%;
+  max-height:72vh;
+  object-fit:contain;
+  border-radius:10px;
+  background:#fff;
+  box-shadow:0 18px 50px rgba(0,0,0,.36);
+}
+.forms-preview-actions{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+  gap:10px;
+}
+.forms-preview-actions a,.forms-preview-actions button{
+  min-height:40px;
+  padding:0 16px;
+  border-radius:11px;
+  border:1px solid var(--border);
+  background:var(--surface3);
+  color:#fff;
+  font-family:'DM Mono',monospace;
+  font-size:12px;
+  text-decoration:none;
+  cursor:pointer;
+}
+.forms-preview-actions .primary{
+  background:var(--accent);
+  border-color:var(--accent);
+  color:#111;
+  font-weight:700;
+}
+.forms-print-modal .forms-preview-dialog{
+  width:min(1080px,100%);
+}
+.forms-print-viewer{
+  width:100%;
+  height:min(72vh,760px);
+  border:1px solid var(--border);
+  border-radius:14px;
+  background:#fff;
+}
 @media(max-width:820px){
   .forms-hero{grid-template-columns:1fr}
   .forms-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -557,6 +672,42 @@ body.forms-page .legal-main.forms-main{
   <div class="footer-bottom"><div class="footer-copy">© 2026 Studio Print. All rights reserved. · Built with <a href="https://devin.ai" target="_blank" rel="noopener" class="devin-credit">Devin AI</a></div></div>
 </footer>
 <div id="formsToast" class="forms-toast" role="status" aria-live="polite"></div>
+<div id="formsPreviewModal" class="forms-preview-modal" aria-hidden="true">
+  <button type="button" class="forms-preview-backdrop" data-preview-close aria-label="Close preview"></button>
+  <div class="forms-preview-dialog" role="dialog" aria-modal="true" aria-labelledby="formsPreviewTitle">
+    <div class="forms-preview-head">
+      <div class="forms-preview-title">
+        <strong id="formsPreviewTitle">Form preview</strong>
+        <span id="formsPreviewMeta">PDF preview</span>
+      </div>
+      <button type="button" class="forms-preview-close" data-preview-close aria-label="Close preview">×</button>
+    </div>
+    <div class="forms-preview-imagewrap">
+      <img id="formsPreviewImage" alt="">
+    </div>
+    <div class="forms-preview-actions">
+      <button type="button" class="primary" id="formsPreviewPrint">Print</button>
+      <a id="formsPreviewDownload" href="#" download>Download</a>
+    </div>
+  </div>
+</div>
+<div id="formsPrintModal" class="forms-preview-modal forms-print-modal" aria-hidden="true">
+  <button type="button" class="forms-preview-backdrop" data-print-close aria-label="Close print preview"></button>
+  <div class="forms-preview-dialog" role="dialog" aria-modal="true" aria-labelledby="formsPrintTitle">
+    <div class="forms-preview-head">
+      <div class="forms-preview-title">
+        <strong id="formsPrintTitle">Print form</strong>
+        <span id="formsPrintMeta">PDF print preview</span>
+      </div>
+      <button type="button" class="forms-preview-close" data-print-close aria-label="Close print preview">×</button>
+    </div>
+    <iframe id="formsPrintViewer" class="forms-print-viewer" title="PDF print preview"></iframe>
+    <div class="forms-preview-actions">
+      <button type="button" class="primary" id="formsPrintAgain">Print</button>
+      <a id="formsPrintDownload" href="#" download>Download</a>
+    </div>
+  </div>
+</div>
 <script src="assets/nav.js" defer></script>
 <script src="assets/deferred-ui.js" defer></script>
 <script src="assets/pwa.js" defer></script>
@@ -589,19 +740,43 @@ body.forms-page .legal-main.forms-main{
   var count=document.getElementById('formsCount');
   var total=document.getElementById('formsTotal');
   var toast=document.getElementById('formsToast');
+  var modal=document.getElementById('formsPreviewModal');
+  var modalTitle=document.getElementById('formsPreviewTitle');
+  var modalMeta=document.getElementById('formsPreviewMeta');
+  var modalImage=document.getElementById('formsPreviewImage');
+  var modalPrint=document.getElementById('formsPreviewPrint');
+  var modalDownload=document.getElementById('formsPreviewDownload');
+  var printModal=document.getElementById('formsPrintModal');
+  var printTitle=document.getElementById('formsPrintTitle');
+  var printMeta=document.getElementById('formsPrintMeta');
+  var printViewer=document.getElementById('formsPrintViewer');
+  var printAgain=document.getElementById('formsPrintAgain');
+  var printDownload=document.getElementById('formsPrintDownload');
+  var currentPreview=null;
+  var currentPrint=null;
   function norm(v){return String(v||'').toLowerCase();}
   function cats(){var out=['All'],seen={All:1};forms.forEach(function(f){if(!seen[f.category]){seen[f.category]=1;out.push(f.category)}});return out;}
   function show(msg){toast.textContent=msg;toast.classList.add('show');clearTimeout(show.t);show.t=setTimeout(function(){toast.classList.remove('show')},3000)}
   function tokenHit(text,q){return norm(text).split(/[^a-z0-9]+/).some(function(w){return w===q||w.indexOf(q)===0})}
   function ok(f,q){if(active!=='All'&&f.category!==active)return false;if(!q)return true;var direct=[f.title,f.category,f.department,f.tags.join(' ')].join(' ');if(tokenHit(direct,q))return true;if(q.indexOf(' ')>-1)return norm([direct,f.description].join(' ')).indexOf(q)>-1;return false}
   function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(ch){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]})}
-  function preview(f){if(f.preview){return '<div class="form-preview-stage"><a class="form-preview actual-preview" href="'+esc(f.url)+'" target="_blank" rel="noopener noreferrer" aria-label="Open '+esc(f.title)+' preview PDF"><img src="'+esc(f.preview)+'" alt="First page preview of '+esc(f.title)+'" loading="lazy"><span class="preview-badge">'+esc(f.pages||'PDF')+'</span></a></div>'}var fs=(f.fields||['Applicant','Address','Mobile','Signature']).slice(0,5);return '<div class="form-preview" aria-hidden="true"><div class="preview-paper"><div class="preview-head"><span>'+esc(f.department)+'</span><b>'+esc(f.format)+'</b></div><div class="preview-title">'+esc(f.title)+'</div><div class="preview-lines"><span class="preview-line"></span><span class="preview-line"></span><span class="preview-line"></span></div><div class="preview-fields">'+fs.map(function(x){return '<div class="preview-field"><span>'+esc(x)+'</span><span></span></div>'}).join('')+'</div><div class="preview-footer"><span class="preview-qr"></span><span class="preview-stamp">portal</span></div></div></div>'}
-  function card(f,i){return '<article class="form-card">'+preview(f)+'<div class="form-body"><div class="form-card-top"><span class="form-cat">'+esc(f.category)+'</span><span class="form-format">'+esc(f.pages||'PDF')+'</span></div><h2>'+esc(f.title)+'</h2><p>'+esc(f.description||'')+'</p><div class="form-meta"><span>'+esc(f.department)+'</span><span>PDF</span></div><div class="form-actions"><button type="button" class="primary" data-print="'+i+'">Print</button><a href="'+esc(f.url)+'" download>Download</a></div></div></article>'}
+  function preview(f,i){if(f.preview){return '<div class="form-preview-stage"><button type="button" class="form-preview actual-preview" data-preview="'+i+'" aria-label="Preview '+esc(f.title)+'"><img src="'+esc(f.preview)+'" alt="First page preview of '+esc(f.title)+'" loading="lazy"><span class="preview-badge">'+esc(f.pages||'PDF')+'</span></button></div>'}var fs=(f.fields||['Applicant','Address','Mobile','Signature']).slice(0,5);return '<div class="form-preview" aria-hidden="true"><div class="preview-paper"><div class="preview-head"><span>'+esc(f.department)+'</span><b>'+esc(f.format)+'</b></div><div class="preview-title">'+esc(f.title)+'</div><div class="preview-lines"><span class="preview-line"></span><span class="preview-line"></span><span class="preview-line"></span></div><div class="preview-fields">'+fs.map(function(x){return '<div class="preview-field"><span>'+esc(x)+'</span><span></span></div>'}).join('')+'</div><div class="preview-footer"><span class="preview-qr"></span><span class="preview-stamp">portal</span></div></div></div>'}
+  function card(f,i){return '<article class="form-card">'+preview(f,i)+'<div class="form-body"><div class="form-card-top"><span class="form-cat">'+esc(f.category)+'</span><span class="form-format">'+esc(f.pages||'PDF')+'</span></div><h2>'+esc(f.title)+'</h2><p>'+esc(f.description||'')+'</p><div class="form-meta"><span>'+esc(f.department)+'</span><span>PDF</span></div><div class="form-actions"><button type="button" class="primary" data-print="'+i+'">Print</button><a href="'+esc(f.url)+'" download>Download</a></div></div></article>'}
+  function openPreview(f){currentPreview=f;modalTitle.textContent=f.title;modalMeta.textContent=[f.department,f.pages||'PDF'].filter(Boolean).join(' · ');modalImage.src=f.preview||'';modalImage.alt='Preview of '+f.title;modalDownload.href=f.url;modalDownload.setAttribute('download','');modal.classList.add('is-open');modal.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';modalPrint.focus()}
+  function closePreview(){modal.classList.remove('is-open');modal.setAttribute('aria-hidden','true');document.body.style.overflow='';currentPreview=null}
+  function triggerPrint(){if(!printViewer.src)return;try{printViewer.contentWindow.focus();printViewer.contentWindow.print();show('Print dialog khul raha hai...')}catch(err){show('PDF same page par khul gaya. Viewer ke print icon se print karo.')}}
+  function printForm(f){if(!f)return;if(modal.classList.contains('is-open'))closePreview();currentPrint=f;printTitle.textContent=f.title;printMeta.textContent=[f.department,f.pages||'PDF'].filter(Boolean).join(' · ');printDownload.href=f.url;printDownload.setAttribute('download','');printModal.classList.add('is-open');printModal.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';printViewer.onload=null;printViewer.src='about:blank';setTimeout(function(){printViewer.onload=function(){setTimeout(triggerPrint,500)};printViewer.src=f.url},40);printAgain.focus()}
+  function closePrint(){printModal.classList.remove('is-open');printModal.setAttribute('aria-hidden','true');printViewer.onload=null;printViewer.src='about:blank';document.body.style.overflow='';currentPrint=null}
   function renderFilters(){filters.innerHTML=cats().map(function(c){return '<button type="button" class="forms-filter '+(c===active?'active':'')+'" data-cat="'+c+'">'+c+'</button>'}).join('')}
   function render(){var q=norm(search.value).trim();var list=forms.filter(function(f){return ok(f,q)});var limited=!q&&active==='All';var shown=limited?list.slice(0,8):list;count.textContent=limited?shown.length+' of '+list.length+' forms':list.length+(list.length===1?' form':' forms');total.textContent=forms.length;grid.innerHTML=shown.length?shown.map(function(f){return card(f,forms.indexOf(f))}).join(''):'<div class="no-results">Form nahi mila. Aadhaar, PAN, voter, ration ya EPFO search karo.</div>'}
   filters.addEventListener('click',function(e){var b=e.target.closest('[data-cat]');if(!b)return;active=b.dataset.cat;renderFilters();render()});
   search.addEventListener('input',render);
-  grid.addEventListener('click',function(e){var b=e.target.closest('[data-print]');if(!b)return;var f=forms[Number(b.dataset.print)];if(!f)return;window.open(f.url,'_blank','noopener,noreferrer');show('PDF open ho gaya. Print ke liye Ctrl+P dabao.')});
+  grid.addEventListener('click',function(e){var p=e.target.closest('[data-preview]');if(p){var pf=forms[Number(p.dataset.preview)];if(pf&&pf.preview)openPreview(pf);return}var b=e.target.closest('[data-print]');if(!b)return;var f=forms[Number(b.dataset.print)];if(!f)return;printForm(f)});
+  modal.addEventListener('click',function(e){if(e.target.closest('[data-preview-close]'))closePreview()});
+  modalPrint.addEventListener('click',function(){printForm(currentPreview)});
+  printModal.addEventListener('click',function(e){if(e.target.closest('[data-print-close]'))closePrint()});
+  printAgain.addEventListener('click',triggerPrint);
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&modal.classList.contains('is-open'))closePreview();if(e.key==='Escape'&&printModal.classList.contains('is-open'))closePrint()});
   renderFilters();render();
 })();
 </script>
