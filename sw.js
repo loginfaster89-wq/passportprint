@@ -1,4 +1,4 @@
-/* Studio Print service worker — P30.
+/* Studio Print service worker — P31.
  *
  * Strategy
  *   - Navigation (HTML) requests: network-first, fall back to cache, then to
@@ -15,8 +15,8 @@
  * the activate step can evict the old cache.
  */
 
-const CACHE_VERSION = 'studioprint-v30';
-const RUNTIME_CACHE = 'studioprint-runtime-v30';
+const CACHE_VERSION = 'studioprint-v31';
+const RUNTIME_CACHE = 'studioprint-runtime-v31';
 
 // Minimum shell we want available offline after the first visit. The SW also
 // opportunistically caches other same-origin GETs it sees at runtime, so this
