@@ -23,6 +23,7 @@ const HTML_FILES = [
   'refund.html',
   'shipping.html',
   'id-print.html',
+  'id-print-regression.html',
   '404.html',
   'offline.html',
 ];
