@@ -7,10 +7,11 @@ Last updated: 2026-05-03 IST
 - Coordination files restored/created so parallel Codex chats can see the current repo state.
 - Local repo was reset back to `origin/main` after two local-only commits were found.
 - Current branch: `main`
-- Current HEAD: `1761f922030f17cf117e0dac8ab2aee832c20135` (`fix(cache): stop long caching pwa registration`)
+- Latest verified website source HEAD: `1761f922030f17cf117e0dac8ab2aee832c20135` (`fix(cache): stop long caching pwa registration`)
 - Local state checked clean before this coordination-file update: `main...origin/main`
 - GitHub remote access checked with `git ls-remote --heads origin main`.
 - Push dry-run checked with `git push --dry-run origin main`: `Everything up-to-date`.
+- Coordination docs are committed to `main`; use `git log --oneline -3` for the latest coordination commit SHA.
 
 ## Changed files in this status update
 
@@ -24,8 +25,9 @@ Last updated: 2026-05-03 IST
 
 ## Commit / deploy / QA
 
-- Commit SHA pushed in this status update: none.
-- Deploy triggered in this status update: no.
+- Website source commit pushed in this status update: none.
+- Coordination docs pushed in this status update: yes.
+- Deploy triggered for website source in this status update: no.
 - Build run in this status update: no, because only coordination docs were added.
 - Live QA run in this status update: no new live deploy to verify.
 

@@ -11,8 +11,9 @@ Current repo path used in this chat: `C:\Users\ajayt\Documents\Codex\2026-05-01\
 - User ran:
   - `git reset --hard origin/main`
   - `git clean -fd`
-- Repo is now back at `origin/main`.
-- Current HEAD: `1761f922030f17cf117e0dac8ab2aee832c20135` (`fix(cache): stop long caching pwa registration`)
+- Repo was brought back to `origin/main` before this docs-only coordination update.
+- Latest verified website source HEAD: `1761f922030f17cf117e0dac8ab2aee832c20135` (`fix(cache): stop long caching pwa registration`)
+- Coordination docs are now committed on top of that source commit; use `git log --oneline -3` for the latest docs commit SHA.
 - GitHub remote was checked and push dry-run returned `Everything up-to-date`.
 
 ## Coordination note
