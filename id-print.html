@@ -42,16 +42,27 @@ body.idp-page main.legal-main{
 }
 .idp-app{max-width:none;width:100%;margin:0 auto;padding:0;}
 body.idp-workspace-mode main.legal-main{
-  max-width:none;padding:12px clamp(12px,2.4vw,32px) 36px;
+  max-width:none;min-height:calc(100vh - 64px);
+  padding:12px clamp(12px,2.4vw,32px) 18px;
 }
 body.idp-workspace-mode .idp-app{
-  max-width:none;padding:0 0 36px;
+  max-width:none;min-height:calc(100vh - 100px);
+  padding:0;display:flex;flex-direction:column;
 }
 body.idp-workspace-mode .idp-hero,
 body.idp-workspace-mode .idp-steps{
   display:none;
 }
+body.idp-workspace-mode .legal-footer{display:none;}
+body.idp-workspace-mode #stepPreview:not(.idp-hidden),
+body.idp-workspace-mode #stepSheet:not(.idp-hidden){
+  display:flex;flex:1;min-height:0;
+}
 body.idp-workspace-mode .idp-preview{padding:18px;}
+body.idp-workspace-mode #stepPreview .idp-preview,
+body.idp-workspace-mode #stepSheet .idp-preview{
+  width:100%;min-height:calc(100vh - 100px);
+}
 body.idp-workspace-mode .idp-preview h3{margin-bottom:10px;}
 body.idp-workspace-mode .idp-detect{padding:6px 14px;margin-bottom:8px;}
 body.idp-workspace-mode .idp-option{margin-top:10px;}
@@ -221,20 +232,31 @@ body.idp-workspace-mode .idp-actions{margin-top:10px;}
   padding-bottom:14px;margin-bottom:16px;border-bottom:1px solid var(--border);
   text-align:left;
 }
+.idp-preview-workspace,
+.idp-sheet-workspace{
+  display:flex;flex-direction:column;
+  background:
+    linear-gradient(135deg,rgba(240,165,0,.07),transparent 34%),
+    var(--surface);
+}
 .idp-workspace-title{min-width:0;}
 .idp-preview-workspace .idp-workspace-head h3{margin:0;}
 .idp-workspace-title #detectBadge .idp-detect{margin-bottom:8px;}
 .idp-workspace-grid{
-  display:grid;
-  grid-template-columns:minmax(0,1fr) minmax(320px,380px);
-  gap:18px;align-items:start;
+  display:grid;flex:1;min-height:0;
+  grid-template-columns:minmax(640px,1fr) minmax(340px,400px);
+  gap:18px;align-items:stretch;
 }
 .idp-preview-stage{
-  min-width:0;padding:14px;border-radius:14px;
+  min-width:0;min-height:0;padding:16px;border-radius:14px;
   background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.07);
+  display:flex;flex-direction:column;justify-content:center;gap:14px;
+}
+.idp-preview-stage #batchCardsContainer{
+  width:100%;
 }
 .idp-control-sidebar{
-  min-width:0;display:grid;gap:12px;
+  min-width:0;display:grid;align-content:start;gap:12px;
 }
 .idp-sidebar-actions{
   padding:14px;border-radius:12px;background:var(--surface2);border:1px solid var(--border);
@@ -412,15 +434,17 @@ body.idp-workspace-mode #stepSheet .idp-preview{
 }
 .idp-sheet-head #sheetTitle{margin-bottom:8px;}
 .idp-sheet-grid{
-  display:grid;grid-template-columns:minmax(320px,420px) minmax(0,1fr);
-  gap:18px;align-items:start;
+  display:grid;flex:1;min-height:0;
+  grid-template-columns:minmax(320px,420px) minmax(0,1fr);
+  gap:18px;align-items:stretch;
 }
-.idp-sheet-controls{display:grid;gap:12px;}
+.idp-sheet-controls{display:grid;align-content:start;gap:12px;}
 body.idp-workspace-mode #stepSheet #layoutPanel,
 body.idp-workspace-mode #stepSheet #idpPlanBanner{margin:0;}
 .idp-sheet-stage{
-  min-width:0;padding:14px;border-radius:14px;
+  min-width:0;min-height:0;padding:14px;border-radius:14px;
   background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.07);
+  display:flex;align-items:center;justify-content:center;
 }
 body.idp-workspace-mode #stepSheet .idp-a4-wrap{margin:0 auto;width:100%;}
 body.idp-workspace-mode #stepSheet .idp-a4-wrap canvas{max-width:min(100%,780px);max-height:70vh;}
@@ -688,6 +712,8 @@ input.idp-range::-moz-range-thumb{
 @media (max-width:980px){
   .idp-preview-workspace .idp-workspace-head{display:grid;text-align:center;}
   .idp-workspace-grid,.idp-sheet-grid{grid-template-columns:1fr;}
+  body.idp-workspace-mode #stepPreview .idp-preview,
+  body.idp-workspace-mode #stepSheet .idp-preview{min-height:auto;}
   body.idp-workspace-mode #stepPreview .idp-info{justify-content:center;max-width:none;}
   body.idp-workspace-mode #stepSheet .idp-a4-wrap{margin:10px auto;}
 }
