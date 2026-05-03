@@ -260,6 +260,16 @@
     "clean_source": true
   },
   {
+    "slug": "bocw-welfare-scheme-application-rajasthan",
+    "title": "BOCW Welfare Scheme Common Application",
+    "category": "Rajasthan",
+    "source_url": "https://labour.rajasthan.gov.in/Documents/FormatsofSchemes.pdf",
+    "pages": 3,
+    "local": "assets/forms/bocw-welfare-scheme-application-rajasthan.pdf",
+    "preview": "assets/forms/previews/bocw-welfare-scheme-application-rajasthan.png",
+    "clean_source": true
+  },
+  {
     "slug": "trade-union-return-rajasthan",
     "title": "Trade Union Annual Return",
     "category": "Rajasthan",
@@ -897,6 +907,76 @@
     "pages": 2,
     "local": "assets/forms/voter-form-8.pdf",
     "preview": "assets/forms/previews/voter-form-8.png",
+    "clean_source": true
+  },
+  {
+    "slug": "unemployment-allowance-income-i-rajasthan",
+    "title": "Unemployment Allowance Income Declaration - Annexure I",
+    "category": "Employment",
+    "source_url": "https://employment.livelihoods.rajasthan.gov.in/UserManual/Income_I.pdf",
+    "pages": 1,
+    "local": "assets/forms/unemployment-allowance-income-i-rajasthan.pdf",
+    "preview": "assets/forms/previews/unemployment-allowance-income-i-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "unemployment-allowance-income-k-rajasthan",
+    "title": "Unemployment Allowance Witness Certificate - Annexure K",
+    "category": "Employment",
+    "source_url": "https://employment.livelihoods.rajasthan.gov.in/UserManual/Income_K.pdf",
+    "pages": 1,
+    "local": "assets/forms/unemployment-allowance-income-k-rajasthan.pdf",
+    "preview": "assets/forms/previews/unemployment-allowance-income-k-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "unemployment-allowance-self-declaration-rajasthan",
+    "title": "Unemployment Allowance Self Declaration - Annexure 1",
+    "category": "Employment",
+    "source_url": "https://employment.livelihoods.rajasthan.gov.in/UserManual/Self_Declaration_File.pdf",
+    "pages": 1,
+    "local": "assets/forms/unemployment-allowance-self-declaration-rajasthan.pdf",
+    "preview": "assets/forms/previews/unemployment-allowance-self-declaration-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "unemployment-internship-attendance-certificate-rajasthan",
+    "title": "Unemployment Internship Attendance Certificate",
+    "category": "Employment",
+    "source_url": "https://employment.livelihoods.rajasthan.gov.in/website/WebsiteDocs/custom_web_pages/Internship_and_Skill_Training.pdf",
+    "pages": 1,
+    "local": "assets/forms/unemployment-internship-attendance-certificate-rajasthan.pdf",
+    "preview": "assets/forms/previews/unemployment-internship-attendance-certificate-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "unemployment-internship-joining-certificate-rajasthan",
+    "title": "Unemployment Internship Joining Certificate",
+    "category": "Employment",
+    "source_url": "https://employment.livelihoods.rajasthan.gov.in/website/WebsiteDocs/custom_web_pages/Internship_and_Skill_Training.pdf",
+    "pages": 1,
+    "local": "assets/forms/unemployment-internship-joining-certificate-rajasthan.pdf",
+    "preview": "assets/forms/previews/unemployment-internship-joining-certificate-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "unemployment-skill-training-joining-certificate-rajasthan",
+    "title": "Unemployment Skill Training Joining Certificate",
+    "category": "Employment",
+    "source_url": "https://employment.livelihoods.rajasthan.gov.in/website/WebsiteDocs/custom_web_pages/Internship_and_Skill_Training.pdf",
+    "pages": 1,
+    "local": "assets/forms/unemployment-skill-training-joining-certificate-rajasthan.pdf",
+    "preview": "assets/forms/previews/unemployment-skill-training-joining-certificate-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "unemployment-skill-training-attendance-certificate-rajasthan",
+    "title": "Unemployment Skill Training Attendance Certificate",
+    "category": "Employment",
+    "source_url": "https://employment.livelihoods.rajasthan.gov.in/website/WebsiteDocs/custom_web_pages/Internship_and_Skill_Training.pdf",
+    "pages": 1,
+    "local": "assets/forms/unemployment-skill-training-attendance-certificate-rajasthan.pdf",
+    "preview": "assets/forms/previews/unemployment-skill-training-attendance-certificate-rajasthan.png",
     "clean_source": true
   },
   {
