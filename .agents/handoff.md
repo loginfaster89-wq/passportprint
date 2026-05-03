@@ -38,13 +38,15 @@ Get-Content .agents\handoff.md
   - Pages 4-6: `NFSA Food Security - Urban Appeal`
 - `/forms` now has 49 forms.
 - Cache bumped to `studioprint-v41`; `id-print-v40` preserved from the latest ID Print commits.
-- Commit/push/live QA: pending.
+- Feature commit pushed to `main`: `e87cf9e0d086258efc47787afc561f918097df75` (`fix(forms): split Rajasthan ration and NFSA forms`).
+- Live QA passed on `https://studioprint.pages.dev/forms?qa=forms-split-e87cf9e`.
 
 ## QA done
 
 - Build passed with bundled Node: `node build.js`.
 - Manifest validation passed: 49 entries, all PDF/preview/page-preview files exist, manifest page counts match actual PDF page counts.
 - Local Chrome QA passed on `dist/forms.html`: total count 49, old combined titles absent, ration search shows all 3 ration flows, NFSA search shows rural/urban, update preview image is upright portrait `673 x 920`, and no page/console errors.
+- Live HTML/SW QA passed: production `/forms` has 49 forms, old combined titles are absent, ration update preview is upright `673 x 920`, and `/sw.js` has `studioprint-v41` / `id-print-v40`.
 
 ## Forms quality rule
 

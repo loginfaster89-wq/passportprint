@@ -21,7 +21,10 @@ Last updated: 2026-05-03 IST
 - Cache bumped to `studioprint-v41`; `id-print-v40` preserved from the latest ID Print commits.
 - Build result: bundled Node command `node build.js` passed.
 - Local QA result: built `dist/forms.html` opened in installed Chrome via Playwright; total count was 49, old combined titles were absent, ration search showed all 3 ration flows, NFSA search showed rural/urban, and ration update preview loaded upright at `673 x 920`; no page/console errors.
-- Commit/push/live QA: pending.
+- Feature commit pushed: `e87cf9e0d086258efc47787afc561f918097df75` (`fix(forms): split Rajasthan ration and NFSA forms`).
+- Live QA result: `https://studioprint.pages.dev/forms?qa=forms-split-e87cf9e` contains the new ration/NFSA split entries, does not contain the old combined titles, and reports 49 forms.
+- Live browser QA result: production `/forms` search for `ration` showed all 3 ration flows; `Ration Card - Update/Member Change` preview loaded upright at `673 x 920`; no page/console errors.
+- Live SW QA result: `https://studioprint.pages.dev/sw.js?qa=forms-split-e87cf9e` contains `studioprint-v41` and `id-print-v40`.
 
 ## Owned file scope
 
@@ -35,11 +38,11 @@ Last updated: 2026-05-03 IST
 
 ## Commit / deploy / QA
 
-- Website source commit pushed: pending.
-- Deploy triggered: pending.
+- Website source commit pushed: `e87cf9e0d086258efc47787afc561f918097df75`.
+- Deploy triggered: yes, by push to `main`.
 - Build run: yes, bundled Node `build.js`.
 - Local QA: passed.
-- Live QA: pending after push/deploy.
+- Live QA: passed after Cloudflare propagation.
 
 ## Forms quality rule
 
@@ -50,8 +53,7 @@ Last updated: 2026-05-03 IST
 
 ## Pending work
 
-- Push this Forms update to `main`.
-- Verify live `/forms` after Cloudflare propagation.
+- Forms update has been pushed and live-verified.
 - Existing residual local dirty files from before this Forms task may still appear for unrelated `dist/*` pages. Do not stage unrelated source files.
 - Before any new work, run:
   - `git pull --ff-only origin main`
