@@ -335,34 +335,46 @@ body.idp-workspace-mode #stepPreview .idp-preview-canvas-pair{max-width:min(100%
 .idp-layout-btn small{font-family:'DM Mono',monospace;font-size:10.5px;line-height:1.4;color:var(--muted);}
 .idp-cal-panel{
   display:none;margin-top:12px;padding-top:12px;border-top:1px solid var(--border);
-  grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;align-items:end;
+  grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;align-items:stretch;
 }
 .idp-cal-panel.show{display:grid;}
 .idp-cal-field{display:flex;flex-direction:column;gap:5px;}
 .idp-cal-field.wide{grid-column:span 2;}
-.idp-cal-tools{display:flex;gap:8px;flex-wrap:wrap;align-items:end;}
+.idp-cal-tools{
+  grid-column:1/-1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:8px;align-items:stretch;
+}
 .idp-cal-field label{
   font-family:'DM Mono',monospace;font-size:10.5px;color:var(--muted);
   text-transform:uppercase;letter-spacing:.08em;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
 .idp-cal-field input[type="number"],
 .idp-cal-field input[type="text"],
 .idp-cal-field select{
-  width:100%;padding:8px 10px;border-radius:8px;border:1px solid var(--border);
-  background:var(--surface);color:var(--text);font-family:'DM Mono',monospace;font-size:12px;
+  width:100%;min-height:34px;padding:8px 10px;border-radius:8px;border:1px solid var(--border);
+  background:rgba(255,255,255,.035);color:var(--text);font-family:'DM Mono',monospace;font-size:12px;
+  color-scheme:dark;
+}
+.idp-cal-field input[type="text"]{-webkit-text-fill-color:var(--text);}
+.idp-cal-field input:-webkit-autofill{
+  -webkit-box-shadow:0 0 0 1000px #161616 inset;
+  -webkit-text-fill-color:var(--text);
 }
 .idp-cal-field input[type="number"]:focus,
 .idp-cal-field input[type="text"]:focus,
 .idp-cal-field select:focus{outline:none;border-color:var(--accent);}
 .idp-cal-check{
-  flex-direction:row;align-items:center;gap:8px;color:var(--muted);
-  font-family:'DM Mono',monospace;font-size:11px;min-height:35px;
+  grid-column:1/-1;flex-direction:row;align-items:center;gap:8px;color:var(--muted);
+  font-family:'DM Mono',monospace;font-size:11px;min-height:34px;
+  padding:8px 10px;border:1px solid var(--border);border-radius:8px;background:rgba(255,255,255,.025);
 }
 .idp-cal-check input{accent-color:var(--accent);}
 .idp-cal-reset{
   padding:9px 12px;border-radius:8px;border:1px solid var(--border);
   background:var(--surface);color:var(--text);font-family:'DM Mono',monospace;
-  font-size:11px;cursor:pointer;
+  font-size:11px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;
+  min-height:34px;text-align:center;
 }
 .idp-cal-reset:hover{border-color:var(--accent);color:var(--accent);}
 .idp-cal-reset:disabled{opacity:.45;cursor:not-allowed;color:var(--muted);border-color:var(--border);}
@@ -745,6 +757,7 @@ input.idp-range::-moz-range-thumb{
   .idp-layout-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
   .idp-cal-panel.show{grid-template-columns:repeat(2,minmax(0,1fr));}
   .idp-cal-field.wide{grid-column:span 2;}
+  .idp-cal-tools{grid-template-columns:repeat(2,minmax(0,1fr));}
   .idp-qa-grid,.idp-qa-checks{grid-template-columns:1fr;}
   .idp-test-panel{align-items:flex-start;flex-direction:column;}
   .idp-test-panel .idp-cal-reset{width:100%;}
@@ -783,6 +796,7 @@ input.idp-range::-moz-range-thumb{
   .idp-layout-grid{grid-template-columns:1fr;}
   .idp-cal-panel.show{grid-template-columns:1fr;}
   .idp-cal-field.wide{grid-column:span 1;}
+  .idp-cal-tools{grid-template-columns:1fr;}
 }
 /* §AC.27 — Position panel (per-side Move + Zoom) removed per user request.
    Rounded Corners + Photo Adjust retained. */
