@@ -300,6 +300,246 @@
     "clean_source": true
   },
   {
+    "slug": "transport-dl-form-2-learner-licence-rajasthan",
+    "title": "Learner Licence Form 2",
+    "category": "Rajasthan",
+    "source_url": "https://transport.rajasthan.gov.in/content/dam/transport/pdf/forms/FORM-2.pdf",
+    "pages": 3,
+    "local": "assets/forms/transport-dl-form-2-learner-licence-rajasthan.pdf",
+    "preview": "assets/forms/previews/transport-dl-form-2-learner-licence-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "transport-dl-form-4-fresh-driving-licence-rajasthan",
+    "title": "Fresh Driving Licence Form 4",
+    "category": "Rajasthan",
+    "source_url": "https://transport.rajasthan.gov.in/content/dam/transport/pdf/forms/FORM-4.pdf",
+    "pages": 3,
+    "local": "assets/forms/transport-dl-form-4-fresh-driving-licence-rajasthan.pdf",
+    "preview": "assets/forms/previews/transport-dl-form-4-fresh-driving-licence-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "transport-dl-form-9-renewal-rajasthan",
+    "title": "Driving Licence Renewal Form 9",
+    "category": "Rajasthan",
+    "source_url": "https://transport.rajasthan.gov.in/content/dam/transport/pdf/forms/FORM-9.pdf",
+    "pages": 1,
+    "local": "assets/forms/transport-dl-form-9-renewal-rajasthan.pdf",
+    "preview": "assets/forms/previews/transport-dl-form-9-renewal-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "transport-dl-form-duplicate-2-3-rajasthan",
+    "title": "Duplicate Driving Licence Form 2.3",
+    "category": "Rajasthan",
+    "source_url": "https://transport.rajasthan.gov.in/content/dam/transport/pdf/forms/FORM-2.3.pdf",
+    "pages": 2,
+    "local": "assets/forms/transport-dl-form-duplicate-2-3-rajasthan.pdf",
+    "preview": "assets/forms/previews/transport-dl-form-duplicate-2-3-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "transport-dl-form-8-add-class-rajasthan",
+    "title": "Add Vehicle Class Form 8",
+    "category": "Rajasthan",
+    "source_url": "https://transport.rajasthan.gov.in/content/dam/transport/pdf/forms/FORM-8.pdf",
+    "pages": 1,
+    "local": "assets/forms/transport-dl-form-8-add-class-rajasthan.pdf",
+    "preview": "assets/forms/previews/transport-dl-form-8-add-class-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "transport-dl-form-4a-international-permit-rajasthan",
+    "title": "International Driving Permit Form 4A",
+    "category": "Rajasthan",
+    "source_url": "https://transport.rajasthan.gov.in/content/dam/transport/pdf/forms/FORM-4-A.pdf",
+    "pages": 2,
+    "local": "assets/forms/transport-dl-form-4a-international-permit-rajasthan.pdf",
+    "preview": "assets/forms/previews/transport-dl-form-4a-international-permit-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "transport-medical-self-declaration-form-1-rajasthan",
+    "title": "Medical Self Declaration Form 1",
+    "category": "Rajasthan",
+    "source_url": "https://transport.rajasthan.gov.in/content/dam/transport/pdf/forms/FORM-1.pdf",
+    "pages": 1,
+    "local": "assets/forms/transport-medical-self-declaration-form-1-rajasthan.pdf",
+    "preview": "assets/forms/previews/transport-medical-self-declaration-form-1-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "transport-medical-certificate-form-1a-rajasthan",
+    "title": "Medical Certificate Form 1A",
+    "category": "Rajasthan",
+    "source_url": "https://transport.rajasthan.gov.in/content/dam/transport/pdf/forms/FORM-1A.pdf",
+    "pages": 2,
+    "local": "assets/forms/transport-medical-certificate-form-1a-rajasthan.pdf",
+    "preview": "assets/forms/previews/transport-medical-certificate-form-1a-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "transport-temporary-registration-rs41-rajasthan",
+    "title": "Temporary Registration Form RS-4.1",
+    "category": "Rajasthan",
+    "source_url": "https://transport.rajasthan.gov.in/content/dam/transport/pdf/forms/FORM-RS-4.1.pdf",
+    "pages": 1,
+    "local": "assets/forms/transport-temporary-registration-rs41-rajasthan.pdf",
+    "preview": "assets/forms/previews/transport-temporary-registration-rs41-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "transport-vehicle-registration-form-20-rajasthan",
+    "title": "Vehicle Registration Form 20",
+    "category": "Rajasthan",
+    "source_url": "https://transport.rajasthan.gov.in/content/dam/transport/pdf/forms/FORM-20.pdf",
+    "pages": 3,
+    "local": "assets/forms/transport-vehicle-registration-form-20-rajasthan.pdf",
+    "preview": "assets/forms/previews/transport-vehicle-registration-form-20-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "transport-rc-renewal-form-25-rajasthan",
+    "title": "RC Renewal Form 25",
+    "category": "Rajasthan",
+    "source_url": "https://transport.rajasthan.gov.in/content/dam/transport/pdf/forms/FORM-25.pdf",
+    "pages": 2,
+    "local": "assets/forms/transport-rc-renewal-form-25-rajasthan.pdf",
+    "preview": "assets/forms/previews/transport-rc-renewal-form-25-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "transport-duplicate-rc-form-26-rajasthan",
+    "title": "Duplicate RC Form 26",
+    "category": "Rajasthan",
+    "source_url": "https://transport.rajasthan.gov.in/content/dam/transport/pdf/forms/FORM-26.pdf",
+    "pages": 2,
+    "local": "assets/forms/transport-duplicate-rc-form-26-rajasthan.pdf",
+    "preview": "assets/forms/previews/transport-duplicate-rc-form-26-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "transport-new-registration-mark-form-27-rajasthan",
+    "title": "New Registration Mark Form 27",
+    "category": "Rajasthan",
+    "source_url": "https://transport.rajasthan.gov.in/content/dam/transport/pdf/forms/FORM-27.pdf",
+    "pages": 2,
+    "local": "assets/forms/transport-new-registration-mark-form-27-rajasthan.pdf",
+    "preview": "assets/forms/previews/transport-new-registration-mark-form-27-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "transport-re-registration-rs41a-rajasthan",
+    "title": "Transport Vehicle Re-registration Form RS-4.1A",
+    "category": "Rajasthan",
+    "source_url": "https://transport.rajasthan.gov.in/content/dam/transport/pdf/forms/FORM-RS-4.1A.pdf",
+    "pages": 1,
+    "local": "assets/forms/transport-re-registration-rs41a-rajasthan.pdf",
+    "preview": "assets/forms/previews/transport-re-registration-rs41a-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "transport-noc-form-28-rajasthan",
+    "title": "Vehicle NOC Form 28",
+    "category": "Rajasthan",
+    "source_url": "https://transport.rajasthan.gov.in/content/dam/transport/pdf/forms/FORM-28.pdf",
+    "pages": 2,
+    "local": "assets/forms/transport-noc-form-28-rajasthan.pdf",
+    "preview": "assets/forms/previews/transport-noc-form-28-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "transport-transfer-notice-form-29-rajasthan",
+    "title": "Transfer Notice Form 29",
+    "category": "Rajasthan",
+    "source_url": "https://transport.rajasthan.gov.in/content/dam/transport/pdf/forms/FORM-29.pdf",
+    "pages": 1,
+    "local": "assets/forms/transport-transfer-notice-form-29-rajasthan.pdf",
+    "preview": "assets/forms/previews/transport-transfer-notice-form-29-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "transport-transfer-application-form-30-rajasthan",
+    "title": "Transfer Application Form 30",
+    "category": "Rajasthan",
+    "source_url": "https://transport.rajasthan.gov.in/content/dam/transport/transport-dept/pdf/forms/FORM-30.pdf",
+    "pages": 2,
+    "local": "assets/forms/transport-transfer-application-form-30-rajasthan.pdf",
+    "preview": "assets/forms/previews/transport-transfer-application-form-30-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "transport-address-change-form-33-rajasthan",
+    "title": "RC Address Change Form 33",
+    "category": "Rajasthan",
+    "source_url": "https://transport.rajasthan.gov.in/content/dam/transport/pdf/forms/FORM-33.pdf",
+    "pages": 2,
+    "local": "assets/forms/transport-address-change-form-33-rajasthan.pdf",
+    "preview": "assets/forms/previews/transport-address-change-form-33-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "transport-hypothecation-entry-form-34-rajasthan",
+    "title": "Hypothecation Entry Form 34",
+    "category": "Rajasthan",
+    "source_url": "https://transport.rajasthan.gov.in/content/dam/transport/pdf/forms/FORM-34.pdf",
+    "pages": 2,
+    "local": "assets/forms/transport-hypothecation-entry-form-34-rajasthan.pdf",
+    "preview": "assets/forms/previews/transport-hypothecation-entry-form-34-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "transport-hypothecation-termination-form-35-rajasthan",
+    "title": "Hypothecation Termination Form 35",
+    "category": "Rajasthan",
+    "source_url": "https://transport.rajasthan.gov.in/content/dam/transport/pdf/forms/FORM-35.pdf",
+    "pages": 1,
+    "local": "assets/forms/transport-hypothecation-termination-form-35-rajasthan.pdf",
+    "preview": "assets/forms/previews/transport-hypothecation-termination-form-35-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "transport-fitness-certificate-rs46-rajasthan",
+    "title": "Fitness Certificate Form RS-4.6",
+    "category": "Rajasthan",
+    "source_url": "https://transport.rajasthan.gov.in/content/dam/transport/pdf/forms/FORM-RS-4.6.pdf",
+    "pages": 1,
+    "local": "assets/forms/transport-fitness-certificate-rs46-rajasthan.pdf",
+    "preview": "assets/forms/previews/transport-fitness-certificate-rs46-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "transport-fitness-renewal-rs47-rajasthan",
+    "title": "Fitness Renewal Form RS-4.7",
+    "category": "Rajasthan",
+    "source_url": "https://transport.rajasthan.gov.in/content/dam/transport/pdf/forms/FORM-RS-4.7.pdf",
+    "pages": 1,
+    "local": "assets/forms/transport-fitness-renewal-rs47-rajasthan.pdf",
+    "preview": "assets/forms/previews/transport-fitness-renewal-rs47-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "transport-stage-carriage-permit-rs51-rajasthan",
+    "title": "Stage Carriage Permit Form RS-5.1",
+    "category": "Rajasthan",
+    "source_url": "https://transport.rajasthan.gov.in/content/dam/transport/pdf/forms/Form%20RS-5.1.pdf",
+    "pages": 3,
+    "local": "assets/forms/transport-stage-carriage-permit-rs51-rajasthan.pdf",
+    "preview": "assets/forms/previews/transport-stage-carriage-permit-rs51-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "transport-stage-carriage-permit-rs52-rajasthan",
+    "title": "Stage Carriage Permit Form RS-5.2",
+    "category": "Rajasthan",
+    "source_url": "https://transport.rajasthan.gov.in/content/dam/transport/pdf/forms/Form%20RS-5.2.pdf",
+    "pages": 3,
+    "local": "assets/forms/transport-stage-carriage-permit-rs52-rajasthan.pdf",
+    "preview": "assets/forms/previews/transport-stage-carriage-permit-rs52-rajasthan.png",
+    "clean_source": true
+  },
+  {
     "slug": "aadhaar-form-1",
     "title": "Aadhaar Form 1 - Adult India Address",
     "category": "Aadhaar",
