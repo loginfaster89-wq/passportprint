@@ -100,6 +100,56 @@
     "clean_source": true
   },
   {
+    "slug": "police-bikaner-servant-employee-verification-rajasthan",
+    "title": "Bikaner Police Servant/Employee Verification",
+    "category": "Rajasthan",
+    "source_url": "https://www.police.rajasthan.gov.in/old/Rajasthan/DownloadForms/Verification%20Forms%20by%20Bikaner%20police.pdf",
+    "pages": 1,
+    "local": "assets/forms/police-bikaner-servant-employee-verification-rajasthan.pdf",
+    "preview": "assets/forms/previews/police-bikaner-servant-employee-verification-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "police-bikaner-tenant-pg-verification-rajasthan",
+    "title": "Bikaner Police Tenant/PG Verification",
+    "category": "Rajasthan",
+    "source_url": "https://www.police.rajasthan.gov.in/old/Rajasthan/DownloadForms/Verification%20Forms%20by%20Bikaner%20police.pdf",
+    "pages": 1,
+    "local": "assets/forms/police-bikaner-tenant-pg-verification-rajasthan.pdf",
+    "preview": "assets/forms/previews/police-bikaner-tenant-pg-verification-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "police-security-agency-license-form-1-rajasthan",
+    "title": "Private Security Agency Licence Form I",
+    "category": "Rajasthan",
+    "source_url": "https://www.police.rajasthan.gov.in/old/Rajasthan/DownloadForms/FORM%201-%20APPLICATION%20FOR%20LICENSE%20TO%20ENGAGE%20IN%20THE%20BUSINESS%20OF%20PRIVATE%20SECURITY%20AGENCY%20.pdf",
+    "pages": 2,
+    "local": "assets/forms/police-security-agency-license-form-1-rajasthan.pdf",
+    "preview": "assets/forms/previews/police-security-agency-license-form-1-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "police-security-agency-applicant-verification-form-2-rajasthan",
+    "title": "Private Security Agency Applicant Verification Form II",
+    "category": "Rajasthan",
+    "source_url": "https://www.police.rajasthan.gov.in/old/Rajasthan/DownloadForms/FORM%202-%20Particulars%20of%20Applicant%20for%20License%20of%20Agency%20For%20verification.pdf",
+    "pages": 5,
+    "local": "assets/forms/police-security-agency-applicant-verification-form-2-rajasthan.pdf",
+    "preview": "assets/forms/previews/police-security-agency-applicant-verification-form-2-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "police-security-agency-affidavit-form-3-rajasthan",
+    "title": "Private Security Agency Affidavit Form III",
+    "category": "Rajasthan",
+    "source_url": "https://www.police.rajasthan.gov.in/old/Rajasthan/DownloadForms/Affidavit%20US%207%7B2%7D%20of%20the%20Private%20Security%20Agency%20Regulation%20Act%2C%202005.pdf",
+    "pages": 2,
+    "local": "assets/forms/police-security-agency-affidavit-form-3-rajasthan.pdf",
+    "preview": "assets/forms/previews/police-security-agency-affidavit-form-3-rajasthan.png",
+    "clean_source": true
+  },
+  {
     "slug": "shop-act-form-1-rajasthan",
     "title": "Shop Act Form 1 - Registration",
     "category": "Rajasthan",
@@ -227,6 +277,26 @@
     "pages": 5,
     "local": "assets/forms/jan-aadhaar-income-format-rajasthan.pdf",
     "preview": "assets/forms/previews/jan-aadhaar-income-format-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "palanhar-scheme-application-rajasthan",
+    "title": "Palanhar Scheme Application",
+    "category": "Rajasthan",
+    "source_url": "https://sje.rajasthan.gov.in/schemes/palanhar_form_2013.pdf",
+    "pages": 5,
+    "local": "assets/forms/palanhar-scheme-application-rajasthan.pdf",
+    "preview": "assets/forms/previews/palanhar-scheme-application-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "income-certificate-format-rajssp-rajasthan",
+    "title": "Income Certificate Format - RajSSP Pension",
+    "category": "Rajasthan",
+    "source_url": "https://sje.rajasthan.gov.in/download/Format%20of%20Income%20Certificate%20for%20RajSSP.pdf",
+    "pages": 1,
+    "local": "assets/forms/income-certificate-format-rajssp-rajasthan.pdf",
+    "preview": "assets/forms/previews/income-certificate-format-rajssp-rajasthan.png",
     "clean_source": true
   },
   {
