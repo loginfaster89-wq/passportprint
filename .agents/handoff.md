@@ -23,36 +23,45 @@ Get-Content .agents\handoff.md
 - This chat owns Forms Hub work only.
 - Do not touch `id-print.html` from this Forms task.
 - Another chat may work on ID Print; coordinate through these `.agents` files.
-- `passport-photo.html`, `dist/passport-photo.html`, `assets/legal.css`, `dist/assets/legal.css`, and `dist/_headers` are locally modified from unrelated work/build output and were not staged by this Forms task.
+- `index.html`, `passport-photo.html`, `assets/legal.css`, `dist/_headers`, `dist/index.html`, `dist/passport-photo.html`, and `dist/assets/legal.css` are locally modified from unrelated work/build output and were not staged by this Forms task.
 
 ## Latest Forms update
 
-- Added 7 official clean Rajasthan Police/SJE forms after PDF inspection:
-  - Bikaner Police Servant/Employee Verification.
-  - Bikaner Police Tenant/PG Verification.
-  - Private Security Agency Licence Form I.
-  - Private Security Agency Applicant Verification Form II.
-  - Private Security Agency Affidavit Form III.
-  - Palanhar Scheme Application.
-  - Income Certificate Format - RajSSP Pension.
-- `/forms` now has 92 forms.
-- Cache is `studioprint-v48`; ID Print refresh marker remains `id-print-v47`.
-- Feature commit pushed to `main`: `6772479` (`feat(forms): add Rajasthan police and SJE forms`).
-- Previous Forms commits: `1114eb2` refreshed 7 Rajasthan PDFs; `34a75f5` added 10 official clean Rajasthan Revenue/eMitra forms.
+- Added 8 official Rajasthan Labour/Employment forms after PDF inspection:
+  - BOCW Welfare Scheme Common Application.
+  - Unemployment Allowance Income Declaration - Annexure I.
+  - Unemployment Allowance Witness Certificate - Annexure K.
+  - Unemployment Allowance Self Declaration - Annexure 1.
+  - Unemployment Internship Attendance Certificate.
+  - Unemployment Internship Joining Certificate.
+  - Unemployment Skill Training Joining Certificate.
+  - Unemployment Skill Training Attendance Certificate.
+- The official Employment internship/skill-training PDF was split into four one-page local PDFs because it contains four separate workflows.
+- `/forms` now has 100 forms.
+- Cache is `studioprint-v50`; ID Print refresh marker is `id-print-v49`.
+- Feature commit pushed to `main`: `98dd9b2` (`feat(forms): add Rajasthan labour employment forms`).
+- Latest parallel ID Print commit observed before push: `61a7d0b`.
 
 ## QA done
 
 - Build passed with bundled Node: `node build.js`.
-- Manifest validation passed: 92 entries and all referenced source PDFs/previews/page-previews exist for the current manifest schema.
-- Live HTML/SW/asset QA passed on `https://studioprint.pages.dev/forms?qa=forms-police-sje-6772479-retry`: page has 92 JS entries and contains Palanhar, Bikaner Police Tenant/PG, and RajSSP income entries. `/sw.js` has `studioprint-v48` and `id-print-v47`; `income-certificate-format-rajssp-rajasthan.pdf` returns 200.
+- Manifest validation passed: 100 entries and all referenced source PDFs/previews/page-previews exist for the current manifest schema.
+- `dist/forms.html` validation passed: 100 JS entries and new BOCW/unemployment entries present.
+- Live HTML/SW/asset QA passed on `https://studioprint.pages.dev/forms?qa=forms-labour-employment-98dd9b2-*`: page has 100 JS entries and contains BOCW Welfare Scheme Common Application plus Unemployment Skill Training Attendance Certificate. `/sw.js` has `studioprint-v50` and `id-print-v49`; `unemployment-allowance-income-i-rajasthan.pdf` returns 200.
 
 ## Research notes
 
-- Research docs: `.agents/research/forms-rajasthan-revenue-20260503.md`, `.agents/research/forms-rajasthan-refresh-20260503.md`, and `.agents/research/forms-rajasthan-police-sje-20260503.md`.
-- Official source bases: `https://emitraapp.rajasthan.gov.in/`, `https://pehchan.rajasthan.gov.in/`, `https://www.police.rajasthan.gov.in/`, and `https://sje.rajasthan.gov.in/`.
-- Every accepted/refreshed PDF was downloaded from an official direct URL, read/inspected, page-count checked, and previewed as clean blank form.
-- Third-party pages were used only for candidate discovery; no third-party-hosted PDFs were added.
-- Rejected manuals/guides, dirty pen-marked candidates, coloured/rotated Police scans, office-only forms, missing standalone Form 1-A URL guesses, and older lower-quality duplicates were documented in the research notes.
+- Research docs include:
+  - `.agents/research/forms-rajasthan-labour-employment-20260503.md`
+  - `.agents/research/forms-rajasthan-police-sje-20260503.md`
+  - `.agents/research/forms-rajasthan-refresh-20260503.md`
+  - `.agents/research/forms-rajasthan-revenue-20260503.md`
+  - `.agents/research/forms-rajasthan-transport-20260503.md`
+- Official source bases used in the latest pass:
+  - `https://labour.rajasthan.gov.in/`
+  - `https://employment.livelihoods.rajasthan.gov.in/`
+- Every accepted PDF was downloaded from an official direct URL, read/inspected, page-count checked, and rendered for visual QA.
+- Third-party pages were not used as PDF sources.
 
 ## Forms quality rule
 
@@ -66,4 +75,4 @@ Get-Content .agents\handoff.md
 
 - Current owned Forms scope: `forms.html`, `assets/forms/manifest.json`, new/refreshed PDFs/previews under `assets/forms/**`, `sw.js`, related tracked `dist/` outputs, and `.agents` docs.
 - Explicitly not owned: `id-print.html`, `passport-photo.html`, `index.html`, `assets/legal.css`, shared auth/nav/pricing files, and workflow files.
-- Rajasthan is not complete yet. Continue official-source research before adding income certificate, Pehchan 2025 Form 1-A/adopted-child, delayed registration, appeal, or other citizen-service forms.
+- Rajasthan is not complete yet. Continue official-source research before adding Pehchan 2025 Form 1-A/adopted-child, delayed registration, appeal, general income, or other citizen-service forms.
