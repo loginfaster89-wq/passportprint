@@ -37,6 +37,25 @@ header.legal-header{top:0!important;margin-top:0!important;padding-top:10px!impo
 
 /* ── ID Print page styles ── */
 .idp-app{max-width:960px;margin:0 auto;padding:32px 20px 60px;}
+body.idp-workspace-mode main.legal-main{
+  max-width:none;padding:12px clamp(12px,2vw,22px) 36px;
+}
+body.idp-workspace-mode .idp-app{
+  max-width:1180px;padding:0 0 36px;
+}
+body.idp-workspace-mode .idp-hero,
+body.idp-workspace-mode .idp-steps{
+  display:none;
+}
+body.idp-workspace-mode .idp-preview{padding:14px 18px;}
+body.idp-workspace-mode .idp-preview h3{margin-bottom:10px;}
+body.idp-workspace-mode .idp-detect{padding:6px 14px;margin-bottom:8px;}
+body.idp-workspace-mode .idp-option{margin-top:10px;}
+body.idp-workspace-mode .idp-editor{margin-top:10px;padding:12px 16px;}
+body.idp-workspace-mode .idp-editor-title{margin-bottom:8px;}
+body.idp-workspace-mode .idp-sliders{gap:10px 18px;}
+body.idp-workspace-mode .idp-info{margin:10px 0;}
+body.idp-workspace-mode .idp-actions{margin-top:10px;}
 
 .idp-hero{text-align:center;margin-bottom:32px;}
 .idp-hero h1{
@@ -566,6 +585,9 @@ input.idp-range::-moz-range-thumb{
 /* Responsive */
 @media (max-width:640px){
   .idp-app{padding:20px 14px 40px;}
+  body.idp-workspace-mode main.legal-main{padding:10px 10px 28px;}
+  body.idp-workspace-mode .idp-app{padding:0 0 28px;}
+  body.idp-workspace-mode .idp-preview{padding:14px;}
   .idp-upload{padding:32px 16px;}
   .idp-cards{flex-direction:column;align-items:center;}
   .idp-steps{font-size:10px;gap:0;}
@@ -1818,10 +1840,20 @@ function refreshIdpPlanBanner() {
 }
 
 /* ── Step management ── */
+function setIdpWorkspaceMode(isActive) {
+  document.body.classList.toggle('idp-workspace-mode', !!isActive);
+  if (isActive) {
+    requestAnimationFrame(function() {
+      window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    });
+  }
+}
+
 function showStep(n) {
   [stepUpload, stepPassword, stepPreview, stepSheet].forEach(el => el.classList.add('idp-hidden'));
   idpError.classList.remove('show');
   idpLoading.classList.remove('show');
+  setIdpWorkspaceMode(n > 1);
 
   document.querySelectorAll('.idp-step').forEach(s => {
     s.classList.remove('active','done');
@@ -1846,6 +1878,7 @@ function showLoading(show) {
 }
 
 function showPasswordStep() {
+  setIdpWorkspaceMode(true);
   stepUpload.classList.add('idp-hidden');
   stepPassword.classList.remove('idp-hidden');
   pdfPasswordInput.value = '';
@@ -1999,6 +2032,7 @@ btnProcessAll.addEventListener('click', async function() {
 });
 
 function showPasswordStepBatch(fileName) {
+  setIdpWorkspaceMode(true);
   stepUpload.classList.add('idp-hidden');
   stepPassword.classList.remove('idp-hidden');
   stepPassword.querySelector('h3').textContent = '\ud83d\udd12 ' + fileName + ' is password-protected';
