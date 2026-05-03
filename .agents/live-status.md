@@ -5,41 +5,52 @@ Last updated: 2026-05-03 IST
 ## Current task status
 
 - Current owner: this chat owns Forms page cleanup only.
-- Active task: fix Forms Hub quality after user reported dirty/filled/broken PDFs and weak form-purpose labelling.
-- Task result: removed `Medical Limit Form` because the PDF rendered corrupt/gibberish text on page 3 and is not acceptable as a clean blank form.
-- Task result: replaced generic `Aadhaar Form` with official UIDAI `Aadhaar Form 1` through `Aadhaar Form 8`, separated by applicant/use case: adult India address, adult NRI foreign address, child 5-18 India address, child NRI foreign address, child below 5 India address, child below 5 NRI, foreign national adult, foreign national child.
-- Task result: split PAN into new PAN and correction use cases: `PAN 49A - New PAN Indian Citizen`, `PAN 49AA - New PAN Foreign Citizen`, `PAN CR-01 - Correction Individual`, and `PAN CR-02 - Correction Non-Individual`. PAN correction forms were split from the official 2026 Income Tax order so the signed order cover page is not exposed as a user form.
-- Task result: clarified Voter titles by purpose: Form 6 new registration, Form 6B Aadhaar link, Form 7 delete/object, Form 8 correction/shift.
-- Task result: fixed Rajasthan `Ration Card New/Update` preview/PDF orientation from sideways scan to readable upright pages.
-- Forms count is now 43 total.
+- Active task completed: full Forms Hub quality/purpose pass after user reported dirty/filled/unclear PDFs.
+- Result: current Forms library audited page-by-page from `assets/forms/manifest.json`: 46 forms, 106 PDF pages, 0 rotation/dark/page-count flags after cleanup.
+- Result: visual contact sheet reviewed at `C:\tmp\forms-full-audit-20260503-resume\contact.jpg`.
+- Result: legacy PAN 49A / 49AA entries and assets removed because PAN allotment for the 2026 flow is now split into Income Tax Forms 93 / 94 / 95 / 96.
+- Result: added official 2026 PAN allotment forms:
+  - PAN Form 93 - Individual Indian Applicant
+  - PAN Form 94 - Non-Individual Indian Applicant
+  - PAN Form 95 - Individual Foreign Applicant
+  - PAN Form 96 - Non-Individual Foreign Applicant
+- Result: kept PAN CR-01 / CR-02 correction forms and clarified their 2026 correction purpose.
+- Result: added official Election Commission Voter Form 6A - Overseas Elector.
+- Result: clarified all legacy vague Forms titles/descriptions by real service purpose: Rajasthan Food/NFSA, Scholarship income declaration, Marriage, Character, Shop Act Forms 1/4/5/7/13/15, Contract Labour Forms I/IV/V, BOCW, Trade Union, Jan Aadhaar income, Pension Forms 2/5/5A/6/14A/30, SSO update, Aadhaar, Voter, EPFO.
+- Result: Rajasthan ration-card PDF rotation metadata normalized and preview/page previews regenerated upright.
+- Result: EPFO Composite Claim Non-Aadhaar official alternate was identified at `https://www.epfindia.gov.in/site_docs/PDFs/Downloads_PDFs/Form_CCF_nonaadhar.pdf`, but not added because this environment repeatedly timed out downloading the official PDF. Do not add third-party Scribd/PDF-filler copies.
+- Forms count is now 46 total.
+- Cache bumped to `studioprint-v37`.
 - Build result: bundled Node command `node build.js` passed.
-- Local QA result: manifest JSON parsed; every manifest PDF, preview, and page preview exists; built `dist/forms.html` opened in headless Chrome; searches for `aadhaar form 7`, `adult nri foreign address`, `pan cr-01`, and `ration card` passed; `medical limit` returned zero cards; no page errors.
-- Live QA result: `https://studioprint.pages.dev/forms` contains `Aadhaar Form 7 - Foreign National Adult`, `PAN CR-01 - Correction Individual`, and `Ration Card New/Update`; it no longer contains `Medical Limit Form`; `https://studioprint.pages.dev/sw.js` returns `studioprint-v35`; sample new PDF and page preview URLs returned HTTP 200.
-- Source commit pushed: `928aa793d8d00c900caf13ff067506aa00bce4a5` (`fix(forms): split official aadhaar and pan forms`).
+- Local QA result: manifest JSON parsed; every manifest PDF and preview exists; automated audit returned 0 flags; built `dist/forms.html` opened in installed Chrome via Playwright; searches for `voter form 6a`, `pan form 93`, `pan form 96`, `shop act form 4`, `contract labour form iv`, `epfo form 11`, and `ration card` passed; `medical limit` absent; preview modal opened for Voter Form 6A; no page/console errors.
+- Live QA result: `https://studioprint.pages.dev/forms` contains `Voter Form 6A - Overseas Elector`, `PAN Form 93 - Individual Indian Applicant`, and `Shop Act Form 4 - Change Notice`; it does not contain `PAN 49A` or `Medical Limit Form`; `https://studioprint.pages.dev/sw.js` returns `studioprint-v37`; sample new PAN/Voter PDF and preview URLs returned HTTP 200.
+- Source commit pushed: `3ade9b3f7200ab45cf33c65b55381b477c88083f` (`fix(forms): audit form purposes and update 2026 PAN`).
 
 ## Owned file scope
 
-- Owned and changed: `forms.html`, `assets/forms/manifest.json`, `assets/forms/*.pdf`, `assets/forms/previews/**`, `sw.js`, `dist/forms.html`, `dist/sw.js`, `.agents/live-status.md`, `.agents/handoff.md`.
+- Owned and changed: `forms.html`, `assets/forms/manifest.json`, `assets/forms/*.pdf`, `assets/forms/previews/**`, `sw.js`, `dist/forms.html`, `dist/sw.js`, selected tracked `dist/assets/forms/previews/pages/*` cleanup, `.agents/live-status.md`, `.agents/handoff.md`.
 - Explicitly not owned: `id-print.html`, `passport-photo.html`, `index.html`, `assets/legal.css`, shared auth/nav/pricing files, and workflow files.
 
 ## Shared files touched
 
-- `sw.js` touched only for cache-version bump to `studioprint-v35`.
+- `sw.js` touched only for cache-version bump to `studioprint-v37`.
 - `forms.html` touched only for Forms page data.
 - Did not touch or stage `id-print.html`.
 
 ## Commit / deploy / QA
 
-- Website source commit pushed: `928aa793d8d00c900caf13ff067506aa00bce4a5`.
+- Website source commit pushed: `3ade9b3f7200ab45cf33c65b55381b477c88083f`.
 - Deploy triggered: yes, by push to `main`.
 - Build run: yes, bundled Node `build.js`.
-- Live QA: passed.
+- Local QA: passed.
+- Live QA: passed after Cloudflare propagation.
 
 ## Pending work
 
-- Remaining legacy Forms entries still need one-by-one official validation before calling the library complete. Do not bulk-add Indian forms from random scans; use official clean blank PDFs only.
-- For future Forms additions, reject files with filled text, handwriting, signatures, old dates, watermarks, black/dark scans, rotated pages, broken/gibberish text, or unclear purpose.
-- Residual local dirty files not owned by this Forms task remain generated/stale: `dist/_headers`, `dist/about.html`, `dist/contact.html`, `dist/id-print.html`, `dist/privacy.html`, `dist/refund.html`, `dist/shipping.html`, `dist/terms.html`, and tracked `dist/assets/forms/previews/pages/ration-card-rajasthan-p*.png`. Do not stage them without checking with the owner of that work.
+- EPFO Composite Claim Non-Aadhaar remains pending until the official EPFO PDF can be downloaded cleanly from the official URL. Do not use third-party copies.
+- For every future Forms addition, first research the form online from official sources and confirm: what service it is used for, how people/counters use it, whether alternate versions exist, and whether the PDF is current for the year/use case.
+- Reject any PDF with filled text, handwriting, signatures, old dates, watermarks, black/dark scans, rotated pages, broken/gibberish text, or unclear purpose.
+- Residual local dirty files not owned by this Forms task remain generated/stale: `dist/_headers`, `dist/about.html`, `dist/contact.html`, `dist/privacy.html`, `dist/refund.html`, `dist/shipping.html`, and `dist/terms.html`. Do not stage them without checking with the owner of that work.
 - Before any new work, run:
   - `git pull --ff-only origin main`
   - `Get-Content .agents\live-status.md`
