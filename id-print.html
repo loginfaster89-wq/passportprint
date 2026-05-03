@@ -220,19 +220,25 @@ header.legal-header{top:0!important;margin-top:0!important;padding-top:10px!impo
 .idp-layout-btn small{font-family:'DM Mono',monospace;font-size:10.5px;line-height:1.4;color:var(--muted);}
 .idp-cal-panel{
   display:none;margin-top:12px;padding-top:12px;border-top:1px solid var(--border);
-  grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;align-items:end;
+  grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;align-items:end;
 }
 .idp-cal-panel.show{display:grid;}
 .idp-cal-field{display:flex;flex-direction:column;gap:5px;}
+.idp-cal-field.wide{grid-column:span 2;}
+.idp-cal-tools{display:flex;gap:8px;flex-wrap:wrap;align-items:end;}
 .idp-cal-field label{
   font-family:'DM Mono',monospace;font-size:10.5px;color:var(--muted);
   text-transform:uppercase;letter-spacing:.08em;
 }
-.idp-cal-field input[type="number"]{
+.idp-cal-field input[type="number"],
+.idp-cal-field input[type="text"],
+.idp-cal-field select{
   width:100%;padding:8px 10px;border-radius:8px;border:1px solid var(--border);
   background:var(--surface);color:var(--text);font-family:'DM Mono',monospace;font-size:12px;
 }
-.idp-cal-field input[type="number"]:focus{outline:none;border-color:var(--accent);}
+.idp-cal-field input[type="number"]:focus,
+.idp-cal-field input[type="text"]:focus,
+.idp-cal-field select:focus{outline:none;border-color:var(--accent);}
 .idp-cal-check{
   flex-direction:row;align-items:center;gap:8px;color:var(--muted);
   font-family:'DM Mono',monospace;font-size:11px;min-height:35px;
@@ -244,6 +250,7 @@ header.legal-header{top:0!important;margin-top:0!important;padding-top:10px!impo
   font-size:11px;cursor:pointer;
 }
 .idp-cal-reset:hover{border-color:var(--accent);color:var(--accent);}
+.idp-cal-reset:disabled{opacity:.45;cursor:not-allowed;color:var(--muted);border-color:var(--border);}
 .idp-plan-banner{
   margin:0 0 14px;padding:10px 12px;border-radius:10px;
   border:1px solid var(--border);background:var(--surface2);
@@ -537,10 +544,12 @@ input.idp-range::-moz-range-thumb{
   .idp-slider-group{flex:1 1 100%;}
   .idp-layout-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
   .idp-cal-panel.show{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .idp-cal-field.wide{grid-column:span 2;}
 }
 @media (max-width:420px){
   .idp-layout-grid{grid-template-columns:1fr;}
   .idp-cal-panel.show{grid-template-columns:1fr;}
+  .idp-cal-field.wide{grid-column:span 1;}
 }
 /* §AC.27 — Position panel (per-side Move + Zoom) removed per user request.
    Rounded Corners + Photo Adjust retained. */
@@ -761,23 +770,41 @@ input.idp-range::-moz-range-thumb{
           </button>
         </div>
         <div class="idp-cal-panel" id="pvcCalPanel" aria-label="PVC tray calibration">
+          <div class="idp-cal-field wide">
+            <label for="pvcProfileSelect">Printer profile</label>
+            <select id="pvcProfileSelect"></select>
+          </div>
+          <div class="idp-cal-field wide">
+            <label for="pvcProfileName">Profile name</label>
+            <input type="text" id="pvcProfileName" maxlength="40" value="Epson L8050 Tray">
+          </div>
           <div class="idp-cal-field">
             <label for="pvcOffsetX">Offset X mm</label>
-            <input type="number" id="pvcOffsetX" step="0.1" min="-10" max="10" value="0">
+            <input type="number" id="pvcOffsetX" step="0.1" min="-12" max="12" value="0">
           </div>
           <div class="idp-cal-field">
             <label for="pvcOffsetY">Offset Y mm</label>
-            <input type="number" id="pvcOffsetY" step="0.1" min="-10" max="10" value="0">
+            <input type="number" id="pvcOffsetY" step="0.1" min="-12" max="12" value="0">
           </div>
           <div class="idp-cal-field">
             <label for="pvcScale">Scale %</label>
             <input type="number" id="pvcScale" step="0.1" min="95" max="105" value="100">
           </div>
+          <div class="idp-cal-field">
+            <label for="pvcRotation">Rotate deg</label>
+            <input type="number" id="pvcRotation" step="0.1" min="-3" max="3" value="0">
+          </div>
           <label class="idp-cal-field idp-cal-check">
             <input type="checkbox" id="pvcGuides">
             Show tray guides
           </label>
-          <button type="button" class="idp-cal-reset" id="pvcReset">Reset tray</button>
+          <div class="idp-cal-tools">
+            <button type="button" class="idp-cal-reset" id="pvcSaveProfile">Save</button>
+            <button type="button" class="idp-cal-reset" id="pvcAddProfile">Clone</button>
+            <button type="button" class="idp-cal-reset" id="pvcDeleteProfile">Delete</button>
+            <button type="button" class="idp-cal-reset" id="pvcTestGrid">Test grid</button>
+            <button type="button" class="idp-cal-reset" id="pvcReset">Reset tray</button>
+          </div>
         </div>
       </div>
       <div id="idpPlanBanner" class="idp-plan-banner ok"></div>
@@ -956,6 +983,16 @@ const SHEET_LAYOUTS = {
   }
 };
 
+const PVC_PROFILE_STORAGE = 'idp_pvc_profiles_v1';
+const PVC_ACTIVE_PROFILE_STORAGE = 'idp_pvc_active_profile_v1';
+const PVC_LEGACY_CAL_STORAGE = 'idp_pvc_cal_v1';
+const PVC_PROFILE_DEFAULTS = [
+  { id: 'epson-l8050-tray', name: 'Epson L8050 Tray', locked: true, x: 0, y: 0, scale: 100, rotation: 0, guides: true },
+  { id: 'epson-l805-tray', name: 'Epson L805 Tray', locked: true, x: 0, y: 0, scale: 100, rotation: 0, guides: true },
+  { id: 'canon-g-tray', name: 'Canon PVC Tray', locked: true, x: 0, y: 0, scale: 100, rotation: 0, guides: true },
+  { id: 'custom-counter', name: 'Shop Custom Profile', locked: false, x: 0, y: 0, scale: 100, rotation: 0, guides: true }
+];
+
 const CROP = {
   aadhaar: {
     /* eAadhaar PDFs (UIDAI 2024+ layout) ship two stacked rows on
@@ -1104,11 +1141,18 @@ const sheetDesc = $('#sheetDesc');
 const layoutPanel = $('#layoutPanel');
 const layoutButtons = Array.from(document.querySelectorAll('[data-sheet-mode]'));
 const pvcCalPanel = $('#pvcCalPanel');
+const pvcProfileSelect = $('#pvcProfileSelect');
+const pvcProfileName = $('#pvcProfileName');
 const pvcOffsetX = $('#pvcOffsetX');
 const pvcOffsetY = $('#pvcOffsetY');
 const pvcScale = $('#pvcScale');
+const pvcRotation = $('#pvcRotation');
 const pvcGuides = $('#pvcGuides');
 const pvcReset = $('#pvcReset');
+const pvcSaveProfile = $('#pvcSaveProfile');
+const pvcAddProfile = $('#pvcAddProfile');
+const pvcDeleteProfile = $('#pvcDeleteProfile');
+const pvcTestGrid = $('#pvcTestGrid');
 const pillFormat = $('#pillFormat');
 const pillPixels = $('#pillPixels');
 const pillWorkflow = $('#pillWorkflow');
@@ -1125,7 +1169,10 @@ let roundedCorners = false;
 /* §AC.28 — `swapSides` state removed (Swap sides toggle deleted). */
 const CARD_RADIUS = 36;
 let sheetMode = 'fold';
+let pvcProfiles = loadPvcProfiles();
+let activePvcProfileId = loadActivePvcProfileId(pvcProfiles);
 let pvcCalibration = loadPvcCalibration();
+let sheetIsCalibrationTest = false;
 
 /* Legacy single-card state (used when only 1 PDF) */
 let pdfArrayBuffer = null;
@@ -1209,25 +1256,114 @@ function clampNumber(value, min, max, fallback) {
   return Math.min(max, Math.max(min, n));
 }
 
-function loadPvcCalibration() {
-  var fallback = { x: 0, y: 0, scale: 100, guides: false };
+function clonePvcProfile(profile) {
+  return {
+    id: profile.id,
+    name: profile.name,
+    locked: !!profile.locked,
+    x: clampNumber(profile.x, -12, 12, 0),
+    y: clampNumber(profile.y, -12, 12, 0),
+    scale: clampNumber(profile.scale, 95, 105, 100),
+    rotation: clampNumber(profile.rotation, -3, 3, 0),
+    guides: profile.guides !== false
+  };
+}
+
+function defaultPvcProfiles() {
+  return PVC_PROFILE_DEFAULTS.map(clonePvcProfile);
+}
+
+function sanitizePvcProfile(profile, fallback) {
+  var base = fallback || PVC_PROFILE_DEFAULTS[0];
+  var id = typeof profile.id === 'string' && profile.id ? profile.id : base.id;
+  var name = typeof profile.name === 'string' && profile.name.trim() ? profile.name.trim().slice(0, 40) : base.name;
+  return clonePvcProfile({
+    id: id,
+    name: name,
+    locked: profile.locked === true || base.locked === true,
+    x: profile.x,
+    y: profile.y,
+    scale: profile.scale,
+    rotation: profile.rotation,
+    guides: profile.guides
+  });
+}
+
+function loadPvcProfiles() {
+  var profiles = defaultPvcProfiles();
   try {
-    var raw = localStorage.getItem('idp_pvc_cal_v1');
-    if (!raw) return fallback;
-    var parsed = JSON.parse(raw);
-    return {
-      x: clampNumber(parsed.x, -12, 12, 0),
-      y: clampNumber(parsed.y, -12, 12, 0),
-      scale: clampNumber(parsed.scale, 95, 105, 100),
-      guides: !!parsed.guides
-    };
-  } catch (_) {
-    return fallback;
-  }
+    var raw = localStorage.getItem(PVC_PROFILE_STORAGE);
+    if (raw) {
+      var parsed = JSON.parse(raw);
+      var saved = Array.isArray(parsed) ? parsed : parsed.profiles;
+      if (Array.isArray(saved)) {
+        var byId = {};
+        profiles.forEach(function(profile) { byId[profile.id] = profile; });
+        saved.forEach(function(profile) {
+          if (!profile || typeof profile !== 'object') return;
+          var fallback = byId[profile.id] || PVC_PROFILE_DEFAULTS[0];
+          byId[profile.id || ('custom-' + Date.now())] = sanitizePvcProfile(profile, fallback);
+        });
+        profiles = Object.keys(byId).map(function(id) { return byId[id]; });
+      }
+    } else {
+      var legacy = localStorage.getItem(PVC_LEGACY_CAL_STORAGE);
+      if (legacy) {
+        var old = JSON.parse(legacy);
+        profiles[0] = sanitizePvcProfile({
+          id: profiles[0].id,
+          name: profiles[0].name,
+          locked: true,
+          x: old.x,
+          y: old.y,
+          scale: old.scale,
+          rotation: old.rotation,
+          guides: old.guides
+        }, profiles[0]);
+      }
+    }
+  } catch (_) {}
+  return profiles.length ? profiles : defaultPvcProfiles();
+}
+
+function loadActivePvcProfileId(profiles) {
+  try {
+    var id = localStorage.getItem(PVC_ACTIVE_PROFILE_STORAGE);
+    if (id && profiles.some(function(profile) { return profile.id === id; })) return id;
+  } catch (_) {}
+  return profiles[0].id;
+}
+
+function getActivePvcProfile() {
+  return pvcProfiles.find(function(profile) { return profile.id === activePvcProfileId; }) || pvcProfiles[0];
+}
+
+function loadPvcCalibration() {
+  return clonePvcProfile(getActivePvcProfile());
+}
+
+function savePvcProfiles() {
+  try {
+    localStorage.setItem(PVC_PROFILE_STORAGE, JSON.stringify({ profiles: pvcProfiles }));
+    localStorage.setItem(PVC_ACTIVE_PROFILE_STORAGE, activePvcProfileId);
+  } catch (_) {}
 }
 
 function savePvcCalibration() {
-  try { localStorage.setItem('idp_pvc_cal_v1', JSON.stringify(pvcCalibration)); } catch (_) {}
+  var idx = pvcProfiles.findIndex(function(profile) { return profile.id === activePvcProfileId; });
+  if (idx < 0) idx = 0;
+  pvcCalibration.id = activePvcProfileId;
+  pvcProfiles[idx] = clonePvcProfile(pvcCalibration);
+  savePvcProfiles();
+  try {
+    localStorage.setItem(PVC_LEGACY_CAL_STORAGE, JSON.stringify({
+      x: pvcCalibration.x,
+      y: pvcCalibration.y,
+      scale: pvcCalibration.scale,
+      rotation: pvcCalibration.rotation,
+      guides: pvcCalibration.guides
+    }));
+  } catch (_) {}
 }
 
 function supportsCounterLayouts(cardType) {
@@ -1239,6 +1375,18 @@ function normalizeSheetMode(mode, cardType) {
   var next = SHEET_LAYOUTS[mode] ? mode : 'fold';
   if (next !== 'fold' && !supportsCounterLayouts(cardType)) return 'fold';
   return next;
+}
+
+function renderPvcProfileOptions() {
+  if (!pvcProfileSelect) return;
+  pvcProfileSelect.innerHTML = '';
+  pvcProfiles.forEach(function(profile) {
+    var option = document.createElement('option');
+    option.value = profile.id;
+    option.textContent = profile.name + (profile.locked ? '' : ' - custom');
+    pvcProfileSelect.appendChild(option);
+  });
+  pvcProfileSelect.value = activePvcProfileId;
 }
 
 function syncPvcCalibrationUI() {
@@ -1253,26 +1401,69 @@ function syncPvcCalibrationUI() {
     btn.classList.toggle('is-active', mode === sheetMode);
   });
 
+  renderPvcProfileOptions();
   if (pvcCalPanel) pvcCalPanel.classList.toggle('show', sheetMode === 'pvc');
+  if (pvcProfileName) pvcProfileName.value = pvcCalibration.name || 'PVC Tray Profile';
   if (pvcOffsetX) pvcOffsetX.value = pvcCalibration.x;
   if (pvcOffsetY) pvcOffsetY.value = pvcCalibration.y;
   if (pvcScale) pvcScale.value = pvcCalibration.scale;
+  if (pvcRotation) pvcRotation.value = pvcCalibration.rotation || 0;
   if (pvcGuides) pvcGuides.checked = !!pvcCalibration.guides;
+  if (pvcDeleteProfile) pvcDeleteProfile.disabled = !!pvcCalibration.locked;
 }
 
-function readPvcCalibrationFromUI() {
+function readPvcCalibrationFromUI(skipBuild) {
   pvcCalibration = {
+    id: activePvcProfileId,
+    name: pvcProfileName && pvcProfileName.value.trim() ? pvcProfileName.value.trim().slice(0, 40) : 'PVC Tray Profile',
+    locked: !!pvcCalibration.locked,
     x: clampNumber(pvcOffsetX && pvcOffsetX.value, -12, 12, 0),
     y: clampNumber(pvcOffsetY && pvcOffsetY.value, -12, 12, 0),
     scale: clampNumber(pvcScale && pvcScale.value, 95, 105, 100),
+    rotation: clampNumber(pvcRotation && pvcRotation.value, -3, 3, 0),
     guides: !!(pvcGuides && pvcGuides.checked)
   };
   savePvcCalibration();
+  syncPvcCalibrationUI();
+  if (!skipBuild && !stepSheet.classList.contains('idp-hidden')) buildSheet();
+}
+
+function switchPvcProfile(profileId) {
+  if (!pvcProfiles.some(function(profile) { return profile.id === profileId; })) return;
+  activePvcProfileId = profileId;
+  pvcCalibration = clonePvcProfile(getActivePvcProfile());
+  savePvcProfiles();
+  syncPvcCalibrationUI();
+  if (!stepSheet.classList.contains('idp-hidden')) buildSheet();
+}
+
+function addPvcProfileClone() {
+  readPvcCalibrationFromUI();
+  var profile = clonePvcProfile(pvcCalibration);
+  profile.id = 'custom-' + Date.now();
+  profile.name = (profile.name || 'PVC Tray Profile').replace(/\s+-\s+copy$/i, '') + ' - copy';
+  profile.locked = false;
+  pvcProfiles.push(profile);
+  activePvcProfileId = profile.id;
+  pvcCalibration = clonePvcProfile(profile);
+  savePvcProfiles();
+  syncPvcCalibrationUI();
+  if (!stepSheet.classList.contains('idp-hidden')) buildSheet();
+}
+
+function deleteActivePvcProfile() {
+  var profile = getActivePvcProfile();
+  if (!profile || profile.locked || pvcProfiles.length <= 1) return;
+  pvcProfiles = pvcProfiles.filter(function(item) { return item.id !== activePvcProfileId; });
+  activePvcProfileId = pvcProfiles[0].id;
+  pvcCalibration = clonePvcProfile(pvcProfiles[0]);
+  savePvcProfiles();
   syncPvcCalibrationUI();
   if (!stepSheet.classList.contains('idp-hidden')) buildSheet();
 }
 
 function setSheetMode(mode) {
+  sheetIsCalibrationTest = false;
   sheetMode = normalizeSheetMode(mode, getCurrentCardType());
   syncPvcCalibrationUI();
   updateSheetMeta();
@@ -2021,6 +2212,7 @@ function drawToCanvas(canvas, srcCanvas, w, h) {
 
 /* ── A4 Sheet generation ── */
 function buildSheet() {
+  sheetIsCalibrationTest = false;
   sheetMode = normalizeSheetMode(sheetMode, getCurrentCardType());
   if (sheetMode === 'multi') buildMultiCardSheet();
   else if (sheetMode === 'dragon') buildDragonSheet();
@@ -2289,6 +2481,24 @@ function buildDragonSheet() {
   /* §AC.25 — footer info text removed (same as buildSingleSheet). */
 }
 
+function drawTrayCard(ctx, image, x, y, w, h, radius, rotationDeg) {
+  var rot = (clampNumber(rotationDeg, -3, 3, 0) * Math.PI) / 180;
+  if (!rot) {
+    if (radius > 0) drawCardClipped(ctx, image, x, y, w, h, radius);
+    else ctx.drawImage(image, x, y, w, h);
+    return;
+  }
+  ctx.save();
+  ctx.translate(x + w / 2, y + h / 2);
+  ctx.rotate(rot);
+  if (radius > 0) {
+    roundedRectPath(ctx, -w / 2, -h / 2, w, h, radius);
+    ctx.clip();
+  }
+  ctx.drawImage(image, -w / 2, -h / 2, w, h);
+  ctx.restore();
+}
+
 function buildPVCTraySheet() {
   var cards = getActiveCards();
   var card = cards.length > 0 ? cards[0] : null;
@@ -2300,6 +2510,7 @@ function buildPVCTraySheet() {
   ctx.fillRect(0, 0, PVC_W, PVC_H);
 
   var scale = clampNumber(pvcCalibration.scale, 95, 105, 100) / 100;
+  var rotation = clampNumber(pvcCalibration.rotation, -3, 3, 0);
   var cardW = Math.round(CR80_W * scale);
   var cardH = Math.round(CR80_H * scale);
   var offsetX = Math.round(mmToPx(pvcCalibration.x || 0));
@@ -2312,13 +2523,11 @@ function buildPVCTraySheet() {
   var radius = useRoundedCorners() ? CARD_RADIUS : 0;
 
   if (card && card.front) {
-    if (radius > 0) drawCardClipped(ctx, card.front, marginX, topY, cardW, cardH, radius);
-    else ctx.drawImage(card.front, marginX, topY, cardW, cardH);
+    drawTrayCard(ctx, card.front, marginX, topY, cardW, cardH, radius, rotation);
   }
 
   if (card && card.back) {
-    if (radius > 0) drawCardClipped(ctx, card.back, marginX, bottomY, cardW, cardH, radius);
-    else ctx.drawImage(card.back, marginX, bottomY, cardW, cardH);
+    drawTrayCard(ctx, card.back, marginX, bottomY, cardW, cardH, radius, rotation);
   }
 
   if (pvcCalibration.guides) {
@@ -2348,8 +2557,8 @@ function buildPVCTraySheet() {
     ctx.fillStyle = '#999';
     ctx.font = '16px sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('Front', marginX + cardW / 2, topY - 10);
-    ctx.fillText('Back', marginX + cardW / 2, bottomY - 10);
+    ctx.fillText((pvcCalibration.name || 'PVC Tray') + ' - Front', marginX + cardW / 2, topY - 10);
+    ctx.fillText('Back - X ' + (pvcCalibration.x || 0) + 'mm Y ' + (pvcCalibration.y || 0) + 'mm S ' + (pvcCalibration.scale || 100) + '%', marginX + cardW / 2, bottomY - 10);
 
     /* Tray border */
     ctx.strokeStyle = '#ddd';
@@ -2360,6 +2569,96 @@ function buildPVCTraySheet() {
   }
 
   /* §AC.25 — footer info text removed (same as buildSingleSheet). */
+}
+
+function drawPVCCalibrationSlot(ctx, x, y, w, h, label) {
+  ctx.save();
+  ctx.strokeStyle = '#111';
+  ctx.lineWidth = 3;
+  ctx.setLineDash([]);
+  ctx.strokeRect(x, y, w, h);
+
+  ctx.strokeStyle = '#999';
+  ctx.lineWidth = 1;
+  ctx.setLineDash([8, 6]);
+  ctx.beginPath();
+  ctx.moveTo(x + w / 2, y);
+  ctx.lineTo(x + w / 2, y + h);
+  ctx.moveTo(x, y + h / 2);
+  ctx.lineTo(x + w, y + h / 2);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  ctx.strokeStyle = '#f0a500';
+  ctx.lineWidth = 2;
+  var step = Math.round(mmToPx(10));
+  for (var gx = x + step; gx < x + w; gx += step) {
+    ctx.beginPath();
+    ctx.moveTo(gx, y);
+    ctx.lineTo(gx, y + 18);
+    ctx.moveTo(gx, y + h - 18);
+    ctx.lineTo(gx, y + h);
+    ctx.stroke();
+  }
+  for (var gy = y + step; gy < y + h; gy += step) {
+    ctx.beginPath();
+    ctx.moveTo(x, gy);
+    ctx.lineTo(x + 18, gy);
+    ctx.moveTo(x + w - 18, gy);
+    ctx.lineTo(x + w, gy);
+    ctx.stroke();
+  }
+
+  drawCornerMarks(ctx, x, y, w, h, 34);
+  ctx.fillStyle = '#111';
+  ctx.font = 'bold 24px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText(label, x + w / 2, y + h / 2 - 18);
+  ctx.font = '16px sans-serif';
+  ctx.fillText('Center lines + 10mm ticks', x + w / 2, y + h / 2 + 12);
+  ctx.restore();
+}
+
+function buildPVCCalibrationSheet() {
+  sheetIsCalibrationTest = true;
+  sheetMode = 'pvc';
+  var ctx = a4Canvas.getContext('2d');
+  a4Canvas.width = PVC_W;
+  a4Canvas.height = PVC_H;
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, PVC_W, PVC_H);
+
+  var scale = clampNumber(pvcCalibration.scale, 95, 105, 100) / 100;
+  var cardW = Math.round(CR80_W * scale);
+  var cardH = Math.round(CR80_H * scale);
+  var offsetX = Math.round(mmToPx(pvcCalibration.x || 0));
+  var offsetY = Math.round(mmToPx(pvcCalibration.y || 0));
+  var marginX = Math.round((PVC_W - cardW) / 2) + offsetX;
+  var topY = 35 + offsetY;
+  var gap = 71;
+  var bottomY = topY + cardH + gap;
+
+  ctx.strokeStyle = '#ddd';
+  ctx.lineWidth = 3;
+  ctx.setLineDash([14, 8]);
+  ctx.strokeRect(10, 10, PVC_W - 20, PVC_H - 20);
+  ctx.setLineDash([]);
+
+  drawPVCCalibrationSlot(ctx, marginX, topY, cardW, cardH, 'Slot 1 / Front');
+  drawPVCCalibrationSlot(ctx, marginX, bottomY, cardW, cardH, 'Slot 2 / Back');
+
+  ctx.fillStyle = '#111';
+  ctx.font = '20px sans-serif';
+  ctx.textAlign = 'left';
+  ctx.fillText('Studio Print PVC Calibration', 40, PVC_H - 105);
+  ctx.font = '16px sans-serif';
+  ctx.fillText((pvcCalibration.name || 'PVC Tray') + ' | X ' + (pvcCalibration.x || 0) + 'mm | Y ' + (pvcCalibration.y || 0) + 'mm | Scale ' + (pvcCalibration.scale || 100) + '% | Rotate ' + (pvcCalibration.rotation || 0) + 'deg', 40, PVC_H - 75);
+  ctx.fillText('If output shifts, adjust X/Y. If card is too small or large, adjust Scale. If it tilts, adjust Rotate.', 40, PVC_H - 45);
+
+  sheetTitle.textContent = 'PVC Calibration Test Grid';
+  sheetDesc.textContent = 'Print this test grid, measure the shift, then save the corrected printer profile.';
+  syncPvcCalibrationUI();
+  refreshSheetPreview();
 }
 
 function drawCornerMarks(ctx, x, y, w, h, len) {
@@ -2944,17 +3243,50 @@ layoutButtons.forEach(function(btn) {
   });
 });
 
-[pvcOffsetX, pvcOffsetY, pvcScale].forEach(function(input) {
+[pvcOffsetX, pvcOffsetY, pvcScale, pvcRotation].forEach(function(input) {
   if (!input) return;
   input.addEventListener('input', readPvcCalibrationFromUI);
   input.addEventListener('change', readPvcCalibrationFromUI);
 });
 
+if (pvcProfileSelect) {
+  pvcProfileSelect.addEventListener('change', function() {
+    switchPvcProfile(pvcProfileSelect.value);
+  });
+}
+
 if (pvcGuides) pvcGuides.addEventListener('change', readPvcCalibrationFromUI);
+if (pvcProfileName) pvcProfileName.addEventListener('change', readPvcCalibrationFromUI);
+
+if (pvcSaveProfile) {
+  pvcSaveProfile.addEventListener('click', function() {
+    readPvcCalibrationFromUI();
+  });
+}
+
+if (pvcAddProfile) pvcAddProfile.addEventListener('click', addPvcProfileClone);
+if (pvcDeleteProfile) pvcDeleteProfile.addEventListener('click', deleteActivePvcProfile);
+if (pvcTestGrid) {
+  pvcTestGrid.addEventListener('click', function() {
+    readPvcCalibrationFromUI(true);
+    buildPVCCalibrationSheet();
+  });
+}
 
 if (pvcReset) {
   pvcReset.addEventListener('click', function() {
-    pvcCalibration = { x: 0, y: 0, scale: 100, guides: false };
+    var current = getActivePvcProfile();
+    var defaultMatch = PVC_PROFILE_DEFAULTS.find(function(profile) { return profile.id === activePvcProfileId; });
+    pvcCalibration = clonePvcProfile(defaultMatch || {
+      id: activePvcProfileId,
+      name: current && current.name ? current.name : 'PVC Tray Profile',
+      locked: current && current.locked,
+      x: 0,
+      y: 0,
+      scale: 100,
+      rotation: 0,
+      guides: true
+    });
     savePvcCalibration();
     syncPvcCalibrationUI();
     if (!stepSheet.classList.contains('idp-hidden')) buildSheet();
@@ -2994,10 +3326,10 @@ btnBack.addEventListener('click', () => {
 btnBackPreview.addEventListener('click', () => showStep(2));
 
 btnDownload.addEventListener('click', async () => {
-  if (!(await idpConsumeSheetOrBlock())) return;
-  var suffix = getSheetLayout().suffix || '-print-sheet.png';
+  if (!sheetIsCalibrationTest && !(await idpConsumeSheetOrBlock())) return;
+  var suffix = sheetIsCalibrationTest ? '-pvc-calibration-test.png' : (getSheetLayout().suffix || '-print-sheet.png');
   var cards = getActiveCards();
-  var prefix = cards.length > 1 ? 'batch-' + cards.length + '-cards' : (detectedType || 'id-card');
+  var prefix = sheetIsCalibrationTest ? 'studio-print' : (cards.length > 1 ? 'batch-' + cards.length + '-cards' : (detectedType || 'id-card'));
   var filename = prefix + suffix;
   /* §AC.18: use canvas.toBlob (not toDataURL) — iOS Safari historically
      caps toDataURL output at ~5 MB / 4096² px, and an A4 @ 300 DPI sheet
@@ -3038,7 +3370,7 @@ btnDownload.addEventListener('click', async () => {
    and shows #printImg at 210mm×297mm. Falls back to a direct
    window.print() on very old browsers that lack toBlob. */
 btnPrint.addEventListener('click', async () => {
-  if (!(await idpConsumeSheetOrBlock())) return;
+  if (!sheetIsCalibrationTest && !(await idpConsumeSheetOrBlock())) return;
   applyDynamicPrintPageStyle();
   var printImg = document.getElementById('printImg');
   if (!printImg || typeof a4Canvas.toBlob !== 'function') {
