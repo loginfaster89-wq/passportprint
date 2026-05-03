@@ -455,10 +455,12 @@ body.idp-workspace-mode #stepPreview .idp-preview-canvas-pair{max-width:min(100%
    print block for the print-time swap rules. */
 .idp-a4-wrap #printImg{display:none;}
 .idp-workbench-sheet .idp-workbench-body{
-  grid-template-columns:minmax(320px,430px) minmax(0,1fr);
+  grid-template-columns:minmax(0,1fr) minmax(320px,430px);
   grid-template-rows:minmax(0,1fr) auto;
 }
 .idp-workbench-sheet{padding-bottom:18px;}
+.idp-workbench-sheet .idp-workbench-panel{grid-column:2;grid-row:1;}
+.idp-workbench-sheet .idp-workbench-main{grid-column:1;grid-row:1;}
 .idp-workbench-sheet .idp-workbench-body > .idp-actions{
   grid-column:1/-1;margin:0;padding:12px 14px;border-radius:14px;
   background:var(--surface2);border:1px solid var(--border);
@@ -749,6 +751,8 @@ input.idp-range::-moz-range-thumb{
   .idp-sidebar-actions .idp-actions{flex-direction:column;align-items:stretch;}
   .idp-sidebar-actions .idp-btn{width:100%;min-width:0;}
   .idp-workbench-sheet{padding-bottom:14px;}
+  .idp-workbench-sheet .idp-workbench-panel{grid-column:1;grid-row:2;}
+  .idp-workbench-sheet .idp-workbench-main{grid-column:1;grid-row:1;}
   .idp-workbench-sheet .idp-workbench-body > .idp-actions{
     flex-direction:column;align-items:stretch;
   }
