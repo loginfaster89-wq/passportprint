@@ -251,6 +251,19 @@ header.legal-header{top:0!important;margin-top:0!important;padding-top:10px!impo
 }
 .idp-cal-reset:hover{border-color:var(--accent);color:var(--accent);}
 .idp-cal-reset:disabled{opacity:.45;cursor:not-allowed;color:var(--muted);border-color:var(--border);}
+.idp-test-panel{
+  max-width:720px;margin:12px auto 0;padding:12px 14px;border-radius:12px;
+  background:var(--surface2);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;gap:14px;text-align:left;
+}
+.idp-test-panel strong{
+  display:block;font-family:'Syne',sans-serif;font-size:13px;color:var(--text);
+}
+.idp-test-panel span{
+  display:block;margin-top:3px;font-family:'DM Mono',monospace;font-size:11px;
+  line-height:1.5;color:var(--muted);
+}
+.idp-layout-head .idp-cal-reset{margin-left:auto;white-space:nowrap;}
 .idp-plan-banner{
   margin:0 0 14px;padding:10px 12px;border-radius:10px;
   border:1px solid var(--border);background:var(--surface2);
@@ -545,6 +558,8 @@ input.idp-range::-moz-range-thumb{
   .idp-layout-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
   .idp-cal-panel.show{grid-template-columns:repeat(2,minmax(0,1fr));}
   .idp-cal-field.wide{grid-column:span 2;}
+  .idp-test-panel{align-items:flex-start;flex-direction:column;}
+  .idp-test-panel .idp-cal-reset{width:100%;}
 }
 @media (max-width:420px){
   .idp-layout-grid{grid-template-columns:1fr;}
@@ -628,6 +643,13 @@ input.idp-range::-moz-range-thumb{
       <input type="file" id="pdfInput" accept=".pdf,application/pdf" multiple>
     </div>
     <div class="idp-plan-note">Free plan: 2 sheets/day after login. Weekly / Monthly: unlimited ID sheets. <a href="#plans">See plans</a></div>
+    <div class="idp-test-panel" aria-label="Printer scale test">
+      <div>
+        <strong>Printer scale check</strong>
+        <span>Print a free A4 test sheet first. Measure the 100 mm ruler and CR80 box before using paid paper or PVC stock.</span>
+      </div>
+      <button type="button" class="idp-cal-reset" id="btnA4TestSheetTop">Open A4 Test Sheet</button>
+    </div>
     <div class="idp-queue idp-hidden" id="fileQueue"></div>
     <div class="idp-batch-count idp-hidden" id="batchCount"></div>
     <div class="idp-queue-actions idp-hidden" id="queueActions">
@@ -750,6 +772,7 @@ input.idp-range::-moz-range-thumb{
         <div class="idp-layout-head">
           <strong>Print Layout Studio</strong>
           <span>Counter presets</span>
+          <button type="button" class="idp-cal-reset" id="btnA4TestSheet">A4 test sheet</button>
         </div>
         <div class="idp-layout-grid" role="group" aria-label="Print layout">
           <button type="button" class="idp-layout-btn is-active" data-sheet-mode="fold">
@@ -980,6 +1003,12 @@ const SHEET_LAYOUTS = {
     desc: 'Two-slot direct PVC tray output with X/Y/scale calibration',
     workflowLabel: 'PVC tray calibrated',
     suffix: '-epson-pvc-tray.png'
+  },
+  a4test: {
+    title: 'A4 Calibration Test Sheet',
+    desc: 'Print at 100% / Actual size. Fit to page OFF. Measure the ruler and CR80 box.',
+    workflowLabel: 'A4 scale test',
+    suffix: '-a4-calibration-test.png'
   }
 };
 
@@ -1124,6 +1153,8 @@ const btnSheet = $('#btnSheet');
 const btnBackPreview = $('#btnBackPreview');
 const btnDownload = $('#btnDownload');
 const btnPrint = $('#btnPrint');
+const btnA4TestSheet = $('#btnA4TestSheet');
+const btnA4TestSheetTop = $('#btnA4TestSheetTop');
 /* §AC.11 — cardFrontCanvas / cardBackCanvas are now offscreen working
    canvases (the DOM only has #pairCanvas). drawFiltered() still writes
    filtered+offset+zoom output to these per-side canvases, then
@@ -1373,6 +1404,7 @@ function supportsCounterLayouts(cardType) {
 
 function normalizeSheetMode(mode, cardType) {
   var next = SHEET_LAYOUTS[mode] ? mode : 'fold';
+  if (next === 'a4test') return next;
   if (next !== 'fold' && !supportsCounterLayouts(cardType)) return 'fold';
   return next;
 }
@@ -1392,11 +1424,12 @@ function renderPvcProfileOptions() {
 function syncPvcCalibrationUI() {
   var cardType = getCurrentCardType();
   var allowedCounterLayouts = supportsCounterLayouts(cardType);
+  var lockLayoutsForCalibrationOnly = sheetIsCalibrationTest && sheetMode === 'a4test' && getActiveCards().length === 0;
   sheetMode = normalizeSheetMode(sheetMode, cardType);
 
   layoutButtons.forEach(function(btn) {
     var mode = btn.dataset.sheetMode;
-    var disabled = mode !== 'fold' && !allowedCounterLayouts;
+    var disabled = lockLayoutsForCalibrationOnly || (mode !== 'fold' && !allowedCounterLayouts);
     btn.disabled = disabled;
     btn.classList.toggle('is-active', mode === sheetMode);
   });
@@ -2213,6 +2246,7 @@ function drawToCanvas(canvas, srcCanvas, w, h) {
 /* ── A4 Sheet generation ── */
 function buildSheet() {
   sheetIsCalibrationTest = false;
+  if (btnBackPreview) btnBackPreview.textContent = 'Back to Preview';
   sheetMode = normalizeSheetMode(sheetMode, getCurrentCardType());
   if (sheetMode === 'multi') buildMultiCardSheet();
   else if (sheetMode === 'dragon') buildDragonSheet();
@@ -2657,8 +2691,134 @@ function buildPVCCalibrationSheet() {
 
   sheetTitle.textContent = 'PVC Calibration Test Grid';
   sheetDesc.textContent = 'Print this test grid, measure the shift, then save the corrected printer profile.';
+  if (btnBackPreview) btnBackPreview.textContent = 'Back to Preview';
   syncPvcCalibrationUI();
   refreshSheetPreview();
+}
+
+function drawA4CalibrationGrid(ctx) {
+  var step = Math.round(mmToPx(10));
+  ctx.save();
+  ctx.strokeStyle = '#e5e5e5';
+  ctx.lineWidth = 1;
+  for (var x = step; x < A4_W; x += step) {
+    ctx.beginPath();
+    ctx.moveTo(x, 0);
+    ctx.lineTo(x, A4_H);
+    ctx.stroke();
+  }
+  for (var y = step; y < A4_H; y += step) {
+    ctx.beginPath();
+    ctx.moveTo(0, y);
+    ctx.lineTo(A4_W, y);
+    ctx.stroke();
+  }
+  ctx.restore();
+}
+
+function drawA4MeasureLine(ctx, x, y, lengthPx, label) {
+  ctx.save();
+  ctx.strokeStyle = '#111';
+  ctx.fillStyle = '#111';
+  ctx.lineWidth = 4;
+  ctx.beginPath();
+  ctx.moveTo(x, y);
+  ctx.lineTo(x + lengthPx, y);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(x, y - 22);
+  ctx.lineTo(x, y + 22);
+  ctx.moveTo(x + lengthPx, y - 22);
+  ctx.lineTo(x + lengthPx, y + 22);
+  ctx.stroke();
+  ctx.font = 'bold 28px sans-serif';
+  ctx.textAlign = 'left';
+  ctx.fillText(label, x, y - 34);
+  ctx.restore();
+}
+
+function buildA4CalibrationSheet() {
+  sheetIsCalibrationTest = true;
+  sheetMode = 'a4test';
+
+  var ctx = a4Canvas.getContext('2d');
+  a4Canvas.width = A4_W;
+  a4Canvas.height = A4_H;
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, A4_W, A4_H);
+
+  drawA4CalibrationGrid(ctx);
+
+  var margin = Math.round(mmToPx(5));
+  ctx.strokeStyle = '#111';
+  ctx.lineWidth = 3;
+  ctx.strokeRect(margin, margin, A4_W - margin * 2, A4_H - margin * 2);
+
+  ctx.strokeStyle = '#f0a500';
+  ctx.lineWidth = 2;
+  drawCornerMarks(ctx, margin, margin, A4_W - margin * 2, A4_H - margin * 2, 58);
+
+  ctx.fillStyle = '#111';
+  ctx.textAlign = 'center';
+  ctx.font = 'bold 48px sans-serif';
+  ctx.fillText('Studio Print - A4 Calibration Test', A4_W / 2, Math.round(mmToPx(20)));
+  ctx.font = '24px sans-serif';
+  ctx.fillText('Print at 100% / Actual size. Turn OFF Fit to page.', A4_W / 2, Math.round(mmToPx(30)));
+
+  drawA4MeasureLine(ctx, Math.round(mmToPx(20)), Math.round(mmToPx(48)), Math.round(mmToPx(100)), '100 mm ruler');
+  drawA4MeasureLine(ctx, Math.round(mmToPx(20)), Math.round(mmToPx(65)), Math.round(mmToPx(50)), '50 mm quick check');
+
+  var cr80W = Math.round(mmToPx(85.6));
+  var cr80H = Math.round(mmToPx(54));
+  var cr80X = Math.round((A4_W - cr80W) / 2);
+  var cr80Y = Math.round(mmToPx(92));
+  ctx.strokeStyle = '#111';
+  ctx.lineWidth = 5;
+  ctx.strokeRect(cr80X, cr80Y, cr80W, cr80H);
+  ctx.strokeStyle = '#f0a500';
+  ctx.lineWidth = 3;
+  drawCornerMarks(ctx, cr80X, cr80Y, cr80W, cr80H, 48);
+  ctx.fillStyle = '#111';
+  ctx.font = 'bold 30px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('CR80 card check: 85.6 x 54 mm', A4_W / 2, cr80Y - 24);
+  ctx.font = '22px sans-serif';
+  ctx.fillText('This box must match the physical ID-card size after printing.', A4_W / 2, cr80Y + cr80H + 46);
+
+  ctx.strokeStyle = '#999';
+  ctx.lineWidth = 2;
+  ctx.setLineDash([16, 10]);
+  ctx.beginPath();
+  ctx.moveTo(A4_W / 2, Math.round(mmToPx(75)));
+  ctx.lineTo(A4_W / 2, Math.round(mmToPx(175)));
+  ctx.moveTo(Math.round(mmToPx(55)), cr80Y + cr80H / 2);
+  ctx.lineTo(A4_W - Math.round(mmToPx(55)), cr80Y + cr80H / 2);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  var textX = Math.round(mmToPx(20));
+  var textY = Math.round(mmToPx(190));
+  ctx.fillStyle = '#111';
+  ctx.font = 'bold 26px sans-serif';
+  ctx.textAlign = 'left';
+  ctx.fillText('How to verify', textX, textY);
+  ctx.font = '22px sans-serif';
+  [
+    '1. Browser print dialog: Scale 100% / Actual size.',
+    '2. Paper size: A4. Margins: none/default, but do not shrink to fit.',
+    '3. Measure the 100 mm line with a ruler. It should be exactly 100 mm.',
+    '4. Measure the CR80 box. It should be 85.6 mm wide and 54 mm high.',
+    '5. If size is wrong, fix printer scaling before printing customer IDs.'
+  ].forEach(function(line, idx) {
+    ctx.fillText(line, textX, textY + 44 + idx * 34);
+  });
+
+  sheetTitle.textContent = 'A4 Calibration Test Sheet';
+  sheetDesc.textContent = 'Print at 100% / Actual size. Measure the ruler and CR80 box before using paid paper.';
+  if (btnBackPreview) btnBackPreview.textContent = getActiveCards().length ? 'Back to Preview' : 'Back to Upload';
+  syncPvcCalibrationUI();
+  refreshSheetPreview();
+  showStep(3);
 }
 
 function drawCornerMarks(ctx, x, y, w, h, len) {
@@ -3219,6 +3379,11 @@ chkRounded.addEventListener('change', () => {
 function updateSheetMeta() {
   var spec = getCardOutputSpec(getCurrentCardType());
   var layout = getSheetLayout();
+  if (sheetIsCalibrationTest) {
+    sheetTitle.textContent = layout.title;
+    sheetDesc.textContent = layout.desc;
+    return;
+  }
   sheetTitle.textContent = getCurrentCardType() === 'ration' ? spec.sheetTitle : layout.title;
   sheetDesc.textContent = getCurrentCardType() === 'ration' ? spec.sheetDesc : layout.desc;
 }
@@ -3273,6 +3438,9 @@ if (pvcTestGrid) {
   });
 }
 
+if (btnA4TestSheet) btnA4TestSheet.addEventListener('click', buildA4CalibrationSheet);
+if (btnA4TestSheetTop) btnA4TestSheetTop.addEventListener('click', buildA4CalibrationSheet);
+
 if (pvcReset) {
   pvcReset.addEventListener('click', function() {
     var current = getActivePvcProfile();
@@ -3323,11 +3491,14 @@ btnBack.addEventListener('click', () => {
   showStep(1);
 });
 
-btnBackPreview.addEventListener('click', () => showStep(2));
+btnBackPreview.addEventListener('click', () => {
+  if (sheetIsCalibrationTest && getActiveCards().length === 0) showStep(1);
+  else showStep(2);
+});
 
 btnDownload.addEventListener('click', async () => {
   if (!sheetIsCalibrationTest && !(await idpConsumeSheetOrBlock())) return;
-  var suffix = sheetIsCalibrationTest ? '-pvc-calibration-test.png' : (getSheetLayout().suffix || '-print-sheet.png');
+  var suffix = sheetIsCalibrationTest ? (getSheetLayout().suffix || '-calibration-test.png') : (getSheetLayout().suffix || '-print-sheet.png');
   var cards = getActiveCards();
   var prefix = sheetIsCalibrationTest ? 'studio-print' : (cards.length > 1 ? 'batch-' + cards.length + '-cards' : (detectedType || 'id-card'));
   var filename = prefix + suffix;
