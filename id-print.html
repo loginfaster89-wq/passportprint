@@ -351,18 +351,21 @@ body.idp-workspace-mode #stepPreview .idp-preview-canvas-pair{max-width:min(100%
 }
 .idp-cal-field input[type="number"],
 .idp-cal-field input[type="text"],
+.idp-cal-field #pvcProfileName,
 .idp-cal-field select{
   width:100%;min-height:34px;padding:8px 10px;border-radius:8px;border:1px solid var(--border);
   background:rgba(255,255,255,.035);color:var(--text);font-family:'DM Mono',monospace;font-size:12px;
   color-scheme:dark;
 }
-.idp-cal-field input[type="text"]{-webkit-text-fill-color:var(--text);}
+.idp-cal-field input[type="text"],
+.idp-cal-field #pvcProfileName{-webkit-text-fill-color:var(--text);}
 .idp-cal-field input:-webkit-autofill{
   -webkit-box-shadow:0 0 0 1000px #161616 inset;
   -webkit-text-fill-color:var(--text);
 }
 .idp-cal-field input[type="number"]:focus,
 .idp-cal-field input[type="text"]:focus,
+.idp-cal-field #pvcProfileName:focus,
 .idp-cal-field select:focus{outline:none;border-color:var(--accent);}
 .idp-cal-check{
   grid-column:1/-1;flex-direction:row;align-items:center;gap:8px;color:var(--muted);
