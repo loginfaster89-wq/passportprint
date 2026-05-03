@@ -1,7 +1,7 @@
 [
   {
     "slug": "ration-card-rajasthan",
-    "title": "Ration Card",
+    "title": "Ration Card New/Update",
     "category": "Rajasthan",
     "source_url": "https://food.rajasthan.gov.in/state_D/Files/2f4f659a-8fb7-47b9-9525-d64d87755174.pdf",
     "pages": 6,
@@ -240,16 +240,6 @@
     "clean_source": true
   },
   {
-    "slug": "pension-medical-limit-rajasthan",
-    "title": "Medical Limit Form",
-    "category": "Rajasthan",
-    "source_url": "https://pension.rajasthan.gov.in/img/pdf/LIMIT%20EXTENSION%20APPLICATION.pdf",
-    "pages": 3,
-    "local": "assets/forms/pension-medical-limit-rajasthan.pdf",
-    "preview": "assets/forms/previews/pension-medical-limit-rajasthan.png",
-    "clean_source": true
-  },
-  {
     "slug": "sso-id-update-citizen-pensioner-rajasthan",
     "title": "SSO ID Update",
     "category": "Rajasthan",
@@ -261,17 +251,87 @@
   },
   {
     "slug": "aadhaar-form-1",
-    "title": "Aadhaar Form",
+    "title": "Aadhaar Form 1 - Adult India Address",
     "category": "Aadhaar",
     "source_url": "https://uidai.gov.in/images/Form_1_Eng.pdf",
-    "pages": 1,
+    "pages": 2,
     "local": "assets/forms/aadhaar-form-1.pdf",
     "preview": "assets/forms/previews/aadhaar-form-1.png",
     "clean_source": true
   },
   {
+    "slug": "aadhaar-form-2",
+    "title": "Aadhaar Form 2 - Adult NRI Foreign Address",
+    "category": "Aadhaar",
+    "source_url": "https://uidai.gov.in/images/Form-2-English.pdf",
+    "pages": 2,
+    "local": "assets/forms/aadhaar-form-2.pdf",
+    "preview": "assets/forms/previews/aadhaar-form-2.png",
+    "clean_source": true
+  },
+  {
+    "slug": "aadhaar-form-3",
+    "title": "Aadhaar Form 3 - Child 5-18 India Address",
+    "category": "Aadhaar",
+    "source_url": "https://uidai.gov.in/images/Form_3_Eng.pdf",
+    "pages": 2,
+    "local": "assets/forms/aadhaar-form-3.pdf",
+    "preview": "assets/forms/previews/aadhaar-form-3.png",
+    "clean_source": true
+  },
+  {
+    "slug": "aadhaar-form-4",
+    "title": "Aadhaar Form 4 - Child NRI Foreign Address",
+    "category": "Aadhaar",
+    "source_url": "https://uidai.gov.in/images/Form-4-English.pdf",
+    "pages": 2,
+    "local": "assets/forms/aadhaar-form-4.pdf",
+    "preview": "assets/forms/previews/aadhaar-form-4.png",
+    "clean_source": true
+  },
+  {
+    "slug": "aadhaar-form-5",
+    "title": "Aadhaar Form 5 - Child Below 5 India Address",
+    "category": "Aadhaar",
+    "source_url": "https://uidai.gov.in/images/Form_5_Eng.pdf",
+    "pages": 2,
+    "local": "assets/forms/aadhaar-form-5.pdf",
+    "preview": "assets/forms/previews/aadhaar-form-5.png",
+    "clean_source": true
+  },
+  {
+    "slug": "aadhaar-form-6",
+    "title": "Aadhaar Form 6 - Child Below 5 NRI",
+    "category": "Aadhaar",
+    "source_url": "https://uidai.gov.in/images/Form-6-English.pdf",
+    "pages": 2,
+    "local": "assets/forms/aadhaar-form-6.pdf",
+    "preview": "assets/forms/previews/aadhaar-form-6.png",
+    "clean_source": true
+  },
+  {
+    "slug": "aadhaar-form-7",
+    "title": "Aadhaar Form 7 - Foreign National Adult",
+    "category": "Aadhaar",
+    "source_url": "https://uidai.gov.in/images/Form_7_Eng.pdf",
+    "pages": 3,
+    "local": "assets/forms/aadhaar-form-7.pdf",
+    "preview": "assets/forms/previews/aadhaar-form-7.png",
+    "clean_source": true
+  },
+  {
+    "slug": "aadhaar-form-8",
+    "title": "Aadhaar Form 8 - Foreign National Child",
+    "category": "Aadhaar",
+    "source_url": "https://uidai.gov.in/images/Form_8_Eng.pdf",
+    "pages": 3,
+    "local": "assets/forms/aadhaar-form-8.pdf",
+    "preview": "assets/forms/previews/aadhaar-form-8.png",
+    "clean_source": true
+  },
+  {
     "slug": "pan-49a",
-    "title": "PAN 49A",
+    "title": "PAN 49A - New PAN Indian Citizen",
     "category": "PAN",
     "source_url": "https://www.incometaxindia.gov.in/documents/d/guest/103120000000007917-pdf-2",
     "pages": 2,
@@ -281,7 +341,7 @@
   },
   {
     "slug": "pan-49aa",
-    "title": "PAN 49AA",
+    "title": "PAN 49AA - New PAN Foreign Citizen",
     "category": "PAN",
     "source_url": "https://www.incometaxindia.gov.in/documents/d/guest/103120000000007918-pdf-2",
     "pages": 2,
@@ -290,8 +350,28 @@
     "clean_source": true
   },
   {
+    "slug": "pan-correction-cr01-individual-2026",
+    "title": "PAN CR-01 - Correction Individual",
+    "category": "PAN",
+    "source_url": "https://www.incometaxindia.gov.in/documents/d/guest/order-for-specifying-procedure-for-pan-correction-pdf",
+    "pages": 4,
+    "local": "assets/forms/pan-correction-cr01-individual-2026.pdf",
+    "preview": "assets/forms/previews/pan-correction-cr01-individual-2026.png",
+    "clean_source": true
+  },
+  {
+    "slug": "pan-correction-cr02-non-individual-2026",
+    "title": "PAN CR-02 - Correction Non-Individual",
+    "category": "PAN",
+    "source_url": "https://www.incometaxindia.gov.in/documents/d/guest/order-for-specifying-procedure-for-pan-correction-pdf",
+    "pages": 2,
+    "local": "assets/forms/pan-correction-cr02-non-individual-2026.pdf",
+    "preview": "assets/forms/previews/pan-correction-cr02-non-individual-2026.png",
+    "clean_source": true
+  },
+  {
     "slug": "voter-form-6",
-    "title": "Voter Form 6",
+    "title": "Voter Form 6 - New Registration",
     "category": "Voter",
     "source_url": "https://voters.eci.gov.in/formspdf/Form_6_English.pdf",
     "pages": 2,
@@ -301,7 +381,7 @@
   },
   {
     "slug": "voter-form-6b",
-    "title": "Voter Form 6B",
+    "title": "Voter Form 6B - Aadhaar Link",
     "category": "Voter",
     "source_url": "https://voters.eci.gov.in/formspdf/Form_6B_English.pdf",
     "pages": 1,
@@ -311,7 +391,7 @@
   },
   {
     "slug": "voter-form-7",
-    "title": "Voter Form 7",
+    "title": "Voter Form 7 - Delete/Object",
     "category": "Voter",
     "source_url": "https://voters.eci.gov.in/formspdf/Form_7_English.pdf",
     "pages": 1,
@@ -321,7 +401,7 @@
   },
   {
     "slug": "voter-form-8",
-    "title": "Voter Form 8",
+    "title": "Voter Form 8 - Correction/Shift",
     "category": "Voter",
     "source_url": "https://voters.eci.gov.in/formspdf/Form_8_English.pdf",
     "pages": 2,
