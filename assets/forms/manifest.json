@@ -300,6 +300,106 @@
     "clean_source": true
   },
   {
+    "slug": "domicile-bonafide-certificate-rajasthan",
+    "title": "Domicile / Bonafide Certificate Application",
+    "category": "Rajasthan",
+    "source_url": "https://emitraapp.rajasthan.gov.in/emitrashared/USER_MGMT_OLD_DOCS/guidelineEform/GAndE_1495797094047.pdf",
+    "pages": 3,
+    "local": "assets/forms/domicile-bonafide-certificate-rajasthan.pdf",
+    "preview": "assets/forms/previews/domicile-bonafide-certificate-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "obc-sbc-caste-certificate-rajasthan",
+    "title": "OBC/SBC Caste Certificate Application",
+    "category": "Rajasthan",
+    "source_url": "https://emitraapp.rajasthan.gov.in/emitrashared/USER_MGMT_OLD_DOCS/guidelineEform/GAndE_1500440878656.pdf",
+    "pages": 4,
+    "local": "assets/forms/obc-sbc-caste-certificate-rajasthan.pdf",
+    "preview": "assets/forms/previews/obc-sbc-caste-certificate-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "sc-st-caste-certificate-rajasthan",
+    "title": "SC/ST Caste Certificate Application",
+    "category": "Rajasthan",
+    "source_url": "https://emitraapp.rajasthan.gov.in/emitrashared/USER_MGMT_OLD_DOCS/guidelineEform/GAndE_1500441414051.pdf",
+    "pages": 3,
+    "local": "assets/forms/sc-st-caste-certificate-rajasthan.pdf",
+    "preview": "assets/forms/previews/sc-st-caste-certificate-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "minority-community-certificate-rajasthan",
+    "title": "Minority Community Certificate Application",
+    "category": "Rajasthan",
+    "source_url": "https://emitraapp.rajasthan.gov.in/emitrashared/USER_MGMT_OLD_DOCS/guidelineEform/GAndE_1495797149413.pdf",
+    "pages": 3,
+    "local": "assets/forms/minority-community-certificate-rajasthan.pdf",
+    "preview": "assets/forms/previews/minority-community-certificate-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "general-caste-certificate-rajasthan",
+    "title": "General Caste Certificate Application",
+    "category": "Rajasthan",
+    "source_url": "https://emitraapp.rajasthan.gov.in/emitrashared/USER_MGMT_OLD_DOCS/guidelineEform/GAndE_1517909643422.pdf",
+    "pages": 3,
+    "local": "assets/forms/general-caste-certificate-rajasthan.pdf",
+    "preview": "assets/forms/previews/general-caste-certificate-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "ews-income-asset-state-rajasthan",
+    "title": "EWS Income & Asset Certificate - Rajasthan State",
+    "category": "Rajasthan",
+    "source_url": "https://emitraapp.rajasthan.gov.in/emitrashared/USER_MGMT_DOCS/GUIDELINE_AND_EFORM/2020/2/24/GAndE_1582546996332.pdf",
+    "pages": 3,
+    "local": "assets/forms/ews-income-asset-state-rajasthan.pdf",
+    "preview": "assets/forms/previews/ews-income-asset-state-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "ews-income-asset-central-state-rajasthan",
+    "title": "EWS Income & Asset Certificate - Central/State",
+    "category": "Rajasthan",
+    "source_url": "https://emitraapp.rajasthan.gov.in/emitrashared/USER_MGMT_DOCS/GUIDELINE_AND_EFORM/2020/2/24/GAndE_1582546967174.pdf",
+    "pages": 4,
+    "local": "assets/forms/ews-income-asset-central-state-rajasthan.pdf",
+    "preview": "assets/forms/previews/ews-income-asset-central-state-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "land-mutation-application-rajasthan",
+    "title": "Land Mutation Application",
+    "category": "Rajasthan",
+    "source_url": "https://emitraapp.rajasthan.gov.in/emitrashared/USER_MGMT_OLD_DOCS/guidelineEform/GAndE_1508838632730.pdf",
+    "pages": 1,
+    "local": "assets/forms/land-mutation-application-rajasthan.pdf",
+    "preview": "assets/forms/previews/land-mutation-application-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "seemagyan-boundary-application-rajasthan",
+    "title": "Seemagyan / Boundary Application",
+    "category": "Rajasthan",
+    "source_url": "https://emitraapp.rajasthan.gov.in/emitrashared/USER_MGMT_OLD_DOCS/guidelineEform/GAndE_1508838608429.pdf",
+    "pages": 1,
+    "local": "assets/forms/seemagyan-boundary-application-rajasthan.pdf",
+    "preview": "assets/forms/previews/seemagyan-boundary-application-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "solvency-haisiyat-certificate-rajasthan",
+    "title": "Solvency / Haisiyat Certificate Application",
+    "category": "Rajasthan",
+    "source_url": "https://emitraapp.rajasthan.gov.in/emitrashared/USER_MGMT_OLD_DOCS/guidelineEform/GAndE_1517393949307.pdf",
+    "pages": 3,
+    "local": "assets/forms/solvency-haisiyat-certificate-rajasthan.pdf",
+    "preview": "assets/forms/previews/solvency-haisiyat-certificate-rajasthan.png",
+    "clean_source": true
+  },
+  {
     "slug": "transport-dl-form-2-learner-licence-rajasthan",
     "title": "Learner Licence Form 2",
     "category": "Rajasthan",
