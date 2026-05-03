@@ -70,26 +70,6 @@
     "clean_source": true
   },
   {
-    "slug": "labour-beneficiary-registration-rajasthan",
-    "title": "Labour Beneficiary",
-    "category": "Rajasthan",
-    "source_url": "https://labour.rajasthan.gov.in/Documents/BeneficiaryRegistrationApplicationForm.pdf",
-    "pages": 2,
-    "local": "assets/forms/labour-beneficiary-registration-rajasthan.pdf",
-    "preview": "assets/forms/previews/labour-beneficiary-registration-rajasthan.png",
-    "clean_source": true
-  },
-  {
-    "slug": "shop-act-form-3-rajasthan",
-    "title": "Shop Act Form 3",
-    "category": "Rajasthan",
-    "source_url": "https://labour.rajasthan.gov.in/Documents/Form3.pdf",
-    "pages": 2,
-    "local": "assets/forms/shop-act-form-3-rajasthan.pdf",
-    "preview": "assets/forms/previews/shop-act-form-3-rajasthan.png",
-    "clean_source": true
-  },
-  {
     "slug": "shop-act-form-4-rajasthan",
     "title": "Shop Act Form 4",
     "category": "Rajasthan",
@@ -200,23 +180,73 @@
     "clean_source": true
   },
   {
-    "slug": "pension-life-certificate-rajasthan",
-    "title": "Life Certificate",
+    "slug": "pension-form-2-rajasthan",
+    "title": "Pension Form 2",
     "category": "Rajasthan",
-    "source_url": "https://pension.rajasthan.gov.in/img/pdf/LIFE%20CERTIFICATE.pdf",
-    "pages": 1,
-    "local": "assets/forms/pension-life-certificate-rajasthan.pdf",
-    "preview": "assets/forms/previews/pension-life-certificate-rajasthan.png",
+    "source_url": "https://pension.rajasthan.gov.in/img/pdf/FORM-2.pdf",
+    "pages": 3,
+    "local": "assets/forms/pension-form-2-rajasthan.pdf",
+    "preview": "assets/forms/previews/pension-form-2-rajasthan.png",
     "clean_source": true
   },
   {
-    "slug": "pension-family-forms-rajasthan",
-    "title": "Family Pension Forms",
+    "slug": "pension-form-5-rajasthan",
+    "title": "Pension Form 5",
     "category": "Rajasthan",
-    "source_url": "https://pension.rajasthan.gov.in/img/download/Family%20Pension%20Forms.pdf",
-    "pages": 15,
-    "local": "assets/forms/pension-family-forms-rajasthan.pdf",
-    "preview": "assets/forms/previews/pension-family-forms-rajasthan.png",
+    "source_url": "https://pension.rajasthan.gov.in/img/pdf/FORM-5.pdf",
+    "pages": 1,
+    "local": "assets/forms/pension-form-5-rajasthan.pdf",
+    "preview": "assets/forms/previews/pension-form-5-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "pension-form-5a-rajasthan",
+    "title": "Pension Form 5A",
+    "category": "Rajasthan",
+    "source_url": "https://pension.rajasthan.gov.in/img/pdf/FORM%205A.pdf",
+    "pages": 2,
+    "local": "assets/forms/pension-form-5a-rajasthan.pdf",
+    "preview": "assets/forms/previews/pension-form-5a-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "pension-form-6-rajasthan",
+    "title": "Pension Form 6",
+    "category": "Rajasthan",
+    "source_url": "https://pension.rajasthan.gov.in/img/pdf/FORM-6.pdf",
+    "pages": 1,
+    "local": "assets/forms/pension-form-6-rajasthan.pdf",
+    "preview": "assets/forms/previews/pension-form-6-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "pension-form-14a-rajasthan",
+    "title": "Pension Form 14A",
+    "category": "Rajasthan",
+    "source_url": "https://pension.rajasthan.gov.in/img/pdf/form14a.pdf",
+    "pages": 2,
+    "local": "assets/forms/pension-form-14a-rajasthan.pdf",
+    "preview": "assets/forms/previews/pension-form-14a-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "pension-form-30-rajasthan",
+    "title": "Pension Form 30",
+    "category": "Rajasthan",
+    "source_url": "https://pension.rajasthan.gov.in/img/pdf/FORM-30.pdf",
+    "pages": 2,
+    "local": "assets/forms/pension-form-30-rajasthan.pdf",
+    "preview": "assets/forms/previews/pension-form-30-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "pension-medical-limit-rajasthan",
+    "title": "Medical Limit Form",
+    "category": "Rajasthan",
+    "source_url": "https://pension.rajasthan.gov.in/img/pdf/LIMIT%20EXTENSION%20APPLICATION.pdf",
+    "pages": 3,
+    "local": "assets/forms/pension-medical-limit-rajasthan.pdf",
+    "preview": "assets/forms/previews/pension-medical-limit-rajasthan.png",
     "clean_source": true
   },
   {
@@ -227,36 +257,6 @@
     "pages": 2,
     "local": "assets/forms/sso-id-update-citizen-pensioner-rajasthan.pdf",
     "preview": "assets/forms/previews/sso-id-update-citizen-pensioner-rajasthan.png",
-    "clean_source": true
-  },
-  {
-    "slug": "lsg-birth-application-rajasthan",
-    "title": "Birth Application",
-    "category": "Rajasthan",
-    "source_url": "https://www.lsg.urban.rajasthan.gov.in/content/dam/raj/udh/ulbs/bikaner%20Division/bikaner/pdf/Birth_application_form.jpg",
-    "pages": 1,
-    "local": "assets/forms/lsg-birth-application-rajasthan.pdf",
-    "preview": "assets/forms/previews/lsg-birth-application-rajasthan.png",
-    "clean_source": true
-  },
-  {
-    "slug": "lsg-death-application-rajasthan",
-    "title": "Death Application",
-    "category": "Rajasthan",
-    "source_url": "https://www.lsg.urban.rajasthan.gov.in/content/dam/raj/udh/ulbs/bikaner%20Division/bikaner/pdf/Death_application_form.jpg",
-    "pages": 1,
-    "local": "assets/forms/lsg-death-application-rajasthan.pdf",
-    "preview": "assets/forms/previews/lsg-death-application-rajasthan.png",
-    "clean_source": true
-  },
-  {
-    "slug": "lsg-self-declaration-rajasthan",
-    "title": "Self Declaration",
-    "category": "Rajasthan",
-    "source_url": "https://www.lsg.urban.rajasthan.gov.in/content/dam/raj/udh/ulbs/bikaner%20Division/bikaner/pdf/08_SelfDeclaration.pdf",
-    "pages": 19,
-    "local": "assets/forms/lsg-self-declaration-rajasthan.pdf",
-    "preview": "assets/forms/previews/lsg-self-declaration-rajasthan.png",
     "clean_source": true
   },
   {
