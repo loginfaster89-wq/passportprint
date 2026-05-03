@@ -1,22 +1,52 @@
 [
   {
-    "slug": "ration-card-rajasthan",
-    "title": "Ration Card Form - New/Update",
+    "slug": "ration-card-apl-new-rajasthan",
+    "title": "Ration Card APL - New Card",
     "category": "Rajasthan",
     "source_url": "https://food.rajasthan.gov.in/state_D/Files/2f4f659a-8fb7-47b9-9525-d64d87755174.pdf",
-    "pages": 6,
-    "local": "assets/forms/ration-card-rajasthan.pdf",
-    "preview": "assets/forms/previews/ration-card-rajasthan.png",
+    "pages": 2,
+    "local": "assets/forms/ration-card-apl-new-rajasthan.pdf",
+    "preview": "assets/forms/previews/ration-card-apl-new-rajasthan.png",
     "clean_source": true
   },
   {
-    "slug": "nfsa-rajasthan",
-    "title": "NFSA Food Security Application",
+    "slug": "ration-card-priority-new-rajasthan",
+    "title": "Ration Card BPL/Antyodaya - New Card",
+    "category": "Rajasthan",
+    "source_url": "https://food.rajasthan.gov.in/state_D/Files/2f4f659a-8fb7-47b9-9525-d64d87755174.pdf",
+    "pages": 2,
+    "local": "assets/forms/ration-card-priority-new-rajasthan.pdf",
+    "preview": "assets/forms/previews/ration-card-priority-new-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "ration-card-update-rajasthan",
+    "title": "Ration Card - Update/Member Change",
+    "category": "Rajasthan",
+    "source_url": "https://food.rajasthan.gov.in/state_D/Files/2f4f659a-8fb7-47b9-9525-d64d87755174.pdf",
+    "pages": 2,
+    "local": "assets/forms/ration-card-update-rajasthan.pdf",
+    "preview": "assets/forms/previews/ration-card-update-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "nfsa-rural-rajasthan",
+    "title": "NFSA Food Security - Rural Appeal",
     "category": "Rajasthan",
     "source_url": "https://food.rajasthan.gov.in/Docs/NFSA_Application_Form.pdf",
-    "pages": 6,
-    "local": "assets/forms/nfsa-rajasthan.pdf",
-    "preview": "assets/forms/previews/nfsa-rajasthan.png",
+    "pages": 3,
+    "local": "assets/forms/nfsa-rural-rajasthan.pdf",
+    "preview": "assets/forms/previews/nfsa-rural-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "nfsa-urban-rajasthan",
+    "title": "NFSA Food Security - Urban Appeal",
+    "category": "Rajasthan",
+    "source_url": "https://food.rajasthan.gov.in/Docs/NFSA_Application_Form.pdf",
+    "pages": 3,
+    "local": "assets/forms/nfsa-urban-rajasthan.pdf",
+    "preview": "assets/forms/previews/nfsa-urban-rajasthan.png",
     "clean_source": true
   },
   {

@@ -18,33 +18,43 @@ Get-Content .agents\live-status.md
 Get-Content .agents\handoff.md
 ```
 
-## Latest ID Print update
+## Active scope
 
-- This chat worked only on ID Print calibration/test-sheet support.
-- Commit pushed to `main`: `9167c07a0c9f1a9c42c84b73f4cddacdacaf0b1f` (`feat(id-print): add A4 calibration test sheet`).
-- `/id-print` now lets a user open an A4 calibration test sheet without uploading a PDF.
-- The calibration sheet is a real 300 DPI A4 canvas (`2480 x 3508`) with a 100 mm ruler, 50 mm quick check, CR80 85.6 x 54 mm box, grid/corner/center guides, and scale instructions.
-- Calibration Print / Download PNG bypasses daily quota because it does not output user documents.
-- Step 3 also has an `A4 test sheet` action for users who already uploaded an ID.
-- Existing PVC tray calibration/profile UI remains in place and unchanged.
-- Cache bumped to `studioprint-v38` / `id-print-v38`.
+- This chat owns Forms Hub work only.
+- Do not touch `id-print.html` from this Forms task.
+- Another chat may work on ID Print; coordinate through these `.agents` files.
+
+## Latest Forms update
+
+- Old combined `Ration Card Form - New/Update` removed.
+- Official Rajasthan Food ration-card PDF split by actual embedded forms:
+  - Pages 1-2: `Ration Card APL - New Card`
+  - Pages 3-4: `Ration Card BPL/Antyodaya - New Card`
+  - Pages 5-6: `Ration Card - Update/Member Change`
+- The ration-card update/member-change pages were rotated upright in the split PDF/previews.
+- Old combined `NFSA Food Security Application` removed.
+- Official NFSA PDF split by actual embedded flows:
+  - Pages 1-3: `NFSA Food Security - Rural Appeal`
+  - Pages 4-6: `NFSA Food Security - Urban Appeal`
+- `/forms` now has 49 forms.
+- Cache bumped to `studioprint-v41`; `id-print-v40` preserved from the latest ID Print commits.
+- Commit/push/live QA: pending.
 
 ## QA done
 
 - Build passed with bundled Node: `node build.js`.
-- Local Chrome QA: A4 test sheet generated from upload screen; canvas and preview were `2480 x 3508`; no page/console errors.
-- Local Chrome QA: `C:\Users\ajayt\Downloads\RC.pdf` still detected as RC, preview generated at `2022 x 638`, and A4 sheet generated at `2480 x 3508`; no page/console errors.
-- Live QA: `https://studioprint.pages.dev/id-print?qa=cal-v38` has the calibration UI and `https://studioprint.pages.dev/sw.js?qa=cal-v38` has `studioprint-v38` / `id-print-v38`.
-- Live browser QA: clicking `Open A4 Test Sheet` generated the calibration sheet with Download PNG and Print available. Only existing font preload credential warnings appeared.
+- Manifest validation passed: 49 entries, all PDF/preview/page-preview files exist, manifest page counts match actual PDF page counts.
+- Local Chrome QA passed on `dist/forms.html`: total count 49, old combined titles absent, ration search shows all 3 ration flows, NFSA search shows rural/urban, update preview image is upright portrait `673 x 920`, and no page/console errors.
+
+## Forms quality rule
+
+- Read every PDF before listing it; the website card must describe the actual government use-case.
+- Split different use-cases into separate entries when the PDF contains separate blank forms.
+- Do not add filled, pen-written, signed, watermarked, old-dated, dark, rotated, unclear, or third-party PDFs.
+- Official guides/manuals are not printable blank forms and should not be listed as forms.
 
 ## Coordination note
 
-- Current owned ID Print scope: `id-print.html`, `sw.js`, `dist/id-print.html`, `dist/sw.js`, `.agents/research/print-calibration-test-20260503.md`, `.agents/live-status.md`, `.agents/handoff.md`.
-- Do not touch Forms files from this ID Print task unless the user explicitly assigns Forms work.
-- Residual local dirty files not owned by this task: `dist/_headers`, `dist/about.html`, `dist/contact.html`, `dist/privacy.html`, `dist/refund.html`, `dist/shipping.html`, `dist/terms.html`.
-
-## Future rule
-
-- For any future print-layout or hardware-like feature, do not rely only on visual browser preview.
-- First add a measurable calibration output where possible: known mm ruler, card-size box, corner/center marks, and clear 100% scale instructions.
-- Then verify the production sheet path uses the same canvas/export/print pipeline as the calibration sheet.
+- Current owned Forms scope: `forms.html`, `assets/forms/manifest.json`, ration/NFSA PDFs and previews under `assets/forms/**`, `sw.js`, related `dist/` outputs, and `.agents` docs.
+- Explicitly not owned: `id-print.html`, `passport-photo.html`, `index.html`, `assets/legal.css`, shared auth/nav/pricing files, and workflow files.
+- Existing residual local dirty files from before this Forms task may still appear for unrelated `dist/*` pages. Do not stage unrelated source files.
