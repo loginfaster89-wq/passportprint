@@ -36,12 +36,16 @@ header.legal-header{top:0!important;margin-top:0!important;padding-top:10px!impo
 .idp-upload input[type="file"]{z-index:2;}
 
 /* ── ID Print page styles ── */
-.idp-app{max-width:960px;margin:0 auto;padding:32px 20px 60px;}
+body.idp-page main.legal-main{
+  max-width:none;width:100%;margin:0 auto;
+  padding:30px clamp(18px,3.6vw,56px) 56px;
+}
+.idp-app{max-width:none;width:100%;margin:0 auto;padding:0;}
 body.idp-workspace-mode main.legal-main{
-  max-width:none;padding:12px clamp(12px,2vw,22px) 36px;
+  max-width:none;padding:12px clamp(12px,2.4vw,32px) 36px;
 }
 body.idp-workspace-mode .idp-app{
-  max-width:1180px;padding:0 0 36px;
+  max-width:none;padding:0 0 36px;
 }
 body.idp-workspace-mode .idp-hero,
 body.idp-workspace-mode .idp-steps{
@@ -57,22 +61,25 @@ body.idp-workspace-mode .idp-sliders{gap:10px 18px;}
 body.idp-workspace-mode .idp-info{margin:10px 0;}
 body.idp-workspace-mode .idp-actions{margin-top:10px;}
 
-.idp-hero{text-align:center;margin-bottom:32px;}
+.idp-hero{
+  display:grid;grid-template-columns:minmax(0,.9fr) minmax(280px,.55fr);
+  gap:28px;align-items:end;text-align:left;margin-bottom:28px;
+}
 .idp-hero h1{
   font-family:'Syne',sans-serif;font-weight:800;
-  font-size:clamp(24px,5vw,38px);line-height:1.15;letter-spacing:-0.5px;
+  font-size:clamp(32px,5vw,58px);line-height:.98;letter-spacing:-0.5px;
   color:#fff;margin-bottom:8px;
 }
 .idp-hero h1 em{font-style:normal;color:var(--accent);
   background:linear-gradient(90deg,var(--accent),#ffd17a);
   -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
 }
-.idp-hero p{color:var(--muted);font-size:14px;line-height:1.6;max-width:560px;margin:0 auto;}
+.idp-hero p{color:var(--muted);font-size:14px;line-height:1.7;max-width:68ch;margin:0 0 0 auto;}
 
 /* Steps indicator */
 .idp-steps{
   display:flex;align-items:center;justify-content:center;gap:0;
-  margin-bottom:28px;font-family:'DM Mono',monospace;font-size:12px;
+  margin-bottom:22px;font-family:'DM Mono',monospace;font-size:12px;
 }
 .idp-step{
   display:flex;align-items:center;gap:6px;padding:6px 14px;
@@ -84,9 +91,14 @@ body.idp-workspace-mode .idp-actions{margin-top:10px;}
 .idp-step-line{width:24px;height:1px;background:var(--border);}
 
 /* Upload area */
+#stepUpload{
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,420px);
+  gap:14px;align-items:stretch;
+}
 .idp-upload{
   border:2px dashed var(--border);border-radius:16px;
-  padding:48px 24px;text-align:center;cursor:pointer;
+  min-height:280px;padding:48px 24px;text-align:center;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
   transition:border-color .2s,background .2s;
   background:var(--surface);position:relative;
 }
@@ -95,6 +107,7 @@ body.idp-workspace-mode .idp-actions{margin-top:10px;}
 .idp-upload h3{font-family:'Syne',sans-serif;font-size:18px;color:#fff;margin-bottom:6px;}
 .idp-upload p{color:var(--muted);font-size:13px;}
 .idp-upload input[type="file"]{position:absolute;inset:0;opacity:0;cursor:pointer;}
+#stepUpload .idp-upload{grid-column:1;grid-row:1;}
 
 /* Batch file queue */
 .idp-queue{margin-top:16px;}
@@ -125,6 +138,9 @@ body.idp-workspace-mode .idp-actions{margin-top:10px;}
 }
 .idp-plan-note a{color:var(--accent);text-decoration:none;}
 .idp-plan-note a:hover{color:#ffc03a;}
+#stepUpload .idp-plan-note{grid-column:1;grid-row:2;}
+#stepUpload .idp-test-panel{grid-column:2;grid-row:1 / span 2;margin:0;height:100%;max-width:none;}
+#fileQueue,#batchCount,#queueActions{grid-column:1/-1;}
 
 /* Password step */
 .idp-password{
@@ -194,12 +210,33 @@ body.idp-workspace-mode .idp-actions{margin-top:10px;}
    corners on each half are drawn into the canvas (per-half clip path),
    so this CSS keeps a single subtle outer chrome only. */
 .idp-preview-canvas-pair{
-  display:block;width:100%;max-width:760px;height:auto;
+  display:block;width:100%;max-width:1080px;height:auto;
   margin:0 auto;
   aspect-ratio:2022/638;
   border:1px solid var(--border);border-radius:8px;
   background:#111;
 }
+body.idp-workspace-mode #stepPreview .idp-preview{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(300px,380px);
+  grid-template-areas:
+    "badge editor"
+    "title editor"
+    "cards editor"
+    "option info"
+    "actions actions";
+  gap:10px 18px;
+  align-items:start;
+  text-align:left;
+}
+body.idp-workspace-mode #stepPreview #detectBadge{grid-area:badge;text-align:left;}
+body.idp-workspace-mode #stepPreview #previewTitle{grid-area:title;}
+body.idp-workspace-mode #stepPreview #batchCardsContainer{grid-area:cards;}
+body.idp-workspace-mode #stepPreview #roundedOption{grid-area:option;}
+body.idp-workspace-mode #stepPreview .idp-editor{grid-area:editor;margin:0;}
+body.idp-workspace-mode #stepPreview .idp-info{grid-area:info;justify-content:flex-start;}
+body.idp-workspace-mode #stepPreview .idp-actions{grid-area:actions;}
+body.idp-workspace-mode #stepPreview .idp-preview-canvas-pair{max-width:none;}
 
 /* Info strip */
 .idp-info{
@@ -351,6 +388,26 @@ body.idp-workspace-mode .idp-actions{margin-top:10px;}
    URL.createObjectURL just before window.print(). See @media
    print block for the print-time swap rules. */
 .idp-a4-wrap #printImg{display:none;}
+body.idp-workspace-mode #stepSheet .idp-preview{
+  display:grid;
+  grid-template-columns:minmax(320px,.42fr) minmax(420px,1fr);
+  grid-template-areas:
+    "title title"
+    "desc desc"
+    "layout sheet"
+    "banner sheet"
+    "actions actions";
+  gap:12px 18px;
+  align-items:start;
+  text-align:left;
+}
+body.idp-workspace-mode #stepSheet #sheetTitle{grid-area:title;text-align:center;}
+body.idp-workspace-mode #stepSheet #sheetDesc{grid-area:desc;text-align:center;}
+body.idp-workspace-mode #stepSheet #layoutPanel{grid-area:layout;margin:0;}
+body.idp-workspace-mode #stepSheet #idpPlanBanner{grid-area:banner;margin:0;}
+body.idp-workspace-mode #stepSheet .idp-a4-wrap{grid-area:sheet;margin:0 auto;width:100%;}
+body.idp-workspace-mode #stepSheet .idp-a4-wrap canvas{max-width:min(100%,760px);max-height:68vh;}
+body.idp-workspace-mode #stepSheet .idp-actions{grid-area:actions;}
 @media (max-width:640px){
   .idp-a4-wrap{margin:10px auto;}
   .idp-a4-wrap canvas{max-height:50vh;max-width:100%;}
@@ -584,7 +641,10 @@ input.idp-range::-moz-range-thumb{
 
 /* Responsive */
 @media (max-width:640px){
-  .idp-app{padding:20px 14px 40px;}
+  body.idp-page main.legal-main{padding:20px 14px 40px;}
+  .idp-hero{grid-template-columns:1fr;text-align:center;}
+  .idp-hero p{margin:0 auto;}
+  #stepUpload{grid-template-columns:1fr;}
   body.idp-workspace-mode main.legal-main{padding:10px 10px 28px;}
   body.idp-workspace-mode .idp-app{padding:0 0 28px;}
   body.idp-workspace-mode .idp-preview{padding:14px;}
@@ -602,6 +662,14 @@ input.idp-range::-moz-range-thumb{
   .idp-test-panel{align-items:flex-start;flex-direction:column;}
   .idp-test-panel .idp-cal-reset{width:100%;}
 }
+@media (max-width:980px){
+  body.idp-workspace-mode #stepPreview .idp-preview,
+  body.idp-workspace-mode #stepSheet .idp-preview{
+    display:block;text-align:center;
+  }
+  body.idp-workspace-mode #stepPreview .idp-info{justify-content:center;}
+  body.idp-workspace-mode #stepSheet .idp-a4-wrap{margin:10px auto;}
+}
 @media (max-width:420px){
   .idp-layout-grid{grid-template-columns:1fr;}
   .idp-cal-panel.show{grid-template-columns:1fr;}
@@ -612,7 +680,7 @@ input.idp-range::-moz-range-thumb{
 
 </style>
 </head>
-<body>
+<body class="idp-page">
 
 <!-- SVG icon sprite used by the shared feature dropdown. -->
 <svg width="0" height="0" style="position:absolute;overflow:hidden" aria-hidden="true" focusable="false">
