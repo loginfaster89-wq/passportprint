@@ -191,6 +191,59 @@ header.legal-header{top:0!important;margin-top:0!important;padding-top:10px!impo
   padding:4px 10px;border-radius:999px;
   background:var(--surface2);border:1px solid var(--border);
 }
+.idp-layout-panel{
+  margin:0 0 16px;padding:14px;border-radius:12px;
+  background:var(--surface2);border:1px solid var(--border);
+  text-align:left;
+}
+.idp-layout-head{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  margin-bottom:10px;font-family:'DM Mono',monospace;font-size:11px;
+  color:var(--muted);text-transform:uppercase;letter-spacing:.08em;
+}
+.idp-layout-head strong{color:var(--text);font-family:'Syne',sans-serif;font-size:13px;letter-spacing:0;text-transform:none;}
+.idp-layout-grid{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;
+}
+.idp-layout-btn{
+  min-height:76px;padding:10px;border-radius:10px;
+  background:var(--surface);border:1px solid var(--border);
+  color:var(--text);text-align:left;cursor:pointer;
+  display:flex;flex-direction:column;gap:5px;
+  transition:border-color .15s,background .15s,transform .15s;
+}
+.idp-layout-btn:hover{border-color:rgba(240,165,0,.45);background:rgba(240,165,0,.05);}
+.idp-layout-btn.is-active{border-color:var(--accent);background:rgba(240,165,0,.12);}
+.idp-layout-btn:active{transform:scale(.98);}
+.idp-layout-btn:disabled{opacity:.45;cursor:not-allowed;transform:none;}
+.idp-layout-btn span{font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--text);}
+.idp-layout-btn small{font-family:'DM Mono',monospace;font-size:10.5px;line-height:1.4;color:var(--muted);}
+.idp-cal-panel{
+  display:none;margin-top:12px;padding-top:12px;border-top:1px solid var(--border);
+  grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;align-items:end;
+}
+.idp-cal-panel.show{display:grid;}
+.idp-cal-field{display:flex;flex-direction:column;gap:5px;}
+.idp-cal-field label{
+  font-family:'DM Mono',monospace;font-size:10.5px;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.08em;
+}
+.idp-cal-field input[type="number"]{
+  width:100%;padding:8px 10px;border-radius:8px;border:1px solid var(--border);
+  background:var(--surface);color:var(--text);font-family:'DM Mono',monospace;font-size:12px;
+}
+.idp-cal-field input[type="number"]:focus{outline:none;border-color:var(--accent);}
+.idp-cal-check{
+  flex-direction:row;align-items:center;gap:8px;color:var(--muted);
+  font-family:'DM Mono',monospace;font-size:11px;min-height:35px;
+}
+.idp-cal-check input{accent-color:var(--accent);}
+.idp-cal-reset{
+  padding:9px 12px;border-radius:8px;border:1px solid var(--border);
+  background:var(--surface);color:var(--text);font-family:'DM Mono',monospace;
+  font-size:11px;cursor:pointer;
+}
+.idp-cal-reset:hover{border-color:var(--accent);color:var(--accent);}
 .idp-plan-banner{
   margin:0 0 14px;padding:10px 12px;border-radius:10px;
   border:1px solid var(--border);background:var(--surface2);
@@ -482,6 +535,12 @@ input.idp-range::-moz-range-thumb{
   .idp-step-line{width:12px;}
   .idp-sliders{gap:10px 16px;}
   .idp-slider-group{flex:1 1 100%;}
+  .idp-layout-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .idp-cal-panel.show{grid-template-columns:repeat(2,minmax(0,1fr));}
+}
+@media (max-width:420px){
+  .idp-layout-grid{grid-template-columns:1fr;}
+  .idp-cal-panel.show{grid-template-columns:1fr;}
 }
 /* §AC.27 — Position panel (per-side Move + Zoom) removed per user request.
    Rounded Corners + Photo Adjust retained. */
@@ -668,7 +727,7 @@ input.idp-range::-moz-range-thumb{
       </div>
       <div class="idp-actions">
         <button class="idp-btn idp-btn-ghost" id="btnBack">← New PDF</button>
-        <button class="idp-btn idp-btn-primary" id="btnSheet">Generate A4 Sheet →</button>
+        <button class="idp-btn idp-btn-primary" id="btnSheet">Generate Print Sheet →</button>
       </div>
     </div>
   </div>
@@ -678,6 +737,49 @@ input.idp-range::-moz-range-thumb{
     <div class="idp-preview">
       <h3 id="sheetTitle">A4 Sheet — Fold &amp; Laminate Layout</h3>
       <p id="sheetDesc" style="color:var(--muted);font-size:12px;margin-bottom:16px;">Print → cut around cards → fold in half → laminate in 65×95mm pouch</p>
+      <div class="idp-layout-panel" id="layoutPanel">
+        <div class="idp-layout-head">
+          <strong>Print Layout Studio</strong>
+          <span>Counter presets</span>
+        </div>
+        <div class="idp-layout-grid" role="group" aria-label="Print layout">
+          <button type="button" class="idp-layout-btn is-active" data-sheet-mode="fold">
+            <span>A4 Fold</span>
+            <small>One front + back pair for lamination pouch</small>
+          </button>
+          <button type="button" class="idp-layout-btn" data-sheet-mode="multi">
+            <span>A4 10 Cards</span>
+            <small>Five front/back rows for counter batches</small>
+          </button>
+          <button type="button" class="idp-layout-btn" data-sheet-mode="dragon">
+            <span>Dragon 4x6</span>
+            <small>Two cards on 4x6 style photo sheet</small>
+          </button>
+          <button type="button" class="idp-layout-btn" data-sheet-mode="pvc">
+            <span>Epson PVC Tray</span>
+            <small>L805/L8050 two-slot direct PVC layout</small>
+          </button>
+        </div>
+        <div class="idp-cal-panel" id="pvcCalPanel" aria-label="PVC tray calibration">
+          <div class="idp-cal-field">
+            <label for="pvcOffsetX">Offset X mm</label>
+            <input type="number" id="pvcOffsetX" step="0.1" min="-10" max="10" value="0">
+          </div>
+          <div class="idp-cal-field">
+            <label for="pvcOffsetY">Offset Y mm</label>
+            <input type="number" id="pvcOffsetY" step="0.1" min="-10" max="10" value="0">
+          </div>
+          <div class="idp-cal-field">
+            <label for="pvcScale">Scale %</label>
+            <input type="number" id="pvcScale" step="0.1" min="95" max="105" value="100">
+          </div>
+          <label class="idp-cal-field idp-cal-check">
+            <input type="checkbox" id="pvcGuides">
+            Show tray guides
+          </label>
+          <button type="button" class="idp-cal-reset" id="pvcReset">Reset tray</button>
+        </div>
+      </div>
       <div id="idpPlanBanner" class="idp-plan-banner ok"></div>
       <div class="idp-a4-wrap">
         <canvas id="sheetPreviewCanvas" width="2480" height="1200" aria-hidden="true"></canvas>
@@ -778,6 +880,11 @@ const CR80_W = 1011;
 const CR80_H = 638;
 const A4_W = 2480;
 const A4_H = 3508;
+const DRAGON_W = 1205;
+const DRAGON_H = 1795;
+const PVC_W = 1417;
+const PVC_H = 1417;
+const PRINT_DPI = 300;
 const RENDER_SCALE = 4;
 const RATION_W = 787;
 const RATION_H = 1011;
@@ -819,6 +926,33 @@ const CARD_OUTPUT_SPECS = {
     sheetTitle: 'A4 Sheet — Ration Card Panels',
     sheetDesc: 'Print at 100% → cut the front and member-list panels separately',
     allowRounded: false
+  }
+};
+
+const SHEET_LAYOUTS = {
+  fold: {
+    title: 'A4 Sheet — Fold & Laminate Layout',
+    desc: 'Print → cut around cards → fold in half → laminate in 65×95mm pouch',
+    workflowLabel: 'Fold & laminate ready',
+    suffix: '-a4-fold-sheet.png'
+  },
+  multi: {
+    title: 'A4 Sheet — 10 Card Layout',
+    desc: 'Five front/back rows for repeat counter printing on A4',
+    workflowLabel: 'A4 10-card counter sheet',
+    suffix: '-a4-10-card-sheet.png'
+  },
+  dragon: {
+    title: 'Dragon Sheet — 4×6 Two Card Layout',
+    desc: 'Front and back stacked for 4×6 / Dragon photo-sheet printing',
+    workflowLabel: 'Dragon 4x6 ready',
+    suffix: '-dragon-4x6-sheet.png'
+  },
+  pvc: {
+    title: 'Epson PVC Tray — L805 / L8050',
+    desc: 'Two-slot direct PVC tray output with X/Y/scale calibration',
+    workflowLabel: 'PVC tray calibrated',
+    suffix: '-epson-pvc-tray.png'
   }
 };
 
@@ -967,6 +1101,14 @@ const a4Canvas = $('#a4Canvas');
 const detectBadge = $('#detectBadge');
 const sheetTitle = $('#sheetTitle');
 const sheetDesc = $('#sheetDesc');
+const layoutPanel = $('#layoutPanel');
+const layoutButtons = Array.from(document.querySelectorAll('[data-sheet-mode]'));
+const pvcCalPanel = $('#pvcCalPanel');
+const pvcOffsetX = $('#pvcOffsetX');
+const pvcOffsetY = $('#pvcOffsetY');
+const pvcScale = $('#pvcScale');
+const pvcGuides = $('#pvcGuides');
+const pvcReset = $('#pvcReset');
 const pillFormat = $('#pillFormat');
 const pillPixels = $('#pillPixels');
 const pillWorkflow = $('#pillWorkflow');
@@ -982,6 +1124,8 @@ const previewTitle = $('#previewTitle');
 let roundedCorners = false;
 /* §AC.28 — `swapSides` state removed (Swap sides toggle deleted). */
 const CARD_RADIUS = 36;
+let sheetMode = 'fold';
+let pvcCalibration = loadPvcCalibration();
 
 /* Legacy single-card state (used when only 1 PDF) */
 let pdfArrayBuffer = null;
@@ -1051,6 +1195,91 @@ function getCardOutputSpec(cardType) {
   return cardType === 'ration' ? CARD_OUTPUT_SPECS.ration : CARD_OUTPUT_SPECS.default;
 }
 
+function getSheetLayout() {
+  return SHEET_LAYOUTS[sheetMode] || SHEET_LAYOUTS.fold;
+}
+
+function mmToPx(mm) {
+  return mm * PRINT_DPI / 25.4;
+}
+
+function clampNumber(value, min, max, fallback) {
+  var n = parseFloat(value);
+  if (!Number.isFinite(n)) n = fallback;
+  return Math.min(max, Math.max(min, n));
+}
+
+function loadPvcCalibration() {
+  var fallback = { x: 0, y: 0, scale: 100, guides: false };
+  try {
+    var raw = localStorage.getItem('idp_pvc_cal_v1');
+    if (!raw) return fallback;
+    var parsed = JSON.parse(raw);
+    return {
+      x: clampNumber(parsed.x, -12, 12, 0),
+      y: clampNumber(parsed.y, -12, 12, 0),
+      scale: clampNumber(parsed.scale, 95, 105, 100),
+      guides: !!parsed.guides
+    };
+  } catch (_) {
+    return fallback;
+  }
+}
+
+function savePvcCalibration() {
+  try { localStorage.setItem('idp_pvc_cal_v1', JSON.stringify(pvcCalibration)); } catch (_) {}
+}
+
+function supportsCounterLayouts(cardType) {
+  var spec = getCardOutputSpec(cardType);
+  return spec.w === CR80_W && spec.h === CR80_H;
+}
+
+function normalizeSheetMode(mode, cardType) {
+  var next = SHEET_LAYOUTS[mode] ? mode : 'fold';
+  if (next !== 'fold' && !supportsCounterLayouts(cardType)) return 'fold';
+  return next;
+}
+
+function syncPvcCalibrationUI() {
+  var cardType = getCurrentCardType();
+  var allowedCounterLayouts = supportsCounterLayouts(cardType);
+  sheetMode = normalizeSheetMode(sheetMode, cardType);
+
+  layoutButtons.forEach(function(btn) {
+    var mode = btn.dataset.sheetMode;
+    var disabled = mode !== 'fold' && !allowedCounterLayouts;
+    btn.disabled = disabled;
+    btn.classList.toggle('is-active', mode === sheetMode);
+  });
+
+  if (pvcCalPanel) pvcCalPanel.classList.toggle('show', sheetMode === 'pvc');
+  if (pvcOffsetX) pvcOffsetX.value = pvcCalibration.x;
+  if (pvcOffsetY) pvcOffsetY.value = pvcCalibration.y;
+  if (pvcScale) pvcScale.value = pvcCalibration.scale;
+  if (pvcGuides) pvcGuides.checked = !!pvcCalibration.guides;
+}
+
+function readPvcCalibrationFromUI() {
+  pvcCalibration = {
+    x: clampNumber(pvcOffsetX && pvcOffsetX.value, -12, 12, 0),
+    y: clampNumber(pvcOffsetY && pvcOffsetY.value, -12, 12, 0),
+    scale: clampNumber(pvcScale && pvcScale.value, 95, 105, 100),
+    guides: !!(pvcGuides && pvcGuides.checked)
+  };
+  savePvcCalibration();
+  syncPvcCalibrationUI();
+  if (!stepSheet.classList.contains('idp-hidden')) buildSheet();
+}
+
+function setSheetMode(mode) {
+  sheetMode = normalizeSheetMode(mode, getCurrentCardType());
+  syncPvcCalibrationUI();
+  updateSheetMeta();
+  refreshCardMetaPills(getCurrentCardType());
+  if (!stepSheet.classList.contains('idp-hidden')) buildSheet();
+}
+
 function getCardCanvasSize(cardType) {
   var spec = getCardOutputSpec(cardType);
   return { w: spec.w, h: spec.h };
@@ -1070,7 +1299,7 @@ function refreshCardMetaPills(cardType) {
   var spec = getCardOutputSpec(cardType);
   if (pillFormat) pillFormat.textContent = spec.formatLabel;
   if (pillPixels) pillPixels.textContent = spec.pixelLabel;
-  if (pillWorkflow) pillWorkflow.textContent = spec.workflowLabel;
+  if (pillWorkflow) pillWorkflow.textContent = getSheetLayout().workflowLabel || spec.workflowLabel;
 }
 
 function cardNeedsSyntheticTopBorder(cardType) {
@@ -1618,6 +1847,8 @@ async function processPdf(pdf) {
     loadPrefs();
     /* §AC.29 — Enable / disable Photo Only based on detected card type. */
     refreshScopeAvailability();
+    syncPvcCalibrationUI();
+    updateSheetMeta();
     refreshCardMetaPills(detectedType);
     applyFilters();
 
@@ -1705,6 +1936,8 @@ function showBatchPreview() {
     backImageData = batchCards[0].back;
     originalFront = batchCards[0].originalFront;
     originalBack = batchCards[0].originalBack;
+    syncPvcCalibrationUI();
+    updateSheetMeta();
     refreshCardMetaPills(detectedType);
   }
 
@@ -1788,7 +2021,12 @@ function drawToCanvas(canvas, srcCanvas, w, h) {
 
 /* ── A4 Sheet generation ── */
 function buildSheet() {
-  buildSingleSheet();
+  sheetMode = normalizeSheetMode(sheetMode, getCurrentCardType());
+  if (sheetMode === 'multi') buildMultiCardSheet();
+  else if (sheetMode === 'dragon') buildDragonSheet();
+  else if (sheetMode === 'pvc') buildPVCTraySheet();
+  else buildSingleSheet();
+  syncPvcCalibrationUI();
   refreshSheetPreview();
 }
 
@@ -1799,9 +2037,11 @@ function refreshSheetPreview() {
      by design for printing, but on screen that wastes space. Keep the
      real A4 canvas intact for download/print and only crop the visible
      preview to the upper content band. */
-  var previewType = getCurrentCardType();
-  var previewSpec = getCardOutputSpec(previewType);
-  srcH = Math.min(a4Canvas.height, Math.max(980, previewSpec.h + previewSpec.startY + 120));
+  if (sheetMode === 'fold') {
+    var previewType = getCurrentCardType();
+    var previewSpec = getCardOutputSpec(previewType);
+    srcH = Math.min(a4Canvas.height, Math.max(980, previewSpec.h + previewSpec.startY + 120));
+  }
   sheetPreviewCanvas.width = srcW;
   sheetPreviewCanvas.height = srcH;
   var pctx = sheetPreviewCanvas.getContext('2d');
@@ -2059,10 +2299,13 @@ function buildPVCTraySheet() {
   ctx.fillStyle = '#ffffff';
   ctx.fillRect(0, 0, PVC_W, PVC_H);
 
-  var cardW = CR80_W;
-  var cardH = CR80_H;
-  var marginX = Math.round((PVC_W - cardW) / 2);
-  var topY = 35;
+  var scale = clampNumber(pvcCalibration.scale, 95, 105, 100) / 100;
+  var cardW = Math.round(CR80_W * scale);
+  var cardH = Math.round(CR80_H * scale);
+  var offsetX = Math.round(mmToPx(pvcCalibration.x || 0));
+  var offsetY = Math.round(mmToPx(pvcCalibration.y || 0));
+  var marginX = Math.round((PVC_W - cardW) / 2) + offsetX;
+  var topY = 35 + offsetY;
   var gap = 71;
   var bottomY = topY + cardH + gap;
 
@@ -2078,41 +2321,43 @@ function buildPVCTraySheet() {
     else ctx.drawImage(card.back, marginX, bottomY, cardW, cardH);
   }
 
-  /* Card slot outlines */
-  ctx.setLineDash([6, 4]);
-  ctx.strokeStyle = '#bbb';
-  ctx.lineWidth = 1;
-  if (radius > 0) {
-    roundedRectPath(ctx, marginX, topY, cardW, cardH, radius);
-    ctx.stroke();
-    roundedRectPath(ctx, marginX, bottomY, cardW, cardH, radius);
-    ctx.stroke();
-  } else {
-    ctx.strokeRect(marginX, topY, cardW, cardH);
-    ctx.strokeRect(marginX, bottomY, cardW, cardH);
+  if (pvcCalibration.guides) {
+    /* Card slot outlines */
+    ctx.setLineDash([6, 4]);
+    ctx.strokeStyle = '#bbb';
+    ctx.lineWidth = 1;
+    if (radius > 0) {
+      roundedRectPath(ctx, marginX, topY, cardW, cardH, radius);
+      ctx.stroke();
+      roundedRectPath(ctx, marginX, bottomY, cardW, cardH, radius);
+      ctx.stroke();
+    } else {
+      ctx.strokeRect(marginX, topY, cardW, cardH);
+      ctx.strokeRect(marginX, bottomY, cardW, cardH);
+    }
+    ctx.setLineDash([]);
+
+    /* Corner marks */
+    ctx.strokeStyle = '#999';
+    ctx.lineWidth = 1.5;
+    var markLen = 20;
+    drawCornerMarks(ctx, marginX, topY, cardW, cardH, markLen);
+    drawCornerMarks(ctx, marginX, bottomY, cardW, cardH, markLen);
+
+    /* Labels */
+    ctx.fillStyle = '#999';
+    ctx.font = '16px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Front', marginX + cardW / 2, topY - 10);
+    ctx.fillText('Back', marginX + cardW / 2, bottomY - 10);
+
+    /* Tray border */
+    ctx.strokeStyle = '#ddd';
+    ctx.lineWidth = 2;
+    ctx.setLineDash([12, 6]);
+    ctx.strokeRect(4, 4, PVC_W - 8, PVC_H - 8);
+    ctx.setLineDash([]);
   }
-  ctx.setLineDash([]);
-
-  /* Corner marks */
-  ctx.strokeStyle = '#999';
-  ctx.lineWidth = 1.5;
-  var markLen = 20;
-  drawCornerMarks(ctx, marginX, topY, cardW, cardH, markLen);
-  drawCornerMarks(ctx, marginX, bottomY, cardW, cardH, markLen);
-
-  /* Labels */
-  ctx.fillStyle = '#999';
-  ctx.font = '16px sans-serif';
-  ctx.textAlign = 'center';
-  ctx.fillText('Front', marginX + cardW / 2, topY - 10);
-  ctx.fillText('Back', marginX + cardW / 2, bottomY - 10);
-
-  /* Tray border */
-  ctx.strokeStyle = '#ddd';
-  ctx.lineWidth = 2;
-  ctx.setLineDash([12, 6]);
-  ctx.strokeRect(4, 4, PVC_W - 8, PVC_H - 8);
-  ctx.setLineDash([]);
 
   /* §AC.25 — footer info text removed (same as buildSingleSheet). */
 }
@@ -2674,12 +2919,50 @@ chkRounded.addEventListener('change', () => {
 
 function updateSheetMeta() {
   var spec = getCardOutputSpec(getCurrentCardType());
-  sheetTitle.textContent = spec.sheetTitle;
-  sheetDesc.textContent = spec.sheetDesc;
+  var layout = getSheetLayout();
+  sheetTitle.textContent = getCurrentCardType() === 'ration' ? spec.sheetTitle : layout.title;
+  sheetDesc.textContent = getCurrentCardType() === 'ration' ? spec.sheetDesc : layout.desc;
+}
+
+function applyDynamicPrintPageStyle() {
+  var pageSize = 'A4 portrait';
+  if (sheetMode === 'dragon') pageSize = '101.6mm 152.4mm';
+  if (sheetMode === 'pvc') pageSize = '120mm 120mm';
+  var style = document.getElementById('idpDynamicPrintPage');
+  if (!style) {
+    style = document.createElement('style');
+    style.id = 'idpDynamicPrintPage';
+    document.head.appendChild(style);
+  }
+  style.textContent = '@media print{@page{size:' + pageSize + ';margin:0 !important;}}';
 }
 
 /* ── Button handlers ── */
+layoutButtons.forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    setSheetMode(btn.dataset.sheetMode);
+  });
+});
+
+[pvcOffsetX, pvcOffsetY, pvcScale].forEach(function(input) {
+  if (!input) return;
+  input.addEventListener('input', readPvcCalibrationFromUI);
+  input.addEventListener('change', readPvcCalibrationFromUI);
+});
+
+if (pvcGuides) pvcGuides.addEventListener('change', readPvcCalibrationFromUI);
+
+if (pvcReset) {
+  pvcReset.addEventListener('click', function() {
+    pvcCalibration = { x: 0, y: 0, scale: 100, guides: false };
+    savePvcCalibration();
+    syncPvcCalibrationUI();
+    if (!stepSheet.classList.contains('idp-hidden')) buildSheet();
+  });
+}
+
 btnSheet.addEventListener('click', () => {
+  syncPvcCalibrationUI();
   updateSheetMeta();
   buildSheet();
   showStep(3);
@@ -2712,7 +2995,7 @@ btnBackPreview.addEventListener('click', () => showStep(2));
 
 btnDownload.addEventListener('click', async () => {
   if (!(await idpConsumeSheetOrBlock())) return;
-  var suffix = '-a4-sheet.png';
+  var suffix = getSheetLayout().suffix || '-print-sheet.png';
   var cards = getActiveCards();
   var prefix = cards.length > 1 ? 'batch-' + cards.length + '-cards' : (detectedType || 'id-card');
   var filename = prefix + suffix;
@@ -2756,6 +3039,7 @@ btnDownload.addEventListener('click', async () => {
    window.print() on very old browsers that lack toBlob. */
 btnPrint.addEventListener('click', async () => {
   if (!(await idpConsumeSheetOrBlock())) return;
+  applyDynamicPrintPageStyle();
   var printImg = document.getElementById('printImg');
   if (!printImg || typeof a4Canvas.toBlob !== 'function') {
     window.print();
@@ -2779,6 +3063,8 @@ btnPrint.addEventListener('click', async () => {
 /* ── Init ── */
 window.addEventListener('focus', refreshIdpPlanBanner);
 window.addEventListener('storage', refreshIdpPlanBanner);
+syncPvcCalibrationUI();
+updateSheetMeta();
 showStep(1);
 </script>
 </body>
