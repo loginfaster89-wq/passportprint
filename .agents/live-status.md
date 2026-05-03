@@ -4,45 +4,34 @@ Last updated: 2026-05-03 IST
 
 ## Current task status
 
-- Current owner: this chat owns the Forms Hub ration-card / NFSA cleanup.
-- Scope lock: this chat is working on `/forms` only. Do not touch `id-print.html` from this task.
-- Active task: replace bundled Rajasthan Food PDFs with separate use-case entries after reading the official PDFs.
-- Result: old combined `Ration Card Form - New/Update` entry removed.
-- Result: official ration-card source split into:
-  - `Ration Card APL - New Card`
-  - `Ration Card BPL/Antyodaya - New Card`
-  - `Ration Card - Update/Member Change`
-- Result: ration-card update/member-change pages are now upright in the split PDF and preview images.
-- Result: old combined `NFSA Food Security Application` entry removed.
-- Result: official NFSA source split into:
-  - `NFSA Food Security - Rural Appeal`
-  - `NFSA Food Security - Urban Appeal`
-- Result: Forms Hub count is now 49 forms.
-- Cache bumped to `studioprint-v41`; `id-print-v40` preserved from the latest ID Print commits.
-- Build result: bundled Node command `node build.js` passed.
-- Local QA result: built `dist/forms.html` opened in installed Chrome via Playwright; total count was 49, old combined titles were absent, ration search showed all 3 ration flows, NFSA search showed rural/urban, and ration update preview loaded upright at `673 x 920`; no page/console errors.
-- Feature commit pushed: `e87cf9e0d086258efc47787afc561f918097df75` (`fix(forms): split Rajasthan ration and NFSA forms`).
-- Live QA result: `https://studioprint.pages.dev/forms?qa=forms-split-e87cf9e` contains the new ration/NFSA split entries, does not contain the old combined titles, and reports 49 forms.
-- Live browser QA result: production `/forms` search for `ration` showed all 3 ration flows; `Ration Card - Update/Member Change` preview loaded upright at `673 x 920`; no page/console errors.
-- Live SW QA result: `https://studioprint.pages.dev/sw.js?qa=forms-split-e87cf9e` contains `studioprint-v41` and `id-print-v40`.
+- Current owner: this chat owns Forms Hub work only.
+- Scope lock: `/forms` only. Do not touch `id-print.html` from this task.
+- Active task completed: researched Rajasthan official civil-registration forms, added clean blank PDFs, and removed one old-dated scholarship income entry.
+- Result: added `Birth Report Form 1`, `Death Report Form 2`, and `Still Birth Report Form 3` from official Rajasthan LSG source PDFs.
+- Result: removed `Income Declaration - Scholarship` because the PDF text was for the 2019-20 scholarship year and no current clean official replacement was verified in this pass.
+- Result: Forms Hub count is now 51 forms.
+- Cache bumped to `studioprint-v43`; `id-print-v42` preserved from the latest ID Print commit.
+- Feature commit pushed: `05ff784` (`feat(forms): add Rajasthan civil registration forms`).
 
 ## Owned file scope
 
-- Owned and changed: `forms.html`, `assets/forms/manifest.json`, `assets/forms/**` ration/NFSA split PDFs and previews, `sw.js`, `dist/forms.html`, `dist/sw.js`, `dist/assets/forms/**` ration/NFSA assets, `.agents/research/forms-rajasthan-ration-nfsa-split-20260503.md`, `.agents/live-status.md`, `.agents/handoff.md`.
+- Owned and changed: `forms.html`, `assets/forms/manifest.json`, new Rajasthan civil-registration PDFs/previews under `assets/forms/**`, removed old scholarship income PDF/previews, `sw.js`, generated `dist/forms.html`, `dist/sw.js`, relevant tracked `dist/assets/forms/previews/pages/**`, `dist/_headers` build-sync output, and `.agents/research/forms-rajasthan-civil-registration-20260503.md`.
 - Explicitly not owned/touched: `id-print.html`, `passport-photo.html`, `index.html`, `assets/legal.css`, shared auth/nav/pricing files, workflow files.
 
 ## Shared files touched
 
 - `forms.html` touched only for Forms Hub data entries.
-- `sw.js` touched only for cache-version bump to `studioprint-v41`.
+- `sw.js` touched only for cache-version bump and to preserve remote `id-print-v42`.
 
 ## Commit / deploy / QA
 
-- Website source commit pushed: `e87cf9e0d086258efc47787afc561f918097df75`.
+- Website source commit pushed: `05ff784`.
 - Deploy triggered: yes, by push to `main`.
 - Build run: yes, bundled Node `build.js`.
-- Local QA: passed.
-- Live QA: passed after Cloudflare propagation.
+- Local validation: passed. Manifest has 51 entries; all referenced source PDFs/previews/page-previews exist; manifest page counts match actual PDF page counts; old income entry absent.
+- Local browser smoke: passed using installed Chrome headless screenshot of `dist/forms.html`; page rendered 51 forms and showed the new birth/death/still-birth cards.
+- Live HTML/SW QA: passed on `https://studioprint.pages.dev/forms?qa=forms-civil-05ff784`; page contains all 3 new civil-registration forms, does not contain old `Income Declaration - Scholarship`, and `/sw.js?qa=forms-civil-05ff784` contains `studioprint-v43` plus `id-print-v42`.
+- Live browser smoke: passed using installed Chrome headless screenshot of production `/forms`; page rendered 51 forms and showed the new cards.
 
 ## Forms quality rule
 
@@ -53,8 +42,8 @@ Last updated: 2026-05-03 IST
 
 ## Pending work
 
-- Forms update has been pushed and live-verified.
-- Existing residual local dirty files from before this Forms task may still appear for unrelated `dist/*` pages. Do not stage unrelated source files.
+- Rajasthan is not complete yet. Pending official clean standalone PDFs still need research for caste, domicile/bonafide, EWS, income certificate, Pehchan 2025 Form 1-A/adopted child, delayed registration documents, and appeal forms.
+- Rejected in this pass: Rajasthan LSG `BPL.pdf` because it is a 2003 scanned BPL survey document, not a clean current printable form.
 - Before any new work, run:
   - `git pull --ff-only origin main`
   - `Get-Content .agents\live-status.md`
