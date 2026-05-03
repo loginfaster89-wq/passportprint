@@ -4,42 +4,35 @@ Last updated: 2026-05-03 IST
 
 ## Current task status
 
-- Current owner: this chat owns Forms page cleanup only.
-- Active task completed: full Forms Hub quality/purpose pass after user reported dirty/filled/unclear PDFs.
-- Result: current Forms library audited page-by-page from `assets/forms/manifest.json`: 46 forms, 106 PDF pages, 0 rotation/dark/page-count flags after cleanup.
-- Result: visual contact sheet reviewed at `C:\tmp\forms-full-audit-20260503-resume\contact.jpg`.
-- Result: legacy PAN 49A / 49AA entries and assets removed because PAN allotment for the 2026 flow is now split into Income Tax Forms 93 / 94 / 95 / 96.
-- Result: added official 2026 PAN allotment forms:
-  - PAN Form 93 - Individual Indian Applicant
-  - PAN Form 94 - Non-Individual Indian Applicant
-  - PAN Form 95 - Individual Foreign Applicant
-  - PAN Form 96 - Non-Individual Foreign Applicant
-- Result: kept PAN CR-01 / CR-02 correction forms and clarified their 2026 correction purpose.
-- Result: added official Election Commission Voter Form 6A - Overseas Elector.
-- Result: clarified all legacy vague Forms titles/descriptions by real service purpose: Rajasthan Food/NFSA, Scholarship income declaration, Marriage, Character, Shop Act Forms 1/4/5/7/13/15, Contract Labour Forms I/IV/V, BOCW, Trade Union, Jan Aadhaar income, Pension Forms 2/5/5A/6/14A/30, SSO update, Aadhaar, Voter, EPFO.
-- Result: Rajasthan ration-card PDF rotation metadata normalized and preview/page previews regenerated upright.
-- Result: EPFO Composite Claim Non-Aadhaar official alternate was identified at `https://www.epfindia.gov.in/site_docs/PDFs/Downloads_PDFs/Form_CCF_nonaadhar.pdf`, but not added because this environment repeatedly timed out downloading the official PDF. Do not add third-party Scribd/PDF-filler copies.
-- Forms count is now 46 total.
-- Cache bumped to `studioprint-v37`.
+- Current owner: this chat owns the ID Print calibration/test-sheet follow-up.
+- Active task completed: added an A4 calibration test sheet so users can verify printer scale/alignment before printing customer IDs, PVC stock, Dragon sheets, or paid paper.
+- Result: `/id-print` now has a "Printer scale check" panel on the upload screen with `Open A4 Test Sheet`.
+- Result: Step 3 Print Layout Studio also has an `A4 test sheet` action.
+- Result: the A4 test sheet renders through the same 300 DPI print/export canvas path as real sheets.
+- Result: test sheet contains a 100 mm ruler, 50 mm quick check, CR80 85.6 x 54 mm box, grid, corner marks, center guides, and print instructions.
+- Result: calibration test sheets skip login/plan daily-sheet consumption because they contain no user document output.
+- Result: existing PVC calibration grid/profile controls from commit `8294c77a0477` remain unchanged.
+- Cache bumped to `studioprint-v38` / `id-print-v38`.
 - Build result: bundled Node command `node build.js` passed.
-- Local QA result: manifest JSON parsed; every manifest PDF and preview exists; automated audit returned 0 flags; built `dist/forms.html` opened in installed Chrome via Playwright; searches for `voter form 6a`, `pan form 93`, `pan form 96`, `shop act form 4`, `contract labour form iv`, `epfo form 11`, and `ration card` passed; `medical limit` absent; preview modal opened for Voter Form 6A; no page/console errors.
-- Live QA result: `https://studioprint.pages.dev/forms` contains `Voter Form 6A - Overseas Elector`, `PAN Form 93 - Individual Indian Applicant`, and `Shop Act Form 4 - Change Notice`; it does not contain `PAN 49A` or `Medical Limit Form`; `https://studioprint.pages.dev/sw.js` returns `studioprint-v37`; sample new PAN/Voter PDF and preview URLs returned HTTP 200.
-- Source commit pushed: `3ade9b3f7200ab45cf33c65b55381b477c88083f` (`fix(forms): audit form purposes and update 2026 PAN`).
+- Local QA result: built `dist/id-print.html` opened in installed Chrome via Playwright; A4 test flow generated `a4Canvas` and preview at `2480 x 3508`; back button returned to upload; no page/console errors.
+- Local QA result: normal ID flow smoke-tested with `C:\Users\ajayt\Downloads\RC.pdf`; detected RC card, preview was `2022 x 638`, A4 sheet generated at `2480 x 3508`, and no page/console errors.
+- Live QA result: `https://studioprint.pages.dev/id-print?qa=cal-v38` contains A4 calibration markers; `https://studioprint.pages.dev/sw.js?qa=cal-v38` contains `studioprint-v38` and `id-print-v38`.
+- Live browser QA result: `Open A4 Test Sheet` on live `/id-print` generated the A4 calibration sheet at `2480 x 3508` with Download PNG and Print available. Only existing font preload credential warnings appeared.
+- Feature commit pushed: `9167c07a0c9f1a9c42c84b73f4cddacdacaf0b1f` (`feat(id-print): add A4 calibration test sheet`).
 
 ## Owned file scope
 
-- Owned and changed: `forms.html`, `assets/forms/manifest.json`, `assets/forms/*.pdf`, `assets/forms/previews/**`, `sw.js`, `dist/forms.html`, `dist/sw.js`, selected tracked `dist/assets/forms/previews/pages/*` cleanup, `.agents/live-status.md`, `.agents/handoff.md`.
-- Explicitly not owned: `id-print.html`, `passport-photo.html`, `index.html`, `assets/legal.css`, shared auth/nav/pricing files, and workflow files.
+- Owned and changed: `id-print.html`, `sw.js`, `dist/id-print.html`, `dist/sw.js`, `.agents/research/print-calibration-test-20260503.md`, `.agents/live-status.md`, `.agents/handoff.md`.
+- Explicitly not owned/touched: `forms.html`, `assets/forms/manifest.json`, `assets/forms/**`, `passport-photo.html`, `index.html`, `assets/legal.css`, shared auth/nav/pricing files, and workflow files.
 
 ## Shared files touched
 
-- `sw.js` touched only for cache-version bump to `studioprint-v37`.
-- `forms.html` touched only for Forms page data.
-- Did not touch or stage `id-print.html`.
+- `sw.js` touched only for cache-version bump to `studioprint-v38` / `id-print-v38`.
+- `id-print.html` touched only for calibration/test-sheet UI and canvas generation.
 
 ## Commit / deploy / QA
 
-- Website source commit pushed: `3ade9b3f7200ab45cf33c65b55381b477c88083f`.
+- Website source commit pushed: `9167c07a0c9f1a9c42c84b73f4cddacdacaf0b1f`.
 - Deploy triggered: yes, by push to `main`.
 - Build run: yes, bundled Node `build.js`.
 - Local QA: passed.
@@ -47,10 +40,9 @@ Last updated: 2026-05-03 IST
 
 ## Pending work
 
-- EPFO Composite Claim Non-Aadhaar remains pending until the official EPFO PDF can be downloaded cleanly from the official URL. Do not use third-party copies.
-- For every future Forms addition, first research the form online from official sources and confirm: what service it is used for, how people/counters use it, whether alternate versions exist, and whether the PDF is current for the year/use case.
-- Reject any PDF with filled text, handwriting, signatures, old dates, watermarks, black/dark scans, rotated pages, broken/gibberish text, or unclear purpose.
-- Residual local dirty files not owned by this Forms task remain generated/stale: `dist/_headers`, `dist/about.html`, `dist/contact.html`, `dist/privacy.html`, `dist/refund.html`, `dist/shipping.html`, and `dist/terms.html`. Do not stage them without checking with the owner of that work.
+- The A4 calibration sheet proves browser/printer scale. It cannot physically verify a user's PVC tray or Dragon paper without that printer; users must print the test sheet and measure the 100 mm ruler / CR80 box.
+- Existing residual local dirty files not owned by this ID Print task remain generated/stale: `dist/_headers`, `dist/about.html`, `dist/contact.html`, `dist/privacy.html`, `dist/refund.html`, `dist/shipping.html`, and `dist/terms.html`. Do not stage them without checking with the owner of that work.
+- Future ID Print hardware work should follow the same pattern: research first, add a measurable test/calibration output, then add the production layout.
 - Before any new work, run:
   - `git pull --ff-only origin main`
   - `Get-Content .agents\live-status.md`

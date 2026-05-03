@@ -18,35 +18,33 @@ Get-Content .agents\live-status.md
 Get-Content .agents\handoff.md
 ```
 
-## Summary
+## Latest ID Print update
 
-- This chat worked only on Forms cleanup. Do not mix this with ID Print work.
-- User clarified a hard quality bar: Forms Hub must not contain filled, signed, pen-written, watermarked, old-date, dark/black, rotated, broken-text, or unclear-purpose PDFs.
-- Full current Forms library was audited from manifest: 46 forms, 106 pages, 0 automated rotation/dark/page-count flags after cleanup.
-- Visual contact sheet reviewed: `C:\tmp\forms-full-audit-20260503-resume\contact.jpg`.
-- Replaced outdated PAN 49A / 49AA listing with official 2026 Income Tax PAN allotment forms:
-  - PAN Form 93 - Individual Indian Applicant
-  - PAN Form 94 - Non-Individual Indian Applicant
-  - PAN Form 95 - Individual Foreign Applicant
-  - PAN Form 96 - Non-Individual Foreign Applicant
-- Added official Election Commission Voter Form 6A - Overseas Elector.
-- Clarified existing form titles/descriptions by exact use case across Rajasthan Food/NFSA, Scholarship income declaration, Marriage, Character, Shop Act, Contract Labour, BOCW, Trade Union, Jan Aadhaar, Pension, SSO, Aadhaar, PAN, Voter, and EPFO.
-- Ration-card PDF rotation metadata and previews regenerated upright.
-- EPFO Composite Claim Non-Aadhaar official alternate found but not added because official EPFO PDF download timed out repeatedly in this environment. Keep pending; do not add third-party copies.
-- Cache bumped to `studioprint-v37`.
-- `node build.js` passed using bundled Node.
-- Local QA passed in installed Chrome: total `46`, search smoke passed for Voter 6A / PAN 93 / PAN 96 / Shop Act Form 4 / Contract Labour Form IV / EPFO Form 11 / Ration; `Medical Limit` absent; Voter 6A preview modal opened; no page/console errors.
-- Live QA passed after propagation: `/forms` shows Voter 6A, PAN 93, Shop Act purpose labels; no PAN 49A / Medical Limit; `/sw.js` has `studioprint-v37`; sample new PDF/preview URLs returned HTTP 200.
-- Source commit pushed to `main`: `3ade9b3f7200ab45cf33c65b55381b477c88083f` (`fix(forms): audit form purposes and update 2026 PAN`).
+- This chat worked only on ID Print calibration/test-sheet support.
+- Commit pushed to `main`: `9167c07a0c9f1a9c42c84b73f4cddacdacaf0b1f` (`feat(id-print): add A4 calibration test sheet`).
+- `/id-print` now lets a user open an A4 calibration test sheet without uploading a PDF.
+- The calibration sheet is a real 300 DPI A4 canvas (`2480 x 3508`) with a 100 mm ruler, 50 mm quick check, CR80 85.6 x 54 mm box, grid/corner/center guides, and scale instructions.
+- Calibration Print / Download PNG bypasses daily quota because it does not output user documents.
+- Step 3 also has an `A4 test sheet` action for users who already uploaded an ID.
+- Existing PVC tray calibration/profile UI remains in place and unchanged.
+- Cache bumped to `studioprint-v38` / `id-print-v38`.
+
+## QA done
+
+- Build passed with bundled Node: `node build.js`.
+- Local Chrome QA: A4 test sheet generated from upload screen; canvas and preview were `2480 x 3508`; no page/console errors.
+- Local Chrome QA: `C:\Users\ajayt\Downloads\RC.pdf` still detected as RC, preview generated at `2022 x 638`, and A4 sheet generated at `2480 x 3508`; no page/console errors.
+- Live QA: `https://studioprint.pages.dev/id-print?qa=cal-v38` has the calibration UI and `https://studioprint.pages.dev/sw.js?qa=cal-v38` has `studioprint-v38` / `id-print-v38`.
+- Live browser QA: clicking `Open A4 Test Sheet` generated the calibration sheet with Download PNG and Print available. Only existing font preload credential warnings appeared.
 
 ## Coordination note
 
-- Do not touch `id-print.html` from this Forms thread. Another chat owns ID Print work.
-- Current owned Forms scope: `forms.html`, `assets/forms/manifest.json`, `assets/forms/*.pdf`, `assets/forms/previews/**`, `sw.js`, `dist/forms.html`, `dist/sw.js`, selected tracked `dist/assets/forms/previews/pages/*` cleanup, `.agents/live-status.md`, `.agents/handoff.md`.
+- Current owned ID Print scope: `id-print.html`, `sw.js`, `dist/id-print.html`, `dist/sw.js`, `.agents/research/print-calibration-test-20260503.md`, `.agents/live-status.md`, `.agents/handoff.md`.
+- Do not touch Forms files from this ID Print task unless the user explicitly assigns Forms work.
 - Residual local dirty files not owned by this task: `dist/_headers`, `dist/about.html`, `dist/contact.html`, `dist/privacy.html`, `dist/refund.html`, `dist/shipping.html`, `dist/terms.html`.
 
-## Future Forms Rule
+## Future rule
 
-- Before adding any new form, research the official source and the real service workflow first.
-- Confirm what the form is used for, how counters/users use it, whether separate versions exist for new/update/correction/caste/age/resident/NRI/foreign/non-individual cases, and whether the PDF is valid/current for the intended use case.
-- Only list clean blank official PDFs. If only third-party scans are available, leave the form pending instead of listing low-quality material.
+- For any future print-layout or hardware-like feature, do not rely only on visual browser preview.
+- First add a measurable calibration output where possible: known mm ruler, card-size box, corner/center marks, and clear 100% scale instructions.
+- Then verify the production sheet path uses the same canvas/export/print pipeline as the calibration sheet.
