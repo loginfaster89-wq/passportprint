@@ -1,8 +1,11 @@
-# Cloudflare Pages headers config.
+﻿﻿# Cloudflare Pages headers config.
 # Mirrors the headers previously defined in netlify.toml so behaviour is identical
 # on either host. See https://developers.cloudflare.com/pages/configuration/headers/.
 
 # Long-cache static assets (same-origin only; HTML stays no-cache)
+/assets/pwa.js
+  Cache-Control: no-cache, no-store, must-revalidate
+
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
 
@@ -30,14 +33,17 @@
 /id-print
   Cache-Control: no-cache, no-store, must-revalidate
 
-# Service worker must always revalidate — otherwise a stale SW keeps serving
+/forms
+  Cache-Control: no-cache, no-store, must-revalidate
+
+# Service worker must always revalidate â€” otherwise a stale SW keeps serving
 # stale precache entries long after the next deploy.
 /sw.js
   Cache-Control: no-cache, no-store, must-revalidate
 
 # Security headers (apply to every response)
 /*
-  X-Frame-Options: DENY
+  X-Frame-Options: SAMEORIGIN
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=()

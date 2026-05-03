@@ -50,13 +50,33 @@
     "clean_source": true
   },
   {
-    "slug": "income-certificate-format-rajasthan",
-    "title": "Income Declaration - Scholarship",
+    "slug": "birth-report-form-1-rajasthan",
+    "title": "Birth Report Form 1",
     "category": "Rajasthan",
-    "source_url": "https://scholarship.rajasthan.gov.in/images/IncomeCertiformate201718.pdf",
+    "source_url": "https://environment.rajasthan.gov.in/content/dam/raj/udh/lsgs/lsg-jaipur/pdf/Download%20form/Birth%20Certificate%20Form.pdf",
     "pages": 1,
-    "local": "assets/forms/income-certificate-format-rajasthan.pdf",
-    "preview": "assets/forms/previews/income-certificate-format-rajasthan.png",
+    "local": "assets/forms/birth-report-form-1-rajasthan.pdf",
+    "preview": "assets/forms/previews/birth-report-form-1-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "death-report-form-2-rajasthan",
+    "title": "Death Report Form 2",
+    "category": "Rajasthan",
+    "source_url": "https://environment.rajasthan.gov.in/content/dam/raj/udh/lsgs/lsg-jaipur/pdf/Download%20form/Death%20Certificate%20Form.pdf",
+    "pages": 1,
+    "local": "assets/forms/death-report-form-2-rajasthan.pdf",
+    "preview": "assets/forms/previews/death-report-form-2-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "still-birth-report-form-3-rajasthan",
+    "title": "Still Birth Report Form 3",
+    "category": "Rajasthan",
+    "source_url": "https://environment.rajasthan.gov.in/content/dam/raj/udh/lsgs/lsg-jaipur/pdf/Download%20form/Birth%20And%20Death%20Ceritificate%20form.pdf",
+    "pages": 1,
+    "local": "assets/forms/still-birth-report-form-3-rajasthan.pdf",
+    "preview": "assets/forms/previews/still-birth-report-form-3-rajasthan.png",
     "clean_source": true
   },
   {
