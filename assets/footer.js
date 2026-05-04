@@ -40,6 +40,7 @@
   }
 
   function wireNewsletter(form) {
+    form.setAttribute('novalidate', '');
     var u = form.dataset.u;
     var d = form.dataset.d;
     if (!u || !d) return;
@@ -62,6 +63,7 @@
   }
 
   function wireContactForm(form) {
+    form.setAttribute('novalidate', '');
     var u = form.dataset.u;
     var d = form.dataset.d;
     if (!u || !d) return;

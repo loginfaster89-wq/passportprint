@@ -26,7 +26,7 @@
 <link rel="preload" href="assets/fonts/syne-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/dm-mono-400-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/fonts.css">
-<link rel="stylesheet" href="assets/legal.css">
+<link rel="stylesheet" href="assets/legal.css?v=tool-footer-final">
 <link rel="stylesheet" href="assets/auth.css">
 <link rel="stylesheet" href="assets/pricing.css">
 <!-- AI library loads lazily on first use via dynamic import -->
@@ -545,7 +545,8 @@ canvas{display:block;}
   text-align: center;
   overflow: hidden;
   border: 1px solid var(--border);
-  transition: transform .25s, box-shadow .25s, border-color .25s;
+  box-shadow: none;
+  transition: border-color .18s ease, background-color .18s ease;
   cursor: pointer;
 }
 /* When wrapped, the card fills the wrapper so brackets line up with the
@@ -553,8 +554,8 @@ canvas{display:block;}
 .upload-card-wrap > .upload-inner-card { width: 100%; max-width: 100%; }
 .upload-zone:hover .upload-inner-card,
 .upload-zone.drag-over .upload-inner-card {
-  transform: translateY(-4px);
-  box-shadow: 0 24px 80px rgba(0,0,0,.6), 0 0 0 1px rgba(240,165,0,.3);
+  transform: none;
+  box-shadow: none;
   border-color: rgba(240,165,0,.3);
 }
 
@@ -840,17 +841,19 @@ canvas{display:block;}
   position:absolute;
   display:inline-flex;
   align-items:center;
-  gap:5px;
-  padding:5px 11px 5px 8px;
-  border-radius:20px;
-  background: rgba(13,13,13,.85);
-  border: 1px solid rgba(240,165,0,.25);
-  font-family:'DM Mono',monospace;
-  font-size:11px;
-  color:var(--text);
+  gap:6px;
+  padding:7px 12px 7px 9px;
+  border-radius:999px;
+  background:rgba(255,255,255,.86);
+  border:1px solid rgba(17,17,17,.10);
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:12px;
+  font-weight:760;
+  color:#2c261f;
   white-space:nowrap;
-  backdrop-filter:blur(10px);
-  box-shadow: 0 4px 20px rgba(0,0,0,.5);
+  -webkit-backdrop-filter:blur(16px) saturate(150%);
+  backdrop-filter:blur(16px) saturate(150%);
+  box-shadow:0 14px 34px rgba(42,34,22,.12),inset 0 1px 0 rgba(255,255,255,.92);
   pointer-events:none;
   z-index:5;
   opacity:0;
@@ -1445,7 +1448,903 @@ header:not(.legal-header){flex-wrap:nowrap;}
   .upload-inner-card{max-width:620px;}
 }
 
+/* ════════════════════════════════════
+   PASSPORT FEATURE REBUILD - MOBBIN-STYLE LIGHT PRODUCT MODULE
+════════════════════════════════════ */
+:root{
+  --bg:#f6f3ed;
+  --surface:rgba(255,255,255,.78);
+  --surface2:#ffffff;
+  --surface3:#f0ede6;
+  --border:rgba(24,24,24,.12);
+  --accent:#111111;
+  --accent-dim:rgba(17,17,17,.07);
+  --accent-glow:rgba(17,17,17,.04);
+  --text:#111111;
+  --muted:#68645d;
+  --muted2:#9a948b;
+  --success:#14785f;
+  --danger:#d54848;
+  --info:#3567d6;
+  --sidebar-w:390px;
+}
+body{
+  min-height:100dvh;
+  height:auto;
+  overflow:auto;
+  color:var(--text);
+  background:
+    radial-gradient(circle at 15% 8%,rgba(255,255,255,.96),rgba(255,255,255,0) 30%),
+    radial-gradient(circle at 80% 0,rgba(240,165,0,.14),rgba(240,165,0,0) 28%),
+    linear-gradient(180deg,#fbfaf6 0%,#f4f0e8 46%,#ebe6dc 100%);
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+.legal-header{
+  position:sticky;
+  top:10px;
+  z-index:40;
+  width:min(calc(100% - 28px),1240px);
+  max-width:none;
+  min-height:0;
+  margin:12px auto 0;
+  padding:10px clamp(16px,3vw,28px);
+  border:1px solid rgba(255,255,255,.76);
+  border-radius:999px;
+  background:linear-gradient(135deg,rgba(255,255,255,0.96),rgba(255,255,255,0.72) 52%,rgba(255,255,255,0.5));
+  color:var(--text);
+  box-shadow:0 24px 70px rgba(0,0,0,0.22),inset 0 1px 0 rgba(255,255,255,0.92);
+  backdrop-filter:saturate(180%) blur(24px);
+  -webkit-backdrop-filter:saturate(180%) blur(24px);
+}
+.legal-header .logo{
+  color:var(--text);
+  letter-spacing:-.04em;
+  font-size:20px;
+  padding:4px 0;
+}
+.legal-header .logo em{color:inherit;font-style:normal;}
+.legal-header .logo em::after{
+  content:"";
+  display:inline-block;
+  width:6px;
+  height:6px;
+  margin-left:4px;
+  border-radius:50%;
+  background:#f0a500;
+  vertical-align:middle;
+}
+.legal-header nav a,
+.legal-header .nav-dd-btn{
+  color:#35312b;
+  border-radius:999px;
+  padding:9px 13px;
+  font-size:13px;
+  transition:background .18s ease,color .18s ease,transform .18s ease;
+}
+.legal-header nav a:hover,
+.legal-header .nav-dd-btn:hover{
+  color:#111;
+  background:rgba(17,17,17,.07);
+}
+.legal-header .nav-login,
+.legal-header .nav-toggle{
+  border-radius:999px;
+  border-color:rgba(17,17,17,.13);
+  background:#111;
+  color:#fff;
+  box-shadow:none;
+}
+.legal-header .nav-toggle{
+  background:#fff;
+  color:#111;
+}
+.dropdown-panel{
+  border-color:rgba(17,17,17,.10)!important;
+  background:rgba(255,255,255,.92)!important;
+  color:var(--text);
+  box-shadow:0 24px 70px rgba(43,35,23,.13)!important;
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+}
+.steps{
+  display:flex!important;
+  max-width:880px;
+  margin:20px auto 0;
+  padding:6px;
+  border:1px solid rgba(17,17,17,.10);
+  border-radius:999px;
+  background:rgba(255,255,255,.68);
+  box-shadow:0 12px 40px rgba(43,35,23,.08);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+}
+.steps-progress{display:none;}
+.step{
+  flex:1;
+  justify-content:center;
+  min-width:0;
+  border-right:0;
+  border-radius:999px;
+  color:#777068;
+  padding:10px 14px;
+  font-family:inherit;
+  font-size:12px;
+}
+.step.active{
+  color:#fff;
+  background:#111;
+}
+.step.done{
+  color:#111;
+  background:rgba(17,17,17,.08);
+}
+.step-num{
+  border-width:1px;
+  background:rgba(255,255,255,.45);
+}
+.step.active .step-num{
+  border-color:rgba(255,255,255,.45);
+  box-shadow:none;
+  animation:none;
+}
+.main.pp-feature{
+  display:block;
+  width:min(1440px,calc(100% - 32px));
+  margin:22px auto 0;
+  padding:0 0 28px;
+  overflow:visible;
+}
+.pp-hero-panel{
+  display:grid;
+  grid-template-columns:minmax(0,1.02fr) minmax(420px,.98fr);
+  gap:28px;
+  align-items:stretch;
+  margin-bottom:24px;
+}
+.pp-feature .pp-workspace + .pp-hero-panel{
+  margin-top:24px;
+  margin-bottom:0;
+}
+.pp-hero-copy,
+.pp-preview-wall,
+.pp-workspace,
+.canvas-area,
+.sidebar{
+  border:1px solid rgba(17,17,17,.10);
+  background:rgba(255,255,255,.72);
+  box-shadow:0 24px 80px rgba(44,36,22,.10);
+  backdrop-filter:blur(24px);
+  -webkit-backdrop-filter:blur(24px);
+}
+.pp-hero-copy{
+  min-height:430px;
+  border-radius:38px;
+  padding:44px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+}
+.pp-eyebrow{
+  display:inline-flex;
+  width:max-content;
+  align-items:center;
+  gap:8px;
+  padding:7px 12px;
+  border:1px solid rgba(17,17,17,.10);
+  border-radius:999px;
+  background:#fff;
+  color:#4d4740;
+  font-size:12px;
+  font-weight:700;
+}
+.pp-eyebrow::before{
+  content:"";
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:#24c083;
+  box-shadow:0 0 0 5px rgba(36,192,131,.12);
+}
+.pp-hero-copy h1{
+  max-width:760px;
+  margin:28px 0 16px;
+  color:#0b0b0b;
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:clamp(44px,6vw,88px);
+  line-height:.92;
+  letter-spacing:-.07em;
+  font-weight:850;
+}
+.pp-hero-copy p{
+  max-width:620px;
+  color:#5d564d;
+  font-size:clamp(16px,1.4vw,20px);
+  line-height:1.55;
+}
+.pp-hero-actions{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:30px;
+}
+.pp-hero-actions .btn{
+  width:auto;
+  min-height:46px;
+  padding:12px 18px;
+  border-radius:999px;
+  font-family:inherit;
+  font-weight:750;
+}
+.pp-hero-actions .btn-primary{
+  background:#111;
+  color:#fff;
+}
+.pp-hero-actions .btn-secondary{
+  background:#fff;
+  color:#111;
+  border-color:rgba(17,17,17,.12);
+}
+.pp-trust-row{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:28px;
+}
+.pp-pill{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  padding:8px 12px;
+  border:1px solid rgba(17,17,17,.10);
+  border-radius:999px;
+  background:rgba(255,255,255,.72);
+  color:#4d4740;
+  font-size:12px;
+  font-weight:650;
+}
+.pp-preview-wall{
+  position:relative;
+  min-height:430px;
+  overflow:hidden;
+  border-radius:38px;
+  padding:28px;
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.90),rgba(255,255,255,.48)),
+    radial-gradient(circle at 18% 20%,rgba(240,165,0,.20),rgba(240,165,0,0) 35%);
+}
+.pp-preview-wall::before{
+  content:"";
+  position:absolute;
+  inset:18px;
+  border-radius:30px;
+  border:1px solid rgba(17,17,17,.08);
+  pointer-events:none;
+}
+.pp-device-card{
+  position:absolute;
+  overflow:hidden;
+  border:1px solid rgba(17,17,17,.10);
+  border-radius:28px;
+  background:#fff;
+  box-shadow:0 22px 60px rgba(36,31,24,.14);
+}
+.pp-device-card.card-upload{
+  top:34px;
+  left:34px;
+  width:48%;
+  height:48%;
+}
+.pp-device-card.card-cut{
+  right:36px;
+  top:82px;
+  width:43%;
+  height:55%;
+}
+.pp-device-card.card-sheet{
+  left:22%;
+  bottom:32px;
+  width:52%;
+  height:31%;
+}
+.pp-card-top{
+  display:flex;
+  align-items:center;
+  gap:5px;
+  padding:12px 14px;
+  border-bottom:1px solid rgba(17,17,17,.08);
+  background:#faf8f3;
+}
+.pp-card-top i{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:#d8d2c8;
+}
+.pp-photo-silhouette{
+  width:82px;
+  height:104px;
+  margin:22px auto 10px;
+  border-radius:22px 22px 18px 18px;
+  background:
+    radial-gradient(circle at 50% 32%,#2b2b2b 0 14px,transparent 15px),
+    radial-gradient(ellipse at 50% 86%,#2b2b2b 0 36px,transparent 37px),
+    linear-gradient(180deg,#f4f1ea,#e7e0d6);
+}
+.pp-mini-lines{
+  width:70%;
+  margin:0 auto;
+}
+.pp-mini-lines span{
+  display:block;
+  height:8px;
+  margin:8px 0;
+  border-radius:999px;
+  background:#e7e1d7;
+}
+.pp-crop-frame{
+  width:150px;
+  height:192px;
+  margin:22px auto;
+  border:2px solid #111;
+  border-radius:24px;
+  background:
+    radial-gradient(circle at 50% 32%,#111 0 16px,transparent 17px),
+    radial-gradient(ellipse at 50% 78%,#111 0 48px,transparent 49px),
+    linear-gradient(180deg,#fff 0 52%,#e8f4fb 52% 100%);
+  box-shadow:inset 0 0 0 10px rgba(255,255,255,.55);
+}
+.pp-sheet-grid{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:7px;
+  height:calc(100% - 45px);
+  padding:18px;
+}
+.pp-sheet-grid span{
+  border:1px solid rgba(17,17,17,.18);
+  border-radius:10px;
+  background:
+    radial-gradient(circle at 50% 34%,#222 0 7px,transparent 8px),
+    radial-gradient(ellipse at 50% 78%,#222 0 17px,transparent 18px),
+    #fff;
+}
+.pp-workspace{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) var(--sidebar-w);
+  gap:20px;
+  border-radius:38px;
+  padding:18px;
+  background:rgba(255,255,255,.52);
+}
+.canvas-area{
+  min-height:660px;
+  padding:28px;
+  border-radius:30px;
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.92),rgba(250,248,242,.88)),
+    radial-gradient(circle at 20% 18%,rgba(240,165,0,.11),rgba(240,165,0,0) 30%);
+  overflow:hidden;
+}
+#uploadBgCanvas,
+.corner-bracket,
+.corner-bracket-inner,
+.float-chip{
+  display:none!important;
+}
+#step1-canvas,
+#step2-canvas,
+#step3-canvas,
+#step4-canvas{
+  width:100%!important;
+  height:100%!important;
+}
+.upload-zone{
+  width:min(760px,100%);
+  height:auto;
+  min-height:430px;
+  max-width:none;
+  padding:0;
+  border:0;
+  border-radius:0;
+  background:transparent;
+  overflow:visible;
+  cursor:default;
+}
+.upload-zone:hover{
+  transform:none;
+  box-shadow:none;
+}
+.upload-zone.drag-over::before{border-radius:32px;}
+.upload-card-wrap{
+  width:100%;
+}
+.upload-inner-card{
+  width:100%;
+  max-width:760px;
+  min-height:350px;
+  padding:46px 38px;
+  border:1px dashed rgba(17,17,17,.18);
+  border-radius:32px;
+  background:#fff;
+  box-shadow:none;
+  transition:border-color .18s ease,background-color .18s ease;
+}
+.upload-zone:hover .upload-inner-card,
+.upload-zone.drag-over .upload-inner-card{
+  border-color:rgba(17,17,17,.34);
+  transform:none;
+  box-shadow:none;
+  background:#fff;
+}
+.upload-inner-card::before,
+.upload-inner-card::after{
+  display:none;
+}
+.upload-icon-wrap{
+  width:78px;
+  height:78px;
+  background:#111;
+  border:0;
+  box-shadow:0 18px 40px rgba(17,17,17,.16);
+}
+.upload-icon-wrap svg path,
+.upload-icon-wrap svg circle{
+  stroke:#fff;
+}
+.upload-icon-wrap svg circle[fill]{
+  fill:#fff;
+}
+.upload-title{
+  color:#111;
+  font-family:inherit!important;
+  font-size:clamp(28px,4vw,46px)!important;
+  line-height:1!important;
+  letter-spacing:-.05em;
+}
+.upload-sub{
+  color:#6f675d!important;
+  font-size:15px!important;
+}
+.upload-feats{
+  margin-top:22px;
+  gap:8px;
+}
+.upload-feat-pill{
+  padding:8px 12px;
+  border-color:rgba(17,17,17,.10);
+  background:#f7f4ee;
+  color:#474039;
+  font-size:12px;
+}
+.upload-cta-hint{
+  color:#6f675d!important;
+  font-size:13px!important;
+}
+.cta-click,
+.cta-tap{
+  background:#111!important;
+  color:#fff!important;
+  border-radius:999px!important;
+  padding:5px 11px!important;
+}
+.canvas-specs{
+  bottom:24px;
+  color:#6f675d;
+}
+#bgCanvas,
+#cropCanvas,
+#sheetCanvas,
+.comp-container,
+#refineCanvasWrap{
+  border-radius:28px;
+  box-shadow:0 24px 70px rgba(42,34,22,.14);
+}
+.comp-label{
+  background:rgba(255,255,255,.78);
+  color:#111;
+  border:1px solid rgba(17,17,17,.10);
+}
+.comp-handle{
+  background:#111;
+  color:#fff;
+}
+.canvas-hint,
+.refine-hint{
+  background:rgba(255,255,255,.78);
+  color:#3b352f;
+  border:1px solid rgba(17,17,17,.10);
+}
+.sidebar{
+  min-height:660px;
+  max-height:660px;
+  border-left:0;
+  border-radius:30px;
+  padding:10px;
+  overflow-y:auto;
+  background:rgba(255,255,255,.74);
+}
+.sidebar::before{
+  display:none!important;
+}
+.sb-section{
+  margin-bottom:10px;
+  padding:18px;
+  border:1px solid rgba(17,17,17,.09);
+  border-radius:24px;
+  background:rgba(255,255,255,.86);
+}
+.sb-section:hover{
+  background:#fff;
+}
+.sb-title{
+  color:#111;
+  font-family:inherit;
+  font-size:12px;
+  letter-spacing:.02em;
+  text-transform:none;
+}
+.preset-grid{
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+.preset-btn,
+.count-btn{
+  border-radius:18px;
+  border-color:rgba(17,17,17,.10);
+  background:#f7f4ee;
+  color:#221f1b;
+  font-family:inherit;
+}
+.preset-btn:hover,
+.preset-btn.active,
+.count-btn:hover,
+.count-btn.active{
+  border-color:#111;
+  background:#111;
+  color:#fff;
+}
+.preset-btn.active .preset-size,
+.preset-btn:hover .preset-size{
+  color:rgba(255,255,255,.70);
+}
+.preset-size,
+.tips,
+.info-box,
+.status-text{
+  color:#6f675d;
+}
+.info-box{
+  border-color:rgba(17,17,17,.09);
+  background:#f7f4ee;
+}
+.info-box strong,
+.slider-val{
+  color:#111;
+}
+.info-box.blue{
+  background:#eef5ff;
+  border-color:rgba(53,103,214,.18);
+}
+.btn{
+  border-radius:999px;
+  font-family:inherit;
+  font-weight:750;
+}
+.btn-primary{
+  background:#111;
+  color:#fff;
+  box-shadow:none;
+}
+.btn-primary:hover:not(:disabled){
+  background:#000;
+  transform:translateY(-1px);
+  box-shadow:0 16px 36px rgba(17,17,17,.18);
+}
+.btn-secondary{
+  background:#fff;
+  color:#111;
+  border-color:rgba(17,17,17,.12);
+}
+.btn-secondary:hover:not(:disabled),
+.btn-ghost:hover:not(:disabled){
+  border-color:#111;
+  color:#111;
+}
+.btn-ghost{
+  color:#655e55;
+  border-color:rgba(17,17,17,.10);
+}
+input[type=range]{
+  background:#ded8ce;
+}
+input[type=range]::-webkit-slider-thumb{
+  background:#111;
+  box-shadow:none;
+}
+.swatches{
+  gap:8px;
+}
+.swatch{
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  box-shadow:0 0 0 1px rgba(17,17,17,.08);
+}
+.swatch.active{
+  border-color:#111;
+}
+.legal-footer{
+  max-width:1320px;
+  margin:0 auto 20px;
+  border:1px solid rgba(17,17,17,.10)!important;
+  border-radius:26px;
+  background:rgba(255,255,255,.62)!important;
+  color:#7a7369!important;
+}
+@media(max-width:1100px){
+  .pp-hero-panel,
+  .pp-workspace{
+    grid-template-columns:1fr;
+  }
+  .pp-preview-wall{
+    min-height:360px;
+  }
+  .canvas-area,
+  .sidebar{
+    min-height:auto;
+    max-height:none;
+  }
+  .canvas-area{
+    min-height:560px;
+  }
+}
+@media(max-width:760px){
+  .legal-header{
+    top:10px;
+    width:calc(100% - 20px);
+    min-height:0;
+    margin-top:12px;
+    padding:10px clamp(16px,3vw,28px);
+  }
+  .legal-header .logo{
+    font-size:20px;
+  }
+  .steps{
+    width:calc(100% - 16px);
+    margin-top:12px;
+    overflow-x:auto;
+    justify-content:flex-start;
+  }
+  .step{
+    flex:0 0 auto;
+    min-width:118px;
+  }
+  .main.pp-feature{
+    width:calc(100% - 16px);
+    margin-top:14px;
+  }
+  .pp-hero-copy{
+    min-height:auto;
+    padding:28px;
+    border-radius:30px;
+  }
+  .pp-hero-copy h1{
+    font-size:44px;
+  }
+  .pp-preview-wall{
+    display:none;
+  }
+  .pp-workspace{
+    padding:10px;
+    border-radius:28px;
+  }
+  .canvas-area{
+    min-height:430px;
+    padding:14px;
+    border-radius:24px;
+  }
+  .upload-inner-card{
+    min-height:300px;
+    padding:32px 18px;
+  }
+  .upload-title{
+    max-width:12ch;
+    margin-left:auto;
+    margin-right:auto;
+    font-size:clamp(26px,7vw,32px)!important;
+    line-height:1.04!important;
+    text-wrap:balance;
+  }
+  .sidebar{
+    padding:0;
+    background:transparent;
+    border:0;
+    box-shadow:none;
+    backdrop-filter:none;
+  }
+  .preset-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+  .legal-footer{
+    width:calc(100% - 16px);
+    margin-bottom:8px;
+  }
+}
+@media(max-width:420px){
+  .legal-header{
+    top:6px;
+    width:calc(100% - 12px);
+    margin-top:6px;
+    padding:9px 8px 9px 10px;
+    gap:8px;
+  }
+  .legal-header .logo{
+    font-size:16px;
+  }
+}
+
+/* Passport workflow polish: keep the tool clean after upload and during AI work. */
+body.passport-page .ai-dl-bar{
+  display:none!important;
+}
+body.passport-page .canvas-area{
+  box-shadow:none;
+}
+body.passport-page .upload-inner-card,
+body.passport-page .upload-zone:hover .upload-inner-card,
+body.passport-page .upload-zone.drag-over .upload-inner-card{
+  box-shadow:none!important;
+  filter:none!important;
+  transform:none!important;
+}
+body.passport-page .upload-icon-wrap{
+  box-shadow:0 10px 26px rgba(17,17,17,.10);
+}
+body.passport-page #bgProgressWrap:not(.hidden){
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  margin-bottom:12px;
+}
+body.passport-page #bgProgressWrap .progress-wrap{
+  margin:6px 0 0;
+}
+body.passport-page #cancelBgBtn{
+  margin-top:0!important;
+}
+body.passport-page #bgProgressWrap:not(.hidden) + #removeBgBtn{
+  margin-top:12px;
+}
+body.passport-page #sheetCanvas{
+  border-radius:8px!important;
+  box-shadow:0 18px 46px rgba(42,34,22,.11)!important;
+}
+body.passport-page #authModal .modal{
+  border:1px solid rgba(255,255,255,.76);
+  border-radius:28px;
+  background:linear-gradient(180deg,rgba(255,255,255,.96),rgba(247,243,234,.94));
+  color:#111;
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  box-shadow:0 30px 90px rgba(17,17,17,.26),inset 0 1px 0 rgba(255,255,255,.94);
+}
+body.passport-page #authModal .modal-header{
+  border-bottom:1px solid rgba(17,17,17,.08);
+  border-radius:28px 28px 0 0;
+  background:rgba(255,255,255,.82);
+}
+body.passport-page #authModal .modal-body{
+  background:rgba(255,255,255,.42);
+}
+body.passport-page #authModal .modal-title{
+  color:#111;
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:24px;
+  letter-spacing:-.04em;
+}
+body.passport-page #authModal .modal-title em{
+  color:inherit;
+  font-style:normal;
+}
+body.passport-page #authModal .modal-title em::after{
+  content:"";
+  display:inline-block;
+  width:6px;
+  height:6px;
+  margin-left:4px;
+  border-radius:50%;
+  background:#f0a500;
+  vertical-align:middle;
+}
+body.passport-page #authModal .auth-tabs{
+  gap:6px;
+  padding:5px;
+  border-radius:999px;
+  background:#fff;
+  box-shadow:0 10px 26px rgba(44,36,22,.06);
+}
+body.passport-page #authModal .auth-tab{
+  min-height:40px;
+  border-radius:999px;
+  color:#5f5850;
+  font-family:inherit;
+  font-size:14px;
+  font-weight:760;
+}
+body.passport-page #authModal .auth-tab.active,
+body.passport-page #authModal .btn-primary{
+  background:#f0a500!important;
+  color:#111!important;
+  box-shadow:none!important;
+}
+body.passport-page #authModal .auth-tab.active{
+  font-weight:850;
+}
+body.passport-page #authModal .btn-primary:hover:not(:disabled){
+  background:#ffbd2f!important;
+  color:#111!important;
+  transform:none;
+  box-shadow:none!important;
+}
+
 /* Passport uses the shared site header, dropdown and auth button styles from assets/legal.css. */
+body.passport-page footer.legal-footer:has(.footer-main){
+  width:min(1440px,calc(100% - 32px));
+  max-width:none;
+  margin:24px auto 36px;
+  padding:0;
+  border:0!important;
+  background:transparent!important;
+  color:#111!important;
+  text-align:left;
+  line-height:1.6;
+  flex-shrink:0;
+}
+body.passport-page footer.legal-footer .footer-main{
+  max-width:1440px;
+  margin:0 auto;
+  padding:34px;
+  border:1px solid rgba(17,17,17,.10);
+  border-radius:34px;
+  background:rgba(255,255,255,.72);
+  box-shadow:0 20px 60px rgba(44,36,22,.09);
+  display:grid;
+  grid-template-columns:1.15fr 2.4fr;
+  gap:40px clamp(24px,4vw,56px);
+  -webkit-backdrop-filter:blur(24px);
+  backdrop-filter:blur(24px);
+}
+body.passport-page footer.legal-footer .footer-logo,
+body.passport-page footer.legal-footer .footer-logo em,
+body.passport-page footer.legal-footer .footer-col h4,
+body.passport-page footer.legal-footer .footer-col a,
+body.passport-page footer.legal-footer .footer-copy{color:#111;}
+body.passport-page footer.legal-footer .footer-tagline,
+body.passport-page footer.legal-footer .footer-news-hint,
+body.passport-page footer.legal-footer .footer-bottom{color:#5f5850;}
+body.passport-page footer.legal-footer .footer-news{
+  background:#fff;
+  border-color:rgba(17,17,17,.10);
+  border-radius:999px;
+}
+body.passport-page footer.legal-footer .footer-news input[type=email]{
+  color:#111;
+  font-family:inherit;
+}
+body.passport-page footer.legal-footer .footer-news button{
+  background:#111;
+  color:#fff;
+  border-radius:999px;
+  font-family:inherit;
+}
+body.passport-page footer.legal-footer .footer-bottom{
+  max-width:1440px;
+  margin:14px auto 0;
+  border-top-color:rgba(17,17,17,.10);
+}
+@media(max-width:760px){
+  body.passport-page footer.legal-footer:has(.footer-main){width:calc(100% - 16px);margin-bottom:8px;}
+  body.passport-page footer.legal-footer .footer-main{padding:24px 20px;border-radius:28px;grid-template-columns:1fr;}
+}
 
 </style>
 <script type="application/ld+json">
@@ -1494,7 +2393,7 @@ header:not(.legal-header){flex-wrap:nowrap;}
 }
 </script>
 </head>
-<body>
+<body class="passport-page">
 
 <!-- SVG icon sprite used by the shared feature dropdown. -->
 <svg width="0" height="0" style="position:absolute;overflow:hidden" aria-hidden="true" focusable="false">
@@ -1552,7 +2451,8 @@ header:not(.legal-header){flex-wrap:nowrap;}
 </div>
 
 <!-- MAIN -->
-<div class="main">
+<div class="main pp-feature">
+  <section class="pp-workspace" aria-label="Passport photo workspace">
 
   <!-- CANVAS AREA -->
   <div class="canvas-area" id="canvasArea">
@@ -1869,20 +2769,93 @@ header:not(.legal-header){flex-wrap:nowrap;}
     </div>
 
   </div>
+  </section>
+  <section class="pp-hero-panel" aria-label="Passport photo feature overview">
+    <div class="pp-hero-copy">
+      <div>
+        <div class="pp-eyebrow">Passport Photo Studio</div>
+        <h1>Passport photos, ready for print in minutes.</h1>
+        <p>Upload one photo, clean the background on-device, crop to official sizes, and export a 300 DPI A4 sheet without sending the photo anywhere.</p>
+        <div class="pp-hero-actions">
+          <label class="btn btn-primary" for="fileInput">Upload photo</label>
+          <button type="button" class="btn btn-secondary" onclick="try{openPlans();}catch(e){}">View plans</button>
+        </div>
+      </div>
+      <div class="pp-trust-row" aria-label="Passport photo benefits">
+        <span class="pp-pill">On-device AI</span>
+        <span class="pp-pill">No photo uploads</span>
+        <span class="pp-pill">300 DPI A4</span>
+        <span class="pp-pill">India / US / UK / Schengen</span>
+      </div>
+    </div>
+    <div class="pp-preview-wall" aria-hidden="true">
+      <div class="pp-device-card card-upload">
+        <div class="pp-card-top"><i></i><i></i><i></i></div>
+        <div class="pp-photo-silhouette"></div>
+        <div class="pp-mini-lines"><span></span><span style="width:72%"></span><span style="width:46%"></span></div>
+      </div>
+      <div class="pp-device-card card-cut">
+        <div class="pp-card-top"><i></i><i></i><i></i></div>
+        <div class="pp-crop-frame"></div>
+      </div>
+      <div class="pp-device-card card-sheet">
+        <div class="pp-card-top"><i></i><i></i><i></i></div>
+        <div class="pp-sheet-grid"><span></span><span></span><span></span><span></span><span></span></div>
+      </div>
+    </div>
+  </section>
 </div>
 
 <footer class="legal-footer">
-  <div class="links">
-    <a href="index.html">Home</a> ·
-    <a href="about.html">About</a> ·
-    <a href="privacy.html">Privacy</a> ·
-    <a href="terms.html">Terms</a> ·
-    <a href="refund.html">Refund</a> ·
-    <a href="shipping.html">Delivery</a> ·
-    <a href="contact.html">Contact</a> ·
-    <a href="forms.html">Forms Hub</a>
+  <div class="footer-main">
+    <div class="footer-brand">
+      <a href="index.html" class="footer-logo">Studio <em>Print</em></a>
+      <p class="footer-tagline">A browser-native print workspace for passport photos, ID-card sheets, PDF-to-print jobs, and 300&nbsp;DPI A4 output — built in India.</p>
+      <form class="footer-news" data-u="loginfaster89" data-d="gmail.com" aria-label="Subscribe to product updates">
+        <input type="email" name="email" placeholder="you@example.com" required autocomplete="email" aria-label="Your email">
+        <button type="submit">Subscribe</button>
+      </form>
+      <div class="footer-news-hint">Occasional build notes. No spam, unsubscribe anytime.</div>
+    </div>
+    <nav class="footer-cols" aria-label="Footer">
+      <div class="footer-col">
+        <h4>Product</h4>
+        <ul>
+          <li><a href="passport-photo.html">Passport Photo</a></li>
+          <li><a href="id-print.html">ID Card Print</a></li>
+          <li><a href="forms.html">Forms Hub</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <ul>
+          <li><a href="index.html#how">How it works</a></li>
+          <li><a href="index.html#faq">FAQ</a></li>
+          <li><a href="sitemap.xml">Sitemap</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="privacy.html">Privacy</a></li>
+          <li><a href="terms.html">Terms</a></li>
+          <li><a href="refund.html">Refund</a></li>
+          <li><a href="shipping.html">Delivery</a></li>
+        </ul>
+      </div>
+    </nav>
   </div>
-  <div>Copyright 2026 Studio Print. All rights reserved.</div>
+  <div class="footer-bottom">
+    <div class="footer-copy">Copyright 2026 Studio Print. All rights reserved.</div>
+
+  </div>
 </footer>
 
 <!-- ══════════ TUTORIAL PAGE ══════════ -->
@@ -4311,6 +5284,24 @@ const USE_BACKEND = !!BACKEND_URL;
 const GOOGLE_CLIENT_ID = (typeof window !== 'undefined' && window.GOOGLE_OAUTH_CLIENT_ID)
   || '216240284102-d63glsohcp2lr85kk1el364f7gecnv9q.apps.googleusercontent.com';
 const GOOGLE_ENABLED = !!GOOGLE_CLIENT_ID && /\.apps\.googleusercontent\.com$/.test(GOOGLE_CLIENT_ID) && !/^(YOUR_|__REPLACE_)/.test(GOOGLE_CLIENT_ID);
+function googleOriginAllowed(){
+  const host = String(location.hostname || '').toLowerCase();
+  if(window.GOOGLE_OAUTH_ALLOW_PREVIEW === true) return true;
+  return host !== 'localhost' && host !== '127.0.0.1' && !/\.lhr\.life$/.test(host);
+}
+function canUseGoogleSignIn(){
+  return GOOGLE_ENABLED && USE_BACKEND && googleOriginAllowed();
+}
+function hideGoogleSignIn(){
+  const wrap = document.getElementById('googleSignInWrap');
+  const host = document.getElementById('googleSignInBtn');
+  if(wrap) wrap.style.display = 'none';
+  if(host) host.innerHTML = '';
+}
+function showGoogleSignIn(){
+  const wrap = document.getElementById('googleSignInWrap');
+  if(wrap && canUseGoogleSignIn()) wrap.style.display = 'flex';
+}
 const AUTH_STORE_KEY='pps_users_v1';
 const AUTH_SESSION_KEY='pps_session_v1';
 const AUTH_TOKEN_KEY='pps_token_v1';
@@ -4727,7 +5718,8 @@ function openAuth(tab){
   setAuthTab(tab);
   document.getElementById('authError').textContent='';
   document.getElementById('authSuccess').style.display='none';
-  if(GOOGLE_ENABLED && USE_BACKEND){
+  if(canUseGoogleSignIn()){
+    showGoogleSignIn();
     loadGoogleSdk()
       .then(()=>{
         if(initGoogleSignIn()){
@@ -4736,8 +5728,11 @@ function openAuth(tab){
         }
       })
       .catch((err)=>{
-        document.getElementById('authError').textContent = (err && err.message) || 'Could not load Google Sign-In.';
+        console.warn((err && err.message) || 'Could not load Google Sign-In.');
+        hideGoogleSignIn();
       });
+  } else {
+    hideGoogleSignIn();
   }
 }
 function setAuthTab(tab){
@@ -4746,6 +5741,8 @@ function setAuthTab(tab){
   document.getElementById('signupForm').style.display=tab==='signup'?'block':'none';
   const otpForm = document.getElementById('otpForm');
   if(otpForm) otpForm.style.display = tab==='otp' ? 'block' : 'none';
+  const googleWrap = document.getElementById('googleSignInWrap');
+  if(googleWrap) googleWrap.style.display = (tab==='otp' || !canUseGoogleSignIn()) ? 'none' : 'flex';
   // Hide the login/signup tab switcher while on OTP step.
   const tabs = document.querySelector('#authModal .auth-tabs');
   if(tabs) tabs.style.display = tab==='otp' ? 'none' : '';
@@ -4780,8 +5777,7 @@ let _googleInitDone = false;
 let _googleBtnRendered = false;
 function initGoogleSignIn(){
   if(_googleInitDone) return true;
-  if(!GOOGLE_ENABLED) return false;
-  if(!USE_BACKEND) return false;
+  if(!canUseGoogleSignIn()) return false;
   if(typeof google === 'undefined' || !google.accounts || !google.accounts.id) return false;
   try {
     google.accounts.id.initialize({
@@ -4801,6 +5797,7 @@ function initGoogleSignIn(){
   }
 }
 function renderGoogleButton(){
+  if(!canUseGoogleSignIn()){ hideGoogleSignIn(); return; }
   if(!initGoogleSignIn()) return;
   const host = document.getElementById('googleSignInBtn');
   if(!host) return;
@@ -4818,6 +5815,7 @@ function renderGoogleButton(){
     _googleBtnRendered = true;
   } catch(e) {
     console.warn('Google button render failed:', e);
+    hideGoogleSignIn();
   }
 }
 function promptGoogleOneTap(){
@@ -5259,10 +6257,7 @@ restoreSession();
 // and the upload card on iPad + iPhone. One Tap still appears inside the
 // auth modal when the user explicitly clicks Login (see openAuth()).
 (function setupGoogleSignInUi(){
-  if(!GOOGLE_ENABLED || !USE_BACKEND){
-    const wrap = document.getElementById('googleSignInWrap');
-    if(wrap) wrap.style.display = 'none';
-  }
+  if(!canUseGoogleSignIn()) hideGoogleSignIn();
 })();
 </script>
 
@@ -5287,7 +6282,7 @@ restoreSession();
         <button class="auth-tab active" data-tab="login" onclick="setAuthTab('login')" data-i18n="auth_login">Login</button>
         <button class="auth-tab" data-tab="signup" onclick="setAuthTab('signup')" data-i18n="auth_signup">Sign Up</button>
       </div>
-      <form id="loginForm" onsubmit="doLogin(event)" style="display:block;">
+      <form id="loginForm" onsubmit="doLogin(event)" style="display:block;" novalidate>
         <div class="form-group">
           <label class="form-label" data-i18n="auth_email">Email</label>
           <input type="email" class="form-input" id="liEmail" autocomplete="email" required>
@@ -5298,7 +6293,7 @@ restoreSession();
         </div>
         <button type="submit" class="btn btn-primary" style="margin-top:6px;" data-i18n="auth_login_btn">Login</button>
       </form>
-      <form id="signupForm" onsubmit="doSignup(event)" style="display:none;">
+      <form id="signupForm" onsubmit="doSignup(event)" style="display:none;" novalidate>
         <div class="form-group">
           <label class="form-label" data-i18n="auth_name">Name</label>
           <input type="text" class="form-input" id="suName" autocomplete="name" required>
@@ -5320,7 +6315,7 @@ restoreSession();
         </div>
         <button type="submit" class="btn btn-primary" style="margin-top:6px;" data-i18n="auth_signup_btn">Send OTP</button>
       </form>
-      <form id="otpForm" onsubmit="doVerifySignupOtp(event)" style="display:none;">
+      <form id="otpForm" onsubmit="doVerifySignupOtp(event)" style="display:none;" novalidate>
         <div style="background:var(--surface,#161625);border:1px solid var(--border,#262637);border-radius:10px;padding:12px 14px;margin-bottom:12px;font-size:12px;line-height:1.6;color:var(--muted);">
           <span data-i18n="auth_otp_intro_pre">We sent a 6-digit verification code to</span>
           <strong id="otpEmailDisplay" style="color:var(--text);display:block;margin:4px 0;word-break:break-all;">—</strong>
@@ -5467,6 +6462,7 @@ restoreSession();
   })();
 </script>
 
+<script src="assets/footer.js" defer></script>
 <script src="assets/cookie.js" defer></script>
 </body>
 </html>

@@ -299,3 +299,258 @@
   .sp-plan-card { padding: 18px 14px; }
   .sp-plan-price { font-size: 28px; }
 }
+
+/* 2026 light-glass pricing refresh.
+   Pricing is loaded lazily on every page, so this stays isolated to sp-* classes. */
+.sp-plans-overlay,
+.sp-pay-overlay{
+  background:rgba(17,17,17,.48);
+  -webkit-backdrop-filter:blur(14px) saturate(135%);
+  backdrop-filter:blur(14px) saturate(135%);
+  padding:clamp(14px,3vw,30px);
+}
+.sp-plans-modal{
+  width:min(1060px,calc(100vw - 28px));
+  max-width:none;
+  border:1px solid rgba(255,255,255,.72);
+  border-radius:30px;
+  background:linear-gradient(180deg,rgba(255,255,255,.94),rgba(247,243,234,.92));
+  color:#111;
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  box-shadow:0 34px 100px rgba(17,17,17,.32),inset 0 1px 0 rgba(255,255,255,.94);
+}
+.sp-pay-modal{
+  width:min(460px,calc(100vw - 28px));
+  max-width:none;
+  border:1px solid rgba(255,255,255,.72);
+  border-radius:28px;
+  background:linear-gradient(180deg,rgba(255,255,255,.94),rgba(247,243,234,.92));
+  color:#111;
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  box-shadow:0 34px 100px rgba(17,17,17,.32),inset 0 1px 0 rgba(255,255,255,.94);
+}
+.sp-plans-header,
+.sp-pay-header{
+  padding:22px 24px;
+  border-bottom:1px solid rgba(17,17,17,.08);
+  border-radius:30px 30px 0 0;
+  background:rgba(255,255,255,.78);
+  -webkit-backdrop-filter:blur(18px);
+  backdrop-filter:blur(18px);
+}
+.sp-pay-header{border-radius:28px 28px 0 0;}
+.sp-plans-title,
+.sp-pay-title{
+  color:#111;
+  font-family:inherit;
+  font-size:clamp(24px,3vw,30px);
+  line-height:1;
+  letter-spacing:0;
+  font-weight:850;
+}
+.sp-pay-title{font-size:24px;}
+.sp-plans-title em,
+.sp-pay-title em{color:#111;}
+.sp-plans-title em::after,
+.sp-pay-title em::after{
+  content:"";
+  display:inline-block;
+  width:7px;
+  height:7px;
+  margin-left:5px;
+  border-radius:50%;
+  background:#f0a500;
+  vertical-align:middle;
+}
+.sp-plans-close,
+.sp-pay-close{
+  width:38px;
+  height:38px;
+  border:1px solid rgba(17,17,17,.10);
+  background:#fff;
+  color:#4d4740;
+}
+.sp-plans-close:hover,
+.sp-pay-close:hover{background:#111;color:#fff;}
+.sp-plans-body{padding:24px;}
+.sp-pay-body{padding:22px;}
+.sp-plans-tagline{
+  margin:0 auto 24px;
+  max-width:720px;
+  color:#5f5850;
+  font-size:14px;
+  line-height:1.65;
+  letter-spacing:0;
+}
+.sp-plans-tagline .accent{
+  color:#111;
+  font-weight:780;
+}
+.sp-plans-grid{
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:16px;
+}
+.sp-plan-card{
+  min-height:470px;
+  padding:26px 20px 20px;
+  border:1px solid rgba(17,17,17,.10);
+  border-radius:22px;
+  background:rgba(255,255,255,.86);
+  box-shadow:0 18px 48px rgba(44,36,22,.09);
+}
+.sp-plan-card:hover{
+  border-color:rgba(17,17,17,.22);
+  transform:translateY(-3px);
+}
+.sp-plan-card.featured{
+  border-color:rgba(17,17,17,.72);
+  background:linear-gradient(180deg,#fff7e5,#fff);
+}
+.sp-plan-card.featured::before{
+  content:"POPULAR";
+  top:-12px;
+  background:#111;
+  color:#fff;
+  border-radius:999px;
+  padding:5px 14px;
+  font-family:inherit;
+  font-size:10px;
+  letter-spacing:.06em;
+}
+.sp-plan-card.current{
+  border-color:#14785f;
+  box-shadow:0 18px 48px rgba(20,120,95,.10);
+}
+.sp-plan-card.current::after{
+  content:"CURRENT";
+  top:-12px;
+  background:#14785f;
+  color:#fff;
+  border-radius:999px;
+  padding:5px 14px;
+  font-family:inherit;
+  font-size:10px;
+  letter-spacing:.06em;
+}
+.sp-plan-name{
+  color:#111;
+  font-family:inherit;
+  font-size:26px;
+  line-height:1;
+  letter-spacing:0;
+  font-weight:850;
+}
+.sp-plan-tagline{
+  min-height:44px;
+  color:#5f5850;
+  font-size:13px;
+  line-height:1.55;
+}
+.sp-plan-price{
+  color:#111;
+  font-family:inherit;
+  font-size:42px;
+  line-height:1;
+  letter-spacing:0;
+  font-weight:880;
+}
+.sp-plan-price .currency{font-size:18px;opacity:1;}
+.sp-plan-price .period{
+  color:#5f5850;
+  font-size:14px;
+  font-weight:700;
+}
+.sp-plan-features{margin-bottom:22px;}
+.sp-plan-features li{
+  color:#111;
+  font-size:13px;
+  line-height:1.45;
+}
+.sp-plan-features li::before{color:#14785f;}
+.sp-plan-btn{
+  min-height:44px;
+  border-radius:999px;
+  font-family:inherit;
+  font-size:13px;
+  font-weight:850;
+}
+.sp-plan-btn-primary{
+  border:1px solid #111;
+  background:#111;
+  color:#fff;
+}
+.sp-plan-btn-primary:hover{
+  border-color:#000;
+  background:#000;
+  color:#fff;
+}
+.sp-plan-btn-current{
+  border:1px solid rgba(20,120,95,.20);
+  background:#e0f8e8;
+  color:#14785f;
+}
+.sp-plan-btn-free{
+  border:1px solid rgba(17,17,17,.12);
+  background:#fff;
+  color:#5f5850;
+}
+.sp-plans-note{
+  margin-top:18px;
+  padding:14px 16px;
+  border:1px solid rgba(17,17,17,.10);
+  border-radius:18px;
+  background:#fff;
+  color:#5f5850;
+  font-size:12px;
+  line-height:1.6;
+}
+.sp-plans-note strong{color:#111;}
+.sp-pay-summary,
+.sp-pay-method{
+  border-color:rgba(17,17,17,.10);
+  border-radius:18px;
+  background:#fff;
+  color:#111;
+}
+.sp-pay-row,
+.sp-pay-label,
+.sp-pay-secure{color:#5f5850;}
+.sp-pay-row strong{color:#111;}
+.sp-pay-row.total{
+  border-top-color:rgba(17,17,17,.12);
+  color:#111;
+}
+.sp-pay-method.active{
+  border-color:#111;
+  background:#f6ead1;
+  color:#111;
+}
+.sp-pay-cta{
+  border-radius:999px;
+  background:#111;
+  color:#fff;
+  font-family:inherit;
+}
+.sp-pay-cta:hover{background:#000;color:#fff;}
+@media (max-width: 900px){
+  .sp-plans-overlay{align-items:flex-start;overflow-y:auto;}
+  .sp-plans-grid{grid-template-columns:1fr;}
+  .sp-plan-card{min-height:0;}
+}
+@media (max-width: 560px){
+  .sp-plans-overlay,
+  .sp-pay-overlay{padding:10px;}
+  .sp-plans-modal,
+  .sp-pay-modal{
+    width:100%;
+    max-height:calc(100dvh - 20px);
+    border-radius:28px;
+  }
+  .sp-plans-header,
+  .sp-pay-header{padding:18px;}
+  .sp-plans-body,
+  .sp-pay-body{padding:18px;}
+  .sp-plans-title{font-size:22px;}
+  .sp-plan-name{font-size:24px;}
+  .sp-plan-price{font-size:38px;}
+}

@@ -29,6 +29,21 @@
     && /\.apps\.googleusercontent\.com$/.test(GOOGLE_CLIENT_ID)
     && !/^(YOUR_|__REPLACE_)/.test(GOOGLE_CLIENT_ID);
 
+  function googleOriginAllowed() {
+    var host = String(location.hostname || '').toLowerCase();
+    if (window.GOOGLE_OAUTH_ALLOW_PREVIEW === true) return true;
+    return host !== 'localhost' && host !== '127.0.0.1' && !/\.lhr\.life$/.test(host);
+  }
+  function canUseGoogleSignIn() {
+    return GOOGLE_ENABLED && googleOriginAllowed();
+  }
+  function hideGoogleSignIn() {
+    var wrap = document.getElementById('spGoogleWrap');
+    var host = document.getElementById('spGoogleBtn');
+    if (wrap) wrap.style.display = 'none';
+    if (host) host.innerHTML = '';
+  }
+
   // ── localStorage helpers ──
   function getUsers() {
     try { return JSON.parse(localStorage.getItem(AUTH_STORE_KEY) || '{}'); }
@@ -195,10 +210,7 @@
 
     // Hide Google section entirely if not configured so the modal
     // collapses gracefully (no empty space, no broken widget).
-    if (!GOOGLE_ENABLED) {
-      var gw = document.getElementById('spGoogleWrap');
-      if (gw) gw.style.display = 'none';
-    }
+    if (!canUseGoogleSignIn()) hideGoogleSignIn();
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && overlay.classList.contains('active')) closeAuth();
     });
@@ -217,7 +229,7 @@
     // Google Sign-In is a shortcut for login + signup; hide it on the
     // OTP step (user has already started the email flow at that point).
     var gw = document.getElementById('spGoogleWrap');
-    if (gw && GOOGLE_ENABLED) gw.style.display = tab === 'otp' ? 'none' : '';
+    if (gw) gw.style.display = (tab === 'otp' || !canUseGoogleSignIn()) ? 'none' : '';
     setError('');
   }
 
@@ -235,8 +247,10 @@
     overlay.classList.add('active');
     // Render the Google button lazily after the modal is visible (GIS
     // measures the host element, so it must be in the DOM + laid out).
-    if (GOOGLE_ENABLED && tab !== 'otp') {
+    if (canUseGoogleSignIn() && tab !== 'otp') {
       setTimeout(renderGoogleButton, 0);
+    } else {
+      hideGoogleSignIn();
     }
     setTimeout(function () {
       var focusId = tab === 'signup' ? 'spSuName' : tab === 'otp' ? 'spOtpCode' : 'spLiEmail';
@@ -380,7 +394,7 @@
   var _googleBtnRendered = false;
   function initGoogleSignIn() {
     if (_googleInitDone) return true;
-    if (!GOOGLE_ENABLED) return false;
+    if (!canUseGoogleSignIn()) return false;
     if (typeof google === 'undefined' || !google.accounts || !google.accounts.id) return false;
     try {
       google.accounts.id.initialize({
@@ -401,12 +415,14 @@
   }
   function renderGoogleButton() {
     // GIS may not be ready yet (async script) — retry a few times.
-    if (!GOOGLE_ENABLED) return;
+    if (!canUseGoogleSignIn()) { hideGoogleSignIn(); return; }
     if (_googleBtnRendered) return;
     if (!initGoogleSignIn()) {
       if (!renderGoogleButton._tries) renderGoogleButton._tries = 0;
       if (renderGoogleButton._tries++ < 20) {
         setTimeout(renderGoogleButton, 150);
+      } else {
+        hideGoogleSignIn();
       }
       return;
     }
@@ -425,6 +441,7 @@
       _googleBtnRendered = true;
     } catch (e) {
       console.warn('Google button render failed:', e);
+      hideGoogleSignIn();
     }
   }
   async function handleGoogleCredential(resp) {

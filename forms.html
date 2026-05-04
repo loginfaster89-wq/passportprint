@@ -9,7 +9,8 @@
 <link rel="preload" href="assets/fonts/syne-latin.woff2" as="font" type="font/woff2">
 <link rel="preload" href="assets/fonts/dm-mono-400-latin.woff2" as="font" type="font/woff2">
 <link rel="stylesheet" href="assets/fonts.css">
-<link rel="stylesheet" href="assets/legal.css">
+<link rel="stylesheet" href="assets/legal.css?v=tool-footer-final">
+<link rel="stylesheet" href="assets/pricing.css?v=forms-plan-refresh" data-sp-deferred-css="pricing">
 <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
 <link rel="alternate icon" type="image/png" href="assets/favicon-32.png">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
@@ -667,6 +668,239 @@ body.forms-page .legal-main.forms-main{
 @media(min-width:821px) and (max-width:1180px){
   .forms-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
 }
+
+/* Forms Hub refresh: keep the legal-page glass shell, but give the tool
+   enough working width and protect cards from generic legal typography. */
+body.forms-page:not(.home):not(.idp-page):has(main.legal-main) main.legal-main.forms-main{
+  width:min(1320px,calc(100% - 32px));
+  max-width:none;
+  padding:44px clamp(24px,4.2vw,64px) 58px;
+}
+body.forms-page .forms-hero{
+  grid-template-columns:minmax(0,1fr) minmax(320px,.45fr);
+  gap:clamp(24px,4vw,54px);
+  border-bottom-color:rgba(17,17,17,.09);
+}
+body.forms-page .forms-kicker{
+  border-color:rgba(17,17,17,.10);
+  background:#fff;
+  color:#4d4740;
+  font-family:Inter,ui-sans-serif,system-ui,sans-serif;
+  font-weight:850;
+  letter-spacing:0;
+  text-transform:none;
+}
+body.forms-page:not(.home):not(.idp-page):has(main.legal-main) main.legal-main.forms-main .forms-hero h1{
+  max-width:12ch;
+  color:#111;
+  font-family:Inter,ui-sans-serif,system-ui,sans-serif;
+  font-size:clamp(48px,6.4vw,88px);
+  letter-spacing:0;
+  font-weight:850;
+}
+body.forms-page .forms-hero p{
+  max-width:62ch;
+  color:#5f5850;
+  font-family:Inter,ui-sans-serif,system-ui,sans-serif;
+}
+body.forms-page .forms-panel{
+  border-color:rgba(17,17,17,.10);
+  border-radius:24px;
+  background:rgba(255,255,255,.78);
+  box-shadow:0 18px 52px rgba(44,36,22,.08);
+  -webkit-backdrop-filter:blur(20px);
+  backdrop-filter:blur(20px);
+}
+body.forms-page .forms-panel-row{
+  border-color:rgba(17,17,17,.10);
+  background:#fff;
+}
+body.forms-page .forms-panel-row strong{color:#111}
+body.forms-page .forms-panel-row span{
+  color:#6f675d;
+  font-family:Inter,ui-sans-serif,system-ui,sans-serif;
+}
+body.forms-page .forms-searchbox{
+  top:96px;
+  padding:18px;
+  border-color:rgba(17,17,17,.10);
+  border-radius:24px;
+  background:rgba(255,255,255,.82);
+  box-shadow:0 18px 58px rgba(44,36,22,.10);
+  -webkit-backdrop-filter:blur(22px);
+  backdrop-filter:blur(22px);
+}
+body.forms-page .forms-search-row{
+  grid-template-columns:minmax(0,1fr) minmax(128px,auto);
+}
+body.forms-page .forms-search{
+  min-height:56px;
+  border-color:rgba(17,17,17,.11);
+  border-radius:18px;
+  background:#fff;
+  color:#111;
+  font-family:Inter,ui-sans-serif,system-ui,sans-serif;
+  font-weight:720;
+  box-shadow:0 10px 28px rgba(44,36,22,.05);
+}
+body.forms-page .forms-search::placeholder{color:#7b746c}
+body.forms-page .forms-search:focus{
+  border-color:#111;
+  box-shadow:0 0 0 4px rgba(17,17,17,.08);
+}
+body.forms-page .forms-count{
+  min-height:56px;
+  border-color:#111;
+  border-radius:18px;
+  background:#111;
+  color:#fff;
+  font-family:Inter,ui-sans-serif,system-ui,sans-serif;
+  font-weight:850;
+}
+body.forms-page .forms-filters{gap:9px;margin-top:12px}
+body.forms-page .forms-filter{
+  min-height:36px;
+  border-color:rgba(17,17,17,.10);
+  background:#f6f3ed;
+  color:#5f5850;
+  font-family:Inter,ui-sans-serif,system-ui,sans-serif;
+  font-weight:820;
+  letter-spacing:0;
+}
+body.forms-page .forms-filter.active{
+  border-color:#111;
+  background:#111;
+  color:#fff;
+}
+body.forms-page .forms-grid{
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:16px;
+}
+body.forms-page .form-card{
+  grid-template-columns:minmax(134px,154px) minmax(0,1fr);
+  align-items:stretch;
+  min-height:254px;
+  padding:14px;
+  border-color:rgba(17,17,17,.10);
+  border-radius:22px;
+  background:
+    radial-gradient(circle at 50% 0,rgba(240,165,0,.12),transparent 46%),
+    rgba(255,255,255,.84);
+  box-shadow:0 18px 48px rgba(44,36,22,.10);
+}
+body.forms-page .form-preview-stage{
+  width:100%;
+  height:100%;
+  min-height:196px;
+  border:1px solid rgba(17,17,17,.06);
+  background:linear-gradient(180deg,#f8f5ef,#fff);
+}
+body.forms-page .form-preview.actual-preview,
+body.forms-page .form-preview.actual-preview img{
+  max-width:150px;
+  max-height:176px;
+}
+body.forms-page .form-body{
+  grid-template-rows:auto minmax(74px,1fr) auto;
+  gap:10px;
+}
+body.forms-page .form-card-top{align-items:start}
+body.forms-page .form-cat{
+  max-width:calc(100% - 58px);
+  border-color:rgba(240,165,0,.34);
+  background:#f6ead1;
+  color:#111;
+  font-family:Inter,ui-sans-serif,system-ui,sans-serif;
+  font-weight:850;
+  letter-spacing:0;
+}
+body.forms-page .form-format{
+  border-color:#111;
+  background:#111;
+  color:#fff;
+  font-family:Inter,ui-sans-serif,system-ui,sans-serif;
+}
+body.forms-page:not(.home):not(.idp-page):has(main.legal-main) main.legal-main.forms-main .form-card h2{
+  margin:0;
+  padding:0;
+  border:0;
+  color:#111;
+  font-family:Inter,ui-sans-serif,system-ui,sans-serif;
+  font-size:clamp(18px,1.35vw,22px);
+  line-height:1.05;
+  letter-spacing:0;
+  font-weight:850;
+  display:-webkit-box;
+  -webkit-line-clamp:3;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+}
+body.forms-page .form-actions{gap:8px}
+body.forms-page .form-actions a,
+body.forms-page .form-actions button{
+  min-width:0;
+  min-height:40px;
+  border-color:rgba(17,17,17,.12);
+  border-radius:999px;
+  background:#fff;
+  color:#111;
+  font-family:Inter,ui-sans-serif,system-ui,sans-serif;
+  font-size:11px;
+  font-weight:850;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+body.forms-page .form-actions .primary{
+  border-color:#111;
+  background:#111;
+  color:#fff;
+}
+body.forms-page .forms-note{
+  border-color:rgba(17,17,17,.10);
+  border-radius:20px;
+  background:rgba(255,255,255,.74);
+  color:#5f5850;
+  font-family:Inter,ui-sans-serif,system-ui,sans-serif;
+}
+@media(min-width:1500px){
+  body.forms-page:not(.home):not(.idp-page):has(main.legal-main) main.legal-main.forms-main{
+    width:min(1640px,calc(100% - 48px));
+  }
+}
+@media(min-width:1760px){
+  body.forms-page .forms-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
+@media(max-width:1180px){
+  body.forms-page .forms-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:900px){
+  body.forms-page:not(.home):not(.idp-page):has(main.legal-main) main.legal-main.forms-main{
+    width:calc(100% - 24px);
+    padding:30px 22px 42px;
+  }
+  body.forms-page .forms-hero{grid-template-columns:1fr}
+  body.forms-page .forms-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  body.forms-page .forms-searchbox{position:relative;top:auto}
+}
+@media(max-width:560px){
+  body.forms-page .forms-search-row,
+  body.forms-page .forms-grid{grid-template-columns:1fr}
+  body.forms-page .form-card{
+    grid-template-columns:118px minmax(0,1fr);
+    min-height:224px;
+    gap:10px;
+  }
+  body.forms-page .form-preview-stage{min-height:172px}
+  body.forms-page .form-preview.actual-preview,
+  body.forms-page .form-preview.actual-preview img{
+    max-width:112px;
+    max-height:146px;
+  }
+  body.forms-page:not(.home):not(.idp-page):has(main.legal-main) main.legal-main.forms-main .form-card h2{
+    font-size:18px;
+  }
+}
 </style>
 </head>
 <body class="forms-page">
@@ -737,18 +971,52 @@ body.forms-page .legal-main.forms-main{
   <div class="footer-main">
     <div class="footer-brand">
       <a href="index.html" class="footer-logo">Studio <em>Print</em></a>
-      <p class="footer-tagline">A browser-native print workspace for passport photos, ID-card sheets, document forms, PDF-to-print jobs, and 300&nbsp;DPI A4 output — built in India.</p>
-      <form class="footer-news" data-u="loginfaster89" data-d="gmail.com" aria-label="Subscribe to product updates"><input type="email" name="email" placeholder="you@example.com" required autocomplete="email" aria-label="Your email"> <button type="submit">Subscribe</button></form>
+      <p class="footer-tagline">A browser-native print workspace for passport photos, ID-card sheets, PDF-to-print jobs, and 300&nbsp;DPI A4 output — built in India.</p>
+      <form class="footer-news" data-u="loginfaster89" data-d="gmail.com" aria-label="Subscribe to product updates">
+        <input type="email" name="email" placeholder="you@example.com" required autocomplete="email" aria-label="Your email">
+        <button type="submit">Subscribe</button>
+      </form>
       <div class="footer-news-hint">Occasional build notes. No spam, unsubscribe anytime.</div>
     </div>
     <nav class="footer-cols" aria-label="Footer">
-      <div class="footer-col"><h4>Product</h4><ul><li><a href="passport-photo.html">Passport Photo</a></li><li><a href="id-print.html">ID Card Print</a></li><li><a href="forms.html">Forms Hub</a></li></ul></div>
-      <div class="footer-col"><h4>Resources</h4><ul><li><a href="index.html#how">How it works</a></li><li><a href="index.html#faq">FAQ</a></li><li><a href="sitemap.xml">Sitemap</a></li></ul></div>
-      <div class="footer-col"><h4>Company</h4><ul><li><a href="about.html">About</a></li><li><a href="contact.html">Contact</a></li></ul></div>
-      <div class="footer-col"><h4>Legal</h4><ul><li><a href="privacy.html">Privacy</a></li><li><a href="terms.html">Terms</a></li><li><a href="refund.html">Refund</a></li><li><a href="shipping.html">Delivery</a></li></ul></div>
+      <div class="footer-col">
+        <h4>Product</h4>
+        <ul>
+          <li><a href="passport-photo.html">Passport Photo</a></li>
+          <li><a href="id-print.html">ID Card Print</a></li>
+          <li><a href="forms.html">Forms Hub</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <ul>
+          <li><a href="index.html#how">How it works</a></li>
+          <li><a href="index.html#faq">FAQ</a></li>
+          <li><a href="sitemap.xml">Sitemap</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="privacy.html">Privacy</a></li>
+          <li><a href="terms.html">Terms</a></li>
+          <li><a href="refund.html">Refund</a></li>
+          <li><a href="shipping.html">Delivery</a></li>
+        </ul>
+      </div>
     </nav>
   </div>
-  <div class="footer-bottom"><div class="footer-copy">Copyright 2026 Studio Print. All rights reserved.</div></div>
+  <div class="footer-bottom">
+    <div class="footer-copy">Copyright 2026 Studio Print. All rights reserved.</div>
+
+  </div>
 </footer>
 <div id="formsToast" class="forms-toast" role="status" aria-live="polite"></div>
 <div id="formsPreviewModal" class="forms-preview-modal" aria-hidden="true">

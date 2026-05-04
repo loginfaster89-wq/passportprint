@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
-<meta name="theme-color" content="#0d0d0d">
+<meta name="theme-color" content="#f6f3ed">
 <title>ID Card Print — Studio Print</title>
 <meta name="description" content="Studio Print's ID-card workflow auto-detects Aadhaar, PAN, ABHA, e-EPIC, Ayushman, Jan Aadhaar, eShram, RC, and ration-card PDFs into CR80 or custom-size A4 print sheets.">
 <meta property="og:title" content="ID Card Print — Studio Print">
@@ -27,12 +27,11 @@
 <link rel="preload" href="assets/fonts/syne-latin.woff2" as="font" type="font/woff2">
 <link rel="preload" href="assets/fonts/dm-mono-400-latin.woff2" as="font" type="font/woff2">
 <link rel="stylesheet" href="assets/fonts.css">
-<link rel="stylesheet" href="assets/legal.css">
+<link rel="stylesheet" href="assets/legal.css?v=tool-footer-final">
 <link rel="stylesheet" href="assets/auth.css">
 <link rel="stylesheet" href="assets/pricing.css">
 <style>
-/* ID Print page-only header/upload stability fix. */
-header.legal-header{top:0!important;margin-top:0!important;padding-top:10px!important;padding-bottom:10px!important;}
+/* ID Print page-only upload stability fix. Header is kept visually aligned with the homepage. */
 .idp-upload input[type="file"]{z-index:2;}
 
 /* ── ID Print page styles ── */
@@ -804,6 +803,580 @@ input.idp-range::-moz-range-thumb{
 /* §AC.27 — Position panel (per-side Move + Zoom) removed per user request.
    Rounded Corners + Photo Adjust retained. */
 
+/* ID Print premium light workspace refresh. */
+body.idp-page{
+  --bg:#f6f3ed;
+  --surface:rgba(255,255,255,.78);
+  --surface2:#fff;
+  --surface3:#f0ede6;
+  --border:rgba(17,17,17,.10);
+  --text:#17130f;
+  --muted:#635b51;
+  --muted2:#8a8379;
+  --accent:#f0a500;
+  --success:#0f8a60;
+  background:#f6f3ed;
+  color:#111;
+}
+body.idp-page::before{
+  content:"";
+  position:fixed;inset:0;z-index:-2;pointer-events:none;
+  background:
+    radial-gradient(circle at 16% 12%,rgba(240,165,0,.16),transparent 28%),
+    radial-gradient(circle at 82% 20%,rgba(17,17,17,.08),transparent 24%),
+    linear-gradient(rgba(17,17,17,.045) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(17,17,17,.045) 1px,transparent 1px),
+    #f6f3ed;
+  background-size:auto,auto,56px 56px,56px 56px,auto;
+}
+body.idp-page main.legal-main{
+  padding-top:42px;
+  background:transparent;
+}
+body.idp-page header.legal-header{
+  width:min(calc(100% - 28px),1240px);
+  margin:12px auto 0!important;
+  top:10px!important;
+  padding:10px clamp(16px,3vw,28px)!important;
+  background:linear-gradient(135deg,rgba(255,255,255,0.96),rgba(255,255,255,0.72) 52%,rgba(255,255,255,0.5));
+  border:1px solid rgba(255,255,255,0.76);
+  border-radius:999px;
+  box-shadow:0 24px 70px rgba(0,0,0,0.22),inset 0 1px 0 rgba(255,255,255,0.92);
+}
+body.idp-page .legal-header .nav-login{
+  background:#111;
+  border:1px solid rgba(17,17,17,0.18);
+  color:#fff;
+  border-radius:999px;
+  padding:9px 18px;
+  box-shadow:none;
+}
+body.idp-page .legal-header .nav-login:hover{
+  background:#000;
+  border-color:rgba(17,17,17,0.24);
+  box-shadow:0 10px 24px -12px rgba(0,0,0,.8);
+}
+body.idp-page .idp-app{max-width:1440px;}
+body.idp-workspace-mode::before{display:block;}
+body.idp-workspace-mode{
+  --bg:#f6f3ed;
+  --surface:rgba(255,255,255,.78);
+  --surface2:#fff;
+  --surface3:#f0ede6;
+  --border:rgba(17,17,17,.10);
+  --text:#17130f;
+  --muted:#635b51;
+  --muted2:#8a8379;
+  --success:#0f8a60;
+  background:#f6f3ed;
+  color:var(--text);
+}
+body.idp-workspace-mode .idp-quick-grid{display:none;}
+.idp-hero{
+  max-width:1240px;
+  margin:42px auto 26px;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(330px,450px);
+  gap:clamp(26px,5vw,70px);
+  align-items:center;
+  text-align:left;
+}
+.idp-hero-copy{min-width:0;}
+.idp-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  margin-bottom:16px;
+  padding:7px 12px;
+  border:1px solid rgba(17,17,17,.10);
+  border-radius:999px;
+  background:rgba(255,255,255,.68);
+  color:#5f5850;
+  font:800 11px/1 'DM Mono',ui-monospace,monospace;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+}
+.idp-eyebrow::before{
+  content:"";
+  width:8px;height:8px;border-radius:50%;
+  background:#f0a500;
+  box-shadow:0 0 0 4px rgba(240,165,0,.16);
+}
+.idp-hero h1{
+  max-width:11ch;
+  color:#111;
+  font-size:clamp(56px,8vw,104px);
+  line-height:.86;
+  letter-spacing:0;
+  margin-bottom:18px;
+}
+.idp-hero h1 em{
+  color:#111;
+  background:linear-gradient(90deg,#111 0%,#f0a500 70%,#ffd17a 100%);
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.idp-hero p{
+  max-width:64ch;
+  margin:0;
+  color:#5f5850;
+  font:500 16px/1.75 Inter,ui-sans-serif,system-ui,sans-serif;
+}
+.idp-hero-actions{
+  display:flex;flex-wrap:wrap;gap:12px;
+  margin-top:24px;
+}
+.idp-hero-btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-height:48px;
+  padding:13px 18px;
+  border:1px solid rgba(17,17,17,.10);
+  border-radius:14px;
+  background:rgba(255,255,255,.76);
+  color:#111;
+  font:820 13px/1 'DM Mono',ui-monospace,monospace;
+  cursor:pointer;
+  box-shadow:0 16px 36px rgba(44,36,22,.08);
+  transition:transform .15s,box-shadow .15s,background .15s;
+}
+.idp-hero-btn.primary{
+  background:#111;
+  color:#fff;
+  border-color:#111;
+}
+.idp-hero-btn:hover{
+  transform:translateY(-1px);
+  box-shadow:0 20px 42px rgba(44,36,22,.13);
+  text-decoration:none;
+}
+.idp-hero-btn:active{transform:translateY(0) scale(.98);}
+.idp-hero-visual{
+  position:relative;
+  min-height:360px;
+  border-radius:36px;
+  overflow:hidden;
+  border:1px solid rgba(17,17,17,.10);
+  background:
+    radial-gradient(circle at 42% 18%,rgba(240,165,0,.34),transparent 34%),
+    linear-gradient(145deg,rgba(255,255,255,.92),rgba(255,255,255,.58));
+  box-shadow:0 28px 90px rgba(44,36,22,.16);
+  -webkit-backdrop-filter:blur(20px);
+  backdrop-filter:blur(20px);
+}
+.idp-hero-visual::before{
+  content:"";
+  position:absolute;inset:18px;
+  border-radius:28px;
+  background:
+    linear-gradient(rgba(17,17,17,.045) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(17,17,17,.045) 1px,transparent 1px);
+  background-size:34px 34px;
+}
+.idp-sheet-ghost{
+  position:absolute;
+  right:28px;bottom:26px;
+  width:220px;height:282px;
+  border-radius:20px;
+  background:#fff;
+  border:1px solid rgba(17,17,17,.10);
+  box-shadow:0 18px 46px rgba(44,36,22,.18);
+}
+.idp-sheet-ghost::before,
+.idp-sheet-ghost::after{
+  content:"";
+  position:absolute;left:22px;right:22px;
+  height:68px;border-radius:14px;
+  border:1px dashed rgba(17,17,17,.22);
+  background:linear-gradient(90deg,#f8f5ef 0 18%,#111 18% 21%,#f8f5ef 21% 55%,#111 55% 58%,#f8f5ef 58%);
+}
+.idp-sheet-ghost::before{top:30px;}
+.idp-sheet-ghost::after{top:122px;}
+.idp-mock-card{
+  position:absolute;
+  left:34px;
+  width:260px;height:164px;
+  border-radius:22px;
+  border:1px solid rgba(17,17,17,.12);
+  background:#111;
+  color:#fff;
+  box-shadow:0 24px 52px rgba(17,17,17,.22);
+}
+.idp-mock-card.front{
+  top:68px;
+  transform:rotate(-7deg);
+  background:linear-gradient(135deg,#111 0%,#2b261e 60%,#f0a500 180%);
+}
+.idp-mock-card.back{
+  left:94px;
+  top:184px;
+  transform:rotate(8deg);
+  background:#fff;
+  color:#111;
+}
+.idp-card-avatar{
+  position:absolute;left:22px;top:28px;
+  width:58px;height:70px;border-radius:16px;
+  background:linear-gradient(180deg,#fff,#d9d3c8);
+}
+.idp-card-lines,
+.idp-card-bars{
+  position:absolute;left:96px;right:22px;top:34px;
+  display:grid;gap:10px;
+}
+.idp-card-lines span,
+.idp-card-bars span{
+  display:block;height:9px;border-radius:999px;
+  background:rgba(255,255,255,.72);
+}
+.idp-card-lines span:nth-child(2){width:72%;}
+.idp-card-lines span:nth-child(3){width:46%;background:#f0a500;}
+.idp-card-bars{left:24px;right:24px;top:42px;gap:8px;}
+.idp-card-bars span{background:#111;height:7px;}
+.idp-card-bars span:nth-child(2){width:82%;}
+.idp-card-bars span:nth-child(3){width:64%;}
+.idp-float-pill{
+  position:absolute;left:28px;bottom:28px;
+  padding:9px 13px;
+  border-radius:999px;
+  background:#111;
+  color:#fff;
+  font:800 11px/1 'DM Mono',ui-monospace,monospace;
+  letter-spacing:.04em;
+}
+.idp-quick-grid{
+  width:min(100%,1240px);
+  margin:0 auto 20px;
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:14px;
+}
+.idp-quick-card{
+  padding:18px;
+  border:1px solid rgba(17,17,17,.10);
+  border-radius:24px;
+  background:rgba(255,255,255,.72);
+  box-shadow:0 18px 48px rgba(44,36,22,.08);
+  -webkit-backdrop-filter:blur(18px);
+  backdrop-filter:blur(18px);
+}
+.idp-quick-card span{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:30px;height:30px;margin-bottom:14px;
+  border-radius:50%;
+  background:#111;
+  color:#fff;
+  font:800 11px/1 'DM Mono',ui-monospace,monospace;
+}
+.idp-quick-card strong{
+  display:block;
+  color:#111;
+  font-family:'Syne',sans-serif;
+  font-size:17px;
+  line-height:1.15;
+  margin-bottom:8px;
+}
+body.idp-page .idp-quick-card strong{color:#111;}
+body.idp-page .idp-layout-head strong{color:#111;}
+.idp-quick-card p{
+  margin:0;
+  color:#635b51;
+  font:500 13px/1.55 Inter,ui-sans-serif,system-ui,sans-serif;
+}
+body.idp-page .idp-steps{
+  width:min(100%,720px);
+  margin:2px auto 22px;
+  padding:6px;
+  border:1px solid rgba(17,17,17,.08);
+  border-radius:999px;
+  background:rgba(255,255,255,.62);
+  box-shadow:0 18px 46px rgba(44,36,22,.08);
+}
+body.idp-page .idp-step-line{background:rgba(17,17,17,.12);}
+body.idp-page .idp-step{color:#746b61;}
+body.idp-page .idp-step.active{
+  color:#111;
+  border-color:rgba(17,17,17,.12);
+  background:#fff;
+  box-shadow:0 8px 24px rgba(44,36,22,.08);
+}
+body.idp-page .idp-step.done{color:#0f8a60;}
+body.idp-page #stepUpload{
+  width:min(100%,1240px);
+  padding:18px;
+  border-radius:34px;
+  border:1px solid rgba(17,17,17,.10);
+  background:rgba(255,255,255,.76);
+  box-shadow:0 24px 74px rgba(44,36,22,.13);
+  -webkit-backdrop-filter:blur(20px);
+  backdrop-filter:blur(20px);
+}
+body.idp-page .idp-upload{
+  min-height:360px;
+  border:1px dashed rgba(17,17,17,.18);
+  border-radius:26px;
+  background:
+    radial-gradient(circle at 50% 0%,rgba(240,165,0,.18),transparent 32%),
+    linear-gradient(180deg,#fff 0%,#fbf8f1 100%);
+}
+body.idp-page .idp-upload:hover,
+body.idp-page .idp-upload.drag-over{
+  border-color:#111;
+  background:
+    radial-gradient(circle at 50% 0%,rgba(240,165,0,.24),transparent 34%),
+    #fff;
+}
+body.idp-page .idp-upload-icon{
+  width:80px;height:80px;
+  display:grid;place-items:center;
+  margin-bottom:18px;
+  border-radius:28px;
+  background:#111;
+  color:#fff;
+  font-size:34px;
+  box-shadow:0 20px 44px rgba(17,17,17,.18);
+}
+body.idp-page .idp-upload h3,
+body.idp-page .idp-preview h3,
+body.idp-page .idp-password h3,
+body.idp-page .idp-workbench-title h3,
+body.idp-page .idp-layout-btn span,
+body.idp-page .idp-test-panel strong,
+body.idp-page .idp-qa-head strong,
+body.idp-page .idp-qa-card span,
+body.idp-page .idp-qa-check strong{color:#111;}
+body.idp-page .idp-upload h3{
+  font-size:clamp(32px,4vw,52px);
+  letter-spacing:-.02em;
+}
+body.idp-page .idp-upload p{
+  max-width:74ch;
+  color:#5f5850;
+  font:600 15px/1.7 Inter,ui-sans-serif,system-ui,sans-serif;
+}
+body.idp-page .idp-plan-note,
+body.idp-page .idp-test-panel span,
+body.idp-page .idp-workbench-title p{color:#70675c;}
+body.idp-page .idp-test-panel{
+  border-radius:18px;
+  background:rgba(255,255,255,.68);
+  border-color:rgba(17,17,17,.10);
+}
+body.idp-page .idp-cal-reset,
+body.idp-page .idp-btn-ghost,
+body.idp-page .idp-editor-actions button{
+  background:#fff;
+  color:#111;
+  border-color:rgba(17,17,17,.12);
+}
+body.idp-page .idp-cal-reset:hover,
+body.idp-page .idp-btn-ghost:hover,
+body.idp-page .idp-editor-actions button:hover{
+  border-color:#111;
+  color:#111;
+}
+body.idp-page .idp-btn-primary{
+  background:#111;
+  color:#fff;
+  box-shadow:0 16px 34px rgba(17,17,17,.16);
+}
+body.idp-page .idp-btn-primary:hover{background:#000;}
+body.idp-page .idp-preview,
+body.idp-page .idp-password,
+body.idp-page .idp-workbench,
+body.idp-page .idp-workbench-main,
+body.idp-page .idp-workbench-panel,
+body.idp-page .idp-editor,
+body.idp-page .idp-layout-panel,
+body.idp-page .idp-command-bar,
+body.idp-page .idp-sidebar-actions,
+body.idp-page .idp-workbench-sheet .idp-workbench-body > .idp-actions,
+body.idp-page .idp-queue-item,
+body.idp-page .idp-plan-banner,
+body.idp-page .idp-qa-panel,
+body.idp-page .idp-qa-card,
+body.idp-page .idp-qa-check{
+  border-color:rgba(17,17,17,.10);
+  background:rgba(255,255,255,.78);
+}
+body.idp-page .idp-workbench,
+body.idp-page .idp-preview{
+  box-shadow:0 24px 74px rgba(44,36,22,.12);
+}
+body.idp-page .idp-preview-canvas-pair,
+body.idp-page .idp-card-wrap canvas,
+body.idp-page .idp-a4-wrap canvas{background:#fff;}
+body.idp-page .idp-layout-btn{
+  background:#fff;
+  border-color:rgba(17,17,17,.10);
+  color:#111;
+}
+body.idp-page .idp-layout-btn:hover{
+  border-color:#111;
+  background:#fffaf0;
+}
+body.idp-page .idp-layout-btn.is-active{
+  border-color:#111;
+  background:#111;
+}
+body.idp-page .idp-layout-btn.is-active span,
+body.idp-page .idp-layout-btn.is-active small{color:#fff;}
+body.idp-page .idp-scope-toggle,
+body.idp-page .idp-option input[type="checkbox"]{
+  background:#fff;
+  border-color:rgba(17,17,17,.12);
+}
+body.idp-page .idp-scope-btn.is-active{
+  background:#111;
+  color:#fff;
+}
+body.idp-page input.idp-range{background:#e4ded4;}
+body.idp-page input.idp-range::-webkit-slider-thumb{
+  background:#111;
+  box-shadow:0 0 0 5px rgba(17,17,17,.10);
+}
+body.idp-page input.idp-range::-moz-range-thumb{
+  background:#111;
+  box-shadow:0 0 0 5px rgba(17,17,17,.10);
+}
+
+/* Preview workspace fit: keep the Step 2 card editor inside the first viewport. */
+body.idp-workspace-mode main.legal-main{
+  min-height:0;
+  padding-top:10px;
+  padding-bottom:10px;
+}
+body.idp-workspace-mode .idp-app{
+  min-height:0;
+}
+body.idp-workspace-mode #stepPreview .idp-preview{
+  min-height:0;
+  height:clamp(560px,calc(100dvh - 260px),760px);
+  padding:16px 18px 76px;
+}
+body.idp-workspace-mode #stepPreview .idp-workbench{
+  gap:12px;
+  padding-bottom:76px;
+}
+body.idp-workspace-mode #stepPreview .idp-workbench-top{
+  padding-bottom:12px;
+}
+body.idp-workspace-mode #stepPreview .idp-workbench-body{
+  margin-bottom:0;
+  gap:14px;
+}
+body.idp-workspace-mode #stepPreview .idp-workbench-main{
+  padding:14px 16px;
+}
+body.idp-workspace-mode #stepPreview .idp-workbench-panel{
+  padding:12px;
+}
+body.idp-workspace-mode #stepPreview .idp-sidebar-actions{
+  left:18px;
+  right:18px;
+  bottom:14px;
+  padding:10px 14px;
+}
+body.idp-workspace-mode #stepPreview .idp-preview-canvas-pair{
+  max-height:42vh;
+  object-fit:contain;
+}
+/* Step 3 fit + footer: error banners should not push the sheet controls below the viewport. */
+body.idp-workspace-mode .legal-footer{
+  display:block;
+}
+body.idp-workspace-mode footer.legal-footer:has(.footer-main){
+  margin:16px auto 36px;
+}
+body.idp-workspace-mode .idp-error.show{
+  max-width:1440px;
+  margin:10px auto 12px;
+  padding:10px 14px;
+}
+body.idp-workspace-mode #stepSheet .idp-preview{
+  min-height:0;
+  height:clamp(600px,calc(100dvh - 245px),780px);
+  padding:16px 18px;
+}
+body.idp-workspace-mode.idp-error-visible #stepSheet .idp-preview,
+body.idp-workspace-mode:has(.idp-error.show) #stepSheet .idp-preview{
+  height:clamp(540px,calc(100dvh - 315px),720px);
+}
+body.idp-workspace-mode #stepSheet .idp-workbench{
+  gap:12px;
+  padding-bottom:14px;
+}
+body.idp-workspace-mode #stepSheet .idp-workbench-top{
+  padding-bottom:10px;
+}
+body.idp-workspace-mode #stepSheet .idp-workbench-title p{
+  margin-bottom:0!important;
+}
+body.idp-workspace-mode #stepSheet .idp-workbench-body{
+  flex:1 1 auto;
+  height:auto;
+  max-height:none;
+  min-height:0;
+  overflow:hidden;
+  gap:14px;
+}
+body.idp-workspace-mode #stepSheet .idp-workbench-main,
+body.idp-workspace-mode #stepSheet .idp-workbench-panel{
+  min-height:0;
+  max-height:100%;
+}
+body.idp-workspace-mode #stepSheet .idp-workbench-panel{
+  padding:12px;
+  overflow:auto;
+}
+body.idp-workspace-mode #stepSheet .idp-workbench-body > .idp-actions{
+  padding:10px 14px;
+}
+body.idp-workspace-mode #stepSheet .idp-a4-wrap{
+  height:100%;
+  min-height:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+}
+body.idp-workspace-mode #stepSheet .idp-a4-wrap canvas{
+  max-height:100%;
+}
+@media (max-width:980px){
+  .idp-hero{
+    grid-template-columns:1fr;
+    text-align:center;
+    margin-top:30px;
+  }
+  .idp-hero h1,
+  .idp-hero p{margin-left:auto;margin-right:auto;}
+  .idp-hero-actions{justify-content:center;}
+  .idp-hero-visual{min-height:320px;}
+  .idp-quick-grid{grid-template-columns:1fr;}
+}
+@media (max-width:640px){
+  body.idp-page main.legal-main{padding-top:24px;}
+  body.idp-page header.legal-header{
+    width:calc(100% - 12px);
+    margin-top:6px!important;
+    top:6px!important;
+    padding:9px 8px 9px 10px!important;
+  }
+  .idp-hero h1{font-size:clamp(48px,15vw,72px);}
+  .idp-hero-visual{min-height:280px;border-radius:28px;}
+  .idp-mock-card{width:220px;height:138px;left:22px;}
+  .idp-mock-card.back{left:70px;top:160px;}
+  .idp-sheet-ghost{width:170px;height:224px;right:16px;bottom:18px;}
+  body.idp-page .idp-steps{
+    align-items:stretch;
+    border-radius:24px;
+    flex-direction:column;
+    gap:4px;
+    width:min(100%,340px);
+  }
+  body.idp-page .idp-step{justify-content:center;}
+  body.idp-page .idp-step-line{display:none;}
+}
+
 </style>
 </head>
 <body class="idp-page">
@@ -853,8 +1426,44 @@ input.idp-range::-moz-range-thumb{
 
   <!-- Hero -->
   <div class="idp-hero">
-    <h1>ID Card <em>Print</em></h1>
-    <p>Drop Aadhaar, PAN, Voter ID, ABHA, Ayushman, Jan Aadhaar, eShram, RC, or ration-card PDFs. The workspace detects the layout, prepares the printable pair or panels, and keeps editing plus print export on the same screen.</p>
+    <div class="idp-hero-copy">
+      <span class="idp-eyebrow">PDF to counter-ready ID sheet</span>
+      <h1>ID Card <em>Print</em></h1>
+      <p>Drop Aadhaar, PAN, Voter ID, ABHA, Ayushman, Jan Aadhaar, eShram, RC, or ration-card PDFs. Studio Print detects the card layout, cleans the preview, and builds A4, 4x6, or PVC-ready output without leaving the browser.</p>
+      <div class="idp-hero-actions">
+        <button type="button" class="idp-hero-btn primary" onclick="document.getElementById('pdfInput')?.click()">Upload PDFs</button>
+        <button type="button" class="idp-hero-btn" onclick="document.getElementById('btnA4TestSheetTop')?.click()">Open A4 Test Sheet</button>
+      </div>
+    </div>
+    <div class="idp-hero-visual" aria-hidden="true">
+      <div class="idp-sheet-ghost"></div>
+      <div class="idp-mock-card front">
+        <div class="idp-card-avatar"></div>
+        <div class="idp-card-lines"><span></span><span></span><span></span></div>
+      </div>
+      <div class="idp-mock-card back">
+        <div class="idp-card-bars"><span></span><span></span><span></span></div>
+      </div>
+      <div class="idp-float-pill">CR80 • 300 DPI • PVC</div>
+    </div>
+  </div>
+
+  <div class="idp-quick-grid" aria-label="ID card print features">
+    <div class="idp-quick-card">
+      <span>01</span>
+      <strong>Auto detects common IDs</strong>
+      <p>Aadhaar, PAN, e-EPIC, ABHA, Ayushman, eShram, RC, and ration cards are routed into the right print workflow.</p>
+    </div>
+    <div class="idp-quick-card">
+      <span>02</span>
+      <strong>Counter-ready layouts</strong>
+      <p>A4 fold, A4 10-card batch, Dragon 4x6, and Epson PVC tray presets stay available from one print studio.</p>
+    </div>
+    <div class="idp-quick-card">
+      <span>03</span>
+      <strong>Scale before paid paper</strong>
+      <p>Use the free A4 calibration sheet and PVC QA report before laminating or printing directly on tray stock.</p>
+    </div>
   </div>
 
   <!-- Steps -->
@@ -1116,7 +1725,12 @@ input.idp-range::-moz-range-thumb{
   <div class="footer-main">
     <div class="footer-brand">
       <a href="index.html" class="footer-logo">Studio <em>Print</em></a>
-      <p class="footer-tagline">A browser-native print workspace for passport photos, ID-card sheets, document forms, PDF-to-print jobs, and 300&nbsp;DPI A4 output - built in India.</p>
+      <p class="footer-tagline">A browser-native print workspace for passport photos, ID-card sheets, PDF-to-print jobs, and 300&nbsp;DPI A4 output — built in India.</p>
+      <form class="footer-news" data-u="loginfaster89" data-d="gmail.com" aria-label="Subscribe to product updates">
+        <input type="email" name="email" placeholder="you@example.com" required autocomplete="email" aria-label="Your email">
+        <button type="submit">Subscribe</button>
+      </form>
+      <div class="footer-news-hint">Occasional build notes. No spam, unsubscribe anytime.</div>
     </div>
     <nav class="footer-cols" aria-label="Footer">
       <div class="footer-col">
@@ -1125,8 +1739,6 @@ input.idp-range::-moz-range-thumb{
           <li><a href="passport-photo.html">Passport Photo</a></li>
           <li><a href="id-print.html">ID Card Print</a></li>
           <li><a href="forms.html">Forms Hub</a></li>
-          
-          
         </ul>
       </div>
       <div class="footer-col">
@@ -1157,6 +1769,7 @@ input.idp-range::-moz-range-thumb{
   </div>
   <div class="footer-bottom">
     <div class="footer-copy">Copyright 2026 Studio Print. All rights reserved.</div>
+
   </div>
 </footer>
 
@@ -2069,6 +2682,7 @@ function setIdpWorkspaceMode(isActive) {
 function showStep(n) {
   [stepUpload, stepPassword, stepPreview, stepSheet].forEach(el => el.classList.add('idp-hidden'));
   idpError.classList.remove('show');
+  document.body.classList.remove('idp-error-visible');
   idpLoading.classList.remove('show');
   setIdpWorkspaceMode(n > 1);
 
@@ -2088,6 +2702,7 @@ function showStep(n) {
 function showError(msg) {
   idpError.textContent = msg;
   idpError.classList.add('show');
+  document.body.classList.add('idp-error-visible');
 }
 
 function showLoading(show) {
