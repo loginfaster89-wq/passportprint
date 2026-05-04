@@ -60,6 +60,16 @@
     "clean_source": true
   },
   {
+    "slug": "birth-report-adopted-child-form-1ka-rajasthan",
+    "title": "Birth Report for Adopted Child Form 1-A",
+    "category": "Rajasthan",
+    "source_url": "https://pehchan.rajasthan.gov.in/pehchan5/Download/FORM_1ka.pdf",
+    "pages": 2,
+    "local": "assets/forms/birth-report-adopted-child-form-1ka-rajasthan.pdf",
+    "preview": "assets/forms/previews/birth-report-adopted-child-form-1ka-rajasthan.png",
+    "clean_source": true
+  },
+  {
     "slug": "death-report-form-2-rajasthan",
     "title": "Death Report Form 2",
     "category": "Rajasthan",
@@ -67,6 +77,26 @@
     "pages": 2,
     "local": "assets/forms/death-report-form-2-rajasthan.pdf",
     "preview": "assets/forms/previews/death-report-form-2-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "mccd-form-4-institutional-death-rajasthan",
+    "title": "MCCD Form 4 - Institutional Death",
+    "category": "Rajasthan",
+    "source_url": "https://pehchan.rajasthan.gov.in/pehchan5/Download/Mccd_Form.pdf",
+    "pages": 1,
+    "local": "assets/forms/mccd-form-4-institutional-death-rajasthan.pdf",
+    "preview": "assets/forms/previews/mccd-form-4-institutional-death-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "mccd-form-4a-non-institutional-death-rajasthan",
+    "title": "MCCD Form 4A - Non-Institutional Death",
+    "category": "Rajasthan",
+    "source_url": "https://pehchan.rajasthan.gov.in/pehchan5/Download/Mccd_Form.pdf",
+    "pages": 1,
+    "local": "assets/forms/mccd-form-4a-non-institutional-death-rajasthan.pdf",
+    "preview": "assets/forms/previews/mccd-form-4a-non-institutional-death-rajasthan.png",
     "clean_source": true
   },
   {
@@ -87,6 +117,56 @@
     "pages": 2,
     "local": "assets/forms/marriage-registration-rajasthan.pdf",
     "preview": "assets/forms/previews/marriage-registration-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "delayed-birth-affidavit-after-one-year-rajasthan",
+    "title": "Delayed Birth Affidavit - After 1 Year",
+    "category": "Rajasthan",
+    "source_url": "https://pehchan.rajasthan.gov.in/pehchan5/Download/BirthDeathAffidavait.pdf",
+    "pages": 1,
+    "local": "assets/forms/delayed-birth-affidavit-after-one-year-rajasthan.pdf",
+    "preview": "assets/forms/previews/delayed-birth-affidavit-after-one-year-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "delayed-death-affidavit-after-one-year-rajasthan",
+    "title": "Delayed Death Affidavit - After 1 Year",
+    "category": "Rajasthan",
+    "source_url": "https://pehchan.rajasthan.gov.in/pehchan5/Download/BirthDeathAffidavait.pdf",
+    "pages": 1,
+    "local": "assets/forms/delayed-death-affidavit-after-one-year-rajasthan.pdf",
+    "preview": "assets/forms/previews/delayed-death-affidavit-after-one-year-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "delayed-birth-affidavit-30-days-to-one-year-rajasthan",
+    "title": "Delayed Birth Affidavit - 30 Days to 1 Year",
+    "category": "Rajasthan",
+    "source_url": "https://pehchan.rajasthan.gov.in/pehchan5/Download/BirthDeathAffidavait.pdf",
+    "pages": 1,
+    "local": "assets/forms/delayed-birth-affidavit-30-days-to-one-year-rajasthan.pdf",
+    "preview": "assets/forms/previews/delayed-birth-affidavit-30-days-to-one-year-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "delayed-death-affidavit-30-days-to-one-year-rajasthan",
+    "title": "Delayed Death Affidavit - 30 Days to 1 Year",
+    "category": "Rajasthan",
+    "source_url": "https://pehchan.rajasthan.gov.in/pehchan5/Download/BirthDeathAffidavait.pdf",
+    "pages": 1,
+    "local": "assets/forms/delayed-death-affidavit-30-days-to-one-year-rajasthan.pdf",
+    "preview": "assets/forms/previews/delayed-death-affidavit-30-days-to-one-year-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "marriage-registration-affidavit-pack-rajasthan",
+    "title": "Marriage Registration Affidavit Pack",
+    "category": "Rajasthan",
+    "source_url": "https://pehchan.rajasthan.gov.in/pehchan5/Download/Marriageaffidavit.pdf",
+    "pages": 5,
+    "local": "assets/forms/marriage-registration-affidavit-pack-rajasthan.pdf",
+    "preview": "assets/forms/previews/marriage-registration-affidavit-pack-rajasthan.png",
     "clean_source": true
   },
   {
