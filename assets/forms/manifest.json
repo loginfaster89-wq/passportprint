@@ -370,6 +370,106 @@
     "clean_source": true
   },
   {
+    "slug": "nps-subscriber-registration-csrf-g-rajasthan",
+    "title": "NPS Subscriber Registration Form CSRF-G",
+    "category": "Rajasthan",
+    "source_url": "https://sipf.rajasthan.gov.in/FORMS/NPS-Subscriber%20Registration%20Form_CSRF-G.pdf",
+    "pages": 4,
+    "local": "assets/forms/nps-subscriber-registration-csrf-g-rajasthan.pdf",
+    "preview": "assets/forms/previews/nps-subscriber-registration-csrf-g-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "nps-subscriber-details-change-s2-rajasthan",
+    "title": "NPS Subscriber Details Change Form S2",
+    "category": "Rajasthan",
+    "source_url": "https://sipf.rajasthan.gov.in/FORMS/S2-Subscriber_Details_Change.pdf",
+    "pages": 6,
+    "local": "assets/forms/nps-subscriber-details-change-s2-rajasthan.pdf",
+    "preview": "assets/forms/previews/nps-subscriber-details-change-s2-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "nps-inter-sector-shifting-iss-rajasthan",
+    "title": "NPS Inter Sector Shifting Form ISS",
+    "category": "Rajasthan",
+    "source_url": "https://sipf.rajasthan.gov.in/FORMS/Form_ISS_Inter%20Sector%20Shifting.pdf",
+    "pages": 3,
+    "local": "assets/forms/nps-inter-sector-shifting-iss-rajasthan.pdf",
+    "preview": "assets/forms/previews/nps-inter-sector-shifting-iss-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "nps-signature-photo-change-s7-rajasthan",
+    "title": "NPS Signature/Photo Change Form S7",
+    "category": "Rajasthan",
+    "source_url": "https://sipf.rajasthan.gov.in/FORMS/S7-Change-in-signature-or-Change-in-photograph.pdf",
+    "pages": 1,
+    "local": "assets/forms/nps-signature-photo-change-s7-rajasthan.pdf",
+    "preview": "assets/forms/previews/nps-signature-photo-change-s7-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "nps-tier-ii-activation-s10-rajasthan",
+    "title": "NPS Tier-II Activation Form S10",
+    "category": "Rajasthan",
+    "source_url": "https://sipf.rajasthan.gov.in/FORMS/S10-For-Subscribers-Having-a-Tier-I-Account-and-PRAN-Card_SG-T-II-A.pdf",
+    "pages": 3,
+    "local": "assets/forms/nps-tier-ii-activation-s10-rajasthan.pdf",
+    "preview": "assets/forms/previews/nps-tier-ii-activation-s10-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "nps-grievance-registration-g1-rajasthan",
+    "title": "NPS Subscriber Grievance Form G1",
+    "category": "Rajasthan",
+    "source_url": "https://sipf.rajasthan.gov.in/FORMS/G1_Subscribers%20Grievance%20Registration%20form-done.pdf",
+    "pages": 1,
+    "local": "assets/forms/nps-grievance-registration-g1-rajasthan.pdf",
+    "preview": "assets/forms/previews/nps-grievance-registration-g1-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "nps-superannuation-withdrawal-101-gs-rajasthan",
+    "title": "NPS Superannuation Withdrawal Form 101-GS",
+    "category": "Rajasthan",
+    "source_url": "https://sipf.rajasthan.gov.in/FORMS/superannuation%20Withdrawl%20form101-gs.pdf",
+    "pages": 8,
+    "local": "assets/forms/nps-superannuation-withdrawal-101-gs-rajasthan.pdf",
+    "preview": "assets/forms/previews/nps-superannuation-withdrawal-101-gs-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "nps-premature-exit-withdrawal-102-gp-rajasthan",
+    "title": "NPS Premature Exit Withdrawal Form 102-GP",
+    "category": "Rajasthan",
+    "source_url": "https://sipf.rajasthan.gov.in/FORMS/withdrawal%20pre%20mathurity%20102-GP.pdf",
+    "pages": 6,
+    "local": "assets/forms/nps-premature-exit-withdrawal-102-gp-rajasthan.pdf",
+    "preview": "assets/forms/previews/nps-premature-exit-withdrawal-102-gp-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "nps-death-withdrawal-103-gd-rajasthan",
+    "title": "NPS Death Claim Withdrawal Form 103-GD",
+    "category": "Rajasthan",
+    "source_url": "https://sipf.rajasthan.gov.in/FORMS/death%20Withdrawal%20Form%20103-GD.pdf",
+    "pages": 5,
+    "local": "assets/forms/nps-death-withdrawal-103-gd-rajasthan.pdf",
+    "preview": "assets/forms/previews/nps-death-withdrawal-103-gd-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "nps-state-autonomous-body-mcf-rajasthan",
+    "title": "NPS State Autonomous Body MCF Form",
+    "category": "Rajasthan",
+    "source_url": "https://sipf.rajasthan.gov.in/FORMS/MCF%20FORM.pdf",
+    "pages": 3,
+    "local": "assets/forms/nps-state-autonomous-body-mcf-rajasthan.pdf",
+    "preview": "assets/forms/previews/nps-state-autonomous-body-mcf-rajasthan.png",
+    "clean_source": true
+  },
+  {
     "slug": "sso-id-update-citizen-pensioner-rajasthan",
     "title": "SSO ID Update - Citizen/Pensioner",
     "category": "Rajasthan",
