@@ -172,9 +172,11 @@ body.idp-workspace-mode .idp-actions{margin-top:10px;}
 .idp-password input{
   width:100%;max-width:280px;padding:10px 14px;
   background:var(--bg);border:1px solid var(--border);border-radius:8px;
-  color:#fff;font-family:'DM Mono',monospace;font-size:14px;
+  color:#111;font-family:'DM Mono',monospace;font-size:14px;
+  -webkit-text-fill-color:#111;caret-color:#111;
   text-align:center;margin-bottom:12px;
 }
+.idp-password input::placeholder{color:#8f867a;-webkit-text-fill-color:#8f867a;}
 .idp-password input:focus{outline:none;border-color:var(--accent);}
 .idp-password .idp-btn{margin:0 auto;}
 
@@ -1375,6 +1377,63 @@ body.idp-workspace-mode #stepSheet .idp-a4-wrap canvas{
   }
   body.idp-page .idp-step{justify-content:center;}
   body.idp-page .idp-step-line{display:none;}
+  body.idp-page .idp-password{
+    width:100%;
+    max-width:none;
+    margin:0;
+    padding:24px 16px;
+    border-radius:24px;
+  }
+  body.idp-page .idp-password input{
+    max-width:none;
+    min-height:46px;
+    background:#fff;
+    color:#111;
+    -webkit-text-fill-color:#111;
+    caret-color:#111;
+  }
+  body.idp-workspace-mode #stepPreview .idp-preview{
+    height:auto;
+    min-height:0;
+    padding:14px;
+    overflow:visible;
+  }
+  body.idp-workspace-mode #stepPreview .idp-workbench{
+    gap:12px;
+    padding-bottom:0;
+  }
+  body.idp-workspace-mode #stepPreview .idp-workbench-body{
+    display:grid;
+    grid-template-columns:1fr;
+    height:auto;
+    max-height:none;
+    margin-bottom:0;
+    overflow:visible;
+  }
+  body.idp-workspace-mode #stepPreview .idp-workbench-main,
+  body.idp-workspace-mode #stepPreview .idp-workbench-panel{
+    max-height:none;
+    overflow:visible;
+  }
+  body.idp-workspace-mode #stepPreview .idp-preview-canvas-pair{
+    width:100%;
+    max-height:34dvh;
+    object-fit:contain;
+  }
+  body.idp-workspace-mode #stepPreview .idp-sidebar-actions{
+    position:static;
+    margin-top:12px;
+    padding:10px;
+  }
+  body.idp-workspace-mode #stepPreview .idp-sidebar-actions .idp-actions{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:8px;
+  }
+  body.idp-workspace-mode #stepPreview .idp-sidebar-actions .idp-btn{
+    width:100%;
+    min-width:0;
+  }
 }
 
 </style>
