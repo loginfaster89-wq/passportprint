@@ -149,11 +149,14 @@ async function buildHtmlFile(relPath) {
   }
 
   const minified = await minify(html, HTML_MINIFIER_OPTIONS);
+  const normalized = minified
+    .replace(/[ \t]+(\r?\n)/g, '$1')
+    .replace(/\r\n/g, '\n');
   await ensureDir(path.dirname(dst));
-  await fs.promises.writeFile(dst, minified, 'utf8');
+  await fs.promises.writeFile(dst, normalized, 'utf8');
 
   const beforeKB = (Buffer.byteLength(await fs.promises.readFile(src), 'utf8') / 1024).toFixed(1);
-  const afterKB = (Buffer.byteLength(minified, 'utf8') / 1024).toFixed(1);
+  const afterKB = (Buffer.byteLength(normalized, 'utf8') / 1024).toFixed(1);
   console.log(`  ${relPath.padEnd(16)} ${beforeKB} KB  →  ${afterKB} KB` + (shouldObfuscate ? '  (obfuscated)' : ''));
 }
 

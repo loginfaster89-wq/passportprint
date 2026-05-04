@@ -533,7 +533,7 @@
 }
 .sp-pay-cta:hover{background:#000;color:#fff;}
 @media (max-width: 900px){
-  .sp-plans-overlay{align-items:flex-start;overflow-y:auto;}
+  .sp-plans-overlay{align-items:center;overflow-y:auto;}
   .sp-plans-grid{grid-template-columns:1fr;}
   .sp-plan-card{min-height:0;}
 }
@@ -553,4 +553,19 @@
   .sp-plans-title{font-size:22px;}
   .sp-plan-name{font-size:24px;}
   .sp-plan-price{font-size:38px;}
+}
+
+/* Final CTA polish: upgrade buttons should read like the Studio Print
+   accent action, not a blacked-out disabled block. */
+.sp-plan-btn-primary{
+  border-color:#f0a500!important;
+  background:#f0a500!important;
+  color:#111!important;
+  box-shadow:0 12px 28px rgba(240,165,0,.22)!important;
+}
+.sp-plan-btn-primary:hover{
+  border-color:#ffbd2f!important;
+  background:#ffbd2f!important;
+  color:#111!important;
+  transform:translateY(-1px);
 }

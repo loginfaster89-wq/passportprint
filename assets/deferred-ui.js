@@ -50,6 +50,10 @@
     ]);
   }
 
+  window.StudioPrintDeferred = window.StudioPrintDeferred || {};
+  window.StudioPrintDeferred.loadAuthBundle = loadAuthBundle;
+  window.StudioPrintDeferred.loadPricingBundle = loadPricingBundle;
+
   function getCachedUser() {
     try {
       var session = JSON.parse(localStorage.getItem('pps_session_v1') || 'null');

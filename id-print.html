@@ -1434,6 +1434,145 @@ body.idp-workspace-mode #stepSheet .idp-a4-wrap canvas{
     width:100%;
     min-width:0;
   }
+
+  body.idp-workspace-mode #stepSheet .idp-preview,
+  body.idp-workspace-mode.idp-error-visible #stepSheet .idp-preview,
+  body.idp-workspace-mode:has(.idp-error.show) #stepSheet .idp-preview{
+    height:auto;
+    min-height:0;
+    padding:14px;
+    overflow:visible;
+    border-radius:26px;
+  }
+  body.idp-workspace-mode #stepSheet .idp-workbench{
+    gap:12px;
+    padding-bottom:0;
+  }
+  body.idp-workspace-mode #stepSheet .idp-workbench-top{
+    display:block;
+    padding-bottom:10px;
+    text-align:center;
+  }
+  body.idp-workspace-mode #stepSheet .idp-workbench-title h3{
+    font-size:20px;
+    line-height:1.14;
+  }
+  body.idp-workspace-mode #stepSheet .idp-workbench-title p{
+    font-size:12px!important;
+    line-height:1.5!important;
+    margin-bottom:0!important;
+  }
+  body.idp-workspace-mode #stepSheet .idp-workbench-body{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    height:auto;
+    max-height:none;
+    overflow:visible;
+  }
+  body.idp-workspace-mode #stepSheet .idp-workbench-main,
+  body.idp-workspace-mode #stepSheet .idp-workbench-panel{
+    max-height:none;
+    overflow:visible;
+    border-radius:22px;
+  }
+  body.idp-workspace-mode #stepSheet .idp-workbench-main{
+    order:1;
+    min-height:360px;
+    padding:12px;
+  }
+  body.idp-workspace-mode #stepSheet .idp-workbench-panel{
+    order:2;
+    padding:10px;
+  }
+  body.idp-workspace-mode #stepSheet .idp-a4-wrap{
+    width:100%;
+    height:auto;
+    min-height:0;
+    overflow:visible;
+  }
+  body.idp-workspace-mode #stepSheet .idp-a4-wrap canvas{
+    width:min(100%,260px);
+    max-width:100%;
+    max-height:none;
+    height:auto;
+  }
+  body.idp-workspace-mode #stepSheet .idp-layout-panel{
+    width:100%;
+    max-width:100%;
+    min-width:0;
+    box-sizing:border-box;
+    overflow:hidden;
+    padding:12px;
+    border-radius:18px;
+  }
+  body.idp-workspace-mode #stepSheet .idp-layout-head{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:8px;
+    text-align:left;
+    width:100%;
+    min-width:0;
+    max-width:100%;
+    box-sizing:border-box;
+  }
+  body.idp-workspace-mode #stepSheet .idp-layout-head > *{
+    min-width:0;
+    max-width:100%;
+  }
+  body.idp-workspace-mode #stepSheet .idp-layout-head .idp-cal-reset{
+    width:100%;
+    margin-left:0;
+  }
+  body.idp-workspace-mode #stepSheet .idp-layout-grid{
+    width:100%;
+    max-width:100%;
+    min-width:0;
+    box-sizing:border-box;
+    display:flex;
+    grid-template-columns:none;
+    overflow-x:auto;
+    overflow-y:hidden;
+    gap:8px;
+    margin:0 -2px;
+    padding:0 2px 6px;
+    scroll-snap-type:x proximity;
+    -webkit-overflow-scrolling:touch;
+  }
+  body.idp-workspace-mode #stepSheet .idp-layout-grid::-webkit-scrollbar{height:0;}
+  body.idp-workspace-mode #stepSheet .idp-layout-btn{
+    flex:0 0 176px;
+    min-height:84px;
+    scroll-snap-align:start;
+  }
+  body.idp-workspace-mode #stepSheet #idpPlanBanner{
+    width:100%;
+    max-width:100%;
+    min-width:0;
+    box-sizing:border-box;
+    overflow-wrap:anywhere;
+    font-size:11px;
+    line-height:1.45;
+  }
+  body.idp-workspace-mode #stepSheet .idp-workbench-body > .idp-actions{
+    order:3;
+    display:grid;
+    grid-template-columns:1fr;
+    gap:8px;
+    padding:10px;
+  }
+  body.idp-workspace-mode #stepSheet .idp-workbench-body > .idp-actions .idp-btn{
+    width:100%;
+    min-width:0;
+  }
+}
+@media (max-width:420px){
+  body.idp-workspace-mode #stepSheet .idp-workbench-main{
+    min-height:330px;
+  }
+  body.idp-workspace-mode #stepSheet .idp-a4-wrap canvas{
+    width:min(100%,235px);
+  }
 }
 
 </style>
@@ -4543,6 +4682,7 @@ btnSheet.addEventListener('click', () => {
   updateSheetMeta();
   buildSheet();
   showStep(3);
+  requestAnimationFrame(refreshSheetPreview);
 });
 
 btnBack.addEventListener('click', () => {

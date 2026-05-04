@@ -558,8 +558,15 @@
       closeAccount();
       if (typeof window.openPlans === 'function') {
         window.openPlans();
+      } else if (window.StudioPrintDeferred && typeof window.StudioPrintDeferred.loadPricingBundle === 'function') {
+        window.StudioPrintDeferred.loadPricingBundle().then(function () {
+          if (typeof window.openPlans === 'function') window.openPlans();
+          else location.href = '#pricing';
+        }).catch(function () {
+          location.href = '#pricing';
+        });
       } else {
-        location.href = 'passport-photo.html#plans';
+        location.href = '#pricing';
       }
     });
     document.getElementById('spAccDelete').addEventListener('click', function () {

@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -2344,6 +2344,187 @@ body.passport-page footer.legal-footer .footer-bottom{
 @media(max-width:760px){
   body.passport-page footer.legal-footer:has(.footer-main){width:calc(100% - 16px);margin-bottom:8px;}
   body.passport-page footer.legal-footer .footer-main{padding:24px 20px;border-radius:28px;grid-template-columns:1fr;}
+}
+
+/* Passport mobile QA: compact upload card, pill scrollers, stronger process cards. */
+@media(max-width:760px){
+  body.passport-page .steps{
+    width:calc(100% - 16px);
+    max-width:calc(100% - 16px);
+    overflow-x:hidden;
+    gap:4px;
+    padding:5px;
+  }
+  body.passport-page .step{
+    flex:1 1 0;
+    min-width:0;
+    padding:7px 6px;
+    gap:0;
+  }
+  body.passport-page .step-label{
+    display:none!important;
+  }
+  body.passport-page .pp-hero-panel,
+  body.passport-page .pp-hero-copy,
+  body.passport-page .pp-hero-copy > div,
+  body.passport-page .pp-hero-copy h1,
+  body.passport-page .pp-hero-copy p,
+  body.passport-page .pp-hero-actions{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+  }
+  body.passport-page .pp-hero-copy{
+    padding:28px 24px;
+    overflow:hidden;
+  }
+  body.passport-page .pp-hero-actions{
+    flex-wrap:wrap;
+  }
+  body.passport-page .pp-trust-row{
+    flex-wrap:nowrap;
+    overflow-x:auto;
+    overflow-y:hidden;
+    justify-content:flex-start;
+    width:100%;
+    max-width:100%;
+    margin:24px 0 0;
+    padding:0 2px 6px;
+    scroll-snap-type:x proximity;
+    -webkit-overflow-scrolling:touch;
+  }
+  body.passport-page .pp-trust-row::-webkit-scrollbar{height:0;}
+  body.passport-page .pp-pill{
+    flex:0 0 auto;
+    scroll-snap-align:start;
+    white-space:nowrap;
+  }
+  body.passport-page .canvas-area{
+    min-height:360px;
+    padding:10px;
+  }
+  body.passport-page .upload-zone{
+    min-height:0;
+    width:100%;
+  }
+  body.passport-page .upload-inner-card{
+    min-height:240px;
+    padding:22px 16px 18px;
+    border-radius:26px;
+  }
+  body.passport-page .upload-icon-wrap{
+    width:58px;
+    height:58px;
+    margin-bottom:10px;
+  }
+  body.passport-page .upload-icon-wrap svg{
+    width:25px;
+    height:25px;
+  }
+  body.passport-page .upload-title{
+    max-width:10ch;
+    font-size:clamp(27px,8vw,34px)!important;
+    line-height:1.03!important;
+  }
+  body.passport-page .upload-sub{
+    max-width:26ch;
+    margin-left:auto;
+    margin-right:auto;
+    font-size:13px!important;
+    line-height:1.45!important;
+  }
+  body.passport-page .upload-feats{
+    display:flex!important;
+    flex-wrap:nowrap;
+    justify-content:flex-start;
+    overflow-x:auto;
+    overflow-y:hidden;
+    gap:7px;
+    margin:14px -2px 0;
+    padding:0 2px 6px;
+    scroll-snap-type:x proximity;
+    -webkit-overflow-scrolling:touch;
+  }
+  body.passport-page .upload-feats::-webkit-scrollbar{height:0;}
+  body.passport-page .upload-feat-pill{
+    flex:0 0 auto;
+    padding:7px 10px;
+    font-size:11px;
+    scroll-snap-align:start;
+  }
+  body.passport-page .upload-cta-hint{
+    margin-top:9px!important;
+    font-size:12px!important;
+  }
+  body.passport-page #featLinesSVG{
+    display:block!important;
+  }
+  body.passport-page .feat-chip{
+    display:inline-flex!important;
+    max-width:45vw;
+    padding:6px 9px 6px 8px;
+    gap:5px;
+    background:rgba(255,255,255,.94);
+    border:1px solid rgba(17,17,17,.08);
+    color:#161411;
+    font-size:10.5px;
+    font-weight:780;
+    line-height:1;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    box-shadow:0 10px 24px rgba(42,34,22,.10),inset 0 1px 0 rgba(255,255,255,.95);
+  }
+  body.passport-page .feat-chip .feat-icon{
+    font-size:11px;
+  }
+  body.passport-page .sidebar .sb-section{
+    border:1px solid rgba(17,17,17,.10);
+    background:rgba(255,255,255,.94);
+    background-clip:padding-box;
+    overflow:visible;
+  }
+  body.passport-page #bgProgressWrap:not(.hidden){
+    gap:8px;
+    margin-bottom:10px;
+  }
+  body.passport-page #bgProgressWrap:not(.hidden) + #removeBgBtn{
+    margin-top:8px;
+  }
+  body.passport-page #cancelBgBtn,
+  body.passport-page #removeBgBtn{
+    min-height:44px;
+  }
+}
+@media(max-width:420px){
+  body.passport-page .canvas-area{min-height:300px;}
+  body.passport-page .upload-inner-card{
+    min-height:190px;
+    padding:16px 12px 14px;
+  }
+  body.passport-page .upload-icon-wrap{
+    width:46px;
+    height:46px;
+    margin-bottom:7px;
+  }
+  body.passport-page .upload-title{
+    font-size:27px!important;
+    max-width:9ch;
+  }
+  body.passport-page .upload-sub{
+    font-size:12px!important;
+    line-height:1.34!important;
+  }
+  body.passport-page .upload-feats{
+    margin-top:9px;
+    padding-bottom:4px;
+  }
+  body.passport-page .upload-feat-pill{
+    padding:6px 8px;
+    font-size:10px;
+  }
+  body.passport-page .upload-cta-hint{
+    margin-top:5px!important;
+  }
 }
 
 </style>
@@ -5055,22 +5236,67 @@ async function printSheet(){
     c.drawImage(cvs, 0, 0);
     paintWatermark(c, outCvs.width, outCvs.height);
   }
-  let img = document.getElementById('passportPrintImg');
-  if(!img){
-    img = document.createElement('img');
-    img.id = 'passportPrintImg';
-    img.alt = 'Passport photo A4 print sheet';
-    document.body.appendChild(img);
-  }
-  img.src = outCvs.toDataURL('image/png');
-  document.body.classList.add('passport-printing');
-  const cleanupPrint = () => {
-    document.body.classList.remove('passport-printing');
-    img.removeAttribute('src');
-    window.removeEventListener('afterprint', cleanupPrint);
+
+  const openPrintFrame = (src, cleanup) => {
+    const frame = document.createElement('iframe');
+    frame.setAttribute('title','Passport photo print sheet');
+    frame.style.position = 'fixed';
+    frame.style.right = '0';
+    frame.style.bottom = '0';
+    frame.style.width = '1px';
+    frame.style.height = '1px';
+    frame.style.border = '0';
+    frame.style.opacity = '0';
+    frame.style.pointerEvents = 'none';
+    document.body.appendChild(frame);
+    const doc = frame.contentDocument || frame.contentWindow.document;
+    doc.open();
+    doc.write(`<!doctype html><html><head><meta charset="utf-8"><title>Studio Print A4 Sheet</title><style>
+      @page{size:A4 portrait;margin:0;}
+      html,body{margin:0;padding:0;width:210mm;height:297mm;background:#fff;overflow:hidden;}
+      img{display:block;width:210mm;height:297mm;object-fit:contain;object-position:center top;margin:0;padding:0;border:0;border-radius:1mm;box-shadow:none;background:#fff;}
+      @media print{html,body{width:210mm;height:297mm;}img{width:210mm;height:297mm;}}
+    </style></head><body><img id="sheet" alt="Passport photo A4 print sheet"></body></html>`);
+    doc.close();
+    const img = doc.getElementById('sheet');
+    let disposed = false;
+    const dispose = () => {
+      if (disposed) return;
+      disposed = true;
+      setTimeout(() => {
+        try { frame.remove(); } catch(_) {}
+        if (cleanup) cleanup();
+      }, 1500);
+    };
+    img.onload = () => {
+      try {
+        frame.contentWindow.focus();
+        frame.contentWindow.print();
+      } catch(e) {
+        window.print();
+      }
+      frame.contentWindow.addEventListener('afterprint', dispose, { once:true });
+      setTimeout(dispose, 45000);
+    };
+    img.onerror = () => {
+      dispose();
+      showToast('Print preview could not load. Please download the PNG and print it.');
+    };
+    img.src = src;
   };
-  window.addEventListener('afterprint', cleanupPrint, { once:true });
-  requestAnimationFrame(() => window.print());
+
+  if (typeof outCvs.toBlob === 'function') {
+    outCvs.toBlob((blob) => {
+      if (!blob) {
+        openPrintFrame(outCvs.toDataURL('image/png'));
+        return;
+      }
+      const url = URL.createObjectURL(blob);
+      openPrintFrame(url, () => URL.revokeObjectURL(url));
+    }, 'image/png');
+  } else {
+    openPrintFrame(outCvs.toDataURL('image/png'));
+  }
 }
 window.downloadSheetHD = downloadSheetHD;
 

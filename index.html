@@ -1698,6 +1698,29 @@ body.home .footer-bottom{
     padding:24px 20px;
   }
 }
+
+/* Smooth the rebuilt homepage sections so adjacent white panels do not
+   look like hard cut blocks while scrolling. */
+body.home section.section .wrap,
+body.home .cta-band,
+body.home .footer-main{
+  background:rgba(255,255,255,.80);
+  border:1px solid rgba(17,17,17,.08);
+  box-shadow:0 28px 90px rgba(44,36,22,.075);
+  -webkit-backdrop-filter:blur(20px);
+  backdrop-filter:blur(20px);
+}
+body.home .feature-card,
+body.home .why-card,
+body.home .step-card,
+body.home .audience-card,
+body.home .stat-card,
+body.home .faq-item,
+body.home .plan-card,
+body.home .hero-inner,
+body.home .hero-preview{
+  box-shadow:0 18px 56px rgba(44,36,22,.075);
+}
 </style>
 <script type="application/ld+json">
 {

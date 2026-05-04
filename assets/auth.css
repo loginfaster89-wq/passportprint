@@ -523,10 +523,10 @@
   backdrop-filter:blur(18px);
 }
 @media (max-width:420px){
-  .sp-auth-overlay{align-items:flex-end;padding:10px;}
+  .sp-auth-overlay{align-items:center;justify-content:center;padding:12px;}
   .sp-auth-modal{
     max-width:100%;
-    max-height:calc(100dvh - 20px);
+    max-height:calc(100dvh - 24px);
     border-radius:28px;
   }
   .sp-auth-header{padding:18px 18px 16px;}

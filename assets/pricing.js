@@ -15,10 +15,9 @@
      <link rel="stylesheet" href="assets/pricing.css">
      <script src="assets/pricing.js" defer></script>
 
-   Razorpay Checkout SDK + preconnects must also be on the page (see
-   index.html head for the canonical snippet). Without the SDK the
-   "Pay Securely" button falls back to navigating to
-   passport-photo.html#buy-<plan> so users never get stuck. */
+   Razorpay Checkout SDK is lazy-loaded when needed. If payment or auth
+   modules cannot load, the modal keeps the user on the current page and
+   shows a retryable message instead of redirecting to another tool. */
 
 (function () {
   'use strict';
@@ -32,6 +31,8 @@
 
   var BACKEND_URL = 'https://passportprint-studio.onrender.com';
   var AUTH_TOKEN_KEY = 'pps_token_v1';
+  var RAZORPAY_SDK_URL = 'https://checkout.razorpay.com/v1/checkout.js';
+  var razorpaySdkPromise = null;
 
   // Mirrors the PLANS constant in passport-photo.html so feature copy +
   // pricing stays in lock-step. Pricing numbers also appear in
@@ -93,6 +94,26 @@
       if (typeof window.currentUser === 'function') return window.currentUser();
     } catch (_) {}
     return null;
+  }
+
+  function loadRazorpaySdk() {
+    if (window.Razorpay) return Promise.resolve();
+    if (razorpaySdkPromise) return razorpaySdkPromise;
+    razorpaySdkPromise = new Promise(function (resolve, reject) {
+      var existing = document.querySelector('script[src="' + RAZORPAY_SDK_URL + '"]');
+      if (existing) {
+        existing.addEventListener('load', resolve, { once: true });
+        existing.addEventListener('error', reject, { once: true });
+        return;
+      }
+      var script = document.createElement('script');
+      script.src = RAZORPAY_SDK_URL;
+      script.async = true;
+      script.onload = resolve;
+      script.onerror = reject;
+      document.head.appendChild(script);
+    });
+    return razorpaySdkPromise;
   }
 
   function effectivePlan(user) {
@@ -326,8 +347,7 @@
       // and continue the buy flow once the user is logged in.
       closeOverlay(PLANS_OVERLAY_ID);
       if (typeof window.openAuth !== 'function') {
-        // No shared auth on this page — graceful fallback.
-        location.href = 'passport-photo.html#buy-' + planId;
+        notify('Please sign in to continue. Reload the page if login is unavailable.');
         return;
       }
       window.openAuth('signup');
@@ -378,11 +398,14 @@
     }
 
     if (!window.Razorpay) {
-      // SDK never loaded — bail to the passport-photo flow which has its
-      // own SDK loader + retry logic.
+      try { await loadRazorpaySdk(); } catch (_) {}
+    }
+
+    if (!window.Razorpay) {
+      // SDK never loaded. Keep the user on this page with a retryable message.
       reset();
       closeOverlay(PAY_OVERLAY_ID);
-      location.href = 'passport-photo.html#buy-' + planId;
+      notify('Payment module could not load. Please check the connection and try again.');
       return;
     }
 
