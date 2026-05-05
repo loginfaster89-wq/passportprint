@@ -1140,6 +1140,126 @@
     "clean_source": true
   },
   {
+    "slug": "udh-building-plan-above-500sqm-rajasthan",
+    "title": "UDH Building Plan Approval - Above 500 sq.m",
+    "category": "Rajasthan",
+    "source_url": "https://udh.rajasthan.gov.in/content/dam/raj/udh/udh%20department/pdf/application-form/Application%20Form%20for%20Building%20Plan%20approval%20above%20500%20sq.m%201.pdf",
+    "pages": 16,
+    "local": "assets/forms/udh-building-plan-above-500sqm-rajasthan.pdf",
+    "preview": "assets/forms/previews/udh-building-plan-above-500sqm-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "udh-lease-deed-rajasthan",
+    "title": "UDH Lease Deed Application",
+    "category": "Rajasthan",
+    "source_url": "https://udh.rajasthan.gov.in/content/dam/raj/udh/udh%20department/pdf/application-form/application%20form%20for%20lease%20deed%201.pdf",
+    "pages": 3,
+    "local": "assets/forms/udh-lease-deed-rajasthan.pdf",
+    "preview": "assets/forms/previews/udh-lease-deed-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "udh-lease-free-certificate-rajasthan",
+    "title": "UDH Lease Free Certificate Application",
+    "category": "Rajasthan",
+    "source_url": "https://udh.rajasthan.gov.in/content/dam/raj/udh/udh%20department/pdf/application-form/Application%20Form%20for%20lease%20free%20certificate-001.jpg",
+    "pages": 1,
+    "local": "assets/forms/udh-lease-free-certificate-rajasthan.pdf",
+    "preview": "assets/forms/previews/udh-lease-free-certificate-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "udh-name-transfer-ii-rajasthan",
+    "title": "UDH Name Transfer II Application",
+    "category": "Rajasthan",
+    "source_url": "https://udh.rajasthan.gov.in/content/dam/raj/udh/udh%20department/pdf/application-form/application%20form%20for%20name%20transfer%20II%201.pdf",
+    "pages": 2,
+    "local": "assets/forms/udh-name-transfer-ii-rajasthan.pdf",
+    "preview": "assets/forms/previews/udh-name-transfer-ii-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "udh-name-transfer-rajasthan",
+    "title": "UDH Name Transfer Application",
+    "category": "Rajasthan",
+    "source_url": "https://udh.rajasthan.gov.in/content/dam/raj/udh/udh%20department/pdf/application-form/Application%20Form%20for%20Name%20Transfer%201.pdf",
+    "pages": 2,
+    "local": "assets/forms/udh-name-transfer-rajasthan.pdf",
+    "preview": "assets/forms/previews/udh-name-transfer-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "udh-subdivision-rajasthan",
+    "title": "UDH Subdivision Application",
+    "category": "Rajasthan",
+    "source_url": "https://udh.rajasthan.gov.in/content/dam/raj/udh/udh%20department/pdf/application-form/form%20for%20sub.pdf",
+    "pages": 2,
+    "local": "assets/forms/udh-subdivision-rajasthan.pdf",
+    "preview": "assets/forms/previews/udh-subdivision-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "udh-residential-building-500sqft-8m-rajasthan",
+    "title": "UDH Residential Building Construction - 500 sq.ft to 8 m",
+    "category": "Rajasthan",
+    "source_url": "https://udh.rajasthan.gov.in/content/dam/raj/udh/udh%20department/pdf/application-form/Application%20Form%20for%20Residantial%20Building%20Construction%20_500%20Sp.f.%20to%208%20M-001%201.jpg",
+    "pages": 1,
+    "local": "assets/forms/udh-residential-building-500sqft-8m-rajasthan.pdf",
+    "preview": "assets/forms/previews/udh-residential-building-500sqft-8m-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "udh-residential-scheme-agriculture-land-rajasthan",
+    "title": "UDH Residential Scheme on Agriculture Land",
+    "category": "Rajasthan",
+    "source_url": "https://udh.rajasthan.gov.in/content/dam/raj/udh/udh%20department/pdf/application-form/Application-Form-for-Residential-Scheme-on-Agriculture-Land%201.pdf",
+    "pages": 2,
+    "local": "assets/forms/udh-residential-scheme-agriculture-land-rajasthan.pdf",
+    "preview": "assets/forms/previews/udh-residential-scheme-agriculture-land-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "udh-residential-to-commercial-land-use-rajasthan",
+    "title": "UDH Residential to Commercial Land Use Application",
+    "category": "Rajasthan",
+    "source_url": "https://udh.rajasthan.gov.in/content/dam/raj/udh/udh%20department/pdf/application-form/Application%20Form%20for%20Residential%20to%20Commercial%20and%20other%20Land%20use-001.jpg",
+    "pages": 1,
+    "local": "assets/forms/udh-residential-to-commercial-land-use-rajasthan.pdf",
+    "preview": "assets/forms/previews/udh-residential-to-commercial-land-use-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "jaipur-mc-loksunwai-application-rajasthan",
+    "title": "Jaipur MC Loksunwai Application",
+    "category": "Rajasthan",
+    "source_url": "https://jaipurmc.org/PDF/Auction_MM_RTI_Act_Etc_PDF/LoksGntAd2011.pdf",
+    "pages": 1,
+    "local": "assets/forms/jaipur-mc-loksunwai-application-rajasthan.pdf",
+    "preview": "assets/forms/previews/jaipur-mc-loksunwai-application-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "jaipur-mc-trade-license-rajasthan",
+    "title": "Jaipur MC Trade License Application",
+    "category": "Rajasthan",
+    "source_url": "https://jaipurmc.org/PDF/Auction_MM_RTI_Act_Etc_PDF/TradeLicense.pdf",
+    "pages": 2,
+    "local": "assets/forms/jaipur-mc-trade-license-rajasthan.pdf",
+    "preview": "assets/forms/previews/jaipur-mc-trade-license-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "jaipur-mc-garden-circle-adoption-application-rajasthan",
+    "title": "Jaipur MC Garden/Circle Adoption Application",
+    "category": "Rajasthan",
+    "source_url": "https://jaipurmc.org/PDF/Auction_MM_RTI_Act_Etc_PDF/Jp_AppForm_AdoptionGCCTD.pdf",
+    "pages": 1,
+    "local": "assets/forms/jaipur-mc-garden-circle-adoption-application-rajasthan.pdf",
+    "preview": "assets/forms/previews/jaipur-mc-garden-circle-adoption-application-rajasthan.png",
+    "clean_source": true
+  },
+  {
     "slug": "transport-dl-form-2-learner-licence-rajasthan",
     "title": "Learner Licence Form 2",
     "category": "Rajasthan",
