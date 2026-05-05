@@ -1260,6 +1260,36 @@
     "clean_source": true
   },
   {
+    "slug": "rajasthan-electricity-jvvnl-new-connection-load-change",
+    "title": "JVVNL Electricity New Connection / Load Change",
+    "category": "Rajasthan",
+    "source_url": "https://rajnivesh.rajasthan.gov.in/Uploads/0e937ea0-0c19-44bf-87fc-8375f086e0bdNew%20Electricity%20Connection%20Form%20final.pdf",
+    "pages": 6,
+    "local": "assets/forms/rajasthan-electricity-jvvnl-new-connection-load-change.pdf",
+    "preview": "assets/forms/previews/rajasthan-electricity-jvvnl-new-connection-load-change.png",
+    "clean_source": true
+  },
+  {
+    "slug": "rajasthan-electricity-avvnl-new-connection-load-change",
+    "title": "AVVNL Electricity New Connection / Load Change",
+    "category": "Rajasthan",
+    "source_url": "https://rajnivesh.rajasthan.gov.in/Uploads/0e937ea0-0c19-44bf-87fc-8375f086e0bdNew%20Electricity%20Connection%20Form%20final.pdf",
+    "pages": 6,
+    "local": "assets/forms/rajasthan-electricity-avvnl-new-connection-load-change.pdf",
+    "preview": "assets/forms/previews/rajasthan-electricity-avvnl-new-connection-load-change.png",
+    "clean_source": true
+  },
+  {
+    "slug": "rajasthan-electricity-jdvvnl-new-connection-load-change",
+    "title": "JDVVNL Electricity New Connection / Load Change",
+    "category": "Rajasthan",
+    "source_url": "https://rajnivesh.rajasthan.gov.in/Uploads/0e937ea0-0c19-44bf-87fc-8375f086e0bdNew%20Electricity%20Connection%20Form%20final.pdf",
+    "pages": 6,
+    "local": "assets/forms/rajasthan-electricity-jdvvnl-new-connection-load-change.pdf",
+    "preview": "assets/forms/previews/rajasthan-electricity-jdvvnl-new-connection-load-change.png",
+    "clean_source": true
+  },
+  {
     "slug": "transport-dl-form-2-learner-licence-rajasthan",
     "title": "Learner Licence Form 2",
     "category": "Rajasthan",
