@@ -10,7 +10,15 @@ Last updated: 2026-05-05 IST
 - If the global edit lock is `ACTIVE`, new editing/deploy work must stop until the owner releases it.
 - Before any live deploy, read `.agents/deploy-policy.md`, confirm one deploy owner, build locally, and run the workflow manually with the latest `origin/main` SHA.
 - Do not create empty retry commits for Cloudflare/GitHub transient failures.
-- Current deployment incident: Google verification tag is present in `main`, but live site still depends on a successful manual Cloudflare deploy.
+- Current deployment status: resolved by Cloudflare dashboard Direct Upload on 2026-05-05 21:51 IST after GitHub Actions hosted runners could not acquire a runner. Live `https://studioprint.pages.dev/` has the Google site verification tag.
+
+## Production deploy verification
+
+- Latest verified production deployment: `https://63530914.studioprint.pages.dev/`.
+- Production URL verified: `https://studioprint.pages.dev/`.
+- Verification result: both URLs returned 200 and contained Google site verification token `YL3_b-WlPXch66iSf_LXU1RSuMJDxKMd9Gnv9MtyUYA`.
+- Deploy method used: Cloudflare dashboard `Create deployment` with local `dist/` folder, Production environment selected.
+- GitHub Actions run `#349` failed before runner acquisition during the GitHub Actions hosted runner incident; this was not a source-code or Cloudflare token failure.
 
 ## Current task status
 

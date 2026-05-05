@@ -4,11 +4,11 @@ Last updated: 2026-05-05 IST
 
 ## Global edit lock
 
-**Status:** ACTIVE
-**Owner:** Codex growth/research chat
-**Scope:** Coordination docs update after successful manual Cloudflare dashboard deploy
-**Started:** 2026-05-05 21:53 IST
-**Notes:** Updating `.agents` status only; live site is already deployed through Cloudflare Direct Upload and verified.
+**Status:** FREE
+**Owner:** none
+**Scope:** none
+**Started:** none
+**Notes:** Released after updating coordination docs for the successful Cloudflare dashboard Direct Upload; live Google site verification tag is verified.
 
 ## Mandatory rule
 

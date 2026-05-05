@@ -30,7 +30,7 @@ pushing, or deploying. The active owner must finish or release the lock first.
 - Read `.agents/work-locks.md` and take the global edit lock before any live deploy or shared-file change.
 - Only one deploy owner should run `Deploy to Cloudflare Pages` from GitHub Actions after collecting ready changes and validating the latest `origin/main`.
 - Do not push empty retry commits for runner or Cloudflare internal errors; use `Re-run jobs` or wait for the external service to recover.
-- Current deploy blocker was external runner/Cloudflare instability, not the Google verification tag code. The tag is already on `main`.
+- Latest live recovery was completed by Cloudflare dashboard Direct Upload on 2026-05-05 21:51 IST after GitHub Actions hosted runners failed to acquire a runner. The Google verification tag is now live on `https://studioprint.pages.dev/`.
 
 ## Active scope
 
