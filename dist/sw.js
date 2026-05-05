@@ -16,10 +16,10 @@
  * the activate step can evict the old cache.
  */
 
-const CACHE_VERSION = 'studioprint-v61';
-const RUNTIME_CACHE = 'studioprint-runtime-v61';
+const CACHE_VERSION = 'studioprint-v62';
+const RUNTIME_CACHE = 'studioprint-runtime-v62';
 const ID_PRINT_REFRESH_VERSION = 'id-print-v53';
-const SITE_REFRESH_VERSION = 'site-v61';
+const SITE_REFRESH_VERSION = 'site-v62';
 
 // Minimum shell we want available offline after the first visit. The SW also
 // opportunistically caches other same-origin GETs it sees at runtime, so this
@@ -84,20 +84,6 @@ self.addEventListener('activate', (event) => {
           .map((name) => caches.delete(name))
       )
     ).then(() => self.clients.claim())
-      .then(() => self.clients.matchAll({ type: 'window', includeUncontrolled: true }))
-      .then((clientList) =>
-        Promise.all(clientList.map((client) => {
-          try {
-            const url = new URL(client.url);
-            if (url.origin !== self.location.origin) return null;
-            if (url.searchParams.get('sw-refresh') === SITE_REFRESH_VERSION) return null;
-            url.searchParams.set('sw-refresh', SITE_REFRESH_VERSION);
-            return client.navigate(url.href);
-          } catch (_) {
-            return null;
-          }
-        }))
-      )
   );
 });
 
