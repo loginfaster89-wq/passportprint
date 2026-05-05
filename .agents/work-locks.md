@@ -8,7 +8,7 @@ Last updated: 2026-05-05 IST
 **Owner:** none
 **Scope:** none
 **Started:** none
-**Notes:** Released after manual deploy for service-worker v62 loading fix failed because GitHub hosted runner was never acquired; no live deploy completed.
+**Notes:** Released after manual deploy and one re-run for service-worker v62 loading fix could not acquire a GitHub hosted runner; no live deploy completed.
 
 ## Mandatory rule
 
