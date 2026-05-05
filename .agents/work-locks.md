@@ -4,11 +4,11 @@ Last updated: 2026-05-05 IST
 
 ## Global edit lock
 
-**Status:** FREE
-**Owner:** none
-**Scope:** none
-**Started:** none
-**Notes:** No chat currently owns a global edit lock.
+**Status:** ACTIVE
+**Owner:** Growth and safety chat
+**Scope:** Add permanent AGENTS.md startup instructions for work-lock/deploy coordination
+**Started:** 2026-05-05 20:20:21 IST
+**Notes:** Updating repo-level agent instructions so the user does not need to repeat lock rules in every chat.
 
 ## Mandatory rule
 
