@@ -860,8 +860,8 @@ body.idp-page main.legal-main{
 }
 body.idp-page header.legal-header{
   width:min(calc(100% - 28px),1240px);
-  margin:12px auto 0!important;
-  top:10px!important;
+  margin:var(--sp-header-offset) auto 0!important;
+  top:var(--sp-header-offset)!important;
   padding:10px clamp(16px,3vw,28px)!important;
   background:linear-gradient(135deg,rgba(255,255,255,0.96),rgba(255,255,255,0.72) 52%,rgba(255,255,255,0.5));
   border:1px solid rgba(255,255,255,0.76);
@@ -1078,6 +1078,8 @@ body.idp-workspace-mode .idp-quick-grid{display:none;}
   display:block;
   gap:0;
   overflow:hidden!important;
+  margin:4px auto 48px;
+  padding:6px 0 18px;
 }
 body.idp-workspace-mode .idp-quick-grid.sp-card-marquee{display:none!important;}
 .idp-quick-grid.sp-card-marquee .sp-card-track{
@@ -1401,8 +1403,8 @@ body.idp-workspace-mode #stepSheet .idp-a4-wrap canvas{
   body.idp-page main.legal-main{padding-top:24px;}
   body.idp-page header.legal-header{
     width:calc(100% - 12px);
-    margin-top:6px!important;
-    top:6px!important;
+    margin-top:var(--sp-header-offset)!important;
+    top:var(--sp-header-offset)!important;
     padding:9px 8px 9px 10px!important;
   }
   .idp-hero h1{font-size:clamp(48px,15vw,72px);}

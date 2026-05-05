@@ -980,22 +980,30 @@ header.legal-header{
   --sp-header-offset:calc(env(safe-area-inset-top,0px) + 18px);
 }
 header.legal-header{
-  position:fixed!important;
-  left:50%!important;
-  transform:translateX(-50%)!important;
+  position:sticky!important;
+  left:auto!important;
+  transform:none!important;
   top:var(--sp-header-offset)!important;
-  margin-top:0!important;
+  margin-top:var(--sp-header-offset)!important;
 }
 main.legal-main,
 body.home main.home-main{
-  padding-top:clamp(96px,8vw,118px)!important;
+  padding-top:clamp(34px,4vw,48px)!important;
 }
-body.passport-page .steps,
+body.forms-page:not(.home):not(.idp-page):has(main.legal-main) main.legal-main.forms-main{
+  padding-top:clamp(34px,4vw,48px)!important;
+}
+body.idp-page main.legal-main{
+  padding-top:clamp(34px,4vw,46px)!important;
+}
+body.passport-page .steps{
+  margin-top:clamp(18px,2.2vw,26px)!important;
+}
 body.passport-page .main.pp-feature{
-  margin-top:clamp(92px,8vw,116px)!important;
+  margin-top:clamp(16px,2vw,24px)!important;
 }
 body.idp-page .idp-hero{
-  margin-top:clamp(24px,3vw,38px)!important;
+  margin-top:clamp(20px,2.4vw,30px)!important;
 }
 @media (max-width:900px){
   :root{--sp-header-offset:calc(env(safe-area-inset-top,0px) + 14px);}
@@ -1007,11 +1015,17 @@ body.idp-page .idp-hero{
   }
   main.legal-main,
   body.home main.home-main{
-    padding-top:90px!important;
+    padding-top:30px!important;
   }
-  body.passport-page .steps,
+  body.forms-page:not(.home):not(.idp-page):has(main.legal-main) main.legal-main.forms-main,
+  body.idp-page main.legal-main{
+    padding-top:30px!important;
+  }
+  body.passport-page .steps{
+    margin-top:16px!important;
+  }
   body.passport-page .main.pp-feature{
-    margin-top:88px!important;
+    margin-top:14px!important;
   }
   body.idp-page .idp-hero{
     margin-top:18px!important;
@@ -1028,12 +1042,13 @@ body.passport-page .pp-hero-panel{
 @media (max-width:420px){
   :root{--sp-header-offset:calc(env(safe-area-inset-top,0px) + 12px);}
   header.legal-header{
-    margin-top:0!important;
+    margin-top:var(--sp-header-offset)!important;
     top:var(--sp-header-offset)!important;
   }
 }
 
 .sp-pill-marquee{
+  position:relative;
   width:100%;
   max-width:100%;
   min-width:0!important;
@@ -1045,9 +1060,32 @@ body.passport-page .pp-hero-panel{
   scrollbar-width:none!important;
   -ms-overflow-style:none!important;
   overscroll-behavior-x:none;
-  contain:layout paint;
-  -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 28px,#000 calc(100% - 28px),transparent 100%);
-  mask-image:linear-gradient(90deg,transparent 0,#000 28px,#000 calc(100% - 28px),transparent 100%);
+  contain:layout;
+  -webkit-mask-image:none;
+  mask-image:none;
+}
+.sp-pill-marquee::before,
+.sp-pill-marquee::after,
+.sp-card-marquee::before,
+.sp-card-marquee::after{
+  content:"";
+  position:absolute;
+  top:0;
+  bottom:0;
+  z-index:3;
+  pointer-events:none;
+}
+.sp-pill-marquee::before,
+.sp-pill-marquee::after{
+  width:72px;
+}
+.sp-pill-marquee::before{
+  left:0;
+  background:linear-gradient(90deg,var(--sp-marquee-edge,rgba(255,255,255,.98)),rgba(255,255,255,0));
+}
+.sp-pill-marquee::after{
+  right:0;
+  background:linear-gradient(270deg,var(--sp-marquee-edge,rgba(255,255,255,.98)),rgba(255,255,255,0));
 }
 .sp-pill-marquee::-webkit-scrollbar{
   width:0!important;
@@ -1062,7 +1100,8 @@ body.passport-page .pp-hero-panel{
   min-width:100%;
   flex-wrap:nowrap!important;
   white-space:nowrap;
-  animation:spPillMarquee 16s linear infinite;
+  padding-inline:34px;
+  animation:spPillMarquee 20s linear infinite;
   transform:translate3d(0,0,0);
   will-change:transform;
 }
@@ -1077,6 +1116,7 @@ body.passport-page .pp-hero-panel{
   to{transform:translate3d(calc(-50% - 4px),0,0);}
 }
 .sp-card-marquee{
+  position:relative;
   width:100%;
   max-width:100%;
   min-width:0!important;
@@ -1088,9 +1128,21 @@ body.passport-page .pp-hero-panel{
   scrollbar-width:none!important;
   -ms-overflow-style:none!important;
   overscroll-behavior-x:none;
-  contain:layout paint;
-  -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 30px,#000 calc(100% - 30px),transparent 100%);
-  mask-image:linear-gradient(90deg,transparent 0,#000 30px,#000 calc(100% - 30px),transparent 100%);
+  contain:layout;
+  -webkit-mask-image:none;
+  mask-image:none;
+}
+.sp-card-marquee::before,
+.sp-card-marquee::after{
+  width:118px;
+}
+.sp-card-marquee::before{
+  left:0;
+  background:linear-gradient(90deg,var(--sp-marquee-edge,rgba(246,243,237,.98)),rgba(246,243,237,0));
+}
+.sp-card-marquee::after{
+  right:0;
+  background:linear-gradient(270deg,var(--sp-marquee-edge,rgba(246,243,237,.98)),rgba(246,243,237,0));
 }
 .sp-card-marquee::-webkit-scrollbar{
   width:0!important;
@@ -1104,7 +1156,8 @@ body.passport-page .pp-hero-panel{
   width:max-content;
   min-width:100%;
   flex-wrap:nowrap!important;
-  animation:spCardMarquee 24s linear infinite;
+  padding-inline:18px;
+  animation:spCardMarquee 32s linear infinite;
   transform:translate3d(0,0,0);
   will-change:transform;
 }
@@ -1118,6 +1171,14 @@ body.passport-page .pp-hero-panel{
   from{transform:translate3d(0,0,0);}
   to{transform:translate3d(calc(-50% - 7px),0,0);}
 }
+body.home .hero-trust.sp-pill-marquee,
+body.passport-page .pp-trust-row.sp-pill-marquee,
+body.passport-page .upload-feats.sp-pill-marquee{
+  --sp-marquee-edge:#fff;
+}
+body.idp-page .idp-quick-grid.sp-card-marquee{
+  --sp-marquee-edge:#f6f3ed;
+}
 @media (prefers-reduced-motion:reduce){
   .sp-pill-marquee{
     overflow:hidden!important;
@@ -1128,6 +1189,11 @@ body.passport-page .pp-hero-panel{
     overflow:hidden!important;
     -webkit-mask-image:none;
     mask-image:none;
+  }
+  .sp-pill-track,
+  .sp-card-track{
+    animation:none!important;
+    transform:none!important;
   }
 }
 

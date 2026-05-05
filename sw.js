@@ -3,8 +3,9 @@
  * Strategy
  *   - Navigation (HTML) requests: network-first, fall back to cache, then to
  *     /offline.html. Lets users bounce around the site with no network.
- *   - Same-origin static assets (/assets/*, icons, manifest, sw.js itself):
- *     cache-first with background revalidate (stale-while-revalidate).
+ *   - Fresh app assets (CSS/JS/manifest/sw.js): network-first. This avoids
+ *     stale UI after deploys where users otherwise need multiple hard refreshes.
+ *   - Other same-origin static assets: stale-while-revalidate.
  *   - Cross-origin requests (Google Fonts, Hugging Face model, Razorpay,
  *     GSI, Render backend, etc.): passthrough to network — never cached,
  *     never intercepted on failure. The app behaves exactly as before for
@@ -15,9 +16,10 @@
  * the activate step can evict the old cache.
  */
 
-const CACHE_VERSION = 'studioprint-v60';
-const RUNTIME_CACHE = 'studioprint-runtime-v60';
+const CACHE_VERSION = 'studioprint-v61';
+const RUNTIME_CACHE = 'studioprint-runtime-v61';
 const ID_PRINT_REFRESH_VERSION = 'id-print-v53';
+const SITE_REFRESH_VERSION = 'site-v61';
 
 // Minimum shell we want available offline after the first visit. The SW also
 // opportunistically caches other same-origin GETs it sees at runtime, so this
@@ -36,6 +38,7 @@ const PRECACHE_URLS = [
   '/404.html',
   '/assets/legal.css',
   '/assets/auth.css',
+  '/assets/pricing.css',
   '/assets/nav.js',
   '/assets/auth.js',
   '/assets/deferred-ui.js',
@@ -86,9 +89,9 @@ self.addEventListener('activate', (event) => {
         Promise.all(clientList.map((client) => {
           try {
             const url = new URL(client.url);
-            const isIdPrint = url.pathname === '/id-print' || url.pathname === '/id-print.html';
-            if (!isIdPrint || url.searchParams.get('sw-refresh') === ID_PRINT_REFRESH_VERSION) return null;
-            url.searchParams.set('sw-refresh', ID_PRINT_REFRESH_VERSION);
+            if (url.origin !== self.location.origin) return null;
+            if (url.searchParams.get('sw-refresh') === SITE_REFRESH_VERSION) return null;
+            url.searchParams.set('sw-refresh', SITE_REFRESH_VERSION);
             return client.navigate(url.href);
           } catch (_) {
             return null;
@@ -120,7 +123,7 @@ function isHtmlRequest(request) {
 
 async function networkFirstHtml(request) {
   try {
-    const network = await fetch(request);
+    const network = await fetch(request, { cache: 'no-store' });
     return network;
   } catch (_) {
     const offline = await caches.match('/offline.html');
@@ -141,6 +144,31 @@ async function staleWhileRevalidate(request) {
   return cached || (await networkPromise) || new Response('Offline', { status: 503 });
 }
 
+function isFreshAppAsset(request) {
+  try {
+    const url = new URL(request.url);
+    const path = url.pathname;
+    if (path === '/sw.js') return true;
+    if (path.endsWith('.css') || path.endsWith('.js') || path.endsWith('.webmanifest')) return true;
+    if (path === '/assets/forms/manifest.json') return true;
+    return false;
+  } catch (_) {
+    return false;
+  }
+}
+
+async function networkFirstAsset(request) {
+  const cache = await caches.open(RUNTIME_CACHE);
+  try {
+    const network = await fetch(request, { cache: 'no-store' });
+    if (network && network.ok) cache.put(request, network.clone()).catch(() => {});
+    return network;
+  } catch (_) {
+    const cached = await cache.match(request);
+    return cached || new Response('Offline', { status: 503 });
+  }
+}
+
 self.addEventListener('fetch', (event) => {
   const { request } = event;
   if (request.method !== 'GET') return;
@@ -154,7 +182,12 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Same-origin assets: stale-while-revalidate.
+  if (isFreshAppAsset(request)) {
+    event.respondWith(networkFirstAsset(request));
+    return;
+  }
+
+  // Same-origin media/assets: stale-while-revalidate.
   event.respondWith(staleWhileRevalidate(request));
 });
 
