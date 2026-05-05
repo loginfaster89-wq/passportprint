@@ -50,6 +50,116 @@
     "clean_source": true
   },
   {
+    "slug": "west-bengal-ration-form-3-rural-new-family",
+    "title": "West Bengal Ration Form 3R - New Family Rural",
+    "category": "West Bengal",
+    "source_url": "https://wbfss.wb.gov.in/food/PDS/Forms/Form%203R.pdf",
+    "pages": 2,
+    "local": "assets/forms/west-bengal-ration-form-3-rural-new-family.pdf",
+    "preview": "assets/forms/previews/west-bengal-ration-form-3-rural-new-family.png",
+    "clean_source": true
+  },
+  {
+    "slug": "west-bengal-ration-form-3-urban-new-family",
+    "title": "West Bengal Ration Form 3U - New Family Urban",
+    "category": "West Bengal",
+    "source_url": "https://wbfss.wb.gov.in/food/PDS/Forms/Form%203U.pdf",
+    "pages": 2,
+    "local": "assets/forms/west-bengal-ration-form-3-urban-new-family.pdf",
+    "preview": "assets/forms/previews/west-bengal-ration-form-3-urban-new-family.png",
+    "clean_source": true
+  },
+  {
+    "slug": "west-bengal-ration-form-4-member-inclusion",
+    "title": "West Bengal Ration Form 4 - Member Inclusion",
+    "category": "West Bengal",
+    "source_url": "https://wbfss.wb.gov.in/food/PDS/Forms/Form%204.pdf",
+    "pages": 2,
+    "local": "assets/forms/west-bengal-ration-form-4-member-inclusion.pdf",
+    "preview": "assets/forms/previews/west-bengal-ration-form-4-member-inclusion.png",
+    "clean_source": true
+  },
+  {
+    "slug": "west-bengal-ration-form-5-card-correction",
+    "title": "West Bengal Ration Form 5 - Card Correction",
+    "category": "West Bengal",
+    "source_url": "https://wbfss.wb.gov.in/food/PDS/Forms/Form%205.pdf",
+    "pages": 2,
+    "local": "assets/forms/west-bengal-ration-form-5-card-correction.pdf",
+    "preview": "assets/forms/previews/west-bengal-ration-form-5-card-correction.png",
+    "clean_source": true
+  },
+  {
+    "slug": "west-bengal-ration-form-6-fps-change",
+    "title": "West Bengal Ration Form 6 - FPS/Kerosene Shop Change",
+    "category": "West Bengal",
+    "source_url": "https://wbfss.wb.gov.in/food/PDS/Forms/Form%206.pdf",
+    "pages": 2,
+    "local": "assets/forms/west-bengal-ration-form-6-fps-change.pdf",
+    "preview": "assets/forms/previews/west-bengal-ration-form-6-fps-change.png",
+    "clean_source": true
+  },
+  {
+    "slug": "west-bengal-ration-form-7-surrender",
+    "title": "West Bengal Ration Form 7 - Surrender DRC",
+    "category": "West Bengal",
+    "source_url": "https://wbfss.wb.gov.in/food/PDS/Forms/Form%207.pdf",
+    "pages": 2,
+    "local": "assets/forms/west-bengal-ration-form-7-surrender.pdf",
+    "preview": "assets/forms/previews/west-bengal-ration-form-7-surrender.png",
+    "clean_source": true
+  },
+  {
+    "slug": "west-bengal-ration-form-8-rural-conversion",
+    "title": "West Bengal Ration Form 8R - Rural Category Conversion",
+    "category": "West Bengal",
+    "source_url": "https://wbfss.wb.gov.in/food/PDS/Forms/Form%208R.pdf",
+    "pages": 2,
+    "local": "assets/forms/west-bengal-ration-form-8-rural-conversion.pdf",
+    "preview": "assets/forms/previews/west-bengal-ration-form-8-rural-conversion.png",
+    "clean_source": true
+  },
+  {
+    "slug": "west-bengal-ration-form-8-urban-conversion",
+    "title": "West Bengal Ration Form 8U - Urban Category Conversion",
+    "category": "West Bengal",
+    "source_url": "https://wbfss.wb.gov.in/food/PDS/Forms/Form%208U.pdf",
+    "pages": 2,
+    "local": "assets/forms/west-bengal-ration-form-8-urban-conversion.pdf",
+    "preview": "assets/forms/previews/west-bengal-ration-form-8-urban-conversion.png",
+    "clean_source": true
+  },
+  {
+    "slug": "west-bengal-ration-form-9-duplicate-card",
+    "title": "West Bengal Ration Form 9 - Duplicate Card",
+    "category": "West Bengal",
+    "source_url": "https://wbfss.wb.gov.in/food/PDS/Forms/Form%209.pdf",
+    "pages": 2,
+    "local": "assets/forms/west-bengal-ration-form-9-duplicate-card.pdf",
+    "preview": "assets/forms/previews/west-bengal-ration-form-9-duplicate-card.png",
+    "clean_source": true
+  },
+  {
+    "slug": "west-bengal-ration-form-10-identity-purpose",
+    "title": "West Bengal Ration Form 10 - Identity Purpose Card",
+    "category": "West Bengal",
+    "source_url": "https://wbfss.wb.gov.in/food/PDS/Forms/Form%2010.pdf",
+    "pages": 2,
+    "local": "assets/forms/west-bengal-ration-form-10-identity-purpose.pdf",
+    "preview": "assets/forms/previews/west-bengal-ration-form-10-identity-purpose.png",
+    "clean_source": true
+  },
+  {
+    "slug": "west-bengal-ration-form-11-mobile-aadhaar-update",
+    "title": "West Bengal Ration Form 11 - Mobile & Aadhaar Update",
+    "category": "West Bengal",
+    "source_url": "https://wbfss.wb.gov.in/food/PDS/Forms/Form%2011%20%28Mobile%20number%20Updation%20Form%29.pdf",
+    "pages": 2,
+    "local": "assets/forms/west-bengal-ration-form-11-mobile-aadhaar-update.pdf",
+    "preview": "assets/forms/previews/west-bengal-ration-form-11-mobile-aadhaar-update.png",
+    "clean_source": true
+  },
+  {
     "slug": "birth-report-form-1-rajasthan",
     "title": "Birth Report Form 1",
     "category": "Rajasthan",
