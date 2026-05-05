@@ -4,11 +4,11 @@ Last updated: 2026-05-05 IST
 
 ## Global edit lock
 
-**Status:** ACTIVE
-**Owner:** Codex UI/live recovery chat
-**Scope:** Controlled production deploy for service-worker v62 loading fix
-**Started:** 2026-05-05 20:43 IST
-**Notes:** Taking deploy lock to manually release latest main after v61 forced-navigation loading issue; no product source edits planned.
+**Status:** FREE
+**Owner:** none
+**Scope:** none
+**Started:** none
+**Notes:** Released after manual deploy for service-worker v62 loading fix failed because GitHub hosted runner was never acquired; no live deploy completed.
 
 ## Mandatory rule
 
