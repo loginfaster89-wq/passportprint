@@ -6,31 +6,31 @@ Last updated: 2026-05-05 IST
 
 - Current owner: this chat owns Forms Hub work only.
 - Scope lock: `/forms` only. Do not touch `id-print.html` from this task.
-- Active task completed: researched and added 28 official Delhi Revenue citizen-service forms.
-- Result: `/forms` now has 157 forms total.
-- Result: added Delhi caste/certificate, marriage, birth/death order, domicile/income, solvency, non-encumbrance, surviving-member, RTI, e-stamp refund, disability ID, and related affidavit formats.
-- Cache bumped to `studioprint-v56`; latest ID Print refresh marker `id-print-v52` preserved.
-- Feature commit pushed: `3307447` (`feat(forms): add Delhi revenue forms`).
-- Previous Forms commits: `aaa2cda` West Bengal ration batch, `2db243b` Rajasthan Pehchan support batch, `18bf54b` SIPF/NPS batch, `98dd9b2` Labour/Employment batch, `6772479` Police/SJE batch, `1114eb2` official PDF refresh, `34a75f5` Revenue/eMitra batch, `ae66863` Transport batch.
+- Active task completed: Rajasthan-only gap pass after the user asked to finish Rajasthan before any other state.
+- Result: `/forms` now has 166 forms total; Rajasthan has 99 entries.
+- Result: added/split current Pehchan Form 14 and Form 15, plus missing clean Rajasthan Pension forms 3, 4, 9, 9A, 33, Life Certificate, and Medical Limit Extension.
+- Cache bumped to `studioprint-v57`; latest ID Print refresh marker `id-print-v53` from the other chat was preserved during rebase.
+- Feature commit pushed: `fb9d438` (`feat(forms): complete Rajasthan gap pass`).
+- Previous Forms commits: `3307447` Delhi Revenue batch, `aaa2cda` West Bengal ration batch, `2db243b` Rajasthan Pehchan support batch, `18bf54b` SIPF/NPS batch, `98dd9b2` Labour/Employment batch, `6772479` Police/SJE batch, `1114eb2` official PDF refresh, `34a75f5` Revenue/eMitra batch, `ae66863` Transport batch.
 
 ## Owned file scope
 
-- Owned and changed: `forms.html`, `assets/forms/manifest.json`, new Delhi Revenue PDFs/previews under `assets/forms/**`, `sw.js`, generated `dist/forms.html`, generated `dist/sw.js`, and `.agents/research/forms-delhi-revenue-20260505.md`.
+- Owned and changed: `forms.html`, `assets/forms/manifest.json`, new Rajasthan Pehchan/Pension PDFs/previews under `assets/forms/**`, `sw.js`, generated `dist/forms.html`, generated `dist/sw.js`, and `.agents/research/forms-rajasthan-gap-pass-20260505.md`.
 - Explicitly not owned/touched: `id-print.html`, `passport-photo.html`, `index.html`, `assets/legal.css`, shared auth/nav/pricing files, workflow files.
-- Local safety note: this batch was committed from clean worktree `C:\tmp\studioprint-forms-work-20260505-next` to avoid touching unrelated dirty files in the original workspace.
+- Local safety note: this batch was committed from clean worktree `C:\tmp\studioprint-forms-rajasthan-20260505` to avoid touching unrelated dirty files in the original workspace.
 
 ## Shared files touched
 
 - `forms.html` touched only for Forms Hub data entries.
-- `sw.js` touched only to bump Forms cache to `studioprint-v56` while preserving `id-print-v52`.
+- `sw.js` touched only to bump Forms cache/runtime cache to `studioprint-v57` while preserving remote `id-print-v53`.
 
 ## Commit / deploy / QA
 
-- Website source commit pushed: `3307447`.
+- Website source commit pushed: `fb9d438`.
 - Deploy triggered: yes, by push to `main`.
 - Build run: yes, bundled Node `build.js` with `NODE_PATH` pointing at the existing dependency tree from the original workspace.
-- Local validation: passed. Manifest has 157 entries; `forms.html` and `dist/forms.html` each have 157 JS entries; all referenced source PDFs/previews/page-previews exist for the current manifest schema; `sw.js` and `dist/sw.js` have no conflict markers.
-- Live HTML/SW/asset QA: passed on `https://studioprint.pages.dev/forms?qa=delhi-3307447-*`; live page has 157 JS entries and contains `Delhi SC Certificate Application` and `Delhi Marriage Identification Certificate`. `/sw.js` contains `studioprint-v56` and `id-print-v52`; `delhi-income-certificate-application.pdf` returns 200.
+- Local validation: passed. Manifest has 166 entries; `forms.html` and `dist/forms.html` each have 166 JS entries; all referenced source PDFs/previews/page-previews exist for the current manifest schema; `sw.js` and `dist/sw.js` have no conflict markers.
+- Live HTML/SW/asset QA: passed on `https://studioprint.pages.dev/forms?qa=rajasthan-fb9d438-*`; live page has 166 JS entries and contains `Pehchan Form 14` plus `Pension Medical Limit Extension`. `/sw.js` contains `studioprint-v57` and `id-print-v53`; `pehchan-form-14-delayed-birth-death-reporting-rajasthan.pdf` returns 200.
 
 ## Forms quality rule
 
@@ -43,9 +43,9 @@ Last updated: 2026-05-05 IST
 
 ## Pending work
 
-- Rajasthan is still not complete, and non-Rajasthan expansion now includes West Bengal and Delhi.
-- Next useful directions: add another high-value state department batch, or return to remaining Rajasthan eMitra/appeal/certificate workflows.
-- Rejected/not added in the Delhi pass: duplicate SC other-state PDF, OBC/SC caste lists, circle-rate notification, marriage order, lower-quality stamped Non-Creamy Layer/OBC prescribed-format scans, and non-form circular/act/handbook links.
+- Rajasthan known official-source gap pass is now complete for the previously documented Pehchan Form 14/Form 15 gap and missing clean Pension table forms verified on 2026-05-05.
+- Do not claim every Rajasthan government PDF forever; future Rajasthan additions still need department-by-department official-source research and PDF inspection.
+- Rejected/not added in this Rajasthan pass: dirty scanned Family Pension bundle, signed/scanned Notice pack, dirty mixed VariousOtherForms bundle, unverified Pre-88 direct PDF, and pension revision circular/memo candidates.
 - Before any new work, run:
   - `git pull --ff-only origin main`
   - `Get-Content .agents\live-status.md`
