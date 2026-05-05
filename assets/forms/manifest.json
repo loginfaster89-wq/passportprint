@@ -160,6 +160,286 @@
     "clean_source": true
   },
   {
+    "slug": "delhi-sc-certificate-application",
+    "title": "Delhi SC Certificate Application",
+    "category": "Delhi",
+    "source_url": "https://revenue.delhi.gov.in/sites/default/files/revenue/downloads/sc_certificate.pdf",
+    "pages": 4,
+    "local": "assets/forms/delhi-sc-certificate-application.pdf",
+    "preview": "assets/forms/previews/delhi-sc-certificate-application.png",
+    "clean_source": true
+  },
+  {
+    "slug": "delhi-obc-certificate-application",
+    "title": "Delhi OBC Certificate Application",
+    "category": "Delhi",
+    "source_url": "https://revenue.delhi.gov.in/sites/default/files/revenue/downloads/input_9050.pdf",
+    "pages": 3,
+    "local": "assets/forms/delhi-obc-certificate-application.pdf",
+    "preview": "assets/forms/previews/delhi-obc-certificate-application.png",
+    "clean_source": true
+  },
+  {
+    "slug": "delhi-hindu-marriage-registration",
+    "title": "Delhi Hindu Marriage Registration",
+    "category": "Delhi",
+    "source_url": "https://revenue.delhi.gov.in/sites/default/files/revenue/downloads/marriage1.pdf",
+    "pages": 3,
+    "local": "assets/forms/delhi-hindu-marriage-registration.pdf",
+    "preview": "assets/forms/previews/delhi-hindu-marriage-registration.png",
+    "clean_source": true
+  },
+  {
+    "slug": "delhi-special-marriage-registration",
+    "title": "Delhi Special Marriage Registration",
+    "category": "Delhi",
+    "source_url": "https://revenue.delhi.gov.in/sites/default/files/revenue/downloads/marrspl_0.pdf",
+    "pages": 2,
+    "local": "assets/forms/delhi-special-marriage-registration.pdf",
+    "preview": "assets/forms/previews/delhi-special-marriage-registration.png",
+    "clean_source": true
+  },
+  {
+    "slug": "delhi-notice-intended-marriage",
+    "title": "Delhi Notice of Intended Marriage",
+    "category": "Delhi",
+    "source_url": "https://revenue.delhi.gov.in/sites/default/files/revenue/downloads/marriage_form.pdf",
+    "pages": 1,
+    "local": "assets/forms/delhi-notice-intended-marriage.pdf",
+    "preview": "assets/forms/previews/delhi-notice-intended-marriage.png",
+    "clean_source": true
+  },
+  {
+    "slug": "delhi-abadi-extended-abadi-certificate",
+    "title": "Delhi Abadi/Extended Abadi Certificate",
+    "category": "Delhi",
+    "source_url": "https://revenue.delhi.gov.in/sites/default/files/revenue/downloads/applicationlaldora.pdf",
+    "pages": 1,
+    "local": "assets/forms/delhi-abadi-extended-abadi-certificate.pdf",
+    "preview": "assets/forms/previews/delhi-abadi-extended-abadi-certificate.png",
+    "clean_source": true
+  },
+  {
+    "slug": "delhi-birth-order-affidavit",
+    "title": "Delhi Birth Order Affidavit",
+    "category": "Delhi",
+    "source_url": "https://revenue.delhi.gov.in/sites/default/files/revenue/downloads/affidavitbirth.pdf",
+    "pages": 1,
+    "local": "assets/forms/delhi-birth-order-affidavit.pdf",
+    "preview": "assets/forms/previews/delhi-birth-order-affidavit.png",
+    "clean_source": true
+  },
+  {
+    "slug": "delhi-birth-registration-order-application",
+    "title": "Delhi Birth Registration Order Application",
+    "category": "Delhi",
+    "source_url": "https://revenue.delhi.gov.in/sites/default/files/revenue/downloads/input_9063.pdf",
+    "pages": 2,
+    "local": "assets/forms/delhi-birth-registration-order-application.pdf",
+    "preview": "assets/forms/previews/delhi-birth-registration-order-application.png",
+    "clean_source": true
+  },
+  {
+    "slug": "delhi-death-registration-order-application",
+    "title": "Delhi Death Registration Order Application",
+    "category": "Delhi",
+    "source_url": "https://revenue.delhi.gov.in/sites/default/files/revenue/downloads/input_9064.pdf",
+    "pages": 2,
+    "local": "assets/forms/delhi-death-registration-order-application.pdf",
+    "preview": "assets/forms/previews/delhi-death-registration-order-application.png",
+    "clean_source": true
+  },
+  {
+    "slug": "delhi-nationality-certificate-application",
+    "title": "Delhi Nationality Certificate Application",
+    "category": "Delhi",
+    "source_url": "https://revenue.delhi.gov.in/sites/default/files/revenue/downloads/ada/nationality.pdf",
+    "pages": 3,
+    "local": "assets/forms/delhi-nationality-certificate-application.pdf",
+    "preview": "assets/forms/previews/delhi-nationality-certificate-application.png",
+    "clean_source": true
+  },
+  {
+    "slug": "delhi-solvency-certificate-application",
+    "title": "Delhi Solvency Certificate Application",
+    "category": "Delhi",
+    "source_url": "https://revenue.delhi.gov.in/sites/default/files/revenue/downloads/ada/input_9052.pdf",
+    "pages": 3,
+    "local": "assets/forms/delhi-solvency-certificate-application.pdf",
+    "preview": "assets/forms/previews/delhi-solvency-certificate-application.png",
+    "clean_source": true
+  },
+  {
+    "slug": "delhi-solvency-affidavit-property",
+    "title": "Delhi Solvency Affidavit - Property",
+    "category": "Delhi",
+    "source_url": "https://revenue.delhi.gov.in/sites/default/files/revenue/downloads/ada/affidavitsolvencybusiness.pdf",
+    "pages": 2,
+    "local": "assets/forms/delhi-solvency-affidavit-property.pdf",
+    "preview": "assets/forms/previews/delhi-solvency-affidavit-property.png",
+    "clean_source": true
+  },
+  {
+    "slug": "delhi-disability-id-card-application",
+    "title": "Delhi Disability ID Card Application",
+    "category": "Delhi",
+    "source_url": "https://revenue.delhi.gov.in/sites/default/files/revenue/downloads/ada/hcap.pdf",
+    "pages": 1,
+    "local": "assets/forms/delhi-disability-id-card-application.pdf",
+    "preview": "assets/forms/previews/delhi-disability-id-card-application.png",
+    "clean_source": true
+  },
+  {
+    "slug": "delhi-domicile-certificate-application",
+    "title": "Delhi Domicile Certificate Application",
+    "category": "Delhi",
+    "source_url": "https://revenue.delhi.gov.in/sites/default/files/revenue/downloads/ada/input_9054.pdf",
+    "pages": 2,
+    "local": "assets/forms/delhi-domicile-certificate-application.pdf",
+    "preview": "assets/forms/previews/delhi-domicile-certificate-application.png",
+    "clean_source": true
+  },
+  {
+    "slug": "delhi-income-certificate-application",
+    "title": "Delhi Income Certificate Application",
+    "category": "Delhi",
+    "source_url": "https://revenue.delhi.gov.in/sites/default/files/revenue/downloads/ada/input_9055.pdf",
+    "pages": 3,
+    "local": "assets/forms/delhi-income-certificate-application.pdf",
+    "preview": "assets/forms/previews/delhi-income-certificate-application.png",
+    "clean_source": true
+  },
+  {
+    "slug": "delhi-non-encumbrance-affidavit",
+    "title": "Delhi Non-Encumbrance Affidavit",
+    "category": "Delhi",
+    "source_url": "https://revenue.delhi.gov.in/sites/default/files/revenue/downloads/ada/affidavitnon-encum-1.pdf",
+    "pages": 1,
+    "local": "assets/forms/delhi-non-encumbrance-affidavit.pdf",
+    "preview": "assets/forms/previews/delhi-non-encumbrance-affidavit.png",
+    "clean_source": true
+  },
+  {
+    "slug": "delhi-non-encumbrance-search-report",
+    "title": "Delhi Non-Encumbrance Search Report",
+    "category": "Delhi",
+    "source_url": "https://revenue.delhi.gov.in/sites/default/files/revenue/downloads/ada/affidavitnon-encumberance-2.pdf",
+    "pages": 1,
+    "local": "assets/forms/delhi-non-encumbrance-search-report.pdf",
+    "preview": "assets/forms/previews/delhi-non-encumbrance-search-report.png",
+    "clean_source": true
+  },
+  {
+    "slug": "delhi-surviving-member-affidavit",
+    "title": "Delhi Surviving Member Affidavit",
+    "category": "Delhi",
+    "source_url": "https://revenue.delhi.gov.in/sites/default/files/revenue/downloads/ada/affidavitsurvining.pdf",
+    "pages": 1,
+    "local": "assets/forms/delhi-surviving-member-affidavit.pdf",
+    "preview": "assets/forms/previews/delhi-surviving-member-affidavit.png",
+    "clean_source": true
+  },
+  {
+    "slug": "delhi-freedom-fighter-certificate-affidavit",
+    "title": "Delhi Freedom Fighter Certificate Affidavit",
+    "category": "Delhi",
+    "source_url": "https://revenue.delhi.gov.in/sites/default/files/revenue/downloads/ada/affidavitfredomfighter.pdf",
+    "pages": 1,
+    "local": "assets/forms/delhi-freedom-fighter-certificate-affidavit.pdf",
+    "preview": "assets/forms/previews/delhi-freedom-fighter-certificate-affidavit.png",
+    "clean_source": true
+  },
+  {
+    "slug": "delhi-income-certificate-affidavit",
+    "title": "Delhi Income Certificate Affidavit",
+    "category": "Delhi",
+    "source_url": "https://revenue.delhi.gov.in/sites/default/files/revenue/downloads/ada/affidavitincome.pdf",
+    "pages": 1,
+    "local": "assets/forms/delhi-income-certificate-affidavit.pdf",
+    "preview": "assets/forms/previews/delhi-income-certificate-affidavit.png",
+    "clean_source": true
+  },
+  {
+    "slug": "delhi-solvency-affidavit-govt-servant",
+    "title": "Delhi Solvency Affidavit - Govt Servant",
+    "category": "Delhi",
+    "source_url": "https://revenue.delhi.gov.in/sites/default/files/revenue/downloads/ada/kj/affidavitsolvency.pdf",
+    "pages": 1,
+    "local": "assets/forms/delhi-solvency-affidavit-govt-servant.pdf",
+    "preview": "assets/forms/previews/delhi-solvency-affidavit-govt-servant.png",
+    "clean_source": true
+  },
+  {
+    "slug": "delhi-solvency-affidavit-salaried-individual",
+    "title": "Delhi Solvency Affidavit - Salaried Individual",
+    "category": "Delhi",
+    "source_url": "https://revenue.delhi.gov.in/sites/default/files/revenue/downloads/ada/kj/affidavitsolvencyindividual.pdf",
+    "pages": 1,
+    "local": "assets/forms/delhi-solvency-affidavit-salaried-individual.pdf",
+    "preview": "assets/forms/previews/delhi-solvency-affidavit-salaried-individual.png",
+    "clean_source": true
+  },
+  {
+    "slug": "delhi-rti-form-a-information-request",
+    "title": "Delhi RTI Form A - Information Request",
+    "category": "Delhi",
+    "source_url": "https://revenue.delhi.gov.in/sites/default/files/revenue/downloads/ada/kj/forma.pdf",
+    "pages": 1,
+    "local": "assets/forms/delhi-rti-form-a-information-request.pdf",
+    "preview": "assets/forms/previews/delhi-rti-form-a-information-request.png",
+    "clean_source": true
+  },
+  {
+    "slug": "delhi-estamp-refund-affidavit",
+    "title": "Delhi E-Stamp Refund Affidavit",
+    "category": "Delhi",
+    "source_url": "https://revenue.delhi.gov.in/sites/default/files/revenue/downloads/ada/kj/affidavit0001.pdf",
+    "pages": 1,
+    "local": "assets/forms/delhi-estamp-refund-affidavit.pdf",
+    "preview": "assets/forms/previews/delhi-estamp-refund-affidavit.png",
+    "clean_source": true
+  },
+  {
+    "slug": "delhi-estamp-refund-application",
+    "title": "Delhi E-Stamp Refund Application",
+    "category": "Delhi",
+    "source_url": "https://revenue.delhi.gov.in/sites/default/files/revenue/downloads/ada/kj/application0001.pdf",
+    "pages": 1,
+    "local": "assets/forms/delhi-estamp-refund-application.pdf",
+    "preview": "assets/forms/previews/delhi-estamp-refund-application.png",
+    "clean_source": true
+  },
+  {
+    "slug": "delhi-estamp-refund-indemnity-bond",
+    "title": "Delhi E-Stamp Refund Indemnity Bond",
+    "category": "Delhi",
+    "source_url": "https://revenue.delhi.gov.in/sites/default/files/revenue/downloads/ada/kj/bond0001.pdf",
+    "pages": 1,
+    "local": "assets/forms/delhi-estamp-refund-indemnity-bond.pdf",
+    "preview": "assets/forms/previews/delhi-estamp-refund-indemnity-bond.png",
+    "clean_source": true
+  },
+  {
+    "slug": "delhi-marriage-registration-affidavit",
+    "title": "Delhi Marriage Registration Affidavit",
+    "category": "Delhi",
+    "source_url": "https://revenue.delhi.gov.in/sites/default/files/revenue/downloads/ada/kj/maffidavit.pdf",
+    "pages": 1,
+    "local": "assets/forms/delhi-marriage-registration-affidavit.pdf",
+    "preview": "assets/forms/previews/delhi-marriage-registration-affidavit.png",
+    "clean_source": true
+  },
+  {
+    "slug": "delhi-marriage-identification-certificate",
+    "title": "Delhi Marriage Identification Certificate",
+    "category": "Delhi",
+    "source_url": "https://revenue.delhi.gov.in/sites/default/files/revenue/downloads/ada/kj/midentification_certificate.pdf",
+    "pages": 1,
+    "local": "assets/forms/delhi-marriage-identification-certificate.pdf",
+    "preview": "assets/forms/previews/delhi-marriage-identification-certificate.png",
+    "clean_source": true
+  },
+  {
     "slug": "birth-report-form-1-rajasthan",
     "title": "Birth Report Form 1",
     "category": "Rajasthan",

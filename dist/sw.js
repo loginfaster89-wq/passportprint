@@ -15,8 +15,8 @@
  * the activate step can evict the old cache.
  */
 
-const CACHE_VERSION = 'studioprint-v55';
-const RUNTIME_CACHE = 'studioprint-runtime-v55';
+const CACHE_VERSION = 'studioprint-v56';
+const RUNTIME_CACHE = 'studioprint-runtime-v56';
 const ID_PRINT_REFRESH_VERSION = 'id-print-v52';
 
 // Minimum shell we want available offline after the first visit. The SW also
