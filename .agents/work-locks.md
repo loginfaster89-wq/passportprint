@@ -4,11 +4,11 @@ Last updated: 2026-05-05 IST
 
 ## Global edit lock
 
-**Status:** ACTIVE
-**Owner:** Codex growth/research chat
-**Scope:** Controlled production deploy after Cloudflare token was saved in GitHub Actions secrets
-**Started:** 2026-05-05 21:24 IST
-**Notes:** Deploy lock only; no product source edits planned. Triggering latest main manually and verifying live Google site verification tag.
+**Status:** FREE
+**Owner:** none
+**Scope:** none
+**Started:** none
+**Notes:** Released after manual deploy run #349 failed before a GitHub hosted runner was acquired during the GitHub Actions runner incident; no live deploy completed.
 
 ## Mandatory rule
 
