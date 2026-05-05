@@ -1290,6 +1290,46 @@
     "clean_source": true
   },
   {
+    "slug": "rajasthan-legal-metrology-dealer-licence-ld1",
+    "title": "Legal Metrology Dealer Licence Form LD-1",
+    "category": "Rajasthan",
+    "source_url": "https://rajnivesh.rajasthan.gov.in/Uploads/3bbe2634-a404-48f8-babc-ef54a16da406.pdf",
+    "pages": 3,
+    "local": "assets/forms/rajasthan-legal-metrology-dealer-licence-ld1.pdf",
+    "preview": "assets/forms/previews/rajasthan-legal-metrology-dealer-licence-ld1.png",
+    "clean_source": true
+  },
+  {
+    "slug": "rajasthan-legal-metrology-manufacturer-licence-lm1",
+    "title": "Legal Metrology Manufacturer Licence Form LM-1",
+    "category": "Rajasthan",
+    "source_url": "https://rajnivesh.rajasthan.gov.in/Uploads/fccd6621-b183-4710-a03f-c4764f30fc77.pdf",
+    "pages": 4,
+    "local": "assets/forms/rajasthan-legal-metrology-manufacturer-licence-lm1.pdf",
+    "preview": "assets/forms/previews/rajasthan-legal-metrology-manufacturer-licence-lm1.png",
+    "clean_source": true
+  },
+  {
+    "slug": "rajasthan-legal-metrology-repairer-licence-lr1",
+    "title": "Legal Metrology Repairer Licence Form LR-1",
+    "category": "Rajasthan",
+    "source_url": "https://rajnivesh.rajasthan.gov.in/Uploads/8dcbefe0-9dd2-448a-8963-a443e21b6d30.pdf",
+    "pages": 4,
+    "local": "assets/forms/rajasthan-legal-metrology-repairer-licence-lr1.pdf",
+    "preview": "assets/forms/previews/rajasthan-legal-metrology-repairer-licence-lr1.png",
+    "clean_source": true
+  },
+  {
+    "slug": "rajasthan-legal-metrology-packer-manufacturer-importer-registration",
+    "title": "Legal Metrology Packer/Manufacturer Registration",
+    "category": "Rajasthan",
+    "source_url": "https://rajnivesh.rajasthan.gov.in/Uploads/bc77b7fc-5dff-4281-b5a9-8a2a33370047.pdf",
+    "pages": 3,
+    "local": "assets/forms/rajasthan-legal-metrology-packer-manufacturer-importer-registration.pdf",
+    "preview": "assets/forms/previews/rajasthan-legal-metrology-packer-manufacturer-importer-registration.png",
+    "clean_source": true
+  },
+  {
     "slug": "transport-dl-form-2-learner-licence-rajasthan",
     "title": "Learner Licence Form 2",
     "category": "Rajasthan",
