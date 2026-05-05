@@ -2,6 +2,16 @@
 
 Last updated: 2026-05-05 IST
 
+## Deploy coordination rule
+
+- Production deploys are now manual-only through GitHub Actions `Deploy to Cloudflare Pages`.
+- Pushing to `main` must not automatically deploy to Cloudflare Pages.
+- Every chat must read `.agents/work-locks.md` and run `.agents/check-work-lock.ps1` before editing or pushing.
+- If the global edit lock is `ACTIVE`, new editing/deploy work must stop until the owner releases it.
+- Before any live deploy, read `.agents/deploy-policy.md`, confirm one deploy owner, build locally, and run the workflow manually with the latest `origin/main` SHA.
+- Do not create empty retry commits for Cloudflare/GitHub transient failures.
+- Current deployment incident: Google verification tag is present in `main`, but live site still depends on a successful manual Cloudflare deploy.
+
 ## Current task status
 
 - Current owner: this chat owns Forms Hub work only.

@@ -14,9 +14,23 @@ Then run:
 
 ```powershell
 git pull --ff-only origin main
+Get-Content .agents\work-locks.md
+powershell -ExecutionPolicy Bypass -File .agents\check-work-lock.ps1
 Get-Content .agents\live-status.md
 Get-Content .agents\handoff.md
 ```
+
+If `.agents/check-work-lock.ps1` reports an active lock, stop before editing,
+pushing, or deploying. The active owner must finish or release the lock first.
+
+## Deployment rule
+
+- Production deploys are manual-only. Normal source pushes to `main` should not trigger Cloudflare Pages.
+- Read `.agents/deploy-policy.md` before attempting any live deploy.
+- Read `.agents/work-locks.md` and take the global edit lock before any live deploy or shared-file change.
+- Only one deploy owner should run `Deploy to Cloudflare Pages` from GitHub Actions after collecting ready changes and validating the latest `origin/main`.
+- Do not push empty retry commits for runner or Cloudflare internal errors; use `Re-run jobs` or wait for the external service to recover.
+- Current deploy blocker was external runner/Cloudflare instability, not the Google verification tag code. The tag is already on `main`.
 
 ## Active scope
 

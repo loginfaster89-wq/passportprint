@@ -35,8 +35,31 @@ once via the Cloudflare dashboard.
 6. Click **Save and Deploy**. The first build takes ~1–2 minutes.
 
 7. Your site will be live at `https://studioprint.pages.dev` (or a similar
-   `<project>.pages.dev` URL shown in the dashboard). Every push to `main`
-   triggers an auto-deploy; pull requests get preview deploys on unique URLs.
+   `<project>.pages.dev` URL shown in the dashboard).
+
+## Current deployment workflow
+
+Deployments are intentionally manual so multiple parallel Codex chats can push
+source work without all of them trying to update the live website at once.
+
+To deploy:
+
+1. Confirm the release is ready and no other chat is mid-push.
+2. Run `git pull --ff-only origin main`.
+3. Read `.agents/work-locks.md` and run `.agents/check-work-lock.ps1`.
+4. Take the global edit lock in `.agents/work-locks.md` and push that lock.
+5. Run `git rev-parse origin/main` and copy the SHA.
+6. Open GitHub Actions -> `Deploy to Cloudflare Pages`.
+7. Click `Run workflow`.
+8. Use branch `main`.
+9. Fill `reason` with a short release note.
+10. Fill `expected_sha` with the copied SHA.
+11. Wait for the run to finish, then verify the live site.
+12. Release the global edit lock.
+
+If GitHub hosted runners or Cloudflare Pages fail with a transient/internal
+error, use `Re-run jobs` after waiting. Do not push empty retry commits just to
+force another deploy attempt.
 
 ## Custom domain (optional)
 
