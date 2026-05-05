@@ -1330,6 +1330,56 @@
     "clean_source": true
   },
   {
+    "slug": "rajasthan-factory-form-1a-non-hazardous",
+    "title": "Factory Form 1A - Non-Hazardous Process",
+    "category": "Rajasthan",
+    "source_url": "https://rajnivesh.rajasthan.gov.in/Uploads/168a742b-5eaa-4344-b2b8-53d93ebcfc03.pdf",
+    "pages": 1,
+    "local": "assets/forms/rajasthan-factory-form-1a-non-hazardous.pdf",
+    "preview": "assets/forms/previews/rajasthan-factory-form-1a-non-hazardous.png",
+    "clean_source": true
+  },
+  {
+    "slug": "rajasthan-factory-building-plan-approval-form-1",
+    "title": "Factory Building Plan Approval Form 1",
+    "category": "Rajasthan",
+    "source_url": "https://rajnivesh.rajasthan.gov.in/Uploads/3e6a9e0f-aacd-499a-9cd4-d3f29c5768e1.pdf",
+    "pages": 2,
+    "local": "assets/forms/rajasthan-factory-building-plan-approval-form-1.pdf",
+    "preview": "assets/forms/previews/rajasthan-factory-building-plan-approval-form-1.png",
+    "clean_source": true
+  },
+  {
+    "slug": "rajasthan-factory-registration-renewal-form-2",
+    "title": "Factory Registration / Renewal Form 2",
+    "category": "Rajasthan",
+    "source_url": "https://rajfab.rajasthan.gov.in/web/Documents/forms/Form_II.pdf",
+    "pages": 4,
+    "local": "assets/forms/rajasthan-factory-registration-renewal-form-2.pdf",
+    "preview": "assets/forms/previews/rajasthan-factory-registration-renewal-form-2.png",
+    "clean_source": true
+  },
+  {
+    "slug": "rajasthan-boiler-manufacturer-registration-renewal",
+    "title": "Boiler Manufacturer Registration / Renewal",
+    "category": "Rajasthan",
+    "source_url": "https://rajnivesh.rajasthan.gov.in/Uploads/4a8c589a-495a-42ea-98e6-1261d44a9a1b.pdf",
+    "pages": 1,
+    "local": "assets/forms/rajasthan-boiler-manufacturer-registration-renewal.pdf",
+    "preview": "assets/forms/previews/rajasthan-boiler-manufacturer-registration-renewal.png",
+    "clean_source": true
+  },
+  {
+    "slug": "rajasthan-boiler-registration-application-checklist",
+    "title": "Boiler Registration Application & Checklist",
+    "category": "Rajasthan",
+    "source_url": "https://rajnivesh.rajasthan.gov.in/Uploads/Boiler_Registration_and_Certification_Module-1.pdf",
+    "pages": 3,
+    "local": "assets/forms/rajasthan-boiler-registration-application-checklist.pdf",
+    "preview": "assets/forms/previews/rajasthan-boiler-registration-application-checklist.png",
+    "clean_source": true
+  },
+  {
     "slug": "transport-dl-form-2-learner-licence-rajasthan",
     "title": "Learner Licence Form 2",
     "category": "Rajasthan",
