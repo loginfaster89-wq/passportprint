@@ -4,11 +4,11 @@ Last updated: 2026-05-05 IST
 
 ## Global edit lock
 
-**Status:** FREE
-**Owner:** none
-**Scope:** none
-**Started:** none
-**Notes:** Released after adding permanent AGENTS.md startup instructions for work-lock/deploy coordination.
+**Status:** ACTIVE
+**Owner:** Growth and safety chat
+**Scope:** Controlled production deploy for Google Search Console verification tag
+**Started:** 2026-05-05 20:26:38 IST
+**Notes:** Holding deploy lock while running one manual Cloudflare Pages release from latest main.
 
 ## Mandatory rule
 
