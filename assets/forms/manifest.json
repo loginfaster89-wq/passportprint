@@ -550,6 +550,26 @@
     "clean_source": true
   },
   {
+    "slug": "pehchan-form-14-delayed-birth-death-reporting-rajasthan",
+    "title": "Pehchan Form 14 - Delayed Birth/Death Reporting",
+    "category": "Rajasthan",
+    "source_url": "https://pehchan.rajasthan.gov.in/pehchan1/Download/rules2025.pdf",
+    "pages": 1,
+    "local": "assets/forms/pehchan-form-14-delayed-birth-death-reporting-rajasthan.pdf",
+    "preview": "assets/forms/previews/pehchan-form-14-delayed-birth-death-reporting-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "pehchan-form-15-birth-death-appeal-rajasthan",
+    "title": "Pehchan Form 15 - Birth/Death Appeal",
+    "category": "Rajasthan",
+    "source_url": "https://pehchan.rajasthan.gov.in/pehchan1/Download/rules2025.pdf",
+    "pages": 1,
+    "local": "assets/forms/pehchan-form-15-birth-death-appeal-rajasthan.pdf",
+    "preview": "assets/forms/previews/pehchan-form-15-birth-death-appeal-rajasthan.png",
+    "clean_source": true
+  },
+  {
     "slug": "marriage-registration-affidavit-pack-rajasthan",
     "title": "Marriage Registration Affidavit Pack",
     "category": "Rajasthan",
@@ -790,6 +810,26 @@
     "clean_source": true
   },
   {
+    "slug": "pension-form-3-medical-exam-letter-rajasthan",
+    "title": "Pension Form 3 - Medical Exam Letter",
+    "category": "Rajasthan",
+    "source_url": "https://pension.rajasthan.gov.in/img/pdf/FORM%203-4%20only.pdf",
+    "pages": 3,
+    "local": "assets/forms/pension-form-3-medical-exam-letter-rajasthan.pdf",
+    "preview": "assets/forms/previews/pension-form-3-medical-exam-letter-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "pension-form-4-medical-examination-statement-rajasthan",
+    "title": "Pension Form 4 - Medical Examination Statement",
+    "category": "Rajasthan",
+    "source_url": "https://pension.rajasthan.gov.in/img/pdf/FORM%203-4%20only.pdf",
+    "pages": 3,
+    "local": "assets/forms/pension-form-4-medical-examination-statement-rajasthan.pdf",
+    "preview": "assets/forms/previews/pension-form-4-medical-examination-statement-rajasthan.png",
+    "clean_source": true
+  },
+  {
     "slug": "pension-form-5-rajasthan",
     "title": "Pension Form 5 - Nomination",
     "category": "Rajasthan",
@@ -820,6 +860,26 @@
     "clean_source": true
   },
   {
+    "slug": "pension-form-9-service-declaration-rajasthan",
+    "title": "Pension Form 9 - Service Declaration",
+    "category": "Rajasthan",
+    "source_url": "https://pension.rajasthan.gov.in/img/pdf/FORM-9.pdf",
+    "pages": 1,
+    "local": "assets/forms/pension-form-9-service-declaration-rajasthan.pdf",
+    "preview": "assets/forms/previews/pension-form-9-service-declaration-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "pension-form-9a-service-admission-order-rajasthan",
+    "title": "Pension Form 9A - Service Admission Order",
+    "category": "Rajasthan",
+    "source_url": "https://pension.rajasthan.gov.in/img/pdf/FORM-9A.pdf",
+    "pages": 1,
+    "local": "assets/forms/pension-form-9a-service-admission-order-rajasthan.pdf",
+    "preview": "assets/forms/previews/pension-form-9a-service-admission-order-rajasthan.png",
+    "clean_source": true
+  },
+  {
     "slug": "pension-form-14a-rajasthan",
     "title": "Pension Form 14A - Family Pension Details",
     "category": "Rajasthan",
@@ -837,6 +897,36 @@
     "pages": 2,
     "local": "assets/forms/pension-form-30-rajasthan.pdf",
     "preview": "assets/forms/previews/pension-form-30-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "pension-form-33-provisional-pension-family-gratuity-rajasthan",
+    "title": "Pension Form 33 - Provisional Pension/Gratuity",
+    "category": "Rajasthan",
+    "source_url": "https://pension.rajasthan.gov.in/img/pdf/FORM-33.pdf",
+    "pages": 4,
+    "local": "assets/forms/pension-form-33-provisional-pension-family-gratuity-rajasthan.pdf",
+    "preview": "assets/forms/previews/pension-form-33-provisional-pension-family-gratuity-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "pension-life-certificate-rajasthan",
+    "title": "Pension Life Certificate",
+    "category": "Rajasthan",
+    "source_url": "https://pension.rajasthan.gov.in/img/pdf/LIFE%20CERTIFICATE.pdf",
+    "pages": 1,
+    "local": "assets/forms/pension-life-certificate-rajasthan.pdf",
+    "preview": "assets/forms/previews/pension-life-certificate-rajasthan.png",
+    "clean_source": true
+  },
+  {
+    "slug": "pension-medical-limit-extension-rajasthan",
+    "title": "Pension Medical Limit Extension Application",
+    "category": "Rajasthan",
+    "source_url": "https://pension.rajasthan.gov.in/img/pdf/LIMIT%20EXTENSION%20APPLICATION.pdf",
+    "pages": 3,
+    "local": "assets/forms/pension-medical-limit-extension-rajasthan.pdf",
+    "preview": "assets/forms/previews/pension-medical-limit-extension-rajasthan.png",
     "clean_source": true
   },
   {
