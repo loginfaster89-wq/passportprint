@@ -4,11 +4,11 @@ Last updated: 2026-05-05 IST
 
 ## Global edit lock
 
-**Status:** FREE
-**Owner:** none
-**Scope:** none
-**Started:** none
-**Notes:** Released after manual deploy run #349 failed before a GitHub hosted runner was acquired during the GitHub Actions runner incident; no live deploy completed.
+**Status:** ACTIVE
+**Owner:** Codex growth/research chat
+**Scope:** Coordination docs update after successful manual Cloudflare dashboard deploy
+**Started:** 2026-05-05 21:53 IST
+**Notes:** Updating `.agents` status only; live site is already deployed through Cloudflare Direct Upload and verified.
 
 ## Mandatory rule
 
