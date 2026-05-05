@@ -1,6 +1,34 @@
 # Handoff For Parallel Codex Chats
 
-Last updated: 2026-05-05 IST
+Last updated: 2026-05-06 00:08 IST
+
+## Paused UI polish WIP
+
+- User paused the UI polish/live update work overnight around 2026-05-06 00:08 IST. Do not deploy this WIP until it is resumed, rebuilt, and re-tested.
+- Active lock owner is `ChatGPT Codex UI polish chat`; lock intentionally remains `ACTIVE` so another chat does not edit the same shared UI/cache files.
+- Local workspace has uncommitted WIP changes. Current dirty tracked files include shared app shell pages, `assets/legal.css`, `assets/auth.js`, `assets/deferred-ui.js`, `assets/pricing.css`, `assets/pwa.js`, `_headers`, and `sw.js`. Untracked `.well-known/`, `favicon.ico`, and `artifacts/` are from the other deploy/status work and should not be blindly deleted.
+- Intended UI scope: cache freshness for first-load users, shared fixed/sticky header spacing, auto pill/card marquees for non-control informational chips, Google button visibility in login modal, pricing button/badge contrast, Passport mobile upload compactness, Passport remove-background card border, Forms preview color polish, and general mobile overflow/performance.
+- Current important WIP details:
+  - `sw.js` cache markers bumped to `studioprint-v64` / `site-v64`.
+  - `_headers` now makes CSS/JS/manifest app shell assets no-cache to avoid hard-refresh issues.
+  - Root HTML files were query-bumped to `?v=ui-polish-v64`.
+  - `assets/deferred-ui.js` lazy-loads auth/pricing with `?v=ui-polish-v64`.
+  - Shared auth and Passport inline auth show the Google fallback button instead of hiding the section on preview origins.
+  - Pricing modal CTA/badge colors were changed from black to yellow accent.
+  - Infinite strips were added/forced for homepage hero trust pills, Passport benefit/upload pills, and ID Print informational cards/pills.
+  - Latest local edit changed `assets/legal.css` from sticky to fixed shared header with centralized body top padding; this must be re-tested because it was made right before pausing.
+- Verification already attempted before the final header patch:
+  - Fresh preview server on port `8127` returned current CSS.
+  - Chrome/Playwright smoke test showed no horizontal overflow on index, passport, forms, id-print, refund at desktop/phone/tablet.
+  - Auto marquee motion was confirmed for visible homepage, Passport, and ID Print informational tracks.
+  - Google login fallback was visible in the shared login modal.
+  - The pre-patch sticky header did not remain sticky while scrolling, which is why the final `assets/legal.css` fixed-header change was started.
+- Resume checklist:
+  - Run `git status --short --branch`.
+  - Re-test `assets/legal.css` fixed-header spacing on index, passport, forms, id-print, and legal pages at phone/tablet/desktop.
+  - Run `git diff --check`; earlier failures were only CRLF trailing whitespace on a few edited HTML lines and were mostly cleaned.
+  - Build with bundled Node: `C:\Users\ajayt\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe build.js` with `NODE_PATH` pointed at bundled `node_modules` if needed.
+  - Only after tests pass, update `dist/`, commit source, push, deploy per `.agents/deploy-policy.md`, verify live, then release the lock.
 
 Current repo path for normal work: `C:\Users\ajayt\Documents\Codex\2026-05-01\hu`
 

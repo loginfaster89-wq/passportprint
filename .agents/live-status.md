@@ -1,6 +1,12 @@
 # Studio Print Live Status
 
-Last updated: 2026-05-05 IST
+Last updated: 2026-05-06 00:08 IST
+
+## Paused UI polish/live update
+
+- User paused the current UI polish/live update work overnight. No live deployment was performed by this chat after the pause.
+- Active lock remains with `ChatGPT Codex UI polish chat` for shared UI/cache files. Other chats should not edit `assets/legal.css`, shared auth/pricing/PWA/cache files, `index.html`, `passport-photo.html`, `id-print.html`, `forms.html`, `_headers`, `sw.js`, or generated `dist/**` until the lock is released.
+- Current source WIP is local only and must be rebuilt/re-tested before any production deploy. See `.agents/handoff.md` section `Paused UI polish WIP` for exact resume steps.
 
 ## Deploy coordination rule
 

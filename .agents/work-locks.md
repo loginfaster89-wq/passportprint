@@ -1,6 +1,6 @@
 # Studio Print Work Locks
 
-Last updated: 2026-05-05 IST
+Last updated: 2026-05-06 00:08 IST
 
 ## Global edit lock
 
@@ -8,7 +8,7 @@ Last updated: 2026-05-05 IST
 **Owner:** ChatGPT Codex UI polish chat
 **Scope:** Shared UI/cache polish: assets/legal.css, assets/auth.css/js if needed, assets/pricing.css, index.html, passport-photo.html, id-print.html, forms.html, _headers, sw.js, generated dist outputs, and .agents status docs.
 **Started:** 2026-05-05 22:06 IST
-**Notes:** Taking lock to fix sticky-header spacing, auto pill/card marquees, cache freshness, auth/pricing polish, and responsive/performance regressions reported by the user.
+**Notes:** Paused overnight at user request. Source WIP is local only, not deployed: cache freshness v64, shared auth/pricing polish, auto pill/card marquees, and responsive header/content spacing are partially implemented. Resume from the same local workspace, verify with build + mobile/desktop smoke tests, then deploy only after approval.
 
 ## Mandatory rule
 
