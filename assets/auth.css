@@ -107,6 +107,38 @@
   width: 100%;
   display: flex; justify-content: center;
 }
+.sp-google-fallback {
+  width: min(100%, 320px);
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 1px solid rgba(17,17,17,.12);
+  border-radius: 999px;
+  background: #fff;
+  color: #111;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 14px 34px rgba(17,17,17,.08);
+}
+.sp-google-fallback::before {
+  content: "G";
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: #f8f8f8;
+  color: #4285f4;
+  font-family: Arial, sans-serif;
+  font-weight: 800;
+}
+.sp-google-btn.google-rendered + .sp-google-fallback {
+  display: none;
+}
 /* Google's rendered iframe sits inside .sp-google-btn; GIS handles its own
    styling, we just make sure the container is sized right and centered. */
 .sp-auth-divider {

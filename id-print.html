@@ -307,6 +307,29 @@ body.idp-workspace-mode #stepPreview .idp-preview-canvas-pair{max-width:min(100%
   padding:4px 10px;border-radius:999px;
   background:var(--surface2);border:1px solid var(--border);
 }
+.idp-info.sp-pill-marquee{
+  display:block;
+  overflow:hidden!important;
+  margin:16px 0;
+}
+.idp-info.sp-pill-marquee .sp-pill-track{
+  gap:8px;
+}
+.idp-info.sp-pill-marquee .pill{
+  flex:0 0 auto;
+}
+.idp-detect-marquee{
+  display:block;
+  width:min(100%,520px);
+  margin:0 auto 10px;
+}
+.idp-detect-marquee .sp-pill-track{
+  gap:8px;
+}
+.idp-detect-marquee .idp-detect{
+  flex:0 0 auto;
+  margin:0!important;
+}
 .idp-layout-panel{
   margin:0 0 16px;padding:14px;border-radius:12px;
   background:var(--surface2);border:1px solid var(--border);
@@ -1731,11 +1754,17 @@ body.idp-workspace-mode #stepSheet .idp-a4-wrap canvas{
           <div id="detectBadge"></div>
           <h3 id="previewTitle">Front &amp; Back Preview</h3>
         </div>
-        <div class="idp-info">
-          <span class="pill" id="pillFormat">CR80 85.6 x 54 mm</span>
-          <span class="pill" id="pillPixels">1011 x 638 px</span>
-          <span class="pill">300 DPI</span>
-          <span class="pill" id="pillWorkflow">Fold &amp; laminate ready</span>
+        <div class="idp-info sp-pill-marquee">
+          <div class="sp-pill-track">
+            <span class="pill" id="pillFormat">CR80 85.6 x 54 mm</span>
+            <span class="pill" id="pillPixels">1011 x 638 px</span>
+            <span class="pill">300 DPI</span>
+            <span class="pill" id="pillWorkflow">Fold &amp; laminate ready</span>
+            <span class="pill" data-pill-mirror="format" aria-hidden="true">CR80 85.6 x 54 mm</span>
+            <span class="pill" data-pill-mirror="pixels" aria-hidden="true">1011 x 638 px</span>
+            <span class="pill" aria-hidden="true">300 DPI</span>
+            <span class="pill" data-pill-mirror="workflow" aria-hidden="true">Fold &amp; laminate ready</span>
+          </div>
         </div>
       </div>
       <div class="idp-workbench-body">
@@ -2719,6 +2748,16 @@ function refreshCardMetaPills(cardType) {
   if (pillFormat) pillFormat.textContent = spec.formatLabel;
   if (pillPixels) pillPixels.textContent = spec.pixelLabel;
   if (pillWorkflow) pillWorkflow.textContent = getSheetLayout().workflowLabel || spec.workflowLabel;
+  document.querySelectorAll('[data-pill-mirror="format"]').forEach(function(el){ el.textContent = spec.formatLabel; });
+  document.querySelectorAll('[data-pill-mirror="pixels"]').forEach(function(el){ el.textContent = spec.pixelLabel; });
+  document.querySelectorAll('[data-pill-mirror="workflow"]').forEach(function(el){ el.textContent = getSheetLayout().workflowLabel || spec.workflowLabel; });
+}
+
+function setDetectBadgeHtml(html) {
+  if (!detectBadge) return;
+  detectBadge.innerHTML = '<div class="sp-pill-marquee idp-detect-marquee"><div class="sp-pill-track">' +
+    html + html.replaceAll('id="', 'data-mirror-id="').replaceAll(' style="margin:0 4px 8px;"', '') +
+    '</div></div>';
 }
 
 function cardNeedsSyntheticTopBorder(cardType) {
@@ -3285,8 +3324,8 @@ async function processPdf(pdf) {
     refreshCardMetaPills(detectedType);
     applyFilters();
 
-    detectBadge.innerHTML = '<div class="idp-detect ' + detectedType + '">' +
-      TYPE_ICONS[detectedType] + ' ' + TYPE_LABELS[detectedType] + ' Detected</div>';
+    setDetectBadgeHtml('<div class="idp-detect ' + detectedType + '">' +
+      TYPE_ICONS[detectedType] + ' ' + TYPE_LABELS[detectedType] + ' Detected</div>');
     /* §AC.27 — Position panel removed; nothing to toggle here. */
 
     previewTitle.textContent = backImageData ? 'Front & Back Preview' : 'Card Preview';
@@ -3308,7 +3347,7 @@ function showBatchPreview() {
     badgeHtml += '<div class="idp-detect ' + card.type + '" style="margin:0 4px 8px;">' +
       TYPE_ICONS[card.type] + ' ' + TYPE_LABELS[card.type] + '</div>';
   });
-  detectBadge.innerHTML = badgeHtml;
+  setDetectBadgeHtml(badgeHtml);
 
   var hasBackForAll = batchCards.every(function(card) { return !!card.back; });
   previewTitle.textContent = batchCards.length + ' Card' + (batchCards.length === 1 ? '' : 's') + (hasBackForAll ? ' — Front & Back Preview' : ' Preview');

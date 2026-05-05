@@ -17,7 +17,7 @@
 
 const CACHE_VERSION = 'studioprint-v56';
 const RUNTIME_CACHE = 'studioprint-runtime-v56';
-const ID_PRINT_REFRESH_VERSION = 'id-print-v52';
+const ID_PRINT_REFRESH_VERSION = 'id-print-v53';
 
 // Minimum shell we want available offline after the first visit. The SW also
 // opportunistically caches other same-origin GETs it sees at runtime, so this

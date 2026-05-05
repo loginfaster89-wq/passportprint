@@ -30,9 +30,8 @@
     && !/^(YOUR_|__REPLACE_)/.test(GOOGLE_CLIENT_ID);
 
   function googleOriginAllowed() {
-    var host = String(location.hostname || '').toLowerCase();
-    if (window.GOOGLE_OAUTH_ALLOW_PREVIEW === true) return true;
-    return host !== 'localhost' && host !== '127.0.0.1' && !/\.lhr\.life$/.test(host);
+    if (window.GOOGLE_OAUTH_DISABLE_PREVIEW === true) return false;
+    return true;
   }
   function canUseGoogleSignIn() {
     return GOOGLE_ENABLED && googleOriginAllowed();
@@ -41,7 +40,14 @@
     var wrap = document.getElementById('spGoogleWrap');
     var host = document.getElementById('spGoogleBtn');
     if (wrap) wrap.style.display = 'none';
-    if (host) host.innerHTML = '';
+    if (host) {
+      host.innerHTML = '';
+      host.classList.remove('google-rendered');
+    }
+  }
+  function showGoogleSignIn() {
+    var wrap = document.getElementById('spGoogleWrap');
+    if (wrap && canUseGoogleSignIn()) wrap.style.display = 'flex';
   }
 
   // ── localStorage helpers ──
@@ -148,6 +154,7 @@
       '    <div class="sp-auth-body">',
       '      <div class="sp-google-wrap" id="spGoogleWrap">',
       '        <div class="sp-google-btn" id="spGoogleBtn"></div>',
+      '        <button type="button" class="sp-google-fallback" id="spGoogleFallback">Continue with Google</button>',
       '        <div class="sp-auth-divider"><span>or</span></div>',
       '      </div>',
       '      <div class="sp-auth-tabs" role="tablist">',
@@ -207,6 +214,18 @@
     document.getElementById('spOtpForm').addEventListener('submit', doVerifyOtp);
     document.getElementById('spOtpResend').addEventListener('click', resendOtp);
     document.getElementById('spOtpBack').addEventListener('click', function () { setAuthTab('signup'); });
+    var googleFallback = document.getElementById('spGoogleFallback');
+    if (googleFallback) {
+      googleFallback.addEventListener('click', function () {
+        showGoogleSignIn();
+        renderGoogleButton();
+        try {
+          if (initGoogleSignIn() && window.google && google.accounts && google.accounts.id) {
+            google.accounts.id.prompt();
+          }
+        } catch (e) {}
+      });
+    }
 
     // Hide Google section entirely if not configured so the modal
     // collapses gracefully (no empty space, no broken widget).
@@ -229,7 +248,7 @@
     // Google Sign-In is a shortcut for login + signup; hide it on the
     // OTP step (user has already started the email flow at that point).
     var gw = document.getElementById('spGoogleWrap');
-    if (gw) gw.style.display = (tab === 'otp' || !canUseGoogleSignIn()) ? 'none' : '';
+    if (gw) gw.style.display = (tab === 'otp' || !canUseGoogleSignIn()) ? 'none' : 'flex';
     setError('');
   }
 
@@ -248,6 +267,7 @@
     // Render the Google button lazily after the modal is visible (GIS
     // measures the host element, so it must be in the DOM + laid out).
     if (canUseGoogleSignIn() && tab !== 'otp') {
+      showGoogleSignIn();
       setTimeout(renderGoogleButton, 0);
     } else {
       hideGoogleSignIn();
@@ -392,6 +412,31 @@
   // both paths identically.
   var _googleInitDone = false;
   var _googleBtnRendered = false;
+  var _googleSdkPromise = null;
+  function loadGoogleSdk() {
+    if (typeof google !== 'undefined' && google.accounts && google.accounts.id) return Promise.resolve(true);
+    if (_googleSdkPromise) return _googleSdkPromise;
+    _googleSdkPromise = new Promise(function (resolve, reject) {
+      var existing = document.querySelector('script[data-sp-google-sdk="1"]');
+      if (existing) {
+        existing.addEventListener('load', function () { resolve(true); }, { once: true });
+        existing.addEventListener('error', function () { reject(new Error('Could not load Google Sign-In.')); }, { once: true });
+        return;
+      }
+      var s = document.createElement('script');
+      s.src = 'https://accounts.google.com/gsi/client';
+      s.async = true;
+      s.defer = true;
+      s.dataset.spGoogleSdk = '1';
+      s.onload = function () { resolve(true); };
+      s.onerror = function () { reject(new Error('Could not load Google Sign-In.')); };
+      document.head.appendChild(s);
+    }).catch(function (err) {
+      _googleSdkPromise = null;
+      throw err;
+    });
+    return _googleSdkPromise;
+  }
   function initGoogleSignIn() {
     if (_googleInitDone) return true;
     if (!canUseGoogleSignIn()) return false;
@@ -416,14 +461,16 @@
   function renderGoogleButton() {
     // GIS may not be ready yet (async script) — retry a few times.
     if (!canUseGoogleSignIn()) { hideGoogleSignIn(); return; }
+    showGoogleSignIn();
     if (_googleBtnRendered) return;
     if (!initGoogleSignIn()) {
-      if (!renderGoogleButton._tries) renderGoogleButton._tries = 0;
-      if (renderGoogleButton._tries++ < 20) {
-        setTimeout(renderGoogleButton, 150);
-      } else {
-        hideGoogleSignIn();
-      }
+      loadGoogleSdk().then(function () {
+        if (!renderGoogleButton._tries) renderGoogleButton._tries = 0;
+        if (renderGoogleButton._tries++ < 20) setTimeout(renderGoogleButton, 150);
+      }).catch(function (err) {
+        console.warn((err && err.message) || 'Could not load Google Sign-In.');
+        setError('Google sign-in could not load. Try email login.');
+      });
       return;
     }
     var host = document.getElementById('spGoogleBtn');
@@ -439,9 +486,10 @@
         width: 320,
       });
       _googleBtnRendered = true;
+      host.classList.add('google-rendered');
     } catch (e) {
       console.warn('Google button render failed:', e);
-      hideGoogleSignIn();
+      setError('Google sign-in could not render. Try email login.');
     }
   }
   async function handleGoogleCredential(resp) {

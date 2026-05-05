@@ -2262,6 +2262,38 @@ body.passport-page #authModal .auth-tabs{
   background:#fff;
   box-shadow:0 10px 26px rgba(44,36,22,.06);
 }
+body.passport-page #authModal .google-fallback-btn{
+  width:min(100%,320px);
+  min-height:44px;
+  border:1px solid rgba(17,17,17,.12);
+  border-radius:999px;
+  background:#fff;
+  color:#111;
+  font-family:inherit;
+  font-size:14px;
+  font-weight:800;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  box-shadow:0 14px 34px rgba(17,17,17,.08);
+}
+body.passport-page #authModal .google-fallback-btn::before{
+  content:"G";
+  width:22px;
+  height:22px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:#f8f8f8;
+  color:#4285f4;
+  font-family:Arial,sans-serif;
+  font-weight:800;
+}
+body.passport-page #authModal #googleSignInBtn.google-rendered + .google-fallback-btn{
+  display:none;
+}
 body.passport-page #authModal .auth-tab{
   min-height:40px;
   border-radius:999px;
@@ -2478,10 +2510,21 @@ body.passport-page footer.legal-footer .footer-bottom{
     font-size:11px;
   }
   body.passport-page .sidebar .sb-section{
-    border:1px solid rgba(17,17,17,.10);
+    position:relative;
+    isolation:isolate;
+    border:1px solid transparent;
     background:rgba(255,255,255,.94);
     background-clip:padding-box;
-    overflow:visible;
+    overflow:hidden;
+  }
+  body.passport-page .sidebar .sb-section::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    z-index:2;
+    pointer-events:none;
+    border:1px solid rgba(17,17,17,.12);
+    border-radius:inherit;
   }
   body.passport-page #bgProgressWrap:not(.hidden){
     gap:8px;
@@ -2524,6 +2567,44 @@ body.passport-page footer.legal-footer .footer-bottom{
   }
   body.passport-page .upload-cta-hint{
     margin-top:5px!important;
+  }
+}
+
+body.passport-page .pp-trust-row.sp-pill-marquee,
+body.passport-page .upload-feats.sp-pill-marquee{
+  display:block;
+  overflow:hidden!important;
+}
+body.passport-page .pp-trust-row.sp-pill-marquee{margin-top:22px;}
+body.passport-page .upload-feats.sp-pill-marquee{margin-top:16px;}
+body.passport-page .pp-trust-row.sp-pill-marquee .sp-pill-track,
+body.passport-page .upload-feats.sp-pill-marquee .sp-pill-track{
+  gap:8px;
+}
+body.passport-page .pp-trust-row.sp-pill-marquee .pp-pill,
+body.passport-page .upload-feats.sp-pill-marquee .upload-feat-pill{
+  flex:0 0 auto;
+}
+body.passport-page #featLinesSVG line{
+  stroke-width:1.25!important;
+  opacity:.48!important;
+}
+body.passport-page .feat-chip{
+  color:#161411!important;
+  background:rgba(255,255,255,.94)!important;
+  border-color:rgba(17,17,17,.10)!important;
+  box-shadow:0 10px 24px rgba(42,34,22,.10),inset 0 1px 0 rgba(255,255,255,.95)!important;
+}
+@media(max-width:760px){
+  body.passport-page .pp-trust-row.sp-pill-marquee,
+  body.passport-page .upload-feats.sp-pill-marquee{
+    padding-bottom:0;
+    -webkit-overflow-scrolling:auto;
+    scroll-snap-type:none;
+  }
+  body.passport-page .upload-feats.sp-pill-marquee{
+    margin-left:0;
+    margin-right:0;
   }
 }
 
@@ -2683,12 +2764,19 @@ body.passport-page footer.legal-footer .footer-bottom{
             <span style="font-size:clamp(9px, 1.3vw, 11px);color:var(--muted2);">JPG · PNG · WEBP · BMP</span>
           </div>
           <!-- Feature pills inside card -->
-          <div class="upload-feats">
+          <div class="upload-feats sp-pill-marquee" aria-label="Upload features">
+            <div class="sp-pill-track">
             <span class="upload-feat-pill">🤖 AI BG Removal</span>
             <span class="upload-feat-pill">✂️ Smart Crop</span>
             <span class="upload-feat-pill">📄 300 DPI Print</span>
             <span class="upload-feat-pill">🌍 6+ Sizes</span>
             <span class="upload-feat-pill">⬇ Instant Save</span>
+            <span class="upload-feat-pill" aria-hidden="true">🤖 AI BG Removal</span>
+            <span class="upload-feat-pill" aria-hidden="true">✂️ Smart Crop</span>
+            <span class="upload-feat-pill" aria-hidden="true">📄 300 DPI Print</span>
+            <span class="upload-feat-pill" aria-hidden="true">🌍 6+ Sizes</span>
+            <span class="upload-feat-pill" aria-hidden="true">⬇ Instant Save</span>
+            </div>
           </div>
           <!-- CTA hint -->
           <div class="upload-cta-hint" style="margin-top:18px;font-size:12px;color:var(--muted2);">
@@ -2962,11 +3050,17 @@ body.passport-page footer.legal-footer .footer-bottom{
           <button type="button" class="btn btn-secondary" onclick="try{openPlans();}catch(e){}">View plans</button>
         </div>
       </div>
-      <div class="pp-trust-row" aria-label="Passport photo benefits">
-        <span class="pp-pill">On-device AI</span>
-        <span class="pp-pill">No photo uploads</span>
-        <span class="pp-pill">300 DPI A4</span>
-        <span class="pp-pill">India / US / UK / Schengen</span>
+      <div class="pp-trust-row sp-pill-marquee" aria-label="Passport photo benefits">
+        <div class="sp-pill-track">
+          <span class="pp-pill">On-device AI</span>
+          <span class="pp-pill">No photo uploads</span>
+          <span class="pp-pill">300 DPI A4</span>
+          <span class="pp-pill">India / US / UK / Schengen</span>
+          <span class="pp-pill" aria-hidden="true">On-device AI</span>
+          <span class="pp-pill" aria-hidden="true">No photo uploads</span>
+          <span class="pp-pill" aria-hidden="true">300 DPI A4</span>
+          <span class="pp-pill" aria-hidden="true">India / US / UK / Schengen</span>
+        </div>
       </div>
     </div>
     <div class="pp-preview-wall" aria-hidden="true">
@@ -5512,9 +5606,8 @@ const GOOGLE_CLIENT_ID = (typeof window !== 'undefined' && window.GOOGLE_OAUTH_C
   || '216240284102-d63glsohcp2lr85kk1el364f7gecnv9q.apps.googleusercontent.com';
 const GOOGLE_ENABLED = !!GOOGLE_CLIENT_ID && /\.apps\.googleusercontent\.com$/.test(GOOGLE_CLIENT_ID) && !/^(YOUR_|__REPLACE_)/.test(GOOGLE_CLIENT_ID);
 function googleOriginAllowed(){
-  const host = String(location.hostname || '').toLowerCase();
-  if(window.GOOGLE_OAUTH_ALLOW_PREVIEW === true) return true;
-  return host !== 'localhost' && host !== '127.0.0.1' && !/\.lhr\.life$/.test(host);
+  if(window.GOOGLE_OAUTH_DISABLE_PREVIEW === true) return false;
+  return true;
 }
 function canUseGoogleSignIn(){
   return GOOGLE_ENABLED && USE_BACKEND && googleOriginAllowed();
@@ -5523,7 +5616,10 @@ function hideGoogleSignIn(){
   const wrap = document.getElementById('googleSignInWrap');
   const host = document.getElementById('googleSignInBtn');
   if(wrap) wrap.style.display = 'none';
-  if(host) host.innerHTML = '';
+  if(host){
+    host.innerHTML = '';
+    host.classList.remove('google-rendered');
+  }
 }
 function showGoogleSignIn(){
   const wrap = document.getElementById('googleSignInWrap');
@@ -5956,7 +6052,8 @@ function openAuth(tab){
       })
       .catch((err)=>{
         console.warn((err && err.message) || 'Could not load Google Sign-In.');
-        hideGoogleSignIn();
+        const authErr = document.getElementById('authError');
+        if(authErr) authErr.textContent = t('err_prefix') + 'Google sign-in could not load. Try email login.';
       });
   } else {
     hideGoogleSignIn();
@@ -6025,7 +6122,17 @@ function initGoogleSignIn(){
 }
 function renderGoogleButton(){
   if(!canUseGoogleSignIn()){ hideGoogleSignIn(); return; }
-  if(!initGoogleSignIn()) return;
+  showGoogleSignIn();
+  if(!initGoogleSignIn()){
+    loadGoogleSdk()
+      .then(()=>{ if(initGoogleSignIn()) renderGoogleButton(); })
+      .catch((err)=>{
+        console.warn((err && err.message) || 'Could not load Google Sign-In.');
+        const authErr = document.getElementById('authError');
+        if(authErr) authErr.textContent = t('err_prefix') + 'Google sign-in could not load. Try email login.';
+      });
+    return;
+  }
   const host = document.getElementById('googleSignInBtn');
   if(!host) return;
   if(_googleBtnRendered) return;
@@ -6040,9 +6147,11 @@ function renderGoogleButton(){
       width: 300,
     });
     _googleBtnRendered = true;
+    host.classList.add('google-rendered');
   } catch(e) {
     console.warn('Google button render failed:', e);
-    hideGoogleSignIn();
+    const authErr = document.getElementById('authError');
+    if(authErr) authErr.textContent = t('err_prefix') + 'Google sign-in could not render. Try email login.';
   }
 }
 function promptGoogleOneTap(){
@@ -6499,6 +6608,7 @@ restoreSession();
       <!-- Google Sign-In: one-click account chooser that auto-fills name + email. -->
       <div id="googleSignInWrap" style="display:flex;flex-direction:column;align-items:center;gap:8px;margin-bottom:12px;">
         <div id="googleSignInBtn" style="min-height:44px;"></div>
+        <button type="button" id="googleFallbackBtn" class="google-fallback-btn" onclick="renderGoogleButton();promptGoogleOneTap();">Continue with Google</button>
         <div class="google-divider" style="display:flex;align-items:center;gap:8px;width:100%;color:var(--muted);font-size:11px;margin:4px 0;">
           <span style="flex:1;height:1px;background:var(--border);"></span>
           <span data-i18n="auth_or">or continue with email</span>
