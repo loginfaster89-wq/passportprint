@@ -23,36 +23,41 @@ Get-Content .agents\handoff.md
 - This chat owns Forms Hub work only.
 - Do not touch `id-print.html` from this Forms task.
 - Another chat may work on ID Print; coordinate through these `.agents` files.
-- The latest Forms batch was committed from clean worktree `C:\tmp\studioprint-forms-rajasthan-20260505` because the original workspace had unrelated dirty files/build output.
+- The latest Forms batch was committed from clean worktree `C:\tmp\studioprint-forms-rajasthan-next-20260505` because the original workspace had unrelated dirty files/build output.
 
 ## Latest Forms update
 
-- Completed Rajasthan-only gap pass after the user asked to finish Rajasthan before moving to any other state.
-- Added/split 9 official Rajasthan entries after PDF text/render inspection:
-  - Pehchan Form 14 - Delayed Birth/Death Reporting.
-  - Pehchan Form 15 - Birth/Death Appeal.
-  - Pension Form 3 - Medical Exam Letter.
-  - Pension Form 4 - Medical Examination Statement.
-  - Pension Form 9 - Service Declaration.
-  - Pension Form 9A - Service Admission Order.
-  - Pension Form 33 - Provisional Pension/Gratuity.
-  - Pension Life Certificate.
-  - Pension Medical Limit Extension Application.
-- `/forms` now has 166 forms total; Rajasthan has 99 entries.
-- Cache is `studioprint-v57`; ID Print refresh marker is `id-print-v53` and was preserved during rebase.
-- Feature commit pushed to `main`: `fb9d438` (`feat(forms): complete Rajasthan gap pass`).
+- Completed Rajasthan-only UDH / Jaipur Municipal Corporation pass after the user asked to finish Rajasthan before moving to any other state.
+- Added 12 official Rajasthan UDH / Jaipur MC entries after PDF text/render inspection:
+  - UDH Building Plan Approval - Above 500 sq.m.
+  - UDH Lease Deed Application.
+  - UDH Lease Free Certificate Application.
+  - UDH Name Transfer II Application.
+  - UDH Name Transfer Application.
+  - UDH Subdivision Application.
+  - UDH Residential Building Construction - 500 sq.ft to 8 m.
+  - UDH Residential Scheme on Agriculture Land.
+  - UDH Residential to Commercial Land Use Application.
+  - Jaipur MC Loksunwai Application.
+  - Jaipur MC Trade License Application.
+  - Jaipur MC Garden/Circle Adoption Application.
+- `/forms` now has 178 forms total; Rajasthan has 111 entries.
+- Cache is `studioprint-v58`; ID Print refresh marker is `id-print-v53` and was preserved during rebase.
+- Feature commit pushed to `main`: `3ccd9be` (`feat(forms): add Rajasthan UDH municipal forms`).
 
 ## QA done
 
 - Build passed with bundled Node: `node build.js` using the original workspace dependency tree through `NODE_PATH`.
-- Manifest validation passed: 166 entries and all referenced source PDFs/previews/page-previews exist for the current manifest schema.
-- `forms.html` and `dist/forms.html` validation passed: each has 166 JS entries; Rajasthan gap entries are present.
-- `sw.js` and `dist/sw.js` validation passed: no conflict markers; `studioprint-v57` and `id-print-v53` present.
-- Live HTML/SW/asset QA passed on `https://studioprint.pages.dev/forms?qa=rajasthan-fb9d438-*`: page has 166 JS entries and contains `Pehchan Form 14` plus `Pension Medical Limit Extension`. `/sw.js` has `studioprint-v57` and `id-print-v53`; `pehchan-form-14-delayed-birth-death-reporting-rajasthan.pdf` returns 200.
+- Manifest validation passed: 178 entries and all referenced source PDFs/previews/page-previews exist for the current manifest schema.
+- Actual PDF page-count validation passed against manifest for all 178 entries.
+- `forms.html` validation passed: 178 JS entries; UDH / Jaipur MC entries are present.
+- `sw.js` and `dist/sw.js` validation passed: no conflict markers; `studioprint-v58` and `id-print-v53` present.
+- Live HTML/SW/asset QA passed on `https://studioprint.pages.dev/forms?qa=rajasthan-3ccd9be-*`: page contains `UDH Building Plan Approval - Above 500 sq.m` and `Jaipur MC Trade License Application`. `/sw.js` has `studioprint-v58` and `id-print-v53`; `udh-lease-deed-rajasthan.pdf` returns 200.
 
 ## Research notes
 
 - Research docs include:
+  - `.agents/research/forms-rajasthan-udh-jaipurmc-20260505.md`
   - `.agents/research/forms-rajasthan-gap-pass-20260505.md`
   - `.agents/research/forms-delhi-revenue-20260505.md`
   - `.agents/research/forms-west-bengal-ration-20260505.md`
@@ -64,12 +69,12 @@ Get-Content .agents\handoff.md
   - `.agents/research/forms-rajasthan-revenue-20260503.md`
   - `.agents/research/forms-rajasthan-transport-20260503.md`
 - Official source base used in the latest pass:
-  - `https://pehchan.rajasthan.gov.in/pehchan1/Download/rules2025.pdf`
-  - `https://pension.rajasthan.gov.in/`
-  - direct PDFs under `https://pension.rajasthan.gov.in/img/pdf/`
+  - `https://udh.rajasthan.gov.in/content/raj/udh/udh-department/en/applicant-corner/online-building-plan-approval-and-related-materials.html`
+  - `https://jaipurmc.org/Presentation/PublicNotice/MstPdf.aspx?Pageid=3`
+  - direct PDFs under `https://jaipurmc.org/PDF/Auction_MM_RTI_Act_Etc_PDF/`
 - Every accepted PDF was downloaded from the official host, read/inspected, page-count checked, and rendered for visual QA.
 - Third-party pages were not used as PDF sources.
-- Rejected/not added in this Rajasthan pass: dirty scanned Family Pension bundle, signed/scanned Notice pack, dirty mixed VariousOtherForms bundle, unverified Pre-88 direct PDF, and pension revision circular/memo candidates.
+- Rejected/not added in this Rajasthan pass: Jaipur MC `COMING SOON` placeholders, faint fire NOC scan, signed/dark dairy notice pack, procedure-only fire NOC document, dirty scanned SJE pension bundle, dirty scanned Family Pension bundle, signed/scanned Notice pack, dirty mixed VariousOtherForms bundle, unverified Pre-88 direct PDF, and pension revision circular/memo candidates.
 
 ## Forms quality rule
 
@@ -83,5 +88,5 @@ Get-Content .agents\handoff.md
 
 - Current owned Forms scope: `forms.html`, `assets/forms/manifest.json`, new/refreshed PDFs/previews under `assets/forms/**`, `sw.js`, related tracked `dist/` outputs, and `.agents` docs.
 - Explicitly not owned: `id-print.html`, `passport-photo.html`, `index.html`, `assets/legal.css`, shared auth/nav/pricing files, and workflow files.
-- Rajasthan known official-source gap pass is complete for the documented Pehchan Form 14/Form 15 gap and missing clean Pension table forms verified on 2026-05-05.
+- Rajasthan known official-source gap pass now includes the documented Pehchan Form 14/Form 15 gap, missing clean Pension table forms, and clean UDH / Jaipur MC forms verified on 2026-05-05.
 - Do not claim every Rajasthan government PDF forever; any future Rajasthan addition still needs department-by-department official-source research and PDF inspection before listing.
