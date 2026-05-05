@@ -8,6 +8,26 @@ Devin-specific condensed recipe (build commands, PR curl snippet, quick
 hard-rules checklist) lives at `.agents/skills/studioprint/SKILL.md` —
 read both files at the start of every session.
 
+## Mandatory start sequence for every Codex chat
+
+Before editing files, pushing commits, or deploying, every chat must run:
+
+```powershell
+git pull --ff-only origin main
+Get-Content .agents\work-locks.md
+powershell -ExecutionPolicy Bypass -File .agents\check-work-lock.ps1
+Get-Content .agents\live-status.md
+Get-Content .agents\handoff.md
+```
+
+If `.agents/check-work-lock.ps1` reports an active global lock, stop and ask
+the user before touching files. If the lock is free, declare the owned file
+scope in chat before editing.
+
+Any task that will edit shared files, push to `main`, or deploy must take the
+global lock in `.agents/work-locks.md` first, commit and push that lock-only
+change, then continue after another `git pull --ff-only origin main`.
+
 ## What this repo is
 
 Plain static HTML/CSS/JS frontend for [Studio Print](https://studioprint.pages.dev/) —
@@ -37,9 +57,11 @@ preview `dist/`. `npm run clean` removes `dist/`.
 ## Deploy
 
 - Primary: **Cloudflare Pages**, project name `studioprint` (not
-  `passportprint`). Every push to `main` runs `.github/workflows/deploy.yml`
-  which does `npm ci` → `npm run build` → `wrangler pages deploy dist
-  --project-name=studioprint`. Secrets `CLOUDFLARE_API_TOKEN` and
+  `passportprint`). Production deploy is manual-only through
+  `.github/workflows/deploy.yml`. Pushing to `main` must not auto-deploy.
+  A deploy owner must take the global lock, verify the latest `origin/main`,
+  run the workflow manually with `reason` and `expected_sha`, then verify the
+  live site before releasing the lock. Secrets `CLOUDFLARE_API_TOKEN` and
   `CLOUDFLARE_ACCOUNT_ID` are already configured in repo settings.
 - Fallback: **Netlify**, reads `netlify.toml`. Both hosts honour the
   `_headers` / `_redirects` convention.
@@ -48,8 +70,8 @@ preview `dist/`. `npm run clean` removes `dist/`.
   propagation for production `*.pages.dev` URLs can take 10–60s; the
   per-deployment URL (`https://<hash>.studioprint.pages.dev`) is always
   immediately fresh.
-- See `CLOUDFLARE_DEPLOY.md` for the manual `wrangler` fallback if the
-  workflow ever fails.
+- See `CLOUDFLARE_DEPLOY.md` and `.agents/deploy-policy.md` for the current
+  manual release process and failure handling.
 
 ## Design tokens — do not change without approval
 
@@ -121,7 +143,8 @@ iPad portrait / narrow tablets.
    user confirms the fine-grained PAT (`GITHUB_PAT_PASSPORTPRINT`) has the
    `Actions: Read and write` scope. Without that scope GitHub rejects
    workflow-file commits with `refusing to allow a Personal Access Token to
-   create or update workflow ... without 'workflow' scope`.
+   create or update workflow ... without 'workflow' scope`. Codex sessions
+   must also take the global lock before workflow edits.
 3. **Pricing numbers** (free: 2 sheets/day; weekly: ₹59/7 days; monthly:
    ₹149/30 days) appear in `index.html`, `terms.html`, `refund.html` and
    `shipping.html`. If they change, update all four.
