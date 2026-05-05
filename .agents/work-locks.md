@@ -4,11 +4,11 @@ Last updated: 2026-05-05 IST
 
 ## Global edit lock
 
-**Status:** FREE
-**Owner:** none
-**Scope:** none
-**Started:** none
-**Notes:** Released after updating coordination docs for the successful Cloudflare dashboard Direct Upload; live Google site verification tag is verified.
+**Status:** ACTIVE
+**Owner:** ChatGPT Codex UI polish chat
+**Scope:** Shared UI/cache polish: assets/legal.css, assets/auth.css/js if needed, assets/pricing.css, index.html, passport-photo.html, id-print.html, forms.html, _headers, sw.js, generated dist outputs, and .agents status docs.
+**Started:** 2026-05-05 22:06 IST
+**Notes:** Taking lock to fix sticky-header spacing, auto pill/card marquees, cache freshness, auth/pricing polish, and responsive/performance regressions reported by the user.
 
 ## Mandatory rule
 
