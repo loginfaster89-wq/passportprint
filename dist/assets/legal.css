@@ -1036,9 +1036,23 @@ body.passport-page .pp-hero-panel{
 .sp-pill-marquee{
   width:100%;
   max-width:100%;
+  min-width:0!important;
+  box-sizing:border-box;
+  flex:0 1 auto;
   overflow:hidden!important;
+  overflow-x:hidden!important;
+  overflow-y:hidden!important;
+  scrollbar-width:none!important;
+  -ms-overflow-style:none!important;
+  overscroll-behavior-x:none;
+  contain:layout paint;
   -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 28px,#000 calc(100% - 28px),transparent 100%);
   mask-image:linear-gradient(90deg,transparent 0,#000 28px,#000 calc(100% - 28px),transparent 100%);
+}
+.sp-pill-marquee::-webkit-scrollbar{
+  width:0!important;
+  height:0!important;
+  display:none!important;
 }
 .sp-pill-track{
   display:flex;
@@ -1046,10 +1060,12 @@ body.passport-page .pp-hero-panel{
   gap:8px;
   width:max-content;
   min-width:100%;
-  animation:spPillMarquee 22s linear infinite;
+  flex-wrap:nowrap!important;
+  white-space:nowrap;
+  animation:spPillMarquee 16s linear infinite;
+  transform:translate3d(0,0,0);
   will-change:transform;
 }
-.sp-pill-marquee:hover .sp-pill-track,
 .sp-pill-marquee:focus-within .sp-pill-track{
   animation-play-state:paused;
 }
@@ -1057,16 +1073,120 @@ body.passport-page .pp-hero-panel{
   flex:0 0 auto;
 }
 @keyframes spPillMarquee{
-  from{transform:translateX(0);}
-  to{transform:translateX(calc(-50% - 4px));}
+  from{transform:translate3d(0,0,0);}
+  to{transform:translate3d(calc(-50% - 4px),0,0);}
+}
+.sp-card-marquee{
+  width:100%;
+  max-width:100%;
+  min-width:0!important;
+  box-sizing:border-box;
+  flex:0 1 auto;
+  overflow:hidden!important;
+  overflow-x:hidden!important;
+  overflow-y:hidden!important;
+  scrollbar-width:none!important;
+  -ms-overflow-style:none!important;
+  overscroll-behavior-x:none;
+  contain:layout paint;
+  -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 30px,#000 calc(100% - 30px),transparent 100%);
+  mask-image:linear-gradient(90deg,transparent 0,#000 30px,#000 calc(100% - 30px),transparent 100%);
+}
+.sp-card-marquee::-webkit-scrollbar{
+  width:0!important;
+  height:0!important;
+  display:none!important;
+}
+.sp-card-track{
+  display:flex;
+  align-items:stretch;
+  gap:14px;
+  width:max-content;
+  min-width:100%;
+  flex-wrap:nowrap!important;
+  animation:spCardMarquee 24s linear infinite;
+  transform:translate3d(0,0,0);
+  will-change:transform;
+}
+.sp-card-marquee:focus-within .sp-card-track{
+  animation-play-state:paused;
+}
+.sp-card-track > *{
+  flex:0 0 auto;
+}
+@keyframes spCardMarquee{
+  from{transform:translate3d(0,0,0);}
+  to{transform:translate3d(calc(-50% - 7px),0,0);}
 }
 @media (prefers-reduced-motion:reduce){
   .sp-pill-marquee{
-    overflow-x:auto!important;
+    overflow:hidden!important;
     -webkit-mask-image:none;
     mask-image:none;
   }
-  .sp-pill-track{
+  .sp-card-marquee{
+    overflow:hidden!important;
+    -webkit-mask-image:none;
+    mask-image:none;
+  }
+}
+
+@media (max-width:900px), (pointer:coarse){
+  header.legal-header,
+  .dropdown-panel,
+  .sp-toast,
+  .forms-toast,
+  .toast,
+  body.home .hero-card,
+  body.home .hero-preview,
+  body.home .feature-card,
+  body.home .audience-card,
+  body.home .metric-card,
+  body.passport-page .pp-hero-card,
+  body.passport-page .pp-visual-card,
+  body.passport-page .upload-card,
+  body.passport-page .sidebar,
+  body.passport-page .sb-section,
+  body.idp-page .idp-hero-visual,
+  body.idp-page .idp-quick-card,
+  body.idp-page .idp-password,
+  body.idp-page .idp-preview,
+  body.idp-page .idp-workbench,
+  footer.legal-footer .footer-main{
+    -webkit-backdrop-filter:none!important;
+    backdrop-filter:none!important;
+  }
+  header.legal-header{
+    box-shadow:0 12px 34px rgba(44,36,22,.10)!important;
+  }
+  body.home .hero-card,
+  body.home .hero-preview,
+  body.home .feature-card,
+  body.home .audience-card,
+  body.home .metric-card,
+  body.passport-page .pp-hero-card,
+  body.passport-page .pp-visual-card,
+  body.passport-page .upload-card,
+  body.passport-page .sidebar,
+  body.passport-page .sb-section,
+  body.idp-page .idp-hero-visual,
+  body.idp-page .idp-quick-card,
+  body.idp-page .idp-password,
+  body.idp-page .idp-preview,
+  body.idp-page .idp-workbench,
+  footer.legal-footer .footer-main{
+    box-shadow:0 14px 34px rgba(44,36,22,.08)!important;
+  }
+  .reveal{
+    opacity:1!important;
+    transform:none!important;
+    transition:none!important;
+  }
+  body.home .hero-preview-demo .bar-fill,
+  body.home .hero-preview-demo .state::before,
+  body.passport-page .float-chip,
+  body.passport-page .feat-chip,
+  body.passport-page .upload-icon{
     animation:none!important;
   }
 }

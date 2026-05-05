@@ -1074,6 +1074,20 @@ body.idp-workspace-mode .idp-quick-grid{display:none;}
   grid-template-columns:repeat(3,minmax(0,1fr));
   gap:14px;
 }
+.idp-quick-grid.sp-card-marquee{
+  display:block;
+  gap:0;
+  overflow:hidden!important;
+}
+body.idp-workspace-mode .idp-quick-grid.sp-card-marquee{display:none!important;}
+.idp-quick-grid.sp-card-marquee .sp-card-track{
+  gap:14px;
+}
+.idp-quick-grid.sp-card-marquee .idp-quick-card{
+  flex:0 0 clamp(280px,32vw,392px);
+  width:clamp(280px,32vw,392px);
+  max-width:392px;
+}
 .idp-quick-card{
   padding:18px;
   border:1px solid rgba(17,17,17,.10);
@@ -1377,6 +1391,11 @@ body.idp-workspace-mode #stepSheet .idp-a4-wrap canvas{
   .idp-hero-actions{justify-content:center;}
   .idp-hero-visual{min-height:320px;}
   .idp-quick-grid{grid-template-columns:1fr;}
+  .idp-quick-grid.sp-card-marquee{display:block;}
+  .idp-quick-grid.sp-card-marquee .idp-quick-card{
+    flex-basis:min(84vw,360px);
+    width:min(84vw,360px);
+  }
 }
 @media (max-width:640px){
   body.idp-page main.legal-main{padding-top:24px;}
@@ -1669,21 +1688,38 @@ body.idp-workspace-mode #stepSheet .idp-a4-wrap canvas{
     </div>
   </div>
 
-  <div class="idp-quick-grid" aria-label="ID card print features">
-    <div class="idp-quick-card">
-      <span>01</span>
-      <strong>Auto detects common IDs</strong>
-      <p>Aadhaar, PAN, e-EPIC, ABHA, Ayushman, eShram, RC, and ration cards are routed into the right print workflow.</p>
-    </div>
-    <div class="idp-quick-card">
-      <span>02</span>
-      <strong>Counter-ready layouts</strong>
-      <p>A4 fold, A4 10-card batch, Dragon 4x6, and Epson PVC tray presets stay available from one print studio.</p>
-    </div>
-    <div class="idp-quick-card">
-      <span>03</span>
-      <strong>Scale before paid paper</strong>
-      <p>Use the free A4 calibration sheet and PVC QA report before laminating or printing directly on tray stock.</p>
+  <div class="idp-quick-grid sp-card-marquee" aria-label="ID card print features">
+    <div class="sp-card-track">
+      <div class="idp-quick-card">
+        <span>01</span>
+        <strong>Auto detects common IDs</strong>
+        <p>Aadhaar, PAN, e-EPIC, ABHA, Ayushman, eShram, RC, and ration cards are routed into the right print workflow.</p>
+      </div>
+      <div class="idp-quick-card">
+        <span>02</span>
+        <strong>Counter-ready layouts</strong>
+        <p>A4 fold, A4 10-card batch, Dragon 4x6, and Epson PVC tray presets stay available from one print studio.</p>
+      </div>
+      <div class="idp-quick-card">
+        <span>03</span>
+        <strong>Scale before paid paper</strong>
+        <p>Use the free A4 calibration sheet and PVC QA report before laminating or printing directly on tray stock.</p>
+      </div>
+      <div class="idp-quick-card" aria-hidden="true">
+        <span>01</span>
+        <strong>Auto detects common IDs</strong>
+        <p>Aadhaar, PAN, e-EPIC, ABHA, Ayushman, eShram, RC, and ration cards are routed into the right print workflow.</p>
+      </div>
+      <div class="idp-quick-card" aria-hidden="true">
+        <span>02</span>
+        <strong>Counter-ready layouts</strong>
+        <p>A4 fold, A4 10-card batch, Dragon 4x6, and Epson PVC tray presets stay available from one print studio.</p>
+      </div>
+      <div class="idp-quick-card" aria-hidden="true">
+        <span>03</span>
+        <strong>Scale before paid paper</strong>
+        <p>Use the free A4 calibration sheet and PVC QA report before laminating or printing directly on tray stock.</p>
+      </div>
     </div>
   </div>
 

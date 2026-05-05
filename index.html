@@ -1065,6 +1065,7 @@ body.home .footer-main{
 }
 body.home .hero-inner{
   max-width:none;
+  min-width:0;
   min-height:520px;
   margin:0;
   padding:48px;
@@ -1072,6 +1073,7 @@ body.home .hero-inner{
   align-items:flex-start;
   justify-content:center;
   gap:22px;
+  overflow:hidden;
 }
 body.home .hero-eyebrow,
 body.home .section-tag{
@@ -1168,6 +1170,7 @@ body.home .hero-trust .pill{
 body.home .hero-trust .pill .tick{color:#111;}
 body.home .hero-preview{
   max-width:none;
+  min-width:0;
   min-height:520px;
   margin:0;
   padding:16px;
@@ -1738,11 +1741,28 @@ body.home .cta-band .btn-ghost{
   border-color:rgba(17,17,17,.13);
 }
 body.home .hero-trust.sp-pill-marquee{
-  display:block;
+  display:block!important;
   margin-top:18px;
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+  align-self:stretch;
+  overflow:hidden!important;
+  overflow-x:hidden!important;
+  scrollbar-width:none!important;
+  -ms-overflow-style:none!important;
 }
+body.home .hero-trust.sp-pill-marquee::-webkit-scrollbar{display:none!important;width:0!important;height:0!important;}
 body.home .hero-trust.sp-pill-marquee .sp-pill-track{
   justify-content:flex-start;
+  flex-wrap:nowrap!important;
+  width:max-content!important;
+  min-width:100%;
+  gap:8px;
+}
+body.home .hero-trust.sp-pill-marquee .pill{
+  flex:0 0 auto;
+  white-space:nowrap;
 }
 </style>
 <script type="application/ld+json">
