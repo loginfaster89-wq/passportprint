@@ -4,11 +4,11 @@ Last updated: 2026-05-05 IST
 
 ## Global edit lock
 
-**Status:** FREE
-**Owner:** none
-**Scope:** none
-**Started:** none
-**Notes:** Released after manual deploy and one re-run for service-worker v62 loading fix could not acquire a GitHub hosted runner; no live deploy completed.
+**Status:** ACTIVE
+**Owner:** Codex growth/research chat
+**Scope:** Controlled production deploy after Cloudflare token was saved in GitHub Actions secrets
+**Started:** 2026-05-05 21:24 IST
+**Notes:** Deploy lock only; no product source edits planned. Triggering latest main manually and verifying live Google site verification tag.
 
 ## Mandatory rule
 
