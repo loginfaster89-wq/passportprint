@@ -1094,7 +1094,6 @@ body.forms-page .forms-hero{
   scrollbar-width:none!important;
   -ms-overflow-style:none!important;
   overscroll-behavior-x:none;
-  contain:layout;
   -webkit-mask-image:none;
   mask-image:none;
   margin-bottom:clamp(14px,1.8vw,22px);
@@ -1136,11 +1135,12 @@ body.forms-page .forms-hero{
   flex-wrap:nowrap!important;
   white-space:nowrap;
   padding-inline:18px;
-  animation:spPillMarquee var(--sp-pill-speed,22s) linear infinite!important;
+  animation:spPillMarquee var(--sp-pill-speed,14s) linear infinite!important;
   transform:translate3d(0,0,0);
   will-change:transform;
 }
-.sp-pill-marquee:focus-within .sp-pill-track{
+.sp-pill-marquee:focus-within .sp-pill-track,
+.sp-pill-marquee:hover .sp-pill-track{
   animation-play-state:paused;
 }
 .sp-pill-track > *{
@@ -1149,7 +1149,7 @@ body.forms-page .forms-hero{
 }
 @keyframes spPillMarquee{
   from{transform:translate3d(0,0,0);}
-  to{transform:translate3d(calc(-50% - 4px),0,0);}
+  to{transform:translate3d(-50%,0,0);}
 }
 .sp-card-marquee{
   position:relative;
@@ -1164,7 +1164,6 @@ body.forms-page .forms-hero{
   scrollbar-width:none!important;
   -ms-overflow-style:none!important;
   overscroll-behavior-x:none;
-  contain:layout;
   -webkit-mask-image:none;
   mask-image:none;
   margin-bottom:clamp(32px,4vw,58px);
@@ -1195,11 +1194,12 @@ body.forms-page .forms-hero{
   min-width:100%;
   flex-wrap:nowrap!important;
   padding-inline:18px;
-  animation:spCardMarquee var(--sp-card-speed,34s) linear infinite!important;
+  animation:spCardMarquee var(--sp-card-speed,22s) linear infinite!important;
   transform:translate3d(0,0,0);
   will-change:transform;
 }
-.sp-card-marquee:focus-within .sp-card-track{
+.sp-card-marquee:focus-within .sp-card-track,
+.sp-card-marquee:hover .sp-card-track{
   animation-play-state:paused;
 }
 .sp-card-track > *{
@@ -1207,7 +1207,7 @@ body.forms-page .forms-hero{
 }
 @keyframes spCardMarquee{
   from{transform:translate3d(0,0,0);}
-  to{transform:translate3d(calc(-50% - 7px),0,0);}
+  to{transform:translate3d(-50%,0,0);}
 }
 body.home .hero-trust.sp-pill-marquee,
 body.passport-page .pp-trust-row.sp-pill-marquee,
@@ -1215,22 +1215,22 @@ body.passport-page .upload-feats.sp-pill-marquee{
   --sp-marquee-edge:#fff;
 }
 body.home .hero-trust.sp-pill-marquee{
-  --sp-pill-speed:24s;
+  --sp-pill-speed:14s;
   margin-top:18px!important;
   margin-bottom:32px!important;
 }
 body.passport-page .pp-trust-row.sp-pill-marquee{
-  --sp-pill-speed:22s;
+  --sp-pill-speed:13s;
   margin-bottom:18px!important;
 }
 body.passport-page .upload-feats.sp-pill-marquee{
-  --sp-pill-speed:18s;
+  --sp-pill-speed:11s;
   min-height:38px;
   margin-bottom:22px!important;
 }
 body.idp-page .idp-quick-grid.sp-card-marquee{
-  --sp-marquee-edge:#f6f3ed;
-  --sp-card-speed:34s;
+  --sp-marquee-edge:#0d0d0d;
+  --sp-card-speed:22s;
   margin-bottom:82px!important;
 }
 @media (prefers-reduced-motion:reduce){

@@ -16,8 +16,8 @@
  * the activate step can evict the old cache.
  */
 
-const CACHE_VERSION = 'studioprint-v69';
-const RUNTIME_CACHE = 'studioprint-runtime-v68';
+const CACHE_VERSION = 'studioprint-v73';
+const RUNTIME_CACHE = 'studioprint-runtime-v73';
 const ID_PRINT_REFRESH_VERSION = 'id-print-v53';
 const SITE_REFRESH_VERSION = 'site-v69';
 
