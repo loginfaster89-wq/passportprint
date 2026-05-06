@@ -1,6 +1,16 @@
 # Studio Print Live Status
 
-Last updated: 2026-05-06 15:10 IST
+Last updated: 2026-05-06 15:52 IST
+
+## SEO/security indexability batch deployed
+
+- Current owner: none; Research & Grow lock released after completion.
+- Commits deployed: `51d46db` (`fix(seo): align canonicals and security headers`) and `c3fb019` (`fix(seo): redirect html routes to canonicals`).
+- Production deploy: GitHub Actions run `25429497019`, completed successfully for `c3fb019`.
+- Fixed: sitemap now lists only 10 real pretty-route canonical URLs and no hash or `.html` URLs; `passport-photo.html` has a meta description; source/dist pages use pretty-route canonical and Open Graph URLs; `favicon.ico` and `.well-known/security.txt` are deployed; `_headers` adds HSTS and staged CSP report-only.
+- Fixed: `.html` URLs redirect with 301 to pretty routes for index, Passport Photo, ID Print, Forms, About, Contact, Privacy, Terms, Refund, and Shipping.
+- Live QA: `/`, `/passport-photo`, `/id-print`, `/forms`, `/sitemap.xml`, `/.well-known/security.txt`, and `/favicon.ico` returned 200 with HSTS and CSP report-only headers. Live sitemap has 10 URLs and zero `.html` or hash entries. Runtime Node redirect check confirmed 301 for representative `.html` URLs.
+- Tooling status after Windows allowlist/restart: default `rg.exe` and default `node.exe` still return `Access is denied`; runtime Node works at `v24.14.0`; browser QA works through runtime Node with bundled `NODE_PATH` and installed Chrome.
 
 ## UI performance / slider v68 live update completed
 

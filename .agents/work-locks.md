@@ -1,14 +1,14 @@
 # Studio Print Work Locks
 
-Last updated: 2026-05-06 15:16 IST
+Last updated: 2026-05-06 15:52 IST
 
 ## Global edit lock
 
-**Status:** ACTIVE
-**Owner:** Codex Research & Grow chat
-**Scope:** SEO/security indexability batch (`sitemap.xml`, `_headers`, page metadata/canonicals in source HTML, `.well-known/security.txt`, `favicon.ico`, generated `dist/**`, and `.agents` oversight notes)
-**Started:** 2026-05-06 15:16 IST
-**Notes:** Fixing canonical/sitemap mismatch, missing metadata, baseline security headers, security.txt/favicon deployment, and durable Research & Grow oversight guidance. Coordinate before touching app-shell/cache/runtime JS or unrelated Forms data.
+**Status:** FREE
+**Owner:** none
+**Scope:** none
+**Started:** none
+**Notes:** SEO/security indexability batch completed and deployed on 2026-05-06 15:49 IST. Latest deploy commit: `c3fb019` (`fix(seo): redirect html routes to canonicals`). Research & Grow oversight docs are in place; future chats should still declare owned scope and re-check locks before editing.
 
 ## Mandatory rule
 

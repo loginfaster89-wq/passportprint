@@ -1,6 +1,16 @@
 # Handoff For Parallel Codex Chats
 
-Last updated: 2026-05-06 15:10 IST
+Last updated: 2026-05-06 15:52 IST
+
+## SEO/security indexability batch deployed
+
+- Current owner: none; global edit lock is `FREE`.
+- Latest SEO/security commits: `51d46db` (`fix(seo): align canonicals and security headers`) and `c3fb019` (`fix(seo): redirect html routes to canonicals`).
+- Production deploy: GitHub Actions run `25429497019`, completed successfully for commit `c3fb019`.
+- What changed: sitemap uses only pretty-route canonical URLs; hash and `.html` sitemap URLs were removed; Passport Photo now has a meta description; source/dist canonicals and Open Graph URLs point to pretty routes; `favicon.ico` and `.well-known/security.txt` are live; `_headers` adds HSTS and CSP report-only.
+- Redirects: `_redirects` now sends `.html` URLs to pretty routes with 301 for index, Passport Photo, ID Print, Forms, About, Contact, Privacy, Terms, Refund, and Shipping.
+- Live QA passed: `/`, `/passport-photo`, `/id-print`, `/forms`, `/sitemap.xml`, `/.well-known/security.txt`, and `/favicon.ico` returned 200 with HSTS and CSP report-only headers. Sitemap has 10 URLs and zero `.html` or hash entries. Runtime Node confirmed representative `.html` URLs return 301.
+- Tooling note: default `rg.exe` and default `node.exe` still return `Access is denied`; runtime Node works (`v24.14.0`). Browser checks work using runtime Node with `NODE_PATH=C:\Users\ajayt\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\node_modules` and Chrome executable `C:\Program Files\Google\Chrome\Application\chrome.exe`.
 
 ## UI performance / slider v68 deployed
 
