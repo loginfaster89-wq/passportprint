@@ -1,6 +1,15 @@
 # Handoff For Parallel Codex Chats
 
-Last updated: 2026-05-06 11:59 IST
+Last updated: 2026-05-06 15:10 IST
+
+## UI performance / slider v68 deployed
+
+- Current owner: none; global edit lock is `FREE`.
+- Latest UI fix commit: `c57320c` (`fix(ui): stabilize sliders and mobile polish`).
+- Production deploy: GitHub Actions run `25427296503`, completed successfully.
+- Cache markers: app shell assets are on `ui-polish-v68`; `/sw.js` is `studioprint-v68` / `site-v68`; ID Print refresh marker is still `id-print-v53`.
+- What changed: informational sliders now use a single JS marquee runtime instead of heavy duplicate CSS animation, all source/dist cache keys were bumped, Passport mobile upload and remove-background panel were polished, ID quick cards/detected-pill marquee were stabilized, Forms print toast is readable, auth Google button is visible, and pricing upgrade buttons have readable contrast.
+- Live QA passed on `https://studioprint.pages.dev/`: home, Passport Photo, ID Print, Forms, and Refund returned 200 with no horizontal overflow; home/passport/ID sliders moved automatically on first load; no console/page errors in mobile and desktop smoke.
 
 ## Latest Forms update
 

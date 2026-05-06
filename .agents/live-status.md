@@ -1,6 +1,15 @@
 # Studio Print Live Status
 
-Last updated: 2026-05-06 11:59 IST
+Last updated: 2026-05-06 15:10 IST
+
+## UI performance / slider v68 live update completed
+
+- Current owner: none; global UI lock released after completion.
+- Commit deployed: `c57320c` (`fix(ui): stabilize sliders and mobile polish`).
+- Deploy: GitHub Actions run `25427296503`, completed successfully.
+- Cache freshness: all app shell HTML and lazy assets are on `ui-polish-v68`; `/sw.js` is `studioprint-v68` / `site-v68`; ID Print refresh marker remains `id-print-v53`.
+- Fixed: first-load informational sliders using JS marquee, reduced duplicate CSS animation lag, all-page cache key bump, Passport mobile upload compactness/locked preset color/remove-background panel border, ID quick card/detected-pill marquee, readable Forms print toast, shared auth Google button visibility, and pricing button contrast.
+- Live QA: home, Passport Photo, ID Print, Forms, and Refund returned 200 with no horizontal overflow; home/passport/ID sliders moved automatically on first load; auth modal Google button visible; pricing buttons readable; Forms print toast readable.
 
 ## Forms Hub Rajasthan batch completed
 

@@ -1,14 +1,14 @@
 # Studio Print Work Locks
 
-Last updated: 2026-05-06 12:58 IST
+Last updated: 2026-05-06 15:10 IST
 
 ## Global edit lock
 
-**Status:** ACTIVE
-**Owner:** UI performance/sliders chat
-**Scope:** Shared UI performance hotfix (`assets/legal.css`, shared runtime JS, `index.html`, `passport-photo.html`, `id-print.html`, `forms.html` UI hooks only, `sw.js`, generated `dist/**`, `.agents/**`)
-**Started:** 2026-05-06 12:58 IST
-**Notes:** Fixing live slider first-load failures, animation lag, and screenshot-reported responsive UI polish. Do not edit Forms data/PDF assets, `.well-known`, `artifacts`, or favicon files from this task.
+**Status:** FREE
+**Owner:** none
+**Scope:** none
+**Started:** none
+**Notes:** Completed UI slider/performance v68 release. Commit `c57320c` deployed via GitHub Actions run `25427296503`; live v68 verified.
 
 ## Mandatory rule
 
