@@ -1898,5 +1898,45 @@
     "local": "assets/forms/epfo-form-11.pdf",
     "preview": "assets/forms/previews/epfo-form-11.png",
     "clean_source": true
+  },
+  {
+    "slug": "rajasthan-drug-licence-form-19",
+    "title": "Drug Licence Form 19 - Sale/Distribution",
+    "category": "Rajasthan",
+    "source_url": "https://rajnivesh.rajasthan.gov.in/Uploads/f48832aa-72df-496f-90bb-3369fc26d6f8.pdf",
+    "pages": 1,
+    "local": "assets/forms/rajasthan-drug-licence-form-19.pdf",
+    "preview": "assets/forms/previews/rajasthan-drug-licence-form-19.png",
+    "clean_source": true
+  },
+  {
+    "slug": "rajasthan-tourism-project-approval-form",
+    "title": "Tourism Project Approval Form",
+    "category": "Rajasthan",
+    "source_url": "https://rajnivesh.rajasthan.gov.in/Uploads/TourismForm.pdf",
+    "pages": 2,
+    "local": "assets/forms/rajasthan-tourism-project-approval-form.pdf",
+    "preview": "assets/forms/previews/rajasthan-tourism-project-approval-form.png",
+    "clean_source": true
+  },
+  {
+    "slug": "rajasthan-riico-preferential-plot-allotment-rule-3w",
+    "title": "RIICO Preferential Plot Allotment - Rule 3W",
+    "category": "Rajasthan",
+    "source_url": "https://rajnivesh.rajasthan.gov.in/Uploads/127ea105-12a0-4a3b-a63f-fe438e2871daPREFERENTIAL%20ALLOTMENT%20OF%20PLOTS%20IN%20INDUSTRIAL%20AREAS%20%5BRule%203W%5D.pdf",
+    "pages": 3,
+    "local": "assets/forms/rajasthan-riico-preferential-plot-allotment-rule-3w.pdf",
+    "preview": "assets/forms/previews/rajasthan-riico-preferential-plot-allotment-rule-3w.png",
+    "clean_source": true
+  },
+  {
+    "slug": "rajasthan-riico-land-allotment-revised-form",
+    "title": "RIICO Land Allotment Revised Form",
+    "category": "Rajasthan",
+    "source_url": "https://rajnivesh.rajasthan.gov.in/Uploads/a3ad68b8-3317-4c75-bdb3-eb49e0aeb391LAND%20ALLOTMENT%20REVISED%20FORM.PDF",
+    "pages": 5,
+    "local": "assets/forms/rajasthan-riico-land-allotment-revised-form.pdf",
+    "preview": "assets/forms/previews/rajasthan-riico-land-allotment-revised-form.png",
+    "clean_source": true
   }
 ]
