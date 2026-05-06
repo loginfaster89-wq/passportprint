@@ -16,6 +16,7 @@ Before editing files, pushing commits, or deploying, every chat must run:
 git pull --ff-only origin main
 Get-Content .agents\work-locks.md
 powershell -ExecutionPolicy Bypass -File .agents\check-work-lock.ps1
+Get-Content .agents\quality-standard.md
 Get-Content .agents\live-status.md
 Get-Content .agents\handoff.md
 ```
@@ -27,6 +28,11 @@ scope in chat before editing.
 Any task that will edit shared files, push to `main`, or deploy must take the
 global lock in `.agents/work-locks.md` first, commit and push that lock-only
 change, then continue after another `git pull --ff-only origin main`.
+
+Before editing, every chat must state how the task satisfies
+`.agents/quality-standard.md`: owned scope, user impact, main risk, success
+criteria, and verification plan. Small fixes may keep this brief, but no task
+should ship unverified or visually broken work.
 
 ## What this repo is
 

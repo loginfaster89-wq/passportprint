@@ -4,6 +4,10 @@ Short checklist for Devin sessions on `loginfaster89-wq/passportprint`.
 Deeper context lives in `AGENTS.md` at the repo root — read that file too,
 this is just the "what do I run, what do I avoid" cheat sheet.
 
+Mandatory quality bar lives in `.agents/quality-standard.md`. Read it before
+editing and use it to state owned scope, user impact, main risk, success
+criteria, and verification plan for every task.
+
 ## 0. Vision — DO NOT DELETE
 
 **This section defines how Devin approaches every task on Studio Print.
@@ -100,6 +104,12 @@ No dev server — edit source, `npm run build`, preview from `dist/`.
     quota khatam hone ya session break hone par bhi research safe rahe
     aur agli session bina re-research ke directly coding shuru kar sake.
     Rule: Research → Docs PR → Coding PR. Kabhi skip mat karo.
+14. **Production quality standard is mandatory (2026-05-06).** Read
+    `.agents/quality-standard.md` before editing. UI/tool work needs visual
+    QA where tooling is available; SEO/growth work needs canonical, sitemap,
+    robots, metadata, schema, internal-link and Search Console impact checks;
+    security/backend work needs auth, CORS, rate-limit, validation, payment,
+    logging, headers, and secret-handling checks.
 
 ## 3. Create a PR (fine-grained PAT flow)
 

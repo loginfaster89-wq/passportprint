@@ -4,11 +4,11 @@ Last updated: 2026-05-06 11:59 IST
 
 ## Global edit lock
 
-**Status:** ACTIVE
-**Owner:** Codex growth/research chat
-**Scope:** Docs-only production quality standard (`.agents/quality-standard.md`, `AGENTS.md`, `.agents/handoff.md`, `.agents/skills/studioprint/SKILL.md`)
-**Started:** 2026-05-06 12:06 IST
-**Notes:** Taking lock to add mandatory world-class quality and visual QA guidance for all future Studio Print chats. No product source, deploy config, `dist/**`, or forms assets will be edited.
+**Status:** FREE
+**Owner:** none
+**Scope:** none
+**Started:** none
+**Notes:** Released after adding mandatory production quality standard docs for future chats. Commit includes docs only; no product source, deploy config, `dist/**`, or forms assets were edited.
 
 ## Mandatory rule
 

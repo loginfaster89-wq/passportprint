@@ -42,12 +42,26 @@ Then run:
 git pull --ff-only origin main
 Get-Content .agents\work-locks.md
 powershell -ExecutionPolicy Bypass -File .agents\check-work-lock.ps1
+Get-Content .agents\quality-standard.md
 Get-Content .agents\live-status.md
 Get-Content .agents\handoff.md
 ```
 
 If `.agents/check-work-lock.ps1` reports an active lock, stop before editing,
 pushing, or deploying. The active owner must finish or release the lock first.
+
+## Production quality standard
+
+- Every chat must read `.agents/quality-standard.md` before editing and state
+  owned scope, user impact, main risk, success criteria, and verification plan.
+- UI/tool work requires visual QA on affected desktop/mobile surfaces whenever
+  tooling is available. If browser tooling fails, document the exact failing
+  command and use screenshots, live URL fetches, or runtime-node fallbacks.
+- Windows Security allowlist was added by the owner on 2026-05-06 for Chrome,
+  Edge, Codex bundled `node.exe`, bundled `rg.exe`, and runtime `node.exe`.
+  Re-test `rg --version`, Node, and browser/visual tooling after Codex restart.
+- No chat should ship half-working, unverified, or visually broken work. Small
+  fixes stay small, but the verification bar does not disappear.
 
 ## Deployment rule
 
