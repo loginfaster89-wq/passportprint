@@ -1,14 +1,14 @@
 # Studio Print Work Locks
 
-Last updated: 2026-05-06 15:10 IST
+Last updated: 2026-05-06 15:16 IST
 
 ## Global edit lock
 
-**Status:** FREE
-**Owner:** none
-**Scope:** none
-**Started:** none
-**Notes:** Completed UI slider/performance v68 release. Commit `c57320c` deployed via GitHub Actions run `25427296503`; live v68 verified.
+**Status:** ACTIVE
+**Owner:** Codex Research & Grow chat
+**Scope:** SEO/security indexability batch (`sitemap.xml`, `_headers`, page metadata/canonicals in source HTML, `.well-known/security.txt`, `favicon.ico`, generated `dist/**`, and `.agents` oversight notes)
+**Started:** 2026-05-06 15:16 IST
+**Notes:** Fixing canonical/sitemap mismatch, missing metadata, baseline security headers, security.txt/favicon deployment, and durable Research & Grow oversight guidance. Coordinate before touching app-shell/cache/runtime JS or unrelated Forms data.
 
 ## Mandatory rule
 
