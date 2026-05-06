@@ -1,14 +1,14 @@
 # Studio Print Work Locks
 
-Last updated: 2026-05-06 12:43 IST
+Last updated: 2026-05-06 12:58 IST
 
 ## Global edit lock
 
-**Status:** FREE
-**Owner:** none
-**Scope:** none
-**Started:** none
-**Notes:** Released after adding the file-scope/deploy coordination model. Scoped work locks are warnings unless file scopes overlap; live/deploy locks remain hard stops.
+**Status:** ACTIVE
+**Owner:** UI performance/sliders chat
+**Scope:** Shared UI performance hotfix (`assets/legal.css`, shared runtime JS, `index.html`, `passport-photo.html`, `id-print.html`, `forms.html` UI hooks only, `sw.js`, generated `dist/**`, `.agents/**`)
+**Started:** 2026-05-06 12:58 IST
+**Notes:** Fixing live slider first-load failures, animation lag, and screenshot-reported responsive UI polish. Do not edit Forms data/PDF assets, `.well-known`, `artifacts`, or favicon files from this task.
 
 ## Mandatory rule
 
