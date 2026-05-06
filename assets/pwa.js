@@ -15,8 +15,8 @@
     if (didControllerReload) return;
     didControllerReload = true;
     try {
-      if (sessionStorage.getItem('sp-sw-reload-v65')) return;
-      sessionStorage.setItem('sp-sw-reload-v65', '1');
+      if (sessionStorage.getItem('sp-sw-reload-v68')) return;
+      sessionStorage.setItem('sp-sw-reload-v68', '1');
     } catch (_) {}
     window.location.reload();
   });

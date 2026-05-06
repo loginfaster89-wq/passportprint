@@ -37,16 +37,16 @@
 
   function loadAuthBundle() {
     return Promise.all([
-      loadCss('assets/auth.css?v=ui-polish-v65', 'auth'),
-      loadScript('assets/auth.js?v=ui-polish-v65', 'auth')
+      loadCss('assets/auth.css?v=ui-polish-v68', 'auth'),
+      loadScript('assets/auth.js?v=ui-polish-v68', 'auth')
     ]);
   }
 
   function loadPricingBundle() {
     return Promise.all([
-      loadCss('assets/pricing.css?v=ui-polish-v65', 'pricing'),
+      loadCss('assets/pricing.css?v=ui-polish-v68', 'pricing'),
       loadAuthBundle(),
-      loadScript('assets/pricing.js?v=ui-polish-v65', 'pricing')
+      loadScript('assets/pricing.js?v=ui-polish-v68', 'pricing')
     ]);
   }
 
