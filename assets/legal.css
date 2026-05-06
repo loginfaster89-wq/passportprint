@@ -1229,9 +1229,9 @@ body.passport-page .upload-feats.sp-pill-marquee{
   margin-bottom:22px!important;
 }
 body.idp-page .idp-quick-grid.sp-card-marquee{
-  --sp-marquee-edge:#0d0d0d;
-  --sp-card-speed:22s;
-  margin-bottom:82px!important;
+  --sp-marquee-edge:rgba(246,243,237,.98);
+  --sp-card-speed:20s;
+  margin-bottom:24px!important;
 }
 @media (prefers-reduced-motion:reduce){
   .sp-pill-marquee{
@@ -1603,14 +1603,7 @@ body.idp-workspace-mode #stepSheet .idp-actions .idp-btn{
   }
 }
 
-/* Final first-load performance pass.
-   The JS marquee owns movement; disabling the older CSS keyframes prevents
-   duplicate transforms during hard refreshes and service-worker swaps. */
-.sp-pill-marquee .sp-pill-track,
-.sp-card-marquee .sp-card-track{
-  animation:none!important;
-  will-change:auto!important;
-}
+/* CSS @keyframes drive all marquee animation — no JS RAF required. */
 .sp-card-marquee{
   -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 6%,#000 94%,transparent 100%);
   mask-image:linear-gradient(90deg,transparent 0,#000 6%,#000 94%,transparent 100%);
