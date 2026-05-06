@@ -1,14 +1,14 @@
 # Studio Print Work Locks
 
-Last updated: 2026-05-06 12:42 IST
+Last updated: 2026-05-06 11:25 IST
 
 ## Global edit lock
 
-**Status:** FREE
-**Owner:** none
-**Scope:** none
-**Started:** none
-**Notes:** UI/cache polish completed and deployed live. Commit `887247f` was pushed, GitHub Actions deploy run `25418217183` completed successfully, and live `https://studioprint.pages.dev/` smoke tests passed for header stickiness, mobile overflow, auto sliders, v65 cache markers, and Google login visibility.
+**Status:** ACTIVE
+**Owner:** Forms Hub chat
+**Scope:** Forms Hub Rajasthan official forms pass (`forms.html`, `assets/forms/**`, `assets/forms/manifest.json`, `sw.js`, generated `dist/**`, `.agents/**`)
+**Started:** 2026-05-06 11:25 IST
+**Notes:** Taking lock to continue Rajasthan official-source forms research/additions. Explicitly not touching `id-print.html`, `passport-photo.html`, shared UI/auth/nav/pricing files, or workflow files unless a deploy/status doc requires coordination.
 
 ## Mandatory rule
 
