@@ -21,15 +21,15 @@
 <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
 <link rel="alternate icon" type="image/png" href="assets/favicon-32.png">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-<link rel="manifest" href="assets/manifest.webmanifest">
+<link rel="manifest" href="assets/manifest.webmanifest?v=ui-polish-v65">
 <link rel="preconnect" href="https://passportprint-studio.onrender.com">
 <link rel="dns-prefetch" href="https://passportprint-studio.onrender.com">
 <link rel="preload" href="assets/fonts/syne-latin.woff2" as="font" type="font/woff2">
 <link rel="preload" href="assets/fonts/dm-mono-400-latin.woff2" as="font" type="font/woff2">
 <link rel="stylesheet" href="assets/fonts.css">
-<link rel="stylesheet" href="assets/legal.css?v=tool-footer-final">
-<link rel="stylesheet" href="assets/auth.css">
-<link rel="stylesheet" href="assets/pricing.css">
+<link rel="stylesheet" href="assets/legal.css?v=ui-polish-v65">
+<link rel="stylesheet" href="assets/auth.css?v=ui-polish-v65">
+<link rel="stylesheet" href="assets/pricing.css?v=ui-polish-v65">
 <style>
 /* ID Print page-only upload stability fix. Header is kept visually aligned with the homepage. */
 .idp-upload input[type="file"]{z-index:2;}
@@ -314,6 +314,11 @@ body.idp-workspace-mode #stepPreview .idp-preview-canvas-pair{max-width:min(100%
 }
 .idp-info.sp-pill-marquee .sp-pill-track{
   gap:8px;
+  display:flex!important;
+  flex-wrap:nowrap!important;
+  width:max-content!important;
+  min-width:100%;
+  animation:spPillMarquee var(--sp-pill-speed,22s) linear infinite!important;
 }
 .idp-info.sp-pill-marquee .pill{
   flex:0 0 auto;
@@ -321,10 +326,15 @@ body.idp-workspace-mode #stepPreview .idp-preview-canvas-pair{max-width:min(100%
 .idp-detect-marquee{
   display:block;
   width:min(100%,520px);
-  margin:0 auto 10px;
+  margin:0 auto 16px;
 }
 .idp-detect-marquee .sp-pill-track{
   gap:8px;
+  display:flex!important;
+  flex-wrap:nowrap!important;
+  width:max-content!important;
+  min-width:100%;
+  animation:spPillMarquee var(--sp-pill-speed,20s) linear infinite!important;
 }
 .idp-detect-marquee .idp-detect{
   flex:0 0 auto;
@@ -860,7 +870,7 @@ body.idp-page main.legal-main{
 }
 body.idp-page header.legal-header{
   width:min(calc(100% - 28px),1240px);
-  margin:var(--sp-header-offset) auto 0!important;
+  margin:0 auto!important;
   top:var(--sp-header-offset)!important;
   padding:10px clamp(16px,3vw,28px)!important;
   background:linear-gradient(135deg,rgba(255,255,255,0.96),rgba(255,255,255,0.72) 52%,rgba(255,255,255,0.5));
@@ -1078,12 +1088,17 @@ body.idp-workspace-mode .idp-quick-grid{display:none;}
   display:block;
   gap:0;
   overflow:hidden!important;
-  margin:4px auto 48px;
-  padding:6px 0 18px;
+  margin:4px auto 82px;
+  padding:6px 0 36px;
 }
 body.idp-workspace-mode .idp-quick-grid.sp-card-marquee{display:none!important;}
 .idp-quick-grid.sp-card-marquee .sp-card-track{
   gap:14px;
+  display:flex!important;
+  flex-wrap:nowrap!important;
+  width:max-content!important;
+  min-width:100%;
+  animation:spCardMarquee var(--sp-card-speed,30s) linear infinite!important;
 }
 .idp-quick-grid.sp-card-marquee .idp-quick-card{
   flex:0 0 clamp(280px,32vw,392px);
@@ -1403,7 +1418,7 @@ body.idp-workspace-mode #stepSheet .idp-a4-wrap canvas{
   body.idp-page main.legal-main{padding-top:24px;}
   body.idp-page header.legal-header{
     width:calc(100% - 12px);
-    margin-top:var(--sp-header-offset)!important;
+    margin-top:0!important;
     top:var(--sp-header-offset)!important;
     padding:9px 8px 9px 10px!important;
   }
@@ -2038,12 +2053,12 @@ body.idp-workspace-mode #stepSheet .idp-a4-wrap canvas{
   </div>
 </footer>
 
-<script src="assets/nav.js" defer></script>
-<script src="assets/auth.js" defer></script>
-<script src="assets/pricing.js" defer></script>
-<script src="assets/pwa.js" defer></script>
-<script src="assets/footer.js" defer></script>
-<script src="assets/cookie.js" defer></script>
+<script src="assets/nav.js?v=ui-polish-v65" defer></script>
+<script src="assets/auth.js?v=ui-polish-v65" defer></script>
+<script src="assets/pricing.js?v=ui-polish-v65" defer></script>
+<script src="assets/pwa.js?v=ui-polish-v65" defer></script>
+<script src="assets/footer.js?v=ui-polish-v65" defer></script>
+<script src="assets/cookie.js?v=ui-polish-v65" defer></script>
 
 <script type="module">
 /* ── ID Card Print — Phase 1 MVP + Phase 3 Batch Processing ──

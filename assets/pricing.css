@@ -409,14 +409,15 @@
 .sp-plan-card.featured::before{
   content:"POPULAR";
   top:-12px;
-  background:#111;
-  color:#fff;
+  background:#f0a500;
+  color:#111;
+  border:1px solid rgba(17,17,17,.16);
   border-radius:999px;
   padding:5px 14px;
   font-family:inherit;
   font-size:10px;
   letter-spacing:.06em;
-  box-shadow:0 8px 18px rgba(17,17,17,.16);
+  box-shadow:0 10px 22px rgba(240,165,0,.22);
 }
 .sp-plan-card.current{
   border-color:#14785f;
@@ -528,11 +529,13 @@
 }
 .sp-pay-cta{
   border-radius:999px;
-  background:#111;
-  color:#fff;
+  background:#f0a500;
+  color:#111;
+  border-color:#f0a500;
+  box-shadow:0 12px 28px rgba(240,165,0,.20);
   font-family:inherit;
 }
-.sp-pay-cta:hover{background:#000;color:#fff;}
+.sp-pay-cta:hover{background:#ffbd2f;color:#111;}
 @media (max-width: 900px){
   .sp-plans-overlay{align-items:center;overflow-y:auto;}
   .sp-plans-grid{grid-template-columns:1fr;}

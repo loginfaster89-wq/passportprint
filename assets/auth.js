@@ -47,7 +47,7 @@
   }
   function showGoogleSignIn() {
     var wrap = document.getElementById('spGoogleWrap');
-    if (wrap && canUseGoogleSignIn()) wrap.style.display = 'flex';
+    if (wrap) wrap.style.display = 'flex';
   }
 
   // ── localStorage helpers ──
@@ -227,9 +227,10 @@
       });
     }
 
-    // Hide Google section entirely if not configured so the modal
-    // collapses gracefully (no empty space, no broken widget).
-    if (!canUseGoogleSignIn()) hideGoogleSignIn();
+    // Keep the visible "Continue with Google" fallback in the modal on every
+    // page. If the GIS script cannot render, users still see a clear provider
+    // option and get a readable inline error instead of a missing section.
+    showGoogleSignIn();
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && overlay.classList.contains('active')) closeAuth();
     });
@@ -248,7 +249,7 @@
     // Google Sign-In is a shortcut for login + signup; hide it on the
     // OTP step (user has already started the email flow at that point).
     var gw = document.getElementById('spGoogleWrap');
-    if (gw) gw.style.display = (tab === 'otp' || !canUseGoogleSignIn()) ? 'none' : 'flex';
+    if (gw) gw.style.display = tab === 'otp' ? 'none' : 'flex';
     setError('');
   }
 
@@ -266,9 +267,9 @@
     overlay.classList.add('active');
     // Render the Google button lazily after the modal is visible (GIS
     // measures the host element, so it must be in the DOM + laid out).
-    if (canUseGoogleSignIn() && tab !== 'otp') {
+    if (tab !== 'otp') {
       showGoogleSignIn();
-      setTimeout(renderGoogleButton, 0);
+      if (canUseGoogleSignIn()) setTimeout(renderGoogleButton, 0);
     } else {
       hideGoogleSignIn();
     }
@@ -460,7 +461,11 @@
   }
   function renderGoogleButton() {
     // GIS may not be ready yet (async script) — retry a few times.
-    if (!canUseGoogleSignIn()) { hideGoogleSignIn(); return; }
+    if (!canUseGoogleSignIn()) {
+      showGoogleSignIn();
+      setError('Google sign-in is not available on this preview origin. Try email login.');
+      return;
+    }
     showGoogleSignIn();
     if (_googleBtnRendered) return;
     if (!initGoogleSignIn()) {

@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -25,12 +25,12 @@
 <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
 <link rel="alternate icon" type="image/png" href="assets/favicon-32.png">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-<link rel="manifest" href="assets/manifest.webmanifest">
+<link rel="manifest" href="assets/manifest.webmanifest?v=ui-polish-v65">
 <link rel="dns-prefetch" href="https://passportprint-studio.onrender.com">
 <link rel="preload" href="assets/fonts/syne-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/dm-mono-400-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/fonts.css">
-<link rel="stylesheet" href="assets/legal.css">
+<link rel="stylesheet" href="assets/legal.css?v=ui-polish-v65">
 <style>
 /* ───── Homepage-specific styles ───── */
 :root{
@@ -992,7 +992,7 @@ section.section .wrap{max-width:1140px;margin:0 auto;}
 
 
 /* Scroll-reveal — sections fade + slide up on first enter. Driven by
-   assets/reveal.js via an IntersectionObserver. Reduced-motion falls
+   assets/reveal.js?v=ui-polish-v65 via an IntersectionObserver. Reduced-motion falls
    back to an instant show in the script itself. */
 .reveal{opacity:0;transform:translateY(14px);transition:opacity .45s ease, transform .45s ease;will-change:opacity,transform;}
 .reveal.in-view{opacity:1;transform:translateY(0);}
@@ -1755,11 +1755,13 @@ body.home .hero-trust.sp-pill-marquee{
 }
 body.home .hero-trust.sp-pill-marquee::-webkit-scrollbar{display:none!important;width:0!important;height:0!important;}
 body.home .hero-trust.sp-pill-marquee .sp-pill-track{
+  display:flex!important;
   justify-content:flex-start;
   flex-wrap:nowrap!important;
   width:max-content!important;
   min-width:100%;
   gap:8px;
+  animation:spPillMarquee var(--sp-pill-speed,24s) linear infinite!important;
 }
 body.home .hero-trust.sp-pill-marquee .pill{
   flex:0 0 auto;
@@ -2367,9 +2369,9 @@ body.home .hero-trust.sp-pill-marquee .pill{
   </div>
 </footer>
 
-<script src="assets/nav.js" defer></script>
-<script src="assets/deferred-ui.js" defer></script>
-<script src="assets/reveal.js" defer></script>
+<script src="assets/nav.js?v=ui-polish-v65" defer></script>
+<script src="assets/deferred-ui.js?v=ui-polish-v65" defer></script>
+<script src="assets/reveal.js?v=ui-polish-v65" defer></script>
 <script>
 (function(){
   var rail=document.getElementById('liveToolsRail');
@@ -2399,7 +2401,7 @@ body.home .hero-trust.sp-pill-marquee .pill{
 <script>
 (function(){
   var loaded = false;
-  var files = ['assets/sliders.js','assets/pwa.js','assets/footer.js','assets/cookie.js'];
+  var files = ['assets/sliders.js?v=ui-polish-v65','assets/pwa.js?v=ui-polish-v65','assets/footer.js?v=ui-polish-v65','assets/cookie.js?v=ui-polish-v65'];
   function loadScript(src){
     var s = document.createElement('script');
     s.src = src;

@@ -1,4 +1,4 @@
-﻿/* Studio Print — service worker registration (P28).
+/* Studio Print — service worker registration (P28).
  *
  * Kept tiny and dependency-free. Registers /sw.js with root scope so one SW
  * controls the whole site (including passport-photo.html which does not load
@@ -15,15 +15,15 @@
     if (didControllerReload) return;
     didControllerReload = true;
     try {
-      if (sessionStorage.getItem('sp-sw-reload-v32')) return;
-      sessionStorage.setItem('sp-sw-reload-v32', '1');
+      if (sessionStorage.getItem('sp-sw-reload-v65')) return;
+      sessionStorage.setItem('sp-sw-reload-v65', '1');
     } catch (_) {}
     window.location.reload();
   });
 
   var register = function () {
     navigator.serviceWorker
-      .register('/sw.js', { scope: '/' })
+      .register('/sw.js', { scope: '/', updateViaCache: 'none' })
       .then(function (registration) {
         registration.update().catch(function () {});
         if (registration.waiting) {

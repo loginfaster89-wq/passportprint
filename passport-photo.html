@@ -20,15 +20,15 @@
 <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
 <link rel="alternate icon" type="image/png" href="assets/favicon-32.png">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-<link rel="manifest" href="assets/manifest.webmanifest">
+<link rel="manifest" href="assets/manifest.webmanifest?v=ui-polish-v65">
 <link rel="preconnect" href="https://passportprint-studio.onrender.com">
 <link rel="dns-prefetch" href="https://passportprint-studio.onrender.com">
 <link rel="preload" href="assets/fonts/syne-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/dm-mono-400-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/fonts.css">
-<link rel="stylesheet" href="assets/legal.css?v=tool-footer-final">
-<link rel="stylesheet" href="assets/auth.css">
-<link rel="stylesheet" href="assets/pricing.css">
+<link rel="stylesheet" href="assets/legal.css?v=ui-polish-v65">
+<link rel="stylesheet" href="assets/auth.css?v=ui-polish-v65">
+<link rel="stylesheet" href="assets/pricing.css?v=ui-polish-v65">
 <!-- AI library loads lazily on first use via dynamic import -->
 <style>
 :root {
@@ -66,7 +66,7 @@ header:not(.legal-header){background:var(--surface);border-bottom:1px solid var(
 .badge-green{border-color:rgba(74,222,128,.3);color:var(--success);background:rgba(74,222,128,.06);}
 .badge-amber{border-color:rgba(240,165,0,.3);color:var(--accent);background:var(--accent-dim);}
 
-/* ── LEGAL FOOTER (shared with rest of site — matches assets/legal.css) ── */
+/* Legal footer shared with rest of site. */
 footer.legal-footer{
   margin-top:auto;border-top:1px solid var(--border);
   background:var(--surface);padding:14px 16px;text-align:center;
@@ -2346,7 +2346,7 @@ body.passport-page #authModal .btn-primary:hover:not(:disabled){
   box-shadow:none!important;
 }
 
-/* Passport uses the shared site header, dropdown and auth button styles from assets/legal.css. */
+/* Passport uses the shared site header, dropdown and auth button styles from assets/legal.css?v=ui-polish-v65. */
 body.passport-page footer.legal-footer:has(.footer-main){
   width:min(1440px,calc(100% - 32px));
   max-width:none;
@@ -2460,7 +2460,7 @@ body.passport-page footer.legal-footer .footer-bottom{
     white-space:nowrap;
   }
   body.passport-page .canvas-area{
-    min-height:340px;
+    min-height:300px;
     padding:10px;
   }
   body.passport-page .upload-zone{
@@ -2468,13 +2468,13 @@ body.passport-page footer.legal-footer .footer-bottom{
     width:100%;
   }
   body.passport-page .upload-inner-card{
-    min-height:220px;
+    min-height:190px;
     padding:18px 14px 14px;
     border-radius:26px;
   }
   body.passport-page .upload-icon-wrap{
-    width:54px;
-    height:54px;
+    width:48px;
+    height:48px;
     margin-bottom:8px;
   }
   body.passport-page .upload-icon-wrap svg{
@@ -2483,7 +2483,7 @@ body.passport-page footer.legal-footer .footer-bottom{
   }
   body.passport-page .upload-title{
     max-width:10ch;
-    font-size:clamp(25px,7.4vw,31px)!important;
+    font-size:clamp(23px,7vw,29px)!important;
     line-height:1.03!important;
   }
   body.passport-page .upload-sub{
@@ -2540,10 +2540,10 @@ body.passport-page footer.legal-footer .footer-bottom{
   body.passport-page .sidebar .sb-section{
     position:relative;
     isolation:isolate;
-    border:1px solid transparent;
+    border:1px solid rgba(17,17,17,.12);
     background:rgba(255,255,255,.94);
-    background-clip:padding-box;
-    overflow:hidden;
+    background-clip:border-box;
+    overflow:visible;
   }
   body.passport-page .sidebar .sb-section::after{
     content:"";
@@ -2551,7 +2551,8 @@ body.passport-page footer.legal-footer .footer-bottom{
     inset:0;
     z-index:2;
     pointer-events:none;
-    border:1px solid rgba(17,17,17,.12);
+    border:0;
+    box-shadow:inset 0 0 0 1px rgba(17,17,17,.12);
     border-radius:inherit;
   }
   body.passport-page #bgProgressWrap:not(.hidden){
@@ -2567,18 +2568,18 @@ body.passport-page footer.legal-footer .footer-bottom{
   }
 }
 @media(max-width:420px){
-  body.passport-page .canvas-area{min-height:280px;}
+  body.passport-page .canvas-area{min-height:240px;}
   body.passport-page .upload-inner-card{
-    min-height:174px;
+    min-height:150px;
     padding:12px 10px 10px;
   }
   body.passport-page .upload-icon-wrap{
-    width:42px;
-    height:42px;
+    width:38px;
+    height:38px;
     margin-bottom:6px;
   }
   body.passport-page .upload-title{
-    font-size:25px!important;
+    font-size:22px!important;
     max-width:9ch;
   }
   body.passport-page .upload-sub{
@@ -2624,10 +2625,12 @@ body.passport-page .upload-feats.sp-pill-marquee{
 body.passport-page .pp-trust-row.sp-pill-marquee .sp-pill-track,
 body.passport-page .upload-feats.sp-pill-marquee .sp-pill-track{
   gap:8px;
+  display:flex!important;
   flex-wrap:nowrap!important;
   width:max-content!important;
   min-width:100%;
   white-space:nowrap;
+  animation:spPillMarquee var(--sp-pill-speed,22s) linear infinite!important;
 }
 body.passport-page .pp-trust-row.sp-pill-marquee .pp-pill,
 body.passport-page .upload-feats.sp-pill-marquee .upload-feat-pill{
@@ -2677,13 +2680,14 @@ body.passport-page #plansModal .plan-card.featured{
 body.passport-page #plansModal .plan-card.featured::before{
   content:"POPULAR"!important;
   top:-13px!important;
-  background:#111!important;
-  color:#fff!important;
+  background:#f0a500!important;
+  color:#111!important;
+  border:1px solid rgba(17,17,17,.16)!important;
   padding:5px 14px!important;
   border-radius:999px!important;
   font-family:Inter,ui-sans-serif,system-ui,sans-serif!important;
   letter-spacing:.08em!important;
-  box-shadow:0 8px 18px rgba(17,17,17,.16)!important;
+  box-shadow:0 10px 22px rgba(240,165,0,.22)!important;
 }
 body.passport-page #plansModal .plan-btn-primary{
   border:1px solid #f0a500!important;
@@ -5716,7 +5720,7 @@ function hideGoogleSignIn(){
 }
 function showGoogleSignIn(){
   const wrap = document.getElementById('googleSignInWrap');
-  if(wrap && canUseGoogleSignIn()) wrap.style.display = 'flex';
+  if(wrap) wrap.style.display = 'flex';
 }
 const AUTH_STORE_KEY='pps_users_v1';
 const AUTH_SESSION_KEY='pps_session_v1';
@@ -6134,8 +6138,8 @@ function openAuth(tab){
   setAuthTab(tab);
   document.getElementById('authError').textContent='';
   document.getElementById('authSuccess').style.display='none';
+  showGoogleSignIn();
   if(canUseGoogleSignIn()){
-    showGoogleSignIn();
     loadGoogleSdk()
       .then(()=>{
         if(initGoogleSignIn()){
@@ -6148,8 +6152,6 @@ function openAuth(tab){
         const authErr = document.getElementById('authError');
         if(authErr) authErr.textContent = t('err_prefix') + 'Google sign-in could not load. Try email login.';
       });
-  } else {
-    hideGoogleSignIn();
   }
 }
 function setAuthTab(tab){
@@ -6159,7 +6161,7 @@ function setAuthTab(tab){
   const otpForm = document.getElementById('otpForm');
   if(otpForm) otpForm.style.display = tab==='otp' ? 'block' : 'none';
   const googleWrap = document.getElementById('googleSignInWrap');
-  if(googleWrap) googleWrap.style.display = (tab==='otp' || !canUseGoogleSignIn()) ? 'none' : 'flex';
+  if(googleWrap) googleWrap.style.display = tab==='otp' ? 'none' : 'flex';
   // Hide the login/signup tab switcher while on OTP step.
   const tabs = document.querySelector('#authModal .auth-tabs');
   if(tabs) tabs.style.display = tab==='otp' ? 'none' : '';
@@ -6214,7 +6216,12 @@ function initGoogleSignIn(){
   }
 }
 function renderGoogleButton(){
-  if(!canUseGoogleSignIn()){ hideGoogleSignIn(); return; }
+  if(!canUseGoogleSignIn()){
+    showGoogleSignIn();
+    const authErr = document.getElementById('authError');
+    if(authErr) authErr.textContent = t('err_prefix') + 'Google sign-in is not available on this preview origin. Try email login.';
+    return;
+  }
   showGoogleSignIn();
   if(!initGoogleSignIn()){
     loadGoogleSdk()
@@ -6686,7 +6693,7 @@ restoreSession();
 // and the upload card on iPad + iPhone. One Tap still appears inside the
 // auth modal when the user explicitly clicks Login (see openAuth()).
 (function setupGoogleSignInUi(){
-  if(!canUseGoogleSignIn()) hideGoogleSignIn();
+  showGoogleSignIn();
 })();
 </script>
 
@@ -6863,7 +6870,7 @@ restoreSession();
 
 
 <!-- Shared nav behavior (hamburger + Features dropdown) -->
-<script src="assets/nav.js" defer></script>
+<script src="assets/nav.js?v=ui-polish-v65" defer></script>
 <script>
   // Auto-open login / plans modals when the page is reached via a hash from
   // another page's header or Account modal.
@@ -6892,8 +6899,9 @@ restoreSession();
   })();
 </script>
 
-<script src="assets/footer.js" defer></script>
-<script src="assets/cookie.js" defer></script>
+<script src="assets/pwa.js?v=ui-polish-v65" defer></script>
+<script src="assets/footer.js?v=ui-polish-v65" defer></script>
+<script src="assets/cookie.js?v=ui-polish-v65" defer></script>
 </body>
 </html>
 

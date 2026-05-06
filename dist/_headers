@@ -2,10 +2,25 @@
 # Mirrors the headers previously defined in netlify.toml so behaviour is identical
 # on either host. See https://developers.cloudflare.com/pages/configuration/headers/.
 
-# Long-cache static assets (same-origin only; HTML stays no-cache)
+# App shell assets must revalidate on every visit. These files carry layout,
+# auth, pricing, and service-worker boot logic; stale copies were forcing users
+# to hard refresh several times before the new UI appeared.
 /assets/pwa.js
   Cache-Control: no-cache, no-store, must-revalidate
 
+/assets/*.css
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/assets/*.js
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/assets/*.webmanifest
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/assets/forms/manifest.json
+  Cache-Control: no-cache, no-store, must-revalidate
+
+# Long-cache hashed/static media assets.
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
 

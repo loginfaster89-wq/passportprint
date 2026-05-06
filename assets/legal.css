@@ -977,36 +977,56 @@ header.legal-header{
 /* Site-wide mobile polish pass: one lower sticky header, readable toasts,
    and reusable infinite strips for informational pills only. */
 :root{
-  --sp-header-offset:calc(env(safe-area-inset-top,0px) + 18px);
+  --sp-header-offset:calc(env(safe-area-inset-top,0px) + 16px);
+  --sp-header-height:55px;
+  --sp-page-start:clamp(12px,1.6vw,22px);
+  --sp-main-start:clamp(12px,1.6vw,22px);
+}
+html{
+  scroll-padding-top:calc(var(--sp-header-offset) + var(--sp-header-height) + 18px);
+}
+body{
+  padding-top:calc(var(--sp-header-offset) + var(--sp-header-height) + var(--sp-page-start));
 }
 header.legal-header{
-  position:sticky!important;
-  left:auto!important;
-  transform:none!important;
+  position:fixed!important;
+  left:50%!important;
+  right:auto!important;
+  transform:translateX(-50%)!important;
   top:var(--sp-header-offset)!important;
-  margin-top:var(--sp-header-offset)!important;
+  margin-top:0!important;
 }
 main.legal-main,
 body.home main.home-main{
-  padding-top:clamp(34px,4vw,48px)!important;
+  padding-top:var(--sp-main-start)!important;
+}
+body:not(.home):not(.idp-page):has(main.legal-main) main.legal-main{
+  margin-top:clamp(12px,1.4vw,18px)!important;
 }
 body.forms-page:not(.home):not(.idp-page):has(main.legal-main) main.legal-main.forms-main{
-  padding-top:clamp(34px,4vw,48px)!important;
+  margin-top:clamp(8px,1.1vw,14px)!important;
+  padding-top:var(--sp-main-start)!important;
 }
 body.idp-page main.legal-main{
-  padding-top:clamp(34px,4vw,46px)!important;
+  padding-top:var(--sp-main-start)!important;
 }
 body.passport-page .steps{
-  margin-top:clamp(18px,2.2vw,26px)!important;
+  margin-top:clamp(14px,1.8vw,20px)!important;
 }
 body.passport-page .main.pp-feature{
-  margin-top:clamp(16px,2vw,24px)!important;
+  margin-top:clamp(10px,1.4vw,16px)!important;
 }
 body.idp-page .idp-hero{
-  margin-top:clamp(20px,2.4vw,30px)!important;
+  margin-top:clamp(8px,1.5vw,18px)!important;
+  scroll-margin-top:calc(var(--sp-header-offset) + 76px);
 }
 @media (max-width:900px){
-  :root{--sp-header-offset:calc(env(safe-area-inset-top,0px) + 14px);}
+  :root{
+    --sp-header-offset:calc(env(safe-area-inset-top,0px) + 12px);
+    --sp-header-height:60px;
+    --sp-page-start:14px;
+    --sp-main-start:16px;
+  }
   .legal-header nav,
   .dropdown-panel{
     background:linear-gradient(135deg,rgba(255,255,255,.99),rgba(255,255,255,.94))!important;
@@ -1015,20 +1035,26 @@ body.idp-page .idp-hero{
   }
   main.legal-main,
   body.home main.home-main{
-    padding-top:30px!important;
+    padding-top:var(--sp-main-start)!important;
   }
   body.forms-page:not(.home):not(.idp-page):has(main.legal-main) main.legal-main.forms-main,
   body.idp-page main.legal-main{
-    padding-top:30px!important;
+    padding-top:var(--sp-main-start)!important;
+  }
+  body:not(.home):not(.idp-page):has(main.legal-main) main.legal-main{
+    margin-top:10px!important;
+  }
+  body.forms-page:not(.home):not(.idp-page):has(main.legal-main) main.legal-main.forms-main{
+    margin-top:8px!important;
   }
   body.passport-page .steps{
     margin-top:16px!important;
   }
   body.passport-page .main.pp-feature{
-    margin-top:14px!important;
+    margin-top:10px!important;
   }
   body.idp-page .idp-hero{
-    margin-top:18px!important;
+    margin-top:10px!important;
   }
 }
 body.passport-page .pp-hero-panel{
@@ -1040,11 +1066,19 @@ body.passport-page .pp-hero-panel{
   }
 }
 @media (max-width:420px){
-  :root{--sp-header-offset:calc(env(safe-area-inset-top,0px) + 12px);}
+  :root{
+    --sp-header-offset:calc(env(safe-area-inset-top,0px) + 10px);
+    --sp-header-height:53px;
+    --sp-page-start:12px;
+    --sp-main-start:14px;
+  }
   header.legal-header{
-    margin-top:var(--sp-header-offset)!important;
     top:var(--sp-header-offset)!important;
   }
+}
+
+body.forms-page .forms-hero{
+  padding-top:0!important;
 }
 
 .sp-pill-marquee{
@@ -1063,6 +1097,7 @@ body.passport-page .pp-hero-panel{
   contain:layout;
   -webkit-mask-image:none;
   mask-image:none;
+  margin-bottom:clamp(14px,1.8vw,22px);
 }
 .sp-pill-marquee::before,
 .sp-pill-marquee::after,
@@ -1077,7 +1112,7 @@ body.passport-page .pp-hero-panel{
 }
 .sp-pill-marquee::before,
 .sp-pill-marquee::after{
-  width:72px;
+  width:40px;
 }
 .sp-pill-marquee::before{
   left:0;
@@ -1100,8 +1135,8 @@ body.passport-page .pp-hero-panel{
   min-width:100%;
   flex-wrap:nowrap!important;
   white-space:nowrap;
-  padding-inline:34px;
-  animation:spPillMarquee 20s linear infinite;
+  padding-inline:18px;
+  animation:spPillMarquee var(--sp-pill-speed,22s) linear infinite!important;
   transform:translate3d(0,0,0);
   will-change:transform;
 }
@@ -1110,6 +1145,7 @@ body.passport-page .pp-hero-panel{
 }
 .sp-pill-track > *{
   flex:0 0 auto;
+  white-space:nowrap!important;
 }
 @keyframes spPillMarquee{
   from{transform:translate3d(0,0,0);}
@@ -1131,6 +1167,8 @@ body.passport-page .pp-hero-panel{
   contain:layout;
   -webkit-mask-image:none;
   mask-image:none;
+  margin-bottom:clamp(32px,4vw,58px);
+  padding-bottom:clamp(10px,1.4vw,18px);
 }
 .sp-card-marquee::before,
 .sp-card-marquee::after{
@@ -1157,7 +1195,7 @@ body.passport-page .pp-hero-panel{
   min-width:100%;
   flex-wrap:nowrap!important;
   padding-inline:18px;
-  animation:spCardMarquee 32s linear infinite;
+  animation:spCardMarquee var(--sp-card-speed,34s) linear infinite!important;
   transform:translate3d(0,0,0);
   will-change:transform;
 }
@@ -1176,8 +1214,24 @@ body.passport-page .pp-trust-row.sp-pill-marquee,
 body.passport-page .upload-feats.sp-pill-marquee{
   --sp-marquee-edge:#fff;
 }
+body.home .hero-trust.sp-pill-marquee{
+  --sp-pill-speed:24s;
+  margin-top:18px!important;
+  margin-bottom:32px!important;
+}
+body.passport-page .pp-trust-row.sp-pill-marquee{
+  --sp-pill-speed:22s;
+  margin-bottom:18px!important;
+}
+body.passport-page .upload-feats.sp-pill-marquee{
+  --sp-pill-speed:18s;
+  min-height:38px;
+  margin-bottom:22px!important;
+}
 body.idp-page .idp-quick-grid.sp-card-marquee{
   --sp-marquee-edge:#f6f3ed;
+  --sp-card-speed:34s;
+  margin-bottom:82px!important;
 }
 @media (prefers-reduced-motion:reduce){
   .sp-pill-marquee{
