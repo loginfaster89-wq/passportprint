@@ -1,12 +1,15 @@
 # Studio Print Live Status
 
-Last updated: 2026-05-06 00:08 IST
+Last updated: 2026-05-06 12:42 IST
 
-## Paused UI polish/live update
+## UI polish/live update completed
 
-- User paused the current UI polish/live update work overnight. No live deployment was performed by this chat after the pause.
-- Active lock remains with `ChatGPT Codex UI polish chat` for shared UI/cache files. Other chats should not edit `assets/legal.css`, shared auth/pricing/PWA/cache files, `index.html`, `passport-photo.html`, `id-print.html`, `forms.html`, `_headers`, `sw.js`, or generated `dist/**` until the lock is released.
-- Current source WIP is local only and must be rebuilt/re-tested before any production deploy. See `.agents/handoff.md` section `Paused UI polish WIP` for exact resume steps.
+- UI/cache polish was resumed after the overnight pause, rebuilt, pushed, and deployed live.
+- Commit deployed: `887247f` (`fix(ui): polish sticky header and mobile sliders`).
+- GitHub Actions deploy run: `25418217183`, completed successfully.
+- Live verification passed on `https://studioprint.pages.dev/` with v65 cache markers on home, Passport Photo, ID Print, Forms, Refund, and `/sw.js`.
+- Live mobile smoke passed for shared sticky/fixed header, no horizontal overflow, auto movement on home/passport/ID informational sliders, and Google login visibility.
+- Global edit lock has been released in `.agents/work-locks.md`.
 
 ## Deploy coordination rule
 
