@@ -1,6 +1,22 @@
 # Handoff For Parallel Codex Chats
 
-Last updated: 2026-05-06 15:52 IST
+Last updated: 2026-05-06 16:33 IST
+
+## Latest Forms update
+
+- Completed Rajasthan official-source Revenue / RIPS pass.
+- Added 4 official RajNivesh entries after PDF text/render inspection:
+  - Land Conversion Form A - Non-Agricultural Use.
+  - Land Conversion Form C - Purpose Change.
+  - RIPS 2019 Form I - ZLD Cost Determination.
+  - RIPS 2019 Form R - Transfer of Remaining Benefits.
+- `/forms` now has 198 forms total; Rajasthan has 131 entries.
+- Cache is `studioprint-v69` / `site-v69`; ID Print refresh marker is `id-print-v53` and was preserved.
+- Feature commit pushed to `main`: `1133a49` (`feat(forms): add Rajasthan revenue and RIPS forms`).
+- Deploy: GitHub Actions run `25431325179`, completed successfully.
+- Live QA passed on `https://studioprint.pages.dev/forms?qa=forms-rips-1133a49-*`: page contains the 4 new entries, `/sw.js` has `studioprint-v69`, `site-v69`, and `id-print-v53`, and `rajasthan-rips-2019-form-r-transfer-benefits.pdf` returns 200.
+- Rejected/not added in this pass: dirty duplicate Revenue Form A scan with existing signature/marking, Revenue authority order templates Form B/Form D, UDH portal screenshot/manual PDFs, Industries scanned subsidy forms with visible marks, low-quality ROF scans, Common Application Form circular/intro, and prefilled RIPS 2022 sample-data PDF.
+- New research doc: `.agents/research/forms-rajasthan-revenue-rips-20260506.md`.
 
 ## SEO/security indexability batch deployed
 
