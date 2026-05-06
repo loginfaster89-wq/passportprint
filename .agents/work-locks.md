@@ -4,11 +4,11 @@ Last updated: 2026-05-06 11:59 IST
 
 ## Global edit lock
 
-**Status:** FREE
-**Owner:** none
-**Scope:** none
-**Started:** none
-**Notes:** Released after adding mandatory production quality standard docs for future chats. Commit includes docs only; no product source, deploy config, `dist/**`, or forms assets were edited.
+**Status:** ACTIVE
+**Owner:** Codex growth/research chat
+**Scope:** Docs-only parallel work coordination rule (`.agents/work-locks.md`, `.agents/check-work-lock.ps1`, `AGENTS.md`, `.agents/handoff.md`, `.agents/quality-standard.md`)
+**Started:** 2026-05-06 12:35 IST
+**Notes:** Taking lock to replace the too-broad stop rule with a file-scope/deploy coordination model. No product source, deploy config, `dist/**`, or forms assets will be edited.
 
 ## Mandatory rule
 
