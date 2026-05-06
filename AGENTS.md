@@ -31,6 +31,11 @@ Take the global lock only for live/deploy work, broad shared app-shell/cache/con
 work, or likely file-scope overlap. Independent page/tool tasks should keep
 moving in their own owned scope and coordinate at commit/push/deploy time.
 
+Research & Grow chat is the cross-chat quality controller. It should monitor
+other chats' `.agents` status, blockers, verification gaps, SEO/security/growth
+risks, and risky implementation direction, then call out exact fixes while still
+respecting owned file scopes.
+
 Before editing, every chat must state how the task satisfies
 `.agents/quality-standard.md`: owned scope, user impact, main risk, success
 criteria, and verification plan. Small fixes may keep this brief, but no task

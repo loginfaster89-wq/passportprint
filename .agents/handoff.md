@@ -71,6 +71,16 @@ only when your owned files overlap that scope or you need shared app-shell/cache
 - Stop at the live update phase if another chat is deploying or preparing a
   production release.
 
+## Research & Grow oversight
+
+- The Research & Grow chat is responsible for watching cross-chat quality,
+  growth, SEO, security, deployment, and live-site risk.
+- If another chat reports a blocker, ships a risky direction, or misses required
+  verification, Research & Grow should surface the exact problem and help fix
+  the process or implementation.
+- This oversight does not remove owned scopes: Research & Grow must coordinate
+  before editing another chat's files.
+
 ## Production quality standard
 
 - Every chat must read `.agents/quality-standard.md` before editing and state

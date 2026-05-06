@@ -28,16 +28,16 @@ const HTML_FILES = [
   'offline.html',
 ];
 
-// Static asset folders to copy verbatim (CSS/fonts/images). We still minify CSS
-// via html-minifier-terser when it appears inline in HTML; standalone CSS files
-// are copied as-is because they are already small.
-const ASSET_DIRS = ['assets'];
+// Static asset folders to copy verbatim (CSS/fonts/images/security contact).
+// We still minify CSS via html-minifier-terser when it appears inline in HTML;
+// standalone CSS files are copied as-is because they are already small.
+const ASSET_DIRS = ['assets', '.well-known'];
 
 // Deploy-host config files that must land at the root of dist/ verbatim.
 // `_headers` / `_redirects` are the Netlify-style conventions that Cloudflare
 // Pages also honours, so the same files work for either host.
 // `robots.txt` / `sitemap.xml` are copied so search engines can index the site.
-const ROOT_FILES = ['_headers', '_redirects', 'robots.txt', 'sitemap.xml', 'sw.js'];
+const ROOT_FILES = ['_headers', '_redirects', 'robots.txt', 'sitemap.xml', 'sw.js', 'favicon.ico'];
 
 // Obfuscator options — conservative settings that preserve globals referenced
 // by inline onclick="foo()" handlers. Renaming globals would break the app.
@@ -90,6 +90,15 @@ const HTML_MINIFIER_OPTIONS = {
 
 async function ensureDir(dir) {
   await fs.promises.mkdir(dir, { recursive: true });
+}
+
+async function emptyDir(dir) {
+  if (!fs.existsSync(dir)) return;
+  const entries = await fs.promises.readdir(dir, { withFileTypes: true });
+  await Promise.all(entries.map((entry) => {
+    const target = path.join(dir, entry.name);
+    return fs.promises.rm(target, { recursive: true, force: true });
+  }));
 }
 
 async function copyDir(src, dest) {
@@ -162,7 +171,13 @@ async function buildHtmlFile(relPath) {
 
 async function main() {
   console.log('→ Cleaning dist/ ...');
-  await fs.promises.rm(OUT, { recursive: true, force: true });
+  try {
+    await fs.promises.rm(OUT, { recursive: true, force: true });
+  } catch (err) {
+    if (!['EBUSY', 'EPERM', 'ENOTEMPTY'].includes(err.code)) throw err;
+    console.warn(`  [warn] could not remove dist/ root (${err.code}); emptying contents instead`);
+    await emptyDir(OUT);
+  }
   await ensureDir(OUT);
 
   console.log('→ Copying static assets ...');

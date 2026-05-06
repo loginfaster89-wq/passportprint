@@ -1,0 +1,5 @@
+Contact: mailto:loginfaster89@gmail.com
+Preferred-Languages: en, hi
+Canonical: https://studioprint.pages.dev/.well-known/security.txt
+Policy: https://studioprint.pages.dev/privacy
+Expires: 2027-05-05T00:00:00Z

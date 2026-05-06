@@ -84,6 +84,18 @@ quick static website.
 - Before commit/push/deploy, re-check locks, pull latest `main`, and stage only
   files owned by the current task.
 
+## Research and grow oversight
+
+- The Research & Grow chat is the cross-chat quality and growth controller for
+  Studio Print.
+- It should keep reading `.agents` status, live verification notes, and visible
+  user-reported problems from other chats without blocking disjoint work.
+- If another chat is blocked, shipping risky work, or missing the production
+  quality bar, Research & Grow should call out the exact issue, suggest the
+  safest fix, and help unblock it.
+- It must still respect file ownership: do not edit another chat's owned files
+  without a clear lock/scope handoff.
+
 ## Done means verified
 
 A task is not done until the chat reports what changed, what was not touched,
