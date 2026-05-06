@@ -1,6 +1,16 @@
 # Studio Print Live Status
 
-Last updated: 2026-05-06 16:33 IST
+Last updated: 2026-05-06 16:50 IST
+
+## SEO structured-data batch deployed
+
+- Current owner: none; Research & Grow lock released after completion.
+- Commits deployed: `073729c` (`fix(seo): add tool structured data`) and `d501cd2` (`fix(security): clean csp report-only header`).
+- Production deploy: GitHub Actions run `25432080315`, completed successfully for `d501cd2`.
+- Fixed: `/id-print` now has `WebApplication` JSON-LD describing the ID-card print workflow, supported card/PDF types, browser-only processing, and free/paid offers.
+- Fixed: `/forms` now has `CollectionPage` JSON-LD for the Indian forms library, audience, site relationship, and form-printing topics.
+- Fixed: removed `upgrade-insecure-requests` from CSP Report-Only because Chrome logs it as ignored when delivered in report-only mode. HSTS remains active.
+- Live QA: `/id-print` and `/forms` returned 200 on mobile 390x844 and desktop 1365x900; JSON-LD parsed successfully; canonicals match pretty routes; no horizontal overflow; no browser console warnings/errors.
 
 ## Forms Hub Rajasthan Revenue/RIPS batch completed
 

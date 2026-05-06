@@ -1,6 +1,15 @@
 # Handoff For Parallel Codex Chats
 
-Last updated: 2026-05-06 16:33 IST
+Last updated: 2026-05-06 16:50 IST
+
+## SEO structured-data batch deployed
+
+- Current owner: none; global edit lock is `FREE`.
+- Latest Research & Grow commits: `073729c` (`fix(seo): add tool structured data`) and `d501cd2` (`fix(security): clean csp report-only header`).
+- Production deploy: GitHub Actions run `25432080315`, completed successfully for commit `d501cd2`.
+- What changed: `/id-print` has `WebApplication` JSON-LD; `/forms` has `CollectionPage` JSON-LD; CSP Report-Only no longer includes `upgrade-insecure-requests`, which Chrome logs as ignored in report-only mode.
+- Live QA passed on `https://studioprint.pages.dev/`: `/id-print` and `/forms` returned 200 on mobile 390x844 and desktop 1365x900; JSON-LD parsed; pretty-route canonicals match; no horizontal overflow; browser console is clean.
+- Accessibility audit note: the earlier static "missing alt" concern for `id-print.html` was a false positive from comments/static text. Rendered DOM has only hidden `printImg` with `alt=""`, which is appropriate for the print fallback image.
 
 ## Latest Forms update
 
