@@ -1,14 +1,14 @@
 # Studio Print Work Locks
 
-Last updated: 2026-05-06 15:52 IST
+Last updated: 2026-05-06 16:02 IST
 
 ## Global edit lock
 
-**Status:** FREE
-**Owner:** none
-**Scope:** none
-**Started:** none
-**Notes:** SEO/security indexability batch completed and deployed on 2026-05-06 15:49 IST. Latest deploy commit: `c3fb019` (`fix(seo): redirect html routes to canonicals`). Research & Grow oversight docs are in place; future chats should still declare owned scope and re-check locks before editing.
+**Status:** ACTIVE
+**Owner:** Forms Hub Rajasthan batch chat
+**Scope:** Forms Hub Rajasthan Revenue/RIPS batch (`forms.html`, `assets/forms/manifest.json`, new `assets/forms/**` PDFs/previews/page-previews, `sw.js`, generated `dist/forms.html`, generated `dist/sw.js`, `.agents` status/research docs, manual deploy)
+**Started:** 2026-05-06 16:02 IST
+**Notes:** Adding vetted clean official Rajasthan Revenue conversion and RIPS 2019 forms only. Do not touch ID Print or shared UI from this task.
 
 ## Mandatory rule
 
