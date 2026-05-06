@@ -110,6 +110,11 @@ No dev server — edit source, `npm run build`, preview from `dist/`.
     robots, metadata, schema, internal-link and Search Console impact checks;
     security/backend work needs auth, CORS, rate-limit, validation, payment,
     logging, headers, and secret-handling checks.
+15. **Parallel chats should keep moving on disjoint scopes.** An active scoped
+    work lock is not an automatic stop. Stop only for overlapping files,
+    shared app-shell/cache/config files, `.agents`, generated `dist/**`, or
+    live deploy/release ownership. Before commit/push/deploy, pull latest
+    `main`, re-check locks, and stage only files owned by the task.
 
 ## 3. Create a PR (fine-grained PAT flow)
 

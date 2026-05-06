@@ -47,8 +47,20 @@ Get-Content .agents\live-status.md
 Get-Content .agents\handoff.md
 ```
 
-If `.agents/check-work-lock.ps1` reports an active lock, stop before editing,
-pushing, or deploying. The active owner must finish or release the lock first.
+If `.agents/check-work-lock.ps1` reports an active live/deploy lock, stop before
+editing, pushing, or deploying. If it reports an active scoped work lock, stop
+only when your owned files overlap that scope or you need shared app-shell/cache,
+`.agents`, generated `dist/**`, or deployment ownership.
+
+## Parallel chat rule
+
+- Do not pause unrelated work just because another chat is active.
+- Complete the assigned task in a clearly declared, disjoint owned scope.
+- Re-check locks and run `git pull --ff-only origin main` before final
+  commit/push.
+- Stage only owned paths; never stage another chat's dirty files.
+- Stop at the live update phase if another chat is deploying or preparing a
+  production release.
 
 ## Production quality standard
 

@@ -72,6 +72,18 @@ quick static website.
   Edge, Codex bundled Node/rg, and runtime Node; re-test tooling after Codex is
   restarted.
 
+## Parallel chat coordination
+
+- Multiple chats should keep working in parallel when their owned file scopes
+  are disjoint.
+- An active scoped work lock is a warning to compare scopes, not an automatic
+  reason to abandon the assigned task.
+- Stop only for overlapping files, shared app-shell/cache/config files,
+  `.agents` coordination files, generated `dist/**`, or live deploy/release
+  ownership.
+- Before commit/push/deploy, re-check locks, pull latest `main`, and stage only
+  files owned by the current task.
+
 ## Done means verified
 
 A task is not done until the chat reports what changed, what was not touched,

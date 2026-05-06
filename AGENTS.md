@@ -21,13 +21,15 @@ Get-Content .agents\live-status.md
 Get-Content .agents\handoff.md
 ```
 
-If `.agents/check-work-lock.ps1` reports an active global lock, stop and ask
-the user before touching files. If the lock is free, declare the owned file
-scope in chat before editing.
+If `.agents/check-work-lock.ps1` reports an active live/deploy lock, stop.
+If it reports an active scoped work lock, compare file scopes: stop only when
+your files overlap the active scope or you need shared app-shell/cache,
+`.agents`, generated `dist/**`, or deployment ownership. If scopes are disjoint,
+continue the assigned task and stage only owned files.
 
-Any task that will edit shared files, push to `main`, or deploy must take the
-global lock in `.agents/work-locks.md` first, commit and push that lock-only
-change, then continue after another `git pull --ff-only origin main`.
+Take the global lock only for live/deploy work, broad shared app-shell/cache/config
+work, or likely file-scope overlap. Independent page/tool tasks should keep
+moving in their own owned scope and coordinate at commit/push/deploy time.
 
 Before editing, every chat must state how the task satisfies
 `.agents/quality-standard.md`: owned scope, user impact, main risk, success
