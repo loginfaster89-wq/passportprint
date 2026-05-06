@@ -1,14 +1,14 @@
 # Studio Print Work Locks
 
-Last updated: 2026-05-06 16:50 IST
+Last updated: 2026-05-06 17:30 IST
 
 ## Global edit lock
 
-**Status:** FREE
-**Owner:** none
-**Scope:** none
-**Started:** none
-**Notes:** SEO structured-data batch completed and deployed on 2026-05-06 16:49 IST. Latest deploy commit: `d501cd2` (`fix(security): clean csp report-only header`). Live QA confirmed `/id-print` and `/forms` have JSON-LD, clean canonicals, no horizontal overflow, and no console warnings on mobile/desktop.
+**Status:** ACTIVE
+**Owner:** Claude zip UI/performance merge chat
+**Scope:** Offline-first shared UI/performance merge from `C:\Users\ajayt\Downloads\files.zip` (`assets/legal.css`, `assets/sliders.js`, `assets/nav.js` if needed, root HTML cache keys, `sw.js`, generated `dist/**`, `.agents/**`)
+**Started:** 2026-05-06 17:30 IST
+**Notes:** Merging useful Claude zip fixes without overwriting newer SEO/security/forms work. Do not edit Forms data/PDF assets, `.well-known`, `artifacts`, or favicon files from this task. Live deploy waits for preview approval.
 
 ## Mandatory rule
 
