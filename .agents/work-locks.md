@@ -1,14 +1,14 @@
 # Studio Print Work Locks
 
-Last updated: 2026-05-06 11:25 IST
+Last updated: 2026-05-06 11:59 IST
 
 ## Global edit lock
 
-**Status:** ACTIVE
-**Owner:** Forms Hub chat
-**Scope:** Forms Hub Rajasthan official forms pass (`forms.html`, `assets/forms/**`, `assets/forms/manifest.json`, `sw.js`, generated `dist/**`, `.agents/**`)
-**Started:** 2026-05-06 11:25 IST
-**Notes:** Taking lock to continue Rajasthan official-source forms research/additions. Explicitly not touching `id-print.html`, `passport-photo.html`, shared UI/auth/nav/pricing files, or workflow files unless a deploy/status doc requires coordination.
+**Status:** FREE
+**Owner:** none
+**Scope:** none
+**Started:** none
+**Notes:** Forms Hub Rajasthan RIICO / Tourism / Medical pass completed and deployed live. Commit `afbc9a1` was pushed, GitHub Actions deploy run `25419868524` completed successfully, and live `/forms` smoke tests passed for 194 total entries, 127 Rajasthan entries, v66 cache markers, and new PDF asset availability.
 
 ## Mandatory rule
 

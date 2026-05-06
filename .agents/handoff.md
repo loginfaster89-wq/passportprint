@@ -1,6 +1,22 @@
 # Handoff For Parallel Codex Chats
 
-Last updated: 2026-05-06 12:42 IST
+Last updated: 2026-05-06 11:59 IST
+
+## Latest Forms update
+
+- Completed Rajasthan official-source RIICO / Tourism / Medical pass.
+- Added 4 official RajNivesh entries after PDF text/render inspection:
+  - Drug Licence Form 19 - Sale/Distribution.
+  - Tourism Project Approval Form.
+  - RIICO Preferential Plot Allotment - Rule 3W.
+  - RIICO Land Allotment Revised Form.
+- `/forms` now has 194 forms total; Rajasthan has 127 entries.
+- Cache is `studioprint-v66` / `site-v66`; ID Print refresh marker is `id-print-v53` and was preserved.
+- Feature commit pushed to `main`: `afbc9a1` (`feat(forms): add Rajasthan RIICO tourism medical forms`).
+- Deploy: GitHub Actions run `25419868524`, completed successfully.
+- Live QA passed on `https://studioprint.pages.dev/forms?qa=rajasthan-riico-medical-afbc9a1-*`: page contains the 4 new entries, `/sw.js` has `studioprint-v66` and `id-print-v53`, and `rajasthan-drug-licence-form-19.pdf` returns 200.
+- Rejected/not added in this pass: RSPCB CTE/CTO/HSW/MSW/C&D/BMW PDFs because they are portal screenshot/user-flow pages, Tourism unit approval and Film Shooting PDFs because they are user-manual / portal screenshots with sample data in one file, and 3 Medical declaration/certificate scans because they are low-quality scanned blanks.
+- New research doc: `.agents/research/forms-rajasthan-riico-tourism-medical-20260506.md`.
 
 ## UI polish completed
 
