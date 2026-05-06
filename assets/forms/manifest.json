@@ -1380,6 +1380,46 @@
     "clean_source": true
   },
   {
+    "slug": "rajasthan-revenue-land-conversion-form-a",
+    "title": "Land Conversion Form A - Non-Agricultural Use",
+    "category": "Rajasthan",
+    "source_url": "https://rajnivesh.rajasthan.gov.in/Uploads/e34ed706-352e-4072-957d-ad85b6dd3332.pdf",
+    "pages": 2,
+    "local": "assets/forms/rajasthan-revenue-land-conversion-form-a.pdf",
+    "preview": "assets/forms/previews/rajasthan-revenue-land-conversion-form-a.png",
+    "clean_source": true
+  },
+  {
+    "slug": "rajasthan-revenue-conversion-purpose-change-form-c",
+    "title": "Land Conversion Form C - Purpose Change",
+    "category": "Rajasthan",
+    "source_url": "https://rajnivesh.rajasthan.gov.in/Uploads/914db165-b7bb-4a62-9347-d4972543615b.pdf",
+    "pages": 3,
+    "local": "assets/forms/rajasthan-revenue-conversion-purpose-change-form-c.pdf",
+    "preview": "assets/forms/previews/rajasthan-revenue-conversion-purpose-change-form-c.png",
+    "clean_source": true
+  },
+  {
+    "slug": "rajasthan-rips-2019-form-i-zld-cost-determination",
+    "title": "RIPS 2019 Form I - ZLD Cost Determination",
+    "category": "Rajasthan",
+    "source_url": "https://rajnivesh.rajasthan.gov.in/Uploads/e06d43d8-4cf5-404f-95b9-35eec93a2371.pdf",
+    "pages": 1,
+    "local": "assets/forms/rajasthan-rips-2019-form-i-zld-cost-determination.pdf",
+    "preview": "assets/forms/previews/rajasthan-rips-2019-form-i-zld-cost-determination.png",
+    "clean_source": true
+  },
+  {
+    "slug": "rajasthan-rips-2019-form-r-transfer-benefits",
+    "title": "RIPS 2019 Form R - Transfer of Remaining Benefits",
+    "category": "Rajasthan",
+    "source_url": "https://rajnivesh.rajasthan.gov.in/Uploads/3217c099-3cd0-40ad-bcf3-4c7a533ed9e5.pdf",
+    "pages": 2,
+    "local": "assets/forms/rajasthan-rips-2019-form-r-transfer-benefits.pdf",
+    "preview": "assets/forms/previews/rajasthan-rips-2019-form-r-transfer-benefits.png",
+    "clean_source": true
+  },
+  {
     "slug": "transport-dl-form-2-learner-licence-rajasthan",
     "title": "Learner Licence Form 2",
     "category": "Rajasthan",
