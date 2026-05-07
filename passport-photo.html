@@ -5429,6 +5429,18 @@ async function printSheet(){
       @media print{html,body{width:210mm;height:297mm;}img{width:210mm;height:297mm;}}
     </style></head><body><img id="sheet" alt="Passport photo A4 print sheet">
 <style id="sp-brand-override">
+/* ── Studio Print brand footer override ── */
+footer.legal-footer{
+  background:#ffffff!important;
+  border-top:1px solid #f0efeb!important;
+  color:#5a5a5a!important;
+  padding:20px clamp(16px,5vw,48px)!important;
+}
+footer.legal-footer .links{gap:16px!important;display:flex!important;flex-wrap:wrap!important;}
+footer.legal-footer .links a{color:#5a5a5a!important;font-size:13px!important;}
+footer.legal-footer .links a:hover{color:#F0A500!important;}
+footer.legal-footer .copy{color:#9a9a9a!important;font-size:12px!important;}
+
 /* ── Studio Print — Unified Brand Header (loads after all CSS) ── */
 header.legal-header,body.idp-page header.legal-header,
 body.idp-workspace-mode header.legal-header,
