@@ -1767,6 +1767,167 @@ body.home .hero-trust.sp-pill-marquee .pill{
   flex:0 0 auto;
   white-space:nowrap;
 }
+
+/* ══════════════════════════════════════════
+   AWWWARDS MOTION LAYER — added styles
+   All within existing design tokens.
+   ══════════════════════════════════════════ */
+
+/* ── Scroll progress bar ── */
+#sp-progress{
+  position:fixed;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,#f0a500,#ffd17a);
+  transform-origin:left center;transform:scaleX(0);
+  z-index:9999;pointer-events:none;
+  box-shadow:0 0 8px rgba(240,165,0,0.55);
+}
+@media(prefers-reduced-motion:reduce){#sp-progress{display:none;}}
+
+/* ── Custom cursor (desktop only) ── */
+#sp-cursor{
+  position:fixed;top:0;left:0;
+  width:40px;height:40px;
+  border-radius:50%;
+  border:1.5px solid rgba(17,17,17,0.35);
+  background:transparent;
+  pointer-events:none;
+  z-index:99998;
+  opacity:0;
+  transition:width .25s cubic-bezier(.23,1,.32,1),
+             height .25s cubic-bezier(.23,1,.32,1),
+             border-color .25s ease,
+             background .25s ease,
+             opacity .4s ease;
+  will-change:transform;
+  mix-blend-mode:multiply;
+}
+#sp-cursor.sp-cursor--hover{
+  width:56px;height:56px;
+  border-color:rgba(17,17,17,0.55);
+  background:rgba(240,165,0,0.07);
+}
+#sp-cursor.sp-cursor--click{
+  width:32px;height:32px;
+  background:rgba(17,17,17,0.06);
+}
+.sp-cursor-dot{
+  position:fixed;top:0;left:0;
+  width:6px;height:6px;
+  border-radius:50%;
+  background:#111;
+  pointer-events:none;
+  z-index:99999;
+  will-change:transform;
+}
+/* Hide cursor on touch devices */
+@media(pointer:coarse){#sp-cursor,.sp-cursor-dot{display:none;}}
+@media(prefers-reduced-motion:reduce){#sp-cursor,.sp-cursor-dot{display:none;}}
+
+/* ── Grain texture overlay (pure CSS noise) ── */
+body.home::before{
+  content:'';
+  position:fixed;inset:0;
+  pointer-events:none;z-index:9997;
+  opacity:0.028;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:280px 280px;
+  animation:sp-grain .45s steps(2) infinite;
+}
+@keyframes sp-grain{
+  0%{transform:translate(0,0);}
+  25%{transform:translate(-2px,1px);}
+  50%{transform:translate(1px,-2px);}
+  75%{transform:translate(-1px,2px);}
+  100%{transform:translate(2px,-1px);}
+}
+@media(prefers-reduced-motion:reduce){body.home::before{animation:none;}}
+
+/* ── Enhanced hover lifts for home cards ── */
+body.home .feature-card.live,
+body.home .why-card,
+body.home .step-card,
+body.home .audience-card,
+body.home .stat-card,
+body.home .plan-card{
+  transition:transform .38s cubic-bezier(.23,1,.32,1),
+             box-shadow .38s cubic-bezier(.23,1,.32,1),
+             border-color .25s ease;
+}
+body.home .feature-card.live:hover,
+body.home .why-card:hover,
+body.home .step-card:hover,
+body.home .audience-card:hover,
+body.home .stat-card:hover{
+  transform:translateY(-6px) scale(1.012);
+  box-shadow:0 28px 64px rgba(44,36,22,.13);
+}
+body.home .plan-card:hover{
+  transform:translateY(-5px) scale(1.01);
+  box-shadow:0 28px 72px rgba(44,36,22,.14);
+}
+
+/* ── Hero panel entrance (GSAP sets opacity/y, CSS provides baseline) ── */
+body.home .hero-inner,
+body.home .hero-preview{
+  will-change:transform,opacity;
+}
+
+/* ── Button magnetic transition base ── */
+body.home .btn{
+  transition:transform .35s cubic-bezier(.23,1,.32,1),
+             background .2s ease,
+             color .2s ease,
+             border-color .2s ease,
+             box-shadow .2s ease;
+}
+
+/* ── Floating accent orbs behind hero-inner ── */
+body.home .hero-inner::before,
+body.home .hero-inner::after{
+  content:'';
+  position:absolute;
+  border-radius:50%;
+  pointer-events:none;
+  z-index:0;
+}
+body.home .hero-inner::before{
+  width:320px;height:320px;
+  top:-80px;right:-60px;
+  background:radial-gradient(circle,rgba(240,165,0,.10),transparent 70%);
+  animation:sp-orb1 8s ease-in-out infinite;
+}
+body.home .hero-inner::after{
+  width:220px;height:220px;
+  bottom:-40px;left:-30px;
+  background:radial-gradient(circle,rgba(36,192,131,.07),transparent 70%);
+  animation:sp-orb2 10s ease-in-out infinite;
+}
+@keyframes sp-orb1{
+  0%,100%{transform:translate(0,0) scale(1);}
+  50%{transform:translate(20px,-18px) scale(1.08);}
+}
+@keyframes sp-orb2{
+  0%,100%{transform:translate(0,0) scale(1);}
+  50%{transform:translate(-14px,16px) scale(1.05);}
+}
+@media(prefers-reduced-motion:reduce){
+  body.home .hero-inner::before,
+  body.home .hero-inner::after{animation:none;}
+}
+
+/* ── Section separator accent line ── */
+body.home section.section{
+  position:relative;
+}
+body.home section.section::after{
+  content:'';
+  display:block;
+  width:48px;height:3px;
+  border-radius:2px;
+  background:linear-gradient(90deg,rgba(240,165,0,.7),transparent);
+  margin:28px 0 0;
+  opacity:0.6;
+}
 </style>
 <script type="application/ld+json">
 {
@@ -1832,8 +1993,16 @@ body.home .hero-trust.sp-pill-marquee .pill{
   ]
 }
 </script>
+<!-- Awwwards motion layer: GSAP + ScrollTrigger + Lenis (CDN, not obfuscated) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js" crossorigin="anonymous"></script>
 </head>
 <body class="home">
+<!-- Awwwards: scroll progress bar -->
+<div id="sp-progress" aria-hidden="true"></div>
+<!-- Awwwards: custom cursor (hidden on touch) -->
+<div id="sp-cursor" aria-hidden="true"><div class="sp-cursor-dot"></div></div>
 
 <!-- Icon sprite (Lucide-style, 24x24, stroke-based). Referenced via
      <svg class="ix"><use href="#i-…"/></svg> so every icon inherits the
@@ -2448,5 +2617,6 @@ body.home .hero-trust.sp-pill-marquee .pill{
   } catch (_) {}
 })();
 </script>
+<script src="assets/awwwards.js?v=aww-v1" defer></script>
 </body>
 </html>
