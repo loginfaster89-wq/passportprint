@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <title>Studio Print — Modern Redesign</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Studio Print shared auth + pricing modules from live site -->
+    <link rel="stylesheet" href="https://studioprint.pages.dev/assets/auth.css">
+    <link rel="stylesheet" href="https://studioprint.pages.dev/assets/pricing.css">
+
+    <!-- Light theme overrides for auth + pricing modals -->
+    <style>
+      /* Override dark CSS vars used by auth.css / pricing.css modals */
+      :root {
+        --bg: #ffffff;
+        --surface: #ffffff;
+        --surface2: #f7f8fa;
+        --border: #e5e7eb;
+        --text: #111111;
+        --muted: #6b7280;
+        --muted2: #9ca3af;
+        --accent: #f0a500;
+        --accent-dim: rgba(240,165,0,0.12);
+        --danger: #ef4444;
+        --success: #10b981;
+        --radius: 14px;
+      }
+
+      /* Modal backdrop lighter */
+      .sp-plans-overlay,
+      .sp-pay-overlay,
+      #spAuthOverlay {
+        background: rgba(0,0,0,0.45) !important;
+      }
+
+      /* Modal card: white, Inter font */
+      .sp-plans-modal,
+      .sp-pay-modal,
+      #spAuthModal {
+        background: #ffffff !important;
+        border: 1px solid #e5e7eb !important;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.12) !important;
+        font-family: 'Inter', sans-serif !important;
+        color: #111 !important;
+      }
+
+      /* Title font */
+      .sp-plans-title,
+      .sp-pay-title,
+      .sp-auth-title {
+        font-family: 'Inter', sans-serif !important;
+        color: #111 !important;
+      }
+
+      /* Plan card backgrounds */
+      .sp-plan-card {
+        background: #f7f8fa !important;
+        border-color: #e5e7eb !important;
+        color: #111 !important;
+      }
+      .sp-plan-card.selected,
+      .sp-plan-card:focus {
+        border-color: #f0a500 !important;
+        background: #fffbf0 !important;
+      }
+
+      /* Accent/CTA buttons */
+      .sp-upgrade-btn,
+      .sp-pay-btn,
+      .sp-auth-submit,
+      button.sp-upgrade-btn {
+        background: #f0a500 !important;
+        color: #fff !important;
+        font-family: 'Inter', sans-serif !important;
+        font-weight: 700 !important;
+        border: none !important;
+      }
+      .sp-upgrade-btn:hover,
+      .sp-pay-btn:hover {
+        background: #d99200 !important;
+      }
+
+      /* Input fields */
+      .sp-auth-input,
+      input.sp-auth-input {
+        background: #f7f8fa !important;
+        border: 1.5px solid #e5e7eb !important;
+        color: #111 !important;
+        font-family: 'Inter', sans-serif !important;
+      }
+      .sp-auth-input:focus {
+        border-color: #f0a500 !important;
+        outline: none !important;
+        box-shadow: 0 0 0 3px rgba(240,165,0,0.15) !important;
+      }
+
+      /* Muted text */
+      .sp-plans-tagline,
+      .sp-pay-note,
+      .sp-auth-sub {
+        color: #6b7280 !important;
+        font-family: 'Inter', sans-serif !important;
+      }
+
+      /* Feature list checks */
+      .sp-plan-feature::before,
+      .sp-plan-feat::before {
+        color: #f0a500 !important;
+      }
+
+      /* Header sticky bg */
+      .sp-plans-header,
+      .sp-pay-header {
+        background: #ffffff !important;
+        border-bottom-color: #e5e7eb !important;
+      }
+
+      /* Toast */
+      .sp-toast {
+        background: #111 !important;
+        color: #fff !important;
+        font-family: 'Inter', sans-serif !important;
+        border-radius: 12px !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    <!-- Auth + Pricing JS — loaded after root so DOM is ready -->
+    <script src="https://studioprint.pages.dev/assets/auth.js" defer></script>
+    <script src="https://studioprint.pages.dev/assets/pricing.js" defer></script>
+  </body>
+</html>
