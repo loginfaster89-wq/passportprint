@@ -1210,6 +1210,25 @@ const ESHRAM_KEYWORDS = ['eshram','e-shram','unorganised worker','unorganized wo
 const RC_KEYWORDS = ['vehicle registration certificate','registration certificate','regn no','regn. number','vehicle class','form 23a','chassis no','registration authority'];
 const RATION_KEYWORDS = ['ration card','parivar ration card','family ration card','software developed by nic','gas agency','consumer number','hindustan petroleum','indane','bharat petroleum'];
 
+function escapeRegex(text) {
+  return String(text).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function textHasKeyword(fullText, keyword) {
+  if (!fullText || !keyword) return false;
+  if (keyword.includes(' ')) return fullText.includes(keyword);
+  if (keyword.length <= 4) {
+    return new RegExp('(^|[^a-z0-9])' + escapeRegex(keyword) + '([^a-z0-9]|$)').test(fullText);
+  }
+  return fullText.includes(keyword);
+}
+
+function keywordHitCount(fullText, keywords) {
+  return keywords.filter(function(keyword) {
+    return textHasKeyword(fullText, keyword);
+  }).length;
+}
+
 const CARD_OUTPUT_SPECS = {
   default: {
     w: CR80_W,
@@ -2186,6 +2205,160 @@ function escHtml(s) {
   return d.innerHTML;
 }
 
+function clampFracRegion(frac) {
+  if (!Array.isArray(frac) || frac.length !== 4) return null;
+  var x = Math.max(0, Math.min(1, frac[0]));
+  var y = Math.max(0, Math.min(1, frac[1]));
+  var w = Math.max(0.0001, Math.min(1 - x, frac[2]));
+  var h = Math.max(0.0001, Math.min(1 - y, frac[3]));
+  return [x, y, w, h];
+}
+
+function expandFracRegion(frac, padX, padY) {
+  var region = clampFracRegion(frac);
+  if (!region) return null;
+  return clampFracRegion([
+    region[0] - padX,
+    region[1] - padY,
+    region[2] + padX * 2,
+    region[3] + padY * 2
+  ]);
+}
+
+function unionFracRegions(a, b) {
+  var fa = clampFracRegion(a);
+  var fb = clampFracRegion(b);
+  if (!fa) return fb;
+  if (!fb) return fa;
+  var left = Math.min(fa[0], fb[0]);
+  var top = Math.min(fa[1], fb[1]);
+  var right = Math.max(fa[0] + fa[2], fb[0] + fb[2]);
+  var bottom = Math.max(fa[1] + fa[3], fb[1] + fb[3]);
+  return clampFracRegion([left, top, right - left, bottom - top]);
+}
+
+function measureInkExtents(sourceCanvas, frac) {
+  var region = clampFracRegion(frac);
+  if (!sourceCanvas || !region) return null;
+  var sx = Math.max(0, Math.round(region[0] * sourceCanvas.width));
+  var sy = Math.max(0, Math.round(region[1] * sourceCanvas.height));
+  var sw = Math.max(1, Math.min(sourceCanvas.width - sx, Math.round(region[2] * sourceCanvas.width)));
+  var sh = Math.max(1, Math.min(sourceCanvas.height - sy, Math.round(region[3] * sourceCanvas.height)));
+  if (sw < 2 || sh < 2) return null;
+
+  var data = sourceCanvas.getContext('2d').getImageData(sx, sy, sw, sh).data;
+  var rowHits = new Uint32Array(sh);
+  var colHits = new Uint32Array(sw);
+
+  for (var y = 0; y < sh; y++) {
+    for (var x = 0; x < sw; x++) {
+      var idx = (y * sw + x) * 4;
+      var a = data[idx + 3];
+      if (a < 24) continue;
+      var r = data[idx];
+      var g = data[idx + 1];
+      var b = data[idx + 2];
+      if (r > 245 && g > 245 && b > 245) continue;
+      rowHits[y] += 1;
+      colHits[x] += 1;
+    }
+  }
+
+  var rowThreshold = Math.max(10, Math.round(sw * 0.006));
+  var colThreshold = Math.max(10, Math.round(sh * 0.006));
+  var top = -1, bottom = -1, left = -1, right = -1;
+
+  for (var ry = 0; ry < sh; ry++) {
+    if (rowHits[ry] >= rowThreshold) { top = ry; break; }
+  }
+  for (var ry2 = sh - 1; ry2 >= 0; ry2--) {
+    if (rowHits[ry2] >= rowThreshold) { bottom = ry2; break; }
+  }
+  for (var cx = 0; cx < sw; cx++) {
+    if (colHits[cx] >= colThreshold) { left = cx; break; }
+  }
+  for (var cx2 = sw - 1; cx2 >= 0; cx2--) {
+    if (colHits[cx2] >= colThreshold) { right = cx2; break; }
+  }
+
+  if (top < 0 || bottom < 0 || left < 0 || right < 0) return null;
+  return { sx: sx, sy: sy, sw: sw, sh: sh, top: top, bottom: bottom, left: left, right: right };
+}
+
+function extentsToFrac(sourceCanvas, extents, marginPx) {
+  if (!sourceCanvas || !extents) return null;
+  var margin = Math.max(6, marginPx || 10);
+  var left = Math.max(0, extents.sx + extents.left - margin);
+  var top = Math.max(0, extents.sy + extents.top - margin);
+  var right = Math.min(sourceCanvas.width, extents.sx + extents.right + margin + 1);
+  var bottom = Math.min(sourceCanvas.height, extents.sy + extents.bottom + margin + 1);
+  return clampFracRegion([
+    left / sourceCanvas.width,
+    top / sourceCanvas.height,
+    (right - left) / sourceCanvas.width,
+    (bottom - top) / sourceCanvas.height
+  ]);
+}
+
+function resolveAdaptiveSingleCrop(sourceCanvas, seedFrac, options) {
+  var seed = clampFracRegion(seedFrac);
+  if (!sourceCanvas || !seed) return seed;
+  var opts = options || {};
+  var searchWindow = expandFracRegion(seed, opts.padX ?? 0.01, opts.padY ?? 0.06);
+  var extents = measureInkExtents(sourceCanvas, searchWindow);
+  if (!extents) return seed;
+  var candidate = extentsToFrac(sourceCanvas, extents, opts.marginPx ?? 10);
+  if (!candidate) return seed;
+  if (candidate[2] < seed[2] * (opts.minWidthRatio || 0.5)) return seed;
+  if (candidate[3] < seed[3] * (opts.minHeightRatio || 0.45)) return seed;
+  return candidate;
+}
+
+function resolveAdaptivePairCrop(sourceCanvas, crop) {
+  if (!sourceCanvas || !crop || !crop.front || !crop.back) return crop;
+  var pairBand = expandFracRegion(unionFracRegions(crop.front, crop.back), 0.006, 0.10);
+  var bandExtents = measureInkExtents(sourceCanvas, pairBand);
+  if (!bandExtents) {
+    return {
+      front: resolveAdaptiveSingleCrop(sourceCanvas, crop.front, { padX: 0.008, padY: 0.08, minWidthRatio: 0.55, minHeightRatio: 0.5 }),
+      back: resolveAdaptiveSingleCrop(sourceCanvas, crop.back, { padX: 0.008, padY: 0.08, minWidthRatio: 0.55, minHeightRatio: 0.5 })
+    };
+  }
+
+  var sharedTop = Math.max(0, (bandExtents.sy + bandExtents.top - 10) / sourceCanvas.height);
+  var sharedBottom = Math.min(1, (bandExtents.sy + bandExtents.bottom + 11) / sourceCanvas.height);
+  var sharedHeight = Math.max(0.02, sharedBottom - sharedTop);
+
+  function resolveSide(sideSeed) {
+    var sideWindow = clampFracRegion([
+      Math.max(0, sideSeed[0] - 0.008),
+      Math.max(0, sharedTop - 0.01),
+      Math.min(1 - Math.max(0, sideSeed[0] - 0.008), sideSeed[2] + 0.016),
+      Math.min(1 - Math.max(0, sharedTop - 0.01), sharedHeight + 0.02)
+    ]);
+    var sideExtents = measureInkExtents(sourceCanvas, sideWindow);
+    if (!sideExtents) return sideSeed;
+    var candidate = extentsToFrac(sourceCanvas, sideExtents, 10);
+    if (!candidate) return sideSeed;
+    if (candidate[2] < sideSeed[2] * 0.55 || candidate[3] < sideSeed[3] * 0.5) return sideSeed;
+    return candidate;
+  }
+
+  return {
+    front: resolveSide(crop.front),
+    back: resolveSide(crop.back)
+  };
+}
+
+function resolveCropSpecForRenderedPage(sourceCanvas, crop) {
+  if (!sourceCanvas || !crop) return crop;
+  if (crop.front && crop.back && !crop.frontPage && !crop.backPage) {
+    var resolvedPair = resolveAdaptivePairCrop(sourceCanvas, crop);
+    return Object.assign({}, crop, resolvedPair);
+  }
+  return Object.assign({}, crop);
+}
+
 /* Add More button */
 btnAddMore.addEventListener('click', function() {
   var inp = document.createElement('input');
@@ -2316,9 +2489,7 @@ async function processPdfBatch(arrayBuffer, password, fileName) {
     });
     var pdf = await loadingTask.promise;
     var page = await pdf.getPage(1);
-
-    var textContent = await page.getTextContent();
-    var fullText = textContent.items.map(i => i.str).join(' ').toLowerCase();
+    var fullText = await collectPdfText(pdf, 2);
 
     var type = detectCardType(fullText, fileName || '');
     if (!type) return { error: 'Unknown card type' };
@@ -2351,7 +2522,8 @@ async function processPdfBatch(arrayBuffer, password, fileName) {
     var front, back;
 
     if (pdf.numPages >= 2 && crop.frontPage) {
-      front = cropRegion(renderCanvas, crop.frontPage);
+      var resolvedFrontPageCrop = resolveAdaptiveSingleCrop(renderCanvas, crop.frontPage, { padX: 0.02, padY: 0.04, minWidthRatio: 0.75, minHeightRatio: 0.75, marginPx: 12 });
+      front = cropRegion(renderCanvas, resolvedFrontPageCrop);
       var page2 = await pdf.getPage(2);
       var vp2 = page2.getViewport({ scale: RENDER_SCALE });
       var rc2 = document.createElement('canvas');
@@ -2359,10 +2531,14 @@ async function processPdfBatch(arrayBuffer, password, fileName) {
       rc2.height = vp2.height;
       var c2 = rc2.getContext('2d');
       await page2.render({ canvasContext: c2, viewport: vp2 }).promise;
-      back = crop.backPage ? cropRegion(rc2, crop.backPage) : null;
+      var resolvedBackPageCrop = crop.backPage
+        ? resolveAdaptiveSingleCrop(rc2, crop.backPage, { padX: 0.02, padY: 0.04, minWidthRatio: 0.75, minHeightRatio: 0.75, marginPx: 12 })
+        : null;
+      back = resolvedBackPageCrop ? cropRegion(rc2, resolvedBackPageCrop) : null;
     } else {
-      front = cropRegion(renderCanvas, crop.front);
-      back = crop.back ? cropRegion(renderCanvas, crop.back) : null;
+      var resolvedCrop = resolveCropSpecForRenderedPage(renderCanvas, crop);
+      front = cropRegion(renderCanvas, resolvedCrop.front);
+      back = resolvedCrop.back ? cropRegion(renderCanvas, resolvedCrop.back) : null;
     }
 
     return {
@@ -2376,18 +2552,32 @@ async function processPdfBatch(arrayBuffer, password, fileName) {
   }
 }
 
+async function collectPdfText(pdf, maxPages) {
+  var parts = [];
+  var total = Math.min(pdf.numPages || 1, maxPages || 1);
+  for (var i = 1; i <= total; i++) {
+    try {
+      var page = await pdf.getPage(i);
+      var textContent = await page.getTextContent();
+      var pageText = textContent.items.map(function(item) { return item.str; }).join(' ').toLowerCase();
+      if (pageText) parts.push(pageText);
+    } catch (err) {}
+  }
+  return parts.join(' ');
+}
+
 function detectCardType(fullText, fileName) {
   var lowerFileName = (fileName || '').toLowerCase();
-  var abhaHits = ABHA_KEYWORDS.filter(k => fullText.includes(k)).length;
-  var ayushmanHits = AYUSHMAN_KEYWORDS.filter(k => fullText.includes(k)).length;
-  var janaadhaarHits = JANAADHAAR_KEYWORDS.filter(k => fullText.includes(k)).length;
-  var eshramHits = ESHRAM_KEYWORDS.filter(k => fullText.includes(k)).length;
-  var aadhaarHits = AADHAAR_KEYWORDS.filter(k => fullText.includes(k)).length;
-  var panHits = PAN_KEYWORDS.filter(k => fullText.includes(k)).length;
-  var epicHits = EPIC_KEYWORDS.filter(k => fullText.includes(k)).length;
-  var voterHits = VOTER_KEYWORDS.filter(k => fullText.includes(k)).length;
-  var rcHits = RC_KEYWORDS.filter(k => fullText.includes(k)).length;
-  var rationHits = RATION_KEYWORDS.filter(k => fullText.includes(k)).length;
+  var abhaHits = keywordHitCount(fullText, ABHA_KEYWORDS);
+  var ayushmanHits = keywordHitCount(fullText, AYUSHMAN_KEYWORDS);
+  var janaadhaarHits = keywordHitCount(fullText, JANAADHAAR_KEYWORDS);
+  var eshramHits = keywordHitCount(fullText, ESHRAM_KEYWORDS);
+  var aadhaarHits = keywordHitCount(fullText, AADHAAR_KEYWORDS);
+  var panHits = keywordHitCount(fullText, PAN_KEYWORDS);
+  var epicHits = keywordHitCount(fullText, EPIC_KEYWORDS);
+  var voterHits = keywordHitCount(fullText, VOTER_KEYWORDS);
+  var rcHits = keywordHitCount(fullText, RC_KEYWORDS);
+  var rationHits = keywordHitCount(fullText, RATION_KEYWORDS);
 
   if (fullText.includes('@abdm') || lowerFileName.includes('abha') || abhaHits >= 2) return 'abha';
   if (ayushmanHits >= 2) return 'ayushman';
@@ -2398,10 +2588,10 @@ function detectCardType(fullText, fileName) {
   if (eshramHits >= 2) return 'eshram';
   if (/(^|[^a-z])rc([^a-z]|$)/.test(lowerFileName) || rcHits >= 2) return 'rc';
   if (lowerFileName.includes('ration') || rationHits >= 2) return 'ration';
+  if (epicHits >= 2) return 'epic';
+  if (voterHits >= 3) return 'voter';
   if (aadhaarHits >= 2) return 'aadhaar';
   if (panHits >= 2) return 'pan';
-  if (epicHits >= 2) return 'epic';
-  if (voterHits >= 2) return 'voter';
   return null;
 }
 
@@ -2409,8 +2599,7 @@ function detectCardType(fullText, fileName) {
 async function processPdf(pdf) {
   try {
     var page = await pdf.getPage(1);
-    var textContent = await page.getTextContent();
-    var fullText = textContent.items.map(i => i.str).join(' ').toLowerCase();
+    var fullText = await collectPdfText(pdf, 2);
 
     detectedType = detectCardType(fullText, batchFiles.length > 0 ? batchFiles[0].name : '');
     if (!detectedType) {
@@ -2447,7 +2636,8 @@ async function processPdf(pdf) {
     }
 
     if (pdf.numPages >= 2 && crop.frontPage) {
-      frontImageData = cropRegion(renderCanvas, crop.frontPage);
+      var resolvedFrontPageCrop = resolveAdaptiveSingleCrop(renderCanvas, crop.frontPage, { padX: 0.02, padY: 0.04, minWidthRatio: 0.75, minHeightRatio: 0.75, marginPx: 12 });
+      frontImageData = cropRegion(renderCanvas, resolvedFrontPageCrop);
       var page2 = await pdf.getPage(2);
       var vp2 = page2.getViewport({ scale: RENDER_SCALE });
       var rc2 = document.createElement('canvas');
@@ -2455,10 +2645,14 @@ async function processPdf(pdf) {
       rc2.height = vp2.height;
       var c2 = rc2.getContext('2d');
       await page2.render({ canvasContext: c2, viewport: vp2 }).promise;
-      backImageData = crop.backPage ? cropRegion(rc2, crop.backPage) : null;
+      var resolvedBackPageCrop = crop.backPage
+        ? resolveAdaptiveSingleCrop(rc2, crop.backPage, { padX: 0.02, padY: 0.04, minWidthRatio: 0.75, minHeightRatio: 0.75, marginPx: 12 })
+        : null;
+      backImageData = resolvedBackPageCrop ? cropRegion(rc2, resolvedBackPageCrop) : null;
     } else {
-      frontImageData = cropRegion(renderCanvas, crop.front);
-      backImageData = crop.back ? cropRegion(renderCanvas, crop.back) : null;
+      var resolvedCrop = resolveCropSpecForRenderedPage(renderCanvas, crop);
+      frontImageData = cropRegion(renderCanvas, resolvedCrop.front);
+      backImageData = resolvedCrop.back ? cropRegion(renderCanvas, resolvedCrop.back) : null;
     }
 
     originalFront = frontImageData;

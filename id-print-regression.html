@@ -87,6 +87,14 @@ const KEYWORDS={
   rc:["vehicle registration certificate","registration certificate","regn no","regn. number","vehicle class","form 23a","chassis no","registration authority"],
   ration:["ration card","parivar ration card","family ration card","software developed by nic","gas agency","consumer number","hindustan petroleum","indane","bharat petroleum"]
 };
+function escapeRegex(text){return String(text).replace(/[.*+?^${}()|[\]\\]/g,"\\$&")}
+function textHasKeyword(text,keyword){
+  if(!text||!keyword)return false;
+  if(keyword.includes(" "))return text.includes(keyword);
+  if(keyword.length<=4)return new RegExp("(^|[^a-z0-9])"+escapeRegex(keyword)+"([^a-z0-9]|$)").test(text);
+  return text.includes(keyword);
+}
+function scoreKeywords(text,type){return KEYWORDS[type].filter(function(k){return textHasKeyword(text,k)}).length}
 const TEMPLATE_REGISTRY_V2={version:"2.1.0",types:{
   aadhaar:[
     {id:"aadhaar-details",whenAny:["details as on","aadhaar no. issued"],front:[.075,.719,.423,.207],back:[.509,.719,.423,.207]},
@@ -108,7 +116,6 @@ const $=function(sel){return document.querySelector(sel)};
 const pdfInput=$("#pdfInput"), pdfPassword=$("#pdfPassword"), runBtn=$("#runBtn"), statusEl=$("#status"), resultsEl=$("#results"), summaryPanel=$("#summaryPanel"), summaryBody=$("#summaryBody"), sheetCanvas=$("#sheetCanvas"), downloadSheetBtn=$("#downloadSheetBtn"), downloadJsonBtn=$("#downloadJsonBtn");
 let qaResults=[];
 
-function scoreKeywords(text,type){return KEYWORDS[type].filter(function(k){return text.includes(k)}).length}
 function detectCardType(text,fileName){
   const name=(fileName||"").toLowerCase();
   if(text.includes("@abdm")||name.includes("abha")||scoreKeywords(text,"abha")>=2)return"abha";
@@ -117,10 +124,10 @@ function detectCardType(text,fileName){
   if(name.includes("uan-card")||name.includes("eshram")||scoreKeywords(text,"eshram")>=2)return"eshram";
   if(/(^|[^a-z])rc([^a-z]|$)/.test(name)||scoreKeywords(text,"rc")>=2)return"rc";
   if(name.includes("ration")||scoreKeywords(text,"ration")>=2)return"ration";
+  if(scoreKeywords(text,"epic")>=2)return"epic";
+  if(scoreKeywords(text,"voter")>=3)return"voter";
   if(scoreKeywords(text,"aadhaar")>=2)return"aadhaar";
   if(scoreKeywords(text,"pan")>=2)return"pan";
-  if(scoreKeywords(text,"epic")>=2)return"epic";
-  if(scoreKeywords(text,"voter")>=2)return"voter";
   return null;
 }
 async function renderPage(pdf,pageNo){
