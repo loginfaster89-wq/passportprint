@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import {
   Camera, CreditCard, FileText, Zap, Shield, Cpu, Printer,
-  ArrowRight, CheckCircle, ChevronDown, Star, Globe, Users, Download
+  ArrowRight, CheckCircle, ChevronDown, Star, Globe, Download
 } from "lucide-react";
 import { useState } from "react";
 
@@ -16,19 +16,19 @@ const TOOLS = [
     icon: Camera, title: "Passport Photo", badge: "Free",
     description: "AI background removal, auto-crop to any country size, 300 DPI A4 sheet export — all in your browser.",
     features: ["AI background removal", "50+ country presets", "300 DPI A4 export", "WhatsApp photos work"],
-    href: "/passport-photo/", testId: "card-tool-passport-photo",
+    href: "/passport-photo/",
   },
   {
     icon: CreditCard, title: "ID Card Print", badge: "Free",
     description: "Auto-detects Aadhaar, PAN, ABHA, e-EPIC, Ayushman, eShram, RC, and ration-card PDFs into A4 print sheets.",
     features: ["Auto PDF detection", "CR80 & custom sizes", "8+ ID card types", "A4 print sheets"],
-    href: "/id-print/", testId: "card-tool-id-print",
+    href: "/id-print/",
   },
   {
     icon: FileText, title: "Forms Hub", badge: "Free",
     description: "Search 200+ official Indian government forms — ration, PAN, voter, Aadhaar, EPFO and more.",
     features: ["200+ official forms", "Search & filter by state", "Preview first page", "Direct print / download"],
-    href: "/forms/", testId: "card-tool-forms-hub",
+    href: "/forms/",
   },
 ];
 
@@ -47,57 +47,50 @@ const HOW_STEPS = [
 ];
 
 const STATS = [
-  { value: "200+", label: "Official govt forms", icon: FileText },
-  { value: "50+", label: "Photo size presets", icon: Globe },
-  { value: "8+", label: "ID card types", icon: CreditCard },
-  { value: "0 KB", label: "Uploaded to server", icon: Shield },
+  { value: "200+", label: "Official govt forms" },
+  { value: "50+", label: "Photo size presets" },
+  { value: "8+", label: "ID card types" },
+  { value: "0 KB", label: "Uploaded to server" },
 ];
 
 const USE_CASES = [
   {
-    icon: "🖨️",
-    title: "Print Shops",
-    desc: "Serve walk-in customers faster. No more manual cropping or expensive photo paper waste. Print perfect passport photos and ID cards in seconds.",
+    icon: "🖨️", title: "Print Shops",
+    desc: "Serve walk-in customers faster. No manual cropping or wasted photo paper. Print perfect passport photos and ID cards in seconds.",
     tags: ["Passport photos", "ID card sheets", "Govt forms"],
   },
   {
-    icon: "🏢",
-    title: "eMitra & CSC Centres",
-    desc: "Handle Aadhaar, PAN, voter ID applications at your counter without waiting for slow government portals. Print instantly.",
+    icon: "🏢", title: "eMitra & CSC Centres",
+    desc: "Handle Aadhaar, PAN, voter ID applications at your counter without slow government portals. Print instantly.",
     tags: ["Aadhaar services", "PAN card", "Voter ID"],
   },
   {
-    icon: "🎓",
-    title: "Students & Families",
-    desc: "Passport renewal, visa application, exam forms — get your documents print-ready at home without visiting a photo studio.",
+    icon: "🎓", title: "Students & Families",
+    desc: "Passport renewal, visa application, exam forms — get documents print-ready at home without visiting a photo studio.",
     tags: ["Passport photo", "Visa application", "Exam forms"],
   },
   {
-    icon: "🏪",
-    title: "Stationery Shops",
-    desc: "Add a new revenue stream. Print government forms and passport photos for your customers without any extra software or hardware investment.",
+    icon: "🏪", title: "Stationery Shops",
+    desc: "Add a new revenue stream. Print government forms and passport photos for customers with no extra software investment.",
     tags: ["Government forms", "Walk-in service", "No extra cost"],
   },
 ];
 
 const PRICING = [
   {
-    name: "Free",
-    price: "₹0", period: "forever",
+    name: "Free", price: "₹0", period: "forever",
     desc: "All three tools, no sign-up required.",
     features: ["Passport Photo tool", "ID Card Print tool", "Forms Hub (200+ forms)", "300 DPI A4 export", "AI background removal (3/day)", "Browser-only processing"],
     cta: "Start for free", href: "/passport-photo/", highlight: false,
   },
   {
-    name: "Pro Weekly",
-    price: "₹59", period: "/ week",
+    name: "Pro Weekly", price: "₹59", period: "/ week",
     desc: "Unlimited access for busy print shops.",
     features: ["Everything in Free", "Unlimited AI background removal", "Bulk passport photo sheets", "Multi-page ID print sheets", "Priority background processing", "No daily limits"],
     cta: "Get Pro Weekly", href: "/passport-photo/#plans", highlight: false,
   },
   {
-    name: "Pro Monthly",
-    price: "₹149", period: "/ month",
+    name: "Pro Monthly", price: "₹149", period: "/ month",
     desc: "Best value for professional print shops.",
     features: ["Everything in Pro Weekly", "Unlimited everything", "Early access to new tools", "Email support", "Commercial use license", "Save ₹87 vs weekly"],
     cta: "Get Pro Monthly", href: "/passport-photo/#plans", highlight: true,
@@ -118,7 +111,7 @@ const FAQS = [
 function FaqItem({ q, a }: { q: string; a: string }) {
   const [open, setOpen] = useState(false);
   return (
-    <div className="border border-gray-200 rounded-2xl overflow-hidden transition-all duration-200 hover:border-amber-200">
+    <div className="border border-gray-200 rounded-2xl overflow-hidden hover:border-amber-200 transition-colors">
       <button className="w-full flex items-center justify-between px-6 py-4 text-left gap-4" onClick={() => setOpen(!open)}>
         <span className="font-semibold text-gray-900 text-sm sm:text-base">{q}</span>
         <ChevronDown size={18} className="flex-shrink-0 text-gray-400 transition-transform duration-200" style={{ transform: open ? "rotate(180deg)" : "rotate(0deg)" }} />
@@ -130,51 +123,53 @@ function FaqItem({ q, a }: { q: string; a: string }) {
 
 export default function Home() {
   return (
-    <div className="bg-white">
+    <div className="bg-white overflow-x-hidden">
 
       {/* ── HERO ── */}
-      <section className="relative overflow-hidden border-b border-gray-100">
+      <section className="relative border-b border-gray-100">
         <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse 80% 60% at 50% -10%, rgba(240,165,0,0.08) 0%, transparent 70%)" }} />
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-20 pb-8 sm:pt-28 sm:pb-12 relative">
-          <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
-            <div className="flex-1 text-center lg:text-left">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-16 pb-8 sm:pt-24 sm:pb-12 relative">
+          <div className="flex flex-col lg:flex-row items-center gap-10 lg:gap-12">
+
+            {/* Left: text */}
+            <div className="flex-1 text-center lg:text-left lg:pr-4">
               <motion.div initial="hidden" animate="show" variants={stagger} className="flex flex-col items-center lg:items-start">
                 <motion.div variants={fadeUp}>
-                  <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold border mb-6" style={{ borderColor: "rgba(240,165,0,0.35)", background: "rgba(240,165,0,0.08)", color: "#8a5e00" }}>
+                  <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold border mb-5" style={{ borderColor: "rgba(240,165,0,0.35)", background: "rgba(240,165,0,0.08)", color: "#8a5e00" }}>
                     <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
                     All tools live · Free to start
                   </span>
                 </motion.div>
-                <motion.h1 variants={fadeUp} className="text-5xl sm:text-6xl lg:text-6xl xl:text-7xl font-black tracking-tight leading-[1.02] text-gray-900" style={{ fontFamily: "'Syne', sans-serif" }}>
+                <motion.h1 variants={fadeUp} className="text-5xl sm:text-6xl lg:text-6xl font-black tracking-tight leading-[1.02] text-gray-900" style={{ fontFamily: "'Syne', sans-serif" }}>
                   Your browser<br />is now a{" "}<span style={{ color: "#F0A500" }}>print studio</span>
                 </motion.h1>
-                <motion.p variants={fadeUp} className="mt-6 text-lg text-gray-500 max-w-lg leading-relaxed">
+                <motion.p variants={fadeUp} className="mt-5 text-base sm:text-lg text-gray-500 max-w-lg leading-relaxed">
                   Passport photos, ID card sheets, and 200+ government forms — processed on-device. No uploads. No account. 100% free to start.
                 </motion.p>
-                <motion.div variants={fadeUp} className="mt-8 flex flex-col sm:flex-row items-center lg:items-start gap-3">
-                  <a href="/passport-photo/" className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl font-bold text-sm shadow-lg hover:shadow-xl transition-all duration-200 hover:-translate-y-0.5" style={{ background: "#F0A500", color: "#000" }}>
-                    <Camera size={17} /> Passport Photo
+                <motion.div variants={fadeUp} className="mt-7 flex flex-wrap items-center justify-center lg:justify-start gap-2.5">
+                  <a href="/passport-photo/" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm shadow-lg hover:shadow-xl transition-all duration-200 hover:-translate-y-0.5" style={{ background: "#F0A500", color: "#000" }}>
+                    <Camera size={16} /> Passport Photo
                   </a>
-                  <a href="/id-print/" className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl font-semibold text-sm bg-gray-900 text-white shadow-lg hover:shadow-xl hover:bg-gray-800 transition-all duration-200 hover:-translate-y-0.5">
-                    <CreditCard size={17} /> ID Card Print
+                  <a href="/id-print/" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm bg-gray-900 text-white shadow-lg hover:bg-gray-800 transition-all duration-200 hover:-translate-y-0.5">
+                    <CreditCard size={16} /> ID Card Print
                   </a>
-                  <a href="/forms/" className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl font-semibold text-sm border border-gray-200 text-gray-700 hover:bg-gray-50 hover:border-gray-300 transition-all duration-200">
-                    <FileText size={17} /> Forms Hub
+                  <a href="/forms/" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm border border-gray-200 text-gray-700 hover:bg-gray-50 transition-all duration-200">
+                    <FileText size={16} /> Forms Hub
                   </a>
                 </motion.div>
-                <motion.div variants={fadeUp} className="mt-8 flex flex-wrap items-center justify-center lg:justify-start gap-4 text-xs text-gray-400">
+                <motion.div variants={fadeUp} className="mt-6 flex flex-wrap items-center justify-center lg:justify-start gap-3 text-xs text-gray-400">
                   {["No account required", "No photo uploads", "300 DPI print-ready", "Made in India 🇮🇳"].map((t) => (
-                    <span key={t} className="flex items-center gap-1.5"><CheckCircle size={13} className="text-amber-500" /> {t}</span>
+                    <span key={t} className="flex items-center gap-1.5"><CheckCircle size={12} className="text-amber-500" /> {t}</span>
                   ))}
                 </motion.div>
               </motion.div>
             </div>
 
-            {/* Hero Visual - Product Cards */}
-            <div className="flex-1 w-full max-w-sm lg:max-w-md xl:max-w-lg relative">
-              <motion.div initial={{ opacity: 0, y: 32 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.2 }} className="relative">
-                {/* Main card - passport photo mockup */}
-                <div className="bg-white rounded-2xl border border-gray-200 shadow-2xl p-5 relative z-10">
+            {/* Right: product mockup */}
+            <div className="w-full max-w-[360px] lg:max-w-[400px] xl:max-w-[440px] flex-shrink-0">
+              <motion.div initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.2 }} className="relative px-6 pb-6">
+                {/* Main card */}
+                <div className="bg-white rounded-2xl border border-gray-200 shadow-2xl p-5">
                   <div className="flex items-center gap-2 mb-4">
                     <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: "rgba(240,165,0,0.12)" }}>
                       <Camera size={14} style={{ color: "#F0A500" }} />
@@ -182,18 +177,19 @@ export default function Home() {
                     <span className="text-sm font-semibold text-gray-800">Passport Photo</span>
                     <span className="ml-auto text-xs px-2 py-0.5 rounded-full" style={{ background: "rgba(240,165,0,0.1)", color: "#8a5e00" }}>Step 1 of 4</span>
                   </div>
-                  {/* Simulated upload area */}
-                  <div className="rounded-xl border-2 border-dashed border-gray-200 p-8 text-center mb-4">
-                    <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                      <Camera size={20} className="text-gray-400" />
+                  {/* Upload area */}
+                  <div className="rounded-xl border-2 border-dashed border-gray-200 p-7 text-center mb-4">
+                    <div className="w-11 h-11 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                      <Camera size={18} className="text-gray-400" />
                     </div>
                     <p className="text-sm text-gray-600 font-medium">Drop your photo here</p>
-                    <p className="text-xs text-gray-400 mt-1">WhatsApp, camera, any image · JPG PNG WEBP</p>
+                    <p className="text-xs text-gray-400 mt-1">WhatsApp, camera, any image</p>
+                    <p className="text-xs text-gray-300 mt-0.5">JPG · PNG · WEBP · BMP</p>
                   </div>
                   {/* Size presets */}
                   <div className="grid grid-cols-3 gap-2">
                     {[{ flag: "🇮🇳", name: "India", size: "35×45mm", active: true }, { flag: "🇺🇸", name: "US Visa", size: "51×51mm", active: false }, { flag: "🇬🇧", name: "UK", size: "35×45mm", active: false }].map((p) => (
-                      <div key={p.name} className={`p-2 rounded-xl border text-center cursor-pointer transition-all ${p.active ? "border-amber-400 bg-amber-50" : "border-gray-200 hover:border-amber-200"}`}>
+                      <div key={p.name} className={`p-2 rounded-xl border text-center cursor-pointer transition-all ${p.active ? "border-amber-400 bg-amber-50" : "border-gray-200"}`}>
                         <div className="text-base">{p.flag}</div>
                         <div className="text-xs font-semibold text-gray-800 mt-0.5">{p.name}</div>
                         <div className="text-xs text-gray-400">{p.size}</div>
@@ -202,13 +198,12 @@ export default function Home() {
                   </div>
                 </div>
 
-                {/* Floating badge - AI removal */}
-                <motion.div
-                  initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, delay: 0.6 }}
-                  className="absolute -right-4 top-8 bg-white rounded-xl border border-gray-200 shadow-lg px-3 py-2 flex items-center gap-2"
+                {/* Floating badge: AI */}
+                <motion.div initial={{ opacity: 0, x: 16 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.6 }}
+                  className="absolute right-0 top-6 bg-white rounded-xl border border-gray-200 shadow-lg px-3 py-2 flex items-center gap-2"
                 >
                   <div className="w-6 h-6 rounded-lg flex items-center justify-center" style={{ background: "rgba(240,165,0,0.12)" }}>
-                    <Cpu size={12} style={{ color: "#F0A500" }} />
+                    <Cpu size={11} style={{ color: "#F0A500" }} />
                   </div>
                   <div>
                     <p className="text-xs font-bold text-gray-900">AI BG Removal</p>
@@ -216,26 +211,24 @@ export default function Home() {
                   </div>
                 </motion.div>
 
-                {/* Floating badge - export */}
-                <motion.div
-                  initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, delay: 0.8 }}
-                  className="absolute -left-4 bottom-8 bg-white rounded-xl border border-gray-200 shadow-lg px-3 py-2 flex items-center gap-2"
+                {/* Floating badge: export */}
+                <motion.div initial={{ opacity: 0, x: -16 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.8 }}
+                  className="absolute left-0 bottom-12 bg-white rounded-xl border border-gray-200 shadow-lg px-3 py-2 flex items-center gap-2"
                 >
                   <div className="w-6 h-6 rounded-lg flex items-center justify-center bg-gray-900">
-                    <Download size={12} className="text-white" />
+                    <Download size={11} className="text-white" />
                   </div>
                   <div>
-                    <p className="text-xs font-bold text-gray-900">Export A4 Sheet</p>
-                    <p className="text-xs text-gray-400">300 DPI · Print-ready</p>
+                    <p className="text-xs font-bold text-gray-900">Export A4 · 300 DPI</p>
+                    <p className="text-xs text-gray-400">Print-ready PDF</p>
                   </div>
                 </motion.div>
 
-                {/* Forms count badge */}
-                <motion.div
-                  initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 1.0 }}
-                  className="absolute left-1/2 -translate-x-1/2 -bottom-5 bg-white rounded-xl border border-gray-200 shadow-lg px-4 py-2 flex items-center gap-2 whitespace-nowrap"
+                {/* Floating badge: forms count */}
+                <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.0 }}
+                  className="absolute left-1/2 -translate-x-1/2 -bottom-0 bg-white rounded-xl border border-gray-200 shadow-lg px-4 py-2 flex items-center gap-2 whitespace-nowrap"
                 >
-                  <FileText size={14} style={{ color: "#F0A500" }} />
+                  <FileText size={13} style={{ color: "#F0A500" }} />
                   <span className="text-xs font-semibold text-gray-800">200+ govt forms searchable</span>
                 </motion.div>
               </motion.div>
@@ -244,10 +237,10 @@ export default function Home() {
         </div>
 
         {/* Stats bar */}
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 pb-14 mt-16">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {STATS.map(({ value, label, icon: Icon }) => (
-              <motion.div key={label} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.3 }} className="text-center">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 pb-12 mt-10">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+            {STATS.map(({ value, label }) => (
+              <motion.div key={label} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.4 }}>
                 <div className="text-2xl sm:text-3xl font-black text-gray-900" style={{ fontFamily: "'Syne', sans-serif" }}>{value}</div>
                 <div className="text-xs text-gray-500 mt-1 font-medium">{label}</div>
               </motion.div>
@@ -287,8 +280,8 @@ export default function Home() {
           </motion.p>
         </motion.div>
         <motion.div initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.1 }} variants={stagger} className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {TOOLS.map(({ icon: Icon, title, badge, description, features, href, testId }) => (
-            <motion.div key={title} variants={fadeUp} className="group relative flex flex-col rounded-2xl border border-gray-200 bg-white p-6 hover:border-amber-300 hover:shadow-xl transition-all duration-300" data-testid={testId}>
+          {TOOLS.map(({ icon: Icon, title, badge, description, features, href }) => (
+            <motion.div key={title} variants={fadeUp} className="group relative flex flex-col rounded-2xl border border-gray-200 bg-white p-6 hover:border-amber-300 hover:shadow-xl transition-all duration-300">
               <div className="absolute inset-x-0 top-0 h-0.5 rounded-t-2xl opacity-0 group-hover:opacity-100 transition-opacity" style={{ background: "#F0A500" }} />
               <div className="flex items-center justify-between mb-5">
                 <div className="w-11 h-11 rounded-xl flex items-center justify-center" style={{ background: "rgba(240,165,0,0.10)" }}>
@@ -357,7 +350,7 @@ export default function Home() {
           <motion.div initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.1 }} variants={stagger} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {HOW_STEPS.map(({ n, title, desc }) => (
               <motion.div key={n} variants={fadeUp} className="relative p-6 rounded-2xl bg-white border border-gray-200 hover:border-amber-200 hover:shadow-lg transition-all duration-300">
-                <div className="text-4xl font-black mb-4 leading-none" style={{ color: "rgba(240,165,0,0.20)", fontFamily: "'Syne', sans-serif" }}>{n}</div>
+                <div className="text-5xl font-black mb-4 leading-none" style={{ color: "rgba(240,165,0,0.18)", fontFamily: "'Syne', sans-serif" }}>{n}</div>
                 <h3 className="font-bold text-gray-900 mb-1.5">{title}</h3>
                 <p className="text-sm text-gray-500 leading-relaxed">{desc}</p>
               </motion.div>
@@ -380,10 +373,10 @@ export default function Home() {
           </motion.div>
           <motion.div initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.1 }} variants={stagger} className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
             {PRICING.map(({ name, price, period, desc, features, cta, href, highlight }) => (
-              <motion.div key={name} variants={fadeUp} className={`relative flex flex-col rounded-2xl border p-7 transition-all duration-300 ${highlight ? "border-amber-400 bg-amber-50 shadow-xl shadow-amber-100" : "border-gray-200 bg-white hover:border-amber-200 hover:shadow-lg"}`}>
+              <motion.div key={name} variants={fadeUp} className={`relative flex flex-col rounded-2xl border p-7 transition-all duration-300 ${highlight ? "border-amber-400 bg-amber-50 shadow-xl shadow-amber-100/50" : "border-gray-200 bg-white hover:border-amber-200 hover:shadow-lg"}`}>
                 {highlight && (
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                    <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold" style={{ background: "#F0A500", color: "#000" }}>
+                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
+                    <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold shadow-sm" style={{ background: "#F0A500", color: "#000" }}>
                       <Star size={10} fill="#000" /> Most Popular
                     </span>
                   </div>
