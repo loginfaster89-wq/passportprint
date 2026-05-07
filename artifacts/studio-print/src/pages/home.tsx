@@ -123,7 +123,7 @@ const pricingPlans = [
     desc: "Individual use — forms library always free",
     features: ["Passport photo (72 DPI, watermark)", "ID card designer (2 sheets/day)", "300+ forms download — free forever", "35+ country presets", "No account required"],
     cta: "Start Free",
-    href: "/passport-photo",
+    action: "auth",
     highlight: false,
   },
   {
@@ -132,8 +132,8 @@ const pricingPlans = [
     period: "/month",
     desc: "For regular users & print shops",
     features: ["Unlimited 300 DPI exports", "No watermark", "Batch ID card printing", "All country presets", "Priority AI background removal", "HD 600 DPI export"],
-    cta: "Get Pro",
-    href: "/passport-photo",
+    cta: "Get Pro — ₹149/mo",
+    action: "plans",
     highlight: true,
     badge: "Most Popular"
   },
@@ -143,8 +143,8 @@ const pricingPlans = [
     period: "/year",
     desc: "Best value — save ₹789 vs monthly",
     features: ["Everything in Pro", "₹999 one-time/year", "Priority support", "Early access to new tools", "Commercial use licence"],
-    cta: "Get Annual",
-    href: "/passport-photo",
+    cta: "Get Annual — ₹999/yr",
+    action: "plans",
     highlight: false,
     badge: "Best Value"
   }
@@ -538,9 +538,17 @@ export default function Home() {
                         </li>
                       ))}
                     </ul>
-                    <a href={plan.href} className={`flex items-center justify-center font-bold rounded-2xl py-3 text-sm transition-all ${
-                      plan.highlight ? "bg-primary text-primary-foreground hover:bg-primary/90" : "bg-neutral-100 text-foreground hover:bg-neutral-200 border border-neutral-200"
-                    }`}>{plan.cta}</a>
+                    <button
+                      onClick={() => {
+                        if (plan.action === "plans") (window as any).openPlans?.();
+                        else (window as any).openAuth?.();
+                      }}
+                      className={`flex items-center justify-center font-bold rounded-2xl py-3 text-sm transition-all w-full ${
+                        plan.highlight ? "bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg shadow-primary/30" : "bg-neutral-100 text-foreground hover:bg-neutral-200 border border-neutral-200"
+                      }`}
+                    >
+                      {plan.cta}
+                    </button>
                   </div>
                 </Reveal>
               ))}
