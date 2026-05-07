@@ -56,18 +56,18 @@
   ]
 }
 </script>
-<link rel="icon" type="image/svg+xml" href="assets/logo.svg">
-<link rel="alternate icon" type="image/png" href="assets/favicon-32.png">
-<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-<link rel="manifest" href="assets/manifest.webmanifest?v=ui-polish-v73">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<link rel="alternate icon" type="image/png" href="/assets/favicon-32.png">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<link rel="manifest" href="/assets/manifest.webmanifest?v=ui-polish-v73">
 <link rel="preconnect" href="https://passportprint-studio.onrender.com">
 <link rel="dns-prefetch" href="https://passportprint-studio.onrender.com">
-<link rel="preload" href="assets/fonts/syne-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="assets/fonts/dm-mono-400-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="assets/fonts.css">
-<link rel="stylesheet" href="assets/legal.css?v=ui-polish-v73">
-<link rel="stylesheet" href="assets/auth.css?v=ui-polish-v73">
-<link rel="stylesheet" href="assets/pricing.css?v=ui-polish-v73">
+<link rel="preload" href="/assets/fonts/syne-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/dm-mono-400-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/fonts.css">
+<link rel="stylesheet" href="/assets/legal.css?v=ui-polish-v73">
+<link rel="stylesheet" href="/assets/auth.css?v=ui-polish-v73">
+<link rel="stylesheet" href="/assets/pricing.css?v=ui-polish-v73">
 <style>
 /* ID Print page-only upload stability fix. Header is kept visually aligned with the homepage. */
 .idp-upload input[type="file"]{z-index:2;}
@@ -1686,33 +1686,14 @@ body.idp-workspace-mode #stepSheet .idp-a4-wrap canvas{
 </svg>
 
 <header class="legal-header">
-  <a href="index.html" class="logo">Studio <em>Print</em></a>
+  <a href="/" class="logo">Studio <em>Print</em></a>
   <nav id="primaryNav">
-    <a href="index.html">Home</a>
-    <div class="has-dropdown">
-      <button class="nav-dd-btn" aria-haspopup="true" aria-expanded="false">Features <span class="caret" aria-hidden="true">▾</span></button>
-      <div class="dropdown-panel" role="menu">
-        <a href="passport-photo.html" role="menuitem">
-          <span class="dd-icon" aria-hidden="true"><svg class="ix" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-camera"/></svg></span>
-          <span class="dd-meta"><strong>Passport Photo</strong><small>AI portrait workflow &middot; A4 export</small></span>
-          <span class="dd-tag live">Live</span>
-        </a>
-        <a href="id-print.html" role="menuitem">
-          <span class="dd-icon" aria-hidden="true"><svg class="ix" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-idcard"/></svg></span>
-          <span class="dd-meta"><strong>ID Card Print</strong><small>PDF auto-detect &middot; CR80 &middot; A4 print</small></span>
-          <span class="dd-tag live">Live</span>
-        </a>
-        <a href="forms.html" role="menuitem">
-          <span class="dd-icon" aria-hidden="true"><svg class="ix" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-search"/></svg></span>
-          <span class="dd-meta"><strong>Forms Hub</strong><small>Search &middot; preview &middot; print forms</small></span>
-          <span class="dd-tag live">Live</span>
-        </a>
-      </div>
-    </div>
-    <a href="index.html#pricing">Pricing</a>
-    <a href="index.html#faq">FAQ</a>
+    <a href="/">Home</a>
+    <a href="/passport-photo/">Passport Photo</a>
+    <a href="/id-print/">ID Card Print</a>
+    <a href="/forms/">Forms Hub</a>
   </nav>
-  <button type="button" class="nav-login" id="hdrAuthBtn" title="Login / Signup"><span class="hdr-lbl">Login</span></button>
+  <a href="/passport-photo/" class="nav-open-tool">Open a Tool ↗</a>
   <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="primaryNav">&#9776;</button>
 </header>
 
@@ -2042,7 +2023,7 @@ body.idp-workspace-mode #stepSheet .idp-a4-wrap canvas{
 <footer class="legal-footer">
   <div class="footer-main">
     <div class="footer-brand">
-      <a href="index.html" class="footer-logo">Studio <em>Print</em></a>
+      <a href="/" class="footer-logo">Studio <em>Print</em></a>
       <p class="footer-tagline">A browser-native print workspace for passport photos, ID-card sheets, PDF-to-print jobs, and 300&nbsp;DPI A4 output — built in India.</p>
       <form class="footer-news" data-u="loginfaster89" data-d="gmail.com" aria-label="Subscribe to product updates">
         <input type="email" name="email" placeholder="you@example.com" required autocomplete="email" aria-label="Your email">
@@ -2054,33 +2035,33 @@ body.idp-workspace-mode #stepSheet .idp-a4-wrap canvas{
       <div class="footer-col">
         <h4>Product</h4>
         <ul>
-          <li><a href="passport-photo.html">Passport Photo</a></li>
-          <li><a href="id-print.html">ID Card Print</a></li>
-          <li><a href="forms.html">Forms Hub</a></li>
+          <li><a href="/passport-photo/">Passport Photo</a></li>
+          <li><a href="/id-print/">ID Card Print</a></li>
+          <li><a href="/forms/">Forms Hub</a></li>
         </ul>
       </div>
       <div class="footer-col">
         <h4>Resources</h4>
         <ul>
-          <li><a href="index.html#how">How it works</a></li>
-          <li><a href="index.html#faq">FAQ</a></li>
+          <li><a href="/#how">How it works</a></li>
+          <li><a href="/#faq">FAQ</a></li>
           <li><a href="sitemap.xml">Sitemap</a></li>
         </ul>
       </div>
       <div class="footer-col">
         <h4>Company</h4>
         <ul>
-          <li><a href="about.html">About</a></li>
-          <li><a href="contact.html">Contact</a></li>
+          <li><a href="/about">About</a></li>
+          <li><a href="/contact">Contact</a></li>
         </ul>
       </div>
       <div class="footer-col">
         <h4>Legal</h4>
         <ul>
-          <li><a href="privacy.html">Privacy</a></li>
-          <li><a href="terms.html">Terms</a></li>
-          <li><a href="refund.html">Refund</a></li>
-          <li><a href="shipping.html">Delivery</a></li>
+          <li><a href="/privacy">Privacy</a></li>
+          <li><a href="/terms">Terms</a></li>
+          <li><a href="/refund">Refund</a></li>
+          <li><a href="/shipping">Delivery</a></li>
         </ul>
       </div>
     </nav>
@@ -2091,12 +2072,12 @@ body.idp-workspace-mode #stepSheet .idp-a4-wrap canvas{
   </div>
 </footer>
 
-<script src="assets/nav.js?v=ui-polish-v73" defer></script>
-<script src="assets/auth.js?v=ui-polish-v73" defer></script>
-<script src="assets/pricing.js?v=ui-polish-v73" defer></script>
-<script src="assets/pwa.js?v=ui-polish-v73" defer></script>
-<script src="assets/footer.js?v=ui-polish-v73" defer></script>
-<script src="assets/cookie.js?v=ui-polish-v73" defer></script>
+<script src="/assets/nav.js?v=ui-polish-v73" defer></script>
+<script src="/assets/auth.js?v=ui-polish-v73" defer></script>
+<script src="/assets/pricing.js?v=ui-polish-v73" defer></script>
+<script src="/assets/pwa.js?v=ui-polish-v73" defer></script>
+<script src="/assets/footer.js?v=ui-polish-v73" defer></script>
+<script src="/assets/cookie.js?v=ui-polish-v73" defer></script>
 
 <script type="module">
 /* ── ID Card Print — Phase 1 MVP + Phase 3 Batch Processing ──
@@ -5111,6 +5092,91 @@ syncPvcCalibrationUI();
 updateSheetMeta();
 showStep(1);
 </script>
+
+<style id="sp-brand-override">
+/* ── Studio Print — Unified Brand Header (loads after all CSS) ── */
+header.legal-header,body.idp-page header.legal-header,
+body.idp-workspace-mode header.legal-header,
+body.forms-page header.legal-header{
+  display:flex!important;align-items:center!important;
+  position:sticky!important;top:0!important;z-index:1000!important;
+  width:100%!important;max-width:100%!important;
+  height:64px!important;min-height:64px!important;
+  padding:0 clamp(16px,5vw,48px)!important;
+  background:#ffffff!important;
+  border:none!important;border-bottom:1px solid #f0efeb!important;
+  box-shadow:0 1px 8px rgba(0,0,0,.05)!important;
+  box-sizing:border-box!important;gap:0!important;
+  margin:0!important;margin-top:0!important;
+  border-radius:0!important;
+  backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
+  left:auto!important;right:auto!important;
+  transform:none!important;
+}
+.legal-header .logo{
+  font-family:'Syne',sans-serif!important;font-size:20px!important;
+  font-weight:800!important;color:#111!important;letter-spacing:-.5px!important;
+  text-decoration:none!important;flex-shrink:0!important;
+  margin-right:20px!important;white-space:nowrap!important;padding:0!important;
+}
+.legal-header .logo em,.legal-header .logo em::after{
+  color:#f0a500!important;font-style:normal!important;
+}
+.legal-header .logo em::after{
+  content:'.'!important;display:inline!important;
+  width:auto!important;height:auto!important;
+  border-radius:0!important;background:transparent!important;
+  margin-left:1px!important;vertical-align:baseline!important;
+}
+#primaryNav{
+  display:flex!important;align-items:center!important;
+  gap:2px!important;margin-left:0!important;flex:1!important;
+  flex-wrap:nowrap!important;overflow:visible!important;
+  flex-direction:row!important;position:static!important;
+  background:transparent!important;border:none!important;box-shadow:none!important;
+}
+#primaryNav a,#primaryNav a:link,#primaryNav a:visited{
+  font-family:'Inter',sans-serif!important;font-size:14px!important;font-weight:500!important;
+  color:#5a5a5a!important;text-decoration:none!important;
+  padding:6px 12px!important;border-radius:8px!important;
+  transition:color .15s,background .15s!important;white-space:nowrap!important;
+  display:inline-flex!important;align-items:center!important;
+}
+#primaryNav a:hover{color:#111!important;background:#f5f4f0!important;}
+#primaryNav a::after{display:none!important;}
+.has-dropdown,.dropdown-panel,.caret,.nav-dd-btn{display:none!important;}
+.nav-login,#hdrAuthBtn,.help-btn,.badges{display:none!important;}
+.nav-open-tool,a.nav-open-tool{
+  margin-left:auto!important;flex-shrink:0!important;
+  display:inline-flex!important;align-items:center!important;
+  background:#f0a500!important;color:#000!important;
+  font-family:'Inter',sans-serif!important;font-size:13px!important;font-weight:600!important;
+  padding:8px 18px!important;border-radius:10px!important;
+  text-decoration:none!important;transition:background .15s,transform .1s!important;
+  white-space:nowrap!important;border:none!important;
+}
+.nav-open-tool:hover{background:#d99400!important;transform:translateY(-1px)!important;}
+.nav-toggle{
+  display:none!important;background:transparent!important;border:none!important;
+  color:#111!important;font-size:20px!important;cursor:pointer!important;
+  padding:6px 8px!important;border-radius:8px!important;margin-left:8px!important;
+}
+@media(max-width:768px){
+  header.legal-header,body.idp-page header.legal-header{height:56px!important;}
+  .nav-toggle{display:flex!important;align-items:center!important;justify-content:center!important;}
+  #primaryNav{display:none!important;flex:none!important;}
+  #primaryNav.open{
+    display:flex!important;flex-direction:column!important;
+    position:fixed!important;top:56px!important;left:0!important;right:0!important;
+    background:#fff!important;border-bottom:1px solid #f0efeb!important;
+    padding:12px 16px!important;gap:4px!important;z-index:998!important;
+    box-shadow:0 8px 24px rgba(0,0,0,.08)!important;
+    max-height:80vh!important;overflow-y:auto!important;
+  }
+  #primaryNav.open a{padding:10px 14px!important;border-radius:10px!important;}
+  .nav-open-tool{font-size:12px!important;padding:7px 14px!important;}
+}
+</style>
 </body>
 </html>
 
