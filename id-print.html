@@ -3240,31 +3240,49 @@ function resolveAdaptiveSingleCrop(sourceCanvas, seedFrac, options) {
 
 function resolveAdaptivePairCrop(sourceCanvas, crop) {
   if (!sourceCanvas || !crop || !crop.front || !crop.back) return crop;
-  var pairBand = expandFracRegion(unionFracRegions(crop.front, crop.back), 0.006, 0.10);
+  var isEpic = crop._type === 'epic';
+  var seedBand = unionFracRegions(crop.front, crop.back);
+  var pairBand = expandFracRegion(seedBand, isEpic ? 0.004 : 0.006, isEpic ? 0.028 : 0.10);
   var bandExtents = measureInkExtents(sourceCanvas, pairBand);
   if (!bandExtents) {
     return {
-      front: resolveAdaptiveSingleCrop(sourceCanvas, crop.front, { padX: 0.008, padY: 0.08, minWidthRatio: 0.55, minHeightRatio: 0.5 }),
-      back: resolveAdaptiveSingleCrop(sourceCanvas, crop.back, { padX: 0.008, padY: 0.08, minWidthRatio: 0.55, minHeightRatio: 0.5 })
+      front: resolveAdaptiveSingleCrop(sourceCanvas, crop.front, { padX: 0.008, padY: isEpic ? 0.025 : 0.08, minWidthRatio: 0.55, minHeightRatio: 0.5, marginPx: isEpic ? 6 : 10 }),
+      back: resolveAdaptiveSingleCrop(sourceCanvas, crop.back, { padX: 0.008, padY: isEpic ? 0.025 : 0.08, minWidthRatio: 0.55, minHeightRatio: 0.5, marginPx: isEpic ? 6 : 10 })
     };
   }
 
-  var sharedTop = Math.max(0, (bandExtents.sy + bandExtents.top - 10) / sourceCanvas.height);
-  var sharedBottom = Math.min(1, (bandExtents.sy + bandExtents.bottom + 11) / sourceCanvas.height);
+  var sharedTop = Math.max(0, (bandExtents.sy + bandExtents.top - (isEpic ? 4 : 10)) / sourceCanvas.height);
+  var sharedBottom = Math.min(1, (bandExtents.sy + bandExtents.bottom + (isEpic ? 5 : 11)) / sourceCanvas.height);
+  if (isEpic && seedBand) {
+    var seedTop = seedBand[1];
+    var seedBottom = seedBand[1] + seedBand[3];
+    sharedTop = Math.max(sharedTop, seedTop - 0.006);
+    sharedBottom = Math.min(sharedBottom, seedBottom + 0.01);
+  }
   var sharedHeight = Math.max(0.02, sharedBottom - sharedTop);
 
   function resolveSide(sideSeed) {
+    var topSlack = isEpic ? 0.004 : 0.01;
+    var heightSlack = isEpic ? 0.008 : 0.02;
     var sideWindow = clampFracRegion([
       Math.max(0, sideSeed[0] - 0.008),
-      Math.max(0, sharedTop - 0.01),
+      Math.max(0, sharedTop - topSlack),
       Math.min(1 - Math.max(0, sideSeed[0] - 0.008), sideSeed[2] + 0.016),
-      Math.min(1 - Math.max(0, sharedTop - 0.01), sharedHeight + 0.02)
+      Math.min(1 - Math.max(0, sharedTop - topSlack), sharedHeight + heightSlack)
     ]);
     var sideExtents = measureInkExtents(sourceCanvas, sideWindow);
     if (!sideExtents) return sideSeed;
-    var candidate = extentsToFrac(sourceCanvas, sideExtents, 10);
+    var candidate = extentsToFrac(sourceCanvas, sideExtents, isEpic ? 6 : 10);
     if (!candidate) return sideSeed;
     if (candidate[2] < sideSeed[2] * 0.55 || candidate[3] < sideSeed[3] * 0.5) return sideSeed;
+    if (isEpic) {
+      var sideSeedTop = sideSeed[1];
+      var sideSeedBottom = sideSeed[1] + sideSeed[3];
+      var candidateBottom = candidate[1] + candidate[3];
+      candidate[1] = Math.max(candidate[1], sideSeedTop - 0.006);
+      candidateBottom = Math.min(candidateBottom, sideSeedBottom + 0.01);
+      candidate[3] = Math.max(sideSeed[3] * 0.8, candidateBottom - candidate[1]);
+    }
     return candidate;
   }
 
@@ -3425,7 +3443,7 @@ async function processPdfBatch(arrayBuffer, password, fileName) {
     var ctx = renderCanvas.getContext('2d');
     await page.render({ canvasContext: ctx, viewport: viewport }).promise;
 
-    var crop = CROP[type];
+    var crop = JSON.parse(JSON.stringify(CROP[type] || null));
     var isIssuedDetailsAadhaar = fullText.includes('details as on') || fullText.includes('aadhaar no. issued');
     if (type === 'aadhaar' && fullText.includes('citizenship')) {
       // New Aadhaar format is taller to fit the red citizenship box.
@@ -3443,6 +3461,7 @@ async function processPdfBatch(arrayBuffer, password, fileName) {
       crop.front = [0.075, 0.719, 0.423, 0.207];
       crop.back = [0.509, 0.719, 0.423, 0.207];
     }
+    if (crop) crop._type = type;
     var front, back;
 
     if (pdf.numPages >= 2 && crop.frontPage) {
@@ -3540,7 +3559,7 @@ async function processPdf(pdf) {
     var ctx = renderCanvas.getContext('2d');
     await page.render({ canvasContext: ctx, viewport: viewport }).promise;
 
-    var crop = CROP[detectedType];
+    var crop = JSON.parse(JSON.stringify(CROP[detectedType] || null));
     var isIssuedDetailsAadhaar = fullText.includes('details as on') || fullText.includes('aadhaar no. issued');
     if (detectedType === 'aadhaar' && fullText.includes('citizenship')) {
       // New Aadhaar format is taller to fit the red citizenship box.
@@ -3558,6 +3577,8 @@ async function processPdf(pdf) {
       crop.front = [0.075, 0.719, 0.423, 0.207];
       crop.back = [0.509, 0.719, 0.423, 0.207];
     }
+
+    if (crop) crop._type = detectedType;
 
     if (pdf.numPages >= 2 && crop.frontPage) {
       var resolvedFrontPageCrop = resolveAdaptiveSingleCrop(renderCanvas, crop.frontPage, { padX: 0.02, padY: 0.04, minWidthRatio: 0.75, minHeightRatio: 0.75, marginPx: 12 });
